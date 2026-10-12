@@ -5,7 +5,7 @@ const $=id=>document.getElementById(id);
 const RISKY_MAX=91.44; // 300 ft
 let D,risky=false,layer,nodes={},adj={},start=null,end=null,routeG=null,mk=[];
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden (posted >=40 or untagged major)
-const cls=s=>(s[2]==null||(s[2]>35&&!(window.LENIENT&&s[2]===99)))?3:(s[3]==='t'?0:1);
+const cls=s=>(s[2]==null||(s[2]>35&&!(window.LENIENT&&s[2]===99)))?3:(s[3]==='t'||s[3]==='v'?0:1);
 const STY=[{color:'#12a150',weight:3.2},{color:'#4cc38a',weight:2.6,dashArray:'5 4'},null,{color:'#e5484d',weight:3,opacity:.75}];
 const MAJOR=new Set(['motorway','motorway_link','trunk','trunk_link','primary','primary_link','secondary','secondary_link','tertiary','tertiary_link']);
 let buckets={},shown={};const G=0.02;
@@ -24,7 +24,7 @@ async function onMove(){if(!D)return;const b=map.getBounds().pad(0.1);const n0=l
 map.on('moveend',onMove);
 function mkLine(s){const c=cls(s);const pl=L.polyline(s[7].map(p=>[p[1],p[0]]),{...STY[c],renderer});
  pl.on('click',e=>{L.DomEvent.stopPropagation(e);const sp=s[2];
-  L.popup().setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[3]==='t'?'':' (assumed)'}<br><b style="color:${c===3?'#e5484d':'#12a150'}">${c===3?'Avoid: 40+ mph or major road':'OK for LSV'}</b>`).openOn(map)});return pl}
+  L.popup().setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[3]==='t'?' (OSM)':s[3]==='v'?' ✅ verified (local source)':' (assumed)'}${s[3]==='v'&&D.sources&&D.sources[s[8]]?`<br><a href="${D.sources[s[8]][0]}" target="_blank" rel="noopener">Source: ${D.sources[s[8]][1]}</a>`:''}<br><b style="color:${c===3?'#e5484d':'#12a150'}">${c===3?'Avoid: 40+ mph or major road':'OK for LSV'}</b>`).openOn(map)});return pl}
 function hav(a,b){const R=6371000,r=Math.PI/180,dl=(b[1]-a[1])*r,dn=(b[0]-a[0])*r,x=Math.sin(dl/2)**2+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
 function len(p){let l=0;for(let i=1;i<p.length;i++)l+=hav(p[i-1],p[i]);return l}
 let fast=new Set();
