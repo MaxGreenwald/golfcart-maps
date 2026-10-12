@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Golf Cart Maps</title><link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1b7f3b"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+html,body{margin:0;height:100%;font-family:-apple-system,system-ui,sans-serif}
+#map{position:absolute;inset:0}
+#panel{position:absolute;z-index:1000;top:env(safe-area-inset-top,0);left:0;right:0;margin:8px;background:#fff;border-radius:12px;box-shadow:0 2px 10px #0003;padding:8px;font-size:14px}
+#panel input[type=text]{width:100%;box-sizing:border-box;padding:8px;font-size:16px;border:1px solid #ccc;border-radius:8px;margin:2px 0}
+.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:4px}
+button{padding:7px 10px;border:0;border-radius:8px;background:#1b7f3b;color:#fff;font-size:14px}
+button.alt{background:#eee;color:#222}.seg button{background:#eee;color:#222}.seg button.on{background:#1b7f3b;color:#fff}
+#sugg{background:#fff;border:1px solid #ddd;border-radius:8px;max-height:180px;overflow:auto;display:none}
+#sugg div{padding:6px;border-bottom:1px solid #eee}
+#legend{position:absolute;z-index:1000;bottom:28px;left:8px;background:#fffe;border-radius:10px;padding:6px 8px;font-size:12px;box-shadow:0 1px 6px #0003}
+.sw{display:inline-block;width:18px;height:4px;margin-right:5px;vertical-align:middle}
+#disc{position:absolute;z-index:1000;bottom:28px;right:8px;max-width:48%;background:#fff8e1ee;border-radius:10px;padding:6px 8px;font-size:11px;box-shadow:0 1px 6px #0003}
+#status{font-size:13px;color:#333;margin-top:4px}
+</style></head><body>
+<div id="map"></div>
+<div id="panel">
+ <div class="row seg"><b>Mode:</b><button id="mLSV" class="on">LSV ≤35</button><button id="mGC">Golf cart ≤25</button>
+  <label><input type="checkbox" id="unk"> allow unknown</label></div>
+ <input type="text" id="q" placeholder="Search address (sets destination)…" autocomplete="off"><div id="sugg"></div>
+ <div class="row"><button id="loc">📍 Locate me</button><button class="alt" id="clr">Clear route</button><span style="font-size:12px;color:#666">Tap map: start, then end</span></div>
+ <div id="status">Loading road data…</div>
+</div>
+<div id="legend"><div><span class="sw" style="background:#1a9641"></span>Allowed (posted)</div>
+<div><span class="sw" style="background:repeating-linear-gradient(90deg,#7fd47f 0 5px,transparent 5px 8px)"></span>Allowed (inferred)</div>
+<div><span class="sw" style="background:#f0a500"></span>Unknown limit</div><div><span class="sw" style="background:#d7191c"></span>Not allowed</div>
+<div><span class="sw" style="background:#2b6cff;height:6px"></span>Route</div></div>
+<div id="disc"><b>Not legal advice.</b> OSM data is volunteer-maintained and may be wrong. Posted signs and local rules always win. Golf carts: roads ≤25 mph or city-designated routes (CVC 21115+). LSVs: no roads &gt;35 mph (CVC 21260/21266). <span id="dmeta"></span></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js')</script>
+</body></html>
