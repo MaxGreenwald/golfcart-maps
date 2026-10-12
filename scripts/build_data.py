@@ -39,7 +39,7 @@ def classify(t):
     s = mph(t.get("maxspeed"))
     if s is not None: return s, "tagged"
     if hw in ("residential", "living_street", "service", "unclassified"): return 25, "inferred"
-    if hw == "tertiary": return None, "unknown"
+    if hw in ("tertiary", "secondary"): return None, "unknown"
     return 99, "inferred_high"
 
 def simplify(pts, tol=0.00004):
