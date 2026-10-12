@@ -1,63 +1,84 @@
-const map=L.map('map',{preferCanvas:true,zoomControl:false}).setView([32.84,-117.27],13);
-L.control.zoom({position:'bottomright'}).addTo(map);
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,opacity:.6,attribution:'© OpenStreetMap contributors'}).addTo(map);
+const map=L.map('map',{preferCanvas:true,zoomControl:false,attributionControl:true}).setView([32.84,-117.27],14);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
 const renderer=L.canvas({tolerance:8});
-let D,mode=39,allowUnk=false,layer,nodes={},adj={},start=null,end=null,routeLine,mk=[];
-const $=id=>document.getElementById(id), st=t=>$('status').innerHTML=t;
-// status: 0 allowed posted, 1 allowed inferred, 2 unknown, 3 forbidden
-function cls(s){const sp=s[2],src=s[3];if(sp==null)return 2;if(sp>mode)return 3;return src==='t'?0:1}
-const STY=[{color:'#1a9641',weight:3},{color:'#5cc45c',weight:2.5,dashArray:'5 3'},{color:'#f0a500',weight:3},{color:'#d7191c',weight:2.5,opacity:.7}];
+const $=id=>document.getElementById(id);
+const RISKY_MAX=91.44; // 300 ft
+let D,risky=false,layer,nodes={},adj={},start=null,end=null,routeG=null,mk=[];
+// cls: 0 posted ok, 1 assumed ok, 3 forbidden (posted >=40 or untagged major)
+const cls=s=>(s[2]==null||s[2]>35)?3:(s[3]==='t'?0:1);
+const STY=[{color:'#12a150',weight:3.2},{color:'#4cc38a',weight:2.6,dashArray:'5 4'},null,{color:'#e5484d',weight:3,opacity:.75}];
 const MAJOR=new Set(['motorway','motorway_link','trunk','trunk_link','primary','primary_link','secondary','secondary_link','tertiary','tertiary_link']);
 let buckets={},shown={};const G=0.02;
 function bucketize(){D.segs.forEach((s,i)=>{const p=s[7][0],k=Math.floor(p[0]/G)+','+Math.floor(p[1]/G);(buckets[k]||(buckets[k]=[])).push(i)})}
-function draw(){if(layer)map.removeLayer(layer);layer=L.layerGroup().addTo(map);shown={};refresh();buildGraph();if(start&&end)route()}
+function draw(){layer=L.layerGroup().addTo(map);refresh()}
 function refresh(){const b=map.getBounds().pad(0.2),z=map.getZoom(),minor=z>=14;
- const x0=Math.floor(b.getWest()/G),x1=Math.floor(b.getEast()/G),y0=Math.floor(b.getSouth()/G),y1=Math.floor(b.getNorth()/G);const want={};
+ const x0=Math.floor(b.getWest()/G),x1=Math.floor(b.getEast()/G),y0=Math.floor(b.getSouth()/G),y1=Math.floor(b.getNorth()/G),want={};
  for(let x=x0;x<=x1;x++)for(let y=y0;y<=y1;y++){const k=x+','+y;if(buckets[k])want[k+(minor?'m':'')]=k}
  for(const k in shown)if(!(k in want)){layer.removeLayer(shown[k]);delete shown[k]}
  for(const k in want)if(!shown[k]){const g=L.layerGroup();for(const i of buckets[want[k]]){const s=D.segs[i];if(!minor&&!MAJOR.has(s[1]))continue;g.addLayer(mkLine(s))}shown[k]=g;layer.addLayer(g)}}
 map.on('moveend',()=>{if(D)refresh()});
-function mkLine(s){{const c=cls(s);const pl=L.polyline(s[7].map(p=>[p[1],p[0]]),{...STY[c],renderer});pl._s=s;
-  pl.on('click',e=>{L.DomEvent.stopPropagation(e);const sp=s[2];const lbl=['Allowed (posted limit)','Allowed (limit inferred)','Unknown – speed limit not recorded','Not allowed (40+ mph or major road)'][cls(s)];
-   L.popup().setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed)'}</b><br>Type: ${s[1]}<br>Speed: ${sp==null?'not tagged':sp==99?'not tagged (major road, assumed >35)':sp+' mph'}<br>Source: ${s[3]==='t'?'OSM maxspeed tag':sp==null?'—':'inferred from road type'}<br><b>${lbl}</b>`).openOn(map)});
-  return pl}}
+function mkLine(s){const c=cls(s);const pl=L.polyline(s[7].map(p=>[p[1],p[0]]),{...STY[c],renderer});
+ pl.on('click',e=>{L.DomEvent.stopPropagation(e);const sp=s[2];
+  L.popup().setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[3]==='t'?'':' (assumed)'}<br><b style="color:${c===3?'#e5484d':'#12a150'}">${c===3?'Avoid: 40+ mph or major road':'OK for LSV'}</b>`).openOn(map)});return pl}
 function hav(a,b){const R=6371000,r=Math.PI/180,dl=(b[1]-a[1])*r,dn=(b[0]-a[0])*r,x=Math.sin(dl/2)**2+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
 function len(p){let l=0;for(let i=1;i<p.length;i++)l+=hav(p[i-1],p[i]);return l}
-let fast=new Set();function buildGraph(){adj={};nodes={};fast=new Set();D.segs.forEach(s=>{if(s[3]==='t'&&s[2]>=40){fast.add(s[5]);fast.add(s[6])}});
- D.segs.forEach((s,i)=>{const c=cls(s);if(c===3||(c===2&&!allowUnk))return;const a=s[5],b=s[6],p=s[7];
-  nodes[a]=p[0];nodes[b]=p[p.length-1];const L_=s._len??(s._len=len(p));
-  if(s[4]>=0)(adj[a]||(adj[a]=[])).push([b,L_,i,false]);if(s[4]<=0)(adj[b]||(adj[b]=[])).push([a,L_,i,true])})}
-function nearest(ll){let best=null,bd=1e18;for(const k in nodes){if(!adj[k])continue;const d=hav([ll.lng,ll.lat],nodes[k]);if(d<bd){bd=d;best=k}}return [best,bd]}
-// A* with binary heap
-function astar(s,t){const g={[s]:0},prev={},T=nodes[t],h=[[hav(nodes[s],T),s]];const done=new Set();
+let fast=new Set();
+function buildGraph(){adj={};nodes={};fast=new Set();
+ D.segs.forEach((s,i)=>{const c=cls(s),a=s[5],b=s[6],p=s[7];s._len??=len(p);nodes[a]=p[0];nodes[b]=p[p.length-1];
+  if(s[3]==='t'&&s[2]>=40){fast.add(a);fast.add(b)}
+  const f=c===3;
+  if(s[4]>=0)(adj[a]||(adj[a]=[])).push([b,s._len,i,false,f]);if(s[4]<=0)(adj[b]||(adj[b]=[])).push([a,s._len,i,true,f])})}
+function nearest(ll){let best=null,bd=1e18;const q=[ll.lng,ll.lat];for(const k in nodes){if(!(adj[k]||[]).some(e=>!e[4]))continue;const d=hav(q,nodes[k]);if(d<bd){bd=d;best=+k}}return [best,bd]}
+// A* over (node, metres-of-current-forbidden-run). Legal mode: forbidden edges never used.
+// Crossing a forbidden road = passing through a shared node between two allowed edges (CVC 21260(b)(1)).
+function astar(s,t){const key=(n,r)=>n+'|'+Math.round(r);const T=nodes[t];const g=new Map(),prev=new Map();const k0=key(s,0);g.set(k0,0);
+ const h=[[hav(nodes[s],T),s,0,k0]],done=new Set();
  const push=x=>{h.push(x);let i=h.length-1;while(i>0){const p=(i-1)>>1;if(h[p][0]<=h[i][0])break;[h[p],h[i]]=[h[i],h[p]];i=p}};
  const pop=()=>{const top=h[0],l=h.pop();if(h.length){h[0]=l;let i=0;for(;;){let a=2*i+1,b=a+1,m=i;if(a<h.length&&h[a][0]<h[m][0])m=a;if(b<h.length&&h[b][0]<h[m][0])m=b;if(m===i)break;[h[m],h[i]]=[h[i],h[m]];i=m}}return top};
- while(h.length){const [,u]=pop();if(u==t)break;if(done.has(u))continue;done.add(u);
-  for(const [v,w,si,rev] of adj[u]||[]){const ng=g[u]+w+(fast.has(+v)?150:0);if(g[v]===undefined||ng<g[v]){g[v]=ng;prev[v]=[u,si,rev];push([ng+hav(nodes[v],T),v])}}}
- if(g[t]===undefined)return null;const pts=[];let x=t;while(x!=s){const [u,si,rev]=prev[x];let p=D.segs[si][7];if(!rev)p=p.slice().reverse();pts.push(...p);x=u}
- pts.reverse();return {dist:len(pts),pts}}
-function route(){if(routeLine)map.removeLayer(routeLine);const [a,da]=nearest(start),[b,db]=nearest(end);
- if(!a||!b){st('No legal roads nearby.');return}
- const r=astar(a,b);if(!r){st(`❌ No legal route in <b>${'LSV'}</b> mode.`);return null}
- routeLine=L.polyline(r.pts.map(p=>[p[1],p[0]]),{color:'#2b6cff',weight:6,opacity:.85}).addTo(map);
- const mi=r.dist/1609.34,min=mi/(25)*60;
- st(`✅ Legal route: <b>${mi.toFixed(1)} mi</b>, ~${Math.round(min)} min${da>150||db>150?' (start/end snapped to nearest legal road)':''}`);
- window.lastRoute={mi,min};return r}
-function setPt(ll){if(!start||end){clearR();start=ll;mk.push(L.marker(ll).addTo(map).bindTooltip('Start'));st('Now tap the destination.')}
- else{end=ll;mk.push(L.marker(ll).addTo(map).bindTooltip('End'));route()}}
-function clearR(){start=end=null;mk.forEach(m=>map.removeLayer(m));mk=[];if(routeLine)map.removeLayer(routeLine);routeLine=null;st('Tap map to set start.')}
-map.on('click',e=>setPt(e.latlng));
-$('clr').onclick=clearR;
-
-
+ let goal=null;
+ while(h.length){const [,u,run,ku]=pop();if(done.has(ku))continue;done.add(ku);if(u===t&&run===0){goal=ku;break}
+  for(const [v,w,si,rev,f] of adj[u]||[]){let nr,cost=w;
+   if(f){if(!risky)continue;nr=run+w;if(nr>RISKY_MAX)continue;cost=w*6+60}else{nr=0;if(fast.has(v))cost+=150}
+   const kv=key(v,nr),ng=g.get(ku)+cost;if(!g.has(kv)||ng<g.get(kv)){g.set(kv,ng);prev.set(kv,[ku,si,rev]);push([ng+hav(nodes[v],T),v,nr,kv])}}}
+ if(!goal)return null;const parts=[];let x=goal;while(x!==k0){const [pk,si,rev]=prev.get(x);parts.push([si,rev]);x=pk}parts.reverse();return parts}
+function summarize(parts){let dist=0,stretches=[],cur=null,line=[];const legs=[];
+ for(const [si,rev] of parts){const s=D.segs[si];let p=s[7];if(rev)p=p.slice().reverse();dist+=s._len;const f=cls(s)===3;
+  legs.push({p,f,s});
+  if(f){if(!cur){cur={len:0,name:D.names[s[0]]||'unnamed road',sp:s[2],p:[]};stretches.push(cur)}cur.len+=s._len;cur.p.push(...p)}else cur=null}
+ // turn-by-turn by street name
+ const steps=[];for(const l of legs){const n=D.names[l.s[0]]||'unnamed road';const last=steps[steps.length-1];if(last&&last.n===n&&last.f===l.f)last.d+=l.s._len;else steps.push({n,d:l.s._len,f:l.f,sp:l.s[2]})}
+ return {dist,stretches,legs,steps}}
+const ft=m=>Math.round(m*3.281)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
+function route(){if(routeG)map.removeLayer(routeG);routeG=null;const [a,da]=nearest(start),[b,db]=nearest(end);
+ const parts=a!=null&&b!=null?astar(a,b):null;$('acts').style.display='flex';
+ if(!parts){$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even allowing ≤300 ft stretches on faster roads, there’s no way through.':'Every way there uses a 40+ mph road. Try <b>⚠️ Risky</b> mode to see short-stretch options.';$('steps').innerHTML='';return null}
+ const r=summarize(parts);routeG=L.layerGroup().addTo(map);
+ const all=[];r.legs.forEach(l=>all.push(...l.p));
+ L.polyline(all.map(p=>[p[1],p[0]]),{color:'#fff',weight:10,opacity:.9}).addTo(routeG);
+ L.polyline(all.map(p=>[p[1],p[0]]),{color:'#1d6fe0',weight:6}).addTo(routeG);
+ r.stretches.forEach(s=>L.polyline(s.p.map(p=>[p[1],p[0]]),{color:'#ffc400',weight:8}).addTo(routeG).bindTooltip(`Risky: ${ft(s.len)} on ${s.name}`));
+ const min=Math.max(1,Math.round(r.dist/1609.34/22*60));
+ $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
+ $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:'All on roads ≤35 mph 🌴'+(da>150||db>150?' · snapped to nearest legal road':'');
+ $('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}</span></div>`).join('');
+ window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};return r}
+const pinIcon=(c,e)=>L.divIcon({className:'',html:`<div class="pin" style="background:${c}"><span>${e}</span></div>`,iconSize:[30,30],iconAnchor:[15,30]});
+function setPt(ll){if(!start||end){clearR();start=ll;mk.push(L.marker(ll,{icon:pinIcon('#14b8c4','🏠')}).addTo(map));$('title').innerHTML='📍 Start set';$('sub').textContent='Tap the map or search for where you’re headed.'}
+ else{end=ll;mk.push(L.marker(ll,{icon:pinIcon('#ff7a59','🏖️')}).addTo(map));route()}}
+function clearR(){start=end=null;mk.forEach(m=>map.removeLayer(m));mk=[];if(routeG)map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('acts').style.display='none';$('title').innerHTML='🏖️ Golf Cart Maps';$('sub').textContent='Tap the map to set a start, or hit 📍.'}
+map.on('click',e=>setPt(e.latlng));$('clr').onclick=clearR;
+$('swap').onclick=()=>{if(start&&end){const a=end,b=start;clearR();setPt(a);setPt(b)}};
+function setRisky(v){risky=v;$('cRisk').classList.toggle('on',v);$('cNorm').classList.toggle('on',!v);if(start&&end)route()}
+$('cNorm').onclick=()=>setRisky(false);$('cRisk').onclick=()=>setRisky(true);
+let legendOn=true;$('lay').onclick=()=>{legendOn=!legendOn;$('legend').style.display=$('disc').style.display=legendOn?'':'none'};
 let me;$('loc').onclick=()=>navigator.geolocation.getCurrentPosition(p=>{const ll=L.latLng(p.coords.latitude,p.coords.longitude);
- if(me)map.removeLayer(me);me=L.circleMarker(ll,{radius:8,color:'#fff',fillColor:'#2b6cff',fillOpacity:1,weight:3}).addTo(map);map.setView(ll,16);
- clearR();start=ll;mk.push(L.marker(ll).addTo(map).bindTooltip('Start (you)'));st('Start = your location. Tap or search a destination.')},e=>st('Location unavailable: '+e.message),{enableHighAccuracy:true});
+ if(me)map.removeLayer(me);me=L.circleMarker(ll,{radius:8,color:'#fff',fillColor:'#1d6fe0',fillOpacity:1,weight:3}).addTo(map);map.setView(ll,16);clearR();start=ll;
+ mk.push(L.marker(ll,{icon:pinIcon('#14b8c4','🛺')}).addTo(map));$('title').innerHTML='📍 Starting from you';$('sub').textContent='Tap or search a destination.'},e=>{$('sub').textContent='Location unavailable: '+e.message},{enableHighAccuracy:true});
 let tmr,lastQ=0;$('q').oninput=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<4){$('sugg').style.display='none';return}
- tmr=setTimeout(async()=>{const wait=Math.max(0,1100-(Date.now()-lastQ));await new Promise(r=>setTimeout(r,wait));lastQ=Date.now();
-  const b=D.meta.bbox;const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=5&bounded=1&viewbox=${b[1]},${b[2]},${b[3]},${b[0]}&q=${encodeURIComponent(v)}`);
-  const j=await r.json();const sg=$('sugg');sg.innerHTML='';sg.style.display=j.length?'block':'none';
-  j.forEach(x=>{const d=document.createElement('div');d.textContent=x.display_name;d.onclick=()=>{sg.style.display='none';$('q').value=x.display_name.split(',')[0];
-   const ll=L.latLng(+x.lat,+x.lon);map.setView(ll,15);if(start&&!end)setPt(ll);else if(start&&end){end=null;mk.pop()&&0;setPt(ll)}else{setPt(ll);st('Start set from search. Tap or search destination, or 📍 for your location.')}};sg.appendChild(d)})},700)};
-window.testRoute=(a,b)=>{buildGraph();clearR();start=L.latLng(a);end=L.latLng(b);const r=route();return r?{mi:+(r.dist/1609.34).toFixed(2),min:Math.round(window.lastRoute.min)}:null};
-fetch('data/roads.json').then(r=>r.json()).then(j=>{D=j;const s=j.meta.stats;$('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;bucketize();draw();st('Tap map to set start, or 📍 Locate me.');window.ready=true});
+ tmr=setTimeout(async()=>{await new Promise(r=>setTimeout(r,Math.max(0,1100-(Date.now()-lastQ))));lastQ=Date.now();const b=D.meta.bbox;
+  const j=await (await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=5&bounded=1&viewbox=${b[1]},${b[2]},${b[3]},${b[0]}&q=${encodeURIComponent(v)}`)).json();
+  const sg=$('sugg');sg.innerHTML='';sg.style.display=j.length?'block':'none';
+  j.forEach(x=>{const d=document.createElement('div');d.textContent='📍 '+x.display_name.split(',').slice(0,3).join(',');d.onclick=()=>{sg.style.display='none';$('q').value=x.display_name.split(',')[0];$('q').blur();
+   const ll=L.latLng(+x.lat,+x.lon);map.setView(ll,15);if(start&&end){const s=start;clearR();setPt(s)}setPt(ll)};sg.appendChild(d)})},700)};
+window.testRoute=(a,b,rk=false)=>{risky=rk;clearR();start=L.latLng(a);mk.push(L.marker(start,{icon:pinIcon('#14b8c4','🏠')}).addTo(map));end=L.latLng(b);mk.push(L.marker(end,{icon:pinIcon('#ff7a59','🏖️')}).addTo(map));const r=route();return r?window.lastRoute:null};
+fetch('data/roads.json').then(r=>r.json()).then(j=>{D=j;$('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;bucketize();buildGraph();draw();clearR();window.ready=true});
