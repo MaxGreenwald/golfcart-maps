@@ -36,6 +36,7 @@
 .leaflet-control-attribution{font-size:10px;margin-bottom:calc(var(--sab) + 150px)!important;border-radius:8px 0 0 8px}
 .pin{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 3px 8px #0004}
 .pin span{display:block;transform:rotate(45deg);text-align:center;line-height:24px;font-size:14px}
+#tip{display:block;margin-top:10px;text-align:center;text-decoration:none;color:#0b6e86;background:linear-gradient(90deg,#e3f6f8,#f6ead2);border-radius:14px;padding:10px;font-size:14px}
 </style></head><body>
 <div id="map"></div>
 <div id="top"><div id="bar"><div id="logo">🛺</div><input id="q" placeholder="Where to, beach cruiser?" autocomplete="off"></div>
@@ -47,6 +48,7 @@
 <div id="steps"></div>
 <div class="btnrow" id="acts" style="display:none"><button class="btn alt" id="clr">Clear</button><button class="btn" id="swap">⇅ Swap</button></div>
 <div id="legend"><span><i class="sw" style="background:#12a150"></i>Posted ≤35</span><span><i class="sw" style="background:repeating-linear-gradient(90deg,#4cc38a 0 5px,transparent 5px 8px)"></i>Small road (assumed 25)</span><span><i class="sw" style="background:#e5484d"></i>40+ / major — avoid</span><span><i class="sw" style="background:#1d6fe0"></i>Route</span><span><i class="sw" style="background:#ffc400"></i>Risky stretch</span></div>
+<a id="tip" href="https://venmo.com/u/max-greenwald" target="_blank" rel="noopener">🎁 Enjoying the ride? <b>Tip the builder</b> on Venmo 🌴</a>
 <div id="disc"><b>Not legal advice.</b> OSM data is volunteer-maintained and can be wrong — posted signs and local rules always win. LSVs: no roads over 35 mph (CVC 21260); you may cross a faster road at a ~90° intersection between ≤35 roads. Risky mode shows short illegal stretches; drive them at your own risk. <span id="dmeta"></span></div>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
