@@ -6,7 +6,7 @@ import json, re, time, urllib.request, urllib.parse, gzip, os, math
 S, W, N, E = 32.53, -117.42, 33.30, -116.95
 TILES_LAT, TILES_LON = 6, 3
 HW = "motorway|motorway_link|trunk|trunk_link|primary|primary_link|secondary|secondary_link|tertiary|tertiary_link|unclassified|residential|living_street|service"
-EP = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"]
+EP = ["https://overpass.private.coffee/api/interpreter", "https://overpass-api.de/api/interpreter", "https://maps.mail.ru/osm/tools/overpass/api/interpreter", "https://overpass.kumi.systems/api/interpreter"]
 UA = "GolfCartMaps/1.0 (personal project)"
 OUT = os.path.join(os.path.dirname(__file__), "..", "public", "data")
 CACHE = os.path.join(os.path.dirname(__file__), "..", "cache")
