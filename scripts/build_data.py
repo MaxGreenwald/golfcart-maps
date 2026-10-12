@@ -2,9 +2,13 @@
 """Fetch drivable roads from OSM Overpass for coastal North San Diego and
 classify them for golf cart (<=25 mph) and LSV (<=35 mph) use.
 Output: public/data/roads.json (compact) + gzip. Stdlib only."""
-import json, re, time, urllib.request, urllib.parse, gzip, os, math
+import json, re, time, urllib.request, urllib.parse, gzip, os, math, sys
+sys.path.insert(0, os.path.dirname(__file__)); import overrides
 S, W, N, E = 32.53, -117.42, 33.30, -116.95
 TILES_LAT, TILES_LON = 6, 3
+PREFIX = "v2_tile"
+if os.environ.get("LEGACY"):  # original smaller coverage (cache/tile*.json)
+    S, W, N, E = 32.70, -117.30, 33.18, -117.10; TILES_LAT, TILES_LON = 4, 2; PREFIX = "tile"
 HW = "motorway|motorway_link|trunk|trunk_link|primary|primary_link|secondary|secondary_link|tertiary|tertiary_link|unclassified|residential|living_street|service"
 EP = ["https://overpass.private.coffee/api/interpreter", "https://overpass-api.de/api/interpreter", "https://maps.mail.ru/osm/tools/overpass/api/interpreter", "https://overpass.kumi.systems/api/interpreter"]
 UA = "GolfCartMaps/1.0 (personal project)"
@@ -13,17 +17,17 @@ CACHE = os.path.join(os.path.dirname(__file__), "..", "cache")
 
 def fetch(bb, i):
     os.makedirs(CACHE, exist_ok=True)
-    cp = os.path.join(CACHE, f"v2_tile{i}.json")
+    cp = os.path.join(CACHE, f"{PREFIX}{i}.json")
     if os.path.exists(cp): return json.load(open(cp))
     q = f'[out:json][timeout:180];way["highway"~"^({HW})$"]["service"!~"parking_aisle|driveway|drive-through"]["access"!~"private|no"]({bb[0]},{bb[1]},{bb[2]},{bb[3]});out tags geom;'
-    for attempt in range(6):
+    for attempt in range(30):
         ep = EP[attempt % len(EP)]
         try:
             req = urllib.request.Request(ep, data=urllib.parse.urlencode({"data": q}).encode(), headers={"User-Agent": UA})
             d = json.load(urllib.request.urlopen(req, timeout=240))
             json.dump(d, open(cp, "w")); return d
         except Exception as e:
-            print("retry", i, ep, e); time.sleep(10 * (attempt + 1))
+            print("retry", i, ep, e); time.sleep(min(120, 15 * (attempt + 1)))
     raise SystemExit("Overpass failed")
 
 def mph(v):
@@ -62,17 +66,27 @@ for a in range(TILES_LAT):
                 # node identity = exact coordinate (shared OSM nodes have identical coords)
                 el["nodes"] = [f'{q["lat"]:.7f},{q["lon"]:.7f}' for q in el["geometry"]]
                 ways[el["id"]] = el
-        time.sleep(2)
+        if not os.path.exists(os.path.join(CACHE, f"{PREFIX}{i}.json")) or True: pass
 # Node ids are kept at way endpoints + shared nodes so routing graph stays connected.
 cnt = {}
 for w in ways.values():
     for n in w["nodes"]: cnt[n] = cnt.get(n, 0) + 1
-names, out, stats = [], [], {"tagged": 0, "inferred": 0, "unknown": 0, "inferred_high": 0}
+wl = list(ways.values())
+ov, rep = overrides.build([(w["tags"], [[q["lon"], q["lat"]] for q in w["geometry"]], w["nodes"]) for w in wl])
+for r in rep: print("override", *r)
+sources = []; sidx = {}
+names, out, stats = [], [], {"tagged": 0, "inferred": 0, "unknown": 0, "inferred_high": 0, "verified": 0}
 nidx = {}
 nids = {}
 def nid(k): return nids.setdefault(k, len(nids))
-for w in ways.values():
-    t = w["tags"]; s, src = classify(t); stats[src] += 1
+for wi, w in enumerate(wl):
+    t = w["tags"]; s, src = classify(t); si = -1
+    if wi in ov:
+        vmph, ok, url, label = ov[wi]; s, src = vmph, "verified"
+        key = (url, label)
+        if key not in sidx: sidx[key] = len(sources); sources.append([url, label])
+        si = sidx[key]
+    stats[src] += 1
     nm = t.get("name") or t.get("ref") or ""
     if nm not in nidx: nidx[nm] = len(names); names.append(nm)
     g = w["geometry"]; nodes = w["nodes"]
@@ -86,7 +100,7 @@ for w in ways.values():
         pts = simplify([[round(g[k]["lon"], 5), round(g[k]["lat"], 5)] for k in sg])
         ow = 1 if t.get("oneway") in ("yes", "1") else (-1 if t.get("oneway") == "-1" else 0)
         if t.get("junction") == "roundabout" and ow == 0: ow = 1
-        out.append([nidx[nm], t["highway"], s, src[0], ow, nid(nodes[sg[0]]), nid(nodes[sg[-1]]), pts])
+        out.append([nidx[nm], t["highway"], s, src[0], ow, nid(nodes[sg[0]]), nid(nodes[sg[-1]]), pts] + ([si] if si >= 0 else []))
 total = sum(stats.values())
 meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": total, "segments": len(out), "stats": stats}
 os.makedirs(OUT, exist_ok=True)
@@ -102,7 +116,7 @@ for k, segs in tiles.items():
     d = json.dumps(segs, separators=(",", ":")); raw += len(d); gz += len(gzip.compress(d.encode()))
     open(os.path.join(td, k + ".json"), "w").write(d)
 meta["tileSize"] = TS; meta["tiles"] = sorted(tiles)
-idx = json.dumps({"meta": meta, "names": names}, separators=(",", ":"))
+idx = json.dumps({"meta": meta, "names": names, "sources": sources}, separators=(",", ":"))
 open(os.path.join(OUT, "index.json"), "w").write(idx)
 if os.path.exists(os.path.join(OUT, "roads.json")): os.remove(os.path.join(OUT, "roads.json"))
 print(json.dumps({k: v for k, v in meta.items() if k != "tiles"}), "tiles", len(tiles), "raw MB", raw/1e6, "gz MB", gz/1e6, "index KB", len(idx)/1e3)

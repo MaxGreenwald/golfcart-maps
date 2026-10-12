@@ -1,0 +1,412 @@
+[
+ {
+  "road": "Mission Blvd",
+  "city": "San Diego (Pacific Beach/Mission Beach)",
+  "from_to_segment_if_known": "Santa Clara Pl - Loring St",
+  "speed_mph": 25,
+  "lsv_ok": true,
+  "source_url": "https://www.kpbs.org/news/public-safety/2025/02/21/san-diego-moves-to-lower-speed-limits-on-select-commercial-streets",
+  "quote_or_evidence": "KPBS: segments of Mission Boulevard lowered from 30 to 25 mph (business activity district). City resolution R-316675 (adopted Mar 16 2026) lists Mission Bl (Santa Clara Pl - Pacific Beach Dr) and (Pacific Beach Dr - Loring St); city Speed Mgmt Plan lists Mission Bl Santa Clara Pl - Loring St, 1.59 mi.",
+  "confidence": "high"
+ },
+ {
+  "road": "Mission Blvd",
+  "city": "San Diego (Mission Beach)",
+  "from_to_segment_if_known": "south of Santa Clara Pl (to W Mission Bay Dr/Belmont Park)",
+  "speed_mph": null,
+  "lsv_ok": null,
+  "source_url": "https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf",
+  "quote_or_evidence": "Not listed in resolution; was 30 mph north of the BAD per VC 22358.9 rule (max 30 mph adjacent to a 25 mph BAD). Inference only: adjacent segment <=30.",
+  "confidence": "low"
+ },
+ {
+  "road": "La Jolla Blvd",
+  "city": "San Diego (La Jolla/Bird Rock)",
+  "from_to_segment_if_known": "Village - Bird Rock (roundabouts)",
+  "speed_mph": 25,
+  "lsv_ok": true,
+  "source_url": "https://www.sandiegouniontribune.com/2017/05/31/do-you-know-how-fast-or-slow-to-go-a-guide-to-la-jollas-speed-limits-from-bird-rock-to-the-shores/",
+  "quote_or_evidence": "La Jolla Boulevard: 25 mph (15 mph through roundabouts)",
+  "confidence": "high"
+ },
+ {
+  "road": "La Jolla Blvd",
+  "city": "San Diego (Bird Rock - Pacific Beach)",
+  "from_to_segment_if_known": "Bird Rock to PB",
+  "speed_mph": null,
+  "lsv_ok": null,
+  "source_url": "http://www.respectbirdrock.org/",
+  "quote_or_evidence": "Designated safety corridor (5 mph reduction) in plan approved Mar 16 2026; prior limit reportedly 35 per search synthesis (not verified on page). Either way <=35.",
+  "confidence": "medium"
+ },
+ {
+  "road": "Prospect St",
+  "city": "San Diego (La Jolla)",
+  "from_to_segment_if_known": "Village",
+  "speed_mph": 25,
+  "lsv_ok": true,
+  "source_url": "https://www.sandiegouniontribune.com/2017/05/31/do-you-know-how-fast-or-slow-to-go-a-guide-to-la-jollas-speed-limits-from-bird-rock-to-the-shores/",
+  "quote_or_evidence": "Prospect Street: 25 mph; R-316675 also lists Prospect St (Eads Av - Cave St) as business district segment",
+  "confidence": "high"
+ },
+ {
+  "road": "Torrey Pines Rd",
+  "city": "San Diego (La Jolla)",
+  "from_to_segment_if_known": "Girard Ave - Prospect Pl",
+  "speed_mph": 25,
+  "lsv_ok": true,
+  "source_url": "https://www.sandiegouniontribune.com/2017/05/31/do-you-know-how-fast-or-slow-to-go-a-guide-to-la-jollas-speed-limits-from-bird-rock-to-the-shores/",
+  "quote_or_evidence": "Torrey Pines Road: 35 mph (25 mph from Girard to Prospect Place, 45 mph Pottery Park Driveway to La Jolla Village Drive)",
+  "confidence": "high"
+ },
+ {
+  "road": "Torrey Pines Rd",
+  "city": "San Diego (La Jolla)",
+  "from_to_segment_if_known": "Prospect Pl - Pottery Park Driveway",
+  "speed_mph": 35,
+  "lsv_ok": true,
+  "source_url": "https://www.sandiegouniontribune.com/2017/05/31/do-you-know-how-fast-or-slow-to-go-a-guide-to-la-jollas-speed-limits-from-bird-rock-to-the-shores/",
+  "quote_or_evidence": "35 mph general; listed as safety corridor in R-316675 (Torrey Pines Rd (Prospect Pl - Pottery Park Driveway)), so may drop to 30",
+  "confidence": "high"
+ },
+ {
+  "road": "Torrey Pines Rd",
+  "city": "San Diego (La Jolla)",
+  "from_to_segment_if_known": "Pottery Park Driveway - La Jolla Village Dr",
+  "speed_mph": 45,
+  "lsv_ok": false,
+  "source_url": "https://www.sandiegouniontribune.com/2017/05/31/do-you-know-how-fast-or-slow-to-go-a-guide-to-la-jollas-speed-limits-from-bird-rock-to-the-shores/",
+  "quote_or_evidence": "45 mph Pottery Park Driveway to La Jolla Village Drive",
+  "confidence": "high"
+ },
+ {
+  "road": "La Jolla Pkwy",
+  "city": "San Diego (La Jolla)",
+  "from_to_segment_if_known": null,
+  "speed_mph": 45,
+  "lsv_ok": false,
+  "source_url": "https://www.sandiegouniontribune.com/2017/05/31/do-you-know-how-fast-or-slow-to-go-a-guide-to-la-jollas-speed-limits-from-bird-rock-to-the-shores/",
+  "quote_or_evidence": "La Jolla Parkway: 45 mph",
+  "confidence": "high"
+ },
+ {
+  "road": "N Torrey Pines Rd",
+  "city": "San Diego (La Jolla/Torrey Pines)",
+  "from_to_segment_if_known": null,
+  "speed_mph": 45,
+  "lsv_ok": false,
+  "source_url": "https://www.sandiegouniontribune.com/2017/05/31/do-you-know-how-fast-or-slow-to-go-a-guide-to-la-jollas-speed-limits-from-bird-rock-to-the-shores/",
+  "quote_or_evidence": "North Torrey Pines Road: 45 mph (blocks LSV coastal route La Jolla->Del Mar)",
+  "confidence": "high"
+ },
+ {
+  "road": "La Jolla Shores Dr",
+  "city": "San Diego (La Jolla)",
+  "from_to_segment_if_known": null,
+  "speed_mph": 30,
+  "lsv_ok": true,
+  "source_url": "https://www.sandiegouniontribune.com/2017/05/31/do-you-know-how-fast-or-slow-to-go-a-guide-to-la-jollas-speed-limits-from-bird-rock-to-the-shores/",
+  "quote_or_evidence": "La Jolla Shores Drive: 30 mph",
+  "confidence": "high"
+ },
+ {
+  "road": "Pearl St / Girard Ave / Nautilus St / El Paseo Grande",
+  "city": "San Diego (La Jolla)",
+  "from_to_segment_if_known": null,
+  "speed_mph": 25,
+  "lsv_ok": true,
+  "source_url": "https://www.sandiegouniontribune.com/2017/05/31/do-you-know-how-fast-or-slow-to-go-a-guide-to-la-jollas-speed-limits-from-bird-rock-to-the-shores/",
+  "quote_or_evidence": "Pearl 25, Girard 25, Nautilus 25, El Paseo Grande 25 (2017 list)",
+  "confidence": "high"
+ },
+ {
+  "road": "Garnet Ave",
+  "city": "San Diego (Pacific Beach)",
+  "from_to_segment_if_known": "Mission Bl - Ingraham St",
+  "speed_mph": null,
+  "lsv_ok": null,
+  "source_url": "https://www.sandiego.gov/sites/default/files/2026-02/comprehensive-speed-management-plan.pdf",
+  "quote_or_evidence": "Listed for reduction in Speed Mgmt Plan (0.88 mi) and R-316675; commercial street, very likely <=30 but exact number not extracted",
+  "confidence": "low"
+ },
+ {
+  "road": "Ingraham St",
+  "city": "San Diego (Mission Bay)",
+  "from_to_segment_if_known": "W Mission Bay Dr - Crown Point Dr / La Playa - Beryl",
+  "speed_mph": null,
+  "lsv_ok": null,
+  "source_url": "https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf",
+  "quote_or_evidence": "Listed in R-316675 Table 1/2 (5 mph reduction); exact speed not extracted from PDF tables. A search engine synthesis claimed 25 mph but unverified - do not trust.",
+  "confidence": "low"
+ },
+ {
+  "road": "Sunset Cliffs Blvd",
+  "city": "San Diego (Ocean Beach)",
+  "from_to_segment_if_known": "Niagara Av - Cape May Av",
+  "speed_mph": null,
+  "lsv_ok": true,
+  "source_url": "https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf",
+  "quote_or_evidence": "R-316675 lists Sunset Cliffs Bl segments with 15 (school zone); OB Rag notes 25 mph signs near Newport Ave",
+  "confidence": "medium"
+ },
+ {
+  "road": "Sunset Cliffs Blvd",
+  "city": "San Diego (OB/Midway)",
+  "from_to_segment_if_known": "Nimitz - W Point Loma",
+  "speed_mph": 45,
+  "lsv_ok": false,
+  "source_url": "https://obrag.org/2008/08/locals-convince-ocean-beach-town-council-to-back-safety-measures-for-sunset-cliffs-blvd/",
+  "quote_or_evidence": "Search synthesis: Nimitz\u2013West Point Loma segment was 45 mph (2008 article)",
+  "confidence": "low"
+ },
+ {
+  "road": "Camino del Mar",
+  "city": "Del Mar",
+  "from_to_segment_if_known": "27th St - Coast Blvd",
+  "speed_mph": 25,
+  "lsv_ok": true,
+  "source_url": "https://thecoastnews.com/speed-limit-lowered-along-stretch-of-del-mar-road/",
+  "quote_or_evidence": "reduce ... from 35 mph to 25 mph between 27th Street and Coast Boulevard",
+  "confidence": "high"
+ },
+ {
+  "road": "Camino del Mar",
+  "city": "Del Mar",
+  "from_to_segment_if_known": "San Dieguito Bridge - 27th St",
+  "speed_mph": 30,
+  "lsv_ok": true,
+  "source_url": "https://thecoastnews.com/speed-limit-lowered-along-stretch-of-del-mar-road/",
+  "quote_or_evidence": "from 35 mph to 30 mph between the San Dieguito Bridge and 27th Street",
+  "confidence": "high"
+ },
+ {
+  "road": "Camino del Mar",
+  "city": "Del Mar",
+  "from_to_segment_if_known": "Plaza - 9th St",
+  "speed_mph": 25,
+  "lsv_ok": true,
+  "source_url": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10062026-3937",
+  "quote_or_evidence": "Heading south on Camino del Mar from the Plaza, the speed limit is 25 mph. At the light at 9th Street, it jumps to 35 mph.",
+  "confidence": "high"
+ },
+ {
+  "road": "Camino del Mar",
+  "city": "Del Mar",
+  "from_to_segment_if_known": "9th St - south city limit (Shores Park/Torrey Pines)",
+  "speed_mph": 35,
+  "lsv_ok": true,
+  "source_url": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10062026-3937",
+  "quote_or_evidence": "jumps to 35 mph ... section runs along Shores Park; council (Oct 2026) considering 30 mph 9th - La Amatista",
+  "confidence": "high"
+ },
+ {
+  "road": "Highway 101 (S Coast Hwy / Camino del Mar)",
+  "city": "Solana Beach",
+  "from_to_segment_if_known": "North City Limit - Dahlia Dr",
+  "speed_mph": 35,
+  "lsv_ok": true,
+  "source_url": "https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf",
+  "quote_or_evidence": "Highway 101 North City Limit-Cliff St 35; Cliff St-Lomas Santa Fe 35; Lomas Santa Fe-Dahlia 35 (2023 E&TS)",
+  "confidence": "high"
+ },
+ {
+  "road": "Highway 101",
+  "city": "Solana Beach",
+  "from_to_segment_if_known": "Dahlia Dr - Via de la Valle",
+  "speed_mph": 40,
+  "lsv_ok": false,
+  "source_url": "https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf",
+  "quote_or_evidence": "Highway 101 Dahlia Drive - Via De La Valle 40 (KEY CHOKE: blocks Solana Beach -> Del Mar on 101)",
+  "confidence": "high"
+ },
+ {
+  "road": "Sierra Ave",
+  "city": "Solana Beach",
+  "from_to_segment_if_known": "Plaza St - Border Ave",
+  "speed_mph": 25,
+  "lsv_ok": true,
+  "source_url": "https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf",
+  "quote_or_evidence": "Sierra Avenue Plaza St-Dahlia 25; Dahlia-Border Ave 25 (parallel alternative to 101 but ends at Border Ave)",
+  "confidence": "high"
+ },
+ {
+  "road": "Lomas Santa Fe Dr",
+  "city": "Solana Beach",
+  "from_to_segment_if_known": "Hwy 101 - Stevens Ave",
+  "speed_mph": 35,
+  "lsv_ok": true,
+  "source_url": "https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf",
+  "quote_or_evidence": "35",
+  "confidence": "high"
+ },
+ {
+  "road": "N Coast Hwy 101",
+  "city": "Encinitas",
+  "from_to_segment_if_known": "La Costa Ave - Encinitas Blvd",
+  "speed_mph": 25,
+  "lsv_ok": true,
+  "source_url": "https://ecode360.com/EN5042/laws/LF2740111.pdf",
+  "quote_or_evidence": "N. Coast Hwy 101 La Costa Ave. to Leucadia Blvd. 25; Leucadia Blvd. to Encinitas Blvd. 25 (Ord 2026-05)",
+  "confidence": "high"
+ },
+ {
+  "road": "S Coast Hwy 101",
+  "city": "Encinitas",
+  "from_to_segment_if_known": "Encinitas Blvd - Swami's Ped Crossing",
+  "speed_mph": 25,
+  "lsv_ok": true,
+  "source_url": "https://ecode360.com/EN5042/laws/LF2740111.pdf",
+  "quote_or_evidence": "Encinitas Blvd to D St 25; D St to J St 25; J St to Swami's 25",
+  "confidence": "high"
+ },
+ {
+  "road": "S Coast Hwy 101",
+  "city": "Encinitas (Cardiff)",
+  "from_to_segment_if_known": "Swami's - south city limit (San Elijo lagoon)",
+  "speed_mph": 30,
+  "lsv_ok": true,
+  "source_url": "https://ecode360.com/EN5042/laws/LF2740111.pdf",
+  "quote_or_evidence": "Swami's to Chesterfield 30; Chesterfield to Las Olas 30; Las Olas to South City Limits 30",
+  "confidence": "high"
+ },
+ {
+  "road": "San Elijo Ave",
+  "city": "Encinitas (Cardiff)",
+  "from_to_segment_if_known": "Santa Fe Dr - Chesterfield Dr",
+  "speed_mph": 25,
+  "lsv_ok": true,
+  "source_url": "https://ecode360.com/EN5042/laws/LF2740111.pdf",
+  "quote_or_evidence": "25",
+  "confidence": "high"
+ },
+ {
+  "road": "Leucadia Blvd",
+  "city": "Encinitas",
+  "from_to_segment_if_known": "Hwy 101 - I-5",
+  "speed_mph": 25,
+  "lsv_ok": true,
+  "source_url": "https://ecode360.com/EN5042/laws/LF2740111.pdf",
+  "quote_or_evidence": "101 to I-5 25 (row partially garbled; I-5 to Quail Gardens 35)",
+  "confidence": "medium"
+ },
+ {
+  "road": "Manchester Ave",
+  "city": "Encinitas",
+  "from_to_segment_if_known": "San Elijo Ave - I-5",
+  "speed_mph": 35,
+  "lsv_ok": true,
+  "source_url": "https://ecode360.com/EN5042/laws/LF2740111.pdf",
+  "quote_or_evidence": "Manchester Ave. San Elijo Ave. to I-5 35",
+  "confidence": "high"
+ },
+ {
+  "road": "Carlsbad Blvd",
+  "city": "Carlsbad",
+  "from_to_segment_if_known": "North city limit - State St",
+  "speed_mph": 35,
+  "lsv_ok": true,
+  "source_url": "https://ecode360.com/44006773",
+  "quote_or_evidence": "\u00a710.44.030 A: 35 mph",
+  "confidence": "high"
+ },
+ {
+  "road": "Carlsbad Blvd",
+  "city": "Carlsbad",
+  "from_to_segment_if_known": "State St - Tamarack Ave",
+  "speed_mph": 30,
+  "lsv_ok": true,
+  "source_url": "https://ecode360.com/44006773",
+  "quote_or_evidence": "B,C: 30 mph",
+  "confidence": "high"
+ },
+ {
+  "road": "Carlsbad Blvd",
+  "city": "Carlsbad",
+  "from_to_segment_if_known": "Tamarack - 1,400 ft S of Manzano Dr",
+  "speed_mph": 35,
+  "lsv_ok": true,
+  "source_url": "https://ecode360.com/44006773",
+  "quote_or_evidence": "D: 35 mph",
+  "confidence": "high"
+ },
+ {
+  "road": "Carlsbad Blvd",
+  "city": "Carlsbad",
+  "from_to_segment_if_known": "1,400 ft S of Manzano - Island Way",
+  "speed_mph": 45,
+  "lsv_ok": false,
+  "source_url": "https://ecode360.com/44006773",
+  "quote_or_evidence": "E: northbound 50; F: southbound 45",
+  "confidence": "high"
+ },
+ {
+  "road": "Carlsbad Blvd",
+  "city": "Carlsbad",
+  "from_to_segment_if_known": "Island Way - south city limit (Batiquitos Lagoon to Leucadia)",
+  "speed_mph": 50,
+  "lsv_ok": false,
+  "source_url": "https://ecode360.com/44006773",
+  "quote_or_evidence": "G: 50 mph (KEY CHOKE: blocks Carlsbad <-> Encinitas on the coast)",
+  "confidence": "high"
+ },
+ {
+  "road": "Coast Highway",
+  "city": "Oceanside",
+  "from_to_segment_if_known": "Wisconsin Ave - south city limit",
+  "speed_mph": 35,
+  "lsv_ok": true,
+  "source_url": "https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones",
+  "quote_or_evidence": "Coast Highway between Wisconsin Ave and Oceanside Blvd / Morse / Vista Way / south city limits: 35",
+  "confidence": "high"
+ },
+ {
+  "road": "The Strand",
+  "city": "Oceanside",
+  "from_to_segment_if_known": "Breakwater Way - Wisconsin",
+  "speed_mph": 15,
+  "lsv_ok": true,
+  "source_url": "https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones",
+  "quote_or_evidence": "Strand from Breakwater Way to Wisconsin: 15",
+  "confidence": "high"
+ },
+ {
+  "road": "Vista Way",
+  "city": "Oceanside",
+  "from_to_segment_if_known": "Coast Hwy - I-5",
+  "speed_mph": 30,
+  "lsv_ok": true,
+  "source_url": "https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones",
+  "quote_or_evidence": "30",
+  "confidence": "high"
+ },
+ {
+  "road": "Oceanside Blvd",
+  "city": "Oceanside",
+  "from_to_segment_if_known": "Coast Hwy - I-5",
+  "speed_mph": 40,
+  "lsv_ok": false,
+  "source_url": "https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones",
+  "quote_or_evidence": "40",
+  "confidence": "high"
+ },
+ {
+  "road": "Orange Ave (SR-75)",
+  "city": "Coronado",
+  "from_to_segment_if_known": "SR-75 portion",
+  "speed_mph": null,
+  "lsv_ok": false,
+  "source_url": "https://gocodebook.com/library/us/ca/coronado/title-20/chapter-20.40-paratransit-vehicles",
+  "quote_or_evidence": "CMC 20.40: Drivers of an LSV operating on SR 75 shall be limited to Orange Avenue extending southwest to Glorietta Boulevard (paratransit/for-hire LSV ordinance). Silver Strand (SR-75) not allowed.",
+  "confidence": "medium"
+ },
+ {
+  "road": "Seacoast Dr",
+  "city": "Imperial Beach",
+  "from_to_segment_if_known": "Palm Ave - Imperial Beach Blvd",
+  "speed_mph": 20,
+  "lsv_ok": true,
+  "source_url": "https://pub-imperialbeach.escribemeetings.com/filestream.ashx?DocumentId=973",
+  "quote_or_evidence": "Search synthesis of IB ordinance 2022: Seacoast Drive 20 mph Palm Ave to IB Blvd (not opened directly)",
+  "confidence": "medium"
+ }
+]
