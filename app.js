@@ -55,7 +55,7 @@ function summarize(parts){let dist=0,stretches=[],cur=null,line=[];const legs=[]
 const ft=m=>Math.round(m*3.281)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
 async function route(){const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da]=nearest(start),[b,db]=nearest(end);
  const parts=a!=null&&b!=null?astar(a,b):null;$('acts').style.display='flex';
- if(!parts){$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even allowing ≤300 ft stretches on faster roads, there’s no way through.':'Every way there uses a 40+ mph road. Try <b>⚠️ Risky</b> mode to see short-stretch options.';$('steps').innerHTML='';setSnap('collapsed');setSnap('collapsed');return null}
+ if(!parts){$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even allowing ≤300 ft stretches on faster roads, there’s no way through.':'Every way there uses a 40+ mph road. Try <b>⚠️ Risky</b> mode to see short-stretch options.';$('steps').innerHTML='';setSnap('half');return null}
  const r=summarize(parts);routeG=L.layerGroup().addTo(map);
  const all=[];r.legs.forEach(l=>all.push(...l.p));
  L.polyline(all.map(p=>[p[1],p[0]]),{color:'#fff',weight:10,opacity:.9}).addTo(routeG);
@@ -67,7 +67,8 @@ async function route(){const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,M
  $('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}</span></div>`).join('');
  setSnap('half');window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};return r}
 const pinIcon=(c,e)=>L.divIcon({className:'',html:`<div class="pin" style="background:${c}"><span>${e}</span></div>`,iconSize:[30,30],iconAnchor:[15,30]});
-function setPt(ll){if(!start||end){clearR();start=ll;mk.push(L.marker(ll,{icon:pinIcon('#14b8c4','🏠')}).addTo(map));$('title').innerHTML='📍 Start set';$('sub').textContent='Tap the map or search for where you’re headed.'}
+function setPt(ll){if(myLL&&(!start||end)){clearR();start=myLL;end=ll;mk.push(L.marker(ll,{icon:pinIcon('#ff7a59','🏖️')}).addTo(map));route();return}
+ if(!start||end){clearR();start=ll;mk.push(L.marker(ll,{icon:pinIcon('#14b8c4','🏠')}).addTo(map));$('title').innerHTML='📍 Start set';$('sub').textContent='Tap the map or search for where you’re headed.'}
  else{end=ll;mk.push(L.marker(ll,{icon:pinIcon('#ff7a59','🏖️')}).addTo(map));route()}}
 function clearR(){start=end=null;mk.forEach(m=>map.removeLayer(m));mk=[];if(routeG)map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('acts').style.display='none';$('title').innerHTML='🏖️ Golf Cart Maps';$('sub').textContent='Tap the map to set a start, or hit 📍.'}
 map.on('click',e=>setPt(e.latlng));$('clr').onclick=clearR;
@@ -75,9 +76,17 @@ $('swap').onclick=()=>{if(start&&end){const a=end,b=start;clearR();setPt(a);setP
 function setRisky(v){risky=v;$('cRisk').classList.toggle('on',v);$('cNorm').classList.toggle('on',!v);if(start&&end)route()}
 $('cNorm').onclick=()=>setRisky(false);$('cRisk').onclick=()=>setRisky(true);
 let legendOn=true;$('lay').onclick=()=>{legendOn=!legendOn;$('legend').style.display=$('disc').style.display=legendOn?'':'none'};
-let me;$('loc').onclick=()=>navigator.geolocation.getCurrentPosition(p=>{const ll=L.latLng(p.coords.latitude,p.coords.longitude);
- if(me)map.removeLayer(me);me=L.circleMarker(ll,{radius:8,color:'#fff',fillColor:'#1d6fe0',fillOpacity:1,weight:3}).addTo(map);map.setView(ll,16);clearR();start=ll;
- mk.push(L.marker(ll,{icon:pinIcon('#14b8c4','🛺')}).addTo(map));$('title').innerHTML='📍 Starting from you';$('sub').textContent='Tap or search a destination.'},e=>{$('sub').textContent='Location unavailable: '+e.message},{enableHighAccuracy:true});
+let me,meAcc,myLL=null,watching=false;
+function locate(){if(!navigator.geolocation){$('sub').textContent='Location not supported on this device.';return}
+ $('showloc').textContent='📍 Finding you…';let first=true;
+ const ok=p=>{myLL=L.latLng(p.coords.latitude,p.coords.longitude);const acc=p.coords.accuracy;
+  if(!me){meAcc=L.circle(myLL,{radius:acc,color:'#1d6fe0',weight:1,fillColor:'#1d6fe0',fillOpacity:.12,interactive:false}).addTo(map);me=L.circleMarker(myLL,{radius:8,color:'#fff',fillColor:'#1d6fe0',fillOpacity:1,weight:3,interactive:false}).addTo(map)}
+  else{me.setLatLng(myLL);meAcc.setLatLng(myLL).setRadius(acc)}
+  if(first){first=false;map.setView(myLL,16);$('showloc').style.display='none';if(!end){clearR()}$('title').innerHTML='📍 Starting from you';$('sub').textContent='Tap the map or search where you’re headed.';}};
+ const err=e=>{$('showloc').textContent='📍 Show my location';$('sub').textContent=e.code===1?'Location is blocked. Turn it on in Settings › Safari › Location.':'Couldn’t find you: '+e.message};
+ if(watching){navigator.geolocation.getCurrentPosition(p=>{first=true;ok(p)},err,{enableHighAccuracy:true});return}
+ watching=true;navigator.geolocation.watchPosition(ok,err,{enableHighAccuracy:true,maximumAge:5000})}
+$('loc').onclick=locate;$('showloc').onclick=locate;
 let tmr,lastQ=0;$('q').oninput=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<4){$('sugg').style.display='none';return}
  tmr=setTimeout(async()=>{await new Promise(r=>setTimeout(r,Math.max(0,1100-(Date.now()-lastQ))));lastQ=Date.now();const b=D.meta.bbox;
   const j=await (await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=5&bounded=1&viewbox=${b[1]},${b[2]},${b[3]},${b[0]}&q=${encodeURIComponent(v)}`)).json();
@@ -87,26 +96,36 @@ let tmr,lastQ=0;$('q').oninput=e=>{clearTimeout(tmr);const v=e.target.value.trim
 window.testRoute=async(a,b,rk=false)=>{risky=rk;clearR();start=L.latLng(a);mk.push(L.marker(start,{icon:pinIcon('#14b8c4','🏠')}).addTo(map));end=L.latLng(b);mk.push(L.marker(end,{icon:pinIcon('#ff7a59','🏖️')}).addTo(map));const r=await route();return r?window.lastRoute:null};
 fetch('data/index.json').then(r=>r.json()).then(async j=>{D={...j,segs:[],tileSet:new Set(j.meta.tiles)};$('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;draw();clearR();await onMove();window.ready=true});
 
-// ---- bottom sheet: collapsed / half / full with touch drag ----
-const sheet=$('sheet'),shead=$('shead');let snap='collapsed';
-function sab(){return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sab'))||0}
-function snaps(){const H=sheet.offsetHeight,vh=window.innerHeight;return{collapsed:H-(shead.offsetHeight+sab()+6),half:H-vh*0.45,full:0}}
-function place(y){sheet.style.transform=`translateY(${y}px)`;const vis=sheet.offsetHeight-y;$('loc').style.bottom=(vis+14)+'px';$('lay').style.bottom=(vis+74)+'px';const hide=vis>window.innerHeight*0.6;$('loc').style.opacity=$('lay').style.opacity=hide?0:1;$('loc').style.pointerEvents=$('lay').style.pointerEvents=hide?'none':''}
+// ---- bottom sheet: pointer-driven, translateY snapping ----
+const sheet=$('sheet'),shead=$('shead');let snap='full';
+function vh(){return window.innerHeight}
+function sizeSheet(){sheet.style.height=Math.round(vh()*0.55)+'px'}
+function snaps(){const H=sheet.offsetHeight;return{full:0,half:Math.max(0,H-vh()*0.36),collapsed:Math.max(0,H-shead.offsetHeight-6)}}
+let curY=0;
+function place(y){curY=y;sheet.style.transform=`translate3d(0,${y}px,0)`;const vis=sheet.offsetHeight-y;
+ $('loc').style.bottom=(vis+14)+'px';$('lay').style.bottom=(vis+76)+'px';$('chev').textContent=snap==='collapsed'?'⌃':'⌄'}
 function setSnap(n){snap=n;place(snaps()[n])}
 window.setSnap=setSnap;window.getSnap=()=>snap;
-let dy0=null,y0=0,moved=false,t0=0;
-const cur=()=>{const m=/translateY\(([-\d.]+)px/.exec(sheet.style.transform);return m?+m[1]:0};
-function ds(y){dy0=y;y0=cur();moved=false;t0=Date.now();sheet.classList.add('drag')}
-function dm(y){if(dy0==null)return;const d=y-dy0;if(Math.abs(d)>4)moved=true;const S=snaps();place(Math.min(S.collapsed,Math.max(0,y0+d)))}
-function de(y){if(dy0==null)return;sheet.classList.remove('drag');const d=y-dy0,S=snaps();dy0=null;
- if(!moved){setSnap(snap==='collapsed'?'half':'collapsed');return}
- const v=d/Math.max(1,Date.now()-t0),y1=cur();let best;
- best=Object.keys(S).reduce((a,b)=>Math.abs(S[a]-y1)<Math.abs(S[b]-y1)?a:b);
- if(best===snap&&Math.abs(v)>0.4)best=v>0?(snap==='full'?'half':'collapsed'):(snap==='collapsed'?'half':'full');setSnap(best)}
-shead.addEventListener('touchstart',e=>{e.preventDefault();ds(e.touches[0].clientY)},{passive:false});
-shead.addEventListener('touchmove',e=>{e.preventDefault();dm(e.touches[0].clientY)},{passive:false});
-shead.addEventListener('touchend',e=>{e.preventDefault();de(e.changedTouches[0].clientY)},{passive:false});
-shead.addEventListener('mousedown',e=>{ds(e.clientY);const mm=ev=>dm(ev.clientY),mu=ev=>{de(ev.clientY);removeEventListener('mousemove',mm);removeEventListener('mouseup',mu)};addEventListener('mousemove',mm);addEventListener('mouseup',mu)});
+const ORDER=['collapsed','half','full'];
+let drag=null;
+function ds(y,id){drag={y0:y,t0:Date.now(),start:curY,moved:false,id};sheet.classList.add('drag')}
+function dm(y){if(!drag)return;const d=y-drag.y0;if(Math.abs(d)>6)drag.moved=true;const S=snaps();place(Math.min(S.collapsed,Math.max(0,drag.start+d)))}
+function de(y){if(!drag)return;const d=y-drag.y0,v=d/Math.max(1,Date.now()-drag.t0),moved=drag.moved;drag=null;sheet.classList.remove('drag');
+ if(!moved){setSnap(ORDER[(ORDER.indexOf(snap)+1)%3]);return}
+ const S=snaps();let best=Object.keys(S).reduce((a,b)=>Math.abs(S[a]-curY)<Math.abs(S[b]-curY)?a:b);
+ if(best===snap&&Math.abs(v)>0.3){const i=ORDER.indexOf(snap)+(v>0?-1:1);best=ORDER[Math.max(0,Math.min(2,i))]}setSnap(best)}
+const isBtn=e=>e.target.closest&&e.target.closest('#chev');
+if(window.PointerEvent){
+ shead.addEventListener('pointerdown',e=>{if(isBtn(e))return;e.preventDefault();try{shead.setPointerCapture(e.pointerId)}catch(_){}ds(e.clientY,e.pointerId)},{passive:false});
+ shead.addEventListener('pointermove',e=>{if(drag){e.preventDefault();dm(e.clientY)}},{passive:false});
+ shead.addEventListener('pointerup',e=>{if(drag){e.preventDefault();de(e.clientY)}},{passive:false});
+ shead.addEventListener('pointercancel',e=>{if(drag)de(e.clientY)});
+}
+// touch fallback: just block native scroll/bounce on header
+shead.addEventListener('touchstart',e=>{if(!isBtn(e))e.preventDefault()},{passive:false});
+shead.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+$('chev').addEventListener('click',e=>{e.stopPropagation();setSnap(snap==='collapsed'?'half':'collapsed')});
 L.DomEvent.disableClickPropagation(sheet);L.DomEvent.disableScrollPropagation(sheet);
-addEventListener('resize',()=>setSnap(snap));
-requestAnimationFrame(()=>{sheet.style.transition='none';setSnap('full');requestAnimationFrame(()=>sheet.style.transition='')});
+map.on('click',()=>{if(!routeG&&snap!=='collapsed')setSnap('collapsed')});
+addEventListener('resize',()=>{sizeSheet();setSnap(snap)});
+sizeSheet();sheet.style.transition='none';setSnap('full');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));

@@ -20,10 +20,10 @@
 #chips{display:flex;gap:6px;margin-top:8px}
 .chip{background:#fffffff0;border-radius:18px;padding:6px 12px;font:700 13px Nunito;box-shadow:0 2px 8px rgba(11,60,80,.15);border:0;color:var(--ink)}
 .chip.on{background:#ffd23f;color:#5a4300}
-.fab{position:absolute;z-index:1000;right:12px;width:50px;height:50px;border-radius:50%;background:#fff;border:0;box-shadow:var(--sh);font-size:21px;display:grid;place-items:center}
-#loc,#lay{transition:bottom .28s}
-#sheet{position:absolute;z-index:1001;left:0;right:0;bottom:0;height:calc(100vh - 140px);height:calc(100dvh - 130px - var(--sat));background:#fff;border-radius:22px 22px 0 0;box-shadow:0 -6px 24px rgba(11,60,80,.16);display:flex;flex-direction:column;transition:transform .28s cubic-bezier(.2,.8,.2,1);will-change:transform}
-#sheet.drag{transition:none}#shead{touch-action:none;padding:8px 16px 6px;cursor:grab;flex:none}#sbody{flex:1;overflow:auto;padding:0 16px calc(var(--sab) + 20px);-webkit-overflow-scrolling:touch}
+.fab{position:absolute;z-index:1002;right:14px;width:54px;height:54px;border-radius:50%;background:#fff;border:0;box-shadow:var(--sh);font-size:22px;display:grid;place-items:center}#loc{background:#1d6fe0;color:#fff}#loc svg{width:26px;height:26px}
+#loc,#lay{transition:bottom .28s}#sheet.drag~#loc{transition:none}
+#sheet{position:absolute;z-index:1001;left:0;right:0;bottom:0;height:55vh;background:#fff;border-radius:22px 22px 0 0;box-shadow:0 -6px 24px rgba(11,60,80,.16);display:flex;flex-direction:column;transition:transform .28s cubic-bezier(.2,.8,.2,1);will-change:transform}
+#sheet.drag{transition:none}#shead{touch-action:none;user-select:none;-webkit-user-select:none;position:relative;padding:8px 16px 6px;cursor:grab;flex:none}#sbody{flex:1;overflow:auto;padding:0 16px calc(var(--sab) + 20px);-webkit-overflow-scrolling:touch}
 details{margin-top:10px}summary{font:800 13px Nunito;color:var(--deep);list-style:none;cursor:pointer}summary::-webkit-details-marker{display:none}
 #sheet .grab{width:40px;height:5px;border-radius:3px;background:#cfe3e8;margin:2px auto 8px}
 #title{font:800 18px Nunito;display:flex;align-items:center;gap:8px}
@@ -39,14 +39,16 @@ details{margin-top:10px}summary{font:800 13px Nunito;color:var(--deep);list-styl
 .pin{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 3px 8px #0004}
 .pin span{display:block;transform:rotate(45deg);text-align:center;line-height:24px;font-size:14px}
 #tip{display:block;margin-top:10px;text-align:center;text-decoration:none;color:#0b6e86;background:linear-gradient(90deg,#e3f6f8,#f6ead2);border-radius:14px;padding:10px;font-size:14px}
+#chev{position:absolute;right:12px;top:8px;width:36px;height:36px;border-radius:50%;border:0;background:#e3f6f8;color:#0b6e86;font:800 20px Nunito;line-height:36px;padding:0}
+#showloc{position:relative}
 </style></head><body>
 <div id="map"></div>
 <div id="top"><div id="bar"><div id="logo">🛺</div><input id="q" placeholder="Where to, beach cruiser?" autocomplete="off"></div>
 <div id="sugg"></div>
 <div id="chips"><button class="chip on" id="cNorm">🌊 Legal only</button><button class="chip" id="cRisk">⚠️ Risky (≤300 ft)</button></div></div>
-<button class="fab" id="lay" title="Legend">🗺️</button><button class="fab" id="loc" title="Locate me">📍</button>
-<div id="sheet"><div id="shead"><div class="grab"></div>
-<div id="title">🏖️ Golf Cart Maps</div><div id="sub">Loading roads…</div></div><div id="sbody">
+<button class="fab" id="lay" title="Legend">🗺️</button><button class="fab" id="loc" title="Show my location" aria-label="Show my location"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><circle cx="12" cy="12" r="4" fill="#fff"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg></button>
+<div id="sheet"><div id="shead"><div class="grab"></div><button id="chev" aria-label="Collapse or expand">⌄</button>
+<div id="title">🏖️ Golf Cart Maps</div><div id="sub">Loading roads…</div></div><button class="btn" id="showloc" style="margin:4px 16px 8px;flex:none">📍 Show my location</button><div id="sbody">
 <div id="steps"></div>
 <div class="btnrow" id="acts" style="display:none"><button class="btn alt" id="clr">Clear</button><button class="btn" id="swap">⇅ Swap</button></div>
 <details id="more" open><summary>🗺️ Legend, tips & fine print ▾</summary><div id="legend"><span><i class="sw" style="background:#12a150"></i>Posted ≤35</span><span><i class="sw" style="background:repeating-linear-gradient(90deg,#4cc38a 0 5px,transparent 5px 8px)"></i>Small road (assumed 25)</span><span><i class="sw" style="background:#e5484d"></i>40+ / major — avoid</span><span><i class="sw" style="background:#1d6fe0"></i>Route</span><span><i class="sw" style="background:#ffc400"></i>Risky stretch</span></div>
