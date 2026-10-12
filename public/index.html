@@ -41,6 +41,7 @@ details{margin-top:10px}summary{font:800 13px Nunito;color:var(--deep);list-styl
 #tip{display:block;margin-top:10px;text-align:center;text-decoration:none;color:#0b6e86;background:linear-gradient(90deg,#e3f6f8,#f6ead2);border-radius:14px;padding:10px;font-size:14px}
 #chev{position:absolute;right:12px;top:8px;width:36px;height:36px;border-radius:50%;border:0;background:#e3f6f8;color:#0b6e86;font:800 20px Nunito;line-height:36px;padding:0}
 #showloc{position:relative}
+@keyframes roll{0%{transform:translateX(-6px) rotate(-6deg)}50%{transform:translateX(6px) rotate(6deg)}100%{transform:translateX(-6px) rotate(-6deg)}}.spin{display:inline-block;animation:roll .9s ease-in-out infinite}
 </style></head><body>
 <div id="map"></div>
 <div id="top"><div id="bar"><div id="logo">🛺</div><input id="q" placeholder="Where to, beach cruiser?" autocomplete="off"></div>

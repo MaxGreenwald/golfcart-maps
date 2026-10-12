@@ -5,7 +5,7 @@ const $=id=>document.getElementById(id);
 const RISKY_MAX=91.44; // 300 ft
 let D,risky=false,layer,nodes={},adj={},start=null,end=null,routeG=null,mk=[];
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden (posted >=40 or untagged major)
-const cls=s=>(s[2]==null||s[2]>35)?3:(s[3]==='t'?0:1);
+const cls=s=>(s[2]==null||(s[2]>35&&!(window.LENIENT&&s[2]===99)))?3:(s[3]==='t'?0:1);
 const STY=[{color:'#12a150',weight:3.2},{color:'#4cc38a',weight:2.6,dashArray:'5 4'},null,{color:'#e5484d',weight:3,opacity:.75}];
 const MAJOR=new Set(['motorway','motorway_link','trunk','trunk_link','primary','primary_link','secondary','secondary_link','tertiary','tertiary_link']);
 let buckets={},shown={};const G=0.02;
@@ -17,9 +17,9 @@ function refresh(){const b=map.getBounds().pad(0.2),z=map.getZoom(),minor=z>=14;
  for(const k in shown)if(!(k in want)){layer.removeLayer(shown[k]);delete shown[k]}
  for(const k in want)if(!shown[k]){const g=L.layerGroup();for(const i of buckets[want[k]]){const s=D.segs[i];if(!minor&&!MAJOR.has(s[1]))continue;g.addLayer(mkLine(s))}shown[k]=g;layer.addLayer(g)}}
 const loaded=new Set(),loading={};
-async function loadTile(k){if(loaded.has(k))return;if(!loading[k])loading[k]=fetch('data/tiles/'+k+'.json').then(r=>r.json()).then(segs=>{if(loaded.has(k))return;loaded.add(k);const from=D.segs.length;D.segs.push(...segs);bucketize(from);buildGraph(from)});return loading[k]}
+async function loadTile(k){if(loaded.has(k))return;if(!loading[k])loading[k]=(async()=>{for(let a=0;a<4;a++){try{const r=await fetch('data/tiles/'+k+'.json',{cache:a?'reload':'default'});if(!r.ok)throw new Error('HTTP '+r.status);const segs=await r.json();if(loaded.has(k))return;loaded.add(k);const from=D.segs.length;D.segs.push(...segs);bucketize(from);buildGraph(from);return}catch(e){console.warn('tile',k,e);await new Promise(r=>setTimeout(r,600*(a+1)))}}delete loading[k];$('sub').textContent='⚠️ Couldn’t load road data for this area. Check your connection and try again.';throw new Error('tile '+k)})();return loading[k]}
 function tilesIn(s,w,n,e){const T=D.meta.tileSize,out=[];for(let x=Math.floor(w/T);x<=Math.floor(e/T);x++)for(let y=Math.floor(s/T);y<=Math.floor(n/T);y++){const k=x+'_'+y;if(D.tileSet.has(k))out.push(k)}return out}
-async function ensure(s,w,n,e){const ks=tilesIn(s,w,n,e).filter(k=>!loaded.has(k));if(!ks.length)return;let done=0;const msg=()=>{$('sub').textContent=`Loading roads… ${done}/${ks.length} areas`};const prev=$('sub').innerHTML;msg();await Promise.all(ks.map(k=>loadTile(k).then(()=>{done++;msg()})));$('sub').innerHTML=window.ready?prev:'Tap the map to set a start, or hit 📍.'}
+async function ensure(s,w,n,e){await READY;const ks=tilesIn(s,w,n,e).filter(k=>!loaded.has(k));if(!ks.length)return;let done=0;const msg=()=>{$('sub').textContent=`Loading roads… ${done}/${ks.length} areas`};const prev=$('sub').innerHTML;msg();await Promise.allSettled(ks.map(k=>loadTile(k).then(()=>{done++;msg()})));$('sub').innerHTML=window.ready?prev:'Tap the map to set a start, or hit 📍.'}
 async function onMove(){if(!D)return;const b=map.getBounds().pad(0.1);const n0=loaded.size;if(map.getZoom()>=11)await ensure(b.getSouth(),b.getWest(),b.getNorth(),b.getEast());if(loaded.size!==n0){shown={};layer.clearLayers()}refresh()}
 map.on('moveend',onMove);
 function mkLine(s){const c=cls(s);const pl=L.polyline(s[7].map(p=>[p[1],p[0]]),{...STY[c],renderer});
@@ -32,7 +32,14 @@ function buildGraph(from){D.segs.slice(from).forEach((s,j)=>{const i=from+j;cons
   if(s[3]==='t'&&s[2]>=40){fast.add(a);fast.add(b)}
   const f=c===3;
   if(s[4]>=0)(adj[a]||(adj[a]=[])).push([b,s._len,i,false,f]);if(s[4]<=0)(adj[b]||(adj[b]=[])).push([a,s._len,i,true,f])})}
-function nearest(ll){let best=null,bd=1e18;const q=[ll.lng,ll.lat];for(const k in nodes){if(!(adj[k]||[]).some(e=>!e[4]))continue;const d=hav(q,nodes[k]);if(d<bd){bd=d;best=+k}}return [best,bd]}
+// snap to nearest point on an allowed (non-forbidden) edge; returns the closer endpoint node of that edge
+function nearest(ll){const q=[ll.lng,ll.lat],kx=Math.cos(ll.lat*Math.PI/180);let best=null,bd=1e18;
+ const T=0.004,bx=Math.floor(q[0]/G),by=Math.floor(q[1]/G);
+ const cand=[];for(let x=bx-1;x<=bx+1;x++)for(let y=by-1;y<=by+1;y++)(buckets[x+','+y]||[]).forEach(i=>cand.push(i));
+ for(const i of cand){const s=D.segs[i];if(cls(s)===3)continue;const p=s[7];
+  for(let j=1;j<p.length;j++){const ax=(p[j-1][0]-q[0])*kx,ay=p[j-1][1]-q[1],bx_=(p[j][0]-q[0])*kx,by_=p[j][1]-q[1];const dx=bx_-ax,dy=by_-ay,L2=dx*dx+dy*dy;let t=L2?-(ax*dx+ay*dy)/L2:0;t=Math.max(0,Math.min(1,t));const ex=ax+t*dx,ey=ay+t*dy,d=ex*ex+ey*ey;
+   if(d<bd){bd=d;const da=hav(q,p[0]),db=hav(q,p[p.length-1]);best=[da<=db?s[5]:s[6],da<=db?s[6]:s[5]]}}}
+ if(!best)return [null,1e9];return [best[0],Math.sqrt(bd)*111320,best[1]]}
 // A* over (node, metres-of-current-forbidden-run). Legal mode: forbidden edges never used.
 // Crossing a forbidden road = passing through a shared node between two allowed edges (CVC 21260(b)(1)).
 function astar(s,t){const key=(n,r)=>n+'|'+Math.round(r);const T=nodes[t];const g=new Map(),prev=new Map();const k0=key(s,0);g.set(k0,0);
@@ -53,8 +60,8 @@ function summarize(parts){let dist=0,stretches=[],cur=null,line=[];const legs=[]
  const steps=[];for(const l of legs){const n=D.names[l.s[0]]||'unnamed road';const last=steps[steps.length-1];if(last&&last.n===n&&last.f===l.f)last.d+=l.s._len;else steps.push({n,d:l.s._len,f:l.f,sp:l.s[2]})}
  return {dist,stretches,legs,steps}}
 const ft=m=>Math.round(m*3.281)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
-async function route(){const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da]=nearest(start),[b,db]=nearest(end);
- const parts=a!=null&&b!=null?astar(a,b):null;$('acts').style.display='flex';
+let routing=false;async function route(){$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
+ await new Promise(r=>setTimeout(r,0));let parts=null;if(a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
  if(!parts){$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even allowing ≤300 ft stretches on faster roads, there’s no way through.':'Every way there uses a 40+ mph road. Try <b>⚠️ Risky</b> mode to see short-stretch options.';$('steps').innerHTML='';setSnap('half');return null}
  const r=summarize(parts);routeG=L.layerGroup().addTo(map);
  const all=[];r.legs.forEach(l=>all.push(...l.p));
@@ -94,7 +101,8 @@ let tmr,lastQ=0;$('q').oninput=e=>{clearTimeout(tmr);const v=e.target.value.trim
   j.forEach(x=>{const d=document.createElement('div');d.textContent='📍 '+x.display_name.split(',').slice(0,3).join(',');d.onclick=()=>{sg.style.display='none';$('q').value=x.display_name.split(',')[0];$('q').blur();
    const ll=L.latLng(+x.lat,+x.lon);map.setView(ll,15);if(start&&end){const s=start;clearR();setPt(s)}setPt(ll)};sg.appendChild(d)})},700)};
 window.testRoute=async(a,b,rk=false)=>{risky=rk;clearR();start=L.latLng(a);mk.push(L.marker(start,{icon:pinIcon('#14b8c4','🏠')}).addTo(map));end=L.latLng(b);mk.push(L.marker(end,{icon:pinIcon('#ff7a59','🏖️')}).addTo(map));const r=await route();return r?window.lastRoute:null};
-fetch('data/index.json').then(r=>r.json()).then(async j=>{D={...j,segs:[],tileSet:new Set(j.meta.tiles)};$('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;draw();clearR();await onMove();window.ready=true});
+let readyRes;const READY=new Promise(r=>readyRes=r);
+fetch('data/index.json').then(r=>r.json()).then(async j=>{D={...j,segs:[],tileSet:new Set(j.meta.tiles)};readyRes();$('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;draw();clearR();await onMove();window.ready=true});
 
 // ---- bottom sheet: pointer-driven, translateY snapping ----
 const sheet=$('sheet'),shead=$('shead');let snap='full';
