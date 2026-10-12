@@ -77,7 +77,7 @@ const pinIcon=(c,e)=>L.divIcon({className:'',html:`<div class="pin" style="backg
 function setPt(ll){if(myLL&&(!start||end)){clearR();start=myLL;end=ll;mk.push(L.marker(ll,{icon:pinIcon('#ff7a59','🏖️')}).addTo(map));route();return}
  if(!start||end){clearR();start=ll;mk.push(L.marker(ll,{icon:pinIcon('#14b8c4','🏠')}).addTo(map));$('title').innerHTML='📍 Start set';$('sub').textContent='Tap the map or search for where you’re headed.'}
  else{end=ll;mk.push(L.marker(ll,{icon:pinIcon('#ff7a59','🏖️')}).addTo(map));route()}}
-function clearR(){start=end=null;mk.forEach(m=>map.removeLayer(m));mk=[];if(routeG)map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('acts').style.display='none';$('title').innerHTML='🏖️ Golf Cart Maps';$('sub').textContent='Tap the map to set a start, or hit 📍.'}
+function clearR(){start=end=null;mk.forEach(m=>map.removeLayer(m));mk=[];if(routeG)map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('acts').style.display='none';$('title').innerHTML='🏖️ Golf Cart Maps';$('sub').innerHTML='Tap the map twice: 1️⃣ start, then 2️⃣ destination — or hit 📍 to start from you.'}
 map.on('click',e=>setPt(e.latlng));$('clr').onclick=clearR;
 $('swap').onclick=()=>{if(start&&end){const a=end,b=start;clearR();setPt(a);setPt(b)}};
 function setRisky(v){risky=v;$('cRisk').classList.toggle('on',v);$('cNorm').classList.toggle('on',!v);if(start&&end)route()}
@@ -94,12 +94,33 @@ function locate(){if(!navigator.geolocation){$('sub').textContent='Location not 
  if(watching){navigator.geolocation.getCurrentPosition(p=>{first=true;ok(p)},err,{enableHighAccuracy:true});return}
  watching=true;navigator.geolocation.watchPosition(ok,err,{enableHighAccuracy:true,maximumAge:5000})}
 $('loc').onclick=locate;$('showloc').onclick=locate;
-let tmr,lastQ=0;$('q').oninput=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<4){$('sugg').style.display='none';return}
- tmr=setTimeout(async()=>{await new Promise(r=>setTimeout(r,Math.max(0,1100-(Date.now()-lastQ))));lastQ=Date.now();const b=D.meta.bbox;
-  const j=await (await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=5&bounded=1&viewbox=${b[1]},${b[2]},${b[3]},${b[0]}&q=${encodeURIComponent(v)}`)).json();
-  const sg=$('sugg');sg.innerHTML='';sg.style.display=j.length?'block':'none';
-  j.forEach(x=>{const d=document.createElement('div');d.textContent='📍 '+x.display_name.split(',').slice(0,3).join(',');d.onclick=()=>{sg.style.display='none';$('q').value=x.display_name.split(',')[0];$('q').blur();
-   const ll=L.latLng(+x.lat,+x.lon);map.setView(ll,15);if(start&&end){const s=start;clearR();setPt(s)}setPt(ll)};sg.appendChild(d)})},700)};
+// ---- fast search: local index (instant) + Photon autocomplete + Nominatim fallback ----
+const qcache=new Map();let POIS=[],nameAt=null,qseq=0,tmr;
+fetch('data/pois.json').then(r=>r.ok?r.json():[]).then(j=>POIS=j).catch(()=>{});
+const norm=t=>t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+function streetIndex(){nameAt=new Map();for(const s of D.segs){if(!nameAt.has(s[0])){const p=s[7][0];nameAt.set(s[0],[p[0],p[1]])}}}
+function localMatches(q){const n=norm(q);if(!n)return[];const out=[];
+ for(const p of POIS){const pn=norm(p[0]);if(pn.includes(n))out.push({name:p[0],sub:(p[1]||'place').replace('_',' ')+(p[4]?' · '+p[4]:''),lat:p[3],lon:p[2],score:pn.startsWith(n)?0:1})}
+ if(!nameAt||nameAt.size<D.segs.length/50)streetIndex();
+ D.names.forEach((nm,i)=>{if(!nm)return;const pn=norm(nm);if(pn.startsWith(n)||pn.includes(' '+n)){const c=nameAt.get(i);if(c)out.push({name:nm,sub:'street',lat:c[1],lon:c[0],score:pn.startsWith(n)?0.5:1.5})}});
+ return out.sort((a,b)=>a.score-b.score).slice(0,5)}
+async function remote(q){const key=norm(q);if(qcache.has(key))return qcache.get(key);const b=D.meta.bbox,c=map.getCenter();let res=[];
+ try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),2500);
+  const r=await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=6&lat=${c.lat}&lon=${c.lng}&bbox=${b[1]},${b[0]},${b[3]},${b[2]}`,{signal:ac.signal});clearTimeout(to);
+  const j=await r.json();res=j.features.map(f=>{const p=f.properties;return{name:p.name||[p.housenumber,p.street].filter(Boolean).join(' '),sub:[p.housenumber&&p.name?p.street:null,p.city||p.district,p.osm_value].filter(Boolean).join(' · '),lat:f.geometry.coordinates[1],lon:f.geometry.coordinates[0]}}).filter(x=>x.name)}
+ catch(e){try{const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=5&bounded=1&viewbox=${b[1]},${b[2]},${b[3]},${b[0]}&q=${encodeURIComponent(q)}`);const j=await r.json();res=j.map(x=>({name:x.display_name.split(',')[0],sub:x.display_name.split(',').slice(1,3).join(','),lat:+x.lat,lon:+x.lon}))}catch(_){}}
+ qcache.set(key,res);return res}
+function showSugg(list){const sg=$('sugg');sg.innerHTML='';sg.style.display=list.length?'block':'none';
+ list.forEach(x=>{const d=document.createElement('div');d.innerHTML=`<b>${x.name}</b><br><small style="color:#6b8592">${x.sub||''}</small>`;d.onclick=()=>pick(x);sg.appendChild(d)})}
+function pick(x){$('sugg').style.display='none';$('q').value=x.name;$('q').blur();const ll=L.latLng(x.lat,x.lon);map.setView(ll,16);
+ if(myLL||start&&!end)setPt(ll);else if(start&&end){const s0=start;clearR();setPt(s0);setPt(ll)}else setPt(ll)}
+const spin=v=>$('qspin').style.display=v?'inline-block':'none';
+$('q').oninput=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<2){$('sugg').style.display='none';spin(false);return}
+ const loc=D?localMatches(v):[];showSugg(loc);
+ if(v.length<3)return;spin(true);const my=++qseq;
+ tmr=setTimeout(async()=>{const r=await remote(v);if(my!==qseq)return;spin(false);
+  const seen=new Set(loc.map(x=>norm(x.name)));showSugg([...loc,...r.filter(x=>{const k=norm(x.name);if(seen.has(k))return false;seen.add(k);return true})].slice(0,7))},250)};
+$('q').addEventListener('keydown',e=>{if(e.key==='Enter'){const f=$('sugg').firstChild;if(f)f.click()}});
 window.testRoute=async(a,b,rk=false)=>{risky=rk;clearR();start=L.latLng(a);mk.push(L.marker(start,{icon:pinIcon('#14b8c4','🏠')}).addTo(map));end=L.latLng(b);mk.push(L.marker(end,{icon:pinIcon('#ff7a59','🏖️')}).addTo(map));const r=await route();return r?window.lastRoute:null};
 let readyRes;const READY=new Promise(r=>readyRes=r);
 fetch('data/index.json').then(r=>r.json()).then(async j=>{D={...j,segs:[],tileSet:new Set(j.meta.tiles)};readyRes();$('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;draw();clearR();await onMove();window.ready=true});

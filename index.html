@@ -17,7 +17,7 @@
 #q::placeholder{color:#7a97a5}
 #sugg{margin-top:6px;background:#fff;border-radius:16px;box-shadow:var(--sh);overflow:hidden;display:none}
 #sugg div{padding:11px 14px;border-bottom:1px solid #eef5f7;font-size:14px}#sugg div:last-child{border:0}
-#chips{display:flex;gap:6px;margin-top:8px}
+#chips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .chip{background:#fffffff0;border-radius:18px;padding:6px 12px;font:700 13px Nunito;box-shadow:0 2px 8px rgba(11,60,80,.15);border:0;color:var(--ink)}
 .chip.on{background:#ffd23f;color:#5a4300}
 .fab{position:absolute;z-index:1002;right:14px;width:54px;height:54px;border-radius:50%;background:#fff;border:0;box-shadow:var(--sh);font-size:22px;display:grid;place-items:center}#loc{background:#1d6fe0;color:#fff}#loc svg{width:26px;height:26px}
@@ -44,9 +44,9 @@ details{margin-top:10px}summary{font:800 13px Nunito;color:var(--deep);list-styl
 @keyframes roll{0%{transform:translateX(-6px) rotate(-6deg)}50%{transform:translateX(6px) rotate(6deg)}100%{transform:translateX(-6px) rotate(-6deg)}}.spin{display:inline-block;animation:roll .9s ease-in-out infinite}
 </style></head><body>
 <div id="map"></div>
-<div id="top"><div id="bar"><div id="logo">🛺</div><input id="q" placeholder="Where to, beach cruiser?" autocomplete="off"></div>
+<div id="top"><div id="bar"><div id="logo">🛺</div><input id="q" placeholder="Where to, beach cruiser?" autocomplete="off" enterkeyhint="search"><span id="qspin" class="spin" style="display:none;font-size:20px;margin-right:8px">🌊</span></div>
 <div id="sugg"></div>
-<div id="chips"><button class="chip on" id="cNorm">🌊 Legal only</button><button class="chip" id="cRisk">⚠️ Risky (≤300 ft)</button></div></div>
+<div id="chips"><button class="chip on" id="cNorm">🌊 Legal only</button><button class="chip" id="cRisk">⚠️ Risky (≤300 ft)</button><span class="chip" id="hint" style="background:#f6ead2;font-weight:600">👆 Tap map: start → end</span></div></div>
 <button class="fab" id="lay" title="Legend">🗺️</button><button class="fab" id="loc" title="Show my location" aria-label="Show my location"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><circle cx="12" cy="12" r="4" fill="#fff"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg></button>
 <div id="sheet"><div id="shead"><div class="grab"></div><button id="chev" aria-label="Collapse or expand">⌄</button>
 <div id="title">🏖️ Golf Cart Maps</div><div id="sub">Loading roads…</div></div><button class="btn" id="showloc" style="margin:4px 16px 8px;flex:none">📍 Show my location</button><div id="sbody">
