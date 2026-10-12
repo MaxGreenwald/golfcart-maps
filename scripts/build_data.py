@@ -3,8 +3,8 @@
 classify them for golf cart (<=25 mph) and LSV (<=35 mph) use.
 Output: public/data/roads.json (compact) + gzip. Stdlib only."""
 import json, re, time, urllib.request, urllib.parse, gzip, os, math
-S, W, N, E = 32.70, -117.30, 33.18, -117.10
-TILES_LAT, TILES_LON = 4, 2
+S, W, N, E = 32.53, -117.42, 33.30, -116.95
+TILES_LAT, TILES_LON = 6, 3
 HW = "motorway|motorway_link|trunk|trunk_link|primary|primary_link|secondary|secondary_link|tertiary|tertiary_link|unclassified|residential|living_street|service"
 EP = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"]
 UA = "GolfCartMaps/1.0 (personal project)"
@@ -13,7 +13,7 @@ CACHE = os.path.join(os.path.dirname(__file__), "..", "cache")
 
 def fetch(bb, i):
     os.makedirs(CACHE, exist_ok=True)
-    cp = os.path.join(CACHE, f"tile{i}.json")
+    cp = os.path.join(CACHE, f"v2_tile{i}.json")
     if os.path.exists(cp): return json.load(open(cp))
     q = f'[out:json][timeout:180];way["highway"~"^({HW})$"]["service"!~"parking_aisle|driveway|drive-through"]["access"!~"private|no"]({bb[0]},{bb[1]},{bb[2]},{bb[3]});out tags geom;'
     for attempt in range(6):
@@ -90,6 +90,19 @@ for w in ways.values():
 total = sum(stats.values())
 meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": total, "segments": len(out), "stats": stats}
 os.makedirs(OUT, exist_ok=True)
-data = json.dumps({"meta": meta, "names": names, "segs": out}, separators=(",", ":"))
-open(os.path.join(OUT, "roads.json"), "w").write(data)
-print(json.dumps(meta), "size MB", len(data)/1e6, "gz MB", len(gzip.compress(data.encode()))/1e6)
+TS = 0.1  # output tile size (degrees); segment goes to tile of its first point
+tiles = {}
+for sg in out:
+    p = sg[7][0]; k = f"{math.floor(p[0]/TS)}_{math.floor(p[1]/TS)}"
+    tiles.setdefault(k, []).append(sg)
+td = os.path.join(OUT, "tiles"); os.makedirs(td, exist_ok=True)
+for f in os.listdir(td): os.remove(os.path.join(td, f))
+raw = gz = 0
+for k, segs in tiles.items():
+    d = json.dumps(segs, separators=(",", ":")); raw += len(d); gz += len(gzip.compress(d.encode()))
+    open(os.path.join(td, k + ".json"), "w").write(d)
+meta["tileSize"] = TS; meta["tiles"] = sorted(tiles)
+idx = json.dumps({"meta": meta, "names": names}, separators=(",", ":"))
+open(os.path.join(OUT, "index.json"), "w").write(idx)
+if os.path.exists(os.path.join(OUT, "roads.json")): os.remove(os.path.join(OUT, "roads.json"))
+print(json.dumps({k: v for k, v in meta.items() if k != "tiles"}), "tiles", len(tiles), "raw MB", raw/1e6, "gz MB", gz/1e6, "index KB", len(idx)/1e3)
