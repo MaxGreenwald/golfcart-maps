@@ -157,11 +157,12 @@ fetch('data/index.json').then(r=>r.json()).then(async j=>{D={...j,segs:[],tileSe
 // ---- bottom sheet: pointer-driven, translateY snapping ----
 const sheet=$('sheet'),shead=$('shead');let snap='full';
 function vh(){return window.innerHeight}
-function sizeSheet(){sheet.style.height=Math.round(vh()*0.55)+'px'}
-function snaps(){const H=sheet.offsetHeight;return{full:0,half:Math.max(0,H-vh()*0.36),collapsed:Math.max(0,H-shead.offsetHeight-6)}}
+const DESK=()=>matchMedia('(min-width:900px)').matches;
+function sizeSheet(){sheet.style.height=DESK()?'':Math.round(vh()*0.85)+'px'}
+function snaps(){const H=sheet.offsetHeight,c=Math.max(0,H-shead.offsetHeight-6);if(DESK())return{full:0,half:0,collapsed:c};return{full:0,half:Math.max(0,H-vh()*0.35),collapsed:c}}
 let curY=0;
 function place(y){curY=y;sheet.style.transform=`translate3d(0,${y}px,0)`;const vis=sheet.offsetHeight-y;
- $('loc').style.bottom=(vis+14)+'px';$('lay').style.bottom=(vis+76)+'px';$('chev').textContent=snap==='collapsed'?'⌃':'⌄'}
+ if(DESK()){$('loc').style.bottom='24px';$('lay').style.bottom='88px'}else{$('loc').style.bottom=(vis+14)+'px';$('lay').style.bottom=(vis+76)+'px'}$('chev').textContent=snap==='collapsed'?'⌃':'⌄'}
 function setSnap(n){snap=n;place(snaps()[n])}
 window.setSnap=setSnap;window.getSnap=()=>snap;
 const ORDER=['collapsed','half','full'];
@@ -186,4 +187,4 @@ $('chev').addEventListener('click',e=>{e.stopPropagation();setSnap(snap==='colla
 L.DomEvent.disableClickPropagation(sheet);L.DomEvent.disableScrollPropagation(sheet);
 map.on('click',()=>{if(!routeG&&!from&&snap!=='collapsed')setSnap('collapsed')});
 addEventListener('resize',()=>{sizeSheet();setSnap(snap)});
-sizeSheet();sheet.style.transition='none';setSnap('full');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));
+sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));
