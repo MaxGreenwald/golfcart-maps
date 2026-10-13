@@ -23,6 +23,6 @@ for el in d["elements"]:
     if "lat" not in c: continue
     kind = t.get("natural") or t.get("leisure") or t.get("tourism") or t.get("amenity") or t.get("shop") or t.get("place") or ("station" if t.get("railway") or t.get("public_transport") else "")
     out.append([t["name"], kind, round(c["lon"], 5), round(c["lat"], 5), t.get("addr:city", "")])
-p = os.path.join(os.path.dirname(__file__), "..", "public", "data", "pois.json")
+p = os.path.join(os.path.dirname(__file__), "..", "public", "data", "sd", "pois.json")
 json.dump(out, open(p, "w"), separators=(",", ":"), ensure_ascii=False)
 print(len(out), "pois", os.path.getsize(p) / 1e3, "KB")

@@ -1,0 +1,5 @@
+{"unverified":["Golf cart mode treats all residential/local streets ≤35 as designated (per districtgov.org/Scout summary of Sumter Co. self-contained retirement community designation); not checked street-by-street, esp. Lake/Marion county portions and Wildwood city.",
+ "Daylight-only: FL 316.212(6) lets carts run at night with headlights/brake lights/turn signals/windshield; app does not enforce daylight in The Villages.",
+ "Cart path coverage depends on OSM golf_cart tags; untagged multi-modal paths are missing."],
+ "sources":["https://www.flsenate.gov/Laws/Statutes/2026/316.212","https://www.flsenate.gov/Laws/Statutes/2025/316.2122","https://sumterclerk.granicus.com/DocumentViewer.php?file=sumterclerk_513847673551255ba49a58f72ce43401.pdf","https://www.districtgov.org/how-to/getting-around/","https://www.districtgov.org/wp-content/uploads/2026/02/Multi-Modal-Path-Memo.pdf"],
+ "overrides":[]}

@@ -8,7 +8,7 @@ let D,risky=false,layer,nodes={},adj={},start=null,end=null,routeG=null,mk=[];
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden (posted >=40 or untagged major)
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden. Cart paths ('c') always ok; designated ('d') ok in designated-only cart mode.
 const desig=s=>s[3]==='c'||s[3]==='d'||(RULE.assume&&RULE.assume.includes(s[1])&&s[2]!=null&&s[2]<=RULE.max_posted);
-const cls=s=>{if(s[3]==='c')return 0;if(s[2]==null||(s[2]>RULE.max_posted&&!(window.LENIENT&&s[2]===99)))return 3;if(RULE.designated_only&&!desig(s))return 3;return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'?0:1};
+const cls=s=>{if(s[3]==='c')return 0;if(MODE==='golf_cart'&&s[9]===1)return 3;if(s[2]==null||(s[2]>RULE.max_posted&&!(window.LENIENT&&s[2]===99)))return 3;if(RULE.designated_only&&!desig(s))return 3;return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'?0:1};
 const STY=[{color:'#12a150',weight:3.2},{color:'#4cc38a',weight:2.6,dashArray:'5 4'},{color:'#0b9fb3',weight:3.4},{color:'#e5484d',weight:3,opacity:.75}];
 const MAJOR=new Set(['path','cycleway','track','footway','motorway','motorway_link','trunk','trunk_link','primary','primary_link','secondary','secondary_link','tertiary','tertiary_link']);
 let buckets={},shown={};const G=0.02;
@@ -27,12 +27,12 @@ async function onMove(){if(!D)return;const b=map.getBounds().pad(0.1);const n0=l
 map.on('moveend',onMove);
 function mkLine(s){const c0=cls(s),c=s[3]==='c'?2:c0;const pl=L.polyline(s[7].map(p=>[p[1],p[0]]),{...STY[c],renderer});
  pl.on('click',e=>{L.DomEvent.stopPropagation(e);if(active){setPt(e.latlng);return}const sp=s[2];window._pll=e.latlng;
-  L.popup().setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[3]==='c'?' 🛺 cart path':s[3]==='d'?' ✅ designated cart road':s[3]==='t'?' (OSM)':s[3]==='v'?' ✅ verified (local source)':s[3]==='m'?' 📷 posted sign (Mapillary)':' (assumed)'}${(s[3]==='v'||s[3]==='m')&&D.sources&&D.sources[s[8]]?`<br><a href="${D.sources[s[8]][0]}" target="_blank" rel="noopener">Source: ${D.sources[s[8]][1]}</a>`:''}<br><b style="color:${c===3?'#e5484d':'#12a150'}">${c===3?(RULE.designated_only&&!(s[2]==null||s[2]>RULE.max_posted)?'Avoid: not a designated golf cart road':`Avoid: ${RULE.max_posted+5}+ mph or major road`):'OK for '+modeName()}</b><br>Segment length: ${(s._len??len(s[7]))<160?ft(s._len??len(s[7])):mi(s._len??len(s[7]))}<div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="popSet('from')">Start here</button><button class="pbtn" onclick="popSet('to')">Go here</button></div>`).openOn(map)});return pl}
+  L.popup().setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[3]==='c'?' 🛺 cart path':s[3]==='d'?' ✅ designated cart road':s[3]==='t'?' (OSM)':s[3]==='v'?' ✅ verified (local source)':s[3]==='m'?' 📷 posted sign (Mapillary)':' (assumed)'}${(s[3]==='v'||s[3]==='m')&&D.sources&&D.sources[s[8]]?`<br><a href="${D.sources[s[8]][0]}" target="_blank" rel="noopener">Source: ${D.sources[s[8]][1]}</a>`:''}<br><b style="color:${c===3?'#e5484d':'#12a150'}">${c===3?(s[9]===1&&MODE==='golf_cart'?'Avoid: golf carts not allowed (posted)':RULE.designated_only&&!(s[2]==null||s[2]>RULE.max_posted)?'Avoid: not a designated golf cart road':`Avoid: ${RULE.max_posted+5}+ mph or major road`):'OK for '+modeName()}</b><br>Segment length: ${(s._len??len(s[7]))<160?ft(s._len??len(s[7])):mi(s._len??len(s[7]))}<div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="popSet('from')">Start here</button><button class="pbtn" onclick="popSet('to')">Go here</button></div>`).openOn(map)});return pl}
 function hav(a,b){const R=6371000,r=Math.PI/180,dl=(b[1]-a[1])*r,dn=(b[0]-a[0])*r,x=Math.sin(dl/2)**2+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
 function len(p){let l=0;for(let i=1;i<p.length;i++)l+=hav(p[i-1],p[i]);return l}
-let fast=new Set(),fnode=new Set();
+let fast=new Set(),fnode=new Set(),cnode=new Set();
 function buildGraph(from){D.segs.slice(from).forEach((s,j)=>{const i=from+j;const c=cls(s),a=s[5],b=s[6],p=s[7];s._len??=len(p);nodes[a]=p[0];nodes[b]=p[p.length-1];
-  if((s[3]==='t'||s[3]==='m')&&s[2]>RULE.max_posted){fast.add(a);fast.add(b)}if(c===3)fnode.add(a),fnode.add(b);
+  if((s[3]==='t'||s[3]==='m')&&s[2]>RULE.max_posted){fast.add(a);fast.add(b)}if(c===3)fnode.add(a),fnode.add(b);if(s[3]==='c')cnode.add(a),cnode.add(b);
   const f=c===3;
   if(s[4]>=0)(adj[a]||(adj[a]=[])).push([b,s._len,i,false,f]);if(s[4]<=0)(adj[b]||(adj[b]=[])).push([a,s._len,i,true,f])})}
 // snap to nearest point on an allowed (non-forbidden) edge; returns the closer endpoint node of that edge
@@ -52,7 +52,7 @@ function astar(s,t){const key=(n,r)=>n+'|'+Math.round(r);const T=nodes[t];const 
  let goal=null;
  while(h.length){const [,u,run,ku]=pop();if(done.has(ku))continue;done.add(ku);if(u===t&&run===0){goal=ku;break}
   for(const [v,w,si,rev,f] of adj[u]||[]){let nr,cost=w;
-   if(!f&&RULE.cross===false&&fnode.has(v)&&v!==t)continue;if(f){if(!risky)continue;nr=run+w;if(nr>RISKY_MAX)continue;cost=w*6+60}else{nr=0;if(fast.has(v))cost+=150}
+   if(!f&&RULE.cross===false&&fnode.has(v)&&!cnode.has(v)&&v!==t)continue;if(f){if(!risky)continue;nr=run+w;if(nr>RISKY_MAX)continue;cost=w*6+60}else{nr=0;if(fast.has(v))cost+=150}
    const kv=key(v,nr),ng=g.get(ku)+cost;if(!g.has(kv)||ng<g.get(kv)){g.set(kv,ng);prev.set(kv,[ku,si,rev]);push([ng+hav(nodes[v],T),v,nr,kv])}}}
  if(!goal)return null;const parts=[];let x=goal;while(x!==k0){const [pk,si,rev]=prev.get(x);parts.push([si,rev]);x=pk}parts.reverse();return parts}
 function summarize(parts){let dist=0,stretches=[],cur=null,line=[];const legs=[];
@@ -167,17 +167,17 @@ let readyRes,READY=new Promise(r=>readyRes=r);
 const modeName=()=>MODE==='lsv'?'LSV':'golf cart';
 function ruleNotes(){const n=[];if(RULE.radius_mi)n.push(`stay within ${RULE.radius_mi} mi of where the cart is registered`);if(RULE.daylight_only)n.push('daylight only');return n.length?' · '+n.join(' · '):''}
 function setRule(){const st=RULES[REG.state]||RULES.CA;RULE={...(st[MODE]||st.lsv)};const rr=REG.rules&&REG.rules[MODE];if(rr)Object.assign(RULE,rr);
- $('cMode').textContent=MODE==='lsv'?'🚙 LSV':'⛳ Golf cart';$('rnote').textContent=`${st.name} ${modeName()}: `+(RULE.designated_only?`cart paths + designated roads only${RULE.assume?' (local streets assumed designated, unverified)':''}`:`roads posted ≤${RULE.max_posted} mph`)+ruleNotes()+(RULE.cite?` · ${RULE.cite}`:'')}
+ $('cMode').textContent=MODE==='lsv'?'🚙 LSV':'⛳ Golf cart';$('rnote').textContent=`${st.name} ${modeName()}: `+(RULE.designated_only?`cart paths + designated roads${RULE.assume?' (local streets, unverified)':''}`:`roads posted ≤${RULE.max_posted} mph`)+ruleNotes();$('rnote').title=RULE.cite||''}
 function regionAt(lat,lng){let best=null,bd=80467;for(const r of REGIONS){const b=r.bbox;if(lat>=b[0]&&lat<=b[2]&&lng>=b[1]&&lng<=b[3])return r;const d=hav([lng,lat],[r.center[1],r.center[0]]);if(d<bd){bd=d;best=r}}return best}
-function resetData(){if(layer){layer.clearLayers();map.removeLayer(layer)}shown={};buckets={};nodes={};adj={};fast=new Set();fnode=new Set();loaded.clear();for(const k in loading)delete loading[k];nameAt=null;POIS=[];D=null;window.ready=false;READY=new Promise(r=>readyRes=r)}
+function resetData(){if(layer){layer.clearLayers();map.removeLayer(layer)}shown={};buckets={};nodes={};adj={};fast=new Set();fnode=new Set();cnode=new Set();loaded.clear();for(const k in loading)delete loading[k];nameAt=null;POIS=[];D=null;window.ready=false;READY=new Promise(r=>readyRes=r)}
 async function loadRegion(id,keepView){const r=REGIONS.find(x=>x.id===id)||REGIONS[0];if(REG&&REG.id===r.id&&D)return;if(!keepView)clearR();resetData();REG=r;BASE='data/'+r.id+'/';window.REG=r;
  try{localStorage.setItem('gcm-region',r.id)}catch(_){}$('city').value=r.id;setRule();$('sub').textContent='Loading roads…';
  if(!keepView)map.setView(r.center,r.zoom);
  fetch(BASE+'pois.json').then(x=>x.ok?x.json():[]).then(j=>{if(REG===r)POIS=j}).catch(()=>{});
- const j=await (await fetch(BASE+'index.json')).json();if(REG!==r)return;D={...j,segs:[],tileSet:new Set(j.meta.tiles)};readyRes();
+ const j=await (await fetch(BASE+'index.json')).json();if(REG!==r)return;$('lgCart').style.display=j.meta.stats&&j.meta.stats.cartpath?'':'none';D={...j,segs:[],tileSet:new Set(j.meta.tiles)};readyRes();
  $('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;draw();if(!keepView)clearR();else sync();await onMove();window.ready=true}
 window.loadRegion=loadRegion;
-function setMode(m){MODE=m;try{localStorage.setItem('gcm-mode',m)}catch(_){}setRule();if(!D)return;adj={};nodes={};fast=new Set();fnode=new Set();buildGraph(0);shown={};layer.clearLayers();refresh();if(start&&end)route()}
+function setMode(m){MODE=m;try{localStorage.setItem('gcm-mode',m)}catch(_){}setRule();if(!D)return;adj={};nodes={};fast=new Set();fnode=new Set();cnode=new Set();buildGraph(0);shown={};layer.clearLayers();refresh();if(start&&end)route()}
 window.setMode=setMode;
 $('cMode').onclick=()=>setMode(MODE==='lsv'?'golf_cart':'lsv');
 $('city').onchange=e=>loadRegion(e.target.value);
