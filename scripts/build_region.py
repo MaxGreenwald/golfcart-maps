@@ -48,6 +48,8 @@ try:
     mly, mst = M.match([(w["tags"], [[q["lon"], q["lat"]] for q in w["geometry"]]) for w in wl])
 except Exception as e: print("mapillary skipped:", e)
 print("mapillary", mst)
+import re
+BAN = re.compile(CFG["cart_ban_names"]) if CFG.get("cart_ban_names") else None
 OV = {o["way"]: o for o in CFG.get("overrides", [])}   # {"way": osm id, "mph": n, "url":..., "label":...}
 names, out, sources, sidx, nidx, nids = [], [], [], {}, {}, {}
 stats = {"tagged": 0, "inferred": 0, "inferred_high": 0, "verified": 0, "mapillary": 0, "cartpath": 0, "designated": 0}
@@ -74,12 +76,14 @@ for wi, w in enumerate(wl):
         cur.append(k)
         if cnt[nodes[k]] > 1 and k < len(nodes) - 1: segs.append(cur); cur = [k]
     segs.append(cur)
+    nocart = t.get("golf_cart") == "no" or (src != "cartpath" and BAN and any(BAN.search(t.get(k, "")) for k in ("name", "ref")))
+    stats["cart_banned"] = stats.get("cart_banned", 0) + bool(nocart)
     code = {"cartpath": "c", "designated": "d"}.get(src, src[0])
     for sg in segs:
         pts = simplify([[round(g[k]["lon"], 5), round(g[k]["lat"], 5)] for k in sg])
         ow = 1 if t.get("oneway") in ("yes", "1") else (-1 if t.get("oneway") == "-1" else 0)
         if t.get("junction") == "roundabout" and ow == 0: ow = 1
-        out.append([nidx[nm], hw, s, code, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([si, 1] if t.get("golf_cart") == "no" else [si] if si >= 0 else []))
+        out.append([nidx[nm], hw, s, code, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([si, 1] if nocart else [si] if si >= 0 else []))
 POLY = CFG.get("poly") or [[W, N], [E, N], [E, S], [W, S]]
 meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": len(wl), "segments": len(out), "stats": stats, "poly": POLY, "region": RID, "unverified": CFG.get("unverified", [])}
 TS = 0.1; tiles = {}

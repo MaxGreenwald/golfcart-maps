@@ -26,3 +26,9 @@ Startup = regions+rules (~3 KB) + one region index+pois (SD ~260 KB gz, others �
 - Peachtree City: golf-cart mode only uses tagged paths; city streets allowed by ordinance not digitized.
 - Hilton Head: OSM speed tagging is ~5%, so untagged tertiary roads default to 25 (allowed) and untagged primary/secondary are blocked — needs a Town ordinance/speed list before launch. SC 4‑mile/daylight rules shown as text only. Cross-island trip (Coligny → Shelter Cove) has no legal route because US‑278 is blocked — likely correct but check.
 - index.html SEO/about text is still San Diego-only; og descriptions still say "Free."
+
+## Update 2026-10-13 (5 PM PT): Villages golf-cart sourcing, Hilton Head hidden
+- Villages golf-cart mode now: streets posted ≤30 (was ≤35), plus a named banned-road list (US 27/441, US 301, SR 44, CR 466/466A/44/42/468/472, CR 25A, El Camino Real, Rainey Trail, Buena Vista Blvd, Morse Blvd, Griffin Ave, Rolling Acres Rd, Powell Rd, Miller St/Blvd, Rose/Willard Ave) on top of OSM golf_cart=no. 1,335 segments blocked for carts. Sources and unverified items: research/regions/villages.json.
+- LSVs stay allowed on Villages multi-modal paths (Max).
+- Hilton Head hidden from picker/geolocation (data kept, ?r=hhi for testing). Speed-list leads: research/regions/hhi.json.
+- SEO/og text unchanged.

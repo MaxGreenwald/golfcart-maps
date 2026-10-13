@@ -1,5 +1,26 @@
-{"unverified":["Golf cart mode treats all residential/local streets ≤35 as designated (per districtgov.org/Scout summary of Sumter Co. self-contained retirement community designation); not checked street-by-street, esp. Lake/Marion county portions and Wildwood city.",
- "Daylight-only: FL 316.212(6) lets carts run at night with headlights/brake lights/turn signals/windshield; app does not enforce daylight in The Villages.",
- "Cart path coverage depends on OSM golf_cart tags; untagged multi-modal paths are missing."],
- "sources":["https://www.flsenate.gov/Laws/Statutes/2026/316.212","https://www.flsenate.gov/Laws/Statutes/2025/316.2122","https://sumterclerk.granicus.com/DocumentViewer.php?file=sumterclerk_513847673551255ba49a58f72ce43401.pdf","https://www.districtgov.org/how-to/getting-around/","https://www.districtgov.org/wp-content/uploads/2026/02/Multi-Modal-Path-Memo.pdf"],
- "overrides":[]}
+{
+ "unverified": [
+  "Golf-cart mode still assumes every residential/local street ≤30 mph inside the area is designated. Sourced: Sumter Co. Sec. 17-3 (self-contained retirement community resolutions, road lists not found online), Marion Co. Ord. 03-26 (all streets in Villages of Marion County), Lady Lake Sec. 17-3 (golf cart communities, streets designated by signage), Fruitland Park (streets ≤30 mph + map PDF), Wildwood O2026-28 (ArcGIS green/red map, not imported). Street-by-street lists for Sumter resolutions and the Wildwood map are NOT digitized.",
+  "Banned-road list comes from a 2018 Villages-News compilation of county/city rules + thevillagesflorida.com; may be dated (Wildwood replaced its rules in July 2026).",
+  "Designated at-grade crossings (El Camino Real light between Enrique Dr & Botello Ave; Rainey Trail between Lynnhaven Ln & Miona Shores Dr; Fruitland Park CR 466A/CR 468 points; US 27/441 at SE 176th St) are not modelled unless OSM has a cart path there — routes may detour to tunnels.",
+  "Fruitland Park allows carts on CR 25A (Dixie Ave) south of Shiloh St and several Lake County roads; banned here only north of Shiloh is not split — whole CR 25A blocked (conservative).",
+  "Night driving with lights (F.S. 316.212(6)) not modelled; LSVs allowed on multi-modal paths per Max."
+ ],
+ "sources": [
+  "https://www.flsenate.gov/Laws/Statutes/2026/316.212",
+  "https://www.leg.state.fl.us/Statutes/index.cfm?App_mode=Display_Statute&URL=0300-0399%2F0316%2FSections%2F0316.2125.html",
+  "https://www.sumtercountyfl.gov/AgendaModule/AI7446/Golf%20Cart%20Ordinance%20Amendment%20-%20Final%20(00268768).pdf",
+  "https://sumterclerk.granicus.com/DocumentViewer.php?file=sumterclerk_513847673551255ba49a58f72ce43401.pdf",
+  "https://www.districtgov.org/wp-content/uploads/2024/05/Ordinance-03-26.pdf",
+  "https://www.villages-news.com/2018/02/15/enjoy-golf-cart-safely-legally/",
+  "http://thevillagesflorida.com/golf-cart-requirements/",
+  "https://www.villages-news.com/2026/07/13/wildwood-adopts-new-golf-cart-and-low-speed-vehicle-ordinance/",
+  "https://experience.arcgis.com/experience/8edb876eefd943c58567fa08819cf786",
+  "https://www.fruitlandpark.org/business-building-and-development/maps/",
+  "https://www.villages-news.com/2018/08/10/fruitland-park-gives-final-ok-to-ordinance-allowing-golf-carts-to-remain-on-dixie-avenue/",
+  "https://www.districtgov.org/how-to/getting-around/",
+  "https://scoutthevillages.com/golf-cart-rules/"
+ ],
+ "overrides": [],
+ "cart_ban_names": "(?i)^(US 27|US 441|US 301|SR 44|CR 466A?|CR 44|CR 42|CR 468|CR 472|CR 25A|El Camino Real|Rainey Trail|Griffin Avenue|Rolling Acres Road|Powell Road|Buena Vista Boulevard|Morse Boulevard|Miller (Street|Boulevard)|Rose Avenue|Willard Avenue)\\b|\\b(US 27|US 441|US 301|SR 44|CR 466A?|CR 42|CR 44|CR 468|CR 472)\\b"
+}

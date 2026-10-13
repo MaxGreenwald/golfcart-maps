@@ -1,1 +1,17 @@
-{"unverified":["US-278 / Cross Island Pkwy assumed forbidden via OSM maxspeed (45+) or untagged-major rule; not checked against Town of Hilton Head ordinance.","SC 4-mile radius and daylight rules shown as notes only; not enforced on the route geometry.","Gated plantations (Sea Pines, Palmetto Dunes, etc.) private roads excluded when OSM access=private."],"overrides":[]}
+{
+ "unverified": [
+  "US-278 / Cross Island Pkwy assumed forbidden via OSM maxspeed (45+) or untagged-major rule; not checked against Town of Hilton Head ordinance.",
+  "SC 4-mile radius and daylight rules shown as notes only; not enforced on the route geometry.",
+  "Gated plantations (Sea Pines, Palmetto Dunes, etc.) private roads excluded when OSM access=private."
+ ],
+ "overrides": [],
+ "status": "HIDDEN from picker (Max, 2026-10-13); data kept. ?r=hhi still loads it for testing.",
+ "speed_sources_todo": [
+  "No street-by-street speed list found online yet for the Town of Hilton Head, Beaufort County or Bluffton.",
+  "Town code (traffic chapter, may hold speed zones): https://library.municode.com/sc/hilton_head_island/codes/code_of_ordinances",
+  "Town ordinances/resolutions archive: https://hiltonheadislandsc.gov/government/publications/index.php",
+  "SCDOT lowered William Hilton Pkwy (US-278) to 40 mph between Beach City Rd and Dillon Rd, 2024-10-22: https://hiltonheadislandsc.gov/news/news.cfm?NewsID=3193",
+  "SC golf cart law (≤35 mph secondary roads, 4 mi, daylight; locals may set hours since 2025-05-22): https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "Next: SCDOT road inventory / speed-limit GIS for Beaufort County, Bluffton Municode traffic chapter, Beaufort County Municode, or a public-records request."
+ ]
+}

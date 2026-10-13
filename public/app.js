@@ -168,7 +168,7 @@ const modeName=()=>MODE==='lsv'?'LSV':'golf cart';
 function ruleNotes(){const n=[];if(RULE.radius_mi)n.push(`stay within ${RULE.radius_mi} mi of where the cart is registered`);if(RULE.daylight_only)n.push('daylight only');return n.length?' · '+n.join(' · '):''}
 function setRule(){const st=RULES[REG.state]||RULES.CA;RULE={...(st[MODE]||st.lsv)};const rr=REG.rules&&REG.rules[MODE];if(rr)Object.assign(RULE,rr);
  $('cMode').textContent=MODE==='lsv'?'🚙 LSV':'⛳ Golf cart';$('rnote').textContent=`${st.name} ${modeName()}: `+(RULE.designated_only?`cart paths + designated roads${RULE.assume?' (local streets, unverified)':''}`:`roads posted ≤${RULE.max_posted} mph`)+ruleNotes();$('rnote').title=RULE.cite||''}
-function regionAt(lat,lng){let best=null,bd=80467;for(const r of REGIONS){const b=r.bbox;if(lat>=b[0]&&lat<=b[2]&&lng>=b[1]&&lng<=b[3])return r;const d=hav([lng,lat],[r.center[1],r.center[0]]);if(d<bd){bd=d;best=r}}return best}
+function regionAt(lat,lng){let best=null,bd=80467;for(const r of REGIONS){if(r.hidden)continue;const b=r.bbox;if(lat>=b[0]&&lat<=b[2]&&lng>=b[1]&&lng<=b[3])return r;const d=hav([lng,lat],[r.center[1],r.center[0]]);if(d<bd){bd=d;best=r}}return best}
 function resetData(){if(layer){layer.clearLayers();map.removeLayer(layer)}shown={};buckets={};nodes={};adj={};fast=new Set();fnode=new Set();cnode=new Set();loaded.clear();for(const k in loading)delete loading[k];nameAt=null;POIS=[];D=null;window.ready=false;READY=new Promise(r=>readyRes=r)}
 async function loadRegion(id,keepView){const r=REGIONS.find(x=>x.id===id)||REGIONS[0];if(REG&&REG.id===r.id&&D)return;if(!keepView)clearR();resetData();REG=r;BASE='data/'+r.id+'/';window.REG=r;
  try{localStorage.setItem('gcm-region',r.id)}catch(_){}$('city').value=r.id;setRule();$('sub').textContent='Loading roads…';
@@ -181,10 +181,10 @@ function setMode(m){MODE=m;try{localStorage.setItem('gcm-mode',m)}catch(_){}setR
 window.setMode=setMode;
 $('cMode').onclick=()=>setMode(MODE==='lsv'?'golf_cart':'lsv');
 $('city').onchange=e=>loadRegion(e.target.value);
-(async()=>{[REGIONS,RULES]=await Promise.all([fetch('data/regions.json').then(r=>r.json()),fetch('data/rules.json').then(r=>r.json())]);
- $('city').innerHTML=REGIONS.map(r=>`<option value="${r.id}">${r.short}${r.beta?' (beta)':''}</option>`).join('');
- const q=new URLSearchParams(location.search).get('r');let saved=null;try{saved=localStorage.getItem('gcm-region')}catch(_){}
- let id=(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved))?saved:null;
+(async()=>{const q=new URLSearchParams(location.search).get('r');[REGIONS,RULES]=await Promise.all([fetch('data/regions.json').then(r=>r.json()),fetch('data/rules.json').then(r=>r.json())]);
+ $('city').innerHTML=REGIONS.filter(r=>!r.hidden||r.id===q).map(r=>`<option value="${r.id}">${r.short}${r.beta?' (beta)':''}</option>`).join('');
+ let saved=null;try{saved=localStorage.getItem('gcm-region')}catch(_){}
+ let id=(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;
  if(!id&&navigator.permissions&&navigator.geolocation){try{const p=await navigator.permissions.query({name:'geolocation'});if(p.state==='granted'){const pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:4000,maximumAge:600000}));const r=regionAt(pos.coords.latitude,pos.coords.longitude);if(r)id=r.id}}catch(_){}}
  await loadRegion(id||'sd')})();
 
