@@ -4,6 +4,19 @@ whose intersection latitudes bound the segment (roads here run ~N-S; for E-W roa
 import json, os, re
 HERE = os.path.dirname(__file__)
 INTEL = json.load(open(os.path.join(HERE, "..", "research", "road_intel.json")))
+DM_SRC = "https://thecoastnews.com/del-mar-moves-to-lower-speed-limits-explore-additional-parking/"
+DM_NOTE = "adopted Oct 2026, signs may still show old limit"
+# Del Mar council speed ordinance (Oct 2026; user-provided map + Coast News article). Appended as extra intel entries.
+_DM = [("Camino del Mar", "Via de la Valle - San Dieguito Bridge", 30, True),
+       ("Camino del Mar", "Coast Blvd - Del Mar Plaza", 30, True),
+       ("Jimmy Durante Blvd", "Via de la Valle - Fairgrounds Gate 2", 40, False),
+       ("Jimmy Durante Blvd", "Fairgrounds Gate 2 - San Dieguito Dr", 30, True),
+       ("Jimmy Durante Blvd", "San Dieguito Dr - Camino del Mar", 30, True),
+       ("Via de la Valle", "Camino del Mar - Jimmy Durante Blvd", 35, True)]
+DM_BASE = len(INTEL)
+for road, seg, mph_, ok in _DM:
+    INTEL.append({"road": road, "city": "Del Mar", "from_to_segment_if_known": seg + " — " + DM_NOTE, "speed_mph": mph_, "lsv_ok": ok,
+                  "source_url": DM_SRC, "confidence": "high"})
 PB = (32.755, -117.262, 32.815, -117.235); LJ = (32.795, -117.29, 32.885, -117.22)
 DM = (32.935, -117.275, 32.985, -117.24); SB = (32.97, -117.28, 33.01, -117.24)
 EN = (33.0, -117.31, 33.095, -117.24); CB = (33.08, -117.36, 33.18, -117.27)
@@ -48,8 +61,19 @@ RULES = {
  39: (r"^Orange Avenue$", CO, None, None, "lat"),
  40: (r"^Seacoast Drive$", IB, r"Palm Avenue", r"Imperial Beach Boulevard", "lat"),
 }
+_DMBOX = (32.955, -117.275, 32.985, -117.25)
+RULES.update({
+ DM_BASE + 0: (r"^Camino del Mar$", _DMBOX, r"__BRIDGE__", r"Via de la Valle", "lat"),
+ DM_BASE + 1: (r"^Camino del Mar$", _DMBOX, r"__DMPLAZA__", r"Coast Boulevard", "lat"),
+ DM_BASE + 2: (r"^Jimmy Durante Boulevard$", _DMBOX, r"__GATE2__", r"Via de la Valle", "lat"),
+ DM_BASE + 3: (r"^Jimmy Durante Boulevard$", _DMBOX, r"__SDD__", r"__GATE2__", "lat"),
+ DM_BASE + 4: (r"^Jimmy Durante Boulevard$", _DMBOX, r"Camino del Mar", r"__SDD__", "lat"),
+ DM_BASE + 5: (r"^Via de la Valle$", _DMBOX, r"Camino del Mar", r"Jimmy Durante Boulevard", "lon"),
+})
+# rules applied later win: drop older Del Mar research rules superseded by the ordinance
+# (research rules 16/17 cover Coast Blvd - bridge and stay in place)
 # fixed coordinates for landmarks that aren't cross streets (approximate)
-FIXED = {"__POTTERY__": -117.2585, "__BRIDGE__": 32.9745, "__DMPLAZA__": 32.9595, "__LJVD__": -117.236, "__SWAMIS__": 33.0345, "__MANZANO__": 33.112,
+FIXED = {"__POTTERY__": -117.2585, "__BRIDGE__": 32.9745, "__DMPLAZA__": 32.9595, "__GATE2__": 32.9757, "__SDD__": 32.9665, "__LJVD__": -117.236, "__SWAMIS__": 33.0345, "__MANZANO__": 33.112,
          "__I5__": None, "__NORTH__": None, "__SOUTH__": None}
 I5_LON = {28: -117.282, 29: -117.258, 37: -117.36, 38: -117.355}
 

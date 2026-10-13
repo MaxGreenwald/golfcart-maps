@@ -15,20 +15,26 @@ UA = "GolfCartMaps/1.0 (personal project)"
 OUT = os.path.join(os.path.dirname(__file__), "..", "public", "data")
 CACHE = os.path.join(os.path.dirname(__file__), "..", "cache")
 
-def fetch(bb, i):
+def fetch(bb, i, depth=0):
+    """Fetch one tile; on repeated failure split it into 4 smaller tiles (Overpass is often overloaded)."""
     os.makedirs(CACHE, exist_ok=True)
     cp = os.path.join(CACHE, f"{PREFIX}{i}.json")
     if os.path.exists(cp): return json.load(open(cp))
     q = f'[out:json][timeout:180];way["highway"~"^({HW})$"]["service"!~"parking_aisle|driveway|drive-through"]["access"!~"private|no"]({bb[0]},{bb[1]},{bb[2]},{bb[3]});out tags geom;'
-    for attempt in range(30):
+    tries = 3 if depth < 2 else 30
+    for attempt in range(tries):
         ep = EP[attempt % len(EP)]
         try:
             req = urllib.request.Request(ep, data=urllib.parse.urlencode({"data": q}).encode(), headers={"User-Agent": UA})
             d = json.load(urllib.request.urlopen(req, timeout=240))
-            json.dump(d, open(cp, "w")); return d
+            json.dump(d, open(cp, "w")); print("ok", i, len(d.get("elements", [])), flush=True); return d
         except Exception as e:
-            print("retry", i, ep, e); time.sleep(min(120, 15 * (attempt + 1)))
-    raise SystemExit("Overpass failed")
+            print("retry", i, ep, e, flush=True); time.sleep(min(90, 10 * (attempt + 1)))
+    if depth >= 2: raise SystemExit("Overpass failed")
+    s_, w_, n_, e_ = bb; ml, mo = (s_ + n_) / 2, (w_ + e_) / 2; els = {}
+    for k, sb in enumerate([(s_, w_, ml, mo), (s_, mo, ml, e_), (ml, w_, n_, mo), (ml, mo, n_, e_)]):
+        for el in fetch(sb, f"{i}_{k}", depth + 1).get("elements", []): els[el["id"]] = el
+    d = {"elements": list(els.values())}; json.dump(d, open(cp, "w")); return d
 
 def mph(v):
     if not v: return None
@@ -60,6 +66,7 @@ ways = {}
 dl, dn = (N-S)/TILES_LAT, (E-W)/TILES_LON; i = 0
 for a in range(TILES_LAT):
     for b in range(TILES_LON):
+        if PREFIX == "v2_tile" and b == TILES_LON - 1 and not os.environ.get("EAST"): i += 1; continue  # inland column optional
         d = fetch((S+a*dl, W+b*dn, S+(a+1)*dl, W+(b+1)*dn), i); i += 1
         for el in d.get("elements", []):
             if el["type"] == "way" and "geometry" in el:
