@@ -112,7 +112,7 @@ let curField='to';
 function setRisky(v){risky=v;$('cRisk').classList.toggle('on',v);$('cNorm').classList.toggle('on',!v);if(start&&end)route()}
 window.setRisky=setRisky;
 $('cNorm').onclick=()=>setRisky(false);$('cRisk').onclick=()=>setRisky(true);
-let legendOn=true;$('lay').onclick=()=>{legendOn=!legendOn;$('legend').style.display=$('disc').style.display=legendOn?'':'none'};
+
 let me,meAcc,myLL=null,watching=false;
 function locate(){if(!navigator.geolocation){$('sub').textContent='Location not supported on this device.';return}
  $('showloc').textContent='📍 Finding you…';let first=true;
@@ -162,7 +162,7 @@ function sizeSheet(){sheet.style.height=DESK()?'':Math.round(vh()*0.85)+'px'}
 function snaps(){const H=sheet.offsetHeight,c=Math.max(0,H-shead.offsetHeight-6);if(DESK())return{full:0,half:0,collapsed:c};return{full:0,half:Math.max(0,H-vh()*0.35),collapsed:c}}
 let curY=0;
 function place(y){curY=y;sheet.style.transform=`translate3d(0,${y}px,0)`;const vis=sheet.offsetHeight-y;
- if(DESK()){$('loc').style.bottom='24px';$('lay').style.bottom='88px'}else{$('loc').style.bottom=(vis+14)+'px';$('lay').style.bottom=(vis+76)+'px'}$('chev').textContent=snap==='collapsed'?'⌃':'⌄'}
+ $('loc').style.bottom=DESK()?'24px':(vis+14)+'px';$('chev').textContent=snap==='collapsed'?'⌃':'⌄'}
 function setSnap(n){snap=n;place(snaps()[n])}
 window.setSnap=setSnap;window.getSnap=()=>snap;
 const ORDER=['collapsed','half','full'];
