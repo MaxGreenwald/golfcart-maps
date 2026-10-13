@@ -1,4 +1,4 @@
-const map=L.map('map',{preferCanvas:true,zoomControl:false,attributionControl:true}).setView([32.84,-117.27],14);
+const map=L.map('map',{preferCanvas:true,zoomControl:false,attributionControl:true}).setView([32.8565,-117.2555],15);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
 const renderer=L.canvas({tolerance:8});
 const $=id=>document.getElementById(id);
