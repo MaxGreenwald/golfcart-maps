@@ -73,7 +73,15 @@ let routing=false;async function route(){$('title').innerHTML='<span class="spin
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
  $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:'All on roads ≤35 mph 🌴'+(da>150||db>150?' · snapped to nearest legal road':'');
  $('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}</span></div>`).join('');
- setSnap('half');window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};return r}
+ setSnap('half');focusStart();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};return r}
+// center the START point (z16) inside the map area left visible by the top card and the sheet/desktop card
+function focusStart(){if(!start)return;const sz=map.getSize(),Z=16,top=$('top').getBoundingClientRect(),sh=$('sheet').getBoundingClientRect();
+ let x0=0,x1=sz.x,y0=top.bottom,y1=sz.y;
+ if(DESK())x0=Math.max(top.right,sh.right);else y1=Math.min(sz.y,sh.top);
+ if(y1-y0<80){y0=0;y1=sz.y}
+ const want=L.point((x0+x1)/2,(y0+y1)/2),off=want.subtract(sz.divideBy(2));
+ const c=map.unproject(map.project(start,Z).subtract(off),Z);window._focus={x:want.x,y:want.y};map.flyTo(c,Z,{duration:0.8})}
+window.focusStart=focusStart;
 const pinIcon=(c,e)=>L.divIcon({className:'',html:`<div class="pin" style="background:${c}"><span>${e}</span></div>`,iconSize:[30,30],iconAnchor:[15,30]});
 // ---- route state: From/To fields (Google-Maps style). A point is {ll,label,me}; me=true means live GPS ("Your location").
 let from=null,to=null,active=null; // active: field that the next map tap fills ('from'|'to'|null)
