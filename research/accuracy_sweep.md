@@ -1,0 +1,123 @@
+# Accuracy sweep (Oct 13 2026)
+
+Applied changes (city | segment | ways | old -> new mph | evidence | bbox lat,lon..lat,lon). Overrides in research/accuracy_sweep.json; tools in research/sweep_tools/.
+
+- San Diego | Aero Dr (Kearny Villa Rd - Sandrock Rd) | 21 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.8095,-117.1510..32.8102,-117.1401
+- San Diego | Eastgate Mall (Genesee Av - Towne Centre Dr) | 7 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.8779,-117.2128..32.8792,-117.2077
+- San Diego | Genesee Av (Genesee Ct - Derrick Dr) | 8 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.8192,-117.1838..32.8226,-117.1819
+- San Diego | Genesee Av (Health Center Dr - Osler St) | 8 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.7916,-117.1702..32.7938,-117.1661
+- San Diego | Hotel Circle N (Camino De La Reina - Taylor St) | 3 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.7611,-117.1691..32.7618,-117.1668
+- San Diego | Kearny Mesa Rd (Convoy St - Armour St) | 5 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.8135,-117.1528..32.8199,-117.1491
+- San Diego | Linda Vista Rd (Genesee Av - Aero Dr) | 32 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.7917,-117.1658..32.8111,-117.1537
+- San Diego | Linda Vista Rd (Morena Bl - Comstock St) | 46 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.7643,-117.1979..32.7829,-117.1719
+- San Diego | Nimitz Bl (Evergreen St - Tennyson St) | 5 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.7311,-117.2308..32.7376,-117.2280
+- San Diego | Pacific Center Bl (Lusk Bl - Pacific Center Ct) | 14 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.9020,-117.1995..32.9043,-117.1955
+- San Diego | Pacific Hy (Harbor Dr - Laurel St) | 1 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.7116,-117.1710..32.7116,-117.1710
+- San Diego | Regents Rd (Arriba St - La Jolla Village Dr) | 1 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.8675,-117.2191..32.8675,-117.2191
+- San Diego | Rosecrans St (Canon St - Nimitz Bl) | 8 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.7216,-117.2317..32.7286,-117.2259
+- San Diego | Rosecrans St (Nimitz Bl - Lytton St) | 51 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.7288,-117.2258..32.7444,-117.2124
+- San Diego | Rosecrans St (Sports Arena Bl - Pacific Hy) | 1 ways | old [40] -> [35] | R-316675 Table 1 safety corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.7516,-117.2048..32.7516,-117.2048
+- San Diego | Mercury St (Armour St - Engineer Rd) | 4 ways | old [40] -> [35] | R-316675 Table 2 ped/bike corridor, -5 mph; existing 40 (OSM/Mapillary) | 32.8205,-117.1490..32.8216,-117.1489
+- San Diego | Adams Av (Hamilton St - SD805) | 1 ways | old [99] -> [25] | R-316675 Table 3 business district, 25 mph | 32.7629,-117.1324..32.7629,-117.1324
+- San Diego | Garnet Av (Ingraham St - Pendleton St) | 10 ways | old [99] -> [25] | R-316675 Table 3 business district, 25 mph | 32.7999,-117.2403..32.8009,-117.2356
+- San Diego | Logan Av (S 16th St - S 26th St) | 8 ways | old [99] -> [25] | R-316675 Table 3 business district, 25 mph | 32.6980,-117.1491..32.7048,-117.1393
+- San Diego | Park Bl (El Cajon Bl - Adams Av) | 6 ways | old [99] -> [25] | R-316675 Table 3 business district, 25 mph | 32.7553,-117.1464..32.7560,-117.1462
+- San Diego | Park Bl (Lincoln Av - Pennsylvania Av) | 12 ways | old [99] -> [25] | R-316675 Table 3 business district, 25 mph | 32.7476,-117.1464..32.7503,-117.1462
+- San Diego | Robinson Av (4th Av - 8th Av) | 8 ways | old [99] -> [25] | R-316675 Table 3 business district, 25 mph | 32.7470,-117.1603..32.7470,-117.1573
+- San Diego | San Diego Av (Washington St - Old Town Av) | 6 ways | old [99] -> [25] | R-316675 Table 3 business district, 25 mph | 32.7428,-117.1833..32.7435,-117.1819
+- San Diego | State St (Hawthorn St - Laurel St) | 7 ways | old [99] -> [25] | R-316675 Table 3 business district, 25 mph | 32.7269,-117.1691..32.7299,-117.1681
+- San Diego | Turquoise St (La Jolla Bl - Cass St) | 6 ways | old [99] -> [25] | R-316675 Table 3 business district, 25 mph | 32.8079,-117.2618..32.8094,-117.2557
+- San Diego | 1st Av (CSt - W Island Av) | 7 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7113,-117.1638..32.7164,-117.1638
+- San Diego | 4th Av (Cedar St - KSt) | 25 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7084,-117.1611..32.7221,-117.1610
+- San Diego | 5th Av (BSt - J St) | 11 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7105,-117.1602..32.7179,-117.1601
+- San Diego | 6th Av (Cedar St - LSt) | 6 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7168,-117.1593..32.7221,-117.1593
+- San Diego | 11th Av (Broadway - KSt) | 6 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7116,-117.1547..32.7157,-117.1547
+- San Diego | 14th St (FSt - Commercial St) | 4 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7057,-117.1519..32.7100,-117.1519
+- San Diego | 16th St (CSt - Logan Av) | 24 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7053,-117.1495..32.7168,-117.1494
+- San Diego | 17th St (FSt - Logan Av) | 8 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7053,-117.1486..32.7124,-117.1485
+- San Diego | Columbia St (W Ivy St - Broadway) | 23 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7156,-117.1689..32.7272,-117.1674
+- San Diego | Congress St (Taylor St - Ampudia St) | 12 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7504,-117.1995..32.7556,-117.1931
+- San Diego | KSt (12th Av - 17th St) | 2 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7084,-117.1529..32.7084,-117.1520
+- San Diego | Kettner Bl (W Kalmia St - W Harbor Dr) | 44 ways | old [40, 99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7114,-117.1712..32.7282,-117.1691
+- San Diego | Park Bl (Tony Gwynn Dr - KSt) | 9 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7066,-117.1558..32.7084,-117.1536
+- San Diego | State St (W Hawthorn St - W Market St) | 21 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7158,-117.1675..32.7262,-117.1665
+- San Diego | W Cedar St (Pacific Hy - 1st Av) | 10 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7219,-117.1709..32.7220,-117.1657
+- San Diego | La Jolla Bl (Loring St - Colima St) | 2 ways | old [99] -> [25] | R-316675 Table 7, posted | 32.8049,-117.2586..32.8050,-117.2583
+- San Diego | Mission Bl (San Fernando Pl - Santa Clara Pl) | 41 ways | old [99] -> [25] | R-316675 Table 7, posted | 32.7677,-117.2527..32.7823,-117.2508
+- San Diego | Park Bl (University Av - El Cajon Bl) | 21 ways | old [99] -> [25] | R-316675 Table 7, posted | 32.7504,-117.1465..32.7551,-117.1463
+- San Diego | India St (W Kalmia St - Broadway) | 17 ways | old [55, 99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7158,-117.1713..32.7313,-117.1683
+- San Diego | Market St (Columbia St - 3rd Av) | 8 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7114,-117.1637..32.7115,-117.1626
+- San Diego | J St (2nd Av - 17th St) | 10 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7094,-117.1593..32.7094,-117.1484
+- San Diego | 10th Av (Ash St - K St) | 9 ways | old [99] -> [25] | R-316675 Table 4 business district, 25 mph | 32.7115,-117.1556..32.7185,-117.1556
+- San Diego | Washington St (Pacific Hy - Normal St) | 23 ways | old [40] -> [35] | R-316675 Table 1; existing 40 (OSM) | 32.7502,-117.1564..32.7522,-117.1493
+- Encinitas | El Camino Del Norte (Rancho Santa Fe Rd - East City Limits) | 3 ways | old [40] -> [35] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0489,-117.2332..33.0500,-117.2291
+- Encinitas | El Camino Real (North City Limits - Garden View Rd) | 4 ways | old [35] -> [40] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0678,-117.2654..33.0782,-117.2621
+- Encinitas | El Camino Real (Garden View Rd - Encinitas Blvd) | 2 ways | old [55] -> [30] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0584,-117.2628..33.0585,-117.2626
+- Encinitas | El Camino Real (Encinitas Blvd - Santa Fe Dr) | 5 ways | old [40] -> [35] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0385,-117.2596..33.0414,-117.2592
+- Encinitas | Encinitas Blvd (Coast Hwy 101 - Quail Gardens Rd) | 38 ways | old [40, 45, 99] -> [35] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0469,-117.2940..33.0489,-117.2794
+- Encinitas | Garden View Rd (Leucadia Blvd - El Camino Real) | 7 ways | old [40, 99] -> [35] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0585,-117.2676..33.0687,-117.2626
+- Encinitas | Garden View Rd (El Camino Real - Glen Arbor Dr) | 1 ways | old [40] -> [35] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0584,-117.2626..33.0584,-117.2626
+- Encinitas | La Costa Ave (N Coast Hwy 101 - East City Limits) | 24 ways | old [40, 99] -> [30] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0825,-117.3087..33.0846,-117.2969
+- Encinitas | Leucadia Blvd (Coast Hwy 101 - I-5) | 1 ways | old [40] -> [25] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0642,-117.3023..33.0642,-117.3023
+- Encinitas | Leucadia Blvd (I-5 - Quail Gardens Dr) | 6 ways | old [40, 45] -> [35] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0651,-117.2807..33.0654,-117.2784
+- Encinitas | Manchester Ave (El Camino Real - Encinitas Blvd) | 10 ways | old [45, 99] -> [35] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0216,-117.2555..33.0371,-117.2388
+- Encinitas | Quail Gardens Dr (Swallowtail Rd - Leucadia Blvd) | 12 ways | old [99] -> [30] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0654,-117.2784..33.0769,-117.2764
+- Encinitas | Quail Gardens Dr (Leucadia Blvd - Encinitas Blvd) | 1 ways | old [99] -> [30] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0653,-117.2785..33.0653,-117.2785
+- Encinitas | Quail Hollow Dr (Saxony Rd - Swallowtail Rd) | 1 ways | old [99] -> [30] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0751,-117.2830..33.0751,-117.2830
+- Encinitas | Santa Fe Dr (Vulcan Ave - I-5) | 3 ways | old [99] -> [25] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0362,-117.2861..33.0362,-117.2850
+- Encinitas | Saxony Rd (Quail Hollow Rd - Leucadia Blvd) | 3 ways | old [40] -> [25] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0653,-117.2857..33.0692,-117.2855
+- Encinitas | Saxony Rd (Leucadia Blvd - Encinitas Blvd) | 7 ways | old [40] -> [30] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0494,-117.2857..33.0651,-117.2853
+- Encinitas | Via Cantebria (Garden View Rd - Encinitas Blvd) | 12 ways | old [40] -> [35] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0466,-117.2683..33.0602,-117.2661
+- Encinitas | Via Cantebria (Garden View Rd - Town Center Dr) | 2 ways | old [40] -> [25] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0645,-117.2639..33.0648,-117.2637
+- Encinitas | Vulcan Ave (La Costa Ave - Leucadia Blvd) | 2 ways | old [40] -> [25] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0703,-117.3072..33.0833,-117.3037
+- Encinitas | Vulcan Ave (Leucadia Blvd - Encinitas Blvd) | 2 ways | old [40] -> [25] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0490,-117.2987..33.0582,-117.2930
+- Encinitas | Vulcan Ave (Encinitas Blvd - Santa Fe Dr) | 3 ways | old [40] -> [30] | Encinitas Ord. 2026-05 Exhibit A (2026 E&TS) | 33.0469,-117.2929..33.0485,-117.2927
+- Oceanside | Mission Avenue (Interstate 5 - Canyon Drive) | 21 ways | old [99] -> [35] | Oceanside Traffic Code Art. XIV 2a | 33.2002,-117.3718..33.2041,-117.3643
+- Oceanside | Lake Boulevard (College Boulevard - Thunder Drive) | 9 ways | old [99] -> [35] | Oceanside Traffic Code Art. XIV 16 | 33.1786,-117.2939..33.1802,-117.2882
+- Oceanside | Wisconsin Avenue (South Coast Highway - South Pacific Street) | 4 ways | old [99] -> [25] | Oceanside Traffic Code Art. XIV 18 | 33.1866,-117.3763..33.1883,-117.3738
+- Oceanside | Ivy Road (Avocado Road - Fire Mountain Drive) | 1 ways | old [99] -> [25] | Oceanside Traffic Code Art. XIV 24 | 33.1839,-117.3431..33.1839,-117.3431
+- Oceanside | North El Camino Real (Douglas Drive - Peyri Drive) | 2 ways | old [55] -> [25] | Oceanside Traffic Code Art. XIV 38 | 33.2312,-117.3253..33.2317,-117.3239
+- Oceanside | Mesa Drive (Mission Avenue - Foussat Road) | 3 ways | old [99] -> [30] | Oceanside Traffic Code Art. XIV 40 | 33.2080,-117.3465..33.2091,-117.3436
+- Oceanside | Crouch Street (Mesa Drive - Oceanside Boulevard) | 3 ways | old [99] -> [30] | Oceanside Traffic Code Art. XIV 50 | 33.1956,-117.3538..33.1971,-117.3536
+- Oceanside | Oceanside Boulevard (Interstate 5 - Crouch Street) | 14 ways | old [45, 99] -> [35] | Oceanside Traffic Code Art. XIV 53 | 33.1908,-117.3616..33.1953,-117.3534
+- Oceanside | Frazee Road (College Boulevard - Muirwood Drive) | 1 ways | old [99] -> [30] | Oceanside Traffic Code Art. XIV 58 | 33.2369,-117.2927..33.2369,-117.2927
+- Oceanside | Crouch Street (Oceanside Boulevard - Grandview Street) | 4 ways | old [99] -> [35] | Oceanside Traffic Code Art. XIV 60 | 33.1922,-117.3532..33.1953,-117.3524
+- Oceanside | Foussat Road (Mesa Drive - Mission Avenue) | 1 ways | old [99] -> [30] | Oceanside Traffic Code Art. XIV 61 | 33.2129,-117.3425..33.2129,-117.3425
+- Oceanside | Downs Street (Skylark Drive - California Street) | 1 ways | old [99] -> [35] | Oceanside Traffic Code Art. XIV 68 | 33.1914,-117.3465..33.1914,-117.3465
+- Oceanside | Plaza Drive (College Boulevard - Thunder Drive) | 20 ways | old [99] -> [35] | Oceanside Traffic Code Art. XIV 81 | 33.1820,-117.2963..33.1832,-117.2895
+- Oceanside | Foussat Road (Rivertree Drive - a location approximately 1,000 feet south of Benet Road) | 16 ways | old [99] -> [35] | Oceanside Traffic Code Art. XIV 83 | 33.2019,-117.3460..33.2244,-117.3410
+- Imperial Beach | 9th Street (State Route 75 - Imperial Beach Boulevard) | 1 ways | old [99] -> [30] | IBMC 10.28.020 (2022 E&TS) | 32.5775,-117.1143..32.5775,-117.1143
+- Imperial Beach | 9th Street (Imperial Beach Boulevard - south City limits) | 1 ways | old [99] -> [30] | IBMC 10.28.020 (2022 E&TS) | 32.5765,-117.1143..32.5765,-117.1143
+- Imperial Beach | Imperial Beach Boulevard (Seacoast Drive - 4th Street) | 1 ways | old [99] -> [30] | IBMC 10.28.020 (2022 E&TS) | 32.5766,-117.1243..32.5766,-117.1243
+- Imperial Beach | Palm Avenue (Seacoast Drive - 3rd Street) | 4 ways | old [99] -> [25] | IBMC 10.28.020 (2022 E&TS) | 32.5839,-117.1317..32.5839,-117.1284
+- Imperial Beach | Palm Avenue (3rd Street - Delaware Street) | 16 ways | old [99] -> [30] | IBMC 10.28.020 (2022 E&TS) | 32.5839,-117.1273..32.5841,-117.1171
+- San Diego | Madison Avenue -117.1460..-117.1304 (lon) | 13 ways | old [99] -> [25] | Mapillary corridor rule: 4 spots, signs [(25, 5)] | 32.7610,-117.1469..32.7610,-117.1308
+- San Diego | Mission Boulevard 32.7635..32.8056 (lat) | 8 ways | old [99] -> [30] | Mapillary corridor rule: 5 spots, signs [(30, 6)] | 32.7636,-117.2582..32.8053,-117.2510
+- San Diego | Robinson Avenue -117.1602..-117.1552 (lon) | 6 ways | old [99] -> [30] | Mapillary corridor rule: 3 spots, signs [(25, 3), (30, 1)] | 32.7464,-117.1571..32.7470,-117.1551
+- San Diego | 30th Street 32.7431..32.7622 (lat) | 49 ways | old [99] -> [25] | Mapillary corridor rule: 8 spots, signs [(25, 10)] | 32.7424,-117.1302..32.7628,-117.1301
+- San Diego | Goldfinch Street 32.7464..32.7505 (lat) | 11 ways | old [99] -> [25] | Mapillary corridor rule: 3 spots, signs [(25, 3)] | 32.7458,-117.1714..32.7508,-117.1713
+- San Diego | Imperial Avenue -117.1456..-117.1226 (lon) | 42 ways | old [99] -> [25] | Mapillary corridor rule: 3 spots, signs [(25, 3)] | 32.7063,-117.1458..32.7067,-117.1222
+- San Diego | India Street 32.7332..32.7407 (lat) | 12 ways | old [99] -> [35] | Mapillary corridor rule: 4 spots, signs [(35, 4)] | 32.7331,-117.1795..32.7413,-117.1723
+- San Diego | East Broadway -117.1503..-117.1335 (lon) | 33 ways | old [99] -> [25] | Mapillary corridor rule: 5 spots, signs [(25, 6)] | 32.7158,-117.1504..32.7158,-117.1337
+- San Diego | Chatsworth Boulevard -117.2416..-117.2245 (lon) | 32 ways | old [99] -> [35] | Mapillary corridor rule: 5 spots, signs [(25, 2), (35, 3)] | 32.7309,-117.2423..32.7410,-117.2245
+- San Diego | Catalina Boulevard 32.7195..32.7430 (lat) | 24 ways | old [99] -> [35] | Mapillary corridor rule: 4 spots, signs [(15, 1), (25, 2), (30, 1), (35, 1)] | 32.7197,-117.2463..32.7437,-117.2349
+- San Diego | Ingraham Street 32.7896..32.7992 (lat) | 17 ways | old [99] -> [35] | Mapillary corridor rule: 4 spots, signs [(35, 4)] | 32.7890,-117.2408..32.7996,-117.2376
+- San Diego | Ocean View Boulevard -117.1260..-117.1081 (lon) | 31 ways | old [99] -> [30] | Mapillary corridor rule: 4 spots, signs [(30, 4)] | 32.7012,-117.1267..32.7013,-117.1079
+- San Diego | 4th Avenue 32.7196..32.7305 (lat) | 7 ways | old [99] -> [30] | Mapillary corridor rule: 3 spots, signs [(25, 2), (30, 1)] | 32.7224,-117.1612..32.7299,-117.1611
+- San Diego | Pacific Highway 32.7165..32.7283 (lat) | 53 ways | old [45, 99] -> [35] | Mapillary corridor rule: 5 spots, signs [(35, 6)] | 32.7158,-117.1731..32.7282,-117.1710
+- San Diego | 5th Avenue 32.7208..32.7473 (lat) | 18 ways | old [99] -> [35] | Mapillary corridor rule: 4 spots, signs [(25, 2), (30, 1), (35, 1)] | 32.7200,-117.1604..32.7473,-117.1602
+- National City | Main Street -117.1260..-117.1159 (lon) | 21 ways | old [99] -> [35] | Mapillary corridor rule: 3 spots, signs [(30, 1), (35, 2)] | 32.6853,-117.1262..32.6928,-117.1151
+- San Diego | Voltaire Street -117.2429..-117.2301 (lon) | 20 ways | old [99] -> [30] | Mapillary corridor rule: 4 spots, signs [(30, 5)] | 32.7407,-117.2431..32.7499,-117.2299
+- San Diego | National Avenue -117.1405..-117.1167 (lon) | 43 ways | old [99] -> [25] | Mapillary corridor rule: 3 spots, signs [(25, 4)] | 32.6959,-117.1402..32.6973,-117.1166
+- San Diego | Market Street -117.1405..-117.1078 (lon) | 25 ways | old [99] -> [35] | Mapillary corridor rule: 6 spots, signs [(30, 2), (35, 4)] | 32.7114,-117.1404..32.7117,-117.1071
+- San Diego | Park Boulevard 32.7419..32.7541 (lat) | 10 ways | old [99] -> [35] | Mapillary corridor rule: 3 spots, signs [(25, 1), (35, 2)] | 32.7412,-117.1475..32.7444,-117.1475
+- San Diego | Murray Ridge Road 32.7876..32.8016 (lat) | 34 ways | old [99] -> [35] | Mapillary corridor rule: 5 spots, signs [(25, 3), (35, 7)] | 32.7874,-117.1448..32.8023,-117.1416
+- San Diego | Camino de la Reina -117.1607..-117.1416 (lon) | 52 ways | old [99] -> [35] | Mapillary corridor rule: 3 spots, signs [(30, 3), (35, 1)] | 32.7664,-117.1616..32.7719,-117.1408
+- San Diego | North Harbor Drive -117.1731..-117.1728 (lon) | 20 ways | old [45] -> [35] | Mapillary corridor rule: 4 spots, signs [(25, 3), (35, 1)] | 32.7117,-117.1732..32.7214,-117.1726
+- San Diego | Mission Bay Drive 32.8023..32.8058 (lat) | 21 ways | old [99] -> [35] | Mapillary corridor rule: 3 spots, signs [(35, 4)] | 32.8019,-117.2191..32.8066,-117.2152
+- San Diego | Garnet Avenue -117.2396..-117.2251 (lon) | 9 ways | old [45, 99] -> [35] | Mapillary corridor rule: 5 spots, signs [(25, 1), (30, 3), (35, 1)] | 32.8027,-117.2275..32.8035,-117.2258
+- San Diego | Genesee Avenue 32.8180..32.8223 (lat) | 12 ways | old [40, 45] -> [35] | Mapillary corridor rule: 3 spots, signs [(35, 3)] | 32.8176,-117.1842..32.8231,-117.1809
+- San Diego | Governor Drive -117.2164..-117.2014 (lon) | 34 ways | old [99] -> [35] | Mapillary corridor rule: 4 spots, signs [(25, 2), (35, 2)] | 32.8508,-117.2169..32.8547,-117.2006
+- San Diego | Soledad Mountain Road 32.8101..32.8266 (lat) | 31 ways | old [99] -> [35] | Mapillary corridor rule: 4 spots, signs [(35, 5)] | 32.8100,-117.2414..32.8273,-117.2307
+- San Diego | Clairemont Drive 32.7902..32.8210 (lat) | 86 ways | old [99] -> [35] | Mapillary corridor rule: 13 spots, signs [(25, 3), (30, 2), (35, 11)] | 32.7902,-117.2064..32.8207,-117.1941
+- Carlsbad | Tamarack Avenue -117.3437..-117.3134 (lon) | 39 ways | old [45, 99] -> [35] | Mapillary corridor rule: 4 spots, signs [(30, 3), (35, 1)] | 33.1482,-117.3443..33.1546,-117.3128

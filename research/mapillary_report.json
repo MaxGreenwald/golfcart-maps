@@ -70,6 +70,22 @@
    "url": "https://www.mapillary.com/app/?lat=32.782722&lng=-117.189970&z=19&focus=map&mapFeatureId=1530605607633068"
   },
   {
+   "road": "Nimitz Boulevard",
+   "way": 6034721,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=32.736120&lng=-117.230180&z=19&focus=map&mapFeatureId=1632624937358081"
+  },
+  {
+   "road": "India Street",
+   "way": 25301208,
+   "override_mph": 25,
+   "mapillary_mph": 55,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=32.731970&lng=-117.171600&z=19&focus=map&mapFeatureId=307000627491380"
+  },
+  {
    "road": "",
    "way": 25307055,
    "osm_mph": 99,
@@ -132,6 +148,14 @@
    "mapillary_mph": 25,
    "change": "newly allowed",
    "url": "https://www.mapillary.com/app/?lat=32.702910&lng=-117.148315&z=19&focus=map&mapFeatureId=1027828245835590"
+  },
+  {
+   "road": "Linda Vista Road",
+   "way": 157976449,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.764080&lng=-117.197620&z=19&focus=map&mapFeatureId=230188728869558"
   },
   {
    "road": "",
@@ -214,6 +238,14 @@
    "url": "https://www.mapillary.com/app/?lat=32.759180&lng=-117.182076&z=19&focus=map&mapFeatureId=812216806371785"
   },
   {
+   "road": "Hotel Circle North",
+   "way": 233700846,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.761868&lng=-117.166960&z=19&focus=map&mapFeatureId=486538699439823"
+  },
+  {
    "road": "East Broadway",
    "way": 280533949,
    "osm_mph": 99,
@@ -254,6 +286,14 @@
    "url": "https://www.mapillary.com/app/?lat=32.741188&lng=-117.130356&z=19&focus=map&mapFeatureId=194339019085378"
   },
   {
+   "road": "Nimitz Boulevard",
+   "way": 366070715,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.737556&lng=-117.230700&z=19&focus=map&mapFeatureId=468748691018273"
+  },
+  {
    "road": "Cleveland Avenue",
    "way": 377691840,
    "osm_mph": 99,
@@ -292,6 +332,14 @@
    "mapillary_mph": 35,
    "change": "newly allowed",
    "url": "https://www.mapillary.com/app/?lat=32.727947&lng=-117.226580&z=19&focus=map&mapFeatureId=1147403333744561"
+  },
+  {
+   "road": "Nimitz Boulevard",
+   "way": 436260140,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 3,
+   "url": "https://www.mapillary.com/app/?lat=32.737823&lng=-117.230910&z=19&focus=map&mapFeatureId=1657660385120261"
   },
   {
    "road": "West Harbor Drive",
@@ -364,6 +412,14 @@
    "mapillary_mph": 25,
    "change": "newly allowed",
    "url": "https://www.mapillary.com/app/?lat=32.742226&lng=-117.147514&z=19&focus=map&mapFeatureId=1311505917849243"
+  },
+  {
+   "road": "Linda Vista Road",
+   "way": 436411757,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.782673&lng=-117.172250&z=19&focus=map&mapFeatureId=513387676461690"
   },
   {
    "road": "West Washington Street",
@@ -486,6 +542,14 @@
    "url": "https://www.mapillary.com/app/?lat=32.669914&lng=-117.110790&z=19&focus=map&mapFeatureId=3799765226952226"
   },
   {
+   "road": "Pacific Highway",
+   "way": 617119343,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.711903&lng=-117.170920&z=19&focus=map&mapFeatureId=388715385571358"
+  },
+  {
    "road": "Chatsworth Boulevard",
    "way": 630391834,
    "osm_mph": 99,
@@ -516,6 +580,14 @@
    "mapillary_mph": 25,
    "change": "newly allowed",
    "url": "https://www.mapillary.com/app/?lat=32.740330&lng=-117.143680&z=19&focus=map&mapFeatureId=824565878176012"
+  },
+  {
+   "road": "Nimitz Boulevard",
+   "way": 660371679,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.736176&lng=-117.229996&z=19&focus=map&mapFeatureId=977182654394036"
   },
   {
    "road": "Point Loma Avenue",
@@ -572,6 +644,14 @@
    "mapillary_mph": 30,
    "change": "newly allowed",
    "url": "https://www.mapillary.com/app/?lat=32.729000&lng=-117.226910&z=19&focus=map&mapFeatureId=510027955453440"
+  },
+  {
+   "road": "Nimitz Boulevard",
+   "way": 966295593,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.731113&lng=-117.228030&z=19&focus=map&mapFeatureId=3473439532756581"
   },
   {
    "road": "Nimitz Boulevard",
@@ -902,6 +982,14 @@
    "url": "https://www.mapillary.com/app/?lat=32.889150&lng=-117.153656&z=19&focus=map&mapFeatureId=2149292005614843"
   },
   {
+   "road": "Kearny Mesa Road",
+   "way": 6047384,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.819435&lng=-117.149270&z=19&focus=map&mapFeatureId=2873359936313914"
+  },
+  {
    "road": "La Jolla Parkway",
    "way": 39452427,
    "override_mph": 45,
@@ -910,12 +998,36 @@
    "url": "https://www.mapillary.com/app/?lat=32.849125&lng=-117.249030&z=19&focus=map&mapFeatureId=9391001557610084"
   },
   {
+   "road": "Linda Vista Road",
+   "way": 161011807,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.811005&lng=-117.153770&z=19&focus=map&mapFeatureId=303101981479290"
+  },
+  {
    "road": "Mount Abernathy Avenue",
    "way": 161136404,
    "osm_mph": 99,
    "mapillary_mph": 30,
    "change": "newly allowed",
    "url": "https://www.mapillary.com/app/?lat=32.821045&lng=-117.175850&z=19&focus=map&mapFeatureId=754090105283537"
+  },
+  {
+   "road": "Pacific Center Boulevard",
+   "way": 166193425,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.902400&lng=-117.199554&z=19&focus=map&mapFeatureId=976383267754379"
+  },
+  {
+   "road": "Pacific Center Boulevard",
+   "way": 166193426,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.902660&lng=-117.199240&z=19&focus=map&mapFeatureId=1353354676010324"
   },
   {
    "road": "Nautilus Street",
@@ -934,6 +1046,30 @@
    "url": "https://www.mapillary.com/app/?lat=32.867280&lng=-117.233430&z=19&focus=map&mapFeatureId=537132808915957"
   },
   {
+   "road": "Regents Road",
+   "way": 233928153,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.867710&lng=-117.219020&z=19&focus=map&mapFeatureId=306202884308413"
+  },
+  {
+   "road": "Aero Drive",
+   "way": 245266088,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=32.809727&lng=-117.149030&z=19&focus=map&mapFeatureId=171279484929208"
+  },
+  {
+   "road": "Genesee Avenue",
+   "way": 246412138,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.792095&lng=-117.166940&z=19&focus=map&mapFeatureId=118878616925216"
+  },
+  {
    "road": "Clairemont Drive",
    "way": 256401848,
    "osm_mph": 99,
@@ -948,38 +1084,6 @@
    "mapillary_mph": 25,
    "change": "newly allowed",
    "url": "https://www.mapillary.com/app/?lat=32.804127&lng=-117.224940&z=19&focus=map&mapFeatureId=289975026131765"
-  },
-  {
-   "road": "Grand Avenue",
-   "way": 436316485,
-   "osm_mph": 45,
-   "mapillary_mph": 35,
-   "change": "newly allowed",
-   "url": "https://www.mapillary.com/app/?lat=32.797810&lng=-117.240740&z=19&focus=map&mapFeatureId=852220818707394"
-  },
-  {
-   "road": "Grand Avenue",
-   "way": 436316489,
-   "osm_mph": 99,
-   "mapillary_mph": 35,
-   "change": "newly allowed",
-   "url": "https://www.mapillary.com/app/?lat=32.799220&lng=-117.234344&z=19&focus=map&mapFeatureId=459017485389246"
-  },
-  {
-   "road": "Grand Avenue",
-   "way": 436316491,
-   "osm_mph": 45,
-   "mapillary_mph": 35,
-   "change": "newly allowed",
-   "url": "https://www.mapillary.com/app/?lat=32.795513&lng=-117.251710&z=19&focus=map&mapFeatureId=748438192496261"
-  },
-  {
-   "road": "Grand Avenue",
-   "way": 436317482,
-   "osm_mph": 99,
-   "mapillary_mph": 35,
-   "change": "newly allowed",
-   "url": "https://www.mapillary.com/app/?lat=32.800890&lng=-117.227200&z=19&focus=map&mapFeatureId=151918123571975"
   },
   {
    "road": "Balboa Avenue",
@@ -1086,6 +1190,30 @@
    "url": "https://www.mapillary.com/app/?lat=32.802177&lng=-117.227776&z=19&focus=map&mapFeatureId=289661666163101"
   },
   {
+   "road": "Aero Drive",
+   "way": 1029318311,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 4,
+   "url": "https://www.mapillary.com/app/?lat=32.809494&lng=-117.145430&z=19&focus=map&mapFeatureId=1525886791419242"
+  },
+  {
+   "road": "Aero Drive",
+   "way": 1029318314,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=32.809658&lng=-117.143840&z=19&focus=map&mapFeatureId=1029507574457224"
+  },
+  {
+   "road": "Aero Drive",
+   "way": 1030273656,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.809864&lng=-117.140950&z=19&focus=map&mapFeatureId=187181269925428"
+  },
+  {
    "road": "Murray Ridge Road",
    "way": 1047792304,
    "osm_mph": 99,
@@ -1110,20 +1238,20 @@
    "url": "https://www.mapillary.com/app/?lat=32.792957&lng=-117.156050&z=19&focus=map&mapFeatureId=1635190093765589"
   },
   {
+   "road": "Pacific Center Boulevard",
+   "way": 1078487070,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=32.904300&lng=-117.195520&z=19&focus=map&mapFeatureId=611562140569655"
+  },
+  {
    "road": "Nautilus Street",
    "way": 1090776667,
    "override_mph": 25,
    "mapillary_mph": 40,
    "signs": 1,
    "url": "https://www.mapillary.com/app/?lat=32.833893&lng=-117.250890&z=19&focus=map&mapFeatureId=1777309199668508"
-  },
-  {
-   "road": "Grand Avenue",
-   "way": 1091023171,
-   "osm_mph": 99,
-   "mapillary_mph": 35,
-   "change": "newly allowed",
-   "url": "https://www.mapillary.com/app/?lat=32.794590&lng=-117.254590&z=19&focus=map&mapFeatureId=617689667821691"
   },
   {
    "road": "Murray Ridge Road",
@@ -1334,12 +1462,12 @@
    "url": "https://www.mapillary.com/app/?lat=33.021473&lng=-117.201480&z=19&focus=map&mapFeatureId=128248032890492"
   },
   {
-   "road": "Manchester Avenue",
-   "way": 232293433,
+   "road": "South El Camino Real",
+   "way": 232293292,
    "override_mph": 35,
-   "mapillary_mph": 45,
+   "mapillary_mph": 40,
    "signs": 1,
-   "url": "https://www.mapillary.com/app/?lat=33.016167&lng=-117.257570&z=19&focus=map&mapFeatureId=297913945376146"
+   "url": "https://www.mapillary.com/app/?lat=33.042090&lng=-117.259766&z=19&focus=map&mapFeatureId=497781354993310"
   },
   {
    "road": "San Dieguito Road",
@@ -1382,6 +1510,22 @@
    "url": "https://www.mapillary.com/app/?lat=33.119300&lng=-117.326420&z=19&focus=map&mapFeatureId=479329186705375"
   },
   {
+   "road": "Encinitas Boulevard",
+   "way": 211570713,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.047123&lng=-117.280110&z=19&focus=map&mapFeatureId=1115686765592452"
+  },
+  {
+   "road": "Encinitas Boulevard",
+   "way": 225063272,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.047620&lng=-117.283676&z=19&focus=map&mapFeatureId=193995989238513"
+  },
+  {
    "road": "Tamarack Avenue",
    "way": 225875496,
    "osm_mph": 99,
@@ -1404,6 +1548,14 @@
    "mapillary_mph": 55,
    "change": "newly forbidden",
    "url": "https://www.mapillary.com/app/?lat=33.106080&lng=-117.267110&z=19&focus=map&mapFeatureId=2362949013838937"
+  },
+  {
+   "road": "Encinitas Boulevard",
+   "way": 436300794,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.048810&lng=-117.292206&z=19&focus=map&mapFeatureId=465632494742980"
   },
   {
    "road": "Leucadia Boulevard",
@@ -1430,12 +1582,36 @@
    "url": "https://www.mapillary.com/app/?lat=33.133610&lng=-117.332570&z=19&focus=map&mapFeatureId=2351909735190048"
   },
   {
+   "road": "La Costa Avenue",
+   "way": 1073749480,
+   "override_mph": 30,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.084106&lng=-117.300370&z=19&focus=map&mapFeatureId=328752388663618"
+  },
+  {
+   "road": "La Costa Avenue",
+   "way": 1264389309,
+   "override_mph": 30,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.083397&lng=-117.306880&z=19&focus=map&mapFeatureId=1373514423024205"
+  },
+  {
    "road": "Hidden Valley Road",
    "way": 1484546524,
    "osm_mph": 40,
    "mapillary_mph": 35,
    "change": "newly allowed",
    "url": "https://www.mapillary.com/app/?lat=33.113503&lng=-117.305016&z=19&focus=map&mapFeatureId=1554092705256762"
+  },
+  {
+   "road": "El Camino del Norte",
+   "way": 6022033,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 4,
+   "url": "https://www.mapillary.com/app/?lat=33.048817&lng=-117.228290&z=19&focus=map&mapFeatureId=288029609642929"
   },
   {
    "road": "El Camino del Norte",

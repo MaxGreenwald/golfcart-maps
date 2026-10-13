@@ -1,0 +1,22 @@
+Name of Street or Portion Affected | Declared Prima Facie Speed Limit (in Miles per Hour)
+9th Street from State Route 75 to Imperial Beach Boulevard | 30
+9th Street from Imperial Beach Boulevard to south City limits | 30
+13th Street from Cypress Avenue to State Route 75 | 25
+13th Street from State Route 75 to Imperial Beach Boulevard | 30
+13th Street from Imperial Beach Boulevard to Iris Avenue | 30
+15th Street from Imperial Beach Boulevard to Iris Avenue | 30
+Connecticut Street from Elm Avenue to Imperial Beach Boulevard | 25
+Elm Avenue from Seacoast Drive to 9th Street | 25
+Elm Avenue from 9th Street to east City limits | 30
+Imperial Beach Boulevard from Seacoast Drive to 4th Street | 30
+Imperial Beach Boulevard from 4th Street to 13th Street | 30
+Imperial Beach Boulevard from 13th Street to 15th Street | 35
+Palm Avenue from Seacoast Drive to 3rd Street | 25
+Palm Avenue from 3rd Street to Delaware Street | 30
+State Route 75 from north/west City limits to 9th Street (southbound/eastbound) | 40
+State Route 75 from 9th Street to 13th Street (eastbound) | 40
+State Route 75 from 13th Street to 9th Street (westbound) | 40
+State Route 75 from 9th Street to north/west City limits (northbound/westbound) | 40
+Rainbow Drive from State Route 75 to Palm Avenue | 25
+Seacoast Drive from Palm Avenue to Imperial Beach Boulevard | 20
+Seacoast Drive from Imperial Beach Boulevard to south City limits | 25

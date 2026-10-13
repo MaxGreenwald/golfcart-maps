@@ -1,0 +1,126 @@
+ | Name of Street and Portion Affected | Declared Prima Facie Speed Limit (mph)
+(1) | [Reserved] | 
+(2) | [Reserved] | 
+(3) | College Boulevard between Thunder Drive and Roselle Avenue | 45
+(4) | Thunder Drive from Vista Way to College Boulevard | 30
+(5a) | Coast Highway between Wisconsin Avenue and Oceanside Boulevard | 35
+(5b) | Coast Highway between Oceanside Boulevard and Morse Street | 35
+(5c) | Coast Highway between Morse Street and Vista Way | 35
+(6) | Fire Mountain Drive from El Camino Real to Avocado Street | 30
+(7) | [Reserved] | 
+(8) | Coast Highway between Vista Way and south city limits | 35
+ | Name of Street and Portion Affected | Declared Prima Facie Speed Limit (mph)
+(1) | Strand from Breakwater Way to Wisconsin | 15
+(2a) | Mission Avenue between Interstate 5 and Canyon Drive | 35
+(2b) | Mission Avenue between Canyon Drive and Mesa Drive | 40
+(2d) | Mission Avenue between Airport Road/Carolyn Circle to Fireside Street | 45
+(2e) | Mission Avenue between Fireside Street and a point 1,150 feet east of Douglas Drive | 45
+(2f) | Mission Avenue between a point 1,150 feet east of Douglas Drive and Academy Road | 45
+(2g) | Mission Avenue between Academy Road and Old Grove Road | 45
+(2h) | Mission Avenue between Old Grove Road and Frazee Road | 45
+(3) | Canyon Drive between Mission Avenue and Crouch Street | 40
+(4) | Oceanside Boulevard between Coast Highway and Interstate 5 | 40
+(5a) | North River Road between Douglas Drive and College Boulevard | 45
+(5b) | North River Road between College Boulevard and North River Road/Vandegrift Boulevard | 45
+(5c) | North River Road between North River Circle and Stallion Drive | 45
+(5d) | North River Road between Stallion Drive and Sleeping Indian Drive | 50
+(6) | North River Road from Highway 76 to Old San Louis Rey Road | 40
+(7a) | El Camino Real between Mission Avenue and Oceanside Boulevard | 45
+(7b) | El Camino Real between Oceanside Boulevard and Vista Way | 45
+(8a) | Ocean Ranch Boulevard between Rancho del Oro Drive and a point 0.356 miles south of Old Grove Road | 40
+(8b) | Ocean Ranch Boulevard between a point 0.356 miles south of Old Grove Road and Old Grove Road | 40
+(9) | Rancho del Oro from Mesa Drive to Mission Avenue | 45
+(10) | College Boulevard between Roselle Street and Waring Road/Barnard Drive | 50
+(11a) | Vista Way between Jefferson Street and El Camino Real | 40
+(11b) | Vista Way between El Camino Real and College Boulevard | 45
+(11c) | Vista Way between College Boulevard and easterly city limits | 40
+(12a) | Vandegrift Boulevard (Northbound) between North River Road and Castellano Drive | 50
+(12b) | Vandegrift Boulevard (Southbound) between North River Road and Castellano Drive | 45
+(12c) | Vandegrift Boulevard (Northbound) between Castellano Drive and the North City Limits | 55
+(12d) | Vandegrift Boulevard (Southbound) between Castellano Drive and the North City Limits | 50
+(13) | Oceanside Boulevard from El Camino Real to College Boulevard | 55
+(14) | Oceanside Boulevard from College Boulevard to the easterly city limits | 50
+(15) | Olive Drive between College Boulevard and Emerald Drive | 35
+(16) | Lake Boulevard from College Boulevard to Thunder Drive | 35
+(17) | Lake Boulevard between Sky Haven Lane and Cannon Road | 45
+(18) | Wisconsin Avenue between South Coast Highway and South Pacific Street | 25
+(19) | Airport Road from Mission Avenue to Roymar Road | 30
+(20) | Airport Road from Roymar Road to the westerly end | 35
+(21a) | [Reserved] | 
+(21b) | Douglas Drive between North El Camino Real and North River Road | 40
+(21c) | Douglas Drive between North River Road and Catalina Drive | 40
+(21d) | Douglas Drive between Catalina Drive and Via Malaguena | 50
+(21e) | Douglas Drive between Via Malaguena and Vandergrift Boulevard | 45
+(22) | El Camino Real between Douglas Drive and Mission Avenue | 40
+(23) | Oceanside Boulevard between College Boulevard and the easterly city limit | 50
+(24) | Ivy Road between Avocado Road and Fire Mountain Drive | 25
+(25) | Old Grove Road between College Boulevard and Pine Ridge Road | 35
+(26) | College Boulevard between Thunder Drive and Old Grove Road | 45
+(27) | College Boulevard between Old Grove Road and Mission Avenue | 50
+(28) | Avenida de la Plata between College Boulevard and Old Grove Road | 30
+(29) | Cannon Road between Melrose Drive and Leisure Village Way | 45
+(30) | Old Grove Road between Frazee Road and State Route 76 | 40
+(31) | North Santa Fe Avenue between State Route 76 and Melrose Drive | 50
+(32) | Rancho del Oro Road between Oceanside Boulevard and Vista Way | 45
+(33) | Shadowridge Drive between Cannon Road and Southerly City Limits | 30
+(34) | Old Grove Road between State Route 76 and College Boulevard | 45
+(35) | [Reserved] | 
+(36a) | Mesa Drive between El Camino Real and Ivey Ranch Road | 45
+(36b) | Mesa Drive between Ivey Rancho Road and Via Rancho Road | 45
+(36c) | Mesa Drive between Via Rancho Road and Santa Fe Avenue | 45
+(37) | Peyri Drive between Mission Avenue and Via Los Padres | 30
+(38) | North El Camino Real between Douglas Drive and Peyri Drive | 25
+(39) | Emerald Drive between Lake Boulevard and Sunset Drive | 45
+(40) | Mesa Drive between Mission Avenue and Foussat Road | 30
+(41) | Mesa Drive between Foussat Road and El Camino Real | 40
+(42) | Surfrider Way between Coast Highway and Horne Street | 25
+(43) | Via Rancho Road between Mesa Drive and Rancho Del Oro Road | 35
+(44) | North Avenue between Seasons Road and the easterly city limits | 40
+(45) | Guajome Lake Road between Mission Avenue and Cranberry Street | 30
+(46) | Cranberry Street between Guajome Lake Road and the easterly end of the street | 30
+(47a) | Melrose Drive between Oceanside Boulevard and Sagewood Drive | 45
+(47b) | Melrose Drive between Sagewood Drive and North Santa Fe Avenue | 45
+(48) | College Boulevard between Adams Street and State Route 76 | 45
+(49) | College Boulevard between Adams Street and North River Road | 45
+(50) | Crouch Street between Mesa Drive and Oceanside Boulevard | 30
+(51) | Industry Street between El Camino Real and Camelot Drive | 25
+(52) | Lake Boulevard between Thunder Drive and Skyhaven Lane | 30
+(53) | Oceanside Boulevard between Interstate 5 and Crouch Street | 35
+(54) | Oceanside Boulevard between Crouch Street and El Camino Real | 45
+(55) | Peacock Boulevard between Oceanside Boulevard and Darwin Drive | 30
+(56) | Skyline Drive between El Camino Real and Valley Road | 30
+(57) | [Reserved] | 
+(58) | Frazee Road between College Boulevard and Muirwood Drive | 30
+(59) | Silver Bluff Drive between College Boulevard and Palette Court/Montage Drive | 35
+(60) | Crouch Street between Oceanside Boulevard and Grandview Street | 35
+(61) | Foussat Road between Mesa Drive and Mission Avenue | 30
+(62) | Darwin Drive between Glenhaven Drive and Sunridge Drive | 25
+(63) | Morse Street between Coast Highway and Stewart Street | 25
+(64) | [Reserved] | 
+(65) | Frazee Road between State Route 76 and College Boulevard | 35
+(66) | Via Esmarca between Fire Mountain Drive and Via Las Rosas | 30
+(67) | Via Esmarca between Via Las Rosas and Vista Way | 30
+(68) | Downs Street between Skylark Drive and California Street | 35
+(69) | [Reserved] | 
+(70) | Frazee Road between Old Grove Road and State Route 76 | 45
+(71) | Rivertree Drive between Foussat Road and Ashwood Court | 30
+(72) | Canyon Drive between Mission Avenue and State Route 76 | 45
+(73) | [Reserved] | 
+(74) | Los Arbolitos Boulevard between El Camino Real and Pala Road | 25
+(75) | Avenida de la Plata between Avenida Empresa and Mesa Drive | 30
+(76) | Avenida de la Plata between Old Grove Road and Avenida Empresa | 30
+(77) | Benet Road between State Route 76 and Airport Road (North) | 45
+(78) | Pala Road between Los Arbolitos Boulevard and Douglas Drive | 35
+(79) | Benet Road between Foussat Road and Airport Road (North) | 40
+(80) | [Reserved] | 
+(81) | Plaza Drive between College Boulevard and Thunder Drive | 35
+(82) | Foussat Road between State Route 76 and a location approximately 545 feet north of Alex Road | 40
+(83) | Foussat Road between Rivertree Drive and a location approximately 1,000 feet south of Benet Road | 35
+(84a) | Corporate Centre Drive between Oceanside Boulevard and Avenida de la Plata | 45
+(84b) | Corporate Centre Drive between Avenida de la Plata and Ocean Ranch Boulevard | 40
+(85) | Rancho Del Oro Road between Oceanside Boulevard and Mesa Drive | 45
+(86) | College Boulevard between Waring Road/Barnard Drive and Lake Boulevard | 40
+(87) | College Boulevard between Lake Boulevard to South City Limits | 45
+(88) | Vista Way between Coast Highway and Interstate 5/State Route 78 Interchange | 30
+(89) | Douglas Drive between Mission Avenue and El Camino Real | 40
+(90) | Mission Gate Drive between Mission Avenue and Via Rancho Road | 25
