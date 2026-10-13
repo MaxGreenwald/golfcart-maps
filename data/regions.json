@@ -1,2 +1,99 @@
-[{"id":"sd","name":"San Diego coast","short":"San Diego","state":"CA","center":[32.8565,-117.2555],"zoom":15,"bbox":[32.53,-117.46,33.3,-116.95]},
- {"id":"villages","name":"The Villages, FL","short":"The Villages","state":"FL","center":[28.9025,-81.9790],"zoom":15,"bbox":[28.78,-82.10,29.02,-81.90],"beta":true}]
+[
+{
+"id": "sd",
+"name": "San Diego coast",
+"short": "San Diego",
+"state": "CA",
+"center": [
+32.8565,
+-117.2555
+],
+"zoom": 15,
+"bbox": [
+32.53,
+-117.46,
+33.3,
+-116.95
+],
+"cover": "it covers the coast from Oceanside to the border (US side), about 6 mi inland."
+},
+{
+"id": "villages",
+"name": "The Villages, FL",
+"short": "The Villages",
+"state": "FL",
+"center": [
+28.9025,
+-81.979
+],
+"zoom": 15,
+"bbox": [
+28.78,
+-82.1,
+29.02,
+-81.9
+],
+"beta": true,
+"cover": "The Villages area covers Lady Lake to Wildwood (Lake, Sumter, Marion counties). Pick another city in the menu above.",
+"rules": {
+"golf_cart": {
+"max_posted": 35,
+"assume": [
+"residential",
+"living_street",
+"service",
+"unclassified"
+],
+"cross": false,
+"daylight_only": false,
+"cite": "F.S. 316.212 + Sumter Co. Sec. 17-3; multi-modal paths 20 mph (Villages CDD); cross big roads only at path tunnels/crossings"
+}
+}
+},
+{
+"id": "ptc",
+"name": "Peachtree City, GA",
+"short": "Peachtree City",
+"state": "GA",
+"center": [
+33.3966,
+-84.596
+],
+"zoom": 15,
+"bbox": [
+33.33,
+-84.64,
+33.46,
+-84.5
+],
+"beta": true,
+"cover": "Peachtree City area only. Pick another city in the menu above.",
+"rules": {
+"golf_cart": {
+"max_posted": 35,
+"assume": [],
+"cross": false,
+"cite": "O.C.G.A. 40-6-331; Peachtree City ordinance: carts on the multi-use path system (city streets UNVERIFIED)"
+}
+}
+},
+{
+"id": "hhi",
+"name": "Hilton Head & Bluffton, SC",
+"short": "Hilton Head",
+"state": "SC",
+"center": [
+32.1393,
+-80.756
+],
+"zoom": 15,
+"bbox": [
+32.1,
+-80.98,
+32.32,
+-80.65
+],
+"beta": true,
+"cover": "Hilton Head Island and Bluffton only. Pick another city in the menu above."
+}
+]
