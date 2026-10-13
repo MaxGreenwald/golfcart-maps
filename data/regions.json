@@ -1,0 +1,2 @@
+[{"id":"sd","name":"San Diego coast","short":"San Diego","state":"CA","center":[32.8565,-117.2555],"zoom":15,"bbox":[32.53,-117.46,33.3,-116.95]},
+ {"id":"villages","name":"The Villages, FL","short":"The Villages","state":"FL","center":[28.9025,-81.9790],"zoom":15,"bbox":[28.78,-82.10,29.02,-81.90],"beta":true}]
