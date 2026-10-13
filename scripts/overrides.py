@@ -133,3 +133,19 @@ def build(ways):
             out[i] = (mph, ok, e["source_url"], f'{e["road"]} ({e["from_to_segment_if_known"] or e["city"]})'); n += 1
         report.append((idx, e["road"], f"{n} ways -> {mph} mph"))
     return out, report
+
+# ---- Max's verified updates (Oct 12 2026) ----
+# Coronado Orange Ave: replaces research #39 (45, paratransit code). 35 from ~10th St/1466 Orange to RH Dana Pl/Hotel del; 25-30 north of that.
+_SVB = len(INTEL)
+_ORG_SRC = "https://www.mapillary.com/app/?lat=32.694275&lng=-117.17524&z=19&focus=map&mapFeatureId=1770240414010580"
+INTEL.append({"road": "Orange Ave", "city": "Coronado", "from_to_segment_if_known": "10th St (1466 Orange) - RH Dana Pl / Hotel del: posted 35 — Google Street View Jun 2026 (Max), Mapillary Aug 2026",
+              "speed_mph": 35, "lsv_ok": True, "source_url": "https://www.google.com/maps/@32.6858,-117.1789,3a,75y,150h,90t/data=!3m1!1e3", "confidence": "high"})
+INTEL.append({"road": "Orange Ave", "city": "Coronado", "from_to_segment_if_known": "Ferry Landing/1st St - 10th St: posted 25-30 — Google Street View Jun 2026 (Max), Mapillary Aug 2026",
+              "speed_mph": 30, "lsv_ok": True, "source_url": _ORG_SRC, "confidence": "high"})
+INTEL.append({"road": "S Coast Hwy 101", "city": "Encinitas (Cardiff)", "from_to_segment_if_known": "Swami's - San Elijo bridge: posted 30 — Street View Mar 2025 and Sep 2025 (Max)",
+              "speed_mph": 30, "lsv_ok": True, "source_url": "https://www.google.com/maps/@33.0186,-117.2822,3a,75y,160h,90t/data=!3m1!1e3", "confidence": "high"})
+RULES.pop(39, None); RULES.pop(26, None)
+RULES[_SVB] = (r"^(Orange Avenue|R\.H\. Dana Place)$", CO, r"__SOUTH__", r"__CO10__", "lat")  # incl. RH Dana Pl at the Hotel del end
+RULES[_SVB + 1] = (r"^Orange Avenue$", CO, r"__CO10__", r"__NORTH__", "lat")
+RULES[_SVB + 2] = (r"^(South Coast Highway 101|South Highway 101|South Coast Highway|US 101 Hist|Coast Highway 101)$", (32.99, -117.31, 33.035, -117.26), r"__SWAMIS__", r"__SOUTH__", "lat")
+FIXED["__CO10__"] = 32.6866  # Orange Ave at 10th St (~1466 Orange)

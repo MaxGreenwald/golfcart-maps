@@ -86,14 +86,6 @@
    "url": "https://www.mapillary.com/app/?lat=32.737167&lng=-117.160300&z=19&focus=map&mapFeatureId=3569218456708474"
   },
   {
-   "road": "Orange Avenue",
-   "way": 27028035,
-   "override_mph": 45,
-   "mapillary_mph": 25,
-   "signs": 2,
-   "url": "https://www.mapillary.com/app/?lat=32.683723&lng=-117.178795&z=19&focus=map&mapFeatureId=176321021051927"
-  },
-  {
    "road": "Cabrillo Memorial Drive",
    "way": 67487403,
    "osm_mph": 99,
@@ -140,22 +132,6 @@
    "mapillary_mph": 25,
    "change": "newly allowed",
    "url": "https://www.mapillary.com/app/?lat=32.702910&lng=-117.148315&z=19&focus=map&mapFeatureId=1027828245835590"
-  },
-  {
-   "road": "Orange Avenue",
-   "way": 153343705,
-   "override_mph": 45,
-   "mapillary_mph": 25,
-   "signs": 1,
-   "url": "https://www.mapillary.com/app/?lat=32.697000&lng=-117.173195&z=19&focus=map&mapFeatureId=1380195905677280"
-  },
-  {
-   "road": "Orange Avenue",
-   "way": 157992671,
-   "override_mph": 45,
-   "mapillary_mph": 30,
-   "signs": 1,
-   "url": "https://www.mapillary.com/app/?lat=32.694520&lng=-117.174480&z=19&focus=map&mapFeatureId=1341199850357079"
   },
   {
    "road": "",
@@ -388,62 +364,6 @@
    "mapillary_mph": 25,
    "change": "newly allowed",
    "url": "https://www.mapillary.com/app/?lat=32.742226&lng=-117.147514&z=19&focus=map&mapFeatureId=1311505917849243"
-  },
-  {
-   "road": "Orange Avenue",
-   "way": 436413490,
-   "override_mph": 45,
-   "mapillary_mph": 35,
-   "signs": 2,
-   "url": "https://www.mapillary.com/app/?lat=32.681515&lng=-117.177150&z=19&focus=map&mapFeatureId=256748416229950"
-  },
-  {
-   "road": "Orange Avenue",
-   "way": 436413494,
-   "override_mph": 45,
-   "mapillary_mph": 25,
-   "signs": 1,
-   "url": "https://www.mapillary.com/app/?lat=32.689056&lng=-117.178215&z=19&focus=map&mapFeatureId=845926582800375"
-  },
-  {
-   "road": "Orange Avenue",
-   "way": 436413504,
-   "override_mph": 45,
-   "mapillary_mph": 30,
-   "signs": 2,
-   "url": "https://www.mapillary.com/app/?lat=32.694275&lng=-117.175240&z=19&focus=map&mapFeatureId=1770240414010580"
-  },
-  {
-   "road": "Orange Avenue",
-   "way": 436413508,
-   "override_mph": 45,
-   "mapillary_mph": 25,
-   "signs": 1,
-   "url": "https://www.mapillary.com/app/?lat=32.687330&lng=-117.178980&z=19&focus=map&mapFeatureId=1430903348294777"
-  },
-  {
-   "road": "Orange Avenue",
-   "way": 436413519,
-   "override_mph": 45,
-   "mapillary_mph": 25,
-   "signs": 1,
-   "url": "https://www.mapillary.com/app/?lat=32.687325&lng=-117.179220&z=19&focus=map&mapFeatureId=293001049098056"
-  },
-  {
-   "road": "Orange Avenue",
-   "way": 436413525,
-   "override_mph": 45,
-   "mapillary_mph": 30,
-   "signs": 1,
-   "url": "https://www.mapillary.com/app/?lat=32.688858&lng=-117.177980&z=19&focus=map&mapFeatureId=1318116969225230"
-  },
-  {
-   "road": "Orange Avenue",
-   "way": 436413538,
-   "override_mph": 45,
-   "mapillary_mph": 25,
-   "signs": 1,
-   "url": "https://www.mapillary.com/app/?lat=32.680850&lng=-117.176390&z=19&focus=map&mapFeatureId=1004466498235279"
   },
   {
    "road": "West Washington Street",
@@ -692,14 +612,6 @@
    "mapillary_mph": 25,
    "change": "newly allowed",
    "url": "https://www.mapillary.com/app/?lat=32.722866&lng=-117.161140&z=19&focus=map&mapFeatureId=1401946473495660"
-  },
-  {
-   "road": "Orange Avenue",
-   "way": 1022310028,
-   "override_mph": 45,
-   "mapillary_mph": 25,
-   "signs": 3,
-   "url": "https://www.mapillary.com/app/?lat=32.695980&lng=-117.174160&z=19&focus=map&mapFeatureId=534286056353370"
   },
   {
    "road": "Mission Boulevard",
