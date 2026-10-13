@@ -13,6 +13,7 @@ _DM = [("Camino del Mar", "Via de la Valle - San Dieguito Bridge", 30, True),
        ("Jimmy Durante Blvd", "Fairgrounds Gate 2 - San Dieguito Dr", 30, True),
        ("Jimmy Durante Blvd", "San Dieguito Dr - Camino del Mar", 30, True),
        ("Via de la Valle", "Camino del Mar - Jimmy Durante Blvd", 35, True)]
+SURVEY = "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_09142026-3926"
 DM_BASE = len(INTEL)
 for road, seg, mph_, ok in _DM:
     INTEL.append({"road": road, "city": "Del Mar", "from_to_segment_if_known": seg + " — " + DM_NOTE, "speed_mph": mph_, "lsv_ok": ok,
@@ -38,7 +39,7 @@ RULES = {
  16: (r"^Camino del Mar$", DM, r"27th Street", r"Coast Boulevard", "lat"),
  17: (r"^Camino del Mar$", (32.965, -117.275, 32.985, -117.25), r"__BRIDGE__", r"27th Street", "lat"),
  18: (r"^Camino del Mar$", DM, r"__DMPLAZA__", r"9th Street", "lat"),
- 19: (r"^(Camino del Mar|South Camino del Mar)$", (32.925, -117.275, 32.96, -117.24), r"9th Street", r"__SOUTH__", "lat"),
+ 19: (r"^Camino del Mar$", (32.945, -117.275, 32.96, -117.24), r"9th Street", r"4th Street", "lat"),  # survey seg 7-8: 35
  20: (r"^(South Coast Highway 101|North Coast Highway 101|South Highway 101|North Highway 101|Highway 101|Camino del Mar|South Coast Highway|North Coast Highway|US 101 Hist)$", SB, r"__NORTH__", r"Dahlia Drive", "lat"),
  21: (r"^(South Coast Highway 101|North Coast Highway 101|South Highway 101|North Highway 101|Highway 101|Camino del Mar|South Coast Highway|North Coast Highway|US 101 Hist)$", (32.97, -117.28, 32.995, -117.25), r"Dahlia Drive", r"Via de la Valle", "lat"),
  22: (r"^(North |South )?Sierra Avenue$", SB, r"Plaza Street", r"Border Avenue", "lat"),
@@ -71,7 +72,13 @@ RULES.update({
  DM_BASE + 5: (r"^Via de la Valle$", _DMBOX, r"Camino del Mar", r"Jimmy Durante Boulevard", "lon"),
 })
 # rules applied later win: drop older Del Mar research rules superseded by the ordinance
-# (research rules 16/17 cover Coast Blvd - bridge and stay in place)
+# Del Mar FY2026-27 Engineering & Traffic Survey (TPAC Sept 14 2026, Table 2) + Max's Street View photos (40 signs at 210 S Camino Del Mar, Mar 2025; 261 County Hwy S21, Feb 2025)
+SV_BASE = len(INTEL)
+INTEL.append({"road": "South Camino del Mar (S21)", "city": "Del Mar", "from_to_segment_if_known": "4th St/Del Mar Heights Rd - Carmel Valley Rd: posted 40 (survey seg 9; Street View signs)", "speed_mph": 40, "lsv_ok": False, "source_url": SURVEY, "confidence": "high"})
+INTEL.append({"road": "Camino del Mar", "city": "Del Mar", "from_to_segment_if_known": "San Dieguito Bridge - Coast Blvd: posted 25 (survey seg 3)", "speed_mph": 25, "lsv_ok": True, "source_url": SURVEY, "confidence": "high"})
+RULES[SV_BASE] = (r"^(South Camino del Mar|Camino del Mar)$", (32.9395, -117.275, 32.9482, -117.25), None, None, "lat")
+RULES[SV_BASE + 1] = (r"^Camino del Mar$", _DMBOX, r"Coast Boulevard", r"__BRIDGE__", "lat")
+RULES.pop(16, None); RULES.pop(17, None)  # superseded by survey seg 3
 # fixed coordinates for landmarks that aren't cross streets (approximate)
 FIXED = {"__POTTERY__": -117.2585, "__BRIDGE__": 32.9745, "__DMPLAZA__": 32.9595, "__GATE2__": 32.9757, "__SDD__": 32.9665, "__LJVD__": -117.236, "__SWAMIS__": 33.0345, "__MANZANO__": 33.112,
          "__I5__": None, "__NORTH__": None, "__SOUTH__": None}
