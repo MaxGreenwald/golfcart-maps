@@ -3,7 +3,7 @@
 classify them for golf cart (<=25 mph) and LSV (<=35 mph) use.
 Output: public/data/roads.json (compact) + gzip. Stdlib only."""
 import json, re, time, urllib.request, urllib.parse, gzip, os, math, sys
-sys.path.insert(0, os.path.dirname(__file__)); import overrides
+sys.path.insert(0, os.path.dirname(__file__)); import overrides, mapillary_signs
 S, W, N, E = 32.53, -117.42, 33.30, -116.95
 TILES_LAT, TILES_LON = 6, 3
 PREFIX = "v2_tile"
@@ -74,6 +74,19 @@ for a in range(TILES_LAT):
                 el["nodes"] = [f'{q["lat"]:.7f},{q["lon"]:.7f}' for q in el["geometry"]]
                 ways[el["id"]] = el
         if not os.path.exists(os.path.join(CACHE, f"{PREFIX}{i}.json")) or True: pass
+# US-Mexico border: drop any way with geometry south of the border line (Playas de Tijuana etc.)
+def border_lat(lon): return 32.5343 + (lon + 117.1235) * 0.0367
+for k in [k for k, w in ways.items() if any(q["lat"] < border_lat(q["lon"]) - 0.0002 for q in w["geometry"])]: del ways[k]
+# Coastal strip (~8-10 km inland from the shoreline), Oceanside to the border. (lon, lat)
+POLY = [(-117.46, 33.27), (-117.30, 33.27), (-117.24, 33.15), (-117.19, 33.05), (-117.15, 32.95), (-117.14, 32.85),
+        (-117.12, 32.75), (-117.06, 32.68), (-117.03, 32.60), (-117.03, 32.53), (-117.46, 32.53)]
+def inpoly(x, y, P=POLY):
+    c = False
+    for i in range(len(P)):
+        (x1, y1), (x2, y2) = P[i], P[i - 1]
+        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1: c = not c
+    return c
+for k in [k for k, w in ways.items() if not inpoly(w["geometry"][len(w["geometry"]) // 2]["lon"], w["geometry"][len(w["geometry"]) // 2]["lat"])]: del ways[k]
 # Node ids are kept at way endpoints + shared nodes so routing graph stays connected.
 cnt = {}
 for w in ways.values():
@@ -81,8 +94,11 @@ for w in ways.values():
 wl = list(ways.values())
 ov, rep = overrides.build([(w["tags"], [[q["lon"], q["lat"]] for q in w["geometry"]], w["nodes"]) for w in wl])
 for r in rep: print("override", *r)
+mly, mst = mapillary_signs.match([(w["tags"], [[q["lon"], q["lat"]] for q in w["geometry"]]) for w in wl])
+print("mapillary", json.dumps(mst))
+conf = []
 sources = []; sidx = {}
-names, out, stats = [], [], {"tagged": 0, "inferred": 0, "unknown": 0, "inferred_high": 0, "verified": 0}
+names, out, stats = [], [], {"tagged": 0, "inferred": 0, "unknown": 0, "inferred_high": 0, "verified": 0, "mapillary": 0}
 nidx = {}
 nids = {}
 def nid(k): return nids.setdefault(k, len(nids))
@@ -93,6 +109,14 @@ for wi, w in enumerate(wl):
         key = (url, label)
         if key not in sidx: sidx[key] = len(sources); sources.append([url, label])
         si = sidx[key]
+        if wi in mly and (mly[wi][0] >= 40) != (vmph >= 40):
+            conf.append({"road": t.get("name", ""), "way": w["id"], "override_mph": vmph, "mapillary_mph": mly[wi][0], "signs": mly[wi][2], "url": mly[wi][1]})
+    elif wi in mly and not ((s >= 40) != (mly[wi][0] >= 40) and mly[wi][2] < 2):  # flipping allowed/forbidden needs 2+ agreeing signs
+        osm = s; s, src = mly[wi][0], "mapillary"
+        key = (mly[wi][1], f"Mapillary: {mly[wi][2]} posted {s} mph sign(s) detected")
+        if key not in sidx: sidx[key] = len(sources); sources.append([key[0], key[1]])
+        si = sidx[key]
+        if (osm >= 40) != (s >= 40): conf.append({"road": t.get("name", ""), "way": w["id"], "osm_mph": osm, "mapillary_mph": s, "change": "newly forbidden" if s >= 40 else "newly allowed", "url": key[0]})
     stats[src] += 1
     nm = t.get("name") or t.get("ref") or ""
     if nm not in nidx: nidx[nm] = len(names); names.append(nm)
@@ -108,8 +132,10 @@ for wi, w in enumerate(wl):
         ow = 1 if t.get("oneway") in ("yes", "1") else (-1 if t.get("oneway") == "-1" else 0)
         if t.get("junction") == "roundabout" and ow == 0: ow = 1
         out.append([nidx[nm], t["highway"], s, src[0], ow, nid(nodes[sg[0]]), nid(nodes[sg[-1]]), pts] + ([si] if si >= 0 else []))
+os.makedirs(os.path.join(os.path.dirname(__file__), "..", "research"), exist_ok=True)
+json.dump({"stats": mst, "changes": conf}, open(os.path.join(os.path.dirname(__file__), "..", "research", "mapillary_report.json"), "w"), indent=1)
 total = sum(stats.values())
-meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": total, "segments": len(out), "stats": stats}
+meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": total, "segments": len(out), "stats": stats, "poly": POLY}
 os.makedirs(OUT, exist_ok=True)
 TS = 0.1  # output tile size (degrees); segment goes to tile of its first point
 tiles = {}

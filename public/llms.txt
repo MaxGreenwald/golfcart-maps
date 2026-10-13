@@ -1,0 +1,35 @@
+# Golf Cart Map
+
+> Free golf cart and LSV (low-speed vehicle) legal road map for coastal San Diego: Oceanside, Carlsbad, Encinitas, Solana Beach, Del Mar, La Jolla, Pacific Beach, Coronado and more. Routes avoid roads posted 40+ mph.
+
+URL: https://golfcartmap.com/
+
+## What it does
+- Shows which roads a golf cart / low-speed vehicle (LSV) may legally use in coastal San Diego County, from Oceanside to the US-Mexico border, about 6 miles inland.
+- Green = posted 35 mph or less (OK for LSVs); dashed green = small road, assumed 25 mph; red = posted 40+ mph or major road (avoid).
+- Plans routes that avoid 40+ mph roads; crossing a faster road at an intersection is allowed.
+- Optional risky mode highlights stretches of 300 ft or less on faster roads.
+
+## Rules used
+- CVC 21260: LSVs only on roads posted 35 mph or less; may cross faster roads at intersections between 35-or-less roads.
+- CVC 385.5: LSV definition (4 wheels, top speed over 20 and at most 25 mph, under 3,000 lb GVWR).
+
+## Coverage
+Oceanside, Carlsbad, Encinitas (Leucadia, Cardiff), Solana Beach, Del Mar, Carmel Valley, Torrey Pines, La Jolla, Pacific Beach, Mission Beach, Ocean Beach, Point Loma, Old Town, downtown San Diego, Coronado, Imperial Beach.
+
+## Data sources
+OpenStreetMap, Mapillary speed-limit sign detections, and city speed surveys/ordinances. Not legal advice; posted signs win.
+
+## FAQ
+
+### Can I drive a golf cart on a 40 mph road in California?
+Not a street-legal low-speed vehicle (LSV). California Vehicle Code 21260 allows an LSV only on roadways with a posted speed limit of 35 mph or less. It may cross a faster road at an intersection when the crossing starts and ends on a roadway posted 35 mph or less. An ordinary golf cart that is not an LSV is more limited: it may only use roads where a local ordinance or golf cart transportation plan permits it.
+
+### What roads can an LSV use in San Diego?
+Any public road with a posted speed limit of 35 mph or less, unless a city or the state restricts LSVs on it (CVC 21260). Freeways and roads posted 40 mph or more are off limits except for crossing at intersections. Golf Cart Map shows these roads in green and the forbidden 40+ mph roads in red.
+
+### What is a low-speed vehicle (LSV) in California?
+Under CVC 385.5, a low-speed vehicle is a motor vehicle with four wheels that can go faster than 20 mph but no faster than 25 mph, weighs less than 3,000 pounds gross, and meets federal LSV safety standards (FMVSS 500). LSVs must be registered, insured and driven by a licensed driver.
+
+### Where does Golf Cart Map get speed limits?
+OpenStreetMap speed tags, posted speed-limit signs detected in Mapillary street imagery, and verified city sources such as council speed surveys. Small residential streets without a posted limit are assumed to be 25 mph. Posted signs always take precedence over the map.

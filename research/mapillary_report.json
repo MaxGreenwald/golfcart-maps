@@ -1,0 +1,1561 @@
+{
+ "stats": {
+  "signs": 7294,
+  "matched": 4854,
+  "ways": 2814
+ },
+ "changes": [
+  {
+   "road": "",
+   "way": 5938699,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.715480&lng=-117.124660&z=19&focus=map&mapFeatureId=318258529921563"
+  },
+  {
+   "road": "32nd Street",
+   "way": 5957472,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.708572&lng=-117.125190&z=19&focus=map&mapFeatureId=1025060986322724"
+  },
+  {
+   "road": "Chatsworth Boulevard",
+   "way": 5962634,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.731070&lng=-117.241830&z=19&focus=map&mapFeatureId=278276523921401"
+  },
+  {
+   "road": "Catalina Boulevard",
+   "way": 5963449,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.732136&lng=-117.242700&z=19&focus=map&mapFeatureId=3972280463099767"
+  },
+  {
+   "road": "East G Street",
+   "way": 5980595,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.712570&lng=-117.143720&z=19&focus=map&mapFeatureId=1540376186515718"
+  },
+  {
+   "road": "4th Avenue",
+   "way": 5987896,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.733376&lng=-117.161354&z=19&focus=map&mapFeatureId=580057275036723"
+  },
+  {
+   "road": "Ca\u00f1on Street",
+   "way": 6031036,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.722214&lng=-117.232895&z=19&focus=map&mapFeatureId=646186177855674"
+  },
+  {
+   "road": "Milton Street",
+   "way": 6031736,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.782722&lng=-117.189970&z=19&focus=map&mapFeatureId=1530605607633068"
+  },
+  {
+   "road": "",
+   "way": 25307055,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.723100&lng=-117.164710&z=19&focus=map&mapFeatureId=501063621074083"
+  },
+  {
+   "road": "5th Avenue",
+   "way": 25518667,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.737167&lng=-117.160300&z=19&focus=map&mapFeatureId=3569218456708474"
+  },
+  {
+   "road": "Orange Avenue",
+   "way": 27028035,
+   "override_mph": 45,
+   "mapillary_mph": 25,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=32.683723&lng=-117.178795&z=19&focus=map&mapFeatureId=176321021051927"
+  },
+  {
+   "road": "Cabrillo Memorial Drive",
+   "way": 67487403,
+   "osm_mph": 99,
+   "mapillary_mph": 15,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.678540&lng=-117.243430&z=19&focus=map&mapFeatureId=935440092996674"
+  },
+  {
+   "road": "Swift Avenue",
+   "way": 82866295,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.747715&lng=-117.119430&z=19&focus=map&mapFeatureId=1129135595189652"
+  },
+  {
+   "road": "36th Street",
+   "way": 105761209,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.711174&lng=-117.116590&z=19&focus=map&mapFeatureId=516093322859355"
+  },
+  {
+   "road": "Washington Street",
+   "way": 124904815,
+   "osm_mph": 40,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.750725&lng=-117.153290&z=19&focus=map&mapFeatureId=1462242688750801"
+  },
+  {
+   "road": "25th Street",
+   "way": 151281120,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.717064&lng=-117.140210&z=19&focus=map&mapFeatureId=968868937186942"
+  },
+  {
+   "road": "National Avenue",
+   "way": 153311806,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.702910&lng=-117.148315&z=19&focus=map&mapFeatureId=1027828245835590"
+  },
+  {
+   "road": "Orange Avenue",
+   "way": 153343705,
+   "override_mph": 45,
+   "mapillary_mph": 25,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.697000&lng=-117.173195&z=19&focus=map&mapFeatureId=1380195905677280"
+  },
+  {
+   "road": "Orange Avenue",
+   "way": 157992671,
+   "override_mph": 45,
+   "mapillary_mph": 30,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.694520&lng=-117.174480&z=19&focus=map&mapFeatureId=1341199850357079"
+  },
+  {
+   "road": "",
+   "way": 159069391,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.772840&lng=-117.161390&z=19&focus=map&mapFeatureId=144887504316868"
+  },
+  {
+   "road": "Nimitz Boulevard",
+   "way": 159947684,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.739777&lng=-117.231650&z=19&focus=map&mapFeatureId=623781320410731"
+  },
+  {
+   "road": "Rosecrans Street",
+   "way": 160433257,
+   "osm_mph": 40,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.743004&lng=-117.213750&z=19&focus=map&mapFeatureId=653079187298092"
+  },
+  {
+   "road": "",
+   "way": 164656258,
+   "osm_mph": 40,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.752380&lng=-117.148120&z=19&focus=map&mapFeatureId=549463611591224"
+  },
+  {
+   "road": "32nd Street",
+   "way": 182002467,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.762940&lng=-117.125070&z=19&focus=map&mapFeatureId=486378505903597"
+  },
+  {
+   "road": "South 28th Street",
+   "way": 184985897,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.698420&lng=-117.133900&z=19&focus=map&mapFeatureId=1098272272313212"
+  },
+  {
+   "road": "32nd Street",
+   "way": 184985947,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.713345&lng=-117.125140&z=19&focus=map&mapFeatureId=3495580077212019"
+  },
+  {
+   "road": "Ulric Street",
+   "way": 202907440,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.786892&lng=-117.171104&z=19&focus=map&mapFeatureId=1698528990760889"
+  },
+  {
+   "road": "Park Boulevard",
+   "way": 205304086,
+   "osm_mph": 40,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.739166&lng=-117.146540&z=19&focus=map&mapFeatureId=1642343647216944"
+  },
+  {
+   "road": "Hotel Circle South",
+   "way": 233700529,
+   "osm_mph": 35,
+   "mapillary_mph": 65,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=32.759180&lng=-117.182076&z=19&focus=map&mapFeatureId=812216806371785"
+  },
+  {
+   "road": "East Broadway",
+   "way": 280533949,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.715720&lng=-117.133020&z=19&focus=map&mapFeatureId=388178622543983"
+  },
+  {
+   "road": "Dana Landing Road",
+   "way": 289502113,
+   "osm_mph": 25,
+   "mapillary_mph": 45,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=32.765040&lng=-117.235810&z=19&focus=map&mapFeatureId=963809467721223"
+  },
+  {
+   "road": "Burgener Boulevard",
+   "way": 319360783,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.790700&lng=-117.192330&z=19&focus=map&mapFeatureId=208212260927870"
+  },
+  {
+   "road": "Cabrillo Memorial Drive",
+   "way": 348459901,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.705250&lng=-117.248764&z=19&focus=map&mapFeatureId=1735343440761801"
+  },
+  {
+   "road": "Upas Street",
+   "way": 365621605,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.741188&lng=-117.130356&z=19&focus=map&mapFeatureId=194339019085378"
+  },
+  {
+   "road": "Cleveland Avenue",
+   "way": 377691840,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.756893&lng=-117.150116&z=19&focus=map&mapFeatureId=280790633765084"
+  },
+  {
+   "road": "Rosecrans Street",
+   "way": 436250895,
+   "osm_mph": 40,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.737060&lng=-117.218376&z=19&focus=map&mapFeatureId=2182564152552480"
+  },
+  {
+   "road": "Catalina Boulevard",
+   "way": 436258449,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.729816&lng=-117.243490&z=19&focus=map&mapFeatureId=625755006730375"
+  },
+  {
+   "road": "Rosecrans Street",
+   "way": 436258517,
+   "osm_mph": 40,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.729750&lng=-117.224650&z=19&focus=map&mapFeatureId=901360262772393"
+  },
+  {
+   "road": "Rosecrans Street",
+   "way": 436258527,
+   "osm_mph": 40,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.727947&lng=-117.226580&z=19&focus=map&mapFeatureId=1147403333744561"
+  },
+  {
+   "road": "West Harbor Drive",
+   "way": 436285085,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.711258&lng=-117.169556&z=19&focus=map&mapFeatureId=927624629750761"
+  },
+  {
+   "road": "Ocean View Boulevard",
+   "way": 436298040,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.701355&lng=-117.112920&z=19&focus=map&mapFeatureId=612128548309987"
+  },
+  {
+   "road": "Market Street",
+   "way": 436305512,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.711475&lng=-117.148490&z=19&focus=map&mapFeatureId=1193011135517174"
+  },
+  {
+   "road": "Market Street",
+   "way": 436305514,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.711575&lng=-117.145744&z=19&focus=map&mapFeatureId=555684777506455"
+  },
+  {
+   "road": "Market Street",
+   "way": 436305515,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.711483&lng=-117.141320&z=19&focus=map&mapFeatureId=518107655988372"
+  },
+  {
+   "road": "Mission Boulevard",
+   "way": 436399458,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.760365&lng=-117.249560&z=19&focus=map&mapFeatureId=152372953529284"
+  },
+  {
+   "road": "Mission Boulevard",
+   "way": 436400723,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.775135&lng=-117.251990&z=19&focus=map&mapFeatureId=438530837532774"
+  },
+  {
+   "road": "West Washington Street",
+   "way": 436405944,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.749870&lng=-117.169510&z=19&focus=map&mapFeatureId=532025765970943"
+  },
+  {
+   "road": "Park Boulevard",
+   "way": 436409295,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.742226&lng=-117.147514&z=19&focus=map&mapFeatureId=1311505917849243"
+  },
+  {
+   "road": "Orange Avenue",
+   "way": 436413490,
+   "override_mph": 45,
+   "mapillary_mph": 35,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=32.681515&lng=-117.177150&z=19&focus=map&mapFeatureId=256748416229950"
+  },
+  {
+   "road": "Orange Avenue",
+   "way": 436413494,
+   "override_mph": 45,
+   "mapillary_mph": 25,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.689056&lng=-117.178215&z=19&focus=map&mapFeatureId=845926582800375"
+  },
+  {
+   "road": "Orange Avenue",
+   "way": 436413504,
+   "override_mph": 45,
+   "mapillary_mph": 30,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=32.694275&lng=-117.175240&z=19&focus=map&mapFeatureId=1770240414010580"
+  },
+  {
+   "road": "Orange Avenue",
+   "way": 436413508,
+   "override_mph": 45,
+   "mapillary_mph": 25,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.687330&lng=-117.178980&z=19&focus=map&mapFeatureId=1430903348294777"
+  },
+  {
+   "road": "Orange Avenue",
+   "way": 436413519,
+   "override_mph": 45,
+   "mapillary_mph": 25,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.687325&lng=-117.179220&z=19&focus=map&mapFeatureId=293001049098056"
+  },
+  {
+   "road": "Orange Avenue",
+   "way": 436413525,
+   "override_mph": 45,
+   "mapillary_mph": 30,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.688858&lng=-117.177980&z=19&focus=map&mapFeatureId=1318116969225230"
+  },
+  {
+   "road": "Orange Avenue",
+   "way": 436413538,
+   "override_mph": 45,
+   "mapillary_mph": 25,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.680850&lng=-117.176390&z=19&focus=map&mapFeatureId=1004466498235279"
+  },
+  {
+   "road": "West Washington Street",
+   "way": 436426464,
+   "osm_mph": 45,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.743248&lng=-117.181390&z=19&focus=map&mapFeatureId=976275080788769"
+  },
+  {
+   "road": "Catalina Boulevard",
+   "way": 436431390,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.708042&lng=-117.249420&z=19&focus=map&mapFeatureId=779381259383401"
+  },
+  {
+   "road": "5th Avenue",
+   "way": 436573729,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.729380&lng=-117.160360&z=19&focus=map&mapFeatureId=177441990956715"
+  },
+  {
+   "road": "Ingraham Street",
+   "way": 436603604,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.780350&lng=-117.236510&z=19&focus=map&mapFeatureId=663324569491143"
+  },
+  {
+   "road": "Cabrillo Memorial Drive",
+   "way": 442834727,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.690792&lng=-117.245160&z=19&focus=map&mapFeatureId=163634762275159"
+  },
+  {
+   "road": "North Harbor Drive",
+   "way": 466529522,
+   "osm_mph": 45,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.716030&lng=-117.172930&z=19&focus=map&mapFeatureId=484646584528969"
+  },
+  {
+   "road": "Catalina Boulevard",
+   "way": 485987974,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.727120&lng=-117.244210&z=19&focus=map&mapFeatureId=478070000181761"
+  },
+  {
+   "road": "",
+   "way": 507853101,
+   "osm_mph": 25,
+   "mapillary_mph": 55,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=32.741947&lng=-117.187370&z=19&focus=map&mapFeatureId=2034602454099691"
+  },
+  {
+   "road": "Meade Avenue",
+   "way": 508059725,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.757355&lng=-117.126140&z=19&focus=map&mapFeatureId=8979718402137752"
+  },
+  {
+   "road": "4th Avenue",
+   "way": 586656736,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.749214&lng=-117.161705&z=19&focus=map&mapFeatureId=237304574836004"
+  },
+  {
+   "road": "Logan Avenue",
+   "way": 593597881,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.700546&lng=-117.143160&z=19&focus=map&mapFeatureId=802319260705552"
+  },
+  {
+   "road": "Robinson Avenue",
+   "way": 593658571,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.746914&lng=-117.157970&z=19&focus=map&mapFeatureId=4308575722487259"
+  },
+  {
+   "road": "Market Street",
+   "way": 593683083,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.711414&lng=-117.116030&z=19&focus=map&mapFeatureId=4341591099206793"
+  },
+  {
+   "road": "Robinson Avenue",
+   "way": 594025074,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.746395&lng=-117.146840&z=19&focus=map&mapFeatureId=2088748058247903"
+  },
+  {
+   "road": "Civic Center Drive",
+   "way": 594126598,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.669914&lng=-117.110790&z=19&focus=map&mapFeatureId=3799765226952226"
+  },
+  {
+   "road": "Chatsworth Boulevard",
+   "way": 630391834,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.745705&lng=-117.215380&z=19&focus=map&mapFeatureId=477812803486898"
+  },
+  {
+   "road": "Pershing Drive",
+   "way": 634177472,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.740807&lng=-117.134030&z=19&focus=map&mapFeatureId=514920792873882"
+  },
+  {
+   "road": "Landis Street",
+   "way": 642980859,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.745544&lng=-117.120630&z=19&focus=map&mapFeatureId=941564314757028"
+  },
+  {
+   "road": "Florida Drive",
+   "way": 660361179,
+   "osm_mph": 50,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.740330&lng=-117.143680&z=19&focus=map&mapFeatureId=824565878176012"
+  },
+  {
+   "road": "Point Loma Avenue",
+   "way": 751994055,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.733660&lng=-117.250680&z=19&focus=map&mapFeatureId=665140515965277"
+  },
+  {
+   "road": "Chatsworth Boulevard",
+   "way": 757085873,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.739100&lng=-117.228250&z=19&focus=map&mapFeatureId=1192930372241076"
+  },
+  {
+   "road": "Ingraham Street",
+   "way": 796840213,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.786804&lng=-117.236885&z=19&focus=map&mapFeatureId=1313087836777799"
+  },
+  {
+   "road": "Fort Stockton Drive",
+   "way": 848035457,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.750877&lng=-117.175766&z=19&focus=map&mapFeatureId=1177135780681320"
+  },
+  {
+   "road": "Chatsworth Boulevard",
+   "way": 870599726,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.737534&lng=-117.230130&z=19&focus=map&mapFeatureId=1157178596101905"
+  },
+  {
+   "road": "Ca\u00f1on Street",
+   "way": 966081399,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.724884&lng=-117.236720&z=19&focus=map&mapFeatureId=1966111051005474"
+  },
+  {
+   "road": "Nimitz Boulevard",
+   "way": 966295592,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.729000&lng=-117.226910&z=19&focus=map&mapFeatureId=510027955453440"
+  },
+  {
+   "road": "Nimitz Boulevard",
+   "way": 966295594,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.729073&lng=-117.226425&z=19&focus=map&mapFeatureId=479533733319973"
+  },
+  {
+   "road": "Chatsworth Boulevard",
+   "way": 997987059,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.734215&lng=-117.233150&z=19&focus=map&mapFeatureId=2596746527290189"
+  },
+  {
+   "road": "",
+   "way": 1007414573,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.719055&lng=-117.117970&z=19&focus=map&mapFeatureId=4650884538261016"
+  },
+  {
+   "road": "Columbia Street",
+   "way": 1021032475,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.726517&lng=-117.168526&z=19&focus=map&mapFeatureId=1327686061704575"
+  },
+  {
+   "road": "4th Avenue",
+   "way": 1021035846,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.722866&lng=-117.161140&z=19&focus=map&mapFeatureId=1401946473495660"
+  },
+  {
+   "road": "Orange Avenue",
+   "way": 1022310028,
+   "override_mph": 45,
+   "mapillary_mph": 25,
+   "signs": 3,
+   "url": "https://www.mapillary.com/app/?lat=32.695980&lng=-117.174160&z=19&focus=map&mapFeatureId=534286056353370"
+  },
+  {
+   "road": "Mission Boulevard",
+   "way": 1025161104,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.778410&lng=-117.252540&z=19&focus=map&mapFeatureId=1910084119799075"
+  },
+  {
+   "road": "",
+   "way": 1028823081,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.757343&lng=-117.136630&z=19&focus=map&mapFeatureId=561707853578855"
+  },
+  {
+   "road": "North 19th Street",
+   "way": 1028948160,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.705772&lng=-117.146750&z=19&focus=map&mapFeatureId=1790711635054452"
+  },
+  {
+   "road": "West Washington Street",
+   "way": 1028955369,
+   "osm_mph": 45,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.749844&lng=-117.169580&z=19&focus=map&mapFeatureId=1303084080802188"
+  },
+  {
+   "road": "33rd Street",
+   "way": 1029161132,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.745853&lng=-117.122810&z=19&focus=map&mapFeatureId=605012005719862"
+  },
+  {
+   "road": "Mission Boulevard",
+   "way": 1033716924,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.767730&lng=-117.251100&z=19&focus=map&mapFeatureId=1219410565144677"
+  },
+  {
+   "road": "Wightman Street",
+   "way": 1041503225,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.747757&lng=-117.118210&z=19&focus=map&mapFeatureId=2067304003694362"
+  },
+  {
+   "road": "4th Avenue",
+   "way": 1053101218,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.740665&lng=-117.161385&z=19&focus=map&mapFeatureId=998146052219109"
+  },
+  {
+   "road": "Morena Boulevard",
+   "way": 1055338844,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.765377&lng=-117.198110&z=19&focus=map&mapFeatureId=878587079367835"
+  },
+  {
+   "road": "Voltaire Street",
+   "way": 1091030104,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.747460&lng=-117.239020&z=19&focus=map&mapFeatureId=1169196991484899"
+  },
+  {
+   "road": "Ulric Street",
+   "way": 1091073756,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.781807&lng=-117.169530&z=19&focus=map&mapFeatureId=4045746282358486"
+  },
+  {
+   "road": "East Island Avenue",
+   "way": 1091336332,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.710506&lng=-117.142525&z=19&focus=map&mapFeatureId=1757772171446640"
+  },
+  {
+   "road": "Florida Drive",
+   "way": 1091340234,
+   "osm_mph": 50,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.730457&lng=-117.143234&z=19&focus=map&mapFeatureId=1588783345100397"
+  },
+  {
+   "road": "Hancock Street",
+   "way": 1125707949,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.743620&lng=-117.186570&z=19&focus=map&mapFeatureId=1178207930753795"
+  },
+  {
+   "road": "East Broadway",
+   "way": 1220518539,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.715860&lng=-117.150580&z=19&focus=map&mapFeatureId=790353471844768"
+  },
+  {
+   "road": "Normal Street",
+   "way": 1220547472,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.752975&lng=-117.147470&z=19&focus=map&mapFeatureId=4164688496922476"
+  },
+  {
+   "road": "Market Street",
+   "way": 1223494459,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.711450&lng=-117.112210&z=19&focus=map&mapFeatureId=907685210079621"
+  },
+  {
+   "road": "Juan Street",
+   "way": 1284269861,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.754684&lng=-117.194855&z=19&focus=map&mapFeatureId=1453700016034958"
+  },
+  {
+   "road": "4th Avenue",
+   "way": 1311367042,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.727734&lng=-117.161316&z=19&focus=map&mapFeatureId=1815128089853087"
+  },
+  {
+   "road": "Rio San Diego Drive",
+   "way": 1322860101,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.777245&lng=-117.132760&z=19&focus=map&mapFeatureId=980851124141631"
+  },
+  {
+   "road": "Chicano Park Boulevard",
+   "way": 1341611692,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.702900&lng=-117.142840&z=19&focus=map&mapFeatureId=952158689704409"
+  },
+  {
+   "road": "South 28th Street",
+   "way": 1346351180,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.695724&lng=-117.133865&z=19&focus=map&mapFeatureId=540137945855288"
+  },
+  {
+   "road": "India Street",
+   "way": 1346640559,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.721214&lng=-117.168480&z=19&focus=map&mapFeatureId=479808533283678"
+  },
+  {
+   "road": "Cleveland Avenue",
+   "way": 1346823237,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.760757&lng=-117.150090&z=19&focus=map&mapFeatureId=1159499879514144"
+  },
+  {
+   "road": "Meade Avenue",
+   "way": 1368304432,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.757263&lng=-117.129974&z=19&focus=map&mapFeatureId=841311619925525"
+  },
+  {
+   "road": "Chatsworth Boulevard",
+   "way": 1418753642,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.743830&lng=-117.221535&z=19&focus=map&mapFeatureId=3933607906914144"
+  },
+  {
+   "road": "Chatsworth Boulevard",
+   "way": 1418757319,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.743824&lng=-117.218720&z=19&focus=map&mapFeatureId=650543054142042"
+  },
+  {
+   "road": "Fort Stockton Drive",
+   "way": 1422375125,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.750782&lng=-117.178210&z=19&focus=map&mapFeatureId=1850770202348393"
+  },
+  {
+   "road": "Murray Ridge Road",
+   "way": 1445341722,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.786446&lng=-117.144870&z=19&focus=map&mapFeatureId=2947963038782617"
+  },
+  {
+   "road": "Lincoln Avenue",
+   "way": 1459565138,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.750260&lng=-117.126050&z=19&focus=map&mapFeatureId=180134653892247"
+  },
+  {
+   "road": "Alameda Boulevard",
+   "way": 1495607255,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.685050&lng=-117.185425&z=19&focus=map&mapFeatureId=3840558899492967"
+  },
+  {
+   "road": "Florida Drive",
+   "way": 1530335629,
+   "osm_mph": 50,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.723248&lng=-117.143036&z=19&focus=map&mapFeatureId=204167878186279"
+  },
+  {
+   "road": "Meade Avenue",
+   "way": 1547723726,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.757164&lng=-117.131310&z=19&focus=map&mapFeatureId=559256835088295"
+  },
+  {
+   "road": "Prospect Place",
+   "way": 39451230,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.847797&lng=-117.268196&z=19&focus=map&mapFeatureId=1730852901550594"
+  },
+  {
+   "road": "Linda Vista (Frontage) Road",
+   "way": 5958796,
+   "osm_mph": 25,
+   "mapillary_mph": 40,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=32.802258&lng=-117.157486&z=19&focus=map&mapFeatureId=185051640163358"
+  },
+  {
+   "road": "Trade Street",
+   "way": 5962637,
+   "osm_mph": 25,
+   "mapillary_mph": 40,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=32.889150&lng=-117.153656&z=19&focus=map&mapFeatureId=2149292005614843"
+  },
+  {
+   "road": "La Jolla Parkway",
+   "way": 39452427,
+   "override_mph": 45,
+   "mapillary_mph": 25,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.849125&lng=-117.249030&z=19&focus=map&mapFeatureId=9391001557610084"
+  },
+  {
+   "road": "Mount Abernathy Avenue",
+   "way": 161136404,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.821045&lng=-117.175850&z=19&focus=map&mapFeatureId=754090105283537"
+  },
+  {
+   "road": "Nautilus Street",
+   "way": 202507385,
+   "override_mph": 25,
+   "mapillary_mph": 40,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=32.833270&lng=-117.262650&z=19&focus=map&mapFeatureId=497071081598478"
+  },
+  {
+   "road": "Villa La Jolla Drive",
+   "way": 229021196,
+   "osm_mph": 30,
+   "mapillary_mph": 40,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=32.867280&lng=-117.233430&z=19&focus=map&mapFeatureId=537132808915957"
+  },
+  {
+   "road": "Clairemont Drive",
+   "way": 256401848,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.812275&lng=-117.200806&z=19&focus=map&mapFeatureId=633671012902161"
+  },
+  {
+   "road": "Garnet Avenue",
+   "way": 278981887,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.804127&lng=-117.224940&z=19&focus=map&mapFeatureId=289975026131765"
+  },
+  {
+   "road": "Grand Avenue",
+   "way": 436316485,
+   "osm_mph": 45,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.797810&lng=-117.240740&z=19&focus=map&mapFeatureId=852220818707394"
+  },
+  {
+   "road": "Grand Avenue",
+   "way": 436316489,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.799220&lng=-117.234344&z=19&focus=map&mapFeatureId=459017485389246"
+  },
+  {
+   "road": "Grand Avenue",
+   "way": 436316491,
+   "osm_mph": 45,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.795513&lng=-117.251710&z=19&focus=map&mapFeatureId=748438192496261"
+  },
+  {
+   "road": "Grand Avenue",
+   "way": 436317482,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.800890&lng=-117.227200&z=19&focus=map&mapFeatureId=151918123571975"
+  },
+  {
+   "road": "Balboa Avenue",
+   "way": 436317654,
+   "osm_mph": 45,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.801040&lng=-117.230450&z=19&focus=map&mapFeatureId=289688992827035"
+  },
+  {
+   "road": "Ingraham Street",
+   "way": 436321766,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.792000&lng=-117.238600&z=19&focus=map&mapFeatureId=167457918535413"
+  },
+  {
+   "road": "Ingraham Street",
+   "way": 436321769,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.794437&lng=-117.239105&z=19&focus=map&mapFeatureId=531482831594420"
+  },
+  {
+   "road": "North Torrey Pines Road",
+   "way": 436321910,
+   "override_mph": 45,
+   "mapillary_mph": 25,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.874910&lng=-117.243520&z=19&focus=map&mapFeatureId=330166748530296"
+  },
+  {
+   "road": "Soledad Mountain Road",
+   "way": 436403543,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.822186&lng=-117.234604&z=19&focus=map&mapFeatureId=1007107891261010"
+  },
+  {
+   "road": "East Torrey Pines Road",
+   "way": 436406641,
+   "override_mph": 45,
+   "mapillary_mph": 35,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.853092&lng=-117.245500&z=19&focus=map&mapFeatureId=3447408762027206"
+  },
+  {
+   "road": "Soledad Mountain Road",
+   "way": 436406705,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.835210&lng=-117.248660&z=19&focus=map&mapFeatureId=649383937954748"
+  },
+  {
+   "road": "Scranton Road",
+   "way": 594847119,
+   "osm_mph": 35,
+   "mapillary_mph": 45,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=32.894836&lng=-117.202705&z=19&focus=map&mapFeatureId=567109606372621"
+  },
+  {
+   "road": "La Jolla Scenic Drive North",
+   "way": 663597304,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.849426&lng=-117.241070&z=19&focus=map&mapFeatureId=202398765057532"
+  },
+  {
+   "road": "Turquoise Street",
+   "way": 729773618,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.808070&lng=-117.261566&z=19&focus=map&mapFeatureId=1164170821746146"
+  },
+  {
+   "road": "Scholars Drive South",
+   "way": 783441133,
+   "osm_mph": 25,
+   "mapillary_mph": 45,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=32.876300&lng=-117.243484&z=19&focus=map&mapFeatureId=498930381461751"
+  },
+  {
+   "road": "La Jolla Scenic Drive North",
+   "way": 950275194,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.869843&lng=-117.240710&z=19&focus=map&mapFeatureId=364930804956267"
+  },
+  {
+   "road": "Balboa Avenue",
+   "way": 1028881183,
+   "osm_mph": 45,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.802177&lng=-117.227776&z=19&focus=map&mapFeatureId=289661666163101"
+  },
+  {
+   "road": "Murray Ridge Road",
+   "way": 1047792304,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.789482&lng=-117.144980&z=19&focus=map&mapFeatureId=524368458576266"
+  },
+  {
+   "road": "Paramount Drive",
+   "way": 1063235632,
+   "osm_mph": 25,
+   "mapillary_mph": 45,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=32.823850&lng=-117.135290&z=19&focus=map&mapFeatureId=1301458487777446"
+  },
+  {
+   "road": "Starling Drive",
+   "way": 1072589639,
+   "osm_mph": 45,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.792957&lng=-117.156050&z=19&focus=map&mapFeatureId=1635190093765589"
+  },
+  {
+   "road": "Nautilus Street",
+   "way": 1090776667,
+   "override_mph": 25,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.833893&lng=-117.250890&z=19&focus=map&mapFeatureId=1777309199668508"
+  },
+  {
+   "road": "Grand Avenue",
+   "way": 1091023171,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.794590&lng=-117.254590&z=19&focus=map&mapFeatureId=617689667821691"
+  },
+  {
+   "road": "Murray Ridge Road",
+   "way": 1091070435,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.798380&lng=-117.142300&z=19&focus=map&mapFeatureId=1165101898356097"
+  },
+  {
+   "road": "Health Center Drive",
+   "way": 1326479261,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.795315&lng=-117.157260&z=19&focus=map&mapFeatureId=821327542117573"
+  },
+  {
+   "road": "Sequence Drive",
+   "way": 1429907365,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.908096&lng=-117.177610&z=19&focus=map&mapFeatureId=597200163121284"
+  },
+  {
+   "road": "Gramercy Drive",
+   "way": 1455129207,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.803146&lng=-117.138040&z=19&focus=map&mapFeatureId=606755442340921"
+  },
+  {
+   "road": "South Coast Highway",
+   "way": 5963768,
+   "override_mph": 30,
+   "mapillary_mph": 45,
+   "signs": 4,
+   "url": "https://www.mapillary.com/app/?lat=33.010365&lng=-117.279110&z=19&focus=map&mapFeatureId=304569591168348"
+  },
+  {
+   "road": "South Coast Highway",
+   "way": 5971449,
+   "override_mph": 30,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.001040&lng=-117.276220&z=19&focus=map&mapFeatureId=472120370682283"
+  },
+  {
+   "road": "Camino del Mar",
+   "way": 157272806,
+   "override_mph": 30,
+   "mapillary_mph": 40,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=32.961678&lng=-117.265144&z=19&focus=map&mapFeatureId=145454770819176"
+  },
+  {
+   "road": "Camino del Mar",
+   "way": 157531215,
+   "override_mph": 30,
+   "mapillary_mph": 40,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=32.965714&lng=-117.265740&z=19&focus=map&mapFeatureId=271924811327901"
+  },
+  {
+   "road": "Camino del Mar",
+   "way": 157531218,
+   "override_mph": 30,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.979840&lng=-117.269300&z=19&focus=map&mapFeatureId=530875514744452"
+  },
+  {
+   "road": "Via de la Valle",
+   "way": 436313336,
+   "override_mph": 35,
+   "mapillary_mph": 45,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.980175&lng=-117.267840&z=19&focus=map&mapFeatureId=504023740734970"
+  },
+  {
+   "road": "South Coast Highway",
+   "way": 436402235,
+   "override_mph": 30,
+   "mapillary_mph": 45,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=33.026604&lng=-117.286920&z=19&focus=map&mapFeatureId=757856198107741"
+  },
+  {
+   "road": "South Coast Highway",
+   "way": 436402237,
+   "override_mph": 30,
+   "mapillary_mph": 45,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.013540&lng=-117.280045&z=19&focus=map&mapFeatureId=956407938528825"
+  },
+  {
+   "road": "South Coast Highway",
+   "way": 436402239,
+   "override_mph": 30,
+   "mapillary_mph": 45,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=33.018692&lng=-117.282310&z=19&focus=map&mapFeatureId=1004047097036314"
+  },
+  {
+   "road": "South Coast Highway",
+   "way": 436403281,
+   "override_mph": 30,
+   "mapillary_mph": 40,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=32.997210&lng=-117.273400&z=19&focus=map&mapFeatureId=1426942724323756"
+  },
+  {
+   "road": "South Coast Highway",
+   "way": 436403305,
+   "override_mph": 30,
+   "mapillary_mph": 45,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.002037&lng=-117.276825&z=19&focus=map&mapFeatureId=458777985346368"
+  },
+  {
+   "road": "Camino del Mar",
+   "way": 436404182,
+   "override_mph": 30,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.966568&lng=-117.266220&z=19&focus=map&mapFeatureId=240893514457524"
+  },
+  {
+   "road": "South Coast Highway",
+   "way": 830832325,
+   "override_mph": 25,
+   "mapillary_mph": 45,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.035270&lng=-117.291650&z=19&focus=map&mapFeatureId=3363932857166301"
+  },
+  {
+   "road": "Camino del Mar",
+   "way": 436308921,
+   "osm_mph": 25,
+   "mapillary_mph": 40,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=32.948610&lng=-117.261024&z=19&focus=map&mapFeatureId=819419758673560"
+  },
+  {
+   "road": "Jimmy Durante Boulevard",
+   "way": 436425583,
+   "override_mph": 30,
+   "mapillary_mph": 45,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.971380&lng=-117.261880&z=19&focus=map&mapFeatureId=3603047079939484"
+  },
+  {
+   "road": "Rancho Santa Fe Farms Road",
+   "way": 1429138854,
+   "osm_mph": 40,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.974205&lng=-117.178660&z=19&focus=map&mapFeatureId=1155839969600748"
+  },
+  {
+   "road": "El Montevideo",
+   "way": 6004250,
+   "osm_mph": 25,
+   "mapillary_mph": 45,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=33.034145&lng=-117.194275&z=19&focus=map&mapFeatureId=3024329427848827"
+  },
+  {
+   "road": "Rambla de Las Flores",
+   "way": 6011651,
+   "osm_mph": 25,
+   "mapillary_mph": 40,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=33.015568&lng=-117.229780&z=19&focus=map&mapFeatureId=1250307733121170"
+  },
+  {
+   "road": "South Rancho Santa Fe Road",
+   "way": 33071961,
+   "osm_mph": 40,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=33.035236&lng=-117.236910&z=19&focus=map&mapFeatureId=1608529340024959"
+  },
+  {
+   "road": "El Apajo",
+   "way": 108396508,
+   "osm_mph": 45,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.997505&lng=-117.194250&z=19&focus=map&mapFeatureId=259128662760766"
+  },
+  {
+   "road": "Paseo Delicias",
+   "way": 145660143,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=33.021870&lng=-117.200880&z=19&focus=map&mapFeatureId=561432155098349"
+  },
+  {
+   "road": "Paseo Delicias",
+   "way": 145660144,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=33.021473&lng=-117.201480&z=19&focus=map&mapFeatureId=128248032890492"
+  },
+  {
+   "road": "Manchester Avenue",
+   "way": 232293433,
+   "override_mph": 35,
+   "mapillary_mph": 45,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.016167&lng=-117.257570&z=19&focus=map&mapFeatureId=297913945376146"
+  },
+  {
+   "road": "San Dieguito Road",
+   "way": 436427810,
+   "osm_mph": 45,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.997192&lng=-117.189674&z=19&focus=map&mapFeatureId=3496221937353136"
+  },
+  {
+   "road": "San Andres Drive",
+   "way": 1090303792,
+   "osm_mph": 25,
+   "mapillary_mph": 40,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=32.986774&lng=-117.245680&z=19&focus=map&mapFeatureId=217051873818678"
+  },
+  {
+   "road": "Rancho Santa Fe Farms Road",
+   "way": 1450370996,
+   "osm_mph": 40,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=32.982838&lng=-117.181435&z=19&focus=map&mapFeatureId=442494892277697"
+  },
+  {
+   "road": "",
+   "way": 5948480,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=33.051273&lng=-117.288600&z=19&focus=map&mapFeatureId=313625826940358"
+  },
+  {
+   "road": "Carlsbad Boulevard",
+   "way": 33749240,
+   "override_mph": 35,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.119300&lng=-117.326420&z=19&focus=map&mapFeatureId=479329186705375"
+  },
+  {
+   "road": "Tamarack Avenue",
+   "way": 225875496,
+   "osm_mph": 99,
+   "mapillary_mph": 30,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=33.154636&lng=-117.324120&z=19&focus=map&mapFeatureId=1347680690833556"
+  },
+  {
+   "road": "Legoland Drive",
+   "way": 402261620,
+   "osm_mph": 99,
+   "mapillary_mph": 15,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=33.130350&lng=-117.315170&z=19&focus=map&mapFeatureId=1421593104872707"
+  },
+  {
+   "road": "El Camino Real",
+   "way": 435637451,
+   "osm_mph": 35,
+   "mapillary_mph": 55,
+   "change": "newly forbidden",
+   "url": "https://www.mapillary.com/app/?lat=33.106080&lng=-117.267110&z=19&focus=map&mapFeatureId=2362949013838937"
+  },
+  {
+   "road": "Leucadia Boulevard",
+   "way": 436406714,
+   "override_mph": 25,
+   "mapillary_mph": 40,
+   "signs": 2,
+   "url": "https://www.mapillary.com/app/?lat=33.065160&lng=-117.284620&z=19&focus=map&mapFeatureId=814791466107252"
+  },
+  {
+   "road": "Leucadia Boulevard",
+   "way": 436410505,
+   "override_mph": 25,
+   "mapillary_mph": 40,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.065050&lng=-117.290955&z=19&focus=map&mapFeatureId=469643921035416"
+  },
+  {
+   "road": "Cannon Road",
+   "way": 436425165,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=33.133610&lng=-117.332570&z=19&focus=map&mapFeatureId=2351909735190048"
+  },
+  {
+   "road": "Hidden Valley Road",
+   "way": 1484546524,
+   "osm_mph": 40,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=33.113503&lng=-117.305016&z=19&focus=map&mapFeatureId=1554092705256762"
+  },
+  {
+   "road": "El Camino del Norte",
+   "way": 33072086,
+   "osm_mph": 40,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=33.048187&lng=-117.226166&z=19&focus=map&mapFeatureId=1392311795450983"
+  },
+  {
+   "road": "Cassidy Street",
+   "way": 5975677,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=33.175945&lng=-117.360950&z=19&focus=map&mapFeatureId=1377328553481290"
+  },
+  {
+   "road": "North Emerald Drive",
+   "way": 436297551,
+   "osm_mph": 99,
+   "mapillary_mph": 35,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=33.190956&lng=-117.279620&z=19&focus=map&mapFeatureId=514436773043479"
+  },
+  {
+   "road": "North River Road",
+   "way": 1552243020,
+   "osm_mph": 99,
+   "mapillary_mph": 25,
+   "change": "newly allowed",
+   "url": "https://www.mapillary.com/app/?lat=33.256058&lng=-117.292800&z=19&focus=map&mapFeatureId=3623330451106983"
+  }
+ ]
+}
