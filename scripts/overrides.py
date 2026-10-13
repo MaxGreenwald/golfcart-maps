@@ -149,3 +149,13 @@ RULES[_SVB] = (r"^(Orange Avenue|R\.H\. Dana Place)$", CO, r"__SOUTH__", r"__CO1
 RULES[_SVB + 1] = (r"^Orange Avenue$", CO, r"__CO10__", r"__NORTH__", "lat")
 RULES[_SVB + 2] = (r"^(South Coast Highway 101|South Highway 101|South Coast Highway|US 101 Hist|Coast Highway 101)$", (32.99, -117.31, 33.035, -117.26), r"__SWAMIS__", r"__SOUTH__", "lat")
 FIXED["__CO10__"] = 32.6866  # Orange Ave at 10th St (~1466 Orange)
+
+# ---- Grand Ave, Pacific Beach (Oct 13 2026) ----
+# Beach Mode Rentals (local cart rental shop) reports Grand Ave is posted 35; Mapillary detected 35 mph signs at 5 spots
+# from west of Mission Blvd to east of Ingraham (one sign each, below the 2-sign auto-flip rule). OSM still says 45.
+# City resolution R-316675 (Mar 2026) lists Grand Av (W/O Mission Bl - Ingraham St) and (Ingraham St - Mission Bay Dr) for reduced limits.
+_GRB = len(INTEL)
+INTEL.append({"road": "Grand Ave", "city": "San Diego (Pacific Beach)", "from_to_segment_if_known": "Mission Blvd - Mission Bay Dr: posted 35 (local rental shop report; Mapillary 35 mph signs; city 2026 speed resolution)",
+              "speed_mph": 35, "lsv_ok": True, "source_url": "https://www.mapillary.com/app/?lat=32.797810&lng=-117.240740&z=19&focus=map&mapFeatureId=852220818707394", "confidence": "high"})
+RULES[_GRB] = (r"^Grand Avenue$", (32.79, -117.262, 32.81, -117.21), r"^Mission Boulevard$", r"__MBD__", "lon")
+FIXED["__MBD__"] = -117.2140  # Grand Ave at Mission Bay Dr (east end of the city segment; Mission Bay Dr itself is outside the coastal strip)
