@@ -8,7 +8,7 @@ let D,risky=false,layer,nodes={},adj={},start=null,end=null,routeG=null,mk=[];
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden (posted >=40 or untagged major)
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden. Cart paths ('c') always ok; designated ('d') ok in designated-only cart mode.
 const desig=s=>s[3]==='c'||s[3]==='d'||(RULE.assume&&RULE.assume.includes(s[1])&&s[2]!=null&&s[2]<=RULE.max_posted);
-const cls=s=>{if(s[3]==='c')return 0;if(MODE==='golf_cart'){if(s[9]===1)return 3;if(s[9]===3)return 0;if((s[9]===2||(s[3]==='d'&&s[9]!==1))&&s[2]!=null&&s[2]<=35)return 0}if(s[2]==null||(s[2]>RULE.max_posted&&!(window.LENIENT&&s[2]===99)))return 3;if(RULE.designated_only&&!desig(s))return 3;return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'?0:1};
+const cls=s=>{if(s[3]==='c')return 0;if(MODE==='golf_cart'){if(s[9]===1)return 3;if(s[9]===3)return 0;if(s[9]===2&&s[2]!=null&&s[2]<=35)return 0}if(s[2]==null||(s[2]>RULE.max_posted&&!(window.LENIENT&&s[2]===99)))return 3;if(RULE.designated_only&&!desig(s))return 3;return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'?0:1};
 const STY=[{color:'#12a150',weight:3.2},{color:'#4cc38a',weight:2.6,dashArray:'5 4'},{color:'#0b9fb3',weight:3.4},{color:'#e5484d',weight:3,opacity:.75}];
 const MAJOR=new Set(['path','cycleway','track','footway','motorway','motorway_link','trunk','trunk_link','primary','primary_link','secondary','secondary_link','tertiary','tertiary_link']);
 let buckets={},shown={};const G=0.02;
