@@ -77,6 +77,9 @@ Branch `carplay` = `native-app` + `multi-region` merged + CarPlay. CI workflow `
 4. Add signing secrets to CI (App Store Connect API key + cert/profile or fastlane match), build signed archive → TestFlight.
 5. Test on a real CarPlay head unit / cart screen (DACH Apollo etc.) and in Xcode's CarPlay Simulator.
 
+**Verified in CI (run 38511945626, macos-15, Xcode iOS 18.5 simulator):** unsigned build passes; ad-hoc simulator build embeds `com.apple.developer.carplay-maps`; app launches on iPhone sim, appears on the CarPlay external display, CarPlay demo hook (`-GCMCarPlayDemo YES`, DEBUG only) plans La Jolla → Crystal Pier through the JS router (3.4 mi, round trip 6.8 mi, battery OK 23%), shows the trip preview and starts guidance ("Turn left onto Draper Avenue", next "Bonair Way") with the green/red legal overlay. Screenshots are uploaded as the `carplay-shots` artifact.
+Fixes found on the way: Swift `callAsyncJavaScript` (Result overlay) links `libswiftWebKit.dylib` and crashed at launch on iOS 18 → bridge uses `evaluateJavaScript` + a `WKScriptMessageHandler`; CarPlay template calls with nil completion throw on error → all calls pass completion blocks.
+
 **Remaining work / known gaps:**
 - Voice prompts (AVSpeechSynthesizer) and lane/turn distance callouts; rerouting when off-route (currently no auto-reroute; choose destination again).
 - Maneuver extraction is name-change based; unnamed service roads produce extra "continue" steps. Consider merging short unnamed segments.
