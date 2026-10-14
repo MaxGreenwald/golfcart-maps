@@ -36,14 +36,50 @@ final class GCMBridge {
 
     private var webView: WKWebView? { phoneWebView() ?? headless?.bridge?.webView }
 
-    /// Runs `return await GCMCarPlay.<body>` with named JSON arguments.
+    // Results come back through a WKScriptMessageHandler. (We avoid the Swift-overlay
+    // callAsyncJavaScript/Result API: it pulls in libswiftWebKit.dylib, which older iOS runtimes lack.)
+    private var pending: [Int: (Any?) -> Void] = [:]
+    private var nextId = 1
+    private var registered = Set<ObjectIdentifier>()
+    private lazy var handler = Handler(owner: self)
+
+    final class Handler: NSObject, WKScriptMessageHandler {
+        weak var owner: GCMBridge?
+        init(owner: GCMBridge) { self.owner = owner }
+        func userContentController(_ c: WKUserContentController, didReceive message: WKScriptMessage) {
+            guard let d = message.body as? [String: Any], let id = (d["id"] as? NSNumber)?.intValue,
+                  let cb = owner?.pending.removeValue(forKey: id) else { return }
+            var v: Any? = nil
+            if let s = d["r"] as? String, let data = s.data(using: .utf8) {
+                v = try? JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed])
+            }
+            if v is NSNull { v = nil }
+            cb(v)
+        }
+    }
+
+    /// Runs `await GCMCarPlay.<body>` with named JSON arguments; `done` gets the decoded JSON (main thread).
     func call(_ body: String, _ args: [String: Any] = [:], done: @escaping (Any?) -> Void) {
         guard let wv = webView else { done(nil); return }
-        let js = "for(let i=0;i<600&&!window.GCMCarPlay;i++)await new Promise(r=>setTimeout(r,50));if(!window.GCMCarPlay)return null;return await GCMCarPlay.\(body);"
-        wv.callAsyncJavaScript(js, arguments: args, in: nil, in: .page) { result in
-            switch result {
-            case .success(let v): done(v)
-            case .failure(let e): NSLog("GCMBridge %@ failed: %@", body, e.localizedDescription); done(nil)
+        let key = ObjectIdentifier(wv)
+        if !registered.contains(key) {
+            wv.configuration.userContentController.add(handler, name: "gcmcp")
+            registered.insert(key)
+        }
+        let id = nextId; nextId += 1
+        pending[id] = done
+        var decl = ""
+        for (k, v) in args {
+            guard JSONSerialization.isValidJSONObject([v]),
+                  let data = try? JSONSerialization.data(withJSONObject: [v]),
+                  let json = String(data: data, encoding: .utf8) else { continue }
+            decl += "const \(k)=\(json)[0];"
+        }
+        let js = "(async()=>{let r=null;try{\(decl)for(let i=0;i<600&&!window.GCMCarPlay;i++)await new Promise(z=>setTimeout(z,50));if(window.GCMCarPlay)r=await GCMCarPlay.\(body);}catch(e){console.error('GCMCarPlay',e)}window.webkit.messageHandlers.gcmcp.postMessage({id:\(id),r:JSON.stringify(r===undefined?null:r)})})();0"
+        wv.evaluateJavaScript(js) { [weak self] _, err in
+            if let err = err {
+                NSLog("GCMBridge %@ failed: %@", body, err.localizedDescription)
+                if let cb = self?.pending.removeValue(forKey: id) { cb(nil) }
             }
         }
     }

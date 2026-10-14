@@ -94,6 +94,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     var session: CPNavigationSession?
     var plan: GCMPlan?
     var step = 0
+    var lastTrip: CPTrip?
     var overlayTimer: Timer?
     var showLegal = true
     var mode: String {
@@ -115,6 +116,18 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         loc.delegate = self
         loc.requestWhenInUseAuthorization()
         loc.startUpdatingLocation()
+        #if DEBUG
+        // CI screenshot hook: `simctl launch <dev> <bundle> -GCMCarPlayDemo YES` plans a demo trip, then starts guidance.
+        if UserDefaults.standard.bool(forKey: "GCMCarPlayDemo") {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
+                self?.choose(["name": "Crystal Pier", "lat": 32.7950, "lon": -117.2560])
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 40) { [weak self] in
+                guard let self = self, let trip = self.lastTrip, let c = trip.routeChoices.first else { return }
+                self.mapTemplate(self.mapTemplate, startedTrip: trip, using: c)
+            }
+        }
+        #endif
         GCMBridge.shared.call("status()") { [weak self] any in
             guard let self = self, let d = any as? [String: Any] else { return }
             if let m = d["mode"] as? String { self.mode = m; self.refreshButtons() }
@@ -265,6 +278,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
                                        additionalInformationVariants: [p.rangeText], selectionSummaryVariants: [p.rangeText])
             let trip = CPTrip(origin: origin, destination: dest, routeChoices: [choice])
             let cfg = CPTripPreviewTextConfiguration(startButtonTitle: "Go", additionalRoutesButtonTitle: nil, overviewButtonTitle: nil)
+            self.lastTrip = trip
             self.mapTemplate.showTripPreviews([trip], textConfiguration: cfg)
             self.mapTemplate.update(self.estimates(p.meters, p.minutes * 60), for: trip, with: .default)
         }
