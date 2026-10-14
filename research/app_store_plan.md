@@ -59,3 +59,31 @@
 
 ## Costs
 - Apple Developer Program: $99/year. Google Play: $25 one-time. CI: GitHub Actions macOS minutes (free tier/paid) or Codemagic free tier. Optional offline tile provider (MapTiler free tier / Protomaps self-hosted).
+
+## CarPlay (branch `carplay`, built Oct 13 2026)
+Branch `carplay` = `native-app` + `multi-region` merged + CarPlay. CI workflow `.github/workflows/carplay-ios.yml` (macos-15, runs on every push to `carplay`).
+
+**Architecture (why):** the routing engine stays in one place, the web app's JS (`public/app.js` A* + rules + region data). `public/carplay.js` exposes `window.GCMCarPlay` (`status`, `setMode`, `plan`, `overlay`, `search`) returning plain JSON. Native Swift calls it with `WKWebView.callAsyncJavaScript` (`ios/App/App/GCMBridge.swift`). No Swift port of the rules means CarPlay can never disagree with the phone/web map. If CarPlay launches without the phone UI, a headless Capacitor web view is parked inside the CarPlay window so JS keeps running. Tested in Chromium: `scripts/test_carplay.py` (SD + Villages, both modes, turns, overlay, search).
+
+**Native pieces:**
+- `Info.plist` `UIApplicationSceneManifest`: phone scene (`SceneDelegate`, Main storyboard) + `CPTemplateApplicationSceneSessionRoleApplication` (`CarPlaySceneDelegate`).
+- `CarPlaySceneDelegate.swift`: MapKit `MKMapView` base map; `CPMapTemplate` with Search, Recent, mode button (LSV / Golf cart), recenter, legal-road layer toggle, zoom. Legal overlay: green OK / red avoid polylines for the visible area (hidden above ~8 km span). Trip preview: `CPTrip` + `CPRouteChoice` showing miles, risky count and battery round-trip check; Go → `CPNavigationSession` with `CPManeuver`s (left/right/slight/U-turn/arrive with SF Symbols, derived from street-name changes + bearings), estimates updated from GPS, advance at 25 m, auto-finish on arrival. Search: region POIs + street names first, then Apple Maps `MKLocalSearch`. Recents saved in UserDefaults.
+- `App.entitlements`: `com.apple.developer.carplay-maps` (wired via `CODE_SIGN_ENTITLEMENTS`).
+
+**Steps to ship CarPlay:**
+1. Wait for Apple to finish the ID review (developer account active).
+2. Submit the CarPlay Navigation entitlement request (draft: `research/carplay_request.md`). Apple can take weeks; approval is not guaranteed.
+3. After approval: in Certificates, Identifiers & Profiles enable CarPlay Navigation on the `com.matchimus.golfcartmaps` App ID, regenerate the provisioning profile (it must include the entitlement).
+4. Add signing secrets to CI (App Store Connect API key + cert/profile or fastlane match), build signed archive → TestFlight.
+5. Test on a real CarPlay head unit / cart screen (DACH Apollo etc.) and in Xcode's CarPlay Simulator.
+
+**Remaining work / known gaps:**
+- Voice prompts (AVSpeechSynthesizer) and lane/turn distance callouts; rerouting when off-route (currently no auto-reroute; choose destination again).
+- Maneuver extraction is name-change based; unnamed service roads produce extra "continue" steps. Consider merging short unnamed segments.
+- Real CarPlay panning (`mapTemplate(_:panWith:)`), dashboard (`CPTemplateApplicationDashboardScene`) and instrument cluster support.
+- Base map is Apple Maps (MapKit) on CarPlay vs OSM tiles on the phone; fine for now, MapLibre native later if we need offline tiles.
+- Headless web view path (CarPlay-only launch) needs a real device test.
+- The scene manifest switches the phone app to scene lifecycle; regression-test deep links/share on device.
+
+## Android Auto (follow-on)
+Android Auto navigation apps use the Android for Cars App Library (`androidx.car.app`, `NavigationTemplate`, `RoutePreviewNavigationTemplate`, `Trip`/`Step`/`Maneuver`) and need the `androidx.car.app.category.NAVIGATION` category; Google reviews them during Play submission (no separate entitlement request, but the Play closed-test rule still applies). Same design: a `CarAppService` calls `window.GCMCarPlay` in the Capacitor web view (`evaluateJavascript`) for routes, draws the map on the `SurfaceCallback` surface. Plan after CarPlay is approved and the Play account exists.
