@@ -32,3 +32,11 @@ Startup = regions+rules (~3 KB) + one region index+pois (SD ~260 KB gz, others �
 - LSVs stay allowed on Villages multi-modal paths (Max).
 - Hilton Head hidden from picker/geolocation (data kept, ?r=hhi for testing). Speed-list leads: research/regions/hhi.json.
 - SEO/og text unchanged.
+
+## Update 2026-10-13 (~5:30 PM PT): Villages route fix, crossings, Wildwood map, CR 25A
+- **2.5 → 8.9 mi jump cause:** lowering golf-cart max to ≤30 also blocked Morse Blvd segments that OSM explicitly tags `golf_cart=yes` (cart-lane sections, posted 35). Fix: roads explicitly designated (OSM golf_cart=yes/designated, Wildwood PERMITTED, Fruitland Park list) allowed up to 35; untagged streets still ≤30. Route back to 2.48 mi (same as LSV). Screenshots: shots/villages-route-golf_cart-before.png / -after.png (+ lsv before/after).
+- **Marked at-grade crossings** (40 m allowed stretch of the major road + crossing nodes, golf-cart mode): El Camino Real @ Enrique/Botello, Rainey Trail @ Lynnhaven/Miona Shores, CR 466A @ College Ave and @ S Dixie Ave, CR 468 @ Berckman St and @ Myrtle Lake Ave/Urick St, US 27/441 @ SE 176th St. 21 segments. Not found: CR 468 @ Pine Ridge Dairy Rd. Screenshot: shots/villages-crossing-elcamino-after.png.
+- **Wildwood O2026-28 map imported** from the public feature service (Golf_Cart_Districts/FeatureServer/0 + RoadsMajorState_CoWW) → research/regions/wildwood/*.geojson. Matched 2,384 OSM ways (1,989 PERMITTED, 395 PROHIBITED, nearest line ≤20 m, majority vote). PRIVATE and unmapped streets keep the default assumption.
+- **CR 25A / Dixie Ave:** blocked only north of Shiloh St (28.8652); south part + Cooke Dr, Shiloh St, Urick St, Myrtle Lake Ave, Pine Ridge Dairy Rd, Cutoff Rd allowed (Fruitland Park ordinance).
+- No manual path/tunnel connections were needed for the test route; OSM path network connected fine.
+- Tests: test.py identical to master, test_regress 12/31 identical, test_ui ALL PASS, test_regions ALL PASS (new: detour <3.5 mi, both crossings, Dixie south allowed / north blocked).

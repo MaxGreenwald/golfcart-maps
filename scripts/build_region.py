@@ -51,6 +51,47 @@ print("mapillary", mst)
 import re
 BAN = re.compile(CFG["cart_ban_names"]) if CFG.get("cart_ban_names") else None
 OV = {o["way"]: o for o in CFG.get("overrides", [])}   # {"way": osm id, "mph": n, "url":..., "label":...}
+XING = CFG.get("crossings", []); XN = set()
+def near(la, lo, R=40):
+    return any(math.hypot((la - x["lat"]) * 110540, (lo - x["lon"]) * 111320 * math.cos(math.radians(la))) < R for x in XING)
+# ---- Wildwood golf cart district map (ArcGIS export) -> per-way flag via nearest line within 20 m + boundary ----
+WW = {}
+if CFG.get("wildwood"):
+    wc = CFG["wildwood"]; lines = []
+    for f in json.load(open(os.path.join(ROOT, wc["roads"])))["features"]:
+        a = f["properties"].get("Approved"); fl = {"PERMITTED": 2, "PROHIBITED": 1}.get(a)
+        if not fl or not f.get("geometry"): continue
+        gm = f["geometry"]; parts = gm["coordinates"] if gm["type"] == "MultiLineString" else [gm["coordinates"]]
+        for pt in parts: lines.append((fl, pt))
+    for f in json.load(open(os.path.join(ROOT, wc["state"])))["features"]:
+        gm = f.get("geometry") or {}; parts = gm.get("coordinates", []) if gm.get("type") == "MultiLineString" else [gm.get("coordinates", [])]
+        for pt in parts: lines.append((1, pt))
+    grid = {}
+    for li, (fl, pt) in enumerate(lines):
+        for k in range(len(pt) - 1):
+            for cx in range(int(min(pt[k][0], pt[k+1][0]) * 500), int(max(pt[k][0], pt[k+1][0]) * 500) + 1):
+                for cy in range(int(min(pt[k][1], pt[k+1][1]) * 500), int(max(pt[k][1], pt[k+1][1]) * 500) + 1): grid.setdefault((cx, cy), []).append((li, k))
+    kx, ky = 111320 * math.cos(math.radians(28.9)), 110540
+    def dseg(p, a, b):
+        ax, ay, bx, by, px, py = a[0]*kx, a[1]*ky, b[0]*kx, b[1]*ky, p[0]*kx, p[1]*ky
+        vx, vy = bx-ax, by-ay; L = vx*vx + vy*vy; u = max(0, min(1, ((px-ax)*vx + (py-ay)*vy) / L)) if L else 0
+        return math.hypot(px-ax-u*vx, py-ay-u*vy)
+    for wi, w in enumerate(wl):
+        if w["tags"]["highway"] not in ROADS: continue
+        g = w["geometry"]; votes = {}
+        for q in g[:: max(1, len(g) // 5)] + [g[-1]]:
+            p = (q["lon"], q["lat"]); best = (21, None)
+            for dx in (-1, 0, 1):
+                for dy in (-1, 0, 1):
+                    for li, k in grid.get((int(p[0]*500)+dx, int(p[1]*500)+dy), ()):
+                        dd = dseg(p, lines[li][1][k], lines[li][1][k+1])
+                        if dd < best[0]: best = (dd, lines[li][0])
+            if best[1]: votes[best[1]] = votes.get(best[1], 0) + 1
+        n = len(g[:: max(1, len(g) // 5)]) + 1
+        if votes:
+            fl, v = max(votes.items(), key=lambda x: x[1])
+            if v * 2 > n: WW[wi] = fl
+    print("wildwood matched ways", len(WW), "permitted", sum(1 for v in WW.values() if v == 2), "prohibited", sum(1 for v in WW.values() if v == 1))
 names, out, sources, sidx, nidx, nids = [], [], [], {}, {}, {}
 stats = {"tagged": 0, "inferred": 0, "inferred_high": 0, "verified": 0, "mapillary": 0, "cartpath": 0, "designated": 0}
 def src_i(url, label):
@@ -76,16 +117,31 @@ for wi, w in enumerate(wl):
         cur.append(k)
         if cnt[nodes[k]] > 1 and k < len(nodes) - 1: segs.append(cur); cur = [k]
     segs.append(cur)
-    nocart = t.get("golf_cart") == "no" or (src != "cartpath" and BAN and any(BAN.search(t.get(k, "")) for k in ("name", "ref")))
-    stats["cart_banned"] = stats.get("cart_banned", 0) + bool(nocart)
+    nm2 = t.get("name", "") + "|" + t.get("ref", "")
+    cflag = 0   # golf-cart flag: 1 banned, 2 designated by ordinance (<=35), 3 designated crossing stretch
+    if src != "cartpath":
+        if BAN and any(BAN.search(t.get(k, "")) for k in ("name", "ref")) and t.get("golf_cart") not in ("yes", "designated"): cflag = 1
+        mlat = g[len(g)//2]["lat"]; mlon = g[len(g)//2]["lon"]
+        for bn in CFG.get("cart_ban_north_of", []):
+            if any(re.search(bn["names"], t.get(k, "")) for k in ("name", "ref")): cflag = 1 if mlat > bn["lat"] else 2
+        ca = CFG.get("cart_allow_names")
+        if ca and re.search(ca["names"], t.get("name", "")) and ca["bbox"][0] <= mlat <= ca["bbox"][2] and ca["bbox"][1] <= mlon <= ca["bbox"][3]: cflag = 2
+        if wi in WW: cflag = WW[wi]
+        if t.get("golf_cart") == "no": cflag = 1
     code = {"cartpath": "c", "designated": "d"}.get(src, src[0])
     for sg in segs:
+        sflag = cflag
+        if XING and src != "cartpath" and any(near(g[k]["lat"], g[k]["lon"]) for k in sg) and (cflag == 1 or (s or 99) > 35 or classify(t)[1] == "inferred_high"):
+            sflag = 3; stats["crossing_segs"] = stats.get("crossing_segs", 0) + 1
+            for k in sg:
+                if near(g[k]["lat"], g[k]["lon"]): XN.add(nodes[k])
+        stats["cart_banned"] = stats.get("cart_banned", 0) + (sflag == 1); stats["cart_ordinance"] = stats.get("cart_ordinance", 0) + (sflag == 2)
         pts = simplify([[round(g[k]["lon"], 5), round(g[k]["lat"], 5)] for k in sg])
         ow = 1 if t.get("oneway") in ("yes", "1") else (-1 if t.get("oneway") == "-1" else 0)
         if t.get("junction") == "roundabout" and ow == 0: ow = 1
-        out.append([nidx[nm], hw, s, code, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([si, 1] if nocart else [si] if si >= 0 else []))
+        out.append([nidx[nm], hw, s, code, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([si, sflag] if sflag else [si] if si >= 0 else []))
 POLY = CFG.get("poly") or [[W, N], [E, N], [E, S], [W, S]]
-meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": len(wl), "segments": len(out), "stats": stats, "poly": POLY, "region": RID, "unverified": CFG.get("unverified", [])}
+meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": len(wl), "segments": len(out), "stats": stats, "poly": POLY, "region": RID, "unverified": CFG.get("unverified", []), "xnodes": sorted(nids[n] for n in XN if n in nids), "crossings": XING}
 TS = 0.1; tiles = {}
 for sg in out:
     p = sg[7][0]; tiles.setdefault(f"{math.floor(p[0]/TS)}_{math.floor(p[1]/TS)}", []).append(sg)
