@@ -9,7 +9,7 @@ Unknown residential = assumed 25. Stats: research/expansion15_stats.json. Source
 | myrtle | 9.6 (15.2) | 65.9 | med | Kings Hwy/US 17/501 banned (city); residential assumed |
 | chs | 8.4 (12.6) | 38.6 | low-med | IOP Connector banned; Folly/Sullivan's town rules not modeled |
 | 30a | 6.0 (14.4) | 60.9 | med | US 98 banned (WCSO); Mapillary failed; Walton red-road map not digitized; private communities |
-| gulfshores | 23.7 (39.6) | 83.8 | low | LOCAL LAW STRICTER: carts/LSVs only on designated streets posted <=25; app's 35 rule overstates |
+| gulfshores | 23.7 (39.6) | 83.8 | low-med | region cap 25 mph (Max 2026-10-14; Gulf Shores 21-13, Orange Beach 70-273); designated-street list not digitized |
 | portaransas | 14.7 (20.0) | 56.7 | med | SH 361 ban south of Ave G approx lat 27.823; beach-as-street not modeled |
 | suncity | 71.1 (77.9) | 73.4 | high-med | best coverage; HOA paths partial |
 | coachella | 12.4 (16.3) | 58.4 | low-med | Palm Desert cart route map not digitized |
@@ -17,5 +17,4 @@ Unknown residential = assumed 25. Stats: research/expansion15_stats.json. Source
 | goldenisles | 5.9 (9.3) | 40.7 | low | Jekyll/Glynn rules not digitized |
 | tybee | 6.1 (17.9) | 66.7 | med | Butler Ave/US 80 banned; crossing points not modeled |
 | galveston | 3.5 (6.5) | 2.6 | med | ordinance bans strong (Seawall, Broadway, Ave O/P approx bbox); speed data weak |
-| havasu | 3.2 (7.5) | 23.0 | low | no city cart ordinance found; plain carts likely not street-legal |
 | ocoast | 26.3 (28.2) | 67.6 | med | Laguna Woods internal rules not modeled |

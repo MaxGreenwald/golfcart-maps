@@ -246,25 +246,6 @@
   },
   "segments": 13033
  },
- "havasu": {
-  "ways": 3768,
-  "cov_ways_pct": 3.2,
-  "cov_len_pct": 7.5,
-  "major_cov_pct": 23.0,
-  "km": 973,
-  "stats": {
-   "tagged": 55,
-   "inferred": 3364,
-   "inferred_high": 116,
-   "verified": 62,
-   "mapillary": 7,
-   "cartpath": 4,
-   "designated": 0,
-   "cart_banned": 91,
-   "cart_ordinance": 0
-  },
-  "segments": 7694
- },
  "ocoast": {
   "ways": 33924,
   "cov_ways_pct": 26.3,

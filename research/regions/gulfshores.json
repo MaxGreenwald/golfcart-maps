@@ -1,5 +1,7 @@
 {
- "unverified": [],
+ "unverified": [
+  "Region cap 25 mph (Max 2026-10-14): roads posted 26+ blocked. Designated-street list itself not digitized; \u226425 roads treated as OK."
+ ],
  "bans": [
   {
    "names": "^(SR|AL) ?(59|180|182|161|135)\\b|Gulf Shores P|Perdido Beach B|Canal R|Foley Beach Exp|Beach Express",
@@ -13,5 +15,7 @@
   "https://www.orangebeachal.gov/DocumentCenter/View/592/ (Ala. Const. Baldwin Co. \u00a71.570: no cart street >25 mph)",
   "https://library.municode.com/al/orange_beach/ordinances/code_of_ordinances?nodeId=2025 (Ord. 2025-1521 carts; SR 182 35 mph segment)"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=gulfshores loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=gulfshores loads it",
+ "region_cap_mph": 25,
+ "cap_source": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"
 }
