@@ -1,0 +1,39 @@
+{
+ "unverified": [],
+ "bans": [
+  {
+   "names": "Seawall|^Broadway|Harborside|^61st St|Ferry R|Teichman|^(FM|SH|TX|Spur|I) ?-?(3005|188|87|275|342|168|45)\\b|Pelican Island Causeway|San Luis Pass|Butterowe|Gulf Freeway",
+   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+   "label": "Galveston Sec. 34-203: state-highway streets (Seawall, Broadway, Harborside, 61st, Ferry Rd, FM 3005/188, I-45) prohibited"
+  },
+  {
+   "names": "^Avenue O$",
+   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+   "label": "Galveston: Avenue O prohibited 53rd\u201315th St",
+   "bbox": [
+    29.27,
+    -94.84,
+    29.31,
+    -94.77
+   ]
+  },
+  {
+   "names": "^Avenue P$",
+   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+   "label": "Galveston: Avenue P prohibited 19th\u201353rd St",
+   "bbox": [
+    29.27,
+    -94.84,
+    29.31,
+    -94.78
+   ]
+  }
+ ],
+ "sources": [
+  "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+  "https://www.galvestontx.gov/FAQ/Topic?mobile=ON&topic=27",
+  "https://library.municode.com/tx/galveston/codes/code_of_ordinances?nodeId=PTIICOCI_CH34TR_ARTIIIVEOP_SS34-78--34-85RE (speed zones)",
+  "West-of-103rd St registration split not modeled"
+ ],
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=galveston loads it"
+}

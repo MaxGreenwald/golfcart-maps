@@ -1,0 +1,15 @@
+{
+ "unverified": [],
+ "bans": [
+  {
+   "names": "^I ?5\\b|^(CA|SR) ?(73|133|241)\\b|San Joaquin Hills Toll",
+   "url": "https://revengegolfcartparts.com/state-golf-cart-laws/",
+   "label": "Freeways/toll roads"
+  }
+ ],
+ "sources": [
+  "CVC 21260 (LSV \u226435)",
+  "Laguna Woods / Village golf cart rules (CVC 21115 local) not digitized"
+ ],
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=ocoast loads it"
+}

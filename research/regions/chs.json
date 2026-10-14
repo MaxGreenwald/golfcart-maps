@@ -1,0 +1,15 @@
+{
+ "unverified": [],
+ "bans": [
+  {
+   "names": "Isle of Palms Connector|^SC ?517|^US ?17|Ben Sawyer|^SC ?703",
+   "url": "https://www.isleofpalms.gov/police/golf-carts-low-speed-vehicles",
+   "label": "IOP: IOP Connector (45 mph, SC 517) and other primary roads prohibited"
+  }
+ ],
+ "sources": [
+  "https://www.isleofpalms.gov/police/golf-carts-low-speed-vehicles",
+  "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+ ],
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=chs loads it"
+}

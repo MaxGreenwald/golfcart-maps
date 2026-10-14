@@ -1,0 +1,18 @@
+{
+ "unverified": [],
+ "bans": [
+  {
+   "names": "^(SH|TX|State Highway) ?361|^Highway 361",
+   "url": "https://cityofportaransas.org/golf-cart-information-and-regulations/",
+   "label": "Port Aransas: carts prohibited on Hwy 361 south of Avenue G",
+   "south_of": 27.823
+  }
+ ],
+ "sources": [
+  "https://cityofportaransas.org/golf-cart-information-and-regulations/",
+  "https://cityofportaransas.org/wp-content/uploads/2026/02/Golf-Cart-Laws-Strictly-Enforced.pdf",
+  "Tex. Transp. Code 551.403/551.303",
+  "Beach driving (the beach is a city street) not modeled"
+ ],
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=portaransas loads it"
+}

@@ -4,7 +4,7 @@ Input: cache/<id>_osm.json (from pbf_extract.py) + optional research/regions/<id
 Priority: overrides/bans > cart paths (OSM golf_cart tags) > Mapillary (2+ signs to flip) > OSM maxspeed > default.
 Output: public/data/<id>/{index.json,pois.json,tiles/*.json}; same segment format as San Diego, plus
 src 'c' = cart path, 'd' = OSM-designated golf cart road (golf_cart=yes|designated on a road)."""
-import json, os, sys, math, gzip, time
+import json, os, sys, math, gzip, time, re
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, "..")
 sys.path.insert(0, HERE)
 import mapillary_signs as M
@@ -100,8 +100,20 @@ def src_i(url, label):
 for wi, w in enumerate(wl):
     t = w["tags"]; hw = t["highway"]; si = -1
     s, src = classify(t)
+    lban = None
+    if hw in ROADS:
+        mla, mlo = w["geometry"][len(w["geometry"])//2]["lat"], w["geometry"][len(w["geometry"])//2]["lon"]
+        for b in CFG.get("bans", []):   # local ordinance / state-highway bans -> blocked for everyone (single rule)
+            if not any(re.search(b["names"], t.get(k, "")) for k in ("name", "ref")): continue
+            if "south_of" in b and mla >= b["south_of"]: continue
+            if "north_of" in b and mla <= b["north_of"]: continue
+            if "west_of" in b and mlo >= b["west_of"]: continue
+            if "bbox" in b and not (b["bbox"][0] <= mla <= b["bbox"][2] and b["bbox"][1] <= mlo <= b["bbox"][3]): continue
+            lban = b; break
     if w["id"] in OV:
         o = OV[w["id"]]; s, src = o["mph"], "verified"; si = src_i(o["url"], o["label"])
+    elif lban:
+        s, src = 99, "verified"; si = src_i(lban["url"], lban["label"])
     elif hw not in ROADS:
         s, src = mph(t.get("maxspeed")) or 20, "cartpath"
     elif wi in mly and not ((s >= 40) != (mly[wi][0] >= 40) and mly[wi][2] < 2):
@@ -129,6 +141,7 @@ for wi, w in enumerate(wl):
         if wi in WW: cflag = WW[wi]
         if src == "verified" and t.get("golf_cart") in ("yes", "designated") and s <= 30 and cflag != 1: cflag = 2   # verified-speed cart-lane road
         if t.get("golf_cart") == "no": cflag = 1
+        if lban: cflag = 1
     code = {"cartpath": "c", "designated": "d"}.get(src, src[0])
     for sg in segs:
         sflag = cflag
