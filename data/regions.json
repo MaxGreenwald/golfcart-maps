@@ -49,52 +49,5 @@
 "cite": "F.S. 316.212/316.2125; Sumter Co. 17-3, Marion Co. Ord. 03-26, Lady Lake 17-3, Fruitland Park ch.34, Wildwood O2026-28; paths 20 mph (CDD). Streets ≤30, major roads via tunnels/path crossings only"
 }
 }
-},
-{
-"id": "ptc",
-"name": "Peachtree City, GA",
-"short": "Peachtree City",
-"state": "GA",
-"center": [
-33.3966,
--84.596
-],
-"zoom": 15,
-"bbox": [
-33.33,
--84.64,
-33.46,
--84.5
-],
-"beta": true,
-"cover": "Peachtree City area only. Pick another city in the menu above.",
-"rules": {
-"golf_cart": {
-"max_posted": 35,
-"assume": [],
-"cross": false,
-"cite": "O.C.G.A. 40-6-331; Peachtree City ordinance: carts on the multi-use path system (city streets UNVERIFIED)"
-}
-}
-},
-{
-"id": "hhi",
-"name": "Hilton Head & Bluffton, SC",
-"short": "Hilton Head",
-"state": "SC",
-"center": [
-32.1393,
--80.756
-],
-"zoom": 15,
-"bbox": [
-32.1,
--80.98,
-32.32,
--80.65
-],
-"beta": true,
-"cover": "Hilton Head Island and Bluffton only. Pick another city in the menu above.",
-"hidden": true
 }
 ]
