@@ -85,6 +85,7 @@ let lastR=null;function renderRange(r){if(r)lastR=r;r=lastR;if(!r)return;const R
  const el=$('range');el.style.display='block';
  el.innerHTML=`<div><span class="rd">${one.toFixed(1)} mi</span> one way · <span class="rd">${rt.toFixed(1)} mi</span> round trip</div><div class="rs ${c.status}">${txt}: round trip ${rt.toFixed(1)} mi, about ${c.pct}% of your ${c.eff} mi range</div><details${el.querySelector('details[open]')?' open':''}><summary>🔋 Range settings <span class="car">▸</span></summary><label>${MODE==='lsv'?'LSV':'Golf cart'} range <input id="rgMi" type="number" inputmode="decimal" min="1" max="150" value="${rng}"> mi</label><label>Battery <input id="rgBat" type="number" inputmode="numeric" min="0" max="100" value="${bat}"> %</label><div class="rh">Estimate. We flag trips over ${Math.round(R.MARGIN*100)}% of your range; hills, heat and passengers cut range.</div></details>`;
  const upd=()=>{const s=R.load();s.range=s.range||{};const m=+$('rgMi').value,b=+$('rgBat').value;if(m>0)s.range[MODE]=m;if(b>=0&&b<=100)s.battery=b;s.profile=null;R.save(s);renderRange();if(window.lastRoute)window.lastRoute.range=window._rangeRes};
+ if(c.status!=='ok'){const rt0=r;chargers().then(()=>{if(lastR!==rt0)return;const n=nearestChg(end);if(n&&n.mi<5&&!el.querySelector('.rc'))el.querySelector('.rs').insertAdjacentHTML('afterend',`<div class="rc">🔌 Nearest public charger to your destination: <b>${esc(n.c.name)}</b>, ${n.mi.toFixed(1)} mi away. <a href="#" onclick="showChg(true);map.setView([${n.c.lat},${n.c.lon}],16);return false">Show</a></div>`)})}
  $('rgMi').onchange=upd;$('rgBat').onchange=upd}
 window.renderRange=renderRange;
 // center the START point (z16) inside the map area left visible by the top card and the sheet/desktop card
@@ -185,8 +186,17 @@ async function loadRegion(id,keepView){const r=REGIONS.find(x=>x.id===id)||REGIO
  if(!keepView)map.setView(r.center,r.zoom);
  fetch(BASE+'pois.json').then(x=>x.ok?x.json():[]).then(j=>{if(REG===r)POIS=j}).catch(()=>{});
  const j=await (await fetch(BASE+'index.json')).json();if(REG!==r)return;$('lgCart').style.display=j.meta.stats&&j.meta.stats.cartpath?'':'none';D={...j,segs:[],tileSet:new Set(j.meta.tiles)};readyRes();
- $('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;draw();if(!keepView)clearR();else sync();await onMove();window.ready=true}
+ CHG=null;if(chgOn)showChg(true);$('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;draw();if(!keepView)clearR();else sync();await onMove();window.ready=true}
 window.loadRegion=loadRegion;
+// ---- public EV chargers (DOE AFDC, Level 1/2 only), loaded lazily per region ----
+let CHG=null,CHGR=null,chgOn=false,chgL=null;const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function chargers(){if(CHG&&CHGR===REG)return CHG;const r=REG;try{const j=await (await fetch(BASE+'chargers.json')).json();if(REG===r){CHG=j.stations;CHGR=r}}catch(_){CHG=[];CHGR=r}return CHG}
+const CON={J1772:'J1772 (Level 2)',NEMA515:'120V outlet (5-15)',NEMA520:'120V outlet (5-20)',NEMA1450:'240V outlet (14-50)',TESLA:'Tesla',CHADEMO:'CHAdeMO',J1772COMBO:'CCS'};
+function chgPop(c){return `<div class="cpop"><b>${esc(c.name)}</b><br>${esc(c.addr)}<br>🔌 ${c.con.map(x=>esc(CON[x]||x)).join(', ')}${c.l2?` · ${c.l2} L2 port${c.l2>1?'s':''}`:''}${c.l1?` · ${c.l1} L1`:''}<br>🕒 ${esc(c.hours||'Hours not listed')}${c.network&&c.network!=='Non-Networked'?`<br>${esc(c.network)}`:''}${c.price?`<br>💲 ${esc(c.price)}`:''}<div class="cn">Most golf carts and LSVs need a J1772 adapter or a regular 120V outlet. Call ahead; listing from DOE AFDC${c.confirmed?`, confirmed ${esc(c.confirmed)}`:''}.</div></div>`}
+async function showChg(on){chgOn=on;$('cChg').classList.toggle('on',on);if(chgL){map.removeLayer(chgL);chgL=null}if(!on)return;const list=await chargers();if(!chgOn)return;
+ chgL=L.layerGroup(list.map(c=>L.marker([c.lat,c.lon],{icon:L.divIcon({className:'',html:'<div class="chg">🔌</div>',iconSize:[22,22],iconAnchor:[11,11]})}).bindPopup(chgPop(c),{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)}))).addTo(map)}
+window.showChg=showChg;$('cChg').onclick=()=>showChg(!chgOn);
+function nearestChg(ll){if(!CHG||!ll)return null;let b=null,bd=1e18;for(const c of CHG){const d=map.distance(ll,[c.lat,c.lon]);if(d<bd){bd=d;b=c}}return b&&{c:b,mi:bd/1609.34}}
 function setMode(m){MODE=m;try{localStorage.setItem('gcm-mode',m)}catch(_){}setRule();if(!D)return;adj={};nodes={};fast=new Set();fnode=new Set();cnode=new Set();buildGraph(0);shown={};layer.clearLayers();refresh();if(start&&end)route()}
 window.setMode=setMode;
 $('cMode').onclick=()=>setMode(MODE==='lsv'?'golf_cart':'lsv');
