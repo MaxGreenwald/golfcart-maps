@@ -168,7 +168,12 @@
   ],
   "beta": true,
   "hidden": true,
-  "cover": "Gulf Shores and Orange Beach only. Pick another city in the menu above."
+  "cover": "Gulf Shores and Orange Beach only. Pick another city in the menu above.",
+  "rule": {
+   "max_posted": 25,
+   "cite": "Gulf Shores Sec. 21-13 (Apr 13 2026) & Orange Beach Sec. 70-273 / Ala. Const. Baldwin Co. \u00a71.570: carts/LSVs only on streets posted \u226425",
+   "url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"
+  }
  },
  {
   "id": "portaransas",
@@ -309,26 +314,6 @@
   "beta": true,
   "hidden": true,
   "cover": "Galveston Island only. Pick another city in the menu above."
- },
- {
-  "id": "havasu",
-  "name": "Lake Havasu City, AZ",
-  "short": "Lake Havasu",
-  "state": "AZ",
-  "center": [
-   34.5,
-   -114.315
-  ],
-  "zoom": 14,
-  "bbox": [
-   34.4,
-   -114.4,
-   34.6,
-   -114.23
-  ],
-  "beta": true,
-  "hidden": true,
-  "cover": "Lake Havasu City only. Pick another city in the menu above."
  },
  {
   "id": "ocoast",
