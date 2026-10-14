@@ -5,6 +5,11 @@
    "names": "Isle of Palms Connector|^SC ?517|^US ?17|Ben Sawyer|^SC ?703",
    "url": "https://www.isleofpalms.gov/police/golf-carts-low-speed-vehicles",
    "label": "IOP: IOP Connector (45 mph, SC 517) and other primary roads prohibited"
+  },
+  {
+   "names": "James Island Expressway|^SC ?30\\b",
+   "url": "https://gis.scdot.org/hosting/rest/services/Speed_Limits/FeatureServer/16",
+   "label": "James Island Expressway (SC 30): limited-access expressway, 45\u201355 mph per SCDOT/FHWA (OSM 25 tag is wrong)"
   }
  ],
  "sources": [
