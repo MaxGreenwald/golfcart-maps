@@ -1,0 +1,287 @@
+{
+ "ptc": {
+  "ways": 5067,
+  "cov_ways_pct": 34.0,
+  "cov_len_pct": 52.7,
+  "major_cov_pct": 68.7,
+  "km": 1056,
+  "stats": {
+   "tagged": 1416,
+   "inferred": 2906,
+   "inferred_high": 110,
+   "verified": 310,
+   "mapillary": 1,
+   "cartpath": 1024,
+   "designated": 6,
+   "cart_banned": 1856,
+   "cart_ordinance": 0
+  },
+  "segments": 11349
+ },
+ "hhi": {
+  "ways": 10790,
+  "cov_ways_pct": 3.6,
+  "cov_len_pct": 7.0,
+  "major_cov_pct": 9.2,
+  "km": 2264,
+  "stats": {
+   "tagged": 267,
+   "inferred": 7609,
+   "inferred_high": 303,
+   "verified": 246,
+   "mapillary": 33,
+   "cartpath": 382,
+   "designated": 45,
+   "cart_banned": 742,
+   "cart_ordinance": 0
+  },
+  "segments": 17191
+ },
+ "myrtle": {
+  "ways": 30951,
+  "cov_ways_pct": 9.6,
+  "cov_len_pct": 15.2,
+  "major_cov_pct": 65.9,
+  "km": 6109,
+  "stats": {
+   "tagged": 1596,
+   "inferred": 26790,
+   "inferred_high": 618,
+   "verified": 1306,
+   "mapillary": 231,
+   "cartpath": 423,
+   "designated": 32,
+   "cart_banned": 3458,
+   "cart_ordinance": 0
+  },
+  "segments": 64213
+ },
+ "chs": {
+  "ways": 10735,
+  "cov_ways_pct": 8.4,
+  "cov_len_pct": 12.6,
+  "major_cov_pct": 38.6,
+  "km": 1877,
+  "stats": {
+   "tagged": 646,
+   "inferred": 8662,
+   "inferred_high": 547,
+   "verified": 247,
+   "mapillary": 103,
+   "cartpath": 14,
+   "designated": 21,
+   "cart_banned": 619,
+   "cart_ordinance": 0
+  },
+  "segments": 20928
+ },
+ "30a": {
+  "ways": 5928,
+  "cov_ways_pct": 6.0,
+  "cov_len_pct": 14.4,
+  "major_cov_pct": 60.9,
+  "km": 1304,
+  "stats": {
+   "tagged": 97,
+   "inferred": 5171,
+   "inferred_high": 139,
+   "verified": 244,
+   "mapillary": 0,
+   "cartpath": 102,
+   "designated": 72,
+   "cart_banned": 784,
+   "cart_ordinance": 0
+  },
+  "segments": 12226
+ },
+ "gulfshores": {
+  "ways": 3432,
+  "cov_ways_pct": 23.7,
+  "cov_len_pct": 39.6,
+  "major_cov_pct": 83.8,
+  "km": 688,
+  "stats": {
+   "tagged": 485,
+   "inferred": 2453,
+   "inferred_high": 39,
+   "verified": 252,
+   "mapillary": 20,
+   "cartpath": 15,
+   "designated": 2,
+   "cart_banned": 798,
+   "cart_ordinance": 0
+  },
+  "segments": 6500
+ },
+ "portaransas": {
+  "ways": 1613,
+  "cov_ways_pct": 14.7,
+  "cov_len_pct": 20.0,
+  "major_cov_pct": 56.7,
+  "km": 380,
+  "stats": {
+   "tagged": 198,
+   "inferred": 1314,
+   "inferred_high": 17,
+   "verified": 31,
+   "mapillary": 17,
+   "cartpath": 59,
+   "designated": 0,
+   "cart_banned": 119,
+   "cart_ordinance": 0
+  },
+  "segments": 3797
+ },
+ "suncity": {
+  "ways": 18231,
+  "cov_ways_pct": 71.1,
+  "cov_len_pct": 77.9,
+  "major_cov_pct": 73.4,
+  "km": 3251,
+  "stats": {
+   "tagged": 11515,
+   "inferred": 3996,
+   "inferred_high": 613,
+   "verified": 341,
+   "mapillary": 623,
+   "cartpath": 165,
+   "designated": 2,
+   "cart_banned": 415,
+   "cart_ordinance": 0
+  },
+  "segments": 30358
+ },
+ "coachella": {
+  "ways": 20467,
+  "cov_ways_pct": 12.4,
+  "cov_len_pct": 16.3,
+  "major_cov_pct": 58.4,
+  "km": 3909,
+  "stats": {
+   "tagged": 1999,
+   "inferred": 12117,
+   "inferred_high": 966,
+   "verified": 587,
+   "mapillary": 71,
+   "cartpath": 1317,
+   "designated": 1,
+   "cart_banned": 970,
+   "cart_ordinance": 0
+  },
+  "segments": 32360
+ },
+ "naples": {
+  "ways": 20660,
+  "cov_ways_pct": 6.8,
+  "cov_len_pct": 12.8,
+  "major_cov_pct": 43.2,
+  "km": 3900,
+  "stats": {
+   "tagged": 960,
+   "inferred": 14543,
+   "inferred_high": 772,
+   "verified": 384,
+   "mapillary": 233,
+   "cartpath": 530,
+   "designated": 271,
+   "cart_banned": 986,
+   "cart_ordinance": 0
+  },
+  "segments": 35342
+ },
+ "goldenisles": {
+  "ways": 1951,
+  "cov_ways_pct": 5.9,
+  "cov_len_pct": 9.3,
+  "major_cov_pct": 40.7,
+  "km": 496,
+  "stats": {
+   "tagged": 70,
+   "inferred": 1652,
+   "inferred_high": 81,
+   "verified": 62,
+   "mapillary": 15,
+   "cartpath": 42,
+   "designated": 38,
+   "cart_banned": 144,
+   "cart_ordinance": 0
+  },
+  "segments": 3934
+ },
+ "tybee": {
+  "ways": 588,
+  "cov_ways_pct": 6.1,
+  "cov_len_pct": 17.9,
+  "major_cov_pct": 66.7,
+  "km": 76,
+  "stats": {
+   "tagged": 15,
+   "inferred": 493,
+   "inferred_high": 0,
+   "verified": 24,
+   "mapillary": 11,
+   "cartpath": 0,
+   "designated": 30,
+   "cart_banned": 131,
+   "cart_ordinance": 0
+  },
+  "segments": 1159
+ },
+ "galveston": {
+  "ways": 5744,
+  "cov_ways_pct": 3.5,
+  "cov_len_pct": 6.5,
+  "major_cov_pct": 2.6,
+  "km": 1392,
+  "stats": {
+   "tagged": 127,
+   "inferred": 4400,
+   "inferred_high": 301,
+   "verified": 486,
+   "mapillary": 131,
+   "cartpath": 14,
+   "designated": 0,
+   "cart_banned": 1225,
+   "cart_ordinance": 0
+  },
+  "segments": 13033
+ },
+ "havasu": {
+  "ways": 3768,
+  "cov_ways_pct": 3.2,
+  "cov_len_pct": 7.5,
+  "major_cov_pct": 23.0,
+  "km": 973,
+  "stats": {
+   "tagged": 55,
+   "inferred": 3364,
+   "inferred_high": 116,
+   "verified": 62,
+   "mapillary": 7,
+   "cartpath": 4,
+   "designated": 0,
+   "cart_banned": 91,
+   "cart_ordinance": 0
+  },
+  "segments": 7694
+ },
+ "ocoast": {
+  "ways": 33924,
+  "cov_ways_pct": 26.3,
+  "cov_len_pct": 28.2,
+  "major_cov_pct": 67.6,
+  "km": 4527,
+  "stats": {
+   "tagged": 7248,
+   "inferred": 17330,
+   "inferred_high": 1498,
+   "verified": 504,
+   "mapillary": 1302,
+   "cartpath": 255,
+   "designated": 20,
+   "cart_banned": 582,
+   "cart_ordinance": 0
+  },
+  "segments": 45249
+ }
+}
