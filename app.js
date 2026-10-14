@@ -27,7 +27,7 @@ async function onMove(){if(!D)return;const b=map.getBounds().pad(0.1);const n0=l
 map.on('moveend',onMove);
 function mkLine(s){const c0=cls(s),c=s[3]==='c'?2:c0;const pl=L.polyline(s[7].map(p=>[p[1],p[0]]),{...STY[c],renderer});
  pl.on('click',e=>{L.DomEvent.stopPropagation(e);if(active){setPt(e.latlng);return}const sp=s[2];window._pll=e.latlng;
-  L.popup().setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[9]===3&&MODE==='golf_cart'?' 🚦 designated golf cart crossing':s[9]===2&&MODE==='golf_cart'?' ✅ golf carts allowed (local ordinance)':''}${s[3]==='c'?' 🛺 cart path':s[3]==='d'?' ✅ designated cart road':s[3]==='t'?' (OSM)':s[3]==='v'?' ✅ verified (local source)':s[3]==='m'?' 📷 posted sign (Mapillary)':' (assumed)'}${(s[3]==='v'||s[3]==='m')&&D.sources&&D.sources[s[8]]?`<br><a href="${D.sources[s[8]][0]}" target="_blank" rel="noopener">Source: ${D.sources[s[8]][1]}</a>`:''}<br><b style="color:${c===3?'#e5484d':'#12a150'}">${c===3?(s[9]===1&&MODE==='golf_cart'?'Avoid: golf carts not allowed (posted)':RULE.designated_only&&!(s[2]==null||s[2]>RULE.max_posted)?'Avoid: not a designated golf cart road':`Avoid: ${RULE.max_posted+5}+ mph or major road`):'OK for '+modeName()}</b><br>Segment length: ${(s._len??len(s[7]))<160?ft(s._len??len(s[7])):mi(s._len??len(s[7]))}<div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="popSet('from')">Start here</button><button class="pbtn" onclick="popSet('to')">Go here</button></div>`).openOn(map)});return pl}
+  L.popup().setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[9]===3&&MODE==='golf_cart'?' 🚦 designated golf cart crossing':s[9]===2&&MODE==='golf_cart'?' ✅ golf carts allowed (local ordinance)':''}${s[3]==='c'?' 🛺 cart path':s[3]==='d'?' ✅ designated cart road':s[3]==='t'?' (OSM)':s[3]==='v'?' ✅ verified (local source)':s[3]==='m'?' 📷 posted sign (Mapillary)':' (assumed)'}${(s[3]==='v'||s[3]==='m')&&D.sources&&D.sources[s[8]]?`<br><a href="${D.sources[s[8]][0]}" target="_blank" rel="noopener">Source: ${D.sources[s[8]][1]}</a>`:''}<br><b style="color:${c===3?'#e5484d':'#12a150'}">${c===3?(s[9]===1&&MODE==='golf_cart'?'Avoid: golf carts not allowed (posted)':RULE.designated_only&&!(s[2]==null||s[2]>RULE.max_posted)?'Avoid: not a designated golf cart road':`Avoid: ${RULE.max_posted+5}+ mph or major road`):'OK for '+modeName()}</b><br>Segment length: ${(s._len??len(s[7]))<160?ft(s._len??len(s[7])):mi(s._len??len(s[7]))}<div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="popSet('from')">Start here</button><button class="pbtn" onclick="popSet('to')">Go here</button></div><button class="pbtn rpt" onclick="reportRoad()">🚩 Report this road</button>`).openOn(map);window._rseg={road:D.names[s[0]]||'(unnamed road)',hw:s[1],sp:sp==null||sp==99?'none recorded':sp+' mph',src:{t:'OSM tag',v:'verified local source',m:'Mapillary sign',c:'cart path',d:'designated cart road'}[s[3]]||'assumed',status:c===3?'Avoid':'OK for '+modeName(),ll:e.latlng}});return pl}
 function hav(a,b){const R=6371000,r=Math.PI/180,dl=(b[1]-a[1])*r,dn=(b[0]-a[0])*r,x=Math.sin(dl/2)**2+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
 function len(p){let l=0;for(let i=1;i<p.length;i++)l+=hav(p[i-1],p[i]);return l}
 let fast=new Set(),fnode=new Set(),cnode=new Set();
@@ -123,7 +123,9 @@ function setPt(ll,label){if(inMX(ll)){$('help').textContent='⚠️ That spot is
 function clearField(f){if(f==='from')from=null;else to=null;active=f;sync();window.state=st()}
 function clearR(){from=to=null;active=null;if(routeG)map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('range').style.display='none';map.closePopup();sync();window.state=st()}
 window.resetRoute=clearR;
-map.on('click',e=>{if(!setPt(e.latlng))map.closePopup()});$('clr').onclick=clearR;$('reset').onclick=clearR;
+map.on('click',e=>{if(!setPt(e.latlng))map.closePopup()});
+// long-press (mobile) / right-click: report here
+map.on('contextmenu',e=>{window._rseg={road:'(not a specific road)',ll:e.latlng};L.popup().setLatLng(e.latlng).setContent('<button class="pbtn rpt" onclick="reportRoad()">🚩 Report a problem here</button>').openOn(map)});$('clr').onclick=clearR;$('reset').onclick=clearR;
 function swap(){[from,to]=[to,from];active=null;sync();if(start&&end)route();else if(routeG){map.removeLayer(routeG);routeG=null}window.state=st()}
 $('swap').onclick=swap;$('swap2').onclick=swap;window.swapRoute=swap;
 for(const [f,id,x] of [['from','qf','xf'],['to','q','xt']]){
@@ -188,6 +190,23 @@ async function loadRegion(id,keepView){const r=REGIONS.find(x=>x.id===id)||REGIO
  const j=await (await fetch(BASE+'index.json')).json();if(REG!==r)return;$('lgCart').style.display=j.meta.stats&&j.meta.stats.cartpath?'':'none';D={...j,segs:[],tileSet:new Set(j.meta.tiles)};readyRes();
  CHG=null;if(chgOn)showChg(true);$('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;draw();if(!keepView)clearR();else sync();await onMove();window.ready=true}
 window.loadRegion=loadRegion;
+// ---- Report a bad road: small form -> mailto (static site, no backend) ----
+const APPV='mr-2026.10.13',RPT_TO='maxgreenwald.assistant@gmail.com';
+function reportRoad(seg){seg=seg||window._rseg||{road:'(general)',ll:map.getCenter()};window._rseg=seg;map.closePopup();
+ $('rpRoad').textContent=seg.road+(seg.sp?` · ${seg.sp} · ${seg.status}`:'');$('rpIssue').value=seg.sp?'wrong_speed':'other';$('rpSpeed').value='';$('rpNotes').value='';$('rpt').style.display='flex'}
+window.reportRoad=reportRoad;
+const ISS={wrong_speed:'Wrong speed limit',allow:'Should be allowed',block:'Should be blocked',closed:'Road closed or doesn\u2019t exist',other:'Other'};
+function buildReport(seg,issue,speed,notes){const ll=seg.ll,z=map.getZoom(),lat=ll.lat.toFixed(5),lon=ll.lng.toFixed(5);
+ const link=`https://golfcartmap.com/?r=${REG.id}&lat=${lat}&lon=${lon}&z=${Math.max(16,z)}`;
+ const subject=`Golf Cart Maps road report: ${seg.road}`;
+ const head=[`Issue: ${ISS[issue]||issue}`,speed?`Suggested speed: ${speed} mph`:null,`Region: ${REG.name}`,`Road: ${seg.road}${seg.hw?` (${seg.hw.replace('_',' ')})`:''}`,`Location: ${lat}, ${lon}`,seg.sp?`Map shows: ${seg.sp} (${seg.src}), ${seg.status}`:null,`Mode: ${modeName()}`,`App version: ${APPV}`,`Map link: ${link}`,`OSM: https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=19/${lat}/${lon}`].filter(Boolean).join('\n');
+ let n=(notes||'').trim();const mk=n2=>`mailto:${RPT_TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(head+'\n\nNotes:\n'+(n2||'(none)'))}`;
+ let url=mk(n);while(url.length>1800&&n.length){n=n.slice(0,Math.max(0,n.length-Math.ceil((url.length-1800)/3)-5))+'…';url=mk(n);if(n.length<3){n='';url=mk(n)}}
+ return {subject,body:decodeURIComponent(url.split('&body=')[1]),url}}
+window.buildReport=buildReport;
+$('rpCancel').onclick=()=>{$('rpt').style.display='none'};
+$('rpSend').onclick=()=>{const r=buildReport(window._rseg,$('rpIssue').value,$('rpSpeed').value,$('rpNotes').value);window.lastReport=r;$('rpt').style.display='none';if(!window.NO_MAILTO)location.href=r.url};
+$('rpGen').onclick=e=>{e.preventDefault();reportRoad({road:'(general problem)',ll:map.getCenter()})};
 // ---- public EV chargers (DOE AFDC, Level 1/2 only), loaded lazily per region ----
 let CHG=null,CHGR=null,chgOn=false,chgL=null;const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 async function chargers(){if(CHG&&CHGR===REG)return CHG;const r=REG;try{const j=await (await fetch(BASE+'chargers.json')).json();if(REG===r){CHG=j.stations;CHGR=r}}catch(_){CHG=[];CHGR=r}return CHG}
@@ -206,7 +225,7 @@ $('city').onchange=e=>loadRegion(e.target.value);
  let saved=null;try{saved=localStorage.getItem('gcm-region')}catch(_){}
  let id=(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;
  if(!id&&navigator.permissions&&navigator.geolocation){try{const p=await navigator.permissions.query({name:'geolocation'});if(p.state==='granted'){const pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:4000,maximumAge:600000}));const r=regionAt(pos.coords.latitude,pos.coords.longitude);if(r)id=r.id}}catch(_){}}
- await loadRegion(id||'sd')})();
+ await loadRegion(id||'sd');const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');if(la&&lo)map.setView([la,lo],+P.get('z')||17)})();
 
 // ---- bottom sheet: pointer-driven, translateY snapping ----
 const sheet=$('sheet'),shead=$('shead');let snap='full';
