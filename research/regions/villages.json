@@ -1,0 +1,94 @@
+{
+ "unverified": [
+  "Golf-cart mode still assumes every residential/local street ≤30 mph inside the area is designated. Sourced: Sumter Co. Sec. 17-3 (self-contained retirement community resolutions, road lists not found online), Marion Co. Ord. 03-26 (all streets in Villages of Marion County), Lady Lake Sec. 17-3 (golf cart communities, streets designated by signage), Fruitland Park (streets ≤30 mph + map PDF), Wildwood O2026-28 (ArcGIS green/red map, not imported). Street-by-street lists for Sumter resolutions and the Wildwood map are NOT digitized.",
+  "Banned-road list comes from a 2018 Villages-News compilation of county/city rules + thevillagesflorida.com; may be dated (Wildwood replaced its rules in July 2026).",
+  "Night driving with lights (F.S. 316.212(6)) not modelled; LSVs allowed on multi-modal paths per Max.",
+  "Pine Ridge Dairy Rd crossing of CR 468 not found as an OSM intersection; not added.",
+  "Wildwood map PRIVATE roads keep the default assumption; Wildwood streets not on the city map keep the default assumption.",
+  "Crossings are modelled as a 40 m allowed stretch of the major road around the signal."
+ ],
+ "sources": [
+  "https://www.flsenate.gov/Laws/Statutes/2026/316.212",
+  "https://www.leg.state.fl.us/Statutes/index.cfm?App_mode=Display_Statute&URL=0300-0399%2F0316%2FSections%2F0316.2125.html",
+  "https://www.sumtercountyfl.gov/AgendaModule/AI7446/Golf%20Cart%20Ordinance%20Amendment%20-%20Final%20(00268768).pdf",
+  "https://sumterclerk.granicus.com/DocumentViewer.php?file=sumterclerk_513847673551255ba49a58f72ce43401.pdf",
+  "https://www.districtgov.org/wp-content/uploads/2024/05/Ordinance-03-26.pdf",
+  "https://www.villages-news.com/2018/02/15/enjoy-golf-cart-safely-legally/",
+  "http://thevillagesflorida.com/golf-cart-requirements/",
+  "https://www.villages-news.com/2026/07/13/wildwood-adopts-new-golf-cart-and-low-speed-vehicle-ordinance/",
+  "https://experience.arcgis.com/experience/8edb876eefd943c58567fa08819cf786",
+  "https://www.fruitlandpark.org/business-building-and-development/maps/",
+  "https://www.villages-news.com/2018/08/10/fruitland-park-gives-final-ok-to-ordinance-allowing-golf-carts-to-remain-on-dixie-avenue/",
+  "https://www.districtgov.org/how-to/getting-around/",
+  "https://scoutthevillages.com/golf-cart-rules/"
+ ],
+ "overrides": [],
+ "cart_ban_names": "(?i)^(US 27|US 441|US 301|SR 44|CR 466A?|CR 44|CR 42|CR 468|CR 472|El Camino Real|Rainey Trail|Griffin Avenue|Rolling Acres Road|Powell Road|Buena Vista Boulevard|Morse Boulevard|Miller (Street|Boulevard)|Rose Avenue|Willard Avenue)\\b|\\b(US 27|US 441|US 301|SR 44|CR 466A?|CR 42|CR 44|CR 468|CR 472)\\b",
+ "crossings": [
+  {
+   "lat": 28.95156,
+   "lon": -81.99196,
+   "label": "El Camino Real at Enrique Dr / Botello Ave (signal)",
+   "src": "http://thevillagesflorida.com/golf-cart-requirements/"
+  },
+  {
+   "lat": 28.90908,
+   "lon": -82.00933,
+   "label": "Rainey Trail at Lynnhaven Ln / Miona Shores Dr",
+   "src": "http://thevillagesflorida.com/golf-cart-requirements/"
+  },
+  {
+   "lat": 28.86151,
+   "lon": -81.9119,
+   "label": "CR 466A (Miller St) at College Ave",
+   "src": "https://www.villages-news.com/2018/02/15/enjoy-golf-cart-safely-legally/"
+  },
+  {
+   "lat": 28.8614,
+   "lon": -81.90673,
+   "label": "CR 466A (Miller St) at S Dixie Ave",
+   "src": "https://www.villages-news.com/2018/02/15/enjoy-golf-cart-safely-legally/"
+  },
+  {
+   "lat": 28.85788,
+   "lon": -81.9144,
+   "label": "CR 468 at Berckman St",
+   "src": "https://www.villages-news.com/2018/02/15/enjoy-golf-cart-safely-legally/"
+  },
+  {
+   "lat": 28.84687,
+   "lon": -81.91618,
+   "label": "CR 468 at Myrtle Lake Ave / Urick St",
+   "src": "https://www.villages-news.com/2018/02/15/enjoy-golf-cart-safely-legally/"
+  },
+  {
+   "lat": 28.9657,
+   "lon": -81.971,
+   "label": "US 27/441 at SE 176th St (signal, Spruce Creek South)",
+   "src": "https://www.villages-news.com/2018/02/15/enjoy-golf-cart-safely-legally/"
+  }
+ ],
+ "cart_ban_north_of": [
+  {
+   "names": "(?i)\\b(CR 25A|Dixie Avenue)\\b",
+   "lat": 28.865175,
+   "label": "Fruitland Park: CR 25A (Dixie Ave) banned north of Shiloh St"
+  }
+ ],
+ "cart_allow_names": {
+  "names": "(?i)^(South |North |S |N )?(Dixie Avenue|Cooke Drive|Shiloh Street|Urick Street|Myrtle Lake Avenue|Pine Ridge Dairy Road|Cutoff Road)$",
+  "bbox": [
+   28.82,
+   -81.95,
+   28.9,
+   -81.88
+  ],
+  "label": "Fruitland Park ordinance (2018): Dixie Ave + listed Lake County roads"
+ },
+ "wildwood": {
+  "roads": "research/regions/wildwood/golf_cart_roads.geojson",
+  "state": "research/regions/wildwood/state.geojson",
+  "boundary": "research/regions/wildwood/boundary.geojson",
+  "url": "https://experience.arcgis.com/experience/8edb876eefd943c58567fa08819cf786"
+ }
+}

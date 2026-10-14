@@ -3,7 +3,7 @@ from playwright.sync_api import sync_playwright
 import json,random,glob,math,os,sys
 random.seed(int(sys.argv[1]) if len(sys.argv)>1 else 7)
 segs=[]
-for f in glob.glob(os.path.join(os.path.dirname(__file__),'..','public','data','tiles','*.json')):
+for f in glob.glob(os.path.join(os.path.dirname(__file__),'..','public','data','sd','tiles','*.json')):
     segs+= [s for s in json.load(open(f)) if s[1]=='residential' and len(s[7])>=2 and (not os.environ.get('COAST') or s[7][0][0]<-117.22)]
 def mid(s):p=s[7][len(s[7])//2];return [p[1],p[0]]
 pairs=[("max_lajolla",[32.8461,-117.2786],[32.8434,-117.2776])]
