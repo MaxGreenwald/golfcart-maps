@@ -141,13 +141,13 @@ let me,meAcc,myLL=null,watching=false;
 function locate(){if(!navigator.geolocation){$('sub').textContent='Location not supported on this device.';return}
  $('showloc').textContent='📍 Finding you…';let first=true;
  const ok=p=>{myLL=L.latLng(p.coords.latitude,p.coords.longitude);const acc=p.coords.accuracy;
-  if(!me){meAcc=L.circle(myLL,{radius:acc,color:'#1d6fe0',weight:1,fillColor:'#1d6fe0',fillOpacity:.12,interactive:false,renderer}).addTo(map);me=L.circleMarker(myLL,{radius:8,color:'#fff',fillColor:'#1d6fe0',fillOpacity:1,weight:3,interactive:false,renderer}).addTo(map)}
+  if(!me){meAcc=L.circle(myLL,{radius:acc,color:'#1d6fe0',weight:1,fillColor:'#1d6fe0',fillOpacity:.12,interactive:false,renderer}).addTo(map);me=meMarker(myLL)}
   else{me.setLatLng(myLL);meAcc.setLatLng(myLL).setRadius(acc)}
   if(first){first=false;const rg=regionAt(myLL.lat,myLL.lng);if(rg&&REG&&rg.id!==REG.id){loadRegion(rg.id,true)}map.setView(myLL,16);$('showloc').style.display='none';if(to&&to.me){sync();if(start&&end)route()}else setField('from',{me:true})}else if((from&&from.me)||(to&&to.me)){sync()}};
  const err=e=>{$('showloc').textContent='📍 Show my location';$('sub').textContent=e.code===1?'Location is blocked. Turn it on in Settings › Safari › Location.':'Couldn’t find you: '+e.message};
  if(watching){navigator.geolocation.getCurrentPosition(p=>{first=true;ok(p)},err,{enableHighAccuracy:true});return}
  watching=true;navigator.geolocation.watchPosition(ok,err,{enableHighAccuracy:true,maximumAge:5000})}
-$('loc').onclick=locate;$('showloc').onclick=locate;$('useme').onmousedown=e=>e.preventDefault();$('useme').onclick=()=>{$('sugg').style.display='none';if(myLL)setField(active||'from',{me:true});else{active=null;locate()}};window.fakeLocate=(lat,lng)=>{myLL=L.latLng(lat,lng);if(!me){me=L.circleMarker(myLL,{radius:8,color:'#fff',fillColor:'#1d6fe0',fillOpacity:1,weight:3,interactive:false,renderer}).addTo(map)}setField('from',{me:true})};
+$('loc').onclick=locate;$('showloc').onclick=locate;$('useme').onmousedown=e=>e.preventDefault();$('useme').onclick=()=>{$('sugg').style.display='none';if(myLL)setField(active||'from',{me:true});else{active=null;locate()}};window.fakeLocate=(lat,lng)=>{myLL=L.latLng(lat,lng);if(!me){me=meMarker(myLL)}setField('from',{me:true})};
 // ---- fast search: local index (instant) + Photon autocomplete + Nominatim fallback ----
 const qcache=new Map();let POIS=[],nameAt=null,qseq=0,tmr;
 
@@ -180,7 +180,7 @@ let readyRes,READY=new Promise(r=>readyRes=r);
 const modeName=()=>MODE==='lsv'?'LSV':'golf cart';
 function ruleNotes(){const n=[];if(RULE.radius_mi)n.push(`stay within ${RULE.radius_mi} mi of where the cart is registered`);if(RULE.daylight_only)n.push('daylight only');return n.length?' · '+n.join(' · '):''}
 function setRule(){const st=RULES[REG.state]||RULES.CA;RULE={...(st[MODE]||st.lsv)};const rr=REG.rules&&REG.rules[MODE];if(rr)Object.assign(RULE,rr);
- $('cMode').textContent=MODE==='lsv'?'🚙 LSV':'⛳ Golf cart';$('rnote').textContent=`${st.name} ${modeName()}: `+(RULE.designated_only?`cart paths + designated roads${RULE.assume?' (local streets, unverified)':''}`:`roads posted ≤${RULE.max_posted} mph`)+ruleNotes();$('rnote').title=RULE.cite||''}
+ $('cMode').textContent=MODE==='lsv'?'🚙 LSV':'⛳ Golf cart';$('rnote').textContent=`${st.name} ${modeName()}: `+(RULE.designated_only?`cart paths + designated roads${RULE.assume?' (local streets, unverified)':''}`:`roads posted ≤${RULE.max_posted} mph`)+ruleNotes()+(REG&&REG.beta?' · Beta: cart rules are still being verified':'');$('rnote').title=RULE.cite||''}
 function regionAt(lat,lng){let best=null,bd=80467;for(const r of REGIONS){if(r.hidden)continue;const b=r.bbox;if(lat>=b[0]&&lat<=b[2]&&lng>=b[1]&&lng<=b[3])return r;const d=hav([lng,lat],[r.center[1],r.center[0]]);if(d<bd){bd=d;best=r}}return best}
 function resetData(){if(layer){layer.clearLayers();map.removeLayer(layer)}shown={};buckets={};nodes={};adj={};fast=new Set();fnode=new Set();cnode=new Set();loaded.clear();for(const k in loading)delete loading[k];nameAt=null;POIS=[];D=null;window.ready=false;READY=new Promise(r=>readyRes=r)}
 async function loadRegion(id,keepView){const r=REGIONS.find(x=>x.id===id)||REGIONS[0];if(REG&&REG.id===r.id&&D)return;if(!keepView)clearR();resetData();REG=r;BASE='data/'+r.id+'/';window.REG=r;
@@ -207,13 +207,25 @@ window.buildReport=buildReport;
 $('rpCancel').onclick=()=>{$('rpt').style.display='none'};
 $('rpSend').onclick=()=>{const r=buildReport(window._rseg,$('rpIssue').value,$('rpSpeed').value,$('rpNotes').value);window.lastReport=r;$('rpt').style.display='none';if(!window.NO_MAILTO)location.href=r.url};
 $('rpGen').onclick=e=>{e.preventDefault();reportRoad({road:'(general problem)',ll:map.getCenter()})};
+
+// Tappable markers: 44px hit area, cursor/touch-action set, and an explicit pointerup handler that opens the popup
+// (iOS Safari can drop Leaflet's delegated click on small divIcons over the canvas renderer).
+function tapMarker(m){m.on('add',()=>{const el=m.getElement();if(!el||el._tap)return;el._tap=1;let t0=null;
+ L.DomEvent.on(el,'pointerdown',e=>{t0=[e.clientX,e.clientY];L.DomEvent.stopPropagation(e)});
+ L.DomEvent.on(el,'pointerup',e=>{L.DomEvent.stopPropagation(e);if(t0&&Math.hypot(e.clientX-t0[0],e.clientY-t0[1])<12){m._tapAt=Date.now();m.openPopup()}t0=null});
+ L.DomEvent.on(el,'click',e=>{L.DomEvent.stop(e);if(Date.now()-(m._tapAt||0)>600)m.openPopup()})});
+ m.off('click',m._openPopup,m);return m}
+window.tapMarker=tapMarker;
+const meIcon=L.divIcon({className:'tapm',html:'<div class="me-dot"></div>',iconSize:[44,44],iconAnchor:[22,22]});
+function meMarker(ll){return addM(tapMarker(L.marker(ll,{icon:meIcon,zIndexOffset:1000,keyboard:false}).bindPopup(()=>'<div class="cpop"><b>📍 You are here</b><div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="map.closePopup();setField(\'from\',{me:true})">Start here</button><button class="pbtn" onclick="map.closePopup();setField(\'to\',{me:true})">Go here</button></div><button class="pbtn rpt" onclick="window._rseg={road:\'(near my location)\',ll:myLL};reportRoad()">🚩 Report a problem here</button></div>',{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)})))}
+const addM=m=>m.addTo(map);
 // ---- public EV chargers (DOE AFDC, Level 1/2 only), loaded lazily per region ----
 let CHG=null,CHGR=null,chgOn=false,chgL=null;const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 async function chargers(){if(CHG&&CHGR===REG)return CHG;const r=REG;try{const j=await (await fetch(BASE+'chargers.json')).json();if(REG===r){CHG=j.stations;CHGR=r}}catch(_){CHG=[];CHGR=r}return CHG}
 const CON={J1772:'J1772 (Level 2)',NEMA515:'120V outlet (5-15)',NEMA520:'120V outlet (5-20)',NEMA1450:'240V outlet (14-50)',TESLA:'Tesla',CHADEMO:'CHAdeMO',J1772COMBO:'CCS'};
 function chgPop(c){return `<div class="cpop"><b>${esc(c.name)}</b><br>${esc(c.addr)}<br>🔌 ${c.con.map(x=>esc(CON[x]||x)).join(', ')}${c.l2?` · ${c.l2} L2 port${c.l2>1?'s':''}`:''}${c.l1?` · ${c.l1} L1`:''}<br>🕒 ${esc(c.hours||'Hours not listed')}${c.network&&c.network!=='Non-Networked'?`<br>${esc(c.network)}`:''}${c.price?`<br>💲 ${esc(c.price)}`:''}<div class="cn">Most golf carts and LSVs need a J1772 adapter or a regular 120V outlet. Call ahead; listing from DOE AFDC${c.confirmed?`, confirmed ${esc(c.confirmed)}`:''}.</div></div>`}
 async function showChg(on){chgOn=on;$('cChg').classList.toggle('on',on);if(chgL){map.removeLayer(chgL);chgL=null}if(!on)return;const list=await chargers();if(!chgOn)return;
- chgL=L.layerGroup(list.map(c=>L.marker([c.lat,c.lon],{icon:L.divIcon({className:'',html:'<div class="chg">🔌</div>',iconSize:[22,22],iconAnchor:[11,11]})}).bindPopup(chgPop(c),{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)}))).addTo(map)}
+ chgL=L.layerGroup(list.map(c=>tapMarker(L.marker([c.lat,c.lon],{icon:L.divIcon({className:'tapm',html:'<div class="chg">🔌</div>',iconSize:[44,44],iconAnchor:[22,22]})}).bindPopup(chgPop(c),{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)})))).addTo(map)}
 window.showChg=showChg;$('cChg').onclick=()=>showChg(!chgOn);
 function nearestChg(ll){if(!CHG||!ll)return null;let b=null,bd=1e18;for(const c of CHG){const d=map.distance(ll,[c.lat,c.lon]);if(d<bd){bd=d;b=c}}return b&&{c:b,mi:bd/1609.34}}
 function setMode(m){MODE=m;try{localStorage.setItem('gcm-mode',m)}catch(_){}setRule();if(!D)return;adj={};nodes={};fast=new Set();fnode=new Set();cnode=new Set();buildGraph(0);shown={};layer.clearLayers();refresh();if(start&&end)route()}
@@ -221,7 +233,7 @@ window.setMode=setMode;
 $('cMode').onclick=()=>setMode(MODE==='lsv'?'golf_cart':'lsv');
 $('city').onchange=e=>loadRegion(e.target.value);
 (async()=>{const q=new URLSearchParams(location.search).get('r');[REGIONS,RULES]=await Promise.all([fetch('data/regions.json').then(r=>r.json()),fetch('data/rules.json').then(r=>r.json())]);
- $('city').innerHTML=REGIONS.filter(r=>!r.hidden||r.id===q).map(r=>`<option value="${r.id}">${r.short}${r.beta?' (beta)':''}</option>`).join('');
+ $('city').innerHTML=REGIONS.filter(r=>!r.hidden||r.id===q).map(r=>`<option value="${r.id}">${r.short}${r.beta?' (Beta)':''}</option>`).join('');
  let saved=null;try{saved=localStorage.getItem('gcm-region')}catch(_){}
  let id=(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;
  if(!id&&navigator.permissions&&navigator.geolocation){try{const p=await navigator.permissions.query({name:'geolocation'});if(p.state==='granted'){const pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:4000,maximumAge:600000}));const r=regionAt(pos.coords.latitude,pos.coords.longitude);if(r)id=r.id}}catch(_){}}

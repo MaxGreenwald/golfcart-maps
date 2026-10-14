@@ -1,12 +1,14 @@
 """Back-to-back route UX tests on a mobile viewport: reset, field X/Escape, browse popups, swap with GPS, Mexico/inland rejection."""
 from playwright.sync_api import sync_playwright
+import os
+URL=os.environ.get("URL","http://localhost:8765/")
 fails=[]
 def ck(name,cond,extra=""):
     print(("PASS " if cond else "FAIL ")+name,extra); cond or fails.append(name)
 with sync_playwright() as p:
     b=p.chromium.launch();ctx=b.new_context(**p.devices["iPhone 13"],geolocation={"latitude":32.8506,"longitude":-117.2717},permissions=["geolocation"]);pg=ctx.new_page()
     pg.on("pageerror",lambda e:fails.append("js error "+str(e)))
-    pg.goto("http://localhost:8765/");pg.wait_for_function("window.ready===true",timeout=120000);pg.wait_for_timeout(500)
+    pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000);pg.wait_for_timeout(500)
     S=lambda:pg.evaluate("getState()")
     def tap_ll(lat,lng):
         pt=pg.evaluate(f"(()=>{{const p=map.latLngToContainerPoint([{lat},{lng}]);return [p.x,p.y]}})()");pg.mouse.click(*pt);pg.wait_for_timeout(300)

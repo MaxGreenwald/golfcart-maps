@@ -1,8 +1,10 @@
 from playwright.sync_api import sync_playwright
+import os
+URL=os.environ.get("URL","http://localhost:8765/")
 R={"cove_windansea":([32.8506,-117.2717],[32.8305,-117.2805]),"delmar15_solana":([32.9598,-117.2655],[32.9932,-117.2713])}
 with sync_playwright() as p:
     b=p.chromium.launch();ctx=b.new_context(**p.devices["iPhone 13"]);pg=ctx.new_page()
-    pg.goto("http://localhost:8765/");pg.wait_for_function("window.ready===true",timeout=120000)
+    pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000)
     pg.wait_for_timeout(800);print("initial snap",pg.evaluate("getSnap()"));pg.screenshot(path="/workspace/golfcart-maps/screenshot-open.png")
     cdp=ctx.new_cdp_session(pg)
     def drag(y0,y1):
@@ -24,7 +26,7 @@ with sync_playwright() as p:
 # geolocation test
 with sync_playwright() as p:
     b=p.chromium.launch();ctx=b.new_context(**p.devices["iPhone 13"],geolocation={"latitude":32.8471,"longitude":-117.2742},permissions=["geolocation"]);pg=ctx.new_page()
-    pg.goto("http://localhost:8765/");pg.wait_for_function("window.ready===true",timeout=120000);pg.wait_for_timeout(500)
+    pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000);pg.wait_for_timeout(500)
     print("loc fab visible",pg.is_visible("#loc"),"prompt",pg.is_visible("#showloc"))
     pg.click("#showloc");pg.wait_for_timeout(2500)
     pg.mouse.click(150,250);pg.wait_for_timeout(2500);print("title",pg.inner_text("#title"))

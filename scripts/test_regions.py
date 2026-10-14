@@ -8,7 +8,7 @@ with sync_playwright() as p:
     b=p.chromium.launch()
     ctx=b.new_context(**p.devices["iPhone 13"]);pg=ctx.new_page();pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000)
     ck("default region sd",pg.evaluate("REG.id")=="sd")
-    ck("hilton head hidden from picker",pg.evaluate("[...document.querySelectorAll('#city option')].map(o=>o.value).join()")=="sd,villages,ptc")
+    ck("picker shows only sd,villages",pg.evaluate("[...document.querySelectorAll('#city option')].map(o=>o.value).join()")=="sd,villages")
     pg.select_option("#city","villages");pg.wait_for_function("window.ready===true&&REG.id==='villages'",timeout=120000);pg.wait_for_timeout(2500)
     ck("picker switched to villages",pg.evaluate("REG.id")=="villages")
     pg.screenshot(path=f"{OUT}/picker-villages-mobile.png")

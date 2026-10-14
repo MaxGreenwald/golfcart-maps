@@ -1,7 +1,9 @@
 from playwright.sync_api import sync_playwright
+import os
+URL=os.environ.get("URL","http://localhost:8765/")
 with sync_playwright() as p:
     b=p.webkit.launch();ctx=b.new_context(**p.devices["iPhone 13"]);pg=ctx.new_page()
-    pg.goto("http://localhost:8765/");pg.wait_for_function("window.ready===true",timeout=120000);pg.wait_for_timeout(800)
+    pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000);pg.wait_for_timeout(800)
     vis=lambda:pg.evaluate("Math.round((innerHeight-document.getElementById('sheet').getBoundingClientRect().top)/innerHeight*100)")
     print("load",pg.evaluate("getSnap()"),vis(),"% visible")
     pg.screenshot(path="/workspace/golfcart-maps/screenshot-open.png")
@@ -15,7 +17,7 @@ with sync_playwright() as p:
     drag(-150);print("swipe up",pg.evaluate("getSnap()"),vis())
     pg.tap("#chev");pg.wait_for_timeout(400);print("chevron",pg.evaluate("getSnap()"),vis())
     pg.tap(".grab");pg.wait_for_timeout(400);print("tap handle",pg.evaluate("getSnap()"),vis())
-    pg.tap("#map",position={"x":200,"y":200});pg.wait_for_timeout(400);print("tap map",pg.evaluate("getSnap()"),vis())
+    my=pg.evaluate("Math.round((Math.max($('top').getBoundingClientRect().bottom,$('chips').getBoundingClientRect().bottom,($('rnote')||$('top')).getBoundingClientRect().bottom)+$('sheet').getBoundingClientRect().top)/2)");pg.tap("#map",position={"x":200,"y":my});pg.wait_for_timeout(400);print("tap map",pg.evaluate("getSnap()"),vis())
     print(pg.evaluate("testRoute([32.8506,-117.2717],[32.8305,-117.2805])"),"after route",pg.evaluate("getSnap()"),vis())
     pg.evaluate("map.fitBounds([[32.826,-117.29],[32.853,-117.262]]);0");pg.wait_for_timeout(4000)
     pg.screenshot(path="/workspace/golfcart-maps/screenshot.png");b.close()
