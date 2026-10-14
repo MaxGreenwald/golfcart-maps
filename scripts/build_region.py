@@ -127,6 +127,7 @@ for wi, w in enumerate(wl):
         ca = CFG.get("cart_allow_names")
         if ca and re.search(ca["names"], t.get("name", "")) and ca["bbox"][0] <= mlat <= ca["bbox"][2] and ca["bbox"][1] <= mlon <= ca["bbox"][3]: cflag = 2
         if wi in WW: cflag = WW[wi]
+        if src == "verified" and t.get("golf_cart") in ("yes", "designated") and s <= 30 and cflag != 1: cflag = 2   # verified-speed cart-lane road
         if t.get("golf_cart") == "no": cflag = 1
     code = {"cartpath": "c", "designated": "d"}.get(src, src[0])
     for sg in segs:

@@ -40,3 +40,18 @@ Startup = regions+rules (~3 KB) + one region index+pois (SD ~260 KB gz, others �
 - **CR 25A / Dixie Ave:** blocked only north of Shiloh St (28.8652); south part + Cooke Dr, Shiloh St, Urick St, Myrtle Lake Ave, Pine Ridge Dairy Rd, Cutoff Rd allowed (Fruitland Park ordinance).
 - No manual path/tunnel connections were needed for the test route; OSM path network connected fine.
 - Tests: test.py identical to master, test_regress 12/31 identical, test_ui ALL PASS, test_regions ALL PASS (new: detour <3.5 mi, both crossings, Dixie south allowed / north blocked).
+
+## Update 2026-10-13 (~11:55 PM PT): Villages source verification
+**Official/primary sources checked**
+- Sumter Co. Code §17-3 (golf carts only on roads designated by BOCC resolution / self-contained retirement community): https://www.sumtercountyfl.gov/AgendaCenter/ViewFile/Item/26701?fileID=65656 — the Villages resolution road lists are NOT published online.
+- VCDD "Golf Car Rules of the Road": carts prohibited on roads posted 35 mph or more; use neighborhood streets, marked lanes, MM paths: https://www.districtgov.org/wp-content/uploads/2024/10/Golf-Car-Rules-of-the-Road.pdf
+- VCDD Multi-Modal Path memo (Stone & Gerken, 2025, posted 2026-02): golf carts AND LSVs allowed on MM paths (LSV-on-path rule now verified): https://www.districtgov.org/wp-content/uploads/2026/02/Multi-Modal-Path-Memo.pdf ; tunnel heights: https://www.districtgov.org/wp-content/uploads/2024/05/Tunnel-Website-Sheet.pdf
+- Sumter Co. traffic study (2023): Morse Blvd CR 466 → US 441 posted 30 mph with cart lanes: https://sumterclerk.granicus.com/DocumentViewer.php?file=sumterclerk_37fdf0f7877075d25e62ce4dbafc19b7.pdf (also VCDD Morse Blvd Phase 1 memo).
+- Marion Co. Ord. 03-26, Wildwood O2026-28 map, Fruitland Park list, Lady Lake §17-3 (unchanged, see villages.json).
+**Discrepancies fixed**
+- Removed the "≤35 if OSM golf_cart=yes" exception (contradicted VCDD 35+ prohibition). ≤35 now only for ordinance-listed roads (Wildwood PERMITTED, Fruitland Park list).
+- Historic Morse Blvd (CR 466–US 441) set to 30 mph (OSM said 35) → golf carts allowed via verified override; Villages test route back to 2.48 mi.
+- Rainey Trail set to 35 (OSM said 30; thevillagesflorida: posted 35, LSVs OK, carts cross only Lynnhaven–Miona Shores).
+- Now blocked for carts: OSM cart-tagged pieces posted 35 (Hillsborough/Stillwater Trail, parts of Odell Circle, Paige Pl, Pinellas Pl) — confirm on the ground.
+**Speed spot-check:** Morse south of 466, Buena Vista, El Camino Real = 35 (matches VHA brochure "arterials usually 35"); CR 466 parts 45; Warm Springs Ave 45. FDOT state roads (US 27/441, US 301, SR 44) remain fully banned for carts — no FDOT cart designation found.
+Tests: test_regions ALL PASS, test_ui ALL PASS, test_regress 12/31 unchanged. Shots: shots/villages-verified-*.png.
