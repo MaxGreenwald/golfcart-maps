@@ -1,0 +1,33 @@
+name: carplay-ios
+on:
+  workflow_dispatch:
+  push:
+    branches: [carplay]
+jobs:
+  ios-sim:
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 20}
+      - run: npm ci && npx cap sync ios
+      # 1) Compile check exactly like a CI build with no Apple signing at all
+      - name: Unsigned simulator build
+        run: |
+          set -o pipefail
+          xcodebuild -workspace ios/App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tail -n 80
+      # 2) Ad-hoc ("Sign to Run Locally") build so the simulator sees the carplay-maps entitlement
+      - name: Ad-hoc signed simulator build
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          xcodebuild -workspace ios/App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= build | tail -n 40
+      - name: Run in simulator + screenshots (phone + CarPlay external display)
+        continue-on-error: true
+        run: bash scripts/ci_carplay_shots.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: carplay-shots, path: shots-ci/, if-no-files-found: warn}
