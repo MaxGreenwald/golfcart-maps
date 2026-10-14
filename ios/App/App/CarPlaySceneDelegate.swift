@@ -112,7 +112,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         mapTemplate.mapDelegate = self
         mapTemplate.automaticallyHidesNavigationBar = false
         refreshButtons()
-        interfaceController.setRootTemplate(mapTemplate, animated: false, completion: nil)
+        interfaceController.setRootTemplate(mapTemplate, animated: false, completion: { _, _ in })
         loc.delegate = self
         loc.requestWhenInUseAuthorization()
         loc.startUpdatingLocation()
@@ -207,7 +207,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     func openSearch() {
         let t = CPSearchTemplate()
         t.delegate = self
-        interface?.pushTemplate(t, animated: true, completion: nil)
+        interface?.pushTemplate(t, animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } })
     }
     func searchTemplate(_ searchTemplate: CPSearchTemplate, updatedSearchText searchText: String, completionHandler: @escaping ([CPListItem]) -> Void) {
         guard searchText.count >= 2 else { completionHandler([]); return }
@@ -251,22 +251,22 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         }
         let t = CPListTemplate(title: "Recent", sections: [CPListSection(items: items)])
         t.emptyViewTitleVariants = ["No recent destinations"]
-        interface?.pushTemplate(t, animated: true, completion: nil)
+        interface?.pushTemplate(t, animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } })
     }
 
     // Trip preview
     func choose(_ d: [String: Any]) {
         guard let name = d["name"] as? String, let lat = d["lat"] as? Double, let lon = d["lon"] as? Double else { return }
         recents = [d] + recents.filter { ($0["name"] as? String) != name }
-        interface?.popToRootTemplate(animated: true, completion: nil)
+        if (interface?.templates.count ?? 0) > 1 { interface?.popToRootTemplate(animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } }) }
         guard let from = loc.location?.coordinate ?? Optional(mapVC.map.centerCoordinate) else { return }
         let to = CLLocationCoordinate2D(latitude: lat, longitude: lon)
         GCMBridge.shared.call("plan(f,t,m,false)", ["f": ["lat": from.latitude, "lon": from.longitude], "t": ["lat": lat, "lon": lon], "m": mode]) { [weak self] any in
             guard let self = self else { return }
             guard let p = GCMPlan(any) else {
                 let reason = (any as? [String: Any])?["reason"] as? String ?? "No legal route found."
-                let alert = CPAlertTemplate(titleVariants: ["No legal route", reason], actions: [CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in self?.interface?.dismissTemplate(animated: true, completion: nil) }])
-                self.interface?.presentTemplate(alert, animated: true, completion: nil)
+                let alert = CPAlertTemplate(titleVariants: ["No legal route", reason], actions: [CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in self?.interface?.dismissTemplate(animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } }) }])
+                self.interface?.presentTemplate(alert, animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } })
                 return
             }
             self.plan = p

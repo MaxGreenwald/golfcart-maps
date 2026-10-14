@@ -27,6 +27,7 @@ jobs:
             -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= build | tail -n 40
       - name: Run in simulator + screenshots (phone + CarPlay external display)
         continue-on-error: true
+        env: {CARPLAY_TAPS: "97,212"}
         run: bash scripts/ci_carplay_shots.sh
       - uses: actions/upload-artifact@v4
         if: always()
