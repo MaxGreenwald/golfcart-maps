@@ -1,8 +1,10 @@
 from playwright.sync_api import sync_playwright
+import os
+URL=os.environ.get("URL","http://localhost:8765/")
 with sync_playwright() as p:
     b=p.chromium.launch()
     for name,kw in [("mobile",p.devices["iPhone 13"]),("desktop",{"viewport":{"width":1440,"height":900}})]:
-        pg=b.new_page(**kw);pg.goto("http://localhost:8765/");pg.wait_for_function("window.ready===true",timeout=120000);pg.wait_for_timeout(800)
+        pg=b.new_page(**kw);pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000);pg.wait_for_timeout(800)
         r=lambda s:pg.evaluate(f"(()=>{{const r=document.querySelector('{s}').getBoundingClientRect();return [Math.round(r.left),Math.round(r.top),Math.round(r.width),Math.round(r.height)]}})()")
         vis=lambda:pg.evaluate("innerHeight-document.getElementById('sheet').getBoundingClientRect().top")
         print(name,"snap",pg.evaluate("getSnap()"),"sheet",r('#sheet'),"visible",vis(),"top",r('#top'),"loc",r('#loc'),"details open",pg.evaluate("more.open"))

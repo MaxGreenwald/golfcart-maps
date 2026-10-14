@@ -140,13 +140,13 @@ let me,meAcc,myLL=null,watching=false;
 function locate(){if(!navigator.geolocation){$('sub').textContent='Location not supported on this device.';return}
  $('showloc').textContent='📍 Finding you…';let first=true;
  const ok=p=>{myLL=L.latLng(p.coords.latitude,p.coords.longitude);const acc=p.coords.accuracy;
-  if(!me){meAcc=L.circle(myLL,{radius:acc,color:'#1d6fe0',weight:1,fillColor:'#1d6fe0',fillOpacity:.12,interactive:false,renderer}).addTo(map);me=L.circleMarker(myLL,{radius:8,color:'#fff',fillColor:'#1d6fe0',fillOpacity:1,weight:3,interactive:false,renderer}).addTo(map)}
+  if(!me){meAcc=L.circle(myLL,{radius:acc,color:'#1d6fe0',weight:1,fillColor:'#1d6fe0',fillOpacity:.12,interactive:false,renderer}).addTo(map);me=meMarker(myLL)}
   else{me.setLatLng(myLL);meAcc.setLatLng(myLL).setRadius(acc)}
   if(first){first=false;map.setView(myLL,16);$('showloc').style.display='none';if(to&&to.me){sync();if(start&&end)route()}else setField('from',{me:true})}else if((from&&from.me)||(to&&to.me)){sync()}};
  const err=e=>{$('showloc').textContent='📍 Show my location';$('sub').textContent=e.code===1?'Location is blocked. Turn it on in Settings › Safari › Location.':'Couldn’t find you: '+e.message};
  if(watching){navigator.geolocation.getCurrentPosition(p=>{first=true;ok(p)},err,{enableHighAccuracy:true});return}
  watching=true;navigator.geolocation.watchPosition(ok,err,{enableHighAccuracy:true,maximumAge:5000})}
-$('loc').onclick=locate;$('showloc').onclick=locate;$('useme').onmousedown=e=>e.preventDefault();$('useme').onclick=()=>{$('sugg').style.display='none';if(myLL)setField(active||'from',{me:true});else{active=null;locate()}};window.fakeLocate=(lat,lng)=>{myLL=L.latLng(lat,lng);if(!me){me=L.circleMarker(myLL,{radius:8,color:'#fff',fillColor:'#1d6fe0',fillOpacity:1,weight:3,interactive:false,renderer}).addTo(map)}setField('from',{me:true})};
+$('loc').onclick=locate;$('showloc').onclick=locate;$('useme').onmousedown=e=>e.preventDefault();$('useme').onclick=()=>{$('sugg').style.display='none';if(myLL)setField(active||'from',{me:true});else{active=null;locate()}};window.fakeLocate=(lat,lng)=>{myLL=L.latLng(lat,lng);if(!me){me=meMarker(myLL)}setField('from',{me:true})};
 // ---- fast search: local index (instant) + Photon autocomplete + Nominatim fallback ----
 const qcache=new Map();let POIS=[],nameAt=null,qseq=0,tmr;
 fetch('data/pois.json').then(r=>r.ok?r.json():[]).then(j=>POIS=j).catch(()=>{});
@@ -228,12 +228,24 @@ window.buildReport=buildReport;
 $('rpCancel').onclick=()=>{$('rpt').style.display='none'};
 $('rpSend').onclick=()=>{const r=buildReport(window._rseg,$('rpIssue').value,$('rpSpeed').value,$('rpNotes').value);window.lastReport=r;$('rpt').style.display='none';if(!window.NO_MAILTO)location.href=r.url};
 $('rpGen').onclick=e=>{e.preventDefault();reportRoad({road:'(general problem)',ll:map.getCenter()})};
+
+// Tappable markers: 44px hit area, cursor/touch-action set, and an explicit pointerup handler that opens the popup
+// (iOS Safari can drop Leaflet's delegated click on small divIcons over the canvas renderer).
+function tapMarker(m){m.on('add',()=>{const el=m.getElement();if(!el||el._tap)return;el._tap=1;let t0=null;
+ L.DomEvent.on(el,'pointerdown',e=>{t0=[e.clientX,e.clientY];L.DomEvent.stopPropagation(e)});
+ L.DomEvent.on(el,'pointerup',e=>{L.DomEvent.stopPropagation(e);if(t0&&Math.hypot(e.clientX-t0[0],e.clientY-t0[1])<12){m._tapAt=Date.now();m.openPopup()}t0=null});
+ L.DomEvent.on(el,'click',e=>{L.DomEvent.stop(e);if(Date.now()-(m._tapAt||0)>600)m.openPopup()})});
+ m.off('click',m._openPopup,m);return m}
+window.tapMarker=tapMarker;
+const meIcon=L.divIcon({className:'tapm',html:'<div class="me-dot"></div>',iconSize:[44,44],iconAnchor:[22,22]});
+function meMarker(ll){return addM(tapMarker(L.marker(ll,{icon:meIcon,zIndexOffset:1000,keyboard:false}).bindPopup(()=>'<div class="cpop"><b>📍 You are here</b><div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="map.closePopup();setField(\'from\',{me:true})">Start here</button><button class="pbtn" onclick="map.closePopup();setField(\'to\',{me:true})">Go here</button></div><button class="pbtn rpt" onclick="window._rseg={road:\'(near my location)\',ll:myLL};reportRoad()">🚩 Report a problem here</button></div>',{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)})))}
+const addM=m=>m.addTo(map);
 // ---- public EV chargers (DOE AFDC, Level 1/2 only), loaded lazily per region ----
 let CHG=null,CHGR=null,chgOn=false,chgL=null;const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 async function chargers(){if(CHG&&CHGR===REG)return CHG;const r=REG;try{const j=await (await fetch(BASE+'chargers.json')).json();if(REG===r){CHG=j.stations;CHGR=r}}catch(_){CHG=[];CHGR=r}return CHG}
 const CON={J1772:'J1772 (Level 2)',NEMA515:'120V outlet (5-15)',NEMA520:'120V outlet (5-20)',NEMA1450:'240V outlet (14-50)',TESLA:'Tesla',CHADEMO:'CHAdeMO',J1772COMBO:'CCS'};
 function chgPop(c){return `<div class="cpop"><b>${esc(c.name)}</b><br>${esc(c.addr)}<br>🔌 ${c.con.map(x=>esc(CON[x]||x)).join(', ')}${c.l2?` · ${c.l2} L2 port${c.l2>1?'s':''}`:''}${c.l1?` · ${c.l1} L1`:''}<br>🕒 ${esc(c.hours||'Hours not listed')}${c.network&&c.network!=='Non-Networked'?`<br>${esc(c.network)}`:''}${c.price?`<br>💲 ${esc(c.price)}`:''}<div class="cn">Most golf carts and LSVs need a J1772 adapter or a regular 120V outlet. Call ahead; listing from DOE AFDC${c.confirmed?`, confirmed ${esc(c.confirmed)}`:''}.</div></div>`}
 async function showChg(on){chgOn=on;$('cChg').classList.toggle('on',on);if(chgL){map.removeLayer(chgL);chgL=null}if(!on)return;const list=await chargers();if(!chgOn)return;
- chgL=L.layerGroup(list.map(c=>L.marker([c.lat,c.lon],{icon:L.divIcon({className:'',html:'<div class="chg">🔌</div>',iconSize:[22,22],iconAnchor:[11,11]})}).bindPopup(chgPop(c),{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)}))).addTo(map)}
+ chgL=L.layerGroup(list.map(c=>tapMarker(L.marker([c.lat,c.lon],{icon:L.divIcon({className:'tapm',html:'<div class="chg">🔌</div>',iconSize:[44,44],iconAnchor:[22,22]})}).bindPopup(chgPop(c),{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)})))).addTo(map)}
 window.showChg=showChg;$('cChg').onclick=()=>showChg(!chgOn);
 function nearestChg(ll){if(!CHG||!ll)return null;let b=null,bd=1e18;for(const c of CHG){const d=map.distance(ll,[c.lat,c.lon]);if(d<bd){bd=d;b=c}}return b&&{c:b,mi:bd/1609.34}}
