@@ -4,7 +4,7 @@ const renderer=L.canvas({tolerance:8});
 const $=id=>document.getElementById(id);
 const RISKY_MAX=91.44; // 300 ft
 let REGIONS=[],RULES={},REG=null,MODE=localStorage.getItem('gcm-mode')||'lsv',RULE={max_posted:35,cross:true},BASE='data/sd/';
-let D,risky=false,layer,nodes={},adj={},start=null,end=null,routeG=null,mk=[];
+let lastLegs=null,D,risky=false,layer,nodes={},adj={},start=null,end=null,routeG=null,mk=[];
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden (posted >=40 or untagged major)
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden. Cart paths ('c') always ok; designated ('d') ok in designated-only cart mode.
 const desig=s=>s[3]==='c'||s[3]==='d'||(RULE.assume&&RULE.assume.includes(s[1])&&s[2]!=null&&s[2]<=RULE.max_posted);
@@ -26,8 +26,8 @@ async function ensure(s,w,n,e){await READY;const ks=tilesIn(s,w,n,e).filter(k=>!
 async function onMove(){if(!D)return;const b=map.getBounds().pad(0.1);const n0=loaded.size;if(map.getZoom()>=11)await ensure(b.getSouth(),b.getWest(),b.getNorth(),b.getEast());if(loaded.size!==n0){shown={};layer.clearLayers()}refresh()}
 map.on('moveend',onMove);
 function mkLine(s){const c0=cls(s),c=s[3]==='c'?2:c0;const pl=L.polyline(s[7].map(p=>[p[1],p[0]]),{...STY[c],renderer});
- pl.on('click',e=>{L.DomEvent.stopPropagation(e);if(active){setPt(e.latlng);return}const sp=s[2];window._pll=e.latlng;
-  L.popup().setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[9]===3&&MODE==='golf_cart'?' 🚦 designated golf cart crossing':s[9]===2&&MODE==='golf_cart'?' ✅ golf carts allowed (local ordinance)':''}${s[3]==='c'?' 🛺 cart path':s[3]==='d'?' ✅ designated cart road':s[3]==='t'?' (OSM)':s[3]==='v'?' ✅ verified (local source)':s[3]==='m'?' 📷 posted sign (Mapillary)':' (assumed)'}${(s[3]==='v'||s[3]==='m')&&D.sources&&D.sources[s[8]]?`<br><a href="${D.sources[s[8]][0]}" target="_blank" rel="noopener">Source: ${D.sources[s[8]][1]}</a>`:''}<br><b style="color:${c===3?'#e5484d':'#12a150'}">${c===3?(s[9]===1&&MODE==='golf_cart'?'Avoid: golf carts not allowed (posted)':RULE.designated_only&&!(s[2]==null||s[2]>RULE.max_posted)?'Avoid: not a designated golf cart road':`Avoid: ${RULE.max_posted+5}+ mph or major road`):'OK for '+modeName()}</b><br>Segment length: ${(s._len??len(s[7]))<160?ft(s._len??len(s[7])):mi(s._len??len(s[7]))}<div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="popSet('from')">Start here</button><button class="pbtn" onclick="popSet('to')">Go here</button></div><button class="pbtn rpt" onclick="reportRoad()">🚩 Report this road</button>`).openOn(map);window._rseg={road:D.names[s[0]]||'(unnamed road)',hw:s[1],sp:sp==null||sp==99?'none recorded':sp+' mph',src:{t:'OSM tag',v:'verified local source',m:'Mapillary sign',c:'cart path',d:'designated cart road'}[s[3]]||'assumed',status:c===3?'Avoid':'OK for '+modeName(),ll:e.latlng}});return pl}
+ pl.on('click',e=>{L.DomEvent.stopPropagation(e);if(active){setPt(e.latlng);return}const sp=s[2];window._pll=e.latlng;window._pname=D.names[s[0]]||'Saved spot';
+  L.popup().setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[9]===3&&MODE==='golf_cart'?' 🚦 designated golf cart crossing':s[9]===2&&MODE==='golf_cart'?' ✅ golf carts allowed (local ordinance)':''}${s[3]==='c'?' 🛺 cart path':s[3]==='d'?' ✅ designated cart road':s[3]==='t'?' (OSM)':s[3]==='v'?' ✅ verified (local source)':s[3]==='m'?' 📷 posted sign (Mapillary)':' (assumed)'}${(s[3]==='v'||s[3]==='m')&&D.sources&&D.sources[s[8]]?`<br><a href="${D.sources[s[8]][0]}" target="_blank" rel="noopener">Source: ${D.sources[s[8]][1]}</a>`:''}<br><b style="color:${c===3?'#e5484d':'#12a150'}">${c===3?(s[9]===1&&MODE==='golf_cart'?'Avoid: golf carts not allowed (posted)':RULE.designated_only&&!(s[2]==null||s[2]>RULE.max_posted)?'Avoid: not a designated golf cart road':`Avoid: ${RULE.max_posted+5}+ mph or major road`):'OK for '+modeName()}</b><br>Segment length: ${(s._len??len(s[7]))<160?ft(s._len??len(s[7])):mi(s._len??len(s[7]))}<div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="popSet('from')">Start here</button><button class="pbtn" onclick="popSet('to')">Go here</button></div><button class="pbtn" style="width:100%;margin-top:6px" onclick="savePlaceAt(window._pll,window._pname)">☆ Save this spot</button><button class="pbtn rpt" onclick="reportRoad()">🚩 Report this road</button>`).openOn(map);window._rseg={road:D.names[s[0]]||'(unnamed road)',hw:s[1],sp:sp==null||sp==99?'none recorded':sp+' mph',src:{t:'OSM tag',v:'verified local source',m:'Mapillary sign',c:'cart path',d:'designated cart road'}[s[3]]||'assumed',status:c===3?'Avoid':'OK for '+modeName(),ll:e.latlng}});return pl}
 function hav(a,b){const R=6371000,r=Math.PI/180,dl=(b[1]-a[1])*r,dn=(b[0]-a[0])*r,x=Math.sin(dl/2)**2+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
 function len(p){let l=0;for(let i=1;i<p.length;i++)l+=hav(p[i-1],p[i]);return l}
 let fast=new Set(),fnode=new Set(),cnode=new Set();
@@ -66,7 +66,7 @@ window.popSet=f=>{if(inMX(window._pll))return;map.closePopup();setField(f,{ll:wi
 const ft=m=>Math.round(m*3.281)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
 let routing=false;async function route(){$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
  await new Promise(r=>setTimeout(r,0));let parts=null;if(a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
- if(!parts){$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even allowing ≤300 ft stretches on faster roads, there’s no way through.':(RULE.designated_only?'Every way there leaves the cart paths/designated roads.':`Every way there uses a ${RULE.max_posted+5}+ mph road.`)+' Try <b>⚠️ Risky</b> mode to see short-stretch options.';$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
+ if(!parts){lastLegs=null;$('go').style.display='none';$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even allowing ≤300 ft stretches on faster roads, there’s no way through.':(RULE.designated_only?'Every way there leaves the cart paths/designated roads.':`Every way there uses a ${RULE.max_posted+5}+ mph road.`)+' Try <b>⚠️ Risky</b> mode to see short-stretch options.';$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
  const r=summarize(parts);routeG=L.layerGroup().addTo(map);
  const all=[];r.legs.forEach(l=>all.push(...l.p));
  L.polyline(all.map(p=>[p[1],p[0]]),{color:'#fff',weight:10,opacity:.9,renderer,interactive:false}).addTo(routeG);
@@ -76,7 +76,7 @@ let routing=false;async function route(){$('title').innerHTML='<span class="spin
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
  $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:(RULE.designated_only?'All on cart paths & designated roads 🌴':`All on roads ≤${RULE.max_posted} mph 🌴`)+ruleNotes()+(da>150||db>150?' · snapped to nearest legal road':'');
  r.back=await backDist(a,b,a2,b2,r.dist);renderRange(r);$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}</span></div>`).join('');
- setSnap('half');focusStart();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};return r}
+ setSnap('half');focusStart();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};window._lastDetail=r;lastLegs=navLegs(r);$('go').style.display='';updStar();return r}
 // return trip: one-way rules can differ, so route B->A; fall back to same distance
 async function backDist(a,b,a2,b2,d){if(a==null||b==null)return d;for(const [x,y] of [[b,a],[b2,a],[b,a2],[b2,a2]]){const p=astar(x,y);if(p)return summarize(p).dist}return d}
 let lastR=null;function renderRange(r){if(r)lastR=r;r=lastR;if(!r)return;const R=GCMRange,s=R.load(),rng=R.rangeFor(MODE,s),bat=s.battery==null?100:s.battery;
@@ -112,7 +112,8 @@ function sync(){start=P(from);end=P(to);mk.forEach(m=>map.removeLayer(m));mk=[];
  $('help').textContent=active==='from'?'Tip: tap the map to drop your start pin':active==='to'||(from&&!to)?'Tip: tap the map to drop a pin for your destination':(from&&to)?'Tip: tap any road for its speed & length':'Tip: tap the map twice (start, then destination), or tap a road for its speed & length';
  if(routeG&&!(start&&end)){map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('range').style.display='none'}
  if(!(from||to)){$('title').innerHTML='🏖️ Golf Cart Maps';$('sub').innerHTML='Tap a road to see its speed limit and length, or plan a route above.'}
- else if(!(start&&end)){$('title').innerHTML=from?'📍 Start set':'🏖️ Destination set';$('sub').textContent=from?'Now pick where you’re headed.':'Now pick a start, or hit 📍 to start from you.'}}
+ if(!routeG&&$('go'))$('go').style.display='none';updStar();
+ if(!(from||to)){}else if(!(start&&end)){$('title').innerHTML=from?'📍 Start set':'🏖️ Destination set';$('sub').textContent=from?'Now pick where you’re headed.':'Now pick a start, or hit 📍 to start from you.'}}
 function setField(f,pt){if(f==='from')from=pt;else to=pt;active=null;sync();if(start&&end)route();window.state=st()}
 const st=()=>({from:from&&{label:$('qf').value,me:!!from.me,lat:P(from)&&P(from).lat},to:to&&{label:$('q').value,me:!!to.me,lat:P(to)&&P(to).lat},routed:!!routeG});
 window.getState=st;
@@ -123,13 +124,14 @@ function setPt(ll,label){if(inMX(ll)){$('help').textContent='⚠️ That spot is
 function clearField(f){if(f==='from')from=null;else to=null;active=f;sync();window.state=st()}
 function clearR(){from=to=null;active=null;if(routeG)map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('range').style.display='none';map.closePopup();sync();window.state=st()}
 window.resetRoute=clearR;
-map.on('click',e=>{if(!setPt(e.latlng))map.closePopup()});
+map.on('click',e=>{$('sugg').style.display='none';if(!setPt(e.latlng))map.closePopup()});
 // long-press (mobile) / right-click: report here
-map.on('contextmenu',e=>{window._rseg={road:'(not a specific road)',ll:e.latlng};L.popup().setLatLng(e.latlng).setContent('<button class="pbtn rpt" onclick="reportRoad()">🚩 Report a problem here</button>').openOn(map)});$('clr').onclick=clearR;$('reset').onclick=clearR;
+map.on('contextmenu',e=>{window._pll=e.latlng;window._rseg={road:'(not a specific road)',ll:e.latlng};L.popup().setLatLng(e.latlng).setContent('<button class="pbtn" style="width:100%" onclick="popSet(\'to\')">Go here</button><button class="pbtn" style="width:100%;margin-top:6px" onclick="savePlaceAt(window._pll)">☆ Save place</button><button class="pbtn rpt" onclick="reportRoad()">🚩 Report a problem here</button>').openOn(map)});$('clr').onclick=clearR;$('reset').onclick=clearR;
 function swap(){[from,to]=[to,from];active=null;sync();if(start&&end)route();else if(routeG){map.removeLayer(routeG);routeG=null}window.state=st()}
 $('swap').onclick=swap;$('swap2').onclick=swap;window.swapRoute=swap;
 for(const [f,id,x] of [['from','qf','xf'],['to','q','xt']]){
- $(id).addEventListener('focus',()=>{active=f;$(id).select();sync();curField=f});
+ $(id).addEventListener('focus',()=>{active=f;$(id).select();sync();curField=f;showSaved()});
+ $(id).addEventListener('blur',()=>setTimeout(()=>{const a=document.activeElement;if(!a||(a.id!=='q'&&a.id!=='qf'))$('sugg').style.display='none'},200));
  $(id).addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();clearField(f);$(id).value='';$('sugg').style.display='none'}});
  $(x).onclick=e=>{e.preventDefault();clearField(f);$('sugg').style.display='none'}}
 let curField='to';
@@ -165,10 +167,10 @@ async function remote(q){const key=(REG?REG.id:'')+'|'+norm(q);if(qcache.has(key
  catch(e){try{const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=5&bounded=1&viewbox=${b[1]},${b[2]},${b[3]},${b[0]}&q=${encodeURIComponent(q)}`);const j=await r.json();res=j.map(x=>({name:x.display_name.split(',')[0],sub:x.display_name.split(',').slice(1,3).join(','),lat:+x.lat,lon:+x.lon}))}catch(_){}}
  qcache.set(key,res);return res}
 function showSugg(list){list=list.filter(x=>!inMX(L.latLng(x.lat,x.lon)));const sg=$('sugg');sg.innerHTML='';sg.style.display=list.length?'block':'none';
- list.forEach(x=>{const d=document.createElement('div');d.innerHTML=`<b>${x.name}</b><br><small style="color:#6b8592">${x.sub||''}</small>`;d.onclick=()=>pick(x);sg.appendChild(d)})}
-function pick(x){$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();const ll=L.latLng(x.lat,x.lon);map.setView(ll,16);active=curField;setPt(ll,x.name)}
+ list.forEach(x=>{const d=document.createElement('div');d.className='srow';const sv=REG&&GCMPlaces.find(REG.id,x.lat,x.lon);d.innerHTML=`<span class="sm"><b>${esc(x.name)}</b><br><small style="color:#6b8592">${esc(x.sub||'')}</small></span><button class="star${sv?' on':''}" aria-label="Save place">${sv?'★':'☆'}</button>`;d.onclick=()=>pick(x);d.querySelector('.star').onclick=e=>{e.stopPropagation();starToggle(x,e.currentTarget)};sg.appendChild(d)})}
+function pick(x){$('sugg').style.display='none';if(REG&&!x.saved)GCMPlaces.addRecent(REG.id,x);document.activeElement&&document.activeElement.blur();const ll=L.latLng(x.lat,x.lon);map.setView(ll,16);active=curField;setPt(ll,x.name)}
 const spin=v=>$('qspin').style.display=v?'inline-block':'none';
-const onq=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<2){$('sugg').style.display='none';spin(false);return}
+const onq=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<2){spin(false);showSaved();return}
  const loc=D?localMatches(v):[];showSugg(loc);
  if(v.length<3)return;spin(true);const my=++qseq;
  tmr=setTimeout(async()=>{const r=await remote(v);if(my!==qseq)return;spin(false);
@@ -261,3 +263,81 @@ L.DomEvent.disableClickPropagation(sheet);L.DomEvent.disableScrollPropagation(sh
 map.on('click',()=>{if(!routeG&&!from&&snap!=='collapsed')setSnap('collapsed')});
 addEventListener('resize',()=>{sizeSheet();setSnap(snap)});
 sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));
+
+// ---- turn-by-turn navigation (logic in nav.js; this is the phone UI + GPS/speech/wake lock glue) ----
+function navLegs(r){return r.legs.map(l=>({p:l.p,name:D.names[l.s[0]]||'',len:l.s._len,f:l.f,hw:l.s[1],sp:l.s[2],cart:l.s[3]==='c'}))}
+window.navLegs=navLegs;
+// plan a route between two LatLngs with the same legal-road rules, without touching the route UI
+async function planLegs(a,b){const P=0.03;await ensure(Math.min(a.lat,b.lat)-P,Math.min(a.lng,b.lng)-P,Math.max(a.lat,b.lat)+P,Math.max(a.lng,b.lng)+P);
+ const [x,,x2]=nearest(a),[y,,y2]=nearest(b);if(x==null||y==null)return null;for(const [u,v] of [[x,y],[x2,y],[x,y2],[x2,y2]]){if(u==null||v==null)continue;const p=astar(u,v);if(p)return navLegs(summarize(p))}return null}
+let NAV=null,navWatch=null,wake=null,navLine=null,navMk=null,muted=localStorage.getItem('gcm-mute')==='1',navFollow=true;
+const ARW={left:'⬅️',right:'➡️',slight_left:'↖️',slight_right:'↗️',straight:'⬆️',depart:'⬆️',uturn:'↩️',arrive:'🏁'};
+let voice=null;function pickVoice(){try{const vs=speechSynthesis.getVoices();voice=vs.find(v=>/^en[-_]US/i.test(v.lang)&&/samantha|google us|aria|jenny/i.test(v.name))||vs.find(v=>/^en[-_]US/i.test(v.lang))||null}catch(_){}}
+if(window.speechSynthesis){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function speak(t){window.navSaid=(window.navSaid||[]);window.navSaid.push(t);$('nvSay').textContent=t;if(muted||!window.speechSynthesis)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=1.02;if(voice)u.voice=voice;u.lang='en-US';speechSynthesis.speak(u)}catch(_){}}
+async function wakeOn(){try{if('wakeLock' in navigator&&document.visibilityState==='visible'){wake=await navigator.wakeLock.request('screen');wake.addEventListener&&wake.addEventListener('release',()=>{wake=null})}}catch(_){wake=null}}
+document.addEventListener('visibilitychange',()=>{if(NAV&&document.visibilityState==='visible'&&!wake)wakeOn()});
+function drawNavLine(legs){if(navLine)map.removeLayer(navLine);const pts=[];legs.forEach(l=>l.p.forEach(p=>pts.push([p[1],p[0]])));navLine=L.layerGroup([L.polyline(pts,{color:'#fff',weight:12,opacity:.9,renderer,interactive:false}),L.polyline(pts,{color:'#1d6fe0',weight:7,renderer,interactive:false})]).addTo(map)}
+function navUI(i){if(!NAV)return;const m=i.next;window.navInfo=i;
+ if(i.state==='rerouting'){$('nvArw').textContent='🔄';$('nvDist').textContent='Rerouting…';$('nvTxt').textContent='Finding a legal way from here';$('nvThen').textContent='';$('navui').classList.add('rr')}
+ else if(i.state==='off'){$('navui').classList.add('rr');$('nvArw').textContent='↩️';$('nvDist').textContent='Off route';$('nvTxt').textContent='Head back toward the blue line';$('nvThen').textContent=''}
+ else if(i.state==='arrived'){$('navui').classList.remove('rr');$('nvArw').textContent='🏁';$('nvDist').textContent='You’ve arrived';$('nvTxt').textContent=to&&!to.me?to.label:'Destination';$('nvThen').textContent='Enjoy the ride 🌴'}
+ else if(m){$('navui').classList.remove('rr');$('nvArw').textContent=ARW[m.type]||'⬆️';$('nvDist').textContent=GCMNav.showDist(i.toNext);$('nvTxt').textContent=m.type==='arrive'?'Arrive at destination':m.text;const t=i.then;$('nvThen').textContent=t&&m.type!=='arrive'&&t.at-m.at<160?'Then '+(ARW[t.type]||'')+' '+(t.type==='arrive'?'arrive':t.text.replace(/^Turn /,'').replace(/^Continue/,'continue')):''}
+ const min=Math.max(1,Math.round(i.remainingSec/60)),eta=new Date(Date.now()+i.remainingSec*1000);
+ $('nvRem').innerHTML=`<b>${min} min</b>${GCMNav.showDist(i.remaining)} · arrive ${eta.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}`}
+function onFix(f){if(!NAV)return;myLL=L.latLng(f.lat,f.lon);if(!navMk)navMk=L.circleMarker(myLL,{radius:9,color:'#fff',fillColor:'#1d6fe0',fillOpacity:1,weight:3,interactive:false,renderer}).addTo(map);else navMk.setLatLng(myLL);
+ if(navFollow)map.setView(myLL,Math.max(map.getZoom(),17),{animate:!window.NAV_NOANIM});NAV.update(f)}
+window.navFix=(lat,lon,t,speed)=>onFix({lat,lon,t:t??Date.now(),speed,acc:5});
+function startNav(){if(!lastLegs||!end)return;const dest=L.latLng(end.lat,end.lng);
+ // iOS: speech only plays if the first utterance starts inside a user gesture; NAV.start() speaks synchronously in this tap
+ if(window.speechSynthesis&&!muted){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}catch(_){}}
+ window.navSaid=[];document.body.classList.add('nav');$('navui').style.display='flex';$('sugg').style.display='none';map.closePopup();if(routeG)map.removeLayer(routeG);drawNavLine(lastLegs);
+ NAV=new GCMNav.Navigator(lastLegs,MODE,{say:speak,onUpdate:navUI,onArrive:()=>{setTimeout(()=>{if(NAV&&NAV.state==='arrived')endNav()},window.NAV_ARRIVE_MS??6000)},
+  reroute:async f=>{const legs=await planLegs(L.latLng(f.lat,f.lon),dest);if(legs)drawNavLine(legs);return legs}});
+ window.NAV=NAV;NAV.start();wakeOn();$('nvMute').textContent=muted?'🔇':'🔊';
+ if(navigator.geolocation&&!window.NAV_SIM)navWatch=navigator.geolocation.watchPosition(p=>onFix({lat:p.coords.latitude,lon:p.coords.longitude,t:p.timestamp||Date.now(),acc:p.coords.accuracy,speed:p.coords.speed}),e=>{if(e.code===1)speak('Location is off. Turn it on to navigate.')},{enableHighAccuracy:true,maximumAge:1000,timeout:15000});
+ if(myLL)map.setView(myLL,17);else map.setView(start,17)}
+function endNav(){if(navWatch!=null)navigator.geolocation.clearWatch(navWatch);navWatch=null;if(NAV)NAV.stop();NAV=null;window.NAV=null;try{window.speechSynthesis&&speechSynthesis.cancel()}catch(_){}
+ if(wake){try{wake.release()}catch(_){}wake=null}if(navLine){map.removeLayer(navLine);navLine=null}if(navMk){map.removeLayer(navMk);navMk=null}
+ document.body.classList.remove('nav');$('navui').style.display='none';$('navui').classList.remove('rr');if(routeG)routeG.addTo(map);setSnap('half')}
+window.startNav=startNav;window.endNav=endNav;
+$('go').onclick=startNav;$('nvEnd').onclick=endNav;
+$('nvMute').onclick=()=>{muted=!muted;try{localStorage.setItem('gcm-mute',muted?'1':'0')}catch(_){}$('nvMute').textContent=muted?'🔇':'🔊';if(muted)try{speechSynthesis.cancel()}catch(_){}else speak('Voice on.')};
+$('nvCenter').onclick=()=>{navFollow=true;if(myLL)map.setView(myLL,17)};map.on('dragstart',()=>{if(NAV)navFollow=false});
+// ---- saved places (Home/Work/favorites) + recent searches, per region (places.js) ----
+const KIND={home:'🏠',work:'💼',fav:'⭐'};
+function showSaved(){if(!REG)return;const sg=$('sugg'),R=REG.id,ps=GCMPlaces.list(R),rc=GCMPlaces.recents(R);sg.innerHTML='';
+ const hm=GCMPlaces.get(R,'home'),wk=GCMPlaces.get(R,'work');
+ const q=document.createElement('div');q.className='qk';q.innerHTML=`<button class="qb" id="qkHome">🏠 <b>Home</b><small>${hm?esc(hm.name):'Set'}</small></button><button class="qb" id="qkWork">💼 <b>Work</b><small>${wk?esc(wk.name):'Set'}</small></button>`;sg.appendChild(q);
+ const quick=(x,k)=>e=>{e.preventDefault();if(x)goPlace(x);else{$('sugg').style.display='none';hintSet(k)}};
+ q.querySelector('#qkHome').onmousedown=q.querySelector('#qkWork').onmousedown=e=>e.preventDefault();q.querySelector('#qkHome').onclick=quick(hm,'home');q.querySelector('#qkWork').onclick=quick(wk,'work');
+ const favs=ps.filter(p=>p.kind==='fav');
+ if(favs.length){const h=document.createElement('div');h.className='sh';h.textContent='Saved places';sg.appendChild(h)}
+ for(const p of favs)sg.appendChild(row(p,'⭐',true));
+ if(rc.length){const h=document.createElement('div');h.className='sh';h.innerHTML='Recent<a href="#" id="rcClr">Clear</a>';sg.appendChild(h);h.querySelector('#rcClr').onmousedown=e=>e.preventDefault();h.querySelector('#rcClr').onclick=e=>{e.preventDefault();GCMPlaces.clearRecents(R);showSaved()}}
+ for(const x of rc)sg.appendChild(row(x,'🕘',false));
+ if(!favs.length&&!rc.length&&!hm&&!wk){const h=document.createElement('div');h.className='sh none';h.textContent='Tap ☆ on a search result or a spot on the map to save it here.';sg.appendChild(h)}
+ sg.style.display='block'}
+window.showSaved=showSaved;
+function row(x,ic,saved){const d=document.createElement('div');d.className='srow';const sv=saved?x:GCMPlaces.find(REG.id,x.lat,x.lon);
+ d.innerHTML=`<span class="ic">${ic}</span><span class="sm"><b>${esc(x.name)}</b><br><small style="color:#6b8592">${esc(x.sub||(saved?'Saved place':''))}</small></span>`+(saved?`<button class="star ed" aria-label="Edit ${esc(x.name)}">✎</button>`:`<button class="star${sv?' on':''}" aria-label="Save place">${sv?'★':'☆'}</button>`);
+ d.onmousedown=e=>e.preventDefault();d.onclick=()=>goPlace(x);const b=d.querySelector('.star');b.onclick=e=>{e.stopPropagation();if(saved)editPlace(x.id);else starToggle(x,b)};return d}
+function hintSet(k){$('help').textContent='';$('sub').innerHTML=`To set ${k==='home'?'Home':'Work'}: search for it or tap the map, then tap <b>☆</b> and choose ${k==='home'?'🏠 Home':'💼 Work'}.`;setSnap('half')}
+// one tap: route from your location (or the start you already picked) to a saved/recent place
+function goPlace(x){$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();if(REG)GCMPlaces.addRecent(REG.id,x);const ll=L.latLng(x.lat,x.lon),pt={ll,label:x.name};
+ if(curField==='from'&&active==='from'){setField('from',pt);return}
+ to=pt;active=null;if(!from){if(myLL){from={me:true}}else{sync();locate();return}}sync();if(start&&end)route();window.state=st()}
+window.goPlace=goPlace;
+function starToggle(x,btn){const R=REG.id,sv=GCMPlaces.find(R,x.lat,x.lon);if(sv){editPlace(sv.id);return}const p=GCMPlaces.add(R,x);if(btn){btn.textContent='★';btn.classList.add('on')}updStar();toast('⭐ Saved '+p.name)}
+window.savePlaceAt=(ll,name)=>{map.closePopup();ll=ll||map.getCenter();const p=GCMPlaces.add(REG.id,{name:name||'Saved spot',sub:ll.lat.toFixed(4)+', '+ll.lng.toFixed(4),lat:ll.lat,lon:ll.lng});updStar();editPlace(p.id,true)};
+function updStar(){const b=$('save');if(!b)return;if(!(to&&end&&!to.me)){b.style.display='none';return}b.style.display='';const sv=REG&&GCMPlaces.find(REG.id,end.lat,end.lng);b.textContent=sv?'★ Saved':'☆ Save';b.classList.toggle('on',!!sv)}
+$('save').onclick=()=>{if(!(to&&end))return;const sv=GCMPlaces.find(REG.id,end.lat,end.lng);if(sv){editPlace(sv.id);return}const p=GCMPlaces.add(REG.id,{name:to.label&&!/^Dropped pin/.test(to.label)?to.label:'Saved spot',sub:to.label,lat:end.lat,lon:end.lng});updStar();editPlace(p.id,true)};
+let edId=null;function editPlace(id,isNew){const p=GCMPlaces.list(REG.id).find(q=>q.id===id);if(!p)return;edId=id;$('peH').textContent=isNew?'⭐ Saved! Name it':'✎ Edit place';$('peName').value=p.name;setKindBtns(p.kind);$('pe').style.display='flex';setTimeout(()=>{try{$('peName').focus();$('peName').select()}catch(_){}},50)}
+window.editPlace=editPlace;
+let edKind='fav';function setKindBtns(k){edKind=k;document.querySelectorAll('#peKind button').forEach(b=>b.classList.toggle('on',b.dataset.k===k))}
+document.querySelectorAll('#peKind button').forEach(b=>b.onclick=()=>setKindBtns(b.dataset.k));
+const closePE=()=>{$('pe').style.display='none';edId=null;updStar();if(document.activeElement===$('q')||document.activeElement===$('qf'))showSaved()};
+$('peSave').onclick=()=>{if(edId){GCMPlaces.rename(REG.id,edId,$('peName').value);GCMPlaces.setKind(REG.id,edId,edKind)}closePE()};
+$('peDel').onclick=()=>{if(edId)GCMPlaces.remove(REG.id,edId);toast('Removed');closePE()};
+$('peCancel').onclick=closePE;$('peName').addEventListener('keydown',e=>{if(e.key==='Enter')$('peSave').click()});
+let tt;function toast(t){const el=$('toast');el.textContent=t;el.style.display='block';clearTimeout(tt);tt=setTimeout(()=>el.style.display='none',2200)}
