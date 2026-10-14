@@ -9,9 +9,9 @@ grep -q libswiftWebKit shots-ci/linked-libs.txt && echo "WARNING: links libswift
 brew install cliclick >/dev/null 2>&1 || true
 DEV=$(xcrun simctl list devices available -j | python3 -c "import json,sys;d=json.load(sys.stdin)['devices'];print([x['udid'] for k,v in d.items() if 'iOS' in k for x in v if x['name'].startswith('iPhone 16')][0])")
 xcrun simctl boot "$DEV"; open -a Simulator; xcrun simctl bootstatus "$DEV" -b
-xcrun simctl privacy "$DEV" grant location com.matchimus.golfcartmaps || true
 xcrun simctl location "$DEV" set 32.8328,-117.2713 || true
 xcrun simctl install "$DEV" "$APP"
+xcrun simctl privacy "$DEV" grant location-always com.matchimus.golfcartmaps || xcrun simctl privacy "$DEV" grant location com.matchimus.golfcartmaps || true
 (xcrun simctl launch --console-pty "$DEV" com.matchimus.golfcartmaps -GCMCarPlayDemo YES > shots-ci/app-console.txt 2>&1 &)
 sleep 25
 xcrun simctl io "$DEV" screenshot shots-ci/phone.png
@@ -23,7 +23,8 @@ osascript -e "$WIN" -e 'tell application "System Events" to tell process "Simula
 sleep 2
 screencapture -x shots-ci/carplay-home.png
 # Open our app on the CarPlay home screen (screen coords, CARPLAY_TAPS="x,y x,y").
-for xy in ${CARPLAY_TAPS:-}; do cliclick c:$xy; sleep 3; done
+osascript -e "$WIN" -e 'tell application "System Events" to tell process "Simulator" to perform action "AXRaise" of w' >> shots-ci/osascript.txt 2>&1
+for xy in ${CARPLAY_TAPS:-}; do cliclick m:$xy w:300 dd:. w:120 du:. ; sleep 4; screencapture -x shots-ci/carplay-tap-$xy.png; done
 sleep 20
 screencapture -x shots-ci/carplay-preview.png
 sleep 35
