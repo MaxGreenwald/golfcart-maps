@@ -1,14 +1,15 @@
+try{localStorage.removeItem('gcm-mode')}catch(_){}
 const map=L.map('map',{preferCanvas:true,zoomControl:false,attributionControl:true}).setView([32.8565,-117.2555],15);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
 const renderer=L.canvas({tolerance:8});
 const $=id=>document.getElementById(id);
 const RISKY_MAX=91.44; // 300 ft
-let REGIONS=[],RULES={},REG=null,MODE=localStorage.getItem('gcm-mode')||'lsv',RULE={max_posted:35,cross:true},BASE='data/sd/';
+let REGIONS=[],RULES={},REG=null,MODE='lsv',RULE={max_posted:35,cross:true},BASE='data/sd/';
 let lastLegs=null,D,risky=false,layer,nodes={},adj={},start=null,end=null,routeG=null,mk=[];
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden (posted >=40 or untagged major)
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden. Cart paths ('c') always ok; designated ('d') ok in designated-only cart mode.
 const desig=s=>s[3]==='c'||s[3]==='d'||(RULE.assume&&RULE.assume.includes(s[1])&&s[2]!=null&&s[2]<=RULE.max_posted);
-const cls=s=>{if(s[3]==='c')return 0;if(MODE==='golf_cart'){if(s[9]===1)return 3;if(s[9]===3)return 0;if((s[9]===2||(s[3]==='d'&&s[9]!==1))&&s[2]!=null&&s[2]<=35)return 0}if(s[2]==null||(s[2]>RULE.max_posted&&!(window.LENIENT&&s[2]===99)))return 3;if(RULE.designated_only&&!desig(s))return 3;return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'?0:1};
+const cls=s=>{if(s[3]==='c')return 0;if(s[9]===1&&/^(motorway|trunk|primary)/.test(s[1]))return 3;if(s[2]==null||(s[2]>RULE.max_posted&&!(window.LENIENT&&s[2]===99)))return 3;if(RULE.designated_only&&!desig(s))return 3;return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'?0:1};
 const STY=[{color:'#12a150',weight:3.2},{color:'#4cc38a',weight:2.6,dashArray:'5 4'},{color:'#0b9fb3',weight:3.4},{color:'#e5484d',weight:3,opacity:.75}];
 const MAJOR=new Set(['path','cycleway','track','footway','motorway','motorway_link','trunk','trunk_link','primary','primary_link','secondary','secondary_link','tertiary','tertiary_link']);
 let buckets={},shown={};const G=0.02;
@@ -27,7 +28,7 @@ async function onMove(){if(!D)return;const b=map.getBounds().pad(0.1);const n0=l
 map.on('moveend',onMove);
 function mkLine(s){const c0=cls(s),c=s[3]==='c'?2:c0;const pl=L.polyline(s[7].map(p=>[p[1],p[0]]),{...STY[c],renderer});
  pl.on('click',e=>{L.DomEvent.stopPropagation(e);if(active){setPt(e.latlng);return}const sp=s[2];window._pll=e.latlng;window._pname=D.names[s[0]]||'Saved spot';
-  L.popup().setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[9]===3&&MODE==='golf_cart'?' 🚦 designated golf cart crossing':s[9]===2&&MODE==='golf_cart'?' ✅ golf carts allowed (local ordinance)':''}${s[3]==='c'?' 🛺 cart path':s[3]==='d'?' ✅ designated cart road':s[3]==='t'?' (OSM)':s[3]==='v'?' ✅ verified (local source)':s[3]==='m'?' 📷 posted sign (Mapillary)':' (assumed)'}${(s[3]==='v'||s[3]==='m')&&D.sources&&D.sources[s[8]]?`<br><a href="${D.sources[s[8]][0]}" target="_blank" rel="noopener">Source: ${D.sources[s[8]][1]}</a>`:''}<br><b style="color:${c===3?'#e5484d':'#12a150'}">${c===3?(s[9]===1&&MODE==='golf_cart'?'Avoid: golf carts not allowed (posted)':RULE.designated_only&&!(s[2]==null||s[2]>RULE.max_posted)?'Avoid: not a designated golf cart road':`Avoid: ${RULE.max_posted+5}+ mph or major road`):'OK for '+modeName()}</b><br>Segment length: ${(s._len??len(s[7]))<160?ft(s._len??len(s[7])):mi(s._len??len(s[7]))}<div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="popSet('from')">Start here</button><button class="pbtn" onclick="popSet('to')">Go here</button></div><button class="pbtn" style="width:100%;margin-top:6px" onclick="savePlaceAt(window._pll,window._pname)">☆ Save this spot</button><button class="pbtn rpt" onclick="reportRoad()">🚩 Report this road</button>`).openOn(map);window._rseg={road:D.names[s[0]]||'(unnamed road)',hw:s[1],sp:sp==null||sp==99?'none recorded':sp+' mph',src:{t:'OSM tag',v:'verified local source',m:'Mapillary sign',c:'cart path',d:'designated cart road'}[s[3]]||'assumed',status:c===3?'Avoid':'OK for '+modeName(),ll:e.latlng}});return pl}
+  L.popup().setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[9]===3?' 🚦 marked cart crossing':s[9]===2?' ✅ cart-allowed (local ordinance)':''}${s[3]==='c'?' 🛺 cart path':s[3]==='d'?' ✅ designated cart road':s[3]==='t'?' (OSM)':s[3]==='v'?' ✅ verified (local source)':s[3]==='m'?' 📷 posted sign (Mapillary)':' (assumed)'}${(s[3]==='v'||s[3]==='m')&&D.sources&&D.sources[s[8]]?`<br><a href="${D.sources[s[8]][0]}" target="_blank" rel="noopener">Source: ${D.sources[s[8]][1]}</a>`:''}<br><b style="color:${c===3?'#e5484d':'#12a150'}">${c===3?(s[9]===1?'Avoid: carts not allowed (posted)':`Avoid: ${RULE.max_posted+5}+ mph or major road`):'OK for '+modeName()}</b><br>Segment length: ${(s._len??len(s[7]))<160?ft(s._len??len(s[7])):mi(s._len??len(s[7]))}<div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="popSet('from')">Start here</button><button class="pbtn" onclick="popSet('to')">Go here</button></div><button class="pbtn" style="width:100%;margin-top:6px" onclick="savePlaceAt(window._pll,window._pname)">☆ Save this spot</button><button class="pbtn rpt" onclick="reportRoad()">🚩 Report this road</button>`).openOn(map);window._rseg={road:D.names[s[0]]||'(unnamed road)',hw:s[1],sp:sp==null||sp==99?'none recorded':sp+' mph',src:{t:'OSM tag',v:'verified local source',m:'Mapillary sign',c:'cart path',d:'designated cart road'}[s[3]]||'assumed',status:c===3?'Avoid':'OK for '+modeName(),ll:e.latlng}});return pl}
 function hav(a,b){const R=6371000,r=Math.PI/180,dl=(b[1]-a[1])*r,dn=(b[0]-a[0])*r,x=Math.sin(dl/2)**2+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
 function len(p){let l=0;for(let i=1;i<p.length;i++)l+=hav(p[i-1],p[i]);return l}
 let fast=new Set(),fnode=new Set(),cnode=new Set();
@@ -79,12 +80,12 @@ let routing=false;async function route(){$('title').innerHTML='<span class="spin
  setSnap('half');focusStart();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};window._lastDetail=r;lastLegs=navLegs(r);$('go').style.display='';updStar();return r}
 // return trip: one-way rules can differ, so route B->A; fall back to same distance
 async function backDist(a,b,a2,b2,d){if(a==null||b==null)return d;for(const [x,y] of [[b,a],[b2,a],[b,a2],[b2,a2]]){const p=astar(x,y);if(p)return summarize(p).dist}return d}
-let lastR=null;function renderRange(r){if(r)lastR=r;r=lastR;if(!r)return;const R=GCMRange,s=R.load(),rng=R.rangeFor(MODE,s),bat=s.battery==null?100:s.battery;
+let lastR=null;function renderRange(r){if(r)lastR=r;r=lastR;if(!r)return;const R=GCMRange,s=R.load(),rng=R.rangeFor(s),bat=s.battery==null?100:s.battery;
  const one=r.dist/1609.34,rt=(r.dist+r.back)/1609.34,c=R.check(rt,rng,bat);window._rangeRes=c;
  const txt={ok:'✅ Plenty of charge',tight:'⚠️ Tight, charge up first',no:'🔋 Not enough range'}[c.status];
  const el=$('range');el.style.display='block';
- el.innerHTML=`<div><span class="rd">${one.toFixed(1)} mi</span> one way · <span class="rd">${rt.toFixed(1)} mi</span> round trip</div><div class="rs ${c.status}">${txt}: round trip ${rt.toFixed(1)} mi, about ${c.pct}% of your ${c.eff} mi range</div><details${el.querySelector('details[open]')?' open':''}><summary>🔋 Range settings <span class="car">▸</span></summary><label>${MODE==='lsv'?'LSV':'Golf cart'} range <input id="rgMi" type="number" inputmode="decimal" min="1" max="150" value="${rng}"> mi</label><label>Battery <input id="rgBat" type="number" inputmode="numeric" min="0" max="100" value="${bat}"> %</label><div class="rh">Estimate. We flag trips over ${Math.round(R.MARGIN*100)}% of your range; hills, heat and passengers cut range.</div></details>`;
- const upd=()=>{const s=R.load();s.range=s.range||{};const m=+$('rgMi').value,b=+$('rgBat').value;if(m>0)s.range[MODE]=m;if(b>=0&&b<=100)s.battery=b;s.profile=null;R.save(s);renderRange();if(window.lastRoute)window.lastRoute.range=window._rangeRes};
+ el.innerHTML=`<div><span class="rd">${one.toFixed(1)} mi</span> one way · <span class="rd">${rt.toFixed(1)} mi</span> round trip</div><div class="rs ${c.status}">${txt}: round trip ${rt.toFixed(1)} mi, about ${c.pct}% of your ${c.eff} mi range</div><details${el.querySelector('details[open]')?' open':''}><summary>🔋 Range settings <span class="car">▸</span></summary><label>Cart range <input id="rgMi" type="number" inputmode="decimal" min="1" max="150" value="${rng}"> mi</label><label>Battery <input id="rgBat" type="number" inputmode="numeric" min="0" max="100" value="${bat}"> %</label><div class="rh">Estimate. We flag trips over ${Math.round(R.MARGIN*100)}% of your range; hills, heat and passengers cut range.</div></details>`;
+ const upd=()=>{const s=R.load();const m=+$('rgMi').value,b=+$('rgBat').value;if(m>0)s.range=m;if(b>=0&&b<=100)s.battery=b;s.profile=null;R.save(s);renderRange();if(window.lastRoute)window.lastRoute.range=window._rangeRes};
  if(c.status!=='ok'){const rt0=r;chargers().then(()=>{if(lastR!==rt0)return;const n=nearestChg(end);if(n&&n.mi<5&&!el.querySelector('.rc'))el.querySelector('.rs').insertAdjacentHTML('afterend',`<div class="rc">🔌 Nearest public charger to your destination: <b>${esc(n.c.name)}</b>, ${n.mi.toFixed(1)} mi away. <a href="#" onclick="showChg(true);map.setView([${n.c.lat},${n.c.lon}],16);return false">Show</a></div>`)})}
  $('rgMi').onchange=upd;$('rgBat').onchange=upd}
 window.renderRange=renderRange;
@@ -179,10 +180,10 @@ $('q').oninput=onq;$('qf').oninput=onq;for(const id of ['q','qf'])$(id).addEvent
 window.testRoute=async(a,b,rk=false)=>{risky=rk;from={ll:L.latLng(a),label:'A'};to={ll:L.latLng(b),label:'B'};active=null;sync();if(inMX(from.ll)||inMX(to.ll))return null;const r=await route();return r?window.lastRoute:null};
 let readyRes,READY=new Promise(r=>readyRes=r);
 // ---- regions: ?r= / saved > geolocation (already-granted only) nearest within 50 mi > San Diego ----
-const modeName=()=>MODE==='lsv'?'LSV':'golf cart';
+const modeName=()=>'carts & LSVs';
 function ruleNotes(){const n=[];if(RULE.radius_mi)n.push(`stay within ${RULE.radius_mi} mi of where the cart is registered`);if(RULE.daylight_only)n.push('daylight only');return n.length?' · '+n.join(' · '):''}
-function setRule(){const st=RULES[REG.state]||RULES.CA;RULE={...(st[MODE]||st.lsv)};const rr=REG.rules&&REG.rules[MODE];if(rr)Object.assign(RULE,rr);
- $('cMode').textContent=MODE==='lsv'?'🚙 LSV':'⛳ Golf cart';$('rnote').textContent=`${st.name} ${modeName()}: `+(RULE.designated_only?`cart paths + designated roads${RULE.assume?' (local streets, unverified)':''}`:`roads posted ≤${RULE.max_posted} mph`)+ruleNotes();$('rnote').title=RULE.cite||''}
+function setRule(){const st=RULES[REG.state]||RULES.CA;RULE={...st.lsv};
+ $('rnote').textContent=`${st.name}: `+(RULE.designated_only?`cart paths + designated roads${RULE.assume?' (local streets, unverified)':''}`:`roads posted ≤${RULE.max_posted} mph`)+ruleNotes();$('rnote').title=RULE.cite||''}
 function regionAt(lat,lng){let best=null,bd=80467;for(const r of REGIONS){if(r.hidden)continue;const b=r.bbox;if(lat>=b[0]&&lat<=b[2]&&lng>=b[1]&&lng<=b[3])return r;const d=hav([lng,lat],[r.center[1],r.center[0]]);if(d<bd){bd=d;best=r}}return best}
 function resetData(){if(layer){layer.clearLayers();map.removeLayer(layer)}shown={};buckets={};nodes={};adj={};fast=new Set();fnode=new Set();cnode=new Set();loaded.clear();for(const k in loading)delete loading[k];nameAt=null;POIS=[];D=null;window.ready=false;READY=new Promise(r=>readyRes=r)}
 async function loadRegion(id,keepView){const r=REGIONS.find(x=>x.id===id)||REGIONS[0];if(REG&&REG.id===r.id&&D)return;if(!keepView)clearR();resetData();REG=r;BASE='data/'+r.id+'/';window.REG=r;
@@ -218,9 +219,6 @@ async function showChg(on){chgOn=on;$('cChg').classList.toggle('on',on);if(chgL)
  chgL=L.layerGroup(list.map(c=>L.marker([c.lat,c.lon],{icon:L.divIcon({className:'',html:'<div class="chg">🔌</div>',iconSize:[22,22],iconAnchor:[11,11]})}).bindPopup(chgPop(c),{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)}))).addTo(map)}
 window.showChg=showChg;$('cChg').onclick=()=>showChg(!chgOn);
 function nearestChg(ll){if(!CHG||!ll)return null;let b=null,bd=1e18;for(const c of CHG){const d=map.distance(ll,[c.lat,c.lon]);if(d<bd){bd=d;b=c}}return b&&{c:b,mi:bd/1609.34}}
-function setMode(m){MODE=m;try{localStorage.setItem('gcm-mode',m)}catch(_){}setRule();if(!D)return;adj={};nodes={};fast=new Set();fnode=new Set();cnode=new Set();buildGraph(0);shown={};layer.clearLayers();refresh();if(start&&end)route()}
-window.setMode=setMode;
-$('cMode').onclick=()=>setMode(MODE==='lsv'?'golf_cart':'lsv');
 $('city').onchange=e=>loadRegion(e.target.value);
 (async()=>{const q=new URLSearchParams(location.search).get('r');[REGIONS,RULES]=await Promise.all([fetch('data/regions.json').then(r=>r.json()),fetch('data/rules.json').then(r=>r.json())]);
  $('city').innerHTML=REGIONS.filter(r=>!r.hidden||r.id===q).map(r=>`<option value="${r.id}">${r.short}${r.beta?' (beta)':''}</option>`).join('');

@@ -10,9 +10,9 @@ const COMPASS=['north','northeast','east','southeast','south','southwest','west'
 const compass=b=>COMPASS[Math.round(b/45)%8];
 const UNNAMED='unnamed road';
 // Cart speeds (mph) for ETA. Golf carts ~15-19, LSVs ~22-25, slower on residential streets and cart paths.
-const SPEED={golf_cart:{main:17,res:12,path:11},lsv:{main:23,res:18,path:12}};
+const SPEED={main:23,res:18,path:12};  // single cart/LSV profile (was LSV)
 const RES=new Set(['residential','living_street','service','unclassified','track']);
-function mph(mode,leg){const S=SPEED[mode]||SPEED.lsv;let v=leg.cart||leg.hw==='path'||leg.hw==='cycleway'||leg.hw==='footway'?S.path:RES.has(leg.hw)?S.res:S.main;if(leg.sp&&leg.sp!==99&&leg.sp<v)v=leg.sp;return v}
+function mph(mode,leg){const S=SPEED;let v=leg.cart||leg.hw==='path'||leg.hw==='cycleway'||leg.hw==='footway'?S.path:RES.has(leg.hw)?S.res:S.main;if(leg.sp&&leg.sp!==99&&leg.sp<v)v=leg.sp;return v}
 // legs: [{p:[[lon,lat]...], name, len(m), f(risky), hw, sp, cart}] in travel order.
 function maneuvers(legs,mode){
  const g=[];for(const l of legs){const n=l.name||UNNAMED,last=g[g.length-1],t=l.len/(mph(mode,l)*0.44704);
