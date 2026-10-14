@@ -21,10 +21,10 @@ function maneuvers(r){
 window.GCMCarPlay={
  version:1,
  async status(){await ready();return {region:REG&&REG.id,regionName:REG&&REG.short,mode:MODE,center:REG&&REG.center,
-  regions:REGIONS.map(r=>({id:r.id,name:r.short||r.name,center:r.center,hidden:!!r.hidden})),range:GCMRange.rangeFor(MODE),battery:(GCMRange.load().battery??100)}},
- async setMode(m){await ready();if(m!==MODE)setMode(m);return MODE},
+  regions:REGIONS.map(r=>({id:r.id,name:r.short||r.name,center:r.center,hidden:!!r.hidden})),range:GCMRange.rangeFor(),battery:(GCMRange.load().battery??100)}},
+ async setMode(m){await ready();return 'lsv'},  // mode switch removed; always LSV rules
  // from/to: {lat,lon}. Returns null-route with reason when there's no legal way.
- async plan(from,to,mode,allowRisky){await ready();await regionFor(to.lat,to.lon);if(mode&&mode!==MODE)setMode(mode);
+ async plan(from,to,mode,allowRisky){await ready();await regionFor(to.lat,to.lon);
   const lr=await window.testRoute([from.lat,from.lon],[to.lat,to.lon],!!allowRisky);const r=window._lastDetail;
   if(!lr||!r)return {ok:false,reason:RULE.designated_only?'Every way there leaves the cart paths/designated roads.':`Every way there uses a ${RULE.max_posted+5}+ mph road.`};
   const line=[];r.legs.forEach(l=>l.p.forEach(p=>line.push([+p[1].toFixed(6),+p[0].toFixed(6)])));

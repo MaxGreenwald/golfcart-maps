@@ -97,10 +97,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     var lastTrip: CPTrip?
     var overlayTimer: Timer?
     var showLegal = true
-    var mode: String {
-        get { UserDefaults.standard.string(forKey: "gcm-cp-mode") ?? "lsv" }
-        set { UserDefaults.standard.set(newValue, forKey: "gcm-cp-mode") }
-    }
+    var mode: String { "lsv" }
 
     // Scene lifecycle
     func templateApplicationScene(_ scene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController, to window: CPWindow) {
@@ -145,8 +142,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
 
     // Buttons
     func refreshButtons() {
-        let modeBtn = CPBarButton(title: mode == "lsv" ? "LSV" : "Golf cart") { [weak self] _ in
-            guard let self = self else { return }
+        
             self.mode = self.mode == "lsv" ? "golf_cart" : "lsv"
             GCMBridge.shared.call("setMode(m)", ["m": self.mode]) { _ in self.scheduleOverlay(now: true) }
             self.refreshButtons()
@@ -154,7 +150,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let searchBtn = CPBarButton(title: "Search") { [weak self] _ in self?.openSearch() }
         let savedBtn = CPBarButton(title: "Recent") { [weak self] _ in self?.openRecents() }
         mapTemplate.leadingNavigationBarButtons = [searchBtn, savedBtn]
-        mapTemplate.trailingNavigationBarButtons = [modeBtn]
+        mapTemplate.trailingNavigationBarButtons = []
         let recenter = CPMapButton { [weak self] _ in
             guard let self = self, let c = self.loc.location?.coordinate else { return }
             self.mapVC.map.setRegion(MKCoordinateRegion(center: c, latitudinalMeters: 1500, longitudinalMeters: 1500), animated: true)
@@ -273,7 +269,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             self.drawRoute(p)
             let dest = MKMapItem(placemark: MKPlacemark(coordinate: to)); dest.name = name
             let origin = MKMapItem(placemark: MKPlacemark(coordinate: from))
-            let label = self.mode == "lsv" ? "LSV" : "Golf cart"
+            let label = "cart / LSV"
             let choice = CPRouteChoice(summaryVariants: ["\(label) legal · \(String(format: "%.1f", p.miles)) mi" + (p.riskyCount > 0 ? " · \(p.riskyCount) risky" : "")],
                                        additionalInformationVariants: [p.rangeText], selectionSummaryVariants: [p.rangeText])
             let trip = CPTrip(origin: origin, destination: dest, routeChoices: [choice])
