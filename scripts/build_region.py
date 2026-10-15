@@ -27,6 +27,16 @@ for el in d["elements"]:
         if t.get("service") in ("parking_aisle", "driveway", "drive-through") and t.get("golf_cart") not in CARTV: continue
     elif t.get("golf_cart") not in CARTV: continue   # paths only when carts are tagged
     el["nodes"] = [f'{q["lat"]:.7f},{q["lon"]:.7f}' for q in el["geometry"]]; ways[el["id"]] = el
+if CFG.get("poly"):   # clip ways to region polygon (midpoint + any vertex inside)
+    PG = CFG["poly"]
+    def _inp(x, y):
+        c = False; j = len(PG) - 1
+        for i in range(len(PG)):
+            xi, yi = PG[i]; xj, yj = PG[j]
+            if (yi > y) != (yj > y) and x < (xj - xi) * (y - yi) / (yj - yi) + xi: c = not c
+            j = i
+        return c
+    ways = {k: w for k, w in ways.items() if any(_inp(q["lon"], q["lat"]) for q in w["geometry"][:: max(1, len(w["geometry"]) // 4)] + [w["geometry"][-1]])}
 cnt = {}
 for w in ways.values():
     for n in w["nodes"]: cnt[n] = cnt.get(n, 0) + 1

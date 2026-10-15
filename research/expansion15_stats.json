@@ -63,17 +63,17 @@
   "major_cov_pct": 38.6,
   "km": 1877,
   "stats": {
-   "tagged": 646,
-   "inferred": 8662,
-   "inferred_high": 547,
-   "verified": 247,
-   "mapillary": 103,
-   "cartpath": 14,
-   "designated": 21,
-   "cart_banned": 619,
+   "tagged": 71,
+   "inferred": 2410,
+   "inferred_high": 66,
+   "verified": 194,
+   "mapillary": 14,
+   "cartpath": 0,
+   "designated": 1,
+   "cart_banned": 206,
    "cart_ordinance": 0
   },
-  "segments": 20928
+  "segments": 5635
  },
  "30a": {
   "ways": 5928,

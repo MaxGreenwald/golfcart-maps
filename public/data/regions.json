@@ -116,19 +116,19 @@
   "short": "Charleston beaches",
   "state": "SC",
   "center": [
-   32.725,
-   -79.87
+   32.7845,
+   -79.79
   ],
   "zoom": 14,
   "bbox": [
-   32.62,
-   -80.02,
-   32.83,
-   -79.72
+   32.63,
+   -80.0,
+   32.86,
+   -79.7
   ],
   "beta": true,
   "hidden": true,
-  "cover": "Isle of Palms, Sullivan's Island and Folly Beach only. Pick another city in the menu above."
+  "cover": "Isle of Palms, Sullivan's Island and Folly Beach (plus access roads) only. Pick another city in the menu above."
  },
  {
   "id": "30a",
