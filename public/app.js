@@ -146,7 +146,7 @@ function locate(){if(!navigator.geolocation){$('sub').textContent='Location not 
  const ok=p=>{myLL=L.latLng(p.coords.latitude,p.coords.longitude);const acc=p.coords.accuracy;
   if(!me){meAcc=L.circle(myLL,{radius:acc,color:'#1d6fe0',weight:1,fillColor:'#1d6fe0',fillOpacity:.12,interactive:false,renderer}).addTo(map);me=meMarker(myLL)}
   else{me.setLatLng(myLL);meAcc.setLatLng(myLL).setRadius(acc)}
-  if(first){first=false;const rg=regionAt(myLL.lat,myLL.lng);if(rg&&REG&&rg.id!==REG.id){loadRegion(rg.id,true)}map.setView(myLL,16);$('showloc').style.display='none';if(to&&to.me){sync();if(start&&end)route()}else setField('from',{me:true})}else if((from&&from.me)||(to&&to.me)){sync()}};
+  if(first){first=false;const rg=regionAt(myLL.lat,myLL.lng);if(rg&&REG&&rg.id!==REG.id){setURL(rg.id,false);loadRegion(rg.id,true)}map.setView(myLL,16);$('showloc').style.display='none';if(to&&to.me){sync();if(start&&end)route()}else setField('from',{me:true})}else if((from&&from.me)||(to&&to.me)){sync()}};
  const err=e=>{$('showloc').textContent='📍 Show my location';$('sub').textContent=e.code===1?'Location is blocked. Turn it on in Settings › Safari › Location.':'Couldn’t find you: '+e.message};
  if(watching){navigator.geolocation.getCurrentPosition(p=>{first=true;ok(p)},err,{enableHighAccuracy:true});return}
  watching=true;navigator.geolocation.watchPosition(ok,err,{enableHighAccuracy:true,maximumAge:5000})}
@@ -231,13 +231,18 @@ async function showChg(on){chgOn=on;$('cChg').classList.toggle('on',on);if(chgL)
  chgL=L.layerGroup(list.map(c=>tapMarker(L.marker([c.lat,c.lon],{icon:L.divIcon({className:'tapm',html:'<div class="chg">🔌</div>',iconSize:[44,44],iconAnchor:[22,22]})}).bindPopup(chgPop(c),{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)})))).addTo(map)}
 window.showChg=showChg;$('cChg').onclick=()=>showChg(!chgOn);
 function nearestChg(ll){if(!CHG||!ll)return null;let b=null,bd=1e18;for(const c of CHG){const d=map.distance(ll,[c.lat,c.lon]);if(d<bd){bd=d;b=c}}return b&&{c:b,mi:bd/1609.34}}
-$('city').onchange=e=>loadRegion(e.target.value);
+// ---- clean per-city URLs: /naples etc. ----
+const SLUG={'sd':'sandiego','villages':'villages','myrtle':'myrtlebeach','chs':'charleston','30a':'30a','gulfshores':'gulfshores','portaransas':'portaransas','suncity':'suncity','coachella':'coachella','naples':'naples','goldenisles':'stsimons','tybee':'tybee','galveston':'galveston','ocoast':'occoast'};const slugOf=id=>SLUG[id]||id;
+function idFromPath(){const s=location.pathname.replace(/^\/+|\/+$/g,'').toLowerCase();if(!s)return '';for(const k in SLUG)if(SLUG[k]===s)return k;return null}
+function setURL(id,push){const p='/'+slugOf(id);if(location.pathname===p)return;const u=p+location.search.replace(/([?&])r=[^&]*&?/,'$1').replace(/[?&]$/,'')+location.hash;try{history[push?'pushState':'replaceState']({r:id},'',u)}catch(_){}}
+window.addEventListener('popstate',()=>{const id=idFromPath();loadRegion(id||'sd')});
+$('city').onchange=e=>{setURL(e.target.value,true);loadRegion(e.target.value)};
 (async()=>{const q=new URLSearchParams(location.search).get('r');[REGIONS,RULES]=await Promise.all([fetch('data/regions.json').then(r=>r.json()),fetch('data/rules.json').then(r=>r.json())]);
  $('city').innerHTML=REGIONS.filter(r=>!r.hidden||r.id===q).map(r=>`<option value="${r.id}">${r.short}${r.beta?' (Beta)':''}</option>`).join('');
  let saved=null;try{saved=localStorage.getItem('gcm-region')}catch(_){}
- let id=(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;
+ const pid=idFromPath();let id=(pid&&REGIONS.some(r=>r.id===pid))?pid:(pid===null)?'sd':(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;
  if(!id&&navigator.permissions&&navigator.geolocation){try{const p=await navigator.permissions.query({name:'geolocation'});if(p.state==='granted'){const pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:4000,maximumAge:600000}));const r=regionAt(pos.coords.latitude,pos.coords.longitude);if(r)id=r.id}}catch(_){}}
- await loadRegion(id||'sd');const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');if(la&&lo)map.setView([la,lo],+P.get('z')||17)})();
+ await loadRegion(id||'sd');if(!REG.hidden)setURL(REG.id,false);const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');if(la&&lo)map.setView([la,lo],+P.get('z')||17)})();
 
 // ---- bottom sheet: pointer-driven, translateY snapping ----
 const sheet=$('sheet'),shead=$('shead');let snap='full';
