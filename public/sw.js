@@ -1,4 +1,4 @@
-const C='gcm-v35';
+const C='gcm-v36';
 const PRE=['./','index.html','app.js','range.js','pay.js','data/regions.json','data/rules.json','data/sd/chargers.json','data/villages/chargers.json'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>Promise.all(PRE.map(u=>c.add(new Request(u,{cache:'reload'})).catch(()=>{})))))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

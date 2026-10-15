@@ -7,8 +7,8 @@ with sync_playwright() as p:
   b=p.chromium.launch();c=b.new_context(viewport={'width':390,'height':844},device_scale_factor=2,has_touch=True,is_mobile=True);pg=c.new_page()
   pg.goto(url('sandiego','sd'));pg.wait_for_function('window.ready===true',timeout=60000);pg.wait_for_timeout(2000)
   print('idle useme',pg.is_visible('#useme'),'chg in chips',pg.locator('#chips #cChg').count());pg.screenshot(path=S+'sfm_idle.png')
-  pg.click('#cSet');pg.wait_for_timeout(500);print('settings',pg.is_visible('#setPanel'),pg.is_visible('#cChg'),pg.inner_text('#rnote')[:60]);pg.screenshot(path=S+'sfm_settings.png')
-  pg.mouse.click(250,600);pg.wait_for_timeout(400);print('closed',not pg.is_visible('#setPanel'))
+  pg.evaluate('setMenu(true)');pg.wait_for_timeout(800);print('settings',pg.is_visible('#setPanel'),pg.is_visible('#cChg'),pg.inner_text('#rnote')[:60]);pg.screenshot(path=S+'sfm_settings.png')
+  print('settings above tips',pg.evaluate("document.getElementById('setPanel').nextElementSibling.id"),'cSet gone',pg.locator('#cSet').count()==0);pg.evaluate("setSnap('collapsed');0");pg.wait_for_timeout(500)
   pg.focus('#qf');pg.wait_for_timeout(500);print('planning useme',pg.is_visible('#useme'),pg.inner_text('#useme'));pg.screenshot(path=S+'sfm_planning.png')
   pg.evaluate("document.activeElement.blur()")
   for w,h in [(390,844),(375,667)]:
@@ -16,7 +16,7 @@ with sync_playwright() as p:
     q.click('#cRisk');q.wait_for_timeout(400);bx=q.locator('#riskWarn .rcard').bounding_box();print('warn shown',q.is_visible('#riskWarn'),'fits',bx['y']>=0 and bx['y']+bx['height']<=h,'risky on',q.evaluate('risky'));q.screenshot(path=S+f'risky_warn_{w}.png')
     q.click('#riskWarn .rok');q.wait_for_timeout(300);print('after ok risky',q.evaluate('risky'),'ack',q.evaluate("localStorage.getItem('gcm-risky-ack')"))
     q.click('#cNorm');q.click('#cRisk');q.wait_for_timeout(300);print('second tap no warn',q.locator('#riskWarn').count()==0)
-    q.click('#cSet');q.click('#whatRisky');q.wait_for_timeout(300);print('whatRisky reopens',q.is_visible('#riskWarn'))
+    q.evaluate('setMenu(true)');q.wait_for_timeout(600);q.click('#whatRisky');q.wait_for_timeout(300);print('whatRisky reopens',q.is_visible('#riskWarn'))
   pg.goto(url('naples','naples'));pg.wait_for_function('window.ready===true',timeout=60000);pg.wait_for_timeout(1500);pg.evaluate("map.setView([26.17,-81.77],15)");pg.wait_for_timeout(2500);pg.screenshot(path=S+'sfm_naples_dashed.png')
   for w,h in [(390,844),(375,667)]:
     c2=b.new_context(viewport={'width':w,'height':h},device_scale_factor=2,has_touch=True,is_mobile=True)
