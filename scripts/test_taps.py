@@ -7,12 +7,12 @@ with sync_playwright() as p:
     b=getattr(p,eng).launch();c=b.new_context(**p.devices["iPhone 13"],service_workers="block",geolocation={"latitude":32.8460,"longitude":-117.2760},permissions=["geolocation"]);pg=c.new_page();errs=[]
     pg.on("pageerror",lambda e:errs.append(str(e)))
     pg.goto(URL+("&" if "?" in URL else "?")+"lat=32.8475&lon=-117.273&z=16");pg.wait_for_function("window.ready===true",timeout=120000);pg.evaluate("setSnap('collapsed')");pg.wait_for_timeout(1500)
-    pg.tap("#cChg");pg.wait_for_timeout(2500)
+    pg.evaluate('setMenu(true)');pg.tap("#cChg");pg.wait_for_timeout(2500)
     bb=next(e.bounding_box() for e in pg.locator(".chg").all() if (lambda q:q and 150<q["y"]<650 and 30<q["x"]<350)(e.bounding_box()))
     x,y=ctr(bb);pg.touchscreen.tap(x+12,y+12);pg.wait_for_timeout(1200)   # edge of 44px hit area
     ck("charger tap opens popup",pg.locator(".cpop").count()==1)
     if OUT:pg.screenshot(path=f"{OUT}-charger-tap.png")
-    pg.evaluate("map.closePopup();0");pg.tap("#cChg");pg.wait_for_timeout(500)
+    pg.evaluate("map.closePopup();0");pg.evaluate('setMenu(true)');pg.tap("#cChg");pg.wait_for_timeout(500)
     pg.evaluate("fakeLocate(32.8460,-117.2760);map.setView([32.8460,-117.2760],17);setSnap('collapsed');0");pg.wait_for_timeout(1500)
     x,y=ctr(pg.locator(".me-dot").bounding_box());pg.touchscreen.tap(x,y);pg.wait_for_timeout(1200)
     ck("location dot tap opens popup","You are here" in (pg.inner_text(".leaflet-popup") if pg.locator(".leaflet-popup").count() else ""))
