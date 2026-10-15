@@ -67,7 +67,6 @@
    -84.5
   ],
   "beta": true,
-  "hidden": true,
   "cover": "Peachtree City area only. Pick another city in the menu above."
  },
  {
@@ -87,7 +86,6 @@
    -80.65
   ],
   "beta": true,
-  "hidden": true,
   "cover": "Hilton Head Island and Bluffton only. Pick another city in the menu above."
  },
  {
@@ -107,7 +105,6 @@
    -78.65
   ],
   "beta": true,
-  "hidden": true,
   "cover": "Myrtle Beach, North Myrtle Beach and Surfside only. Pick another city in the menu above."
  },
  {
@@ -127,7 +124,6 @@
    -79.7
   ],
   "beta": true,
-  "hidden": true,
   "cover": "Isle of Palms, Sullivan's Island and Folly Beach (plus access roads) only. Pick another city in the menu above."
  },
  {
@@ -147,7 +143,6 @@
    -85.9
   ],
   "beta": true,
-  "hidden": true,
   "cover": "South Walton (Miramar Beach to Inlet Beach) only. Pick another city in the menu above."
  },
  {
@@ -167,7 +162,6 @@
    -87.5
   ],
   "beta": true,
-  "hidden": true,
   "cover": "Gulf Shores and Orange Beach only. Pick another city in the menu above.",
   "rule": {
    "max_posted": 25,
@@ -192,7 +186,6 @@
    -97.03
   ],
   "beta": true,
-  "hidden": true,
   "cover": "Port Aransas / north Mustang Island only. Pick another city in the menu above."
  },
  {
@@ -212,7 +205,6 @@
    -112.22
   ],
   "beta": true,
-  "hidden": true,
   "cover": "Sun City, Sun City West and Youngtown only. Pick another city in the menu above."
  },
  {
@@ -232,7 +224,6 @@
    -116.18
   ],
   "beta": true,
-  "hidden": true,
   "cover": "Palm Desert, Indian Wells and La Quinta only. Pick another city in the menu above."
  },
  {
@@ -252,7 +243,6 @@
    -81.68
   ],
   "beta": true,
-  "hidden": true,
   "cover": "Naples and Marco Island only. Pick another city in the menu above."
  },
  {
@@ -272,7 +262,6 @@
    -81.35
   ],
   "beta": true,
-  "hidden": true,
   "cover": "St. Simons Island and Jekyll Island only. Pick another city in the menu above."
  },
  {
@@ -292,7 +281,6 @@
    -80.82
   ],
   "beta": true,
-  "hidden": true,
   "cover": "Tybee Island only. Pick another city in the menu above."
  },
  {
@@ -312,7 +300,6 @@
    -94.72
   ],
   "beta": true,
-  "hidden": true,
   "cover": "Galveston Island only. Pick another city in the menu above."
  },
  {
@@ -332,7 +319,6 @@
    -117.58
   ],
   "beta": true,
-  "hidden": true,
   "cover": "Laguna Woods, Laguna Beach, Dana Point and San Clemente only. Pick another city in the menu above."
  }
 ]
