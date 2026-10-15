@@ -12,7 +12,9 @@
 /index.html
   Cache-Control: no-cache
 
-/*.js
+/app.js
+  Cache-Control: public, max-age=0, must-revalidate
+/range.js
   Cache-Control: public, max-age=0, must-revalidate
 
 /data/*
