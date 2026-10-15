@@ -1,0 +1,28 @@
+# Cloudflare Pages headers (ignored by GitHub Pages)
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/
+  Cache-Control: no-cache
+
+/index.html
+  Cache-Control: no-cache
+
+/*.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/data/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/site.webmanifest
+  Content-Type: application/manifest+json
+  Cache-Control: public, max-age=3600
+
+/icon-*
+  Cache-Control: public, max-age=604800
+/og*.png
+  Cache-Control: public, max-age=604800

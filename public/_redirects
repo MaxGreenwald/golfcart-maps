@@ -1,0 +1,2 @@
+# Cloudflare Pages: send www to apex (ignored by GitHub Pages)
+https://www.golfcartmap.com/* https://golfcartmap.com/:splat 301
