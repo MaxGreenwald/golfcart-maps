@@ -142,7 +142,7 @@ json.dump([{"way": wl[k]["id"], "road": v[1], "mph": v[0], "m": round(_len_m(wl[
           open(os.path.join(os.path.dirname(__file__), "..", "research", "short_stubs.json"), "w"), indent=1)
 for wi, w in enumerate(wl):
     t = w["tags"]; s, src = classify(t); si = -1
-    if wi in STUB and wi not in ov and wi not in mly:
+    if wi in STUB and _spd[wi][1] == "inferred_high":  # also covers a lone, unapplied Mapillary match
         s, src = STUB[wi][0], "inferred"
         key = ("", f"Short piece of {STUB[wi][1]} with no limit of its own; uses the adjoining {STUB[wi][0]} mph posting")
         if key not in sidx: sidx[key] = len(sources); sources.append(list(key))
