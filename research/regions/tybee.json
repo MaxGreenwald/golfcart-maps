@@ -1,0 +1,15 @@
+{
+ "unverified": [],
+ "bans": [
+  {
+   "names": "^US ?80|Butler Av|Tybee R|^(GA|SR) ?26\\b",
+   "url": "https://cityoftybee.org/464/Motorized-Cart-Information",
+   "label": "Tybee: carts prohibited on US 80/Butler Ave (cross only at 14th St, Jones Ave, Campbell Ave, or south of Park of Seven Flags)"
+  }
+ ],
+ "sources": [
+  "https://cityoftybee.org/464/Motorized-Cart-Information",
+  "https://www.cityoftybee.org/DocumentCenter/View/409/"
+ ],
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=tybee loads it"
+}

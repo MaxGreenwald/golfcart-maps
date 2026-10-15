@@ -1,0 +1,15 @@
+{
+ "unverified": [],
+ "bans": [
+  {
+   "names": "^(CA|SR) ?(111|74)\\b|Highway 111|Hwy 111|^I ?10",
+   "url": "https://revengegolfcartparts.com/state-golf-cart-laws/",
+   "label": "CA 111 / I-10 state highways"
+  }
+ ],
+ "sources": [
+  "CVC 21260 (LSV \u226435)",
+  "https://www.palmdesert.gov/ (Palm Desert golf cart program; route map not digitized)"
+ ],
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=coachella loads it"
+}

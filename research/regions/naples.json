@@ -1,0 +1,16 @@
+{
+ "unverified": [],
+ "bans": [
+  {
+   "names": "^US ?41|Tamiami|^SR ?(84|951)\\b|^I ?75",
+   "url": "https://www.flhouse.gov/Statutes/2025/0316.212/",
+   "label": "US 41 / state roads: FDOT, not designated"
+  }
+ ],
+ "sources": [
+  "F.S. 316.212/316.2122",
+  "https://library.municode.com/fl/marco_island/codes/code_of_ordinances?nodeId=PTIICOOR_CH50TRVE",
+  "City of Naples designations not digitized"
+ ],
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=naples loads it"
+}

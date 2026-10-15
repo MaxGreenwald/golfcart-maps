@@ -1,0 +1,15 @@
+{
+ "unverified": [],
+ "bans": [
+  {
+   "names": "^US ?17|Torras Causeway|Jekyll Island Causeway|Downing Musgrove|^(GA|SR) ?(25|520)\\b",
+   "url": "https://costacarts.com/are-golf-carts-street-legal-by-state/",
+   "label": "Causeways/US 17: state highways, 45+ mph"
+  }
+ ],
+ "sources": [
+  "O.C.G.A. 40-6-331/40-6-362",
+  "Glynn County & Jekyll Island Authority cart rules not digitized"
+ ],
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=goldenisles loads it"
+}

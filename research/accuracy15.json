@@ -1,0 +1,161 @@
+{
+ "chs": {
+  "known_len_pct_before": 15.8,
+  "known_len_pct_after": 20.0,
+  "segments_newly_blocked": 31,
+  "segments_newly_ok": 442,
+  "roads_changed": 32,
+  "top_changed": [
+   [
+    "Mathis Ferry Road",
+    [
+     0,
+     71
+    ]
+   ],
+   [
+    "Meeting Street",
+    [
+     0,
+     57
+    ]
+   ],
+   [
+    "(unnamed)",
+    [
+     0,
+     40
+    ]
+   ],
+   [
+    "Bowman Road",
+    [
+     0,
+     37
+    ]
+   ],
+   [
+    "Calhoun Street",
+    [
+     0,
+     29
+    ]
+   ],
+   [
+    "King Street",
+    [
+     0,
+     29
+    ]
+   ],
+   [
+    "Morrison Drive",
+    [
+     0,
+     27
+    ]
+   ],
+   [
+    "Folly Road Boulevard",
+    [
+     0,
+     21
+    ]
+   ]
+  ],
+  "unresolved_major_count": 103,
+  "unresolved_major_km": 74.9,
+  "unresolved_major_top": [
+   {
+    "name": "(unnamed unclassified)",
+    "hw": "unclassified",
+    "km": 6.56,
+    "lat": 32.83765,
+    "lon": -79.88887
+   },
+   {
+    "name": "River Road",
+    "hw": "tertiary",
+    "km": 6.42,
+    "lat": 32.68451,
+    "lon": -80.02233
+   },
+   {
+    "name": "Sol Legare Road",
+    "hw": "unclassified",
+    "km": 4.18,
+    "lat": 32.67317,
+    "lon": -79.99219
+   },
+   {
+    "name": "Johnnie Dodds Boulevard",
+    "hw": "tertiary",
+    "km": 3.1,
+    "lat": 32.80926,
+    "lon": -79.87575
+   },
+   {
+    "name": "Waterway Boulevard",
+    "hw": "tertiary",
+    "km": 2.66,
+    "lat": 32.80196,
+    "lon": -79.76517
+   },
+   {
+    "name": "Dills Bluff Road",
+    "hw": "tertiary",
+    "km": 2.26,
+    "lat": 32.73174,
+    "lon": -79.9462
+   },
+   {
+    "name": "Secessionville Road",
+    "hw": "tertiary",
+    "km": 2.17,
+    "lat": 32.70351,
+    "lon": -79.95755
+   },
+   {
+    "name": "Hospital Drive",
+    "hw": "tertiary",
+    "km": 2.16,
+    "lat": 32.81937,
+    "lon": -79.84962
+   },
+   {
+    "name": "Watermark Road",
+    "hw": "tertiary",
+    "km": 1.79,
+    "lat": 32.81395,
+    "lon": -79.84228
+   },
+   {
+    "name": "Center Street",
+    "hw": "tertiary",
+    "km": 1.72,
+    "lat": 32.78229,
+    "lon": -79.86226
+   },
+   {
+    "name": "McCants Drive",
+    "hw": "tertiary",
+    "km": 1.71,
+    "lat": 32.78958,
+    "lon": -79.86145
+   },
+   {
+    "name": "Palm Boulevard",
+    "hw": "tertiary",
+    "km": 1.68,
+    "lat": 32.80224,
+    "lon": -79.74354
+   }
+  ],
+  "changes": {
+   "dot": 757,
+   "dot_block": 8,
+   "dot_open": 180,
+   "desig_only_block": 0
+  }
+ }
+}
