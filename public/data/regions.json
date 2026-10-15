@@ -46,7 +46,7 @@
     ],
     "cross": false,
     "daylight_only": false,
-    "cite": "F.S. 316.212/316.2125; Sumter Co. 17-3, Marion Co. Ord. 03-26, Lady Lake 17-3, Fruitland Park ch.34, Wildwood O2026-28; paths 20 mph (CDD). Streets \u226430, major roads via tunnels/path crossings only"
+    "cite": "F.S. 316.212/316.2125; Sumter Co. 17-3, Marion Co. Ord. 03-26, Lady Lake 17-3, Fruitland Park ch.34, Wildwood O2026-28; paths 20 mph (CDD). Streets ≤30, major roads via tunnels/path crossings only"
    }
   }
  },
@@ -161,11 +161,10 @@
    30.32,
    -87.5
   ],
-  "beta": true,
   "cover": "Gulf Shores and Orange Beach only. Pick another city in the menu above.",
   "rule": {
    "max_posted": 25,
-   "cite": "Gulf Shores Sec. 21-13 (Apr 13 2026) & Orange Beach Sec. 70-273 / Ala. Const. Baldwin Co. \u00a71.570: carts/LSVs only on streets posted \u226425",
+   "cite": "Gulf Shores Sec. 21-13 (Apr 13 2026) & Orange Beach Sec. 70-273 / Ala. Const. Baldwin Co. §1.570: carts/LSVs only on streets posted ≤25",
    "url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"
   }
  },
@@ -204,7 +203,6 @@
    33.72,
    -112.22
   ],
-  "beta": true,
   "cover": "Sun City, Sun City West and Youngtown only. Pick another city in the menu above."
  },
  {
@@ -280,7 +278,6 @@
    32.04,
    -80.82
   ],
-  "beta": true,
   "cover": "Tybee Island only. Pick another city in the menu above."
  },
  {
