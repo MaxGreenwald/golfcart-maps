@@ -1,3 +1,11 @@
+// ---- anonymous usage analytics: no cookies, no IPs; random ids in localStorage; failures never break the app ----
+(function(){function rid(){try{return crypto.randomUUID()}catch(_){return Math.random().toString(36).slice(2)+Date.now().toString(36)}}
+ function ids(){let u='',s='';try{u=localStorage.getItem('gcm-aid');if(!u){u=rid();localStorage.setItem('gcm-aid',u)}const now=Date.now();let j=JSON.parse(localStorage.getItem('gcm-sid')||'null');if(!j||now-j.t>30*60000)j={id:rid(),t:now};j.t=now;localStorage.setItem('gcm-sid',JSON.stringify(j));s=j.id}catch(_){}return{u,s}}
+ const dev=()=>/iPad|Tablet/i.test(navigator.userAgent)||(/Macintosh/.test(navigator.userAgent)&&navigator.maxTouchPoints>1)?'tablet':/Mobi|Android|iPhone/i.test(navigator.userAgent)?'mobile':'desktop';
+ const pwa=()=>{try{return !!(matchMedia('(display-mode: standalone)').matches||navigator.standalone)}catch(_){return false}};
+ window.track=function(name,props){try{if(window.NO_TRACK)return;const i=ids(),b=JSON.stringify({e:name,r:(window.REG&&window.REG.id)||null,p:props||{},u:i.u,s:i.s,d:dev(),pwa:pwa()});
+  if(navigator.sendBeacon&&navigator.sendBeacon('/api/e',new Blob([b],{type:'text/plain'})))return;fetch('/api/e',{method:'POST',body:b,keepalive:true}).catch(()=>{})}catch(_){}}})();
+const track=window.track;
 try{localStorage.removeItem('gcm-mode')}catch(_){}
 const map=L.map('map',{preferCanvas:true,zoomControl:false,attributionControl:true}).setView([32.8565,-117.2555],15);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
@@ -29,7 +37,7 @@ async function ensure(s,w,n,e){await READY;const ks=tilesIn(s,w,n,e).filter(k=>!
 async function onMove(){if(!D)return;const b=map.getBounds().pad(0.1);const n0=loaded.size;if(map.getZoom()>=11)await ensure(b.getSouth(),b.getWest(),b.getNorth(),b.getEast());if(loaded.size!==n0){shown={};layer.clearLayers()}refresh()}
 map.on('moveend',onMove);
 function mkLine(s){const c0=cls(s),c=s[3]==='c'?2:unk(s)?4:c0;const pl=L.polyline(s[7].map(p=>[p[1],p[0]]),{...STY[c],renderer});
- pl.on('click',e=>{L.DomEvent.stopPropagation(e);if(active){setPt(e.latlng);return}const sp=s[2];window._pll=e.latlng;
+ pl.on('click',e=>{L.DomEvent.stopPropagation(e);if(active){setPt(e.latlng);return}track('road_tap',{mph:s[2]==null||s[2]==99?null:s[2]});const sp=s[2];window._pll=e.latlng;
   L.popup(popOpts()).setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[9]===3?' 🚦 marked cart crossing':s[9]===2?' ✅ cart-allowed (local ordinance)':''}${s[3]==='c'?' 🛺 cart path':s[3]==='d'?' ✅ designated cart road':s[3]==='t'?' (OSM)':s[3]==='v'?' ✅ verified (local source)':s[3]==='m'?' 📷 posted sign (Mapillary)':' (assumed)'}${(s[3]==='v'||s[3]==='m')&&D.sources&&D.sources[s[8]]?`<br><a href="${D.sources[s[8]][0]}" target="_blank" rel="noopener">Source: ${D.sources[s[8]][1]}</a>`:''}${REG.rule&&REG.rule.url?`<br><a href="${REG.rule.url}" target="_blank" rel="noopener">Local cap ≤${REG.rule.max_posted} mph: ${REG.rule.cite}</a>`:''}<br><b style="color:${c===3?'#e5484d':unk(s)?'#b38600':'#12a150'}">${unk(s)?'❓ Speed unknown — check signs (allowed with caution; no posted limit found)':c===3?(s[9]===1?'Avoid: carts not allowed (posted)':`Avoid: ${RULE.max_posted%5?RULE.max_posted+1:RULE.max_posted+(RULE.max_posted===25?1:5)}+ mph or major road`):'OK for '+modeName()}</b><br>Segment length: ${(s._len??len(s[7]))<160?ft(s._len??len(s[7])):mi(s._len??len(s[7]))}<div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="popSet('from')">Start here</button><button class="pbtn" onclick="popSet('to')">Go here</button></div><button class="pbtn rpt" onclick="reportRoad()">🚩 Report this road</button>`).openOn(map);window._rseg={road:D.names[s[0]]||'(unnamed road)',hw:s[1],sp:sp==null||sp==99?'none recorded':sp+' mph',src:{t:'OSM tag',v:'verified local source',m:'Mapillary sign',c:'cart path',d:'designated cart road'}[s[3]]||'assumed',status:c===3?'Avoid':unk(s)?'Speed unknown — check signs':'OK for '+modeName(),ll:e.latlng}});return pl}
 function hav(a,b){const R=6371000,r=Math.PI/180,dl=(b[1]-a[1])*r,dn=(b[0]-a[0])*r,x=Math.sin(dl/2)**2+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
 function len(p){let l=0;for(let i=1;i<p.length;i++)l+=hav(p[i-1],p[i]);return l}
@@ -69,8 +77,8 @@ window.popSet=f=>{if(inMX(window._pll))return;map.closePopup();setField(f,{ll:wi
 const ft=m=>Math.round(m*3.281)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
 let routing=false;async function route(){$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
  await new Promise(r=>setTimeout(r,0));let parts=null;if(a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
- if(!parts){$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':(RULE.designated_only?'Every way there leaves the cart paths/designated roads.':`Every way there uses a ${RULE.max_posted+5}+ mph road.`)+' Try <b>⚠️ Risky</b> mode to see short-stretch options.';$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
- const r=summarize(parts);routeG=L.layerGroup().addTo(map);
+ if(!parts){$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':(RULE.designated_only?'Every way there leaves the cart paths/designated roads.':`Every way there uses a ${RULE.max_posted+5}+ mph road.`)+' Try <b>⚠️ Risky</b> mode to see short-stretch options.';track('route_failed',{risky});$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
+ const r=summarize(parts);track('route_planned',{mi:+(r.dist/1609.34).toFixed(2),risky:r.stretches.length>0,risky_mode:risky});routeG=L.layerGroup().addTo(map);
  const all=[];r.legs.forEach(l=>all.push(...l.p));
  L.polyline(all.map(p=>[p[1],p[0]]),{color:'#fff',weight:10,opacity:.9,renderer,interactive:false}).addTo(routeG);
  L.polyline(all.map(p=>[p[1],p[0]]),{color:'#1d6fe0',weight:6,renderer,interactive:false}).addTo(routeG);
@@ -116,7 +124,7 @@ function sync(){start=P(from);end=P(to);mk.forEach(m=>map.removeLayer(m));mk=[];
  if(routeG&&!(start&&end)){map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('range').style.display='none'}
  if(!(from||to)){$('title').innerHTML='🏖️ Golf Cart Maps';$('sub').innerHTML='Tap a road to see its speed limit and length, or plan a route above.'}
  else if(!(start&&end)){$('title').innerHTML=from?'📍 Start set':'🏖️ Destination set';$('sub').textContent=from?'Now pick where you’re headed.':'Now pick a start, or hit 📍 to start from you.'}}
-function setField(f,pt){if(f==='from')from=pt;else to=pt;active=null;sync();if(start&&end)route();window.state=st()}
+function setField(f,pt){if(f==='from'&&pt&&pt.me)track('start_from_me');if(f==='from')from=pt;else to=pt;active=null;sync();if(start&&end)route();window.state=st()}
 const st=()=>({from:from&&{label:$('qf').value,me:!!from.me,lat:P(from)&&P(from).lat},to:to&&{label:$('q').value,me:!!to.me,lat:P(to)&&P(to).lat},routed:!!routeG});
 window.getState=st;
 // a tap places a point: focused field first, else the first empty field. Returns false if nothing to fill.
@@ -136,13 +144,13 @@ for(const [f,id,x] of [['from','qf','xf'],['to','q','xt']]){
  $(id).addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();clearField(f);$(id).value='';$('sugg').style.display='none'}});
  $(x).onclick=e=>{e.preventDefault();clearField(f);$('sugg').style.display='none'}}
 let curField='to';
-function setRisky(v){risky=v;$('cRisk').classList.toggle('on',v);$('cNorm').classList.toggle('on',!v);if(start&&end)route()}
+function setRisky(v){if(v&&!risky)track('risky_on');risky=v;$('cRisk').classList.toggle('on',v);$('cNorm').classList.toggle('on',!v);if(start&&end)route()}
 window.setRisky=setRisky;
-$('cNorm').onclick=()=>setRisky(false);function riskyWarn(onOK){const old=document.getElementById('riskWarn');if(old)old.remove();const d=document.createElement('div');d.id='riskWarn';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.innerHTML='<div class="rbk"></div><div class="rcard"><h3>⚠️ Risky mode</h3><p>Risky routes can use short stretches (up to 500 ft) of roads posted over 35 mph to connect legal streets. Driving a golf cart or LSV on those roads may be illegal and unsafe. Use at your own risk, and always follow posted signs.</p><button class="rok">Turn on Risky</button><button class="rno">Cancel</button></div>';document.body.appendChild(d);const close=()=>d.remove();d.querySelector('.rbk').onclick=close;d.querySelector('.rno').onclick=close;d.querySelector('.rok').onclick=()=>{try{localStorage.setItem('gcm-risky-ack','1')}catch(_){}close();setRisky(true)};d.querySelector('.rok').focus()}window.riskyWarn=riskyWarn;
+$('cNorm').onclick=()=>setRisky(false);function riskyWarn(onOK){const old=document.getElementById('riskWarn');if(old)old.remove();const d=document.createElement('div');d.id='riskWarn';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.innerHTML='<div class="rbk"></div><div class="rcard"><h3>⚠️ Risky mode</h3><p>Risky routes can use short stretches (up to 500 ft) of roads posted over 35 mph to connect legal streets. Driving a golf cart or LSV on those roads may be illegal and unsafe. Use at your own risk, and always follow posted signs.</p><button class="rok">Turn on Risky</button><button class="rno">Cancel</button></div>';document.body.appendChild(d);const close=()=>d.remove();d.querySelector('.rbk').onclick=close;d.querySelector('.rno').onclick=close;d.querySelector('.rok').onclick=()=>{track('risky_warning_accepted');try{localStorage.setItem('gcm-risky-ack','1')}catch(_){}close();setRisky(true)};d.querySelector('.rok').focus()}window.riskyWarn=riskyWarn;
 $('cRisk').onclick=()=>{let ack=null;try{ack=localStorage.getItem('gcm-risky-ack')}catch(_){}if(ack||risky)setRisky(true);else riskyWarn()};
 
 let me,meAcc,myLL=null,watching=false;
-function locate(){if(!navigator.geolocation){$('sub').textContent='Location not supported on this device.';return}
+function locate(){track('locate');if(!navigator.geolocation){$('sub').textContent='Location not supported on this device.';return}
  $('showloc').textContent='📍 Finding you…';let first=true;
  const ok=p=>{myLL=L.latLng(p.coords.latitude,p.coords.longitude);const acc=p.coords.accuracy;
   if(!me){meAcc=L.circle(myLL,{radius:acc,color:'#1d6fe0',weight:1,fillColor:'#1d6fe0',fillOpacity:.12,interactive:false,renderer}).addTo(map);me=meMarker(myLL)}
@@ -209,7 +217,7 @@ function buildReport(seg,issue,speed,notes){const ll=seg.ll,z=map.getZoom(),lat=
  return {subject,body:decodeURIComponent(url.split('&body=')[1]),url}}
 window.buildReport=buildReport;
 $('rpCancel').onclick=()=>{$('rpt').style.display='none'};
-$('rpSend').onclick=()=>{const r=buildReport(window._rseg,$('rpIssue').value,$('rpSpeed').value,$('rpNotes').value);window.lastReport=r;$('rpt').style.display='none';if(!window.NO_MAILTO)location.href=r.url};
+$('rpSend').onclick=()=>{track('report_problem',{issue:$('rpIssue').value});const r=buildReport(window._rseg,$('rpIssue').value,$('rpSpeed').value,$('rpNotes').value);window.lastReport=r;$('rpt').style.display='none';if(!window.NO_MAILTO)location.href=r.url};
 $('rpGen').onclick=e=>{e.preventDefault();reportRoad({road:'(general problem)',ll:map.getCenter()})};
 
 // Tappable markers: 44px hit area, cursor/touch-action set, and an explicit pointerup handler that opens the popup
@@ -228,7 +236,7 @@ let CHG=null,CHGR=null,chgOn=false,chgL=null;const esc=t=>String(t??'').replace(
 async function chargers(){if(CHG&&CHGR===REG)return CHG;const r=REG;try{const j=await (await fetch(BASE+'chargers.json')).json();if(REG===r){CHG=j.stations;CHGR=r}}catch(_){CHG=[];CHGR=r}return CHG}
 const CON={J1772:'J1772 (Level 2)',NEMA515:'120V outlet (5-15)',NEMA520:'120V outlet (5-20)',NEMA1450:'240V outlet (14-50)',TESLA:'Tesla',CHADEMO:'CHAdeMO',J1772COMBO:'CCS'};
 function chgPop(c){return `<div class="cpop"><b>${esc(c.name)}</b><br>${esc(c.addr)}<br>🔌 ${c.con.map(x=>esc(CON[x]||x)).join(', ')}${c.l2?` · ${c.l2} L2 port${c.l2>1?'s':''}`:''}${c.l1?` · ${c.l1} L1`:''}<br>🕒 ${esc(c.hours||'Hours not listed')}${c.network&&c.network!=='Non-Networked'?`<br>${esc(c.network)}`:''}${c.price?`<br>💲 ${esc(c.price)}`:''}<div class="cn">Most golf carts and LSVs need a J1772 adapter or a regular 120V outlet. Call ahead; listing from DOE AFDC${c.confirmed?`, confirmed ${esc(c.confirmed)}`:''}.</div></div>`}
-async function showChg(on){if(on&&window.PAY&&!PAY.unlocked()){PAY.sheet();return}chgOn=on;$('cChg').classList.toggle('on',on);if(chgL){map.removeLayer(chgL);chgL=null}if(!on)return;const list=await chargers();if(!chgOn)return;
+async function showChg(on){if(on&&window.PAY&&!PAY.unlocked()){track('chargers_tap_locked');PAY.sheet();return}chgOn=on;$('cChg').classList.toggle('on',on);if(chgL){map.removeLayer(chgL);chgL=null}if(!on)return;const list=await chargers();if(!chgOn)return;
  chgL=L.layerGroup(list.map(c=>tapMarker(L.marker([c.lat,c.lon],{icon:L.divIcon({className:'tapm',html:'<div class="chg">🔌</div>',iconSize:[44,44],iconAnchor:[22,22]})}).bindPopup(chgPop(c),{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)})))).addTo(map)}
 window.showChg=showChg;function popOpts(){const T=document.getElementById('top'),S=document.getElementById('sheet'),H=innerHeight,W=innerWidth;const tb=T?T.getBoundingClientRect().bottom:0;let left=10,bot=10;if(S){const r=S.getBoundingClientRect();if(W>=900)left=Math.max(10,r.right+10);else bot=Math.max(10,H-r.top+10)}return{autoPan:true,autoPanPaddingTopLeft:L.point(left,W>=900?10:tb+12),autoPanPaddingBottomRight:L.point(10,bot),maxWidth:Math.min(300,W-40)}}window.popOpts=popOpts;function fitCity(){const s=$('city');if(!s||s.selectedIndex<0)return;const cs=getComputedStyle(s),cx=(fitCity.c||(fitCity.c=document.createElement('canvas'))).getContext('2d');cx.font=`${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;s.style.width=Math.ceil(cx.measureText(s.options[s.selectedIndex].text).width+parseFloat(cs.paddingRight||0)+4)+'px'}window.fitCity=fitCity;addEventListener('resize',fitCity);document.fonts&&document.fonts.ready.then(fitCity);function setMenu(o){if(!o)return;try{setSnap('full')}catch(_){}setTimeout(()=>$('setPanel').scrollIntoView({block:'nearest'}),50)}window.setMenu=setMenu;$('whatRisky').onclick=e=>{e.preventDefault();setMenu(false);riskyWarn()};$('cChg').onclick=()=>showChg(!chgOn);
 function nearestChg(ll){if(!CHG||!ll)return null;let b=null,bd=1e18;for(const c of CHG){const d=map.distance(ll,[c.lat,c.lon]);if(d<bd){bd=d;b=c}}return b&&{c:b,mi:bd/1609.34}}
@@ -237,13 +245,13 @@ const SLUG={'sd':'sandiego','villages':'villages','myrtle':'myrtlebeach','chs':'
 function idFromPath(){const s=location.pathname.replace(/^\/+|\/+$/g,'').toLowerCase();if(!s)return '';for(const k in SLUG)if(SLUG[k]===s)return k;return null}
 function setURL(id,push){const p='/'+slugOf(id);if(location.pathname===p)return;const u=p+location.search.replace(/([?&])r=[^&]*&?/,'$1').replace(/[?&]$/,'')+location.hash;try{history[push?'pushState':'replaceState']({r:id},'',u)}catch(_){}}
 window.addEventListener('popstate',()=>{const id=idFromPath();loadRegion(id||'sd')});
-$('city').onchange=e=>{setURL(e.target.value,true);loadRegion(e.target.value)};
+$('city').onchange=e=>{track('region_change',{to:e.target.value});setURL(e.target.value,true);loadRegion(e.target.value)};
 (async()=>{const q=new URLSearchParams(location.search).get('r');[REGIONS,RULES]=await Promise.all([fetch('data/regions.json').then(r=>r.json()),fetch('data/rules.json').then(r=>r.json())]);
  $('city').innerHTML=REGIONS.filter(r=>!r.hidden||r.id===q).map(r=>`<option value="${r.id}">${r.short}${r.beta&&innerWidth>480?' (Beta)':''}</option>`).join('');
  let saved=null;try{saved=localStorage.getItem('gcm-region')}catch(_){}
- const pid=idFromPath();let id=(pid&&REGIONS.some(r=>r.id===pid))?pid:(pid===null)?'sd':(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;
- if(!id&&navigator.permissions&&navigator.geolocation){try{const p=await navigator.permissions.query({name:'geolocation'});if(p.state==='granted'){const pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:4000,maximumAge:600000}));const r=regionAt(pos.coords.latitude,pos.coords.longitude);if(r)id=r.id}}catch(_){}}
- await loadRegion(id||'sd');if(!REG.hidden)setURL(REG.id,false);const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');if(la&&lo)map.setView([la,lo],+P.get('z')||17)})();
+ const pid=idFromPath();let id=(pid&&REGIONS.some(r=>r.id===pid))?pid:(pid===null)?'sd':(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;let src=(pid||q)?'path':id?'saved':'default';
+ if(!id&&navigator.permissions&&navigator.geolocation){try{const p=await navigator.permissions.query({name:'geolocation'});if(p.state==='granted'){const pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:4000,maximumAge:600000}));const r=regionAt(pos.coords.latitude,pos.coords.longitude);if(r){id=r.id;src='geo'}}}catch(_){}}
+ await loadRegion(id||'sd');track('app_open',{source:src,path:location.pathname});if(!REG.hidden)setURL(REG.id,false);const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');if(la&&lo)map.setView([la,lo],+P.get('z')||17)})();
 
 // ---- bottom sheet: pointer-driven, translateY snapping ----
 const sheet=$('sheet'),shead=$('shead');let snap='full';
@@ -279,3 +287,4 @@ L.DomEvent.disableClickPropagation(sheet);L.DomEvent.disableScrollPropagation(sh
 map.on('click',()=>{if(!routeG&&!from&&snap!=='collapsed')setSnap('collapsed')});
 addEventListener('resize',()=>{sizeSheet();setSnap(snap)});
 sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));
+try{const sp=document.getElementById('setPanel');if(sp&&window.IntersectionObserver){let seen=false;new IntersectionObserver(es=>{if(!seen&&es.some(x=>x.isIntersecting)&&snap==='full'&&window.ready){seen=true;track('settings_open')}}).observe(sp)}}catch(_){}

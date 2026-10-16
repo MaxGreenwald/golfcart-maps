@@ -17,13 +17,13 @@ ${IOS?'':'<button class="pbtn" id="paySub">Subscribe</button>'}
 <details id="payRest"><summary>Restore purchase</summary><input id="payEmail" type="email" placeholder="Email used at checkout" autocomplete="email"><button class="pbtn2" id="payRestBtn">Restore</button></details>
 <div id="payMsg" class="pmsg"></div>${IOS?'':'<div class="pfine">Renews yearly. Cancel anytime. Secure checkout by Stripe.</div>'}</div>`;
 document.body.appendChild(d);d.querySelector('.pbk').onclick=close;d.querySelector('.px').onclick=close;
-if(!IOS)$('paySub').onclick=async()=>{msg('Opening checkout…');const r=await api('checkout',{method:'POST'});if(r.ok&&r.j.url)location.href=r.j.url;else msg('Checkout is unavailable right now. Try again later.')};
+if(!IOS)$('paySub').onclick=async()=>{window.track&&track('checkout_started');msg('Opening checkout…');const r=await api('checkout',{method:'POST'});if(r.ok&&r.j.url)location.href=r.j.url;else msg('Checkout is unavailable right now. Try again later.')};
 $('payRestBtn').onclick=async()=>{const e=$('payEmail').value.trim();if(!e)return msg('Enter your email.');msg('Checking…');
- const r=await api('restore',post({email:e}));if(r.ok&&r.j.token){save(r.j);lockUI();close();window.showChg&&window.showChg(true)}
+ const r=await api('restore',post({email:e}));window.track&&track('restore',{ok:!!(r.ok&&r.j.token)});if(r.ok&&r.j.token){save(r.j);lockUI();close();window.showChg&&window.showChg(true)}
  else msg(r.status===404?'No active subscription found for that email.':'Could not check right now. Try again later.')}}
 async function afterCheckout(){const q=new URLSearchParams(location.search),id=q.get('paid');if(!id)return;
  history.replaceState(null,'',location.pathname+location.hash);if(id==='cancel')return;
- const r=await api('verify?session_id='+encodeURIComponent(id));if(r.ok&&r.j.token){save(r.j);lockUI();setTimeout(()=>window.showChg&&window.showChg(true),400)}
+ const r=await api('verify?session_id='+encodeURIComponent(id));if(r.ok&&r.j.token){window.track&&track('unlock_success');save(r.j);lockUI();setTimeout(()=>window.showChg&&window.showChg(true),400)}
  else{sheet();msg('We could not confirm that payment yet. Try Restore purchase in a minute.')}}
 async function refresh(){const t=load();if(!t||!t.token)return;if(Date.now()-(t.at||0)<7*864e5&&t.exp*1000>Date.now())return;
  try{const r=await api('refresh',post({token:t.token}));if(r.ok&&r.j.token)save(r.j);else if(r.status===401||r.status===402)localStorage.removeItem(K)}catch(_){} lockUI()}

@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Golf Cart Map · Stats</title>
+<style>body{font:14px/1.4 system-ui,-apple-system,sans-serif;margin:0;background:#f4f8f9;color:#0b3c50}main{max-width:900px;margin:auto;padding:16px}h1{font-size:20px;margin:4px 0 12px}h2{font-size:15px;margin:0 0 8px}.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}.c{background:#fff;border-radius:12px;padding:12px;box-shadow:0 1px 3px #0001}.k{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}.k div{background:#fff;border-radius:12px;padding:10px 14px;box-shadow:0 1px 3px #0001}.k b{display:block;font-size:22px}table{border-collapse:collapse;width:100%}td,th{text-align:left;padding:3px 6px;border-bottom:1px solid #eef3f5}td:not(:first-child),th:not(:first-child){text-align:right}.bar{background:#12a150;height:8px;border-radius:4px}.m{color:#6b8592;font-size:12px}</style></head>
+<body><main><h1>🛺 Golf Cart Map · usage</h1><div id="o">Loading…</div><p class="m">Anonymous: no cookies, no IPs, random device IDs only. Times in UTC days.</p></main>
+<script>
+const P=new URLSearchParams(location.search),k=P.get('k')||'',days=P.get('days')||30,$=s=>document.getElementById(s);
+const esc=s=>String(s??'—').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tbl=(h,rows)=>`<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(x=>`<td>${esc(x)}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${h.length}">No data yet</td></tr>`}</table>`;
+const pct=x=>x==null?'—':Math.round(x*100)+'%';
+fetch('/api/stats?days='+days,{headers:{'x-stats-key':k},cache:'no-store'}).then(r=>r.json()).then(s=>{if(s.error){$('o').textContent='Error: '+s.error+(k?'':' (add ?k=YOUR_KEY)');return}
+ const f=s.paywall_funnel,top=f[0].users||1;
+ $('o').innerHTML=`<div class="k"><div><b>${s.totals.users}</b>users (${s.days}d)</div><div><b>${s.totals.sessions}</b>sessions</div><div><b>${s.routes.planned}</b>routes</div><div><b>${pct(s.routes.success_rate)}</b>route success</div><div><b>${pct(s.pwa.pwa_share)}</b>home-screen app</div></div>
+ <div class="g"><div class="c"><h2>Daily</h2>${tbl(['Day','Users','Sessions','Events'],s.daily.slice(0,14).map(d=>[d.day,d.users,d.sessions,d.events]))}</div>
+ <div class="c"><h2>Events</h2>${tbl(['Event','Count','Users'],s.events.map(e=>[e.event,e.n,e.users]))}</div>
+ <div class="c"><h2>Top regions</h2>${tbl(['Region','Users','Routes'],s.top_regions.map(r=>[r.region,r.users,r.routes]))}</div>
+ <div class="c"><h2>Paywall funnel (users)</h2>${f.map(x=>`<div>${esc(x.step)}: <b>${x.users}</b><div class="bar" style="width:${Math.max(2,x.users/top*100)}%"></div></div>`).join('')}<p class="m">Restores: ${s.restores}</p></div>
+ <div class="c"><h2>Devices / app</h2>${tbl(['Device','Users'],s.devices.map(d=>[d.device,d.users]))}<p class="m">Home-screen app ${s.pwa.pwa_users} · browser ${s.pwa.browser_users}</p></div>
+ <div class="c"><h2>Countries · open source</h2>${tbl(['Country','Users'],s.countries.map(c=>[c.country,c.users]))}${tbl(['Opened via','Opens'],s.open_sources.map(c=>[c.source,c.n]))}</div></div>
+ <p class="m">Generated ${esc(s.generated)}</p>`}).catch(e=>$('o').textContent='Error: '+e)
+</script></body></html>
