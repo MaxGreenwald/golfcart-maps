@@ -1,0 +1,16 @@
+{
+ "unverified": [
+  "City-level cart designations not digitized; app applies the state LSV rule (posted \u226435)."
+ ],
+ "bans": [
+  {
+   "names": "^SR ?200|^A1A.*Buccaneer",
+   "url": "https://www.flhouse.gov/Statutes/2025/0316.212/",
+   "label": "SR 200: FDOT, 45+ mph"
+  }
+ ],
+ "sources": [
+  "F.S. 316.212/316.2122"
+ ],
+ "status": "Beta (regions15, 2026-10-17)"
+}

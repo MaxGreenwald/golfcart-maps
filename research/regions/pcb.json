@@ -1,0 +1,16 @@
+{
+ "unverified": [
+  "City-level cart designations not digitized; app applies the state LSV rule (posted \u226435)."
+ ],
+ "bans": [
+  {
+   "names": "^US ?98|Back Beach|Panama City Beach P",
+   "url": "https://www.flhouse.gov/Statutes/2025/0316.212/",
+   "label": "US 98 / Back Beach Rd: FDOT, 45+ mph"
+  }
+ ],
+ "sources": [
+  "F.S. 316.212/316.2122"
+ ],
+ "status": "Beta (regions15, 2026-10-17)"
+}

@@ -46,7 +46,7 @@
     ],
     "cross": false,
     "daylight_only": false,
-    "cite": "F.S. 316.212/316.2125; Sumter Co. 17-3, Marion Co. Ord. 03-26, Lady Lake 17-3, Fruitland Park ch.34, Wildwood O2026-28; paths 20 mph (CDD). Streets ≤30, major roads via tunnels/path crossings only"
+    "cite": "F.S. 316.212/316.2125; Sumter Co. 17-3, Marion Co. Ord. 03-26, Lady Lake 17-3, Fruitland Park ch.34, Wildwood O2026-28; paths 20 mph (CDD). Streets \u226430, major roads via tunnels/path crossings only"
    }
   }
  },
@@ -164,7 +164,7 @@
   "cover": "Gulf Shores and Orange Beach only. Pick another city in the menu above.",
   "rule": {
    "max_posted": 25,
-   "cite": "Gulf Shores Sec. 21-13 (Apr 13 2026) & Orange Beach Sec. 70-273 / Ala. Const. Baldwin Co. §1.570: carts/LSVs only on streets posted ≤25",
+   "cite": "Gulf Shores Sec. 21-13 (Apr 13 2026) & Orange Beach Sec. 70-273 / Ala. Const. Baldwin Co. \u00a71.570: carts/LSVs only on streets posted \u226425",
    "url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"
   }
  },
@@ -317,5 +317,300 @@
   ],
   "beta": true,
   "cover": "Laguna Woods, Laguna Beach, Dana Point and San Clemente only. Pick another city in the menu above."
+ },
+ {
+  "id": "annamaria",
+  "name": "Anna Maria Island, FL",
+  "short": "Anna Maria",
+  "state": "FL",
+  "center": [
+   27.495,
+   -82.715
+  ],
+  "zoom": 14,
+  "bbox": [
+   27.44,
+   -82.76,
+   27.55,
+   -82.67
+  ],
+  "beta": true,
+  "cover": "Anna Maria, Holmes Beach and Bradenton Beach only. Pick another city in the menu above."
+ },
+ {
+  "id": "putinbay",
+  "name": "Put-in-Bay, OH",
+  "short": "Put-in-Bay",
+  "state": "OH",
+  "center": [
+   41.654,
+   -82.818
+  ],
+  "zoom": 14,
+  "bbox": [
+   41.63,
+   -82.87,
+   41.68,
+   -82.78
+  ],
+  "beta": true,
+  "cover": "South Bass Island (Put-in-Bay) only. Pick another city in the menu above."
+ },
+ {
+  "id": "southpadre",
+  "name": "South Padre Island, TX",
+  "short": "South Padre",
+  "state": "TX",
+  "center": [
+   26.11,
+   -97.185
+  ],
+  "zoom": 14,
+  "bbox": [
+   26.05,
+   -97.22,
+   26.17,
+   -97.15
+  ],
+  "beta": true,
+  "cover": "South Padre Island and Port Isabel only. Pick another city in the menu above."
+ },
+ {
+  "id": "siesta",
+  "name": "Siesta Key / Sarasota keys, FL",
+  "short": "Siesta Key",
+  "state": "FL",
+  "center": [
+   27.268,
+   -82.548
+  ],
+  "zoom": 14,
+  "bbox": [
+   27.17,
+   -82.7,
+   27.45,
+   -82.5
+  ],
+  "beta": true,
+  "cover": "Siesta Key, Lido, St. Armands and Longboat Key area only. Pick another city in the menu above."
+ },
+ {
+  "id": "destin",
+  "name": "Destin / Okaloosa Island, FL",
+  "short": "Destin",
+  "state": "FL",
+  "center": [
+   30.395,
+   -86.575
+  ],
+  "zoom": 14,
+  "bbox": [
+   30.37,
+   -86.75,
+   30.42,
+   -86.4
+  ],
+  "beta": true,
+  "cover": "Fort Walton Beach (Okaloosa Island) to Destin only. Pick another city in the menu above."
+ },
+ {
+  "id": "pcb",
+  "name": "Panama City Beach, FL",
+  "short": "Panama City Beach",
+  "state": "FL",
+  "center": [
+   30.215,
+   -85.845
+  ],
+  "zoom": 14,
+  "bbox": [
+   30.13,
+   -85.97,
+   30.3,
+   -85.72
+  ],
+  "beta": true,
+  "cover": "Panama City Beach only. Pick another city in the menu above."
+ },
+ {
+  "id": "staug",
+  "name": "St. Augustine, FL",
+  "short": "St. Augustine",
+  "state": "FL",
+  "center": [
+   29.85,
+   -81.305
+  ],
+  "zoom": 14,
+  "bbox": [
+   29.75,
+   -81.36,
+   29.95,
+   -81.25
+  ],
+  "beta": true,
+  "cover": "St. Augustine, Anastasia Island and St. Augustine Beach only. Pick another city in the menu above."
+ },
+ {
+  "id": "amelia",
+  "name": "Amelia Island / Fernandina Beach, FL",
+  "short": "Amelia Island",
+  "state": "FL",
+  "center": [
+   30.605,
+   -81.45
+  ],
+  "zoom": 14,
+  "bbox": [
+   30.5,
+   -81.48,
+   30.71,
+   -81.42
+  ],
+  "beta": true,
+  "cover": "Amelia Island only. Pick another city in the menu above."
+ },
+ {
+  "id": "keywest",
+  "name": "Key West, FL",
+  "short": "Key West",
+  "state": "FL",
+  "center": [
+   24.57,
+   -81.77
+  ],
+  "zoom": 14,
+  "bbox": [
+   24.54,
+   -81.82,
+   24.6,
+   -81.72
+  ],
+  "beta": true,
+  "cover": "Key West island only. Pick another city in the menu above."
+ },
+ {
+  "id": "suncitycenter",
+  "name": "Sun City Center, FL",
+  "short": "Sun City Center",
+  "state": "FL",
+  "center": [
+   27.71,
+   -82.375
+  ],
+  "zoom": 14,
+  "bbox": [
+   27.68,
+   -82.42,
+   27.74,
+   -82.33
+  ],
+  "beta": true,
+  "cover": "Sun City Center and Kings Point only. Pick another city in the menu above."
+ },
+ {
+  "id": "lwr",
+  "name": "Lakewood Ranch, FL",
+  "short": "Lakewood Ranch",
+  "state": "FL",
+  "center": [
+   27.415,
+   -82.405
+  ],
+  "zoom": 14,
+  "bbox": [
+   27.36,
+   -82.48,
+   27.47,
+   -82.33
+  ],
+  "beta": true,
+  "cover": "Lakewood Ranch only. Pick another city in the menu above."
+ },
+ {
+  "id": "bhi",
+  "name": "Bald Head Island / Southport, NC",
+  "short": "Southport",
+  "state": "NC",
+  "center": [
+   33.918,
+   -78.02
+  ],
+  "zoom": 14,
+  "bbox": [
+   33.86,
+   -78.25,
+   33.95,
+   -77.94
+  ],
+  "beta": true,
+  "cover": "Oak Island, Southport and Bald Head Island (carts only, no cars) only. Pick another city in the menu above.",
+  "rule": {
+   "max_posted": 35,
+   "cite": "Bald Head Island has no cars (golf carts and bikes only; ferry access). Southport and Oak Island: NC LSV \u226435 (G.S. 20-121.1), carts by town ordinance",
+   "url": "https://villagebhi.org/"
+  }
+ },
+ {
+  "id": "obx",
+  "name": "Outer Banks, NC",
+  "short": "Outer Banks",
+  "state": "NC",
+  "center": [
+   36.0,
+   -75.665
+  ],
+  "zoom": 14,
+  "bbox": [
+   35.85,
+   -75.78,
+   36.2,
+   -75.6
+  ],
+  "beta": true,
+  "cover": "Nags Head, Kill Devil Hills, Kitty Hawk, Southern Shores and Duck only. Pick another city in the menu above."
+ },
+ {
+  "id": "avalon",
+  "name": "Avalon (Catalina Island), CA",
+  "short": "Avalon",
+  "state": "CA",
+  "center": [
+   33.34,
+   -118.33
+  ],
+  "zoom": 14,
+  "bbox": [
+   33.32,
+   -118.35,
+   33.36,
+   -118.31
+  ],
+  "beta": true,
+  "cover": "City of Avalon only (rental carts and permitted autoettes; most of the island outside town is closed to private vehicles). Pick another city in the menu above.",
+  "rule": {
+   "max_posted": 25,
+   "cite": "Avalon: car permits are capped, so visitors and most residents get around in rented golf carts or permitted autoettes; CVC 21115 golf carts on streets \u226425",
+   "url": "https://www.cityofavalon.com/"
+  }
+ },
+ {
+  "id": "rockport",
+  "name": "Rockport / Fulton, TX",
+  "short": "Rockport",
+  "state": "TX",
+  "center": [
+   28.05,
+   -97.05
+  ],
+  "zoom": 14,
+  "bbox": [
+   27.98,
+   -97.1,
+   28.12,
+   -97.0
+  ],
+  "beta": true,
+  "cover": "Rockport and Fulton only. Pick another city in the menu above."
  }
 ]

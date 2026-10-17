@@ -1,0 +1,16 @@
+{
+ "unverified": [
+  "City-level cart designations not digitized; app applies the state LSV rule (posted \u226435)."
+ ],
+ "bans": [
+  {
+   "names": "^SH ?35\\b|^TX ?35\\b",
+   "url": "",
+   "label": "SH 35: 45+ mph"
+  }
+ ],
+ "sources": [
+  "Tex. Transp. Code 551.403 / 551.303"
+ ],
+ "status": "Beta (regions15, 2026-10-17)"
+}
