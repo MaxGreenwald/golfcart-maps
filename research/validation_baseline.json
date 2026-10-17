@@ -1,0 +1,22 @@
+{
+ "_note": "Reviewed known cases. Fail = more than this. Lower when fixed; raise only after checking the listed islands.",
+ "red_islands": {
+  "30a": 1,
+  "chs": 2,
+  "coachella": 0,
+  "galveston": 0,
+  "goldenisles": 1,
+  "gulfshores": 0,
+  "hhi": 0,
+  "myrtle": 3,
+  "naples": 2,
+  "ocoast": 14,
+  "portaransas": 2,
+  "ptc": 0,
+  "sd": 77,
+  "suncity": 5,
+  "tybee": 0,
+  "villages": 7
+ },
+ "ring_code_errors": {}
+}

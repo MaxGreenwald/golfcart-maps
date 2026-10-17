@@ -1,4 +1,5 @@
 from playwright.sync_api import sync_playwright
+import os as _os; SHOTS_DIR = _os.environ.get("SHOTS_DIR", "/workspace/golfcart-maps/")
 import os
 URL=os.environ.get("URL","http://localhost:8765/")
 with sync_playwright() as p:
@@ -8,8 +9,8 @@ with sync_playwright() as p:
         r=lambda s:pg.evaluate(f"(()=>{{const r=document.querySelector('{s}').getBoundingClientRect();return [Math.round(r.left),Math.round(r.top),Math.round(r.width),Math.round(r.height)]}})()")
         vis=lambda:pg.evaluate("innerHeight-document.getElementById('sheet').getBoundingClientRect().top")
         print(name,"snap",pg.evaluate("getSnap()"),"sheet",r('#sheet'),"visible",vis(),"top",r('#top'),"loc",r('#loc'),"details open",pg.evaluate("more.open"))
-        pg.screenshot(path=f"/workspace/golfcart-maps/screenshot-{name}.png")
+        pg.screenshot(path=SHOTS_DIR+f"screenshot-{name}.png")
         pg.evaluate("testRoute([32.8506,-117.2717],[32.8305,-117.2805]).then(()=>0)");pg.wait_for_timeout(3000)
         pg.evaluate("setSnap('full');0");pg.wait_for_timeout(500);print(" full visible",vis(),"sbody scroll",pg.evaluate("[sbody.scrollHeight,sbody.clientHeight]"))
-        pg.screenshot(path=f"/workspace/golfcart-maps/screenshot-{name}-route.png")
+        pg.screenshot(path=SHOTS_DIR+f"screenshot-{name}-route.png")
         pg.evaluate("setSnap('collapsed');0");pg.wait_for_timeout(500);print(" collapsed visible",vis())
