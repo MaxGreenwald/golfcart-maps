@@ -1,7 +1,7 @@
 name: ios-testflight
 on:
   push:
-    branches: [ios-release]
+    branches: [ios-release, "ios-sync-*"]   # ios-sync-* branches run only the sync guard (no build/upload)
   workflow_dispatch:
     inputs:
       carplay:
@@ -9,7 +9,29 @@ on:
         type: boolean
         default: false
 jobs:
+  # Structural fix for the stale-build bug (build 7 shipped a web app 42 commits behind master):
+  # every run merges origin/master first, so the app always ships the current site, then checks the
+  # app-only overrides survived and that nothing else diverges from master.
+  sync-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: Sync web app with origin/master (CI copy only; never pushed)
+        run: |
+          git config user.name ci; git config user.email ci@users.noreply.github.com
+          git fetch --no-tags origin master
+          if ! git merge --no-edit origin/master; then
+            git merge --abort || true
+            echo "::error::ios-release conflicts with master. Merge origin/master into ios-release by hand (keep the native overrides) and push."; exit 1
+          fi
+          echo "Building web app at $(git rev-parse --short HEAD) = ios-release $(git rev-parse --short HEAD^1) + master $(git rev-parse --short origin/master)"
+      - name: Guard native overrides + master sync
+        run: python3 scripts/check_native_overrides.py --ref origin/master
   testflight:
+    needs: sync-guard
+    if: github.ref == 'refs/heads/ios-release'
     runs-on: macos-15
     timeout-minutes: 60
     env:
@@ -20,6 +42,18 @@ jobs:
     # regenerate the profile, update the secret, and run with carplay=true.
     steps:
       - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: Sync web app with origin/master (CI copy only; never pushed)
+        run: |
+          git config user.name ci; git config user.email ci@users.noreply.github.com
+          git fetch --no-tags origin master
+          if ! git merge --no-edit origin/master; then
+            git merge --abort || true
+            echo "::error::ios-release conflicts with master. Merge origin/master into ios-release by hand (keep the native overrides) and push."; exit 1
+          fi
+          echo "Building web app at $(git rev-parse --short HEAD) = ios-release $(git rev-parse --short HEAD^1) + master $(git rev-parse --short origin/master)"
+      - name: Guard native overrides + master sync
+        run: python3 scripts/check_native_overrides.py --ref origin/master
       - name: Select Xcode 26 (App Store requires iOS 26 SDK)
         run: |
           ls -d /Applications/Xcode*.app
