@@ -1,5 +1,6 @@
 """Back-to-back route UX tests on a mobile viewport: reset, field X/Escape, browse popups, swap with GPS, Mexico/inland rejection."""
 from playwright.sync_api import sync_playwright
+import os as _os; SHOTS_DIR = _os.environ.get("SHOTS_DIR", "/workspace/golfcart-maps/")
 import os
 URL=os.environ.get("URL","http://localhost:8765/")
 fails=[]
@@ -51,7 +52,7 @@ with sync_playwright() as p:
     ck("swap: GPS moves to To",s["to"]["me"] and not s["from"]["me"] and pg.input_value("#q")=="Your location" and abs(s["to"]["lat"]-32.8506)<1e-4 and abs(s["from"]["lat"]-32.8305)<1e-4 and s["routed"],str(s))
     ck("swap: rerouted",pg.evaluate("lastRoute")!=r1 or True, str(pg.evaluate("lastRoute")))
     ck("swap: GPS ring marker at To",pg.evaluate("mk.length")==2)
-    pg.screenshot(path="/workspace/golfcart-maps/screenshot-swap.png")
+    pg.screenshot(path=SHOTS_DIR+"screenshot-swap.png")
     pg.click("#swap2");pg.wait_for_timeout(2500);s=S()
     ck("swap back restores GPS as From",s["from"]["me"] and not s["to"]["me"] and pg.input_value("#qf")=="Your location" and s["routed"],str(s))
     # two plain points swapped twice
@@ -66,5 +67,7 @@ with sync_playwright() as p:
     pg.evaluate("map.fire('click',{latlng:L.latLng(33.12,-117.08)});0");ck("Escondido tap rejected",not S()["from"])
     ck("testRoute rejects Mexico",pg.evaluate("testRoute([32.58,-117.11],[32.52,-117.11])") is None)
     pg.click("#reset");pg.evaluate("setSnap('half');0");pg.click("#q");pg.wait_for_timeout(300)
-    pg.screenshot(path="/workspace/golfcart-maps/screenshot-fields.png")
+    pg.screenshot(path=SHOTS_DIR+"screenshot-fields.png")
     print("RESULT", "ALL PASS" if not fails else f"{len(fails)} FAIL: {fails}")
+
+import sys as _sys; _sys.exit(1 if fails else 0)
