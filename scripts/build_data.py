@@ -140,6 +140,7 @@ for _pass in range(2):
 print("short stubs inherited", len(STUB))
 json.dump([{"way": wl[k]["id"], "road": v[1], "mph": v[0], "m": round(_len_m(wl[k]["geometry"])), "at": [wl[k]["geometry"][0]["lat"], wl[k]["geometry"][0]["lon"]]} for k, v in STUB.items()],
           open(os.path.join(os.path.dirname(__file__), "..", "research", "short_stubs.json"), "w"), indent=1)
+WS, WOUT = {}, {}   # wi -> final (mph, src); wi -> indices into out (for the roundabout pass)
 for wi, w in enumerate(wl):
     t = w["tags"]; s, src = classify(t); si = -1
     if wi in STUB and _spd[wi][1] == "inferred_high":  # also covers a lone, unapplied Mapillary match
@@ -160,7 +161,7 @@ for wi, w in enumerate(wl):
         if key not in sidx: sidx[key] = len(sources); sources.append([key[0], key[1]])
         si = sidx[key]
         if (osm >= 40) != (s >= 40): conf.append({"road": t.get("name", ""), "way": w["id"], "osm_mph": osm, "mapillary_mph": s, "change": "newly forbidden" if s >= 40 else "newly allowed", "url": key[0]})
-    stats[src] += 1
+    stats[src] += 1; WS[wi] = (s, src); WOUT[wi] = []
     nm = t.get("name") or t.get("ref") or ""
     if nm not in nidx: nidx[nm] = len(names); names.append(nm)
     g = w["geometry"]; nodes = w["nodes"]
@@ -174,7 +175,16 @@ for wi, w in enumerate(wl):
         pts = simplify([[round(g[k]["lon"], 5), round(g[k]["lat"], 5)] for k in sg])
         ow = 1 if t.get("oneway") in ("yes", "1") else (-1 if t.get("oneway") == "-1" else 0)
         if t.get("junction") == "roundabout" and ow == 0: ow = 1
+        WOUT[wi].append(len(out))
         out.append([nidx[nm], t["highway"], s, src[0], ow, nid(nodes[sg[0]]), nid(nodes[sg[-1]]), pts] + ([si] if si >= 0 else []))
+# Roundabouts with no limit of their own take the highest posted limit of their connecting roads (see build_data_lib).
+from build_data_lib import roundabout_inherit
+RBX = roundabout_inherit(wl, WS, lambda w: True)
+for wi, (nmph, rcode) in RBX["set"].items():
+    for i in WOUT[wi]: out[i][2] = nmph; out[i][3] = rcode
+stats["roundabout_inherited"] = len(RBX["set"])
+print("roundabouts", {k: v for k, v in RBX.items() if k not in ("set", "log")})
+if os.environ.get("RB_DEBUG"): json.dump(RBX["log"], open("/tmp/rb_sd.json", "w"), indent=0)
 os.makedirs(os.path.join(os.path.dirname(__file__), "..", "research"), exist_ok=True)
 json.dump({"stats": mst, "changes": conf}, open(os.path.join(os.path.dirname(__file__), "..", "research", "mapillary_report.json"), "w"), indent=1)
 total = sum(stats.values())
