@@ -1,0 +1,17 @@
+{
+ "unverified": [],
+ "bans": [
+  {
+   "names": "^US ?98|^US ?331|Emerald Coast P|Scenic H(igh)?wy 98|^SR ?30\\b",
+   "url": "https://waltonso.org/lsv/",
+   "label": "Walton County Sheriff: LSVs may not drive on US 98 (cross at 4-way intersections only)"
+  }
+ ],
+ "sources": [
+  "https://waltonso.org/lsv/",
+  "https://www.mywaltonfl.gov/DocumentCenter/View/43678/Ordinance-2025-03-LSV",
+  "F.S. 316.2122",
+  "Golf carts (non-LSV) are not allowed on any Walton County public road; private communities (Seaside, Rosemary, Alys, Sandestin) set own rules"
+ ],
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=30a loads it"
+}

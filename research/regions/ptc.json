@@ -1,1 +1,19 @@
-{"unverified":["Golf cart mode: only OSM golf_cart-tagged paths/roads are allowed; PTC city ordinance lets carts use some city streets (not yet digitized).","Path network completeness depends on OSM golf_cart tags; city GIS import license unverified."],"overrides":[]}
+{
+ "unverified": [
+  "Golf cart mode: only OSM golf_cart-tagged paths/roads are allowed; PTC city ordinance lets carts use some city streets (not yet digitized).",
+  "Path network completeness depends on OSM golf_cart tags; city GIS import license unverified."
+ ],
+ "overrides": [],
+ "bans": [
+  {
+   "names": "^(GA|SR) ?(54|74)\\b|^Joel Cowan Pkwy",
+   "url": "https://costacarts.com/are-golf-carts-street-legal-by-state/",
+   "label": "GA state routes 54/74 (state highway; carts use path tunnels/bridges)"
+  }
+ ],
+ "sources": [
+  "https://costacarts.com/are-golf-carts-street-legal-by-state/",
+  "O.C.G.A. 40-6-331 (local designation), 40-6-362 (LSV \u226435)"
+ ],
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=ptc loads it"
+}

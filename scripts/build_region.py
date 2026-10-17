@@ -4,7 +4,7 @@ Input: cache/<id>_osm.json (from pbf_extract.py) + optional research/regions/<id
 Priority: overrides/bans > cart paths (OSM golf_cart tags) > Mapillary (2+ signs to flip) > OSM maxspeed > default.
 Output: public/data/<id>/{index.json,pois.json,tiles/*.json}; same segment format as San Diego, plus
 src 'c' = cart path, 'd' = OSM-designated golf cart road (golf_cart=yes|designated on a road)."""
-import json, os, sys, math, gzip, time
+import json, os, sys, math, gzip, time, re
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, "..")
 sys.path.insert(0, HERE)
 import mapillary_signs as M
@@ -27,6 +27,16 @@ for el in d["elements"]:
         if t.get("service") in ("parking_aisle", "driveway", "drive-through") and t.get("golf_cart") not in CARTV: continue
     elif t.get("golf_cart") not in CARTV: continue   # paths only when carts are tagged
     el["nodes"] = [f'{q["lat"]:.7f},{q["lon"]:.7f}' for q in el["geometry"]]; ways[el["id"]] = el
+if CFG.get("poly"):   # clip ways to region polygon (midpoint + any vertex inside)
+    PG = CFG["poly"]
+    def _inp(x, y):
+        c = False; j = len(PG) - 1
+        for i in range(len(PG)):
+            xi, yi = PG[i]; xj, yj = PG[j]
+            if (yi > y) != (yj > y) and x < (xj - xi) * (y - yi) / (yj - yi) + xi: c = not c
+            j = i
+        return c
+    ways = {k: w for k, w in ways.items() if any(_inp(q["lon"], q["lat"]) for q in w["geometry"][:: max(1, len(w["geometry"]) // 4)] + [w["geometry"][-1]])}
 cnt = {}
 for w in ways.values():
     for n in w["nodes"]: cnt[n] = cnt.get(n, 0) + 1
@@ -43,7 +53,7 @@ try:
     from concurrent.futures import ThreadPoolExecutor
     with ThreadPoolExecutor(4) as ex: res = list(ex.map(lambda b: M.tile(b, tk), bbs))  # cached after first run
     signs = {x["id"]: x for r in res for x in r}
-    sl = [{"id": k, "mph": int(v["object_value"].split("-limit-")[1].split("--")[0]), "lon": v["geometry"]["coordinates"][0], "lat": v["geometry"]["coordinates"][1], "dir": v.get("aligned_direction")} for k, v in signs.items()]
+    sl = [{"id": k, "mph": int(v["object_value"].split("-limit-")[1].split("--")[0]), "lon": v["geometry"]["coordinates"][0], "lat": v["geometry"]["coordinates"][1], "dir": v.get("aligned_direction")} for k, v in signs.items() if v.get("geometry") and "-limit-" in v.get("object_value", "")]
     M.load = lambda: sl
     mly, mst = M.match([(w["tags"], [[q["lon"], q["lat"]] for q in w["geometry"]]) for w in wl])
 except Exception as e: print("mapillary skipped:", e)
@@ -92,6 +102,52 @@ if CFG.get("wildwood"):
             fl, v = max(votes.items(), key=lambda x: x[1])
             if v * 2 > n: WW[wi] = fl
     print("wildwood matched ways", len(WW), "permitted", sum(1 for v in WW.values() if v == 2), "prohibited", sum(1 for v in WW.values() if v == 1))
+# ---- State DOT / FHWA posted speed lines (cache/<id>_dot.json from fetch_dot.py) -> per-way speed via >=60% of samples within 12 m ----
+DOT = {}; dotp = os.path.join(ROOT, "cache", RID + "_dot.json")
+if os.path.exists(dotp) and not CFG.get("no_dot"):
+    dl = json.load(open(dotp)); dg = {}
+    kx2, ky2 = 111320 * math.cos(math.radians((S + N) / 2)), 110540
+    for li, o in enumerate(dl):
+        pt = o["coords"]
+        for k in range(len(pt) - 1):
+            for cx in range(int(min(pt[k][0], pt[k+1][0]) * 1000), int(max(pt[k][0], pt[k+1][0]) * 1000) + 1):
+                for cy in range(int(min(pt[k][1], pt[k+1][1]) * 1000), int(max(pt[k][1], pt[k+1][1]) * 1000) + 1): dg.setdefault((cx, cy), []).append((li, k))
+    def dseg2(p, a, b):
+        ax, ay, bx, by, px, py = a[0]*kx2, a[1]*ky2, b[0]*kx2, b[1]*ky2, p[0]*kx2, p[1]*ky2
+        vx, vy = bx-ax, by-ay; L = vx*vx + vy*vy; u = max(0, min(1, ((px-ax)*vx + (py-ay)*vy) / L)) if L else 0
+        return math.hypot(px-ax-u*vx, py-ay-u*vy)
+    DOTCLS = set("motorway motorway_link trunk trunk_link primary primary_link secondary secondary_link tertiary tertiary_link unclassified".split())
+    for wi, w in enumerate(wl):
+        if w["tags"]["highway"] not in DOTCLS: continue
+        g = w["geometry"]; smp = g[:: max(1, len(g) // 8)] + [g[-1]]; votes = {}
+        for q in smp:
+            p = (q["lon"], q["lat"]); best = (12, None)
+            for dx in (-1, 0, 1):
+                for dy in (-1, 0, 1):
+                    for li, k in dg.get((int(p[0]*1000)+dx, int(p[1]*1000)+dy), ()):
+                        dd = dseg2(p, dl[li]["coords"][k], dl[li]["coords"][k+1])
+                        if dd < best[0]: best = (dd, li)
+            if best[1] is not None:
+                o = dl[best[1]]; votes.setdefault(o["mph"], []).append(o)
+        if votes:
+            mph_, vs = max(votes.items(), key=lambda x: (len(x[1]), x[0]))
+            if len(vs) >= 0.6 * len(smp): DOT[wi] = vs[0]
+    print("dot matched ways", len(DOT))
+DES = {}   # wi -> (url,label): ordinance-designated cart streets
+def _norm(x): return re.sub(r"[^a-z0-9 ]", "", x.lower().replace("avenue", "ave").replace("street", "st").replace("drive", "dr").replace("boulevard", "blvd").replace("road", "rd").replace("lane", "ln").replace("court", "ct").replace("circle", "cir").replace("west ", "w ").replace("east ", "e ").replace("saint ", "st "))
+import difflib
+for dsg in CFG.get("designated_names", []):
+    nl = [_norm(n) for n in dsg["names"]]; bb = dsg["bbox"]
+    for wi, w in enumerate(wl):
+        nm_ = w["tags"].get("name")
+        if not nm_ or w["tags"]["highway"] not in ROADS: continue
+        q = w["geometry"][len(w["geometry"])//2]
+        if not (bb[0] <= q["lat"] <= bb[2] and bb[1] <= q["lon"] <= bb[3]): continue
+        n0 = _norm(nm_)
+        if n0 in nl or (dsg.get("fuzzy") and difflib.get_close_matches(n0, nl, 1, dsg["fuzzy"])): DES[wi] = (dsg["url"], dsg["label"])
+print("designated (ordinance list) ways", len(DES))
+CONF = []
+CHG = {"dot": 0, "dot_block": 0, "dot_open": 0, "desig_only_block": 0}
 names, out, sources, sidx, nidx, nids = [], [], [], {}, {}, {}
 stats = {"tagged": 0, "inferred": 0, "inferred_high": 0, "verified": 0, "mapillary": 0, "cartpath": 0, "designated": 0}
 def src_i(url, label):
@@ -100,13 +156,37 @@ def src_i(url, label):
 for wi, w in enumerate(wl):
     t = w["tags"]; hw = t["highway"]; si = -1
     s, src = classify(t)
+    lban = None
+    if hw in ROADS:
+        mla, mlo = w["geometry"][len(w["geometry"])//2]["lat"], w["geometry"][len(w["geometry"])//2]["lon"]
+        for b in CFG.get("bans", []):   # local ordinance / state-highway bans -> blocked for everyone (single rule)
+            if not any(re.search(b["names"], t.get(k, "")) for k in ("name", "ref")): continue
+            if "south_of" in b and mla >= b["south_of"]: continue
+            if "north_of" in b and mla <= b["north_of"]: continue
+            if "west_of" in b and mlo >= b["west_of"]: continue
+            if "bbox" in b and not (b["bbox"][0] <= mla <= b["bbox"][2] and b["bbox"][1] <= mlo <= b["bbox"][3]): continue
+            lban = b; break
     if w["id"] in OV:
         o = OV[w["id"]]; s, src = o["mph"], "verified"; si = src_i(o["url"], o["label"])
+    elif lban:
+        s, src = 99, "verified"; si = src_i(lban["url"], lban["label"])
+    elif wi in DOT and src == "tagged" and DOT[wi]["src"] == "FHWA" and (s > 35) != (DOT[wi]["mph"] > 35):
+        g_ = w["geometry"][len(w["geometry"])//2]; CONF.append({"name": t.get("name") or t.get("ref"), "osm_mph": s, "fhwa_mph": DOT[wi]["mph"], "lat": round(g_["lat"], 5), "lon": round(g_["lon"], 5), "way": w["id"]})
+    elif wi in DOT and not (wi in mly and mly[wi][2] >= 2):
+        o = DOT[wi]; s0 = s; s, src = o["mph"], "verified"; si = src_i(o["url"], o["label"]); CHG["dot"] += 1
+        if s0 <= 35 < s: CHG["dot_block"] += 1
+        if s0 > 35 >= s: CHG["dot_open"] += 1
     elif hw not in ROADS:
         s, src = mph(t.get("maxspeed")) or 20, "cartpath"
     elif wi in mly and not ((s >= 40) != (mly[wi][0] >= 40) and mly[wi][2] < 2):
         s, src = mly[wi][0], "mapillary"; si = src_i(mly[wi][1], f"Mapillary: {mly[wi][2]} posted {s} mph sign(s) detected")
     if src not in ("verified", "cartpath") and t.get("golf_cart") in ("yes", "designated") and s <= 35: src = "designated"
+    if wi in DES and src not in ("cartpath",) and s <= 35 and not lban: src = "designated"; si = src_i(*DES[wi])
+    if hw in ROADS and not lban and src not in ("designated", "cartpath") and w["id"] not in OV:
+        mq = w["geometry"][len(w["geometry"])//2]
+        for z in CFG.get("designated_only_zones", []):
+            bb = z["bbox"]
+            if bb[0] <= mq["lat"] <= bb[2] and bb[1] <= mq["lon"] <= bb[3]: s, src = 99, "verified"; si = src_i(z["url"], z["label"]); CHG["desig_only_block"] += 1; break
     stats[src] += 1
     nm = t.get("name") or t.get("ref") or ("Cart path" if src == "cartpath" else "")
     if src == "cartpath" and t.get("tunnel") in ("yes", "culvert"): nm += " (cart tunnel)"
@@ -127,7 +207,9 @@ for wi, w in enumerate(wl):
         ca = CFG.get("cart_allow_names")
         if ca and re.search(ca["names"], t.get("name", "")) and ca["bbox"][0] <= mlat <= ca["bbox"][2] and ca["bbox"][1] <= mlon <= ca["bbox"][3]: cflag = 2
         if wi in WW: cflag = WW[wi]
+        if src == "verified" and t.get("golf_cart") in ("yes", "designated") and s <= 30 and cflag != 1: cflag = 2   # verified-speed cart-lane road
         if t.get("golf_cart") == "no": cflag = 1
+        if lban: cflag = 1
     code = {"cartpath": "c", "designated": "d"}.get(src, src[0])
     for sg in segs:
         sflag = cflag
@@ -141,7 +223,7 @@ for wi, w in enumerate(wl):
         if t.get("junction") == "roundabout" and ow == 0: ow = 1
         out.append([nidx[nm], hw, s, code, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([si, sflag] if sflag else [si] if si >= 0 else []))
 POLY = CFG.get("poly") or [[W, N], [E, N], [E, S], [W, S]]
-meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": len(wl), "segments": len(out), "stats": stats, "poly": POLY, "region": RID, "unverified": CFG.get("unverified", []), "xnodes": sorted(nids[n] for n in XN if n in nids), "crossings": XING}
+meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": len(wl), "segments": len(out), "stats": stats, "poly": POLY, "region": RID, "unverified": CFG.get("unverified", []), "changes": CHG, "dot_conflicts": CONF, "xnodes": sorted(nids[n] for n in XN if n in nids), "crossings": XING}
 TS = 0.1; tiles = {}
 for sg in out:
     p = sg[7][0]; tiles.setdefault(f"{math.floor(p[0]/TS)}_{math.floor(p[1]/TS)}", []).append(sg)

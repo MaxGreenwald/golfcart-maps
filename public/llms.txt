@@ -8,7 +8,7 @@ URL: https://golfcartmap.com/
 - Shows which roads a golf cart / low-speed vehicle (LSV) may legally use in coastal San Diego County, from Oceanside to the US-Mexico border, about 6 miles inland.
 - Green = posted 35 mph or less (OK for LSVs); dashed green = small road, assumed 25 mph; red = posted 40+ mph or major road (avoid).
 - Plans routes that avoid 40+ mph roads; crossing a faster road at an intersection is allowed.
-- Optional risky mode highlights stretches of 300 ft or less on faster roads.
+- Optional risky mode highlights stretches of 500 ft or less on faster roads.
 
 ## Rules used
 - CVC 21260: LSVs only on roads posted 35 mph or less; may cross faster roads at intersections between 35-or-less roads.

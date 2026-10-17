@@ -102,8 +102,51 @@ names, out, stats = [], [], {"tagged": 0, "inferred": 0, "unknown": 0, "inferred
 nidx = {}
 nids = {}
 def nid(k): return nids.setdefault(k, len(nids))
+# Short split stubs: OSM often splits one street into several ways; when only some pieces carry a
+# posted limit (tag/city list/Mapillary), an untagged 99 "inferred_high" leftover of <=200 m shows as an
+# isolated red stub between OK pieces. Inherit the adjoining same-street limit when both ends join <=35
+# roads and at least one end continues the same street with a known (tagged/verified/mapillary) <=35 limit.
+def _len_m(g): return sum(math.hypot((g[k+1]["lon"]-g[k]["lon"])*93500, (g[k+1]["lat"]-g[k]["lat"])*110540) for k in range(len(g)-1))
+_spd = []
+for wi, w in enumerate(wl):
+    s0, src0 = classify(w["tags"])
+    if wi in ov: s0, src0 = ov[wi][0], "verified"
+    elif wi in mly and not ((s0 >= 40) != (mly[wi][0] >= 40) and mly[wi][2] < 2): s0, src0 = mly[wi][0], "mapillary"
+    _spd.append((s0, src0))
+_ends = {}
+for wi, w in enumerate(wl):
+    for n in (w["nodes"][0], w["nodes"][-1]): _ends.setdefault(n, []).append(wi)
+_mid = {}
+for wi, w in enumerate(wl):
+    for n in w["nodes"]: _mid.setdefault(n, []).append(wi)
+STUB = {}
+_ROADS = {"motorway", "trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "living_street"}
+_CAND = {wi for wi, w in enumerate(wl) if _spd[wi][1] == "inferred_high" and w["tags"].get("name") and _len_m(w["geometry"]) <= 200}
+for _pass in range(2):
+    _prev = dict(STUB)  # only resolve from the previous pass so a chain of split pieces grows at most one piece per pass
+    for wi, w in enumerate(wl):
+        s0, src0 = _spd[wi]; nm = w["tags"].get("name")
+        if src0 != "inferred_high" or wi in STUB or not nm or _len_m(w["geometry"]) > 200: continue
+        ok_ends, known = 0, []
+        for n in (w["nodes"][0], w["nodes"][-1]):
+            nb = [j for j in _mid.get(n, []) if j != wi and wl[j]["tags"].get("highway", "").replace("_link", "") in _ROADS and (j not in _CAND or j in _prev)]
+            same = [j for j in nb if wl[j]["tags"].get("name") == nm]
+            pool = same or nb
+            sp = [_prev[j][0] if j in _prev else _spd[j][0] for j in pool]
+            if not sp or max(sp) > 35: ok_ends = -9; break
+            ok_ends += 1
+            known += [(_prev[j][0] if j in _prev else _spd[j][0]) for j in same if j in _prev or _spd[j][1] in ("tagged", "verified", "mapillary")]
+        if ok_ends == 2 and known: STUB[wi] = (max(known), nm)
+print("short stubs inherited", len(STUB))
+json.dump([{"way": wl[k]["id"], "road": v[1], "mph": v[0], "m": round(_len_m(wl[k]["geometry"])), "at": [wl[k]["geometry"][0]["lat"], wl[k]["geometry"][0]["lon"]]} for k, v in STUB.items()],
+          open(os.path.join(os.path.dirname(__file__), "..", "research", "short_stubs.json"), "w"), indent=1)
 for wi, w in enumerate(wl):
     t = w["tags"]; s, src = classify(t); si = -1
+    if wi in STUB and _spd[wi][1] == "inferred_high":  # also covers a lone, unapplied Mapillary match
+        s, src = STUB[wi][0], "inferred"
+        key = ("", f"Short piece of {STUB[wi][1]} with no limit of its own; uses the adjoining {STUB[wi][0]} mph posting")
+        if key not in sidx: sidx[key] = len(sources); sources.append(list(key))
+        si = sidx[key]
     if wi in ov:
         vmph, ok, url, label = ov[wi]; s, src = vmph, "verified"
         key = (url, label)

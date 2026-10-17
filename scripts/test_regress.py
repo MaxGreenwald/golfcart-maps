@@ -1,5 +1,7 @@
 """Routing regression: Max's La Jolla pair + ~30 random residential pairs (0.5-3 km apart)."""
 from playwright.sync_api import sync_playwright
+import os
+URL=os.environ.get("URL","http://localhost:8765/")
 import json,random,glob,math,os,sys
 random.seed(int(sys.argv[1]) if len(sys.argv)>1 else 7)
 segs=[]
@@ -11,7 +13,7 @@ while len(pairs)<31:
     a=mid(random.choice(segs));b=mid(random.choice(segs))
     d=math.hypot((a[0]-b[0])*111,(a[1]-b[1])*93)
     if 0.5<d<3: pairs.append((f"rand{len(pairs)}",a,b))
-url=os.environ.get("URL","http://localhost:8765/")
+url=os.environ.get("URL",URL)
 with sync_playwright() as p:
     b=p.chromium.launch();pg=b.new_page();pg.goto(url);pg.wait_for_function("window.ready===true",timeout=120000)
     if os.environ.get("LENIENT"): pg.evaluate("window.LENIENT=true;adj={};nodes={};buildGraph(0)")
