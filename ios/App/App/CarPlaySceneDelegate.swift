@@ -142,11 +142,6 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
 
     // Buttons
     func refreshButtons() {
-        
-            self.mode = self.mode == "lsv" ? "golf_cart" : "lsv"
-            GCMBridge.shared.call("setMode(m)", ["m": self.mode]) { _ in self.scheduleOverlay(now: true) }
-            self.refreshButtons()
-        }
         let searchBtn = CPBarButton(title: "Search") { [weak self] _ in self?.openSearch() }
         let savedBtn = CPBarButton(title: "Recent") { [weak self] _ in self?.openRecents() }
         mapTemplate.leadingNavigationBarButtons = [searchBtn, savedBtn]
