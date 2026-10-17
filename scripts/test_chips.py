@@ -16,3 +16,4 @@ with sync_playwright() as p:
     c.close()
   b.close()
 print('RESULT','ALL PASS' if ok else 'FAIL')
+import sys as _sys; _sys.exit(0 if ok else 1)

@@ -63,6 +63,8 @@ def roundabout_inherit(wl, WS, is_road, cap=35):
         nm = lambda o: wl[o]["tags"].get("name") or wl[o]["tags"].get("ref") or ""
         pnames = {nm(o) for o in appr if WS[o][1] not in ("inferred_high", "cartpath", "inferred")}
         unames = {nm(o) for o in appr if WS[o][1] == "inferred_high"} - pnames
+        if m >= 99:   # highest approach is a banned/no-limit road (e.g. state-highway ban): stay red, keep 'unknown'
+            res["kept_unsure"] += 1; lg["result"] = "unchanged (approach is banned or has no limit)"; res["log"].append(lg); continue
         if not posted or unames:   # only assumed side streets, or an unknown-speed major road we can't vouch for -> keep red
             res["kept_unsure"] += 1; lg["result"] = "unchanged (%s)" % ("only assumed approaches" if not posted else "unknown major approach: " + ", ".join(sorted(unames))); res["log"].append(lg); continue
         lg["result"] = m
@@ -70,3 +72,18 @@ def roundabout_inherit(wl, WS, is_road, cap=35):
         for wi in unk: res["set"][wi] = (m, "r")   # 'r' = ring limit taken from its posted approaches
         res["log"].append(lg)
     return res
+
+
+def validate_rings(wl, WS, rbx, cap=35):
+    """Guard for the roundabout rule (run by the builders). Returns (errors, warnings).
+    error: a ring that still has no limit although every connecting road is <=cap and at least one is posted
+           (exactly the Villages bug: red ring between green 35 mph approaches).
+    warning: any other ring left without a limit (listed so a human can check OSM)."""
+    errs, warns = [], []
+    for lg in rbx["log"]:
+        if isinstance(lg.get("result"), int): continue
+        ap = [a for a in lg["approaches"] if a[3] != "cartpath"]
+        known = [a for a in ap if a[3] != "inferred_high"]
+        ok = ap and len(known) == len(ap) and all(a[2] <= cap for a in ap) and any(a[3] != "inferred" for a in ap)
+        (errs if ok else warns).append(lg)
+    return errs, warns

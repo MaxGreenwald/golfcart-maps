@@ -1,0 +1,46 @@
+name: web-ci
+# Fast checks for every push/PR. Never deploys anything.
+on:
+  push:
+  pull_request:
+jobs:
+  data:
+    name: unit tests + data validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Unit tests (roundabout rule, validators)
+        run: python -m unittest discover -s tests -v
+      - name: Validate built region data (red islands / ring codes vs research/validation_baseline.json)
+        run: python scripts/validate_data.py
+  browser:
+    name: browser tests (Chromium + WebKit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      URL: http://localhost:8765/
+      SHOTS: ${{ github.workspace }}/ci-shots/
+      SHOTS_DIR: ${{ github.workspace }}/ci-shots/
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Playwright
+        run: pip install playwright && python -m playwright install --with-deps chromium webkit
+      - name: Serve public/
+        run: |
+          mkdir -p ci-shots
+          (cd public && python -m http.server 8765 >/dev/null 2>&1 &)
+          for i in $(seq 1 20); do curl -sf http://localhost:8765/ >/dev/null && break; sleep 1; done
+      - name: test_ui
+        run: python scripts/test_ui.py
+      - name: test_chips
+        run: python scripts/test_chips.py
+      - name: test_layout
+        run: python scripts/test_layout.py
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: {name: ci-shots, path: ci-shots, if-no-files-found: ignore}
