@@ -27,5 +27,7 @@ W=${WRANGLER:-}
 if [ -z "$W" ]; then
   if [ -x /workspace/.wr3/node_modules/.bin/wrangler ]; then W=/workspace/.wr3/node_modules/.bin/wrangler; else W="npx --yes wrangler@3"; fi
 fi
-# run from the repo root so wrangler also bundles ./functions (the /api/ paywall endpoints)
+# run from the repo root so wrangler also bundles ./functions (the /api/ paywall endpoints);
+# wrangler keeps its cache in the nearest node_modules/ (gitignored), so make sure there is one here
+mkdir -p node_modules
 $W pages deploy dist --project-name golfcart-maps --branch "$branch" --commit-hash "$(git rev-parse HEAD)" --commit-message "$(git log -1 --format=%s | cut -c1-200)" --commit-dirty=true
