@@ -10,9 +10,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with: {fetch-depth: 0}   # tests/test_web_build.py replays a real missed cache bump from history
+      - name: public/ is the only copy of the web app (no committed ios/android/dist bundles)
+        run: python scripts/check_single_source.py
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - name: Unit tests (roundabout rule, validators)
+      - name: Unit tests (roundabout rule, validators, SW cache name, single source)
         run: python -m unittest discover -s tests -v
       - name: Validate built region data (red islands / ring codes vs research/validation_baseline.json)
         run: python scripts/validate_data.py
@@ -30,11 +33,14 @@ jobs:
         with: {python-version: "3.12"}
       - name: Playwright
         run: pip install playwright && python -m playwright install --with-deps chromium webkit
-      - name: Serve public/
+      - name: Build dist/ (what gets deployed) and serve it
         run: |
           mkdir -p ci-shots
-          (cd public && python -m http.server 8765 >/dev/null 2>&1 &)
+          python scripts/build_web.py
+          (cd dist && python -m http.server 8765 >/dev/null 2>&1 &)
           for i in $(seq 1 20); do curl -sf http://localhost:8765/ >/dev/null && break; sleep 1; done
+      - name: test_sw (stamped cache name, old caches dropped, works offline)
+        run: python scripts/test_sw.py
       - name: test_ui
         run: python scripts/test_ui.py
       - name: test_chips

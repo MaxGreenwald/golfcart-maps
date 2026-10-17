@@ -2,3 +2,6 @@ cache/
 .env
 __pycache__/
 node_modules
+dist/
+ios/App/App/public/
+android/app/src/main/assets/public/
