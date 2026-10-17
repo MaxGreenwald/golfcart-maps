@@ -6,7 +6,7 @@ const load=()=>{try{return JSON.parse(localStorage.getItem(K))}catch(_){return n
 const save=t=>{t.at=Date.now();localStorage.setItem(K,JSON.stringify(t))};
 const unlocked=()=>{const t=load();return !!(t&&t.token&&t.exp*1000>Date.now())};
 function lockUI(){const b=$('cChg');if(b)b.classList.toggle('locked',!unlocked())}
-async function api(p,o){const r=await fetch('/api/'+p,o);let j={};try{j=await r.json()}catch(_){}return{ok:r.ok,status:r.status,j}}
+async function api(p,o){const r=await fetch((window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform()?'https://golfcartmap.com':'')+'/api/'+p,o);let j={};try{j=await r.json()}catch(_){}return{ok:r.ok,status:r.status,j}}
 const post=b=>({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
 function close(){const s=$('paySheet');if(s)s.remove()}
 function msg(t){const m=$('payMsg');if(m)m.textContent=t}

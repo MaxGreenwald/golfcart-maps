@@ -8,11 +8,11 @@
    - privacy link is absolute https://golfcartmap.com/privacy (index.html)
    - carplay.js exists and is loaded; app.js exposes window._lastDetail (used by carplay.js)
 3. Divergence budget: public/, functions/, lib/ may differ from origin/master only in the allowlisted files below.
-   Once the overrides live in master itself (branch ios-unify), this list should shrink to nothing.
+   Since branch ios-unify the overrides live in master itself, so the list is empty: ios-release = master's web app.
 Usage: check_native_overrides.py [--ref origin/master] [--no-git]"""
 import os, re, subprocess, sys
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
-ALLOW = {"public/app.js", "public/index.html", "public/pay.js", "public/sw.js", "public/carplay.js"}
+ALLOW = set()   # overrides now live in master (runtime-guarded by Capacitor.isNativePlatform()); ios-release must not diverge
 def rd(p):
     f = os.path.join(ROOT, p)
     return open(f, encoding="utf-8").read() if os.path.exists(f) else ""
