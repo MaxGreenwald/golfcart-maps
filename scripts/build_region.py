@@ -150,6 +150,7 @@ CONF = []
 CHG = {"dot": 0, "dot_block": 0, "dot_open": 0, "desig_only_block": 0}
 names, out, sources, sidx, nidx, nids = [], [], [], {}, {}, {}
 stats = {"tagged": 0, "inferred": 0, "inferred_high": 0, "verified": 0, "mapillary": 0, "cartpath": 0, "designated": 0}
+WS, WOUT = {}, {}   # wi -> final (mph, src); wi -> indices into out
 def src_i(url, label):
     if (url, label) not in sidx: sidx[(url, label)] = len(sources); sources.append([url, label])
     return sidx[(url, label)]
@@ -211,6 +212,7 @@ for wi, w in enumerate(wl):
         if t.get("golf_cart") == "no": cflag = 1
         if lban: cflag = 1
     code = {"cartpath": "c", "designated": "d"}.get(src, src[0])
+    WS[wi] = (s, src); WOUT[wi] = []
     for sg in segs:
         sflag = cflag
         if XING and src != "cartpath" and any(near(g[k]["lat"], g[k]["lon"]) for k in sg) and (cflag == 1 or (s or 99) > 35 or classify(t)[1] == "inferred_high"):
@@ -221,7 +223,18 @@ for wi, w in enumerate(wl):
         pts = simplify([[round(g[k]["lon"], 5), round(g[k]["lat"], 5)] for k in sg])
         ow = 1 if t.get("oneway") in ("yes", "1") else (-1 if t.get("oneway") == "-1" else 0)
         if t.get("junction") == "roundabout" and ow == 0: ow = 1
+        WOUT[wi].append(len(out))
         out.append([nidx[nm], hw, s, code, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([si, sflag] if sflag else [si] if si >= 0 else []))
+# ---- Roundabouts: OSM rarely tags maxspeed on the ring itself, so an untagged major-class ring (secondary etc.)
+# fell to 99 "inferred_high" and showed red even when every approach is posted <=35. A ring with no limit of its own
+# takes the HIGHEST known limit among its connecting roads (conservative: a ring touching a 40+ road stays red). ----
+from build_data_lib import roundabout_inherit
+RBX = roundabout_inherit(wl, WS, lambda w: w["tags"]["highway"] in ROADS)
+for wi, (nmph, rcode) in RBX["set"].items():
+    for i in WOUT[wi]: out[i][2] = nmph; out[i][3] = rcode
+stats["roundabout_inherited"] = len(RBX["set"]); CHG["roundabout_rings"] = RBX["rings"]; CHG["roundabout_rings_opened"] = RBX["opened"]
+print("roundabouts", {k: v for k, v in RBX.items() if k != "set"})
+if os.environ.get("RB_DEBUG"): json.dump(RBX["log"], open("/tmp/rb_%s.json" % RID, "w"), indent=0)
 POLY = CFG.get("poly") or [[W, N], [E, N], [E, S], [W, S]]
 meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": len(wl), "segments": len(out), "stats": stats, "poly": POLY, "region": RID, "unverified": CFG.get("unverified", []), "changes": CHG, "dot_conflicts": CONF, "xnodes": sorted(nids[n] for n in XN if n in nids), "crossings": XING}
 TS = 0.1; tiles = {}
