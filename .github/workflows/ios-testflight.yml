@@ -15,6 +15,9 @@ jobs:
     env:
       TEAM_ID: 8AUV2FF925
       BUILD_NUMBER: ${{ github.run_number }}
+    # Signing: IOS_DIST_P12 (+_PASSWORD) is an Apple Distribution cert; IOS_APPSTORE_PROFILE an App Store profile
+    # for com.matchimus.golfcartmaps WITHOUT CarPlay. After Apple grants CarPlay, enable it on the App ID,
+    # regenerate the profile, update the secret, and run with carplay=true.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -26,6 +29,26 @@ jobs:
           mkdir -p ~/private_keys
           echo "$ASC_KEY_P8" | base64 --decode > ~/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8
           echo "KEY_PATH=$HOME/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8" >> $GITHUB_ENV
+      - name: Install distribution cert + App Store profile
+        env:
+          P12: ${{ secrets.IOS_DIST_P12 }}
+          P12_PW: ${{ secrets.IOS_DIST_P12_PASSWORD }}
+          PROFILE: ${{ secrets.IOS_APPSTORE_PROFILE }}
+        run: |
+          KC=$RUNNER_TEMP/ci.keychain-db; KCPW=$(uuidgen)
+          echo "$P12" | base64 --decode > $RUNNER_TEMP/dist.p12
+          security create-keychain -p "$KCPW" $KC
+          security set-keychain-settings -lut 21600 $KC
+          security unlock-keychain -p "$KCPW" $KC
+          security import $RUNNER_TEMP/dist.p12 -P "$P12_PW" -A -t cert -f pkcs12 -k $KC
+          security set-key-partition-list -S apple-tool:,apple: -k "$KCPW" $KC >/dev/null
+          security list-keychain -d user -s $KC $(security list-keychains -d user | tr -d '"')
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "$PROFILE" | base64 --decode > $RUNNER_TEMP/p.mobileprovision
+          UUID=$(security cms -D -i $RUNNER_TEMP/p.mobileprovision | plutil -extract UUID raw -)
+          cp $RUNNER_TEMP/p.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
+          echo "PROFILE_UUID=$UUID" >> $GITHUB_ENV
+          security find-identity -v -p codesigning $KC
       - name: Gate CarPlay entitlement
         if: ${{ !inputs.carplay }}
         run: sed -i '' 's#CODE_SIGN_ENTITLEMENTS = App/App.entitlements;#CODE_SIGN_ENTITLEMENTS = App/App.NoCarPlay.entitlements;#' ios/App/App.xcodeproj/project.pbxproj && grep -n CODE_SIGN_ENTITLEMENTS ios/App/App.xcodeproj/project.pbxproj
@@ -48,7 +71,9 @@ jobs:
             <key>method</key><string>app-store-connect</string>
             <key>destination</key><string>upload</string>
             <key>teamID</key><string>$TEAM_ID</string>
-            <key>signingStyle</key><string>automatic</string>
+            <key>signingStyle</key><string>manual</string>
+            <key>signingCertificate</key><string>Apple Distribution</string>
+            <key>provisioningProfiles</key><dict><key>com.matchimus.golfcartmaps</key><string>$PROFILE_UUID</string></dict>
             <key>manageAppVersionAndBuildNumber</key><false/>
           </dict></plist>
           PL
