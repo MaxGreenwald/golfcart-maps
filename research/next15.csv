@@ -1,0 +1,25 @@
+rank,id,name,state,url,why,bbox,legality,osm_main_maxspeed_pct,osm_all_maxspeed_pct,osm_golf_cart_ways,raw_osm_ways,note
+1,annamaria,Anna Maria Island,FL,/annamaria,Top Gulf beach cart-rental island (3 shops already in outreach50),"27.44,-82.76,27.55,-82.67","FL 316.2122 LSV<=35; island cities allow carts/LSVs on local streets",83,13,0,1789,
+2,putinbay,Put-in-Bay,OH,/putinbay,Iconic cart island; carts are the main way around (5 shops in outreach50),"41.63,-82.87,41.68,-82.78","ORC 4511.214; village permits carts on streets",12,6,0,1222,low maxspeed tagging - mostly inferred; streets are low-speed
+3,southpadre,South Padre Island,TX,/southpadre,Big TX beach rental market (2 shops in outreach50),"26.05,-97.22,26.17,-97.15","TX 551.403 carts <=35 by local auth; city permits carts",91,76,12,2673,Queen Isabella Causeway banned
+4,siesta,Siesta Key / Sarasota keys,FL,/siestakey,"Top-ranked beach, dense LSV rentals on Siesta/Lido/Longboat","27.17,-82.70,27.45,-82.50",FL LSV<=35; US 41 banned,48,14,39,22413,
+5,destin,Destin / Okaloosa Island,FL,/destin,Huge Emerald Coast tourism; LSV rentals common,"30.37,-86.75,30.42,-86.40",FL LSV<=35; US 98 banned,61,21,44,7812,
+6,pcb,Panama City Beach,FL,/panamacitybeach,~4M+ visitors/yr; many LSV rental shops,"30.13,-85.97,30.30,-85.72",FL LSV<=35; US 98/Back Beach banned,81,29,66,9491,
+7,staug,St. Augustine,FL,/staugustine,Historic city + beach; cart tours/rentals,"29.75,-81.36,29.95,-81.25",FL LSV<=35; US 1/SR 312 banned,70,18,73,10060,
+8,amelia,Amelia Island / Fernandina,FL,/ameliaisland,Resort island with cart-friendly Fernandina Beach,"30.50,-81.48,30.71,-81.42",FL LSV<=35; SR 200 banned,56,13,68,3043,
+9,keywest,Key West,FL,/keywest,Major tourist town; electric car/cart rentals everywhere,"24.54,-81.82,24.60,-81.72",FL LSV<=35,79,57,41,5558,
+10,suncitycenter,Sun City Center,FL,/suncitycenter,Classic 55+ golf cart town (in outreach50),"27.68,-82.42,27.74,-82.33",FL carts on designated roads; LSV<=35; SR 674 banned,50,11,22,3307,
+11,lwr,Lakewood Ranch,FL,/lakewoodranch,One of the top-selling master-planned communities; big cart use,"27.36,-82.48,27.47,-82.33",FL LSV<=35; I-75/University Pkwy banned,52,13,155,10473,
+12,bhi,Bald Head Island / Southport / Oak Island,NC,/southport,"BHI is car-free (carts only); Southport/Oak Island cart towns","33.86,-78.25,33.95,-77.94",NC 20-121.1 LSV<=35; local cart ordinances,65,26,177,3355,BHI ferry-only
+13,obx,Outer Banks,NC,/outerbanks,Large beach rental market (Duck to Nags Head),"35.85,-75.78,36.20,-75.60",NC LSV<=35; US 158 banned,49,14,5,6294,
+14,avalon,Avalon (Catalina),CA,/catalina,Cars restricted; carts are the main vehicle,"33.32,-118.35,33.36,-118.31",CVC 21260/21115 + Avalon permits,85,80,12,268,tiny area
+15,rockport,Rockport / Fulton,TX,/rockport,Coastal Bend cart-friendly towns near Port Aransas,"27.98,-97.10,28.12,-97.00",TX 551.403; SH 35 banned,3,2,0,1846,low OSM tagging - TxDOT layer fills main roads
+A1,,Venice,FL,,Retiree beach town,,FL LSV<=35,,,,,alternate
+A2,,Sun Lakes,AZ,,55+ golf community near Chandler,,AZ NEV<=35,,,,,alternate
+A3,,St. George Island,FL,,Quiet cart-heavy island,,FL LSV<=35,,,,,alternate
+S,,Mackinac Island,MI,,,,No motor vehicles incl. carts,,,,,skip
+S,,Kiawah/Seabrook/Daufuskie/Fripp/Sea Island,SC/GA,,,,Private gated; roads private,,,,,skip
+S,,Hot Springs Village,AR,,,,Gated private roads,,,,,skip
+S,,Ocean City MD,MD,,,,Carts not street-legal,,,,,skip
+S,,Lake Havasu City,AZ,,,,Built in expansion-15 then dropped: cart legality unverified,,,,,skip
+S,,Leisure World,MD/CA,,,,Private community streets,,,,,skip

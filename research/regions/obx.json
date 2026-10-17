@@ -1,0 +1,17 @@
+{
+ "unverified": [
+  "City-level cart designations not digitized; app applies the state LSV rule (posted \u226435)."
+ ],
+ "bans": [
+  {
+   "names": "^US ?158|Croatan H",
+   "url": "",
+   "label": "US 158 bypass: 45+ mph"
+  }
+ ],
+ "sources": [
+  "N.C.G.S. 20-121.1",
+  "G.S. 160A-300.6"
+ ],
+ "status": "Beta (regions15, 2026-10-17)"
+}
