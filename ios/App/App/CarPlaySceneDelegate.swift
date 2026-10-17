@@ -127,7 +127,6 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         #endif
         GCMBridge.shared.call("status()") { [weak self] any in
             guard let self = self, let d = any as? [String: Any] else { return }
-            if let m = d["mode"] as? String { self.mode = m; self.refreshButtons() }
             if self.loc.location == nil, let c = d["center"] as? [Double], c.count == 2 {
                 self.mapVC.map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: c[0], longitude: c[1]), latitudinalMeters: 2500, longitudinalMeters: 2500), animated: false)
             }
