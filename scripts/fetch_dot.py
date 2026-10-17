@@ -7,6 +7,7 @@ SRC = {
  "FL": ("https://services1.arcgis.com/O1JpcwDW8sjYuddV/arcgis/rest/services/Maximum_Speed_Limit_TDA/FeatureServer/0", "SPEED", "ROADWAY", "FDOT Maximum Speed Limit (TDA)", "https://gis-fdot.opendata.arcgis.com/datasets/maximum-speed-limit-tda"),
  "TX": ("https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Speed_Limits/FeatureServer/0", "SPD_LMT", "RTE_NM", "TxDOT Speed Limits", "https://gis-txdot.opendata.arcgis.com/datasets/txdot-speed-limits"),
  "SC": ("https://gis.scdot.org/hosting/rest/services/Speed_Limits/FeatureServer/16", "Regulatory", "RouteLRS", "SCDOT Speed Limits", "https://gis.scdot.org/hosting/rest/services/Speed_Limits/FeatureServer/16"),
+ "ME": ("https://gis.maine.gov/mapservices/rest/services/dot/MaineDOT_OpenData/MapServer/34", "speed", "report_id", "MaineDOT Posted Speed Limits (speed regulation #)", "https://www.arcgis.com/home/item.html?id=45a20b2d367d47bb85d5a70ca81e2cd0"),
  "FHWA": ("https://geo.dot.gov/server/rest/services/Hosted/FHWA__2022_Speed_Limit_Study_Results__All_States/FeatureServer/0", "speed_limit", "route_id", "FHWA 2022 speed limit study (HPMS 2020, NHS roads)", "https://geo.dot.gov/server/rest/services/Hosted/FHWA__2022_Speed_Limit_Study_Results__All_States/FeatureServer/0"),
 }
 regs = {r["id"]: r for r in json.load(open(os.path.join(ROOT, "public/data/regions.json")))}

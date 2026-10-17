@@ -118,7 +118,7 @@ if os.path.exists(dotp) and not CFG.get("no_dot"):
         return math.hypot(px-ax-u*vx, py-ay-u*vy)
     DOTCLS = set("motorway motorway_link trunk trunk_link primary primary_link secondary secondary_link tertiary tertiary_link unclassified".split())
     for wi, w in enumerate(wl):
-        if w["tags"]["highway"] not in DOTCLS: continue
+        if w["tags"]["highway"] not in DOTCLS and not (CFG.get("dot_all_classes") and w["tags"]["highway"] in ROADS): continue
         g = w["geometry"]; smp = g[:: max(1, len(g) // 8)] + [g[-1]]; votes = {}
         for q in smp:
             p = (q["lon"], q["lat"]); best = (12, None)
@@ -146,6 +146,19 @@ for dsg in CFG.get("designated_names", []):
         n0 = _norm(nm_)
         if n0 in nl or (dsg.get("fuzzy") and difflib.get_close_matches(n0, nl, 1, dsg["fuzzy"])): DES[wi] = (dsg["url"], dsg["label"])
 print("designated (ordinance list) ways", len(DES))
+# Hand-entered posted limits by road name (research/regions/<id>.json "speed_names"), for main roads OSM doesn't tag:
+# {"names": regex on name/ref, "mph": n, "url": source, "label": text, optional "highway": regex, "bbox": [S,W,N,E],
+#  "north_of"/"south_of"/"east_of"/"west_of": the way's midpoint must be past that lat/lon}. First match wins.
+def speed_name(t, mid):
+    for o in CFG.get("speed_names", []):
+        if not any(re.search(o["names"], t.get(k, "")) for k in ("name", "ref")): continue
+        if "highway" in o and not re.search(o["highway"], t.get("highway", "")): continue
+        la, lo = mid["lat"], mid["lon"]
+        if "bbox" in o and not (o["bbox"][0] <= la <= o["bbox"][2] and o["bbox"][1] <= lo <= o["bbox"][3]): continue
+        if ("north_of" in o and la <= o["north_of"]) or ("south_of" in o and la >= o["south_of"]): continue
+        if ("east_of" in o and lo <= o["east_of"]) or ("west_of" in o and lo >= o["west_of"]): continue
+        return o
+    return None
 CONF = []
 CHG = {"dot": 0, "dot_block": 0, "dot_open": 0, "desig_only_block": 0}
 names, out, sources, sidx, nidx, nids = [], [], [], {}, {}, {}
@@ -167,10 +180,13 @@ for wi, w in enumerate(wl):
             if "west_of" in b and mlo >= b["west_of"]: continue
             if "bbox" in b and not (b["bbox"][0] <= mla <= b["bbox"][2] and b["bbox"][1] <= mlo <= b["bbox"][3]): continue
             lban = b; break
+    spn = speed_name(t, w["geometry"][len(w["geometry"])//2]) if hw in ROADS else None
     if w["id"] in OV:
         o = OV[w["id"]]; s, src = o["mph"], "verified"; si = src_i(o["url"], o["label"])
     elif lban:
         s, src = 99, "verified"; si = src_i(lban["url"], lban["label"])
+    elif spn:
+        s, src = spn["mph"], "verified"; si = src_i(spn["url"], spn["label"]); CHG["speed_names"] = CHG.get("speed_names", 0) + 1
     elif wi in DOT and src == "tagged" and DOT[wi]["src"] == "FHWA" and (s > 35) != (DOT[wi]["mph"] > 35):
         g_ = w["geometry"][len(w["geometry"])//2]; CONF.append({"name": t.get("name") or t.get("ref"), "osm_mph": s, "fhwa_mph": DOT[wi]["mph"], "lat": round(g_["lat"], 5), "lon": round(g_["lon"], 5), "way": w["id"]})
     elif wi in DOT and not (wi in mly and mly[wi][2] >= 2):
@@ -223,8 +239,12 @@ for wi, w in enumerate(wl):
         pts = simplify([[round(g[k]["lon"], 5), round(g[k]["lat"], 5)] for k in sg])
         ow = 1 if t.get("oneway") in ("yes", "1") else (-1 if t.get("oneway") == "-1" else 0)
         if t.get("junction") == "roundabout" and ow == 0: ow = 1
+        ss, ssi = s, si
+        if spn and src == "verified" and w["id"] not in OV and not lban:   # a long way can span two posted zones: decide per segment
+            o2 = speed_name(t, g[sg[len(sg)//2]])
+            if o2: ss, ssi = o2["mph"], src_i(o2["url"], o2["label"])
         WOUT[wi].append(len(out))
-        out.append([nidx[nm], hw, s, code, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([si, sflag] if sflag else [si] if si >= 0 else []))
+        out.append([nidx[nm], hw, ss, code, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([ssi, sflag] if sflag else [ssi] if ssi >= 0 else []))
 # ---- Roundabouts: OSM rarely tags maxspeed on the ring itself, so an untagged major-class ring (secondary etc.)
 # fell to 99 "inferred_high" and showed red even when every approach is posted <=35. A ring with no limit of its own
 # takes the HIGHEST known limit among its connecting roads (conservative: a ring touching a 40+ road stays red). ----

@@ -31,7 +31,16 @@
   "suncity": 5,
   "suncitycenter": 0,
   "tybee": 0,
-  "villages": 7
+  "villages": 7,
+  "wailea": 0,
+  "kaanapali": 0,
+  "poipu": 1,
+  "waikoloa": 0,
+  "kailua": 0,
+  "oob": 0
  },
- "ring_code_errors": {}
+ "ring_code_errors": {},
+ "_islands_explained": {
+  "poipu": "Kaumualii Hwy (HI-50, state highway, untagged) at Omao Rd/Lawai: correctly red"
+ }
 }
