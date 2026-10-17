@@ -1,0 +1,58 @@
+name: ios-testflight
+on:
+  workflow_dispatch:
+    inputs:
+      carplay:
+        description: "Include com.apple.developer.carplay-maps entitlement (only after Apple grants it)"
+        type: boolean
+        default: false
+jobs:
+  testflight:
+    runs-on: macos-15
+    timeout-minutes: 60
+    env:
+      TEAM_ID: 8AUV2FF925
+      BUILD_NUMBER: ${{ github.run_number }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 20}
+      - run: npm ci && npx cap sync ios
+      - name: API key
+        env: {ASC_KEY_P8: "${{ secrets.ASC_KEY_P8 }}"}
+        run: |
+          mkdir -p ~/private_keys
+          echo "$ASC_KEY_P8" | base64 --decode > ~/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8
+          echo "KEY_PATH=$HOME/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8" >> $GITHUB_ENV
+      - name: Gate CarPlay entitlement
+        if: ${{ !inputs.carplay }}
+        run: sed -i '' 's#CODE_SIGN_ENTITLEMENTS = App/App.entitlements;#CODE_SIGN_ENTITLEMENTS = App/App.NoCarPlay.entitlements;#' ios/App/App.xcodeproj/project.pbxproj && grep -n CODE_SIGN_ENTITLEMENTS ios/App/App.xcodeproj/project.pbxproj
+      - name: Archive
+        run: |
+          set -o pipefail
+          xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath build/App.xcarchive \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$KEY_PATH" -authenticationKeyID "${{ secrets.ASC_KEY_ID }}" -authenticationKeyIssuerID "${{ secrets.ASC_ISSUER_ID }}" \
+            DEVELOPMENT_TEAM=$TEAM_ID CODE_SIGN_STYLE=Automatic MARKETING_VERSION=1.0 CURRENT_PROJECT_VERSION=$BUILD_NUMBER \
+            archive | tail -n 120
+      - name: Export + upload to TestFlight
+        run: |
+          set -o pipefail
+          cat > build/export.plist <<PL
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>teamID</key><string>$TEAM_ID</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+          </dict></plist>
+          PL
+          xcodebuild -exportArchive -archivePath build/App.xcarchive -exportOptionsPlist build/export.plist -exportPath build/export \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$KEY_PATH" -authenticationKeyID "${{ secrets.ASC_KEY_ID }}" -authenticationKeyIssuerID "${{ secrets.ASC_ISSUER_ID }}" | tail -n 80
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: {name: xcode-logs, path: "~/Library/Logs/DiagnosticReports", if-no-files-found: ignore}
