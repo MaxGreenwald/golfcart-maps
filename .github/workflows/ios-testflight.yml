@@ -29,6 +29,8 @@ jobs:
           echo "Building web app at $(git rev-parse --short HEAD) = ios-release $(git rev-parse --short HEAD^1) + master $(git rev-parse --short origin/master)"
       - name: Guard native overrides + master sync
         run: python3 scripts/check_native_overrides.py --ref origin/master
+      - name: public/ is the only copy of the web app
+        run: python3 scripts/check_single_source.py
   testflight:
     needs: sync-guard
     if: github.ref == 'refs/heads/ios-release'
@@ -61,7 +63,7 @@ jobs:
           sudo xcode-select -s "$X" && xcodebuild -version
       - uses: actions/setup-node@v4
         with: {node-version: 20}
-      - run: npm ci && npx cap sync ios
+      - run: python3 scripts/build_web.py && npm ci && npx cap sync ios
       - name: API key
         env: {ASC_KEY_P8: "${{ secrets.ASC_KEY_P8 }}"}
         run: |
