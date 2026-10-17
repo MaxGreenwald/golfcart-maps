@@ -1,0 +1,65 @@
+{
+ "unverified": [
+  "Untagged local streets are assumed 25 mph (Maine's default in built-up areas, 29-A §2074); a few rural roads at the town's west edge may be posted higher.",
+  "Smithwheel Road and Portland Avenue (north of Milliken Mills Rd) have no MaineDOT speed regulation on file; they're shown at the 25 mph built-up default. Check the signs."
+ ],
+ "bans": [],
+ "sources": [
+  "29-A M.R.S. §2089 https://www.legislature.maine.gov/legis/statutes/29-A/title29-Asec2089.html",
+  "MaineDOT Posted Speed Limits (official speed regulations) https://www.arcgis.com/home/item.html?id=45a20b2d367d47bb85d5a70ca81e2cd0",
+  "OpenStreetMap"
+ ],
+ "status": "Beta (hawaii-oob, 2026-10-17)",
+ "dot_all_classes": true,
+ "_dot_all_classes": "MaineDOT speed regulations cover local streets too (Ross Rd, Union Ave, Seaside Ave), so match them on every road class, not just collectors.",
+ "speed_names": [
+  {
+   "names": "^Ocean Park Road$",
+   "west_of": -70.42598,
+   "url": "https://www.arcgis.com/home/item.html?id=45a20b2d367d47bb85d5a70ca81e2cd0",
+   "label": "MaineDOT speed regulation #2743551: Ocean Park Rd, US 1 to Coolidge Ave (Saco), posted 30 mph",
+   "mph": 30
+  },
+  {
+   "names": "^Ocean Park Road$",
+   "west_of": -70.4149,
+   "url": "https://www.arcgis.com/home/item.html?id=45a20b2d367d47bb85d5a70ca81e2cd0",
+   "label": "MaineDOT speed regulation #2743555: Ocean Park Rd, Coolidge Ave to the Saco/OOB line, posted 35 mph",
+   "mph": 35
+  },
+  {
+   "names": "^Ocean Park Road$",
+   "west_of": -70.4139,
+   "url": "https://www.arcgis.com/home/item.html?id=45a20b2d367d47bb85d5a70ca81e2cd0",
+   "label": "MaineDOT speed regulation #1948671: Route 5, Ocean Park Ave to the Saco/OOB line, posted 30 mph",
+   "mph": 30
+  },
+  {
+   "names": "^Ocean Park Road$",
+   "url": "https://www.arcgis.com/home/item.html?id=45a20b2d367d47bb85d5a70ca81e2cd0",
+   "label": "MaineDOT speed regulation #3506084: Route 5 (Ocean Park Rd), Ocean Park Ave to Pleasantwood Dr, posted 30 mph",
+   "mph": 30
+  },
+  {
+   "names": "^Cascade Road$",
+   "south_of": 43.52454,
+   "url": "https://www.arcgis.com/home/item.html?id=45a20b2d367d47bb85d5a70ca81e2cd0",
+   "label": "MaineDOT speed regulation #1949817: Route 98 (Cascade Rd), Route 5 to Birch Ln, posted 25 mph",
+   "mph": 25
+  },
+  {
+   "names": "^Cascade Road$",
+   "south_of": 43.53073,
+   "url": "https://www.arcgis.com/home/item.html?id=45a20b2d367d47bb85d5a70ca81e2cd0",
+   "label": "MaineDOT speed regulation #1949818: Route 98 (Cascade Rd), Birch Ln to Ross Rd, posted 35 mph",
+   "mph": 35
+  },
+  {
+   "names": "^Cascade Road$",
+   "url": "https://www.arcgis.com/home/item.html?id=45a20b2d367d47bb85d5a70ca81e2cd0",
+   "label": "MaineDOT speed regulation #2748074: Route 98 (Cascade Rd), Ross Rd north to US 1 (Saco), posted 40 mph",
+   "mph": 40
+  }
+ ],
+ "_speed_names": "Hand-entered from MaineDOT's official speed regulations where OSM ways span two posted zones (the automatic DOT match needs 60% agreement)."
+}

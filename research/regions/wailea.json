@@ -1,0 +1,17 @@
+{
+ "unverified": [
+  "OSM tags few residential speed limits here; untagged local streets are assumed 25 mph and untagged collectors show as 'speed unknown, check signs'.",
+  "No county LSV route list is published; the app applies the state NEV rule (posted ≤35)."
+ ],
+ "bans": [],
+ "sources": [
+  "HRS 291C-134 (neighborhood electric vehicles) https://www.capitol.hawaii.gov/hrscurrent/Vol05_Ch0261-0319/HRS0291C/HRS_0291C-0134.HTM",
+  "FHWA 2022 speed limit study (NHS roads)",
+  "OpenStreetMap maxspeed",
+  {
+   "label": "HDOT: Piilani Hwy posted 35 mph from Uwapo Rd to Okolani Dr (matches OSM)",
+   "url": "https://hidot.hawaii.gov/administration/piilani-highway-speed-limit-permanently-reduced-to-35-mph-between-uwapo-road-and-lipoa-street/"
+  }
+ ],
+ "status": "Beta (hawaii-oob, 2026-10-17)"
+}
