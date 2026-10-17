@@ -13,7 +13,7 @@ Exit 1 if any region has more red islands or ring-code errors than research/vali
 import json, os, sys, glob
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 BASE = os.path.join(ROOT, "research", "validation_baseline.json")
-POSTED = set("tvmdr")   # tagged, verified, mapillary, designated, roundabout-inherited
+POSTED = set("tvmdrk")   # tagged, verified, mapillary, designated, roundabout- and turn-lane-inherited
 MAJOR_OK = ("motorway", "trunk")   # untagged freeways are legitimately red; ignore them
 
 def load(region):
@@ -46,7 +46,7 @@ def red_islands(segs):
 
 def ring_errors(segs):
     """'r' segments must carry a usable inherited speed (99 = inherited from a banned/unknown road: also an error)."""
-    return [s[7][0] for s in segs if s[3] == "r" and (s[2] is None or s[2] == 99)]
+    return [s[7][0] for s in segs if s[3] in ("r", "k") and (s[2] is None or s[2] > 35 and s[3] == "k" or s[2] == 99)]
 
 def main(argv):
     regions = [r["id"] for r in json.load(open(os.path.join(ROOT, "public", "data", "regions.json")))]

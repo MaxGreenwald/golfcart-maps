@@ -184,6 +184,16 @@ for wi, (nmph, rcode) in RBX["set"].items():
     for i in WOUT[wi]: out[i][2] = nmph; out[i][3] = rcode
 stats["roundabout_inherited"] = len(RBX["set"])
 print("roundabouts", {k: v for k, v in RBX.items() if k not in ("set", "log")})
+# ---- Short turn/slip lanes (*_link) with no limit: same safe rule (highest connecting limit; stays red near 40+/banned/unknown roads) ----
+from build_data_lib import link_inherit
+for wi, (nmph, rcode) in RBX["set"].items(): WS[wi] = (nmph, "roundabout")
+LKX = link_inherit(wl, WS, lambda w: True)
+for wi, (nmph, lcode) in LKX["set"].items():
+    WS[wi] = (nmph, "link")
+    for i in WOUT[wi]: out[i][2] = nmph; out[i][3] = lcode
+stats["link_inherited"] = len(LKX["set"])
+print("turn lanes", {k: v for k, v in LKX.items() if k not in ("set", "log")})
+if os.environ.get("RB_DEBUG"): json.dump(LKX["log"], open("/tmp/lk_%s.json" % "sd", "w"), indent=0)
 from build_data_lib import validate_rings
 _re, _rw = validate_rings(wl, WS, RBX)
 for x in _rw: print("  warn: roundabout left without a limit", x["lat"], x["lon"], x.get("name"), "-", x["result"])
