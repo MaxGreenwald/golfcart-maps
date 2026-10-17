@@ -15,14 +15,15 @@ Entitlement requested: **CarPlay Navigation app** (`com.apple.developer.carplay-
 
 ## App description
 Golf Cart Maps is a navigation app for drivers of street-legal golf carts and low-speed vehicles (LSVs).
-These vehicles are legally limited to certain roads: in California an LSV may only use roads posted 35 mph
-or less (CVC 21260), and in Florida, Georgia and South Carolina golf carts may only use roads a city or county
-has designated, or roads under a set speed limit. Regular navigation apps route these drivers onto roads where
-their vehicle is illegal and unsafe. Golf Cart Maps classifies every road in each supported community
-(coastal San Diego, The Villages FL, Peachtree City GA, with more planned) using OpenStreetMap speed data,
-posted-sign imagery and local ordinances, and plans turn-by-turn routes that only use roads that are legal for
-the selected vehicle type (golf cart or LSV), including legal crossings of faster roads. Each trip also shows
-the round-trip distance and whether it fits the vehicle's battery range.
+These vehicles are legally limited to slower roads: in California, for example, an LSV may only use roads
+posted 35 mph or less (CVC 21260), and many Florida, Georgia, South Carolina, Alabama and Texas communities
+set similar limits. Regular navigation apps route these drivers onto roads where their vehicle is illegal and
+unsafe. Golf Cart Maps classifies every road in each supported community using state DOT speed data,
+posted-sign imagery, local ordinances and OpenStreetMap, and plans turn-by-turn routes that only use roads
+posted 35 mph or less, including legal crossings of faster roads. Coverage today: coastal San Diego, The
+Villages FL, Naples FL, 30A FL, Myrtle Beach SC, Charleston-area beaches SC, Tybee Island and St. Simons GA,
+Gulf Shores AL, Port Aransas and Galveston TX, Sun City AZ, Coachella Valley and the Orange County coast CA,
+with more planned. Each trip also shows the round-trip distance and whether it fits the vehicle's battery range.
 
 ## Why the Navigation category
 The core function of the app is turn-by-turn route guidance to a destination. On CarPlay it shows a map
@@ -34,7 +35,7 @@ routing restricted to roads that are legal for low-speed vehicles.
 
 ## Target users
 - Owners and renters of street-legal golf carts and LSVs in golf cart communities (The Villages FL,
-  Peachtree City GA, beach towns in Southern California, and similar communities).
+  Gulf Coast and Southeast beach towns, coastal Southern California, and similar communities).
 - Golf cart rental companies and dealers who want customers to stay on legal roads.
 - Many new golf carts and LSVs ship with touchscreens that support Apple CarPlay (for example DACH Apollo,
   Club Car Onward, Evolution D5, Bintelli), so drivers expect to use navigation on the vehicle's display.

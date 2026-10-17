@@ -1,5 +1,7 @@
 name: ios-testflight
 on:
+  push:
+    branches: [ios-release]
   workflow_dispatch:
     inputs:
       carplay:
