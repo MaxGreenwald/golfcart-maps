@@ -13,7 +13,7 @@ async function asCarPlay(f){const prev=window._trackOpts;window._trackOpts=CP;tr
 async function regionFor(lat,lon){if(REG&&inBox(REG,lat,lon))return;const r=REGIONS.find(x=>inBox(x,lat,lon));if(r){window._regHow='carplay';await asCarPlay(async()=>{await loadRegion(r.id,true);await ready()})}}
 // Native hooks call these (CarPlaySceneDelegate.swift via GCMBridge): connect -> session, Go -> route_started, arrival -> route_completed.
 const CP_EVENTS={session:1,route_started:1,route_completed:1};
-function cpTrack(name,props){if(!CP_EVENTS[name])return {ok:false,reason:'not allowed'};const p={};if(props&&props.mi!=null&&isFinite(+props.mi))p.mi=+props.mi;
+function cpTrack(name,props){if(!CP_EVENTS[name])return {ok:false,reason:'not allowed'};const p={};if(props&&props.mi!=null&&isFinite(+props.mi))p.mi=Math.round(+props.mi*2)/2;
  if(!window.GCMTrack)return {ok:false,reason:'no tracker'};window.GCMTrack.track(name,p,name==='session'?{platform:'carplay',force:true}:CP);return {ok:true,event:name,platform:'carplay',props:p}}
 function maneuvers(r){
  // group legs by street name + risky flag, keep geometry, then derive turn types at joins

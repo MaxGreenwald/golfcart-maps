@@ -3,7 +3,7 @@ try{localStorage.removeItem('gcm-mode')}catch(_){}
 const track=(e,p,o)=>{try{window.GCMTrack&&window.GCMTrack.track(e,p,o)}catch(_){}};
 let _rtKey=null,_rtAt=0,_doneKey=null,_wasFar=null; // route_completed = live location reaches the destination after being 150+ m away
 function trackRoute(ok,mi,reason){const k=(to&&to.ll?to.ll.lat.toFixed(4)+','+to.ll.lng.toFixed(4):'')+'|'+risky;const now=Date.now();if(k===_rtKey&&now-_rtAt<600000)return;_rtKey=k;_rtAt=now;
- track('route_searched',ok?{ok:true,risky:!!risky,mi}:{ok:false,risky:!!risky,reason:reason||'no_legal_route'},window._trackOpts)}
+ track('route_searched',ok?{ok:true,risky:!!risky,mi:mi!=null&&isFinite(mi)?Math.round(mi*2)/2:undefined}:{ok:false,risky:!!risky,reason:reason||'no_legal_route'},window._trackOpts)}
 const map=L.map('map',{preferCanvas:true,zoomControl:false,attributionControl:true}).setView([32.8565,-117.2555],15);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
 const renderer=L.canvas({tolerance:8});
@@ -164,7 +164,7 @@ function locate(){if(!navigator.geolocation){$('sub').textContent='Location not 
  const ok=p=>{myLL=L.latLng(p.coords.latitude,p.coords.longitude);const acc=p.coords.accuracy;
   if(!me){meAcc=L.circle(myLL,{radius:acc,color:'#1d6fe0',weight:1,fillColor:'#1d6fe0',fillOpacity:.12,interactive:false,renderer}).addTo(map);me=meMarker(myLL)}
   else{me.setLatLng(myLL);meAcc.setLatLng(myLL).setRadius(acc)}
-  try{if(routeG&&end&&_rtKey&&myLL.distanceTo(end)>150)_wasFar=_rtKey;if(routeG&&end&&_rtKey&&_wasFar===_rtKey&&_doneKey!==_rtKey&&myLL.distanceTo(end)<40){_doneKey=_rtKey;track('route_completed',window.lastRoute&&window.lastRoute.mi!=null?{mi:+window.lastRoute.mi}:{})}}catch(_){}
+  try{if(routeG&&end&&_rtKey&&myLL.distanceTo(end)>150)_wasFar=_rtKey;if(routeG&&end&&_rtKey&&_wasFar===_rtKey&&_doneKey!==_rtKey&&myLL.distanceTo(end)<40){_doneKey=_rtKey;track('route_completed',window.lastRoute&&window.lastRoute.mi!=null?{mi:Math.round(window.lastRoute.mi*2)/2}:{})}}catch(_){}
   if(first){first=false;const rg=regionAt(myLL.lat,myLL.lng);if(rg&&REG&&rg.id!==REG.id){setURL(rg.id,false);window._regHow='auto';loadRegion(rg.id,true)}map.setView(myLL,16);$('showloc').style.display='none';if(to&&to.me){sync();if(start&&end)route()}else setField('from',{me:true})}else if((from&&from.me)||(to&&to.me)){sync()}};
  const err=e=>{$('showloc').textContent='📍 Show my location';$('sub').textContent=e.code===1?'Location is blocked. Turn it on in Settings › Safari › Location.':'Couldn’t find you: '+e.message};
  if(watching){navigator.geolocation.getCurrentPosition(p=>{first=true;ok(p)},err,{enableHighAccuracy:true});return}
