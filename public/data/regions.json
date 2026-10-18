@@ -233,7 +233,13 @@
   ],
   "beta": true,
   "cover": "Palm Desert, Indian Wells and La Quinta only. Pick another city in the menu above.",
-  "slug": "coachella"
+  "slug": "coachella",
+  "rule": {
+   "golf_cart": {
+    "note": "Palm Desert and La Quinta golf cart plans may allow carts on some signed routes above 25 mph; we only show roads posted 25 or less for plain carts",
+    "cite": "CVC 21716; CVC 21115 + Sts. & Hwys. Code §1950 golf cart transportation plans (Palm Desert, La Quinta)"
+   }
+  }
  },
  {
   "id": "naples",
@@ -332,7 +338,13 @@
   ],
   "beta": true,
   "cover": "Laguna Woods, Laguna Beach, Dana Point and San Clemente only. Pick another city in the menu above.",
-  "slug": "occoast"
+  "slug": "occoast",
+  "rule": {
+   "golf_cart": {
+    "note": "plain golf carts: public streets posted 25 or less (inside Laguna Woods Village, follow community rules)",
+    "cite": "CVC 21716"
+   }
+  }
  },
  {
   "id": "annamaria",
@@ -575,7 +587,10 @@
   "rule": {
    "max_posted": 35,
    "cite": "Bald Head Island has no cars (golf carts and bikes only; ferry access). Southport and Oak Island: NC LSV ≤35 (G.S. 20-121.1), carts by town ordinance",
-   "url": "https://villagebhi.org/"
+   "url": "https://villagebhi.org/",
+   "golf_cart": {
+    "note": "Bald Head Island: carts on island roads; Southport and Oak Island allow golf carts only by town ordinance, check local rules"
+   }
   },
   "slug": "southport"
  },
