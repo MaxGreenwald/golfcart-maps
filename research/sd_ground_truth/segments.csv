@@ -1,0 +1,614 @@
+city,road,osm_way,highway,length_m,map_mph,osm,official,official_source,official_url,mapillary,streetview,agree,verified_mph,status,confidence,fix,routes,lat,lon
+Carlsbad,(unnamed),775434094,unclassified,107,25,,,,,,,,,no posted-limit source (state default assumed),low,,cb_ponto->enc_leucadia,33.08316,-117.30848
+Carlsbad,(unnamed),963491533,service,21,25,,,,,,,,,no posted-limit source (state default assumed),low,,cb_village->cb_tamarack,33.15909,-117.3498
+Carlsbad,(unnamed),612920258,service,23,25,,,,,,,,,no posted-limit source (state default assumed),low,,cb_lagoon->cb_village; ocn_buccaneer->cb_lagoon,33.16969,-117.35752
+Carlsbad,Cannon Road,26587781,primary,57,35,,35,Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A)),https://ecode360.com/44006773#10.44-coastal-streets,,,,,one official source,medium,,cb_tamarack->cb_terramar,33.13258,-117.33537
+Carlsbad,Cannon Road,436431221,primary,35,35,,35,Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A)),https://ecode360.com/44006773#10.44-coastal-streets,,,,,one official source,medium,,cb_tamarack->cb_terramar,33.13286,-117.33458
+Carlsbad,Carlsbad Boulevard,436431496,primary,268,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 50 mph (OSM/imagery: osm 30),blocker: blocks Terramar -> South Ponto (no legal route),33.08932,-117.31288
+Carlsbad,Carlsbad Boulevard,436431497,primary,462,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,50,,Y,50,verified,high,,blocker: blocks Terramar -> South Ponto (no legal route),33.09072,-117.31385
+Carlsbad,Carlsbad Boulevard,436431495,primary,193,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 50 mph (OSM/imagery: osm 30),blocker: blocks Terramar -> South Ponto (no legal route),33.09172,-117.31377
+Carlsbad,Carlsbad Boulevard,436431493,primary,154,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,,,one official source,medium,,blocker: blocks Terramar -> South Ponto (no legal route),33.09181,-117.31425
+Carlsbad,Carlsbad Boulevard,908227119,primary,195,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,50,,Y,50,verified,high,,blocker: blocks Terramar -> South Ponto (no legal route),33.09268,-117.31414
+Carlsbad,Carlsbad Boulevard,908227120,primary,25,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 50 mph (OSM/imagery: osm 30),blocker: blocks Terramar -> South Ponto (no legal route),33.0937,-117.31456
+Carlsbad,Carlsbad Boulevard,33801002,primary,626,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,50,,Y,50,verified,high,,blocker: blocks Terramar -> South Ponto (no legal route),33.09522,-117.31568
+Carlsbad,Carlsbad Boulevard,33749367,primary,474,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,50,,Y,50,verified,high,,blocker: blocks Terramar -> South Ponto (no legal route),33.09647,-117.31598
+Carlsbad,Carlsbad Boulevard,436431494,primary,87,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 50 mph (OSM/imagery: osm 30),blocker: blocks Terramar -> South Ponto (no legal route),33.0979,-117.31658
+Carlsbad,Carlsbad Boulevard,436431492,primary,86,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,,,one official source,medium,,blocker: blocks Terramar -> South Ponto (no legal route),33.09848,-117.31696
+Carlsbad,Carlsbad Boulevard,1140667824,primary,305,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,50,,Y,50,verified,high,,blocker: blocks Terramar -> South Ponto (no legal route),33.09958,-117.3173
+Carlsbad,Carlsbad Boulevard,435654183,primary,322,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 50 mph (OSM/imagery: osm 30),blocker: blocks Terramar -> South Ponto (no legal route),33.10076,-117.31765
+Carlsbad,Carlsbad Boulevard,436609337,primary,7,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 50 mph (OSM/imagery: osm 30),blocker: blocks Terramar -> South Ponto (no legal route),33.10124,-117.31785
+Carlsbad,Carlsbad Boulevard,435654179,primary,63,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 50 mph (OSM/imagery: osm 30),blocker: blocks Terramar -> South Ponto (no legal route),33.10171,-117.31804
+Carlsbad,Carlsbad Boulevard,1140667823,primary,12,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,,,one official source,medium,,blocker: blocks Terramar -> South Ponto (no legal route),33.10174,-117.31823
+Carlsbad,Carlsbad Boulevard,435654184,primary,409,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,50,,Y,50,verified,high,,blocker: blocks Terramar -> South Ponto (no legal route),33.10189,-117.31812
+Carlsbad,Carlsbad Boulevard,435654182,primary,30,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,,,one official source,medium,,blocker: blocks Terramar -> South Ponto (no legal route),33.10195,-117.31832
+Carlsbad,Carlsbad Boulevard,435654177,primary,108,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,,,one official source,medium,,blocker: blocks Terramar -> South Ponto (no legal route),33.1021,-117.31838
+Carlsbad,Carlsbad Boulevard,32924629,primary,345,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,50,,Y,50,verified,high,,blocker: blocks Terramar -> South Ponto (no legal route),33.10495,-117.3196
+Carlsbad,Carlsbad Boulevard,435654178,primary,89,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 50 mph (OSM/imagery: osm 30),blocker: blocks Terramar -> South Ponto (no legal route),33.10589,-117.31993
+Carlsbad,Carlsbad Boulevard,435654180,primary,70,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,,,one official source,medium,,blocker: blocks Terramar -> South Ponto (no legal route),33.10605,-117.32021
+Carlsbad,Carlsbad Boulevard,436609338,primary,105,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 50 mph (OSM/imagery: osm 30),blocker: blocks Terramar -> South Ponto (no legal route),33.10639,-117.32018
+Carlsbad,Carlsbad Boulevard,435654176,primary,35,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,,,one official source,medium,,blocker: blocks Terramar -> South Ponto (no legal route),33.10649,-117.32046
+Carlsbad,Carlsbad Boulevard,436609340,primary,106,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 50 mph (OSM/imagery: osm 30),blocker: blocks Terramar -> South Ponto (no legal route),33.10763,-117.32072
+Carlsbad,Carlsbad Boulevard,33749239,primary,576,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,50,,Y,50,verified,high,,blocker: blocks Terramar -> South Ponto (no legal route),33.10866,-117.32136
+Carlsbad,Carlsbad Boulevard,33749309,primary,469,,30,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,50,,Y,50,verified,high,,blocker: blocks Terramar -> South Ponto (no legal route),33.10927,-117.32138
+Carlsbad,Carlsbad Boulevard,435654181,primary,87,,,50,Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia)),https://ecode360.com/44006773,,,,,one official source,medium,,blocker: blocks Terramar -> South Ponto (no legal route),33.11177,-117.32267
+Carlsbad,Carlsbad Boulevard,437777329,primary,153,,,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,,,one official source,medium,,blocker: blocks Terramar -> South Ponto (no legal route),33.11272,-117.32325
+Carlsbad,Carlsbad Boulevard,436431232,primary,56,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),cb_tamarack->cb_terramar,33.13261,-117.33554
+Carlsbad,Carlsbad Boulevard,436431224,primary,32,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),cb_tamarack->cb_terramar,33.13297,-117.33579
+Carlsbad,Carlsbad Boulevard,436431226,primary,18,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),cb_tamarack->cb_terramar,33.13322,-117.33597
+Carlsbad,Carlsbad Boulevard,436431234,primary,66,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,35,,Y,35,verified,high,,cb_tamarack->cb_terramar,33.13336,-117.33607
+Carlsbad,Carlsbad Boulevard,436431223,primary,32,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),cb_tamarack->cb_terramar,33.13388,-117.33643
+Carlsbad,Carlsbad Boulevard,436431236,primary,14,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),cb_tamarack->cb_terramar,33.13412,-117.3366
+Carlsbad,Carlsbad Boulevard,436431240,primary,43,35,,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,,,one official source,medium,,cb_tamarack->cb_terramar,33.1343,-117.3368
+Carlsbad,Carlsbad Boulevard,436431231,primary,21,35,,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,,,one official source,medium,,cb_tamarack->cb_terramar,33.13453,-117.33694
+Carlsbad,Carlsbad Boulevard,157272810,primary,359,35,,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,35,,Y,35,verified,high,,cb_tamarack->cb_terramar,33.13572,-117.33763
+Carlsbad,Carlsbad Boulevard,436429112,primary,58,35,,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,,,one official source,medium,,cb_tamarack->cb_terramar,33.13791,-117.3387
+Carlsbad,Carlsbad Boulevard,436429098,primary,48,35,,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,,,one official source,medium,,cb_tamarack->cb_terramar,33.13815,-117.33883
+Carlsbad,Carlsbad Boulevard,157272816,primary,27,35,,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,,,one official source,medium,,cb_tamarack->cb_terramar,33.13855,-117.33905
+Carlsbad,Carlsbad Boulevard,436429114,primary,397,35,,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,,,one official source,medium,,cb_tamarack->cb_terramar,33.1416,-117.34072
+Carlsbad,Carlsbad Boulevard,436429108,primary,56,35,,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,,,one official source,medium,,cb_tamarack->cb_terramar,33.14237,-117.34116
+Carlsbad,Carlsbad Boulevard,157272821,primary,329,35,,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,35,,Y,35,verified,high,,cb_tamarack->cb_terramar,33.14419,-117.34249
+Carlsbad,Carlsbad Boulevard,157272815,primary,46,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,35,,Y,35,verified,high,,cb_tamarack->cb_terramar,33.14497,-117.34316
+Carlsbad,Carlsbad Boulevard,157272817,primary,77,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),cb_tamarack->cb_terramar,33.1453,-117.34347
+Carlsbad,Carlsbad Boulevard,404648983,primary,137,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,35,,Y,35,verified,high,,cb_tamarack->cb_terramar,33.14629,-117.34434
+Carlsbad,Carlsbad Boulevard,436429085,primary,36,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),cb_tamarack->cb_terramar,33.14685,-117.34483
+Carlsbad,Carlsbad Boulevard,436429075,primary,18,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),cb_tamarack->cb_terramar,33.14712,-117.34504
+Carlsbad,Carlsbad Boulevard,157272814,primary,35,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),cb_tamarack->cb_terramar,33.14726,-117.34515
+Carlsbad,Carlsbad Boulevard,436429102,primary,36,35,30,35,"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),cb_tamarack->cb_terramar,33.14762,-117.34544
+Carlsbad,Carlsbad Boulevard,436429087,primary,14,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_tamarack->cb_terramar,33.1479,-117.34566
+Carlsbad,Carlsbad Boulevard,225875493,primary,40,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,30,,Y,30,verified,high,,cb_tamarack->cb_terramar,33.14797,-117.34571
+Carlsbad,Carlsbad Boulevard,436429090,primary,32,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_tamarack->cb_terramar,33.14844,-117.34608
+Carlsbad,Carlsbad Boulevard,436429099,primary,56,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_tamarack->cb_terramar,33.1488,-117.34636
+Carlsbad,Carlsbad Boulevard,436429097,primary,33,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_tamarack->cb_terramar,33.14912,-117.3466
+Carlsbad,Carlsbad Boulevard,436429103,primary,54,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_tamarack->cb_terramar,33.14952,-117.34691
+Carlsbad,Carlsbad Boulevard,436429088,primary,48,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_tamarack->cb_terramar,33.1499,-117.34718
+Carlsbad,Carlsbad Boulevard,436429107,primary,57,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.15025,-117.34747
+Carlsbad,Carlsbad Boulevard,436429101,primary,39,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.15062,-117.34775
+Carlsbad,Carlsbad Boulevard,436429111,primary,62,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.15071,-117.34782
+Carlsbad,Carlsbad Boulevard,436429093,primary,46,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.15143,-117.34839
+Carlsbad,Carlsbad Boulevard,436429109,primary,63,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.15185,-117.34872
+Carlsbad,Carlsbad Boulevard,436429091,primary,34,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,30,,Y,30,verified,high,,cb_village->cb_tamarack,33.15217,-117.34895
+Carlsbad,Carlsbad Boulevard,436429100,primary,76,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,30,,Y,30,verified,high,,cb_village->cb_tamarack,33.15276,-117.34937
+Carlsbad,Carlsbad Boulevard,436429079,primary,30,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.153,-117.34953
+Carlsbad,Carlsbad Boulevard,778728488,primary,25,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.15312,-117.34961
+Carlsbad,Carlsbad Boulevard,778728487,primary,17,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.15322,-117.34974
+Carlsbad,Carlsbad Boulevard,778728489,primary,7,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.15329,-117.34979
+Carlsbad,Carlsbad Boulevard,778728490,primary,25,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.15355,-117.3499
+Carlsbad,Carlsbad Boulevard,436429092,primary,46,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.15391,-117.35016
+Carlsbad,Carlsbad Boulevard,436429113,primary,34,30,,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,,,one official source,medium,,cb_village->cb_tamarack,33.15397,-117.35029
+Carlsbad,Carlsbad Boulevard,436405050,primary,125,30,,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,30,,Y,30,verified,high,,cb_village->cb_tamarack,33.15483,-117.35078
+Carlsbad,Carlsbad Boulevard,436429110,primary,33,30,,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,,,one official source,medium,,cb_village->cb_tamarack,33.15538,-117.3509
+Carlsbad,Carlsbad Boulevard,436429115,primary,141,30,,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,,,one official source,medium,,cb_village->cb_tamarack,33.15586,-117.35091
+Carlsbad,Carlsbad Boulevard,436405071,primary,45,30,,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,,,one official source,medium,,cb_village->cb_tamarack,33.15679,-117.35079
+Carlsbad,Carlsbad Boulevard,436405073,primary,119,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.15758,-117.35076
+Carlsbad,Carlsbad Boulevard,1472857149,primary,8,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_village->cb_tamarack,33.15817,-117.35104
+Carlsbad,Carlsbad Boulevard,594046978,primary,29,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_lagoon->cb_village,33.15933,-117.35198
+Carlsbad,Carlsbad Boulevard,436405060,primary,9,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_lagoon->cb_village,33.15952,-117.35213
+Carlsbad,Carlsbad Boulevard,436405066,primary,53,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_lagoon->cb_village,33.15965,-117.35223
+Carlsbad,Carlsbad Boulevard,436405055,primary,22,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_lagoon->cb_village,33.15998,-117.3525
+Carlsbad,Carlsbad Boulevard,436405051,primary,122,30,20,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 30 mph (OSM/imagery: osm 20),cb_lagoon->cb_village,33.16024,-117.35272
+Carlsbad,Carlsbad Boulevard,436405063,primary,29,30,,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,,,one official source,medium,,cb_lagoon->cb_village,33.16112,-117.35346
+Carlsbad,Carlsbad Boulevard,1162446010,primary,77,30,,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,30,,Y,30,verified,high,,cb_lagoon->cb_village,33.16148,-117.35375
+Carlsbad,Carlsbad Boulevard,1353806365,primary,32,30,,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,,,one official source,medium,,cb_lagoon->cb_village,33.16188,-117.35403
+Carlsbad,Carlsbad Boulevard,1085300499,primary,135,30,,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,25,,N,,disagree,medium,map uses the official 30 mph (OSM/imagery: mapillary 25),cb_lagoon->cb_village,33.16277,-117.3544
+Carlsbad,Carlsbad Boulevard,157272820,primary,33,30,,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,30,,Y,30,verified,high,,cb_lagoon->cb_village,33.16339,-117.35448
+Carlsbad,Carlsbad Boulevard,467556154,primary,33,30,,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,,,one official source,medium,,cb_lagoon->cb_village,33.16382,-117.35445
+Carlsbad,Carlsbad Boulevard,467556151,primary,66,30,,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,,,one official source,medium,,cb_lagoon->cb_village,33.16388,-117.35444
+Carlsbad,Carlsbad Boulevard,1268886227,primary,74,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,Y,30,verified,high,,cb_lagoon->cb_village,33.16492,-117.35437
+Carlsbad,Carlsbad Boulevard,157272811,primary,65,30,30,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,30,,Y,30,verified,high,,cb_lagoon->cb_village,33.16553,-117.35447
+Carlsbad,Carlsbad Boulevard,526970380,primary,10,30,15,30,Carlsbad Blvd (State St - Tamarack Ave),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 30 mph (OSM/imagery: osm 15),cb_lagoon->cb_village,33.16574,-117.35458
+Carlsbad,Carlsbad Boulevard,794576109,primary,19,35,10,35,Carlsbad Blvd (North city limit - State St),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 10),cb_lagoon->cb_village,33.16591,-117.35457
+Carlsbad,Carlsbad Boulevard,382185424,primary,46,35,15,35,Carlsbad Blvd (North city limit - State St),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 15),cb_lagoon->cb_village,33.16614,-117.35468
+Carlsbad,Carlsbad Boulevard,157272819,primary,28,35,35,35,Carlsbad Blvd (North city limit - State St),https://ecode360.com/44006773,,,Y,35,verified,high,,cb_lagoon->cb_village,33.16642,-117.3548
+Carlsbad,Carlsbad Boulevard,407600254,primary,211,35,25,35,Carlsbad Blvd (North city limit - State St),https://ecode360.com/44006773,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 25),cb_lagoon->cb_village,33.16657,-117.35491
+Carlsbad,Carlsbad Boulevard,407600255,primary,12,35,35,35,Carlsbad Blvd (North city limit - State St),https://ecode360.com/44006773,,,Y,35,verified,high,,cb_lagoon->cb_village,33.16812,-117.35622
+Carlsbad,Carlsbad Village Drive,436473395,primary,10,25,25,,,,,,,,one unofficial source,low,,cb_village->cb_tamarack,33.15828,-117.351
+Carlsbad,Carlsbad Village Drive,436473461,primary,90,25,25,,,,,,,,one unofficial source,low,,cb_village->cb_tamarack,33.15833,-117.35089
+Carlsbad,Carlsbad Village Drive,821770511,primary,59,25,25,,,,,,,,one unofficial source,low,,cb_village->cb_tamarack,33.15874,-117.35018
+Carlsbad,Grand Avenue,594046977,secondary,11,25,25,25,Grand Ave (Ocean St - I-5 (MC 10.44.440)),https://ecode360.com/44006773#10.44-coastal-streets,,,Y,25,verified,high,,cb_lagoon->cb_village,33.15932,-117.35191
+Carlsbad,Grand Avenue,643001896,secondary,75,25,25,25,Grand Ave (Ocean St - I-5 (MC 10.44.440)),https://ecode360.com/44006773#10.44-coastal-streets,25,,Y,25,verified,high,,cb_lagoon->cb_village,33.15949,-117.35154
+Carlsbad,Grand Avenue,1272650244,secondary,73,25,25,25,Grand Ave (Ocean St - I-5 (MC 10.44.440)),https://ecode360.com/44006773#10.44-coastal-streets,,,Y,25,verified,high,,cb_lagoon->cb_village,33.16002,-117.35063
+Carlsbad,Grand Avenue,594046976,secondary,112,25,25,25,Grand Ave (Ocean St - I-5 (MC 10.44.440)),https://ecode360.com/44006773#10.44-coastal-streets,,,Y,25,verified,high,,cb_lagoon->cb_village; cb_village->cb_tamarack,33.16042,-117.35005
+Carlsbad,La Costa Avenue,6047426,primary,12,30,,30,Encinitas Ord. 2026-05 Exhibit A (2026 E&TS): La Costa Ave (N Coast Hwy 101 - East City Limits) posted 30,https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,cb_ponto->enc_leucadia,33.08255,-117.30874
+Carlsbad,La Costa Avenue,750625054,secondary,38,30,40,30,Encinitas Ord. 2026-05 Exhibit A (2026 E&TS): La Costa Ave (N Coast Hwy 101 - East City Limits) posted 30,https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 30 mph (OSM/imagery: osm 40),cb_ponto->enc_leucadia,33.08262,-117.30864
+Carlsbad,Los Robles Drive,6049155,residential,788,25,,,,,,,,,no posted-limit source (state default assumed),low,,cb_tamarack->cb_terramar,33.13007,-117.33263
+Carlsbad,Pacific Coast Highway,1498658898,primary,17,35,35,,,,,,,,one unofficial source,low,,cb_lagoon->cb_village,33.1689,-117.35686
+Carlsbad,Pacific Coast Highway,436435231,primary,171,35,35,,,,35,,,,OSM + imagery agree (no official source),medium,,cb_lagoon->cb_village; ocn_buccaneer->cb_lagoon,33.16969,-117.35752
+Carlsbad,Pacific Coast Highway,436435226,primary,41,30,30,,,,,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.17029,-117.35803
+Carlsbad,Pacific Coast Highway,436435230,primary,36,35,30,,,,35,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.1706,-117.35829
+Carlsbad,Pacific Coast Highway,157272989,primary,97,35,35,,,,35,,,,OSM + imagery agree (no official source),medium,,ocn_buccaneer->cb_lagoon,33.17105,-117.35866
+Carlsbad,Pacific Coast Highway,745258855,primary,12,30,30,,,,,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.17158,-117.35911
+Carlsbad,Pacific Coast Highway,745258854,primary,18,35,35,,,,,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.17167,-117.35919
+Carlsbad,Pacific Coast Highway,436435228,primary,37,30,30,,,,,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.17182,-117.35931
+Carlsbad,Pacific Coast Highway,436435227,primary,34,30,30,,,,,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.17209,-117.35954
+Carlsbad,South Coast Highway,5981701,primary,94,35,35,35,Coast Highway (Wisconsin Ave - south city limit),https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones,35,,Y,35,verified,high,,cb_lagoon->cb_village,33.16864,-117.35665
+Carlsbad,South Coast Highway,436435229,primary,3,35,30,35,Coast Highway (Wisconsin Ave - south city limit),https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),ocn_buccaneer->cb_lagoon,33.1718,-117.3593
+Carlsbad,Washington Street,277165078,service,127,25,,,,,,,,,no posted-limit source (state default assumed),low,,cb_village->cb_tamarack,33.15989,-117.35044
+Coronado,(unnamed),259124637,service,435,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.6871,-117.18274
+Coronado,(unnamed),366216635,service,176,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.69571,-117.17331
+Coronado,2nd Street,1370888636,residential,160,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.69613,-117.1703
+Coronado,2nd Street,1370888635,residential,15,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.69654,-117.17128
+Coronado,2nd Street,1022310024,residential,114,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.69683,-117.17197
+Coronado,3rd Street,1033773080,trunk,58,25,30,,,,25,,,,one unofficial source,low,,co_ferry->co_downtown,32.69584,-117.17383
+Coronado,3rd Street,153343730,trunk,19,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.69594,-117.17409
+Coronado,5th Street,1495607254,residential,140,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.69312,-117.17586
+Coronado,Avenida Del Sol,1222284657,residential,15,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_hoteldel->co_shores,32.6796,-117.17576
+Coronado,Avenida del Sol,6044049,residential,16,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_hoteldel->co_shores,32.67964,-117.17567
+Coronado,B Avenue,159103867,residential,352,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.69698,-117.17049
+Coronado,B Avenue,1510801907,living_street,24,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.69787,-117.16998
+Coronado,B Avenue,1510801909,service,34,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.69827,-117.16977
+Coronado,D Avenue,1460404571,tertiary,214,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.69068,-117.17854
+Coronado,D Avenue,6001032,tertiary,881,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.69488,-117.17608
+Coronado,E Avenue,159103964,residential,715,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_downtown->co_hoteldel,32.68687,-117.18218
+Coronado,Encino Lane,259122960,service,122,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_downtown->co_central; co_downtown->co_hoteldel,32.68615,-117.1833
+Coronado,F Avenue,1348157202,residential,200,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_downtown->co_central,32.68474,-117.18462
+Coronado,F Avenue,5975598,residential,528,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_downtown->co_central,32.68866,-117.18248
+Coronado,Flora Avenue,6006391,residential,160,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_downtown->co_hoteldel,32.6843,-117.18133
+Coronado,Loma Avenue,6055334,tertiary,160,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_downtown->co_hoteldel,32.68368,-117.17933
+Coronado,Olive Avenue,6007447,tertiary,650,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_ferry->co_downtown,32.68967,-117.18122
+Coronado,Orange Avenue,712243537,trunk,60,35,,,,,,35,,,one unofficial source,low,,co_hoteldel->co_shores,32.67963,-117.17595
+Coronado,Orange Avenue,1042547699,trunk,25,35,,,,,,35,,,one unofficial source,low,,co_hoteldel->co_shores,32.68004,-117.17606
+Coronado,Orange Avenue,1073766101,trunk,95,35,,,,,,35,,,one unofficial source,low,,co_hoteldel->co_shores,32.68046,-117.17621
+Coronado,Orange Avenue,436413547,trunk,215,35,,,,,,35,,,one unofficial source,low,,co_hoteldel->co_shores,32.68223,-117.17815
+Coronado,Orange Avenue,436413513,trunk,68,35,30,,,,,35,,,one unofficial source,low,,co_downtown->co_hoteldel,32.68249,-117.1784
+Coronado,Orange Avenue,153343706,trunk,355,35,30,,,,,35,,,one unofficial source,low,,co_downtown->co_hoteldel,32.68422,-117.17916
+Coronado,Orange Avenue,436413504,trunk,301,30,30,,,,30,,,,OSM + imagery agree (no official source),medium,,co_ferry->co_downtown,32.69301,-117.17582
+Coronado,Orange Avenue,1346362636,trunk,10,30,30,,,,30,,,,OSM + imagery agree (no official source),medium,,co_ferry->co_downtown,32.69444,-117.17498
+Coronado,Orange Avenue,436285063,trunk,70,30,30,,,,30,,,,OSM + imagery agree (no official source),medium,,co_ferry->co_downtown,32.6946,-117.17488
+Coronado,Orange Avenue,436285065,trunk,42,30,,,,,30,,,,one unofficial source,low,,co_ferry->co_downtown,32.69508,-117.17459
+Coronado,Orange Avenue,157992673,trunk,64,30,,,,,30,,,,one unofficial source,low,,co_ferry->co_downtown,32.69542,-117.17439
+Coronado,Star Park Circle,5975055,tertiary,233,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_downtown->co_hoteldel,32.68424,-117.18127
+Coronado,Strand Way,1071964333,unclassified,20,25,,,,,,,,,no posted-limit source (state default assumed),low,,co_hoteldel->co_shores,32.67956,-117.17554
+Del Mar,15th Street,5957212,tertiary,138,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_plaza->dm_25th; dm_plaza->dm_powerhouse,32.95938,-117.2663
+Del Mar,15th Street,1073931012,tertiary,38,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_plaza->dm_25th; dm_plaza->dm_powerhouse,32.9596,-117.26547
+Del Mar,20th Street,6011322,residential,185,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_plaza->dm_25th,32.96586,-117.26736
+Del Mar,21st Street,34906978,living_street,72,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_plaza->dm_25th,32.96694,-117.2682
+Del Mar,25th Street,5988143,living_street,73,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_25th->dm_dogbeach,32.96961,-117.2681
+Del Mar,25th Street,1342044218,residential,14,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_25th->dm_dogbeach,32.96973,-117.26792
+Del Mar,Camino del Mar,1104886713,primary,143,25,,25,Camino del Mar (San Dieguito Bridge - Coast Blvd: posted 25 (survey seg 3)),https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_09142026-3926,25,,Y,25,verified,high,,dm_25th->dm_dogbeach,32.97037,-117.26805
+Del Mar,Camino del Mar,1342043490,primary,127,25,,25,Camino del Mar (San Dieguito Bridge - Coast Blvd: posted 25 (survey seg 3)),https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_09142026-3926,30,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 30),dm_25th->dm_dogbeach,32.97168,-117.26831
+Del Mar,Camino del Mar,1348444859,primary,50,25,,25,Camino del Mar (San Dieguito Bridge - Coast Blvd: posted 25 (survey seg 3)),https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_09142026-3926,,,,,one official source,medium,,dm_25th->dm_dogbeach,32.97219,-117.26841
+Del Mar,Camino del Mar,34906972,primary,65,25,,25,Camino del Mar (San Dieguito Bridge - Coast Blvd: posted 25 (survey seg 3)),https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_09142026-3926,,,,,one official source,medium,,dm_25th->dm_dogbeach,32.97303,-117.26858
+Del Mar,Camino del Mar,436313314,primary,30,25,,25,Camino del Mar (San Dieguito Bridge - Coast Blvd: posted 25 (survey seg 3)),https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_09142026-3926,,,,,one official source,medium,,dm_25th->dm_dogbeach,32.97342,-117.26864
+Del Mar,Camino del Mar,34906973,primary,185,,,40,"Camino del Mar (Via de la Valle - San Dieguito Bridge — posted 40 mph today; ordinance lowers it to 30 mph from 2026-11-19, once new signs are up)",https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943,25,,N,,disagree,medium,map uses the official 40 mph (OSM/imagery: mapillary 25),blocker: blocks Fletcher Cove -> Del Mar Dog Beach (no legal route),32.97552,-117.26902
+Del Mar,Camino del Mar,1342043649,primary,4,,,40,"Camino del Mar (Via de la Valle - San Dieguito Bridge — posted 40 mph today; ordinance lowers it to 30 mph from 2026-11-19, once new signs are up)",https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943,,,,,one official source,medium,,blocker: blocks Fletcher Cove -> Del Mar Dog Beach (no legal route),32.976,-117.26909
+Del Mar,Camino del Mar,1342043660,primary,4,,,40,"Camino del Mar (Via de la Valle - San Dieguito Bridge — posted 40 mph today; ordinance lowers it to 30 mph from 2026-11-19, once new signs are up)",https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943,,,,,one official source,medium,,blocker: blocks Fletcher Cove -> Del Mar Dog Beach (no legal route),32.97603,-117.26909
+Del Mar,Camino del Mar,157272809,primary,242,,,40,"Camino del Mar (Via de la Valle - San Dieguito Bridge — posted 40 mph today; ordinance lowers it to 30 mph from 2026-11-19, once new signs are up)",https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943,,,,,one official source,medium,,blocker: blocks Fletcher Cove -> Del Mar Dog Beach (no legal route),32.97698,-117.26922
+Del Mar,Camino del Mar,157531225,primary,253,,45,40,"Camino del Mar (Via de la Valle - San Dieguito Bridge — posted 40 mph today; ordinance lowers it to 30 mph from 2026-11-19, once new signs are up)",https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943,,,N,,disagree,medium,map uses the official 40 mph (OSM/imagery: osm 45),blocker: blocks Fletcher Cove -> Del Mar Dog Beach (no legal route),32.97704,-117.26931
+Del Mar,Camino del Mar,34092357,primary,179,,,40,"Camino del Mar (Via de la Valle - San Dieguito Bridge — posted 40 mph today; ordinance lowers it to 30 mph from 2026-11-19, once new signs are up)",https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943,,,,,one official source,medium,,blocker: blocks Fletcher Cove -> Del Mar Dog Beach (no legal route),32.97928,-117.26908
+Del Mar,Camino del Mar,157531218,primary,220,,45,40,"Camino del Mar (Via de la Valle - San Dieguito Bridge — posted 40 mph today; ordinance lowers it to 30 mph from 2026-11-19, once new signs are up)",https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943,40,,Y,40,verified,high,,blocker: blocks Fletcher Cove -> Del Mar Dog Beach (no legal route),32.97931,-117.26921
+Del Mar,Camino del Mar,436313320,primary,44,,,40,"Camino del Mar (Via de la Valle - San Dieguito Bridge — posted 40 mph today; ordinance lowers it to 30 mph from 2026-11-19, once new signs are up)",https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943,,,,,one official source,medium,,blocker: blocks Fletcher Cove -> Del Mar Dog Beach (no legal route),32.98009,-117.26904
+Del Mar,Coast Boulevard,6034023,tertiary,96,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_plaza->dm_25th,32.95992,-117.26744
+Del Mar,Coast Boulevard,397545296,tertiary,76,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_plaza->dm_25th,32.9604,-117.26752
+Del Mar,Coast Boulevard,397545295,tertiary,184,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_plaza->dm_25th,32.96158,-117.26762
+Del Mar,Coast Boulevard,251405959,tertiary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_plaza->dm_25th,32.96245,-117.2672
+Del Mar,Coast Boulevard,1420378430,tertiary,30,25,,,,,25,,,,one unofficial source,low,,dm_plaza->dm_25th,32.96262,-117.26719
+Del Mar,Coast Boulevard,251405961,tertiary,515,25,25,,,,25,,,,OSM + imagery agree (no official source),medium,,dm_plaza->dm_25th,32.96481,-117.26739
+Del Mar,Ocean Front,6020349,living_street,124,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_plaza->dm_25th,32.96685,-117.26819
+Del Mar,Ocean Front,6020358,living_street,432,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_25th->dm_dogbeach,32.96885,-117.26867
+Del Mar,Sandy Lane,1043261359,residential,4,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_25th->dm_dogbeach,32.97341,-117.26876
+Del Mar,Sandy Lane,157531257,residential,12,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_25th->dm_dogbeach,32.97341,-117.2688
+Del Mar,Sandy Lane,1043261357,residential,11,25,,,,,,,,,no posted-limit source (state default assumed),low,,dm_25th->dm_dogbeach,32.97342,-117.26864
+Encinitas,(unnamed),578626359,service,87,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_cardiff->enc_seaside; enc_seaside->sb_tide,33.01271,-117.28011
+Encinitas,(unnamed),581640834,service,73,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_moonlight->enc_downtown,33.04909,-117.29379
+Encinitas,4th Street,5969035,tertiary,262,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_leucadia->enc_moonlight; enc_moonlight->enc_downtown,33.04964,-117.29727
+Encinitas,A Street,6017290,residential,371,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_moonlight->enc_downtown,33.04974,-117.2963
+Encinitas,A Street,1131697937,residential,15,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_moonlight->enc_downtown,33.04992,-117.29452
+Encinitas,East Circle Drive,5965648,residential,198,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_seaside->sb_tide; sb_tide->sb_fletcher,33.00059,-117.2764
+Encinitas,East E Street,6050797,tertiary,49,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.04469,-117.29353
+Encinitas,East E Street,1033855883,tertiary,38,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.04476,-117.29288
+Encinitas,East E Street,157272901,tertiary,28,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.04479,-117.2926
+Encinitas,Encinitas Boulevard,169543038,primary,42,35,40,35,Encinitas Ord. 2026-05 Exhibit A (2026 E&TS): Encinitas Blvd (Coast Hwy 101 - Quail Gardens Rd) posted 35,https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 40),enc_moonlight->enc_downtown,33.04878,-117.29401
+Encinitas,Encinitas Boulevard,391854306,primary,24,35,40,35,Encinitas Ord. 2026-05 Exhibit A (2026 E&TS): Encinitas Blvd (Coast Hwy 101 - Quail Gardens Rd) posted 35,https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 40),enc_moonlight->enc_downtown,33.04881,-117.29372
+Encinitas,Encinitas Boulevard,391854304,primary,9,35,40,35,Encinitas Ord. 2026-05 Exhibit A (2026 E&TS): Encinitas Blvd (Coast Hwy 101 - Quail Gardens Rd) posted 35,https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 40),enc_moonlight->enc_downtown,33.04882,-117.29348
+Encinitas,Encinitas Boulevard,391854305,primary,39,35,40,35,Encinitas Ord. 2026-05 Exhibit A (2026 E&TS): Encinitas Blvd (Coast Hwy 101 - Quail Gardens Rd) posted 35,https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 40),enc_moonlight->enc_downtown,33.04885,-117.29316
+Encinitas,Europa Street,6019579,residential,209,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_leucadia->enc_beacons,33.06289,-117.3027
+Encinitas,Jasper Street,6005753,residential,235,25,,,,,,,,,no posted-limit source (state default assumed),low,,cb_ponto->enc_leucadia; enc_leucadia->enc_beacons; enc_leucadia->enc_moonlight,33.06546,-117.3037
+Encinitas,La Veta Avenue,5991996,residential,832,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_leucadia->enc_moonlight,33.05398,-117.29813
+Encinitas,Montgomery Avenue,839558500,residential,1196,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_cardiff->enc_seaside; enc_swamis->enc_cardiff,33.02082,-117.27891
+Encinitas,Montgomery Avenue,1459208035,tertiary,156,20,20,,,,,,,,one unofficial source,low,,enc_cardiff->enc_seaside; enc_swamis->enc_cardiff,33.02486,-117.28175
+Encinitas,Montgomery Avenue,5957177,tertiary,347,20,20,,,,,,,,one unofficial source,low,,enc_cardiff->enc_seaside; enc_swamis->enc_cardiff,33.02578,-117.28366
+Encinitas,North Coast Highway,436300822,primary,61,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,enc_moonlight->enc_downtown,33.04891,-117.29421
+Encinitas,North Coast Highway,436300808,primary,46,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,35,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 35),enc_moonlight->enc_downtown,33.04974,-117.29433
+Encinitas,North Coast Highway,436300807,primary,22,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,enc_moonlight->enc_downtown,33.04993,-117.29436
+Encinitas,North Coast Highway,1329263158,primary,162,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,35,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 35),enc_leucadia->enc_moonlight,33.05772,-117.29898
+Encinitas,North Coast Highway,436300819,primary,42,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,35,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 35),enc_leucadia->enc_moonlight,33.05824,-117.29929
+Encinitas,North Coast Highway,1106587666,primary,85,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,enc_leucadia->enc_moonlight,33.05924,-117.29992
+Encinitas,North Coast Highway,436300813,primary,33,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,35,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 35),enc_leucadia->enc_moonlight,33.05939,-117.30002
+Encinitas,North Coast Highway,211570987,primary,120,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,enc_leucadia->enc_moonlight,33.05985,-117.30032
+Encinitas,North Coast Highway,436300820,primary,25,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,enc_leucadia->enc_moonlight,33.06067,-117.30079
+Encinitas,North Coast Highway,1098265887,primary,418,25,35,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,35,,N,,disagree,medium,"map uses the official 25 mph (OSM/imagery: osm 35, mapillary 35)",enc_leucadia->enc_beacons; enc_leucadia->enc_moonlight,33.0618,-117.30141
+Encinitas,North Coast Highway,331768745,primary,31,25,35,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: osm 35),enc_leucadia->enc_beacons; enc_leucadia->enc_moonlight,33.0644,-117.30232
+Encinitas,North Coast Highway,436410528,primary,32,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,enc_leucadia->enc_beacons; enc_leucadia->enc_moonlight,33.06448,-117.30235
+Encinitas,North Coast Highway,1106585108,primary,245,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,cb_ponto->enc_leucadia; enc_leucadia->enc_beacons; enc_leucadia->enc_moonlight,33.06562,-117.30274
+Encinitas,North Coast Highway,393555889,primary,587,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,35,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 35),cb_ponto->enc_leucadia,33.06949,-117.30401
+Encinitas,North Coast Highway,1457602674,primary,17,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,cb_ponto->enc_leucadia,33.072,-117.30487
+Encinitas,North Coast Highway,1457602672,primary,411,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,cb_ponto->enc_leucadia,33.07388,-117.30548
+Encinitas,North Coast Highway,436410525,primary,28,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,cb_ponto->enc_leucadia,33.07573,-117.3061
+Encinitas,North Coast Highway,777277259,primary,36,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,cb_ponto->enc_leucadia,33.07598,-117.30617
+Encinitas,North Coast Highway,1031589250,primary,266,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,cb_ponto->enc_leucadia,33.07745,-117.30666
+Encinitas,North Coast Highway,1031589249,primary,25,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,35,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 35),cb_ponto->enc_leucadia,33.07861,-117.30705
+Encinitas,North Coast Highway,436410539,primary,160,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,35,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 35),cb_ponto->enc_leucadia,33.07962,-117.3074
+Encinitas,North Coast Highway,794576108,primary,111,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,,,one official source,medium,,cb_ponto->enc_leucadia,33.08081,-117.3078
+Encinitas,North Coast Highway,158341851,primary,167,25,,25,N Coast Hwy 101 (La Costa Ave - Encinitas Blvd),https://ecode360.com/EN5042/laws/LF2740111.pdf,35,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 35),cb_ponto->enc_leucadia,33.08193,-117.30841
+Encinitas,North Court,5966758,residential,51,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_leucadia->enc_moonlight,33.05807,-117.29969
+Encinitas,San Elijo Avenue,6002009,secondary,1648,25,25,25,San Elijo Ave (Santa Fe Dr - Chesterfield Dr),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,Y,25,verified,high,,enc_cardiff->enc_seaside; enc_swamis->enc_cardiff,33.02958,-117.28806
+Encinitas,South Coast Highway,5971449,primary,230,30,,,,,40,30,,,one unofficial source,low,,enc_seaside->sb_tide,33.00017,-117.27524
+Encinitas,South Coast Highway,436403305,primary,103,30,30,,,,45,30,,,one unofficial source,low,,enc_seaside->sb_tide,33.00211,-117.27698
+Encinitas,South Coast Highway,436403311,primary,94,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_seaside->sb_tide,33.00282,-117.27738
+Encinitas,South Coast Highway,436403307,primary,81,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_seaside->sb_tide,33.00347,-117.27769
+Encinitas,South Coast Highway,5963768,primary,817,30,30,,,,45,30,,,one unofficial source,low,,enc_seaside->sb_tide,33.00696,-117.27835
+Encinitas,South Coast Highway,436402240,primary,56,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_seaside->sb_tide,33.01119,-117.27925
+Encinitas,South Coast Highway,436402241,primary,116,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_seaside->sb_tide,33.0122,-117.27947
+Encinitas,South Coast Highway,1104886712,primary,114,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside; enc_seaside->sb_tide,33.0129,-117.27967
+Encinitas,South Coast Highway,436402237,primary,39,30,30,,,,45,30,,,one unofficial source,low,,enc_cardiff->enc_seaside,33.01384,-117.28
+Encinitas,South Coast Highway,436402231,primary,224,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.01582,-117.28086
+Encinitas,South Coast Highway,32868836,primary,60,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.01633,-117.28107
+Encinitas,South Coast Highway,32868833,primary,243,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.0176,-117.28164
+Encinitas,South Coast Highway,436402239,primary,73,30,30,,,,45,30,,,one unofficial source,low,,enc_cardiff->enc_seaside,33.01894,-117.28227
+Encinitas,South Coast Highway,1016489437,primary,14,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.0191,-117.28236
+Encinitas,South Coast Highway,1268448800,primary,13,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.01921,-117.28241
+Encinitas,South Coast Highway,224931553,primary,27,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.01925,-117.28243
+Encinitas,South Coast Highway,436402228,primary,32,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.0197,-117.28267
+Encinitas,South Coast Highway,436402236,primary,254,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.02054,-117.28317
+Encinitas,South Coast Highway,436402229,primary,247,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.02303,-117.28467
+Encinitas,South Coast Highway,436402234,primary,46,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.02409,-117.28536
+Encinitas,South Coast Highway,224931554,primary,47,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.02448,-117.28559
+Encinitas,South Coast Highway,436402238,primary,42,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.02481,-117.2858
+Encinitas,South Coast Highway,436402233,primary,88,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.02552,-117.28622
+Encinitas,South Coast Highway,436402230,primary,43,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.02587,-117.28643
+Encinitas,South Coast Highway,436402232,primary,33,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.02613,-117.28659
+Encinitas,South Coast Highway,436402235,primary,80,30,30,,,,45,30,,,one unofficial source,low,,enc_cardiff->enc_seaside,33.02677,-117.28698
+Encinitas,South Coast Highway,436402227,primary,40,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.0271,-117.28718
+Encinitas,South Coast Highway,333377582,primary,54,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.02753,-117.28745
+Encinitas,South Coast Highway,157272993,primary,624,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.0296,-117.28855
+Encinitas,South Coast Highway,436442863,primary,172,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.03269,-117.29015
+Encinitas,South Coast Highway,158341856,primary,85,30,30,,,,,30,,,OSM + imagery agree (no official source),medium,,enc_cardiff->enc_seaside,33.03411,-117.29092
+Encinitas,South Coast Highway,830832325,primary,132,25,30,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,45,,N,,disagree,medium,"map uses the official 25 mph (OSM/imagery: osm 30, mapillary 45)",enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.03586,-117.29182
+Encinitas,South Coast Highway,926055270,primary,111,25,30,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: osm 30),enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.03595,-117.29187
+Encinitas,South Coast Highway,224931510,primary,94,25,25,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,Y,25,verified,high,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.0372,-117.29249
+Encinitas,South Coast Highway,437779286,primary,172,25,25,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,30,,Y,25,verified,high,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.03812,-117.29279
+Encinitas,South Coast Highway,436442866,primary,28,25,25,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,Y,25,verified,high,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.03925,-117.29293
+Encinitas,South Coast Highway,1431092745,primary,36,25,25,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,Y,25,verified,high,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.03942,-117.29295
+Encinitas,South Coast Highway,436442869,primary,110,25,25,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,30,,Y,25,verified,high,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.03991,-117.29302
+Encinitas,South Coast Highway,1353155386,primary,47,25,25,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,Y,25,verified,high,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.04074,-117.29313
+Encinitas,South Coast Highway,436442870,primary,74,25,25,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,30,,Y,25,verified,high,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.04144,-117.29323
+Encinitas,South Coast Highway,436442864,primary,25,25,25,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,Y,25,verified,high,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.04182,-117.29328
+Encinitas,South Coast Highway,391851509,primary,44,25,25,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,Y,25,verified,high,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.04205,-117.29331
+Encinitas,South Coast Highway,436442868,primary,61,25,25,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,30,,Y,25,verified,high,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.04293,-117.29343
+Encinitas,South Coast Highway,436442865,primary,41,25,25,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,Y,25,verified,high,,enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.04306,-117.29345
+Encinitas,South Coast Highway,1022281192,primary,2,25,30,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: osm 30),enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.04336,-117.29349
+Encinitas,South Coast Highway,436442867,primary,48,25,30,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: osm 30),enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.04346,-117.2935
+Encinitas,South Coast Highway,960133747,primary,96,25,30,25,S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing),https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: osm 30),enc_cardiff->enc_seaside; enc_downtown->enc_swamis; enc_swamis->enc_cardiff,33.04459,-117.29366
+Encinitas,South Vulcan Avenue,1385268718,secondary,30,30,30,,,,,,,,one unofficial source,low,,enc_cardiff->enc_seaside; enc_swamis->enc_cardiff,33.03625,-117.29118
+Encinitas,South Vulcan Avenue,844392318,secondary,860,35,30,,,,,,,,one unofficial source,low,,enc_cardiff->enc_seaside; enc_swamis->enc_cardiff,33.03969,-117.29177
+Encinitas,South Vulcan Avenue,169543080,secondary,73,35,35,,,,,,,,one unofficial source,low,,enc_cardiff->enc_seaside; enc_swamis->enc_cardiff,33.0447,-117.29244
+Encinitas,South Vulcan Avenue,169543081,secondary,40,35,35,,,,,,,,one unofficial source,low,,enc_downtown->enc_swamis,33.04492,-117.29247
+Encinitas,South Vulcan Avenue,1245123393,secondary,44,35,35,,,,,,,,one unofficial source,low,,enc_downtown->enc_swamis,33.04518,-117.2925
+Encinitas,South Vulcan Avenue,1245123394,secondary,59,35,35,,,,,,,,one unofficial source,low,,enc_moonlight->enc_downtown,33.04601,-117.29261
+Encinitas,South Vulcan Avenue,960133745,secondary,57,35,35,,,,,,,,one unofficial source,low,,enc_moonlight->enc_downtown,33.04622,-117.29263
+Encinitas,South Vulcan Avenue,755796786,secondary,14,35,35,,,,,,,,one unofficial source,low,,enc_moonlight->enc_downtown,33.04662,-117.29268
+Encinitas,South Vulcan Avenue,327182015,secondary,22,35,35,,,,,,,,one unofficial source,low,,enc_moonlight->enc_downtown,33.04675,-117.2927
+Encinitas,South Vulcan Avenue,1245123396,secondary,18,30,40,30,Encinitas Ord. 2026-05 Exhibit A (2026 E&TS): Vulcan Ave (Encinitas Blvd - Santa Fe Dr) posted 30,https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 30 mph (OSM/imagery: osm 40),enc_moonlight->enc_downtown,33.04694,-117.29273
+Encinitas,South Vulcan Avenue,1245123397,secondary,85,30,40,30,Encinitas Ord. 2026-05 Exhibit A (2026 E&TS): Vulcan Ave (Encinitas Blvd - Santa Fe Dr) posted 30,https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 30 mph (OSM/imagery: osm 40),enc_moonlight->enc_downtown,33.04722,-117.29276
+Encinitas,South Vulcan Avenue,6001345,secondary,109,30,40,30,Encinitas Ord. 2026-05 Exhibit A (2026 E&TS): Vulcan Ave (Encinitas Blvd - Santa Fe Dr) posted 30,https://ecode360.com/EN5042/laws/LF2740111.pdf,,,N,,disagree,medium,map uses the official 30 mph (OSM/imagery: osm 40),enc_moonlight->enc_downtown,33.04853,-117.29293
+Imperial Beach,3rd Street,5963560,tertiary,404,25,,,,,,,,,no posted-limit source (state default assumed),low,,ib_pier->ib_palm,32.58246,-117.12744
+Imperial Beach,4th Street,5968994,residential,219,25,,,,,,,,,no posted-limit source (state default assumed),low,,ib_pier->ib_palm,32.58245,-117.12532
+Imperial Beach,4th Street,1349727528,residential,14,25,,,,,,,,,no posted-limit source (state default assumed),low,,ib_pier->ib_palm,32.5839,-117.12531
+Imperial Beach,Dahlia Avenue,1347748701,residential,6,25,,,,,,,,,no posted-limit source (state default assumed),low,,ib_pier->ib_palm,32.58316,-117.12532
+Imperial Beach,Dahlia Avenue,1347748700,residential,9,25,,,,,,,,,no posted-limit source (state default assumed),low,,ib_pier->ib_palm,32.58317,-117.12734
+Imperial Beach,Dahlia Avenue,1275484957,residential,184,25,,,,,,,,,no posted-limit source (state default assumed),low,,ib_pier->ib_palm,32.58317,-117.12638
+Imperial Beach,Donax Avenue,1347748679,residential,8,25,,,,,,,,,no posted-limit source (state default assumed),low,,ib_pier->ib_palm,32.58246,-117.13165
+Imperial Beach,Donax Avenue,1347748687,residential,185,25,,,,,,,,,no posted-limit source (state default assumed),low,,ib_pier->ib_palm,32.58246,-117.13062
+Imperial Beach,Donax Avenue,1347748688,residential,14,25,,,,,,,,,no posted-limit source (state default assumed),low,,ib_pier->ib_palm,32.58246,-117.12959
+Imperial Beach,Donax Avenue,6024688,residential,187,25,,,,,,,,,no posted-limit source (state default assumed),low,,ib_pier->ib_palm,32.58246,-117.12837
+Imperial Beach,Donax Avenue,1347748689,residential,7,25,,,,,,,,,no posted-limit source (state default assumed),low,,ib_pier->ib_palm,32.58246,-117.12744
+Imperial Beach,Seacoast Drive,25723392,residential,118,25,,,,,,,,,no posted-limit source (state default assumed),low,,ib_seacoast->ib_south,32.5733,-117.13171
+Imperial Beach,Seacoast Drive,149560908,residential,319,25,25,,,,,,,,one unofficial source,low,,ib_seacoast->ib_south,32.5756,-117.13175
+Imperial Beach,Seacoast Drive,1349741396,residential,12,25,25,,,,,,,,one unofficial source,low,,ib_pier->ib_seacoast,32.57653,-117.13174
+Imperial Beach,Seacoast Drive,1349741397,primary,10,20,25,20,Seacoast Dr (Palm Ave - Imperial Beach Blvd),https://pub-imperialbeach.escribemeetings.com/filestream.ashx?DocumentId=973,,,N,,disagree,medium,map uses the official 20 mph (OSM/imagery: osm 25),ib_pier->ib_seacoast,32.57665,-117.13174
+Imperial Beach,Seacoast Drive,1349741538,primary,147,20,25,20,Seacoast Dr (Palm Ave - Imperial Beach Blvd),https://pub-imperialbeach.escribemeetings.com/filestream.ashx?DocumentId=973,25,,N,,disagree,medium,"map uses the official 20 mph (OSM/imagery: osm 25, mapillary 25)",ib_pier->ib_seacoast,32.57703,-117.13174
+Imperial Beach,Seacoast Drive,1349741537,primary,12,20,25,20,Seacoast Dr (Palm Ave - Imperial Beach Blvd),https://pub-imperialbeach.escribemeetings.com/filestream.ashx?DocumentId=973,,,N,,disagree,medium,map uses the official 20 mph (OSM/imagery: osm 25),ib_pier->ib_seacoast,32.57812,-117.13173
+Imperial Beach,Seacoast Drive,1349741828,primary,307,20,25,20,Seacoast Dr (Palm Ave - Imperial Beach Blvd),https://pub-imperialbeach.escribemeetings.com/filestream.ashx?DocumentId=973,,,N,,disagree,medium,map uses the official 20 mph (OSM/imagery: osm 25),ib_pier->ib_palm; ib_pier->ib_seacoast,32.57957,-117.13173
+Imperial Beach,Seacoast Drive,1349741827,primary,14,20,25,20,Seacoast Dr (Palm Ave - Imperial Beach Blvd),https://pub-imperialbeach.escribemeetings.com/filestream.ashx?DocumentId=973,,,N,,disagree,medium,map uses the official 20 mph (OSM/imagery: osm 25),ib_pier->ib_palm,32.581,-117.13173
+Imperial Beach,Seacoast Drive,1349741898,primary,67,20,25,20,Seacoast Dr (Palm Ave - Imperial Beach Blvd),https://pub-imperialbeach.escribemeetings.com/filestream.ashx?DocumentId=973,,,N,,disagree,medium,map uses the official 20 mph (OSM/imagery: osm 25),ib_pier->ib_palm,32.58137,-117.13173
+Imperial Beach,Seacoast Drive,1349741897,primary,14,20,25,20,Seacoast Dr (Palm Ave - Imperial Beach Blvd),https://pub-imperialbeach.escribemeetings.com/filestream.ashx?DocumentId=973,,,N,,disagree,medium,map uses the official 20 mph (OSM/imagery: osm 25),ib_pier->ib_palm,32.58174,-117.13173
+Imperial Beach,Seacoast Drive,149560905,primary,226,20,25,20,Seacoast Dr (Palm Ave - Imperial Beach Blvd),https://pub-imperialbeach.escribemeetings.com/filestream.ashx?DocumentId=973,,,N,,disagree,medium,map uses the official 20 mph (OSM/imagery: osm 25),ib_pier->ib_palm,32.58246,-117.13173
+La Jolla,(unnamed),5954263,service,95,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81424,-117.26932
+La Jolla,(unnamed),111565278,service,429,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.8168,-117.27082
+La Jolla,(unnamed),111565314,service,852,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.82383,-117.27648
+La Jolla,(unnamed),105067511,residential,32,25,,,,,25,,,,one unofficial source,low,,lj_cove->lj_shores,32.85795,-117.25557
+La Jolla,Camino de la Costa,356998652,tertiary,23,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81763,-117.27158
+La Jolla,Camino de la Costa,39613267,tertiary,68,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81771,-117.27132
+La Jolla,Coast Boulevard,202057234,tertiary,200,5,5,,,,,,,,one unofficial source,low,,lj_cove->lj_shores; lj_village->lj_cove,32.84965,-117.27388
+La Jolla,Dunemere Drive,5989411,residential,163,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_village->lj_windansea,32.83536,-117.27885
+La Jolla,East Torrey Pines Road,436406290,primary,165,35,35,,,,35,,,,OSM + imagery agree (no official source),medium,,lj_cove->lj_shores,32.84765,-117.26667
+La Jolla,East Torrey Pines Road,436406265,primary,31,35,35,,,,,,,,one unofficial source,low,,lj_cove->lj_shores,32.84796,-117.26553
+La Jolla,East Torrey Pines Road,436406292,primary,276,35,35,,,,35,,,,OSM + imagery agree (no official source),medium,,lj_cove->lj_shores,32.84858,-117.2633
+La Jolla,East Torrey Pines Road,436406276,primary,28,35,35,,,,,,,,one unofficial source,low,,lj_cove->lj_shores,32.84879,-117.26272
+La Jolla,East Torrey Pines Road,436406281,primary,61,35,35,,,,,,,,one unofficial source,low,,lj_cove->lj_shores,32.84912,-117.26214
+La Jolla,East Torrey Pines Road,436406272,primary,32,35,35,,,,35,,,,OSM + imagery agree (no official source),medium,,lj_cove->lj_shores,32.84938,-117.26167
+La Jolla,East Torrey Pines Road,436406284,primary,188,35,35,,,,35,,,,OSM + imagery agree (no official source),medium,,lj_cove->lj_shores,32.84962,-117.26106
+La Jolla,East Torrey Pines Road,436406271,primary,33,35,35,,,,,,,,one unofficial source,low,,lj_cove->lj_shores,32.84978,-117.25938
+La Jolla,El Paseo Grande,6000946,residential,844,25,,,,,25,,,,one unofficial source,low,,lj_cove->lj_shores,32.85422,-117.25564
+La Jolla,Fern Glen,6012226,tertiary,201,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_village->lj_windansea,32.83346,-117.28061
+La Jolla,Girard Avenue,5979547,tertiary,109,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_cove->lj_shores; lj_village->lj_cove,32.8483,-117.27424
+La Jolla,Herschel Avenue,1030373435,tertiary,594,25,25,,,,,,,,one unofficial source,low,,lj_village->lj_cove; lj_village->lj_windansea,32.84577,-117.27289
+La Jolla,La Jolla Boulevard,38093737,primary,143,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80814,-117.26309
+La Jolla,La Jolla Boulevard,436570658,primary,38,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80899,-117.26417
+La Jolla,La Jolla Boulevard,436402146,primary,51,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80932,-117.26456
+La Jolla,La Jolla Boulevard,6055286,primary,24,25,35,,,,,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80941,-117.26465
+La Jolla,La Jolla Boulevard,436402150,primary,12,25,35,,,,,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80954,-117.26483
+La Jolla,La Jolla Boulevard,1090776665,primary,28,25,35,,,,,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80972,-117.26504
+La Jolla,La Jolla Boulevard,1427018603,primary,62,25,35,,,,,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.81012,-117.26551
+La Jolla,La Jolla Boulevard,204762551,primary,87,25,35,,,,35,,,,OSM + imagery agree (no official source),medium,,lj_birdrock->pb_tourmaline,32.81067,-117.26616
+La Jolla,La Jolla Boulevard,1090776664,primary,14,25,35,,,,,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.81077,-117.26625
+La Jolla,La Jolla Boulevard,1090776663,primary,21,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81079,-117.26631
+La Jolla,La Jolla Boulevard,685352242,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81096,-117.2665
+La Jolla,La Jolla Boulevard,685352243,primary,16,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81108,-117.26673
+La Jolla,La Jolla Boulevard,38093579,primary,183,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81187,-117.26757
+La Jolla,La Jolla Boulevard,38093577,primary,26,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81254,-117.26837
+La Jolla,La Jolla Boulevard,305848067,primary,149,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81343,-117.26925
+La Jolla,La Jolla Boulevard,39617456,primary,211,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81416,-117.26976
+La Jolla,La Jolla Boulevard,1090776660,primary,153,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81417,-117.26968
+La Jolla,La Jolla Boulevard,1090776659,primary,28,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81541,-117.27048
+La Jolla,La Jolla Boulevard,1274741994,primary,8,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81751,-117.27192
+La Jolla,La Jolla Boulevard,641851320,primary,13,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81751,-117.27182
+La Jolla,La Jolla Boulevard,356998530,primary,8,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81754,-117.27197
+La Jolla,La Jolla Boulevard,1274741993,primary,4,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81763,-117.27197
+La Jolla,La Jolla Boulevard,641851317,primary,20,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81764,-117.27179
+La Jolla,La Jolla Boulevard,641851313,primary,31,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81778,-117.27205
+La Jolla,La Jolla Boulevard,436403802,primary,7,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81795,-117.27211
+La Jolla,La Jolla Boulevard,436403808,primary,196,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81869,-117.27257
+La Jolla,La Jolla Boulevard,436403796,primary,16,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81965,-117.27317
+La Jolla,La Jolla Boulevard,436403803,primary,29,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81988,-117.27332
+La Jolla,La Jolla Boulevard,436403807,primary,32,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.81997,-117.27338
+La Jolla,La Jolla Boulevard,436403797,primary,24,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.82033,-117.2736
+La Jolla,La Jolla Boulevard,436403795,primary,93,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.82107,-117.27406
+La Jolla,La Jolla Boulevard,436606681,primary,16,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.8212,-117.27414
+La Jolla,La Jolla Boulevard,436403804,primary,31,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.82145,-117.2743
+La Jolla,La Jolla Boulevard,436403800,primary,22,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.82163,-117.27441
+La Jolla,La Jolla Boulevard,436403801,primary,33,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.82174,-117.27448
+La Jolla,La Jolla Boulevard,436403799,primary,12,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.822,-117.27464
+La Jolla,La Jolla Boulevard,436403806,primary,104,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.82283,-117.27516
+La Jolla,La Jolla Boulevard,436403798,primary,35,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.82311,-117.27533
+La Jolla,La Jolla Boulevard,436404257,primary,132,25,,,,,25,,,,one unofficial source,low,,lj_village->lj_windansea,32.83598,-117.27795
+La Jolla,La Jolla Boulevard,436404250,primary,14,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_village->lj_windansea,32.8366,-117.27814
+La Jolla,La Jolla Boulevard,6055290,primary,72,25,,,,,25,,,,one unofficial source,low,,lj_village->lj_windansea,32.83707,-117.27827
+La Jolla,La Jolla Boulevard,436404255,primary,26,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_village->lj_windansea,32.83733,-117.27825
+La Jolla,La Jolla Boulevard,436404258,primary,141,25,,,,,25,,,,one unofficial source,low,,lj_village->lj_windansea,32.83793,-117.27814
+La Jolla,La Jolla Boulevard,436404233,primary,46,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_village->lj_windansea,32.83896,-117.27845
+La Jolla,La Jolla Boulevard,436404244,secondary,26,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_village->lj_windansea,32.83922,-117.27854
+La Jolla,La Jolla Boulevard,138876904,secondary,256,25,,,,,25,,,,one unofficial source,low,,lj_village->lj_windansea,32.84045,-117.2788
+La Jolla,Little Street,5971861,residential,118,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_cove->lj_shores,32.84998,-117.25935
+La Jolla,Lowry Place,5957450,residential,78,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_cove->lj_shores,32.85066,-117.25705
+La Jolla,Lowry Terrace,5987874,residential,171,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_cove->lj_shores,32.85158,-117.2571
+La Jolla,Monte Vista Avenue,1274741997,tertiary,139,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_village->lj_windansea,32.8344,-117.27919
+La Jolla,Neptune Place,6052359,tertiary,382,25,,,,,25,,,,one unofficial source,low,,lj_windansea->lj_birdrock,32.82898,-117.28016
+La Jolla,Neptune Place,631788211,tertiary,453,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_village->lj_windansea; lj_windansea->lj_birdrock,32.83095,-117.28071
+La Jolla,Palomar Avenue,663875263,tertiary,45,25,,,,,25,,,,one unofficial source,low,,lj_windansea->lj_birdrock,32.82626,-117.27942
+La Jolla,Palomar Avenue,1274741996,tertiary,146,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.82658,-117.27802
+La Jolla,Prospect Place,436406262,secondary,45,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_cove->lj_shores,32.84727,-117.26749
+La Jolla,Prospect Place,39451230,secondary,196,25,,,,,25,,,,one unofficial source,low,,lj_cove->lj_shores,32.84785,-117.26858
+La Jolla,Prospect Place,1368617343,secondary,18,25,,,,,25,,,,one unofficial source,low,,lj_cove->lj_shores,32.84827,-117.26979
+La Jolla,Prospect Place,1274738982,secondary,59,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_cove->lj_shores,32.84836,-117.27019
+La Jolla,Prospect Street,6001627,secondary,759,25,,,,,25,,,,one unofficial source,low,,lj_village->lj_windansea,32.84451,-117.27765
+La Jolla,Prospect Street,1268432540,secondary,62,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_village->lj_windansea,32.84722,-117.27504
+La Jolla,Prospect Street,672141692,secondary,11,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_village->lj_windansea,32.84749,-117.27469
+La Jolla,Prospect Street,281630532,secondary,67,25,,,,,35,,,,one unofficial source,low,,lj_cove->lj_shores; lj_village->lj_windansea,32.84774,-117.27445
+La Jolla,Prospect Street,202057283,secondary,125,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_cove->lj_shores,32.84789,-117.27413
+La Jolla,Prospect Street,202057282,secondary,59,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_village->lj_cove; lj_village->lj_windansea,32.84807,-117.27402
+La Jolla,Prospect Street,202057281,secondary,374,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_cove->lj_shores,32.84915,-117.27129
+La Jolla,Roseland Drive,6040495,residential,77,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_cove->lj_shores,32.85053,-117.25792
+La Jolla,US 101 Hist,282419508,primary,32,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81239,-117.26832
+La Jolla,US 101 Hist,39617466,primary,16,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81377,-117.26957
+La Jolla,US 101 Hist,39613216,primary,21,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81554,-117.27072
+La Jolla,US 101 Hist,641851338,primary,22,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81565,-117.27054
+La Jolla,US 101 Hist,641851335,primary,12,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81568,-117.27072
+La Jolla,Via del Norte,5969817,residential,545,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_windansea->lj_birdrock,32.82312,-117.27522
+Oceanside,(unnamed),5958699,service,28,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_buccaneer->cb_lagoon; ocn_pier->ocn_buccaneer,33.17904,-117.37085
+Oceanside,(unnamed),583732927,service,1035,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_downtown->ocn_pier,33.18956,-117.37478
+Oceanside,(unnamed),581317562,service,61,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_downtown->ocn_pier,33.19169,-117.37575
+Oceanside,(unnamed),365387463,service,885,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_downtown->ocn_pier,33.19331,-117.37675
+Oceanside,(unnamed),1417461304,service,72,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_downtown->ocn_pier,33.19567,-117.37874
+Oceanside,Civic Center Drive,5981560,tertiary,76,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_harbor,33.19561,-117.38436
+Oceanside,Croswaithe Street,6051223,residential,124,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_buccaneer->cb_lagoon,33.18084,-117.37091
+Oceanside,Godfrey Street,6006505,residential,396,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_buccaneer->cb_lagoon,33.18296,-117.36835
+Oceanside,Minnesota Avenue,5956004,residential,688,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_downtown->ocn_pier,33.1901,-117.37344
+Oceanside,Missouri Avenue,6025978,tertiary,685,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_downtown->ocn_pier,33.19187,-117.37589
+Oceanside,North Myers Street,6004148,tertiary,110,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_harbor,33.1938,-117.3819
+Oceanside,North Myers Street,1072637397,tertiary,10,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_harbor,33.19432,-117.38234
+Oceanside,North Myers Street,1072637394,tertiary,29,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_harbor,33.19441,-117.38242
+Oceanside,North Myers Street,1072637395,tertiary,82,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_harbor,33.19495,-117.38287
+Oceanside,North Myers Street,277155525,tertiary,116,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_harbor,33.19543,-117.38327
+Oceanside,North Pacific Street,694976034,secondary,53,99,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_harbor,33.19585,-117.38464
+Oceanside,North Pacific Street,694977983,secondary,72,99,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_harbor,33.19624,-117.38498
+Oceanside,North Pacific Street,1268890540,secondary,114,25,25,,,,25,,,,OSM + imagery agree (no official source),medium,,ocn_pier->ocn_harbor,33.19712,-117.38526
+Oceanside,North Pacific Street,449110168,secondary,458,25,25,,,,,,,,one unofficial source,low,,ocn_pier->ocn_harbor,33.20035,-117.38797
+Oceanside,North Pacific Street,1417142696,secondary,92,25,25,,,,,,,,one unofficial source,low,,ocn_pier->ocn_harbor,33.20118,-117.38776
+Oceanside,North Pacific Street,600950809,secondary,157,25,25,,,,,,,,one unofficial source,low,,ocn_pier->ocn_harbor,33.20265,-117.38829
+Oceanside,North Pacific Street,214380998,secondary,191,25,25,,,,25,,,,OSM + imagery agree (no official source),medium,,ocn_pier->ocn_harbor,33.20351,-117.38951
+Oceanside,North Pacific Street,643762189,secondary,8,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_harbor,33.20405,-117.39016
+Oceanside,Pacific Coast Highway,1029525635,primary,189,35,30,,,,35,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.17269,-117.36005
+Oceanside,Pacific Coast Highway,1029525636,primary,26,30,30,,,,,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.17374,-117.36093
+Oceanside,Pacific Coast Highway,436403829,primary,144,30,30,,,,,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.17445,-117.36153
+Oceanside,Pacific Coast Highway,436403814,primary,35,30,30,,,,,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.17524,-117.3622
+Oceanside,Pacific Coast Highway,436403826,primary,367,35,35,,,,35,,,,OSM + imagery agree (no official source),medium,,ocn_buccaneer->cb_lagoon,33.17686,-117.36357
+Oceanside,Pacific Coast Highway,436403816,primary,42,30,30,,,,,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.17837,-117.36483
+Oceanside,Pacific Coast Highway,367573673,primary,193,35,35,,,,,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.17934,-117.36565
+Oceanside,Pacific Coast Highway,367573674,primary,24,30,30,,,,,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.18009,-117.3663
+Oceanside,Pacific Coast Highway,740684252,primary,186,35,35,,,,35,,,,OSM + imagery agree (no official source),medium,,ocn_buccaneer->cb_lagoon,33.18111,-117.36715
+Oceanside,Pacific Coast Highway,740684251,primary,107,35,35,,,,,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.18193,-117.36789
+Oceanside,Pacific Coast Highway,740684253,primary,121,35,30,,,,35,,,,one unofficial source,low,,ocn_buccaneer->cb_lagoon,33.18282,-117.36858
+Oceanside,Pacific Coast Highway,583732922,primary,533,25,25,,,,,,,,one unofficial source,low,,ocn_downtown->ocn_pier,33.19083,-117.37526
+Oceanside,Seagaze Drive,6041612,tertiary,141,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_downtown->ocn_pier; ocn_pier->ocn_harbor,33.19301,-117.38227
+Oceanside,South Cleveland Street,5963815,residential,128,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_buccaneer->cb_lagoon,33.18243,-117.3705
+Oceanside,South Cleveland Street,30076610,residential,1107,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_buccaneer->cb_lagoon; ocn_downtown->ocn_pier,33.18763,-117.37491
+Oceanside,South Coast Highway,436403817,primary,34,35,30,35,Coast Highway (Wisconsin Ave - south city limit),https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),ocn_buccaneer->cb_lagoon,33.17499,-117.36199
+Oceanside,South Coast Highway,436403815,primary,23,35,30,35,Coast Highway (Wisconsin Ave - south city limit),https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 30),ocn_buccaneer->cb_lagoon,33.1782,-117.36469
+Oceanside,South Harbor Drive,5961178,secondary,149,15,15,,,,,,,,one unofficial source,low,,ocn_pier->ocn_harbor,33.20447,-117.38956
+Oceanside,South Harbor Drive,1376031736,secondary,247,15,15,,,,,,,,one unofficial source,low,,ocn_pier->ocn_harbor,33.20602,-117.38913
+Oceanside,South Harbor Drive,1532551121,tertiary,12,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_harbor,33.20684,-117.3912
+Oceanside,South Harbor Drive,1532551122,tertiary,51,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_harbor,33.20686,-117.39107
+Oceanside,South Harbor Drive,643762187,tertiary,76,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_harbor,33.20688,-117.39053
+Oceanside,South Myers Street,277156147,residential,110,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_downtown->ocn_pier,33.18687,-117.37599
+Oceanside,South Myers Street,5965728,residential,797,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_downtown->ocn_pier,33.19156,-117.38
+Oceanside,South Pacific Street,1456970086,secondary,602,25,25,,,,25,,,,OSM + imagery agree (no official source),medium,,ocn_buccaneer->cb_lagoon; ocn_pier->ocn_buccaneer,33.17827,-117.36996
+Oceanside,South Pacific Street,6029947,secondary,1553,25,25,,,,25,,,,OSM + imagery agree (no official source),medium,,ocn_pier->ocn_buccaneer,33.19072,-117.3804
+Oceanside,South Tait Street,6051197,residential,975,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_buccaneer->cb_lagoon,33.1818,-117.37229
+Oceanside,The Strand North,6009283,living_street,47,15,,15,The Strand (Breakwater Way - Wisconsin),https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones,,,,,one official source,medium,,ocn_downtown->ocn_pier; ocn_pier->ocn_buccaneer; ocn_pier->ocn_harbor,33.19279,-117.38291
+Oceanside,The Strand North,1471776101,living_street,6,15,,15,The Strand (Breakwater Way - Wisconsin),https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones,,,,,one official source,medium,,ocn_downtown->ocn_pier; ocn_pier->ocn_buccaneer; ocn_pier->ocn_harbor,33.19308,-117.38316
+Oceanside,The Strand North,1456972699,living_street,44,15,,15,The Strand (Breakwater Way - Wisconsin),https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones,,,,,one official source,medium,,ocn_downtown->ocn_pier; ocn_pier->ocn_buccaneer; ocn_pier->ocn_harbor,33.1934,-117.38343
+Oceanside,The Strand South,6009339,living_street,904,15,15,15,The Strand (Breakwater Way - Wisconsin),https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones,,,Y,15,verified,high,,ocn_pier->ocn_buccaneer,33.1904,-117.38089
+Oceanside,Washington Avenue,5962631,residential,761,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_downtown->ocn_pier,33.19165,-117.37357
+Oceanside,Wisconsin Avenue,643762184,tertiary,58,25,,,,,,,,,no posted-limit source (state default assumed),low,,ocn_pier->ocn_buccaneer,33.18629,-117.37677
+Oceanside,Wisconsin Avenue,5967620,secondary,106,25,,25,Oceanside Traffic Code Art. XIV 18: Wisconsin Avenue (South Coast Highway - South Pacific Street) posted 25,https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones,,,,,one official source,medium,,ocn_buccaneer->cb_lagoon; ocn_downtown->ocn_pier,33.18658,-117.37628
+Oceanside,Wisconsin Avenue,617084571,secondary,113,25,,25,Oceanside Traffic Code Art. XIV 18: Wisconsin Avenue (South Coast Highway - South Pacific Street) posted 25,https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones,,,,,one official source,medium,,ocn_buccaneer->cb_lagoon; ocn_downtown->ocn_pier,33.18727,-117.37535
+Oceanside,Wisconsin Avenue,617084573,secondary,183,25,,25,Oceanside Traffic Code Art. XIV 18: Wisconsin Avenue (South Coast Highway - South Pacific Street) posted 25,https://gocodebook.com/library/us/ca/oceanside/oceanside-traffic-code-1/article-xiv-special-speed-zones,,,,,one official source,medium,,ocn_buccaneer->cb_lagoon; ocn_downtown->ocn_pier,33.18826,-117.37384
+Pacific Beach / Mission Beach,(unnamed),5945809,residential,51,25,25,,,,,,,,one unofficial source,low,,mb_belmont->mb_bay,32.76985,-117.25074
+Pacific Beach / Mission Beach,(unnamed),672290744,service,53,25,,,,,,,,,no posted-limit source (state default assumed),low,,mb_belmont->mb_bay; pb_pier->mb_belmont,32.77198,-117.25182
+Pacific Beach / Mission Beach,(unnamed),38084693,service,208,25,,,,,,,,,no posted-limit source (state default assumed),low,,mb_belmont->mb_bay,32.78269,-117.24967
+Pacific Beach / Mission Beach,(unnamed),38086316,service,232,25,,,,,,,,,no posted-limit source (state default assumed),low,,mb_belmont->mb_bay,32.78306,-117.24935
+Pacific Beach / Mission Beach,(unnamed),1073757221,service,16,25,,,,,,,,,no posted-limit source (state default assumed),low,,mb_belmont->mb_bay,32.78325,-117.24942
+Pacific Beach / Mission Beach,(unnamed),1444046104,service,109,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont; pb_pier->pb_garnet,32.79516,-117.25518
+Pacific Beach / Mission Beach,(unnamed),1118556756,service,3,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->pb_garnet,32.79528,-117.25456
+Pacific Beach / Mission Beach,(unnamed),1118556759,service,11,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->pb_garnet,32.79529,-117.25453
+Pacific Beach / Mission Beach,(unnamed),1118556757,service,322,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79619,-117.255
+Pacific Beach / Mission Beach,(unnamed),111294951,service,1885,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->pb_garnet,32.79759,-117.24409
+Pacific Beach / Mission Beach,(unnamed),577467608,service,52,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->pb_garnet,32.79796,-117.24083
+Pacific Beach / Mission Beach,Bayside Lane,6008316,living_street,1343,25,,,,,,,,,no posted-limit source (state default assumed),low,,mb_belmont->mb_bay,32.77833,-117.25208
+Pacific Beach / Mission Beach,El Carmel Place,5957496,residential,421,15,,,,,15,,,,one unofficial source,low,,mb_belmont->mb_bay,32.77831,-117.25251
+Pacific Beach / Mission Beach,Grand Avenue,436316485,primary,137,35,45,,,,35,,,,one unofficial source,low,,pb_pier->pb_garnet,32.79783,-117.24079
+Pacific Beach / Mission Beach,Hornblend Street,1459181460,residential,113,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79557,-117.25551
+Pacific Beach / Mission Beach,La Jolla Boulevard,6055287,primary,54,25,,25,"San Diego R-316675 Table 7, posted: La Jolla Bl (Loring St - Colima St)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_tourmaline->pb_pier,32.8049,-117.25831
+Pacific Beach / Mission Beach,La Jolla Boulevard,436401815,primary,31,25,,25,"San Diego R-316675 Table 7, posted: La Jolla Bl (Loring St - Colima St)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,35,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 35),lj_birdrock->pb_tourmaline,32.80499,-117.25859
+Pacific Beach / Mission Beach,La Jolla Boulevard,436401826,primary,48,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80539,-117.25888
+Pacific Beach / Mission Beach,La Jolla Boulevard,1036494576,primary,29,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.8056,-117.25904
+Pacific Beach / Mission Beach,La Jolla Boulevard,1046077657,primary,20,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80582,-117.25921
+Pacific Beach / Mission Beach,La Jolla Boulevard,436402151,primary,13,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80596,-117.25935
+Pacific Beach / Mission Beach,La Jolla Boulevard,436402149,primary,80,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80612,-117.25951
+Pacific Beach / Mission Beach,La Jolla Boulevard,436402148,primary,38,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80664,-117.26009
+Pacific Beach / Mission Beach,La Jolla Boulevard,436402152,primary,18,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80683,-117.2603
+Pacific Beach / Mission Beach,La Jolla Boulevard,1024173606,primary,27,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80694,-117.26044
+Pacific Beach / Mission Beach,La Jolla Boulevard,436402155,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80711,-117.26065
+Pacific Beach / Mission Beach,La Jolla Boulevard,436402153,primary,57,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80761,-117.26125
+Pacific Beach / Mission Beach,La Jolla Boulevard,1057078945,primary,32,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80773,-117.26142
+Pacific Beach / Mission Beach,La Jolla Boulevard,641851357,primary,51,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80787,-117.26175
+Pacific Beach / Mission Beach,La Jolla Boulevard,38093741,primary,52,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80796,-117.26242
+Pacific Beach / Mission Beach,Loring Street,6040353,residential,188,25,,,,,25,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline; pb_tourmaline->pb_pier,32.8048,-117.25895
+Pacific Beach / Mission Beach,Loring Street,1490384280,residential,48,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80484,-117.25861
+Pacific Beach / Mission Beach,Loring Street,1490384279,residential,37,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80492,-117.25867
+Pacific Beach / Mission Beach,Mission Boulevard,436400933,secondary,70,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,mb_belmont->mb_bay,32.76989,-117.25103
+Pacific Beach / Mission Beach,Mission Boulevard,436400929,secondary,17,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,mb_belmont->mb_bay,32.77048,-117.25106
+Pacific Beach / Mission Beach,Mission Boulevard,436400936,secondary,135,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,mb_belmont->mb_bay,32.77075,-117.25088
+Pacific Beach / Mission Beach,Mission Boulevard,436400938,secondary,149,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,30,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 30),mb_belmont->mb_bay,32.77126,-117.25112
+Pacific Beach / Mission Beach,Mission Boulevard,436400931,secondary,27,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,mb_belmont->mb_bay,32.77132,-117.25099
+Pacific Beach / Mission Beach,Mission Boulevard,436400932,secondary,74,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,mb_belmont->mb_bay,32.77187,-117.2511
+Pacific Beach / Mission Beach,Mission Boulevard,436400930,primary,10,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,mb_belmont->mb_bay,32.77206,-117.25114
+Pacific Beach / Mission Beach,Mission Boulevard,436400715,primary,20,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.77215,-117.25127
+Pacific Beach / Mission Beach,Mission Boulevard,436400711,primary,25,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,mb_belmont->mb_bay,32.77216,-117.25117
+Pacific Beach / Mission Beach,Mission Boulevard,1019974702,primary,14,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.77224,-117.25129
+Pacific Beach / Mission Beach,Mission Boulevard,647114929,primary,10,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,mb_belmont->mb_bay,32.7723,-117.25119
+Pacific Beach / Mission Beach,Mission Boulevard,436400722,primary,39,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.77262,-117.25135
+Pacific Beach / Mission Beach,Mission Boulevard,1019974701,primary,184,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,30,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 30),mb_belmont->mb_bay,32.77313,-117.25136
+Pacific Beach / Mission Beach,Mission Boulevard,436400724,primary,163,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.77338,-117.25149
+Pacific Beach / Mission Beach,Mission Boulevard,436400720,primary,19,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,mb_belmont->mb_bay,32.77417,-117.25162
+Pacific Beach / Mission Beach,Mission Boulevard,436400721,primary,40,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.77421,-117.25174
+Pacific Beach / Mission Beach,Mission Boulevard,1051758970,primary,29,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.77469,-117.25189
+Pacific Beach / Mission Beach,Mission Boulevard,436400723,primary,217,30,,,,,30,,,,one unofficial source,low,,mb_belmont->mb_bay,32.7752,-117.25198
+Pacific Beach / Mission Beach,Mission Boulevard,436400725,primary,168,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.77544,-117.25217
+Pacific Beach / Mission Beach,Mission Boulevard,436400719,primary,21,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,mb_belmont->mb_bay,32.77624,-117.25231
+Pacific Beach / Mission Beach,Mission Boulevard,436400718,primary,20,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.77628,-117.25243
+Pacific Beach / Mission Beach,Mission Boulevard,1025161103,primary,199,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,mb_belmont->mb_bay,32.777,-117.25248
+Pacific Beach / Mission Beach,Mission Boulevard,436400713,primary,180,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.77726,-117.25261
+Pacific Beach / Mission Beach,Mission Boulevard,1025161104,primary,57,30,,,,,30,,,,one unofficial source,low,,mb_belmont->mb_bay,32.77831,-117.25258
+Pacific Beach / Mission Beach,Mission Boulevard,1025161220,primary,72,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.77836,-117.25266
+Pacific Beach / Mission Beach,Mission Boulevard,1025161219,primary,187,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.77933,-117.25262
+Pacific Beach / Mission Beach,Mission Boulevard,436400716,primary,26,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.78045,-117.25259
+Pacific Beach / Mission Beach,Mission Boulevard,1187547621,primary,184,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.78119,-117.25256
+Pacific Beach / Mission Beach,Mission Boulevard,436400937,primary,33,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.78252,-117.25254
+Pacific Beach / Mission Beach,Mission Boulevard,1187547622,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.78263,-117.25255
+Pacific Beach / Mission Beach,Mission Boulevard,436400934,primary,5,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.78284,-117.25257
+Pacific Beach / Mission Beach,Mission Boulevard,51757241,primary,166,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.7837,-117.25271
+Pacific Beach / Mission Beach,Mission Boulevard,1025213750,primary,62,25,,,,,25,,,,one unofficial source,low,,pb_pier->mb_belmont,32.78453,-117.25288
+Pacific Beach / Mission Beach,Mission Boulevard,1025213749,primary,57,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.78508,-117.25305
+Pacific Beach / Mission Beach,Mission Boulevard,897526121,primary,168,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.7861,-117.25342
+Pacific Beach / Mission Beach,Mission Boulevard,1036262975,primary,69,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.78715,-117.25355
+Pacific Beach / Mission Beach,Mission Boulevard,864926367,primary,281,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.78861,-117.25334
+Pacific Beach / Mission Beach,Mission Boulevard,436401834,primary,23,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79002,-117.25353
+Pacific Beach / Mission Beach,Mission Boulevard,436401830,primary,18,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79022,-117.25359
+Pacific Beach / Mission Beach,Mission Boulevard,436401850,primary,46,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.7904,-117.25364
+Pacific Beach / Mission Beach,Mission Boulevard,436401829,primary,18,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.7908,-117.25376
+Pacific Beach / Mission Beach,Mission Boulevard,436401838,primary,34,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79106,-117.2538
+Pacific Beach / Mission Beach,Mission Boulevard,35340212,primary,147,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79177,-117.25402
+Pacific Beach / Mission Beach,Mission Boulevard,436401831,primary,28,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79269,-117.2543
+Pacific Beach / Mission Beach,Mission Boulevard,436401851,primary,17,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79284,-117.25434
+Pacific Beach / Mission Beach,Mission Boulevard,1084582945,primary,11,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79292,-117.25437
+Pacific Beach / Mission Beach,Mission Boulevard,436401853,primary,47,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79321,-117.25446
+Pacific Beach / Mission Beach,Mission Boulevard,436401840,primary,29,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79355,-117.25456
+Pacific Beach / Mission Beach,Mission Boulevard,436401832,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79375,-117.25463
+Pacific Beach / Mission Beach,Mission Boulevard,436401844,primary,49,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79415,-117.25475
+Pacific Beach / Mission Beach,Mission Boulevard,436401848,primary,7,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79442,-117.25483
+Pacific Beach / Mission Beach,Mission Boulevard,772456688,primary,21,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79453,-117.25487
+Pacific Beach / Mission Beach,Mission Boulevard,436401827,primary,15,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79461,-117.25489
+Pacific Beach / Mission Beach,Mission Boulevard,436401833,primary,21,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79482,-117.25495
+Pacific Beach / Mission Beach,Mission Boulevard,772456690,primary,22,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79512,-117.25504
+Pacific Beach / Mission Beach,Mission Boulevard,138875256,primary,35,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79531,-117.2551
+Pacific Beach / Mission Beach,Mission Boulevard,436401842,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79574,-117.25523
+Pacific Beach / Mission Beach,Mission Boulevard,436401847,primary,37,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79611,-117.25535
+Pacific Beach / Mission Beach,Mission Boulevard,436401852,primary,15,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79637,-117.25543
+Pacific Beach / Mission Beach,Mission Boulevard,1011674984,primary,22,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.7965,-117.25547
+Pacific Beach / Mission Beach,Mission Boulevard,436401843,primary,36,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79667,-117.25552
+Pacific Beach / Mission Beach,Mission Boulevard,436401854,primary,9,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79695,-117.25561
+Pacific Beach / Mission Beach,Mission Boulevard,1031090708,primary,64,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79718,-117.25568
+Pacific Beach / Mission Beach,Mission Boulevard,436608596,primary,78,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79798,-117.25592
+Pacific Beach / Mission Beach,Mission Boulevard,436608585,primary,26,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79843,-117.25606
+Pacific Beach / Mission Beach,Mission Boulevard,436608582,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79852,-117.25609
+Pacific Beach / Mission Beach,Mission Boulevard,436608594,primary,52,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79891,-117.25621
+Pacific Beach / Mission Beach,Mission Boulevard,436608577,primary,28,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79938,-117.25636
+Pacific Beach / Mission Beach,Mission Boulevard,436608573,primary,27,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79962,-117.25643
+Pacific Beach / Mission Beach,Mission Boulevard,436608595,primary,52,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79984,-117.2565
+Pacific Beach / Mission Beach,Mission Boulevard,436608578,primary,26,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80031,-117.25664
+Pacific Beach / Mission Beach,Mission Boulevard,436608575,primary,27,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80055,-117.25672
+Pacific Beach / Mission Beach,Mission Boulevard,436608588,primary,52,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80077,-117.25678
+Pacific Beach / Mission Beach,Mission Boulevard,436608586,primary,26,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80106,-117.25687
+Pacific Beach / Mission Beach,Mission Boulevard,436608583,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.8015,-117.257
+Pacific Beach / Mission Beach,Mission Boulevard,436608591,primary,53,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.8017,-117.25706
+Pacific Beach / Mission Beach,Mission Boulevard,436608574,primary,24,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80217,-117.25721
+Pacific Beach / Mission Beach,Mission Boulevard,436608572,primary,29,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80242,-117.25729
+Pacific Beach / Mission Beach,Mission Boulevard,436608593,primary,47,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80264,-117.25735
+Pacific Beach / Mission Beach,Mission Boulevard,436608576,primary,31,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.8031,-117.25749
+Pacific Beach / Mission Beach,Mission Boulevard,436608580,primary,8,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80318,-117.25751
+Pacific Beach / Mission Beach,Mission Boulevard,436608589,primary,90,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80356,-117.25764
+Pacific Beach / Mission Beach,Mission Boulevard,1546555793,primary,7,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80402,-117.25777
+Pacific Beach / Mission Beach,Mission Boulevard,436608592,primary,11,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80412,-117.2578
+Pacific Beach / Mission Beach,Mission Boulevard,436608590,primary,53,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80451,-117.25792
+Pacific Beach / Mission Beach,Mission Boulevard,436608581,primary,10,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80468,-117.25798
+Pacific Beach / Mission Beach,Mission Boulevard,436608587,primary,36,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80489,-117.25805
+Pacific Beach / Mission Beach,Pacific View Drive,6011830,residential,179,25,,,,,25,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline; pb_tourmaline->pb_pier,32.80503,-117.26068
+Pacific Beach / Mission Beach,Santa Clara Place,1187547623,residential,115,25,,,,,,,,,no posted-limit source (state default assumed),low,,mb_belmont->mb_bay,32.7827,-117.25153
+Pacific Beach / Mission Beach,Santa Clara Place,356662587,residential,13,25,,,,,,,,,no posted-limit source (state default assumed),low,,mb_belmont->mb_bay,32.78275,-117.25109
+Pacific Beach / Mission Beach,Ventura Place,51755335,unclassified,33,25,,,,,,,,,no posted-limit source (state default assumed),low,,mb_belmont->mb_bay,32.77198,-117.25134
+Pacific Beach / Mission Beach,Ventura Place,1047147288,unclassified,19,25,,,,,,,,,no posted-limit source (state default assumed),low,,mb_belmont->mb_bay,32.77201,-117.25168
+Pacific Beach / Mission Beach,Ventura Place,1249839458,unclassified,3,25,,,,,,,,,no posted-limit source (state default assumed),low,,mb_belmont->mb_bay; pb_pier->mb_belmont,32.77204,-117.25179
+Pacific Beach / Mission Beach,Ventura Place,120370089,unclassified,52,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.77209,-117.25146
+Solana Beach,(unnamed),737897992,service,43,25,,,,,,,,,no posted-limit source (state default assumed),low,,sb_fletcher->sb_cedros,32.99347,-117.26933
+Solana Beach,Acacia Avenue,5993071,residential,904,25,,,,,,,,,no posted-limit source (state default assumed),low,,sb_tide->sb_fletcher,32.99427,-117.27302
+Solana Beach,Lomas Santa Fe Drive,26328612,primary,13,35,50,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 50),sb_fletcher->sb_cedros,32.99188,-117.27161
+Solana Beach,Lomas Santa Fe Drive,436403292,primary,17,35,50,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 50),sb_fletcher->sb_cedros,32.99189,-117.27151
+Solana Beach,Lomas Santa Fe Drive,32677195,primary,18,35,50,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 50),sb_fletcher->sb_cedros,32.99194,-117.27124
+Solana Beach,Lomas Santa Fe Drive,436403302,primary,11,35,50,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 50),sb_fletcher->sb_cedros,32.99196,-117.27113
+Solana Beach,Lomas Santa Fe Drive,436403296,primary,9,35,35,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,Y,35,verified,high,,sb_fletcher->sb_cedros,32.99198,-117.27103
+Solana Beach,Lomas Santa Fe Drive,436403290,primary,23,35,35,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,Y,35,verified,high,,sb_fletcher->sb_cedros,32.99202,-117.27079
+Solana Beach,Lomas Santa Fe Drive,436403298,primary,16,35,35,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,Y,35,verified,high,,sb_fletcher->sb_cedros,32.99202,-117.27077
+Solana Beach,Lomas Santa Fe Drive,436403299,primary,36,35,35,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,Y,35,verified,high,,sb_fletcher->sb_cedros,32.99207,-117.27051
+Solana Beach,Lomas Santa Fe Drive,436403300,primary,17,35,35,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,Y,35,verified,high,,sb_fletcher->sb_cedros,32.99213,-117.27013
+Solana Beach,Lomas Santa Fe Drive,436403304,primary,23,35,35,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,Y,35,verified,high,,sb_fletcher->sb_cedros,32.99216,-117.26991
+Solana Beach,Lomas Santa Fe Drive,436403291,primary,34,35,35,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,Y,35,verified,high,,sb_fletcher->sb_cedros,32.99221,-117.26961
+Solana Beach,North Rios Avenue,6012762,residential,1286,25,,,,,25,,,,one unofficial source,low,,sb_fletcher->sb_cedros,32.99933,-117.27131
+Solana Beach,Ocean Street,760918009,residential,213,25,,,,,,,,,no posted-limit source (state default assumed),low,,enc_seaside->sb_tide,32.99946,-117.2752
+Solana Beach,South Coast Highway,436403289,primary,123,30,45,,,,,30,,,one unofficial source,low,,sb_tide->sb_fletcher,32.99201,-117.27178
+Solana Beach,South Coast Highway,780284924,primary,207,30,45,,,,,30,,,one unofficial source,low,,sb_tide->sb_fletcher,32.99336,-117.2721
+Solana Beach,South Coast Highway,224931099,primary,239,30,45,,,,35,30,,,one unofficial source,low,,sb_tide->sb_fletcher,32.99527,-117.27266
+Solana Beach,South Coast Highway,1268448802,primary,20,30,45,,,,,30,,,one unofficial source,low,,enc_seaside->sb_tide,32.99952,-117.2748
+Solana Beach,South Coast Highway,34092347,primary,23,30,45,,,,,30,,,one unofficial source,low,,enc_seaside->sb_tide,32.99969,-117.27489
+Solana Beach,West Cliff Street,780284927,residential,189,25,,,,,,,,,no posted-limit source (state default assumed),low,,sb_tide->sb_fletcher,32.9967,-117.27377

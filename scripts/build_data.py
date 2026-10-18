@@ -107,6 +107,18 @@ def nid(k): return nids.setdefault(k, len(nids))
 # isolated red stub between OK pieces. Inherit the adjoining same-street limit when both ends join <=35
 # roads and at least one end continues the same street with a known (tagged/verified/mapillary) <=35 limit.
 def _len_m(g): return sum(math.hypot((g[k+1]["lon"]-g[k]["lon"])*93500, (g[k+1]["lat"]-g[k]["lat"])*110540) for k in range(len(g)-1))
+# Overrides whose source needs a second source before they may turn a 40+/unknown-major road LSV-legal
+FLIPHOLD = []
+for wi in list(ov):
+    url = ov[wi][2]
+    if url in overrides.CORROBORATE_FLIP:
+        s_osm, how = classify(wl[wi]["tags"])
+        if how == "tagged" and s_osm > 35 and ov[wi][0] <= 35 and not (wi in mly and mly[wi][0] <= 35):
+            FLIPHOLD.append({"road": wl[wi]["tags"].get("name", ""), "way": wl[wi]["id"], "osm_mph": s_osm, "source_mph": ov[wi][0], "source": ov[wi][3], "url": url,
+                             "at": [wl[wi]["geometry"][0]["lat"], wl[wi]["geometry"][0]["lon"]]})
+            del ov[wi]
+print("held (needs a 2nd source to become legal)", len(FLIPHOLD))
+json.dump(FLIPHOLD, open(os.path.join(os.path.dirname(__file__), "..", "research", "sd_flip_hold.json"), "w"), indent=1)
 _spd = []
 for wi, w in enumerate(wl):
     s0, src0 = classify(w["tags"])
@@ -201,6 +213,27 @@ if _re:
     for x in _re: print("  ERROR: roundabout still unknown but all approaches <=35:", x["lat"], x["lon"], x.get("name"))
     if os.environ.get("VALIDATE") != "warn": sys.exit("roundabout validation failed (VALIDATE=warn to override)")
 if os.environ.get("RB_DEBUG"): json.dump(RBX["log"], open("/tmp/rb_sd.json", "w"), indent=0)
+# ---- Two-source verification (research/sd_ground_truth/verified_ways.json, made by analyze.py) -> map badge + regression guard ----
+_VP = os.path.join(os.path.dirname(__file__), "..", "research", "sd_ground_truth", "verified_ways.json")
+VER = json.load(open(_VP)) if os.path.exists(_VP) else None
+if VER:
+    vsegs, vsrc, vsidx, verr = {}, [], {}, []
+    for wi, w in enumerate(wl):
+        e = VER["ways"].get(overrides.way_key(w["tags"], w["nodes"]))
+        if not e: continue
+        if WS[wi][0] != e["mph"]:   # a verified road changed speed: never let that ship silently
+            verr.append(f'{w["tags"].get("name", "")} (way {w["id"]}): verified {e["mph"]} mph on {e["date"]}, build now says {WS[wi][0]}')
+            continue
+        lab = " + ".join(sorted({s[2] for s in e["sources"]}))
+        k = (e["date"], lab, next((s[3] for s in e["sources"] if s[0] == "official"), ""))
+        if k not in vsidx: vsidx[k] = len(vsrc); vsrc.append(list(k))
+        for i in WOUT[wi]:
+            p = out[i][7]; vsegs["%.5f,%.5f|%.5f,%.5f" % (p[0][0], p[0][1], p[-1][0], p[-1][1])] = [e["mph"], vsidx[k]]
+    for x in verr: print("  ERROR verified segment regressed:", x)
+    if verr and os.environ.get("VALIDATE") != "warn": sys.exit("verified segments changed speed; re-verify them (research/sd_ground_truth) or fix the data")
+    json.dump({"date": VER["date"], "rule": "Verified = an official source and an independent source (OSM, posted-sign photo or Street View) agree",
+               "accuracy": VER["accuracy"], "src": vsrc, "segs": vsegs}, open(os.path.join(OUT, "verified.json"), "w"), separators=(",", ":"))
+    print("verified segments", len(vsegs), "regressions", len(verr))
 os.makedirs(os.path.join(os.path.dirname(__file__), "..", "research"), exist_ok=True)
 json.dump({"stats": mst, "changes": conf}, open(os.path.join(os.path.dirname(__file__), "..", "research", "mapillary_report.json"), "w"), indent=1)
 total = sum(stats.values())

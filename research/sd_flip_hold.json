@@ -1,0 +1,254 @@
+[
+ {
+  "road": "Carlsbad Village Drive",
+  "way": 436473399,
+  "osm_mph": 40,
+  "source_mph": 35,
+  "source": "Carlsbad Village Dr (Pio Pico Dr - Highland Dr (MC 10.44.080 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.166061,
+   -117.337929
+  ]
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436575416,
+  "osm_mph": 50,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1348513,
+   -117.328465
+  ]
+ },
+ {
+  "road": "Cannon Road",
+  "way": 1018528777,
+  "osm_mph": 50,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1353552,
+   -117.3270085
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 33727438,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1222055,
+   -117.3226172
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 33727616,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1220621,
+   -117.3224715
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 33727620,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1223166,
+   -117.3249574
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 33748784,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1220888,
+   -117.3237691
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 33984915,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1221795,
+   -117.3216714
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 253010839,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1221387,
+   -117.3198729
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 436269295,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1220019,
+   -117.3200726
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 436424230,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1221515,
+   -117.320257
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 436424233,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1221759,
+   -117.3210132
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 436424234,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.122044,
+   -117.3215716
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 436424236,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1220254,
+   -117.320673
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 436575461,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1224719,
+   -117.325659
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 714476313,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1219907,
+   -117.3197244
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 1018205474,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1222374,
+   -117.3239265
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 1018205476,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1221408,
+   -117.324317
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 1036210993,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1220386,
+   -117.3210104
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 1036210994,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1220093,
+   -117.320262
+  ]
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 1370428069,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.122238,
+   -117.3246945
+  ]
+ }
+]

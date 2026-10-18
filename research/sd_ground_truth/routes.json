@@ -1,0 +1,433 @@
+{
+ "note": "Most-used-route proxy (no usage data yet): trips between each coastal city's main beaches, town centre and neighbourhoods, plus city-to-city hops. Replace/extend with real top routes from analytics (route_searched by town) once traffic exists.",
+ "places": {
+  "ocn_pier": [
+   "Oceanside",
+   "Oceanside Pier",
+   33.1934,
+   -117.3836
+  ],
+  "ocn_harbor": [
+   "Oceanside",
+   "Oceanside Harbor Village",
+   33.2066,
+   -117.3925
+  ],
+  "ocn_downtown": [
+   "Oceanside",
+   "Downtown Oceanside (Mission Ave & Coast Hwy)",
+   33.1958,
+   -117.379
+  ],
+  "ocn_buccaneer": [
+   "Oceanside",
+   "Buccaneer Beach (South O)",
+   33.1786,
+   -117.371
+  ],
+  "cb_village": [
+   "Carlsbad",
+   "Carlsbad Village (State St & Grand Ave)",
+   33.1606,
+   -117.3497
+  ],
+  "cb_tamarack": [
+   "Carlsbad",
+   "Tamarack Beach",
+   33.1497,
+   -117.3477
+  ],
+  "cb_terramar": [
+   "Carlsbad",
+   "Terramar (Cannon Rd & Carlsbad Blvd)",
+   33.13,
+   -117.333
+  ],
+  "cb_ponto": [
+   "Carlsbad",
+   "South Ponto (Ponto Dr)",
+   33.0867,
+   -117.3082
+  ],
+  "cb_lagoon": [
+   "Carlsbad",
+   "Buena Vista Lagoon / north Village",
+   33.17,
+   -117.357
+  ],
+  "enc_leucadia": [
+   "Encinitas",
+   "Leucadia (Leucadia Blvd & 101)",
+   33.065,
+   -117.303
+  ],
+  "enc_beacons": [
+   "Encinitas",
+   "Beacon's Beach",
+   33.0632,
+   -117.3046
+  ],
+  "enc_moonlight": [
+   "Encinitas",
+   "Moonlight Beach",
+   33.0478,
+   -117.2971
+  ],
+  "enc_downtown": [
+   "Encinitas",
+   "Downtown Encinitas (D St & 101)",
+   33.0458,
+   -117.2925
+  ],
+  "enc_swamis": [
+   "Encinitas",
+   "Swami's",
+   33.0345,
+   -117.2925
+  ],
+  "enc_cardiff": [
+   "Encinitas",
+   "Cardiff Town Center",
+   33.0207,
+   -117.2786
+  ],
+  "enc_seaside": [
+   "Encinitas",
+   "Cardiff Seaside / San Elijo",
+   33.013,
+   -117.281
+  ],
+  "sb_fletcher": [
+   "Solana Beach",
+   "Fletcher Cove",
+   32.9918,
+   -117.2717
+  ],
+  "sb_cedros": [
+   "Solana Beach",
+   "Cedros Design District",
+   32.9935,
+   -117.2695
+  ],
+  "sb_tide": [
+   "Solana Beach",
+   "Tide Beach Park",
+   33.0005,
+   -117.278
+  ],
+  "dm_plaza": [
+   "Del Mar",
+   "Del Mar Plaza (15th & Camino del Mar)",
+   32.9595,
+   -117.2655
+  ],
+  "dm_powerhouse": [
+   "Del Mar",
+   "Powerhouse Park",
+   32.959,
+   -117.269
+  ],
+  "dm_25th": [
+   "Del Mar",
+   "25th St beach",
+   32.9665,
+   -117.271
+  ],
+  "dm_dogbeach": [
+   "Del Mar",
+   "Dog Beach (north beach)",
+   32.9735,
+   -117.269
+  ],
+  "lj_village": [
+   "La Jolla",
+   "La Jolla Village (Girard & Prospect)",
+   32.8475,
+   -117.2735
+  ],
+  "lj_cove": [
+   "La Jolla",
+   "La Jolla Cove",
+   32.85,
+   -117.2716
+  ],
+  "lj_shores": [
+   "La Jolla",
+   "La Jolla Shores",
+   32.8575,
+   -117.256
+  ],
+  "lj_windansea": [
+   "La Jolla",
+   "Windansea",
+   32.8303,
+   -117.281
+  ],
+  "lj_birdrock": [
+   "La Jolla",
+   "Bird Rock",
+   32.815,
+   -117.27
+  ],
+  "pb_tourmaline": [
+   "Pacific Beach",
+   "Tourmaline (La Jolla Blvd & Tourmaline St)",
+   32.805,
+   -117.26
+  ],
+  "pb_pier": [
+   "Pacific Beach",
+   "Crystal Pier",
+   32.795,
+   -117.256
+  ],
+  "pb_garnet": [
+   "Pacific Beach",
+   "Garnet Ave & Ingraham",
+   32.7978,
+   -117.241
+  ],
+  "mb_belmont": [
+   "Mission Beach",
+   "Belmont Park",
+   32.7712,
+   -117.2516
+  ],
+  "mb_bay": [
+   "Mission Beach",
+   "Mission Bay (Santa Clara Pl)",
+   32.7836,
+   -117.2489
+  ],
+  "co_ferry": [
+   "Coronado",
+   "Ferry Landing",
+   32.6985,
+   -117.1696
+  ],
+  "co_downtown": [
+   "Coronado",
+   "Downtown Orange Ave",
+   32.6859,
+   -117.1831
+  ],
+  "co_hoteldel": [
+   "Coronado",
+   "Hotel del Coronado (Orange Ave & R.H. Dana Pl)",
+   32.6826,
+   -117.1785
+  ],
+  "co_central": [
+   "Coronado",
+   "Central Beach",
+   32.6852,
+   -117.1847
+  ],
+  "co_shores": [
+   "Coronado",
+   "Glorietta Bay (Strand Way)",
+   32.68,
+   -117.173
+  ],
+  "ib_pier": [
+   "Imperial Beach",
+   "Imperial Beach Pier (Seacoast Dr & Evergreen Ave)",
+   32.5795,
+   -117.13172
+  ],
+  "ib_seacoast": [
+   "Imperial Beach",
+   "Seacoast Dr & Imperial Beach Blvd",
+   32.5765,
+   -117.13172
+  ],
+  "ib_palm": [
+   "Imperial Beach",
+   "Palm Ave & 3rd St",
+   32.584,
+   -117.1255
+  ],
+  "ib_south": [
+   "Imperial Beach",
+   "South Seacoast Dr",
+   32.57,
+   -117.1321
+  ]
+ },
+ "routes": [
+  [
+   "ocn_pier",
+   "ocn_harbor"
+  ],
+  [
+   "ocn_pier",
+   "ocn_buccaneer"
+  ],
+  [
+   "ocn_downtown",
+   "ocn_pier"
+  ],
+  [
+   "ocn_buccaneer",
+   "cb_lagoon"
+  ],
+  [
+   "cb_lagoon",
+   "cb_village"
+  ],
+  [
+   "cb_village",
+   "cb_tamarack"
+  ],
+  [
+   "cb_tamarack",
+   "cb_terramar"
+  ],
+  [
+   "cb_terramar",
+   "cb_ponto"
+  ],
+  [
+   "cb_ponto",
+   "enc_leucadia"
+  ],
+  [
+   "enc_leucadia",
+   "enc_beacons"
+  ],
+  [
+   "enc_leucadia",
+   "enc_moonlight"
+  ],
+  [
+   "enc_moonlight",
+   "enc_downtown"
+  ],
+  [
+   "enc_downtown",
+   "enc_swamis"
+  ],
+  [
+   "enc_swamis",
+   "enc_cardiff"
+  ],
+  [
+   "enc_cardiff",
+   "enc_seaside"
+  ],
+  [
+   "enc_seaside",
+   "sb_tide"
+  ],
+  [
+   "sb_tide",
+   "sb_fletcher"
+  ],
+  [
+   "sb_fletcher",
+   "sb_cedros"
+  ],
+  [
+   "sb_fletcher",
+   "dm_dogbeach"
+  ],
+  [
+   "dm_plaza",
+   "dm_powerhouse"
+  ],
+  [
+   "dm_plaza",
+   "dm_25th"
+  ],
+  [
+   "dm_25th",
+   "dm_dogbeach"
+  ],
+  [
+   "lj_village",
+   "lj_cove"
+  ],
+  [
+   "lj_cove",
+   "lj_shores"
+  ],
+  [
+   "lj_village",
+   "lj_windansea"
+  ],
+  [
+   "lj_windansea",
+   "lj_birdrock"
+  ],
+  [
+   "lj_birdrock",
+   "pb_tourmaline"
+  ],
+  [
+   "pb_tourmaline",
+   "pb_pier"
+  ],
+  [
+   "pb_pier",
+   "pb_garnet"
+  ],
+  [
+   "pb_pier",
+   "mb_belmont"
+  ],
+  [
+   "mb_belmont",
+   "mb_bay"
+  ],
+  [
+   "co_ferry",
+   "co_downtown"
+  ],
+  [
+   "co_downtown",
+   "co_hoteldel"
+  ],
+  [
+   "co_downtown",
+   "co_central"
+  ],
+  [
+   "co_hoteldel",
+   "co_shores"
+  ],
+  [
+   "ib_pier",
+   "ib_seacoast"
+  ],
+  [
+   "ib_pier",
+   "ib_palm"
+  ],
+  [
+   "ib_seacoast",
+   "ib_south"
+  ]
+ ],
+ "blockers": [
+  {
+   "why": "blocks Terramar -> South Ponto (no legal route)",
+   "name": "^Carlsbad Boulevard$",
+   "bbox": [
+    33.088,
+    -117.33,
+    33.113,
+    -117.3
+   ]
+  },
+  {
+   "why": "blocks Fletcher Cove -> Del Mar Dog Beach (no legal route)",
+   "name": "^Camino del Mar$",
+   "bbox": [
+    32.9755,
+    -117.275,
+    32.981,
+    -117.26
+   ]
+  }
+ ]
+}

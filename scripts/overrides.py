@@ -150,6 +150,32 @@ RULES[_SVB + 1] = (r"^Orange Avenue$", CO, r"__CO10__", r"__NORTH__", "lat")
 RULES[_SVB + 2] = (r"^(South Coast Highway 101|South Highway 101|South Coast Highway|US 101 Hist|Coast Highway 101)$", (32.99, -117.31, 33.035, -117.26), r"__SWAMIS__", r"__SOUTH__", "lat")
 FIXED["__CO10__"] = 32.6866  # Orange Ave at 10th St (~1466 Orange)
 
+# ---- Carlsbad Municipal Code ch. 10.44 Article II speed limits (E&TS-based; https://ecode360.com/44006773), coastal streets (Oct 18 2026) ----
+# Carlsbad Blvd itself is already covered above (research #30-34, same code). Streets not listed in 10.44 keep OSM/defaults.
+C_SRC = "https://ecode360.com/44006773#10.44-coastal-streets"
+# Safety: these code sections are old (some 1970s-2000s). They may lower a limit, but they never turn a road OSM shows
+# as 40+ (or unknown major) into an LSV-legal road unless a posted sign (Mapillary, 1+) agrees. Otherwise: listed for a Street View check.
+CORROBORATE_FLIP = {C_SRC}
+_CBX = (33.08, -117.36, 33.176, -117.27)
+_CMC = [  # (road, segment text, mph, name regex, cross_from, cross_to, axis, I-5 lon if an end is I-5)
+    ("Tamarack Ave", "Carlsbad Blvd - I-5 (MC 10.44.300 A)", 30, r"^Tamarack Avenue$", r"^Carlsbad Boulevard$", "__I5__", "lon", -117.3367),
+    ("Grand Ave", "Ocean St - I-5 (MC 10.44.440)", 25, r"^Grand Avenue$", r"^Ocean Street$", "__I5__", "lon", -117.3410),
+    ("Carlsbad Village Dr", "Pio Pico Dr - Highland Dr (MC 10.44.080 A)", 35, r"^Carlsbad Village Drive$", r"^Pio Pico Drive$", r"^Highland Drive$", "lon", None),
+    ("Jefferson St", "Grand Ave - north city limit (MC 10.44.050)", 35, r"^Jefferson Street$", r"^Grand Avenue$", "__NORTH__", "lat", None),
+    ("Pio Pico Dr", "Tamarack Ave - Elm Ave/Carlsbad Village Dr (MC 10.44.310)", 35, r"^Pio Pico Drive$", r"^Tamarack Avenue$", r"^Carlsbad Village Drive$", "lat", None),
+    ("Poinsettia Ln", "Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A)", 35, r"^Poinsettia Lane$", r"^Carlsbad Boulevard$", r"^Paseo del Norte$", "lon", None),
+    ("Cannon Rd", "Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A)", 35, r"^Cannon Road$", r"^Carlsbad Boulevard$", r"^Paseo del Norte$", "lon", None),
+    ("Palomar Airport Rd", "Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A)", 35, r"^Palomar Airport Road$", r"^Carlsbad Boulevard$", r"^Paseo del Norte$", "lon", None),
+    ("Laguna Dr", "State St - Jefferson St (MC 10.44.580)", 30, r"^Laguna Drive$", r"^State Street$", r"^Jefferson Street$", "lon", None),
+    ("Las Flores Dr", "Jefferson St - Highland Dr (MC 10.44.560)", 30, r"^Las Flores Drive$", r"^Jefferson Street$", r"^Highland Drive$", "lon", None),
+    ("Chestnut Ave", "Pio Pico Dr - El Camino Real (MC 10.44.040 A)", 30, r"^Chestnut Avenue$", r"^Pio Pico Drive$", r"^El Camino Real$", "lon", None),
+]
+for road, seg, mph_, rre, cf, ct, axis, i5 in _CMC:
+    k = len(INTEL)
+    INTEL.append({"road": road, "city": "Carlsbad", "from_to_segment_if_known": seg, "speed_mph": mph_, "lsv_ok": mph_ <= 35, "source_url": C_SRC, "confidence": "high"})
+    RULES[k] = (rre, _CBX if axis == "lon" else (33.155, -117.36, 33.176, -117.33), cf, ct, axis)
+    if i5 is not None: I5_LON[k] = i5
+
 # ---- Grand Ave, Pacific Beach (Oct 13 2026) ----
 # Beach Mode Rentals (local cart rental shop) reports Grand Ave is posted 35; Mapillary detected 35 mph signs at 5 spots
 # from west of Mission Blvd to east of Ingraham (one sign each, below the 2-sign auto-flip rule). OSM still says 45.

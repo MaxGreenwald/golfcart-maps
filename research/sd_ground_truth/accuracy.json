@@ -1,0 +1,68 @@
+{
+ "market": "Coastal San Diego",
+ "date": "2026-10-18",
+ "ways": 613,
+ "verified_ways": 74,
+ "length_m": 82498,
+ "verified_length_m": 10426,
+ "share_verified_by_length": 0.126,
+ "share_verified_by_ways": 0.121,
+ "share_two_sources_any_kind_by_length": 0.221,
+ "disagreements": 70,
+ "held_blocked": 0,
+ "by_status": {
+  "OSM + imagery agree (no official source)": 42,
+  "disagree": 70,
+  "no posted-limit source (state default assumed)": 252,
+  "one official source": 79,
+  "one unofficial source": 96,
+  "verified": 74
+ },
+ "by_city": {
+  "Carlsbad": {
+   "ways": 124,
+   "verified_ways": 52,
+   "share_by_length": 0.533
+  },
+  "Coronado": {
+   "ways": 35,
+   "verified_ways": 0,
+   "share_by_length": 0.0
+  },
+  "Del Mar": {
+   "ways": 30,
+   "verified_ways": 2,
+   "share_by_length": 0.101
+  },
+  "Encinitas": {
+   "ways": 103,
+   "verified_ways": 12,
+   "share_by_length": 0.151
+  },
+  "Imperial Beach": {
+   "ways": 22,
+   "verified_ways": 0,
+   "share_by_length": 0.0
+  },
+  "La Jolla": {
+   "ways": 92,
+   "verified_ways": 0,
+   "share_by_length": 0.0
+  },
+  "Oceanside": {
+   "ways": 59,
+   "verified_ways": 1,
+   "share_by_length": 0.057
+  },
+  "Pacific Beach / Mission Beach": {
+   "ways": 127,
+   "verified_ways": 0,
+   "share_by_length": 0.0
+  },
+  "Solana Beach": {
+   "ways": 21,
+   "verified_ways": 7,
+   "share_by_length": 0.046
+  }
+ }
+}
