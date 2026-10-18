@@ -1,4 +1,4 @@
-// roadrule.js: the ONE road-rule module. The web app, CarPlay (via app.js), the Node tests and scripts/cart_impact.mjs all use it.
+// roadrule.js: the ONE road-rule module. The web app, CarPlay (via app.js), the Node tests and scripts/cart_impact.js all use it.
 // Vehicle types: 'golf_cart' (plain golf cart / PTV / motorized cart) and 'lsv' (street-legal low-speed vehicle / NEV with VIN, plate, insurance).
 // Thresholds live in data/rules.json (per state, per vehicle, each with a cite) and data/regions.json rule (region overrides;
 // flat keys apply to both vehicles, rule.golf_cart / rule.lsv apply to one).
