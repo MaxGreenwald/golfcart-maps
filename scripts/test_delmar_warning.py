@@ -16,7 +16,7 @@ def run(today):
         pg.goto(URL); pg.wait_for_function("window.ready===true", timeout=120000); pg.wait_for_timeout(800)
         res = {}
         cov = pg.evaluate("""(async()=>{await ensure(32.94,-117.29,33.0,-117.24);let flagged=0,want=0,miss=0;const re=/Via de la Valle - San Dieguito Bridge|Fairgrounds Gate 2 - San Dieguito|Camino del Mar - Jimmy Durante/;
-          for(const s of D.segs){if(!s)continue;const a=!!advOf(s);const w=s[3]==='v'&&re.test(JSON.stringify(D.sources[s[8]]||''));flagged+=a;want+=w;if(w&&!a)miss++}return {flagged,want,miss}})()""")
+          for(const s of D.segs){if(!s)continue;const a0=advOf(s),a=!!(a0&&!a0.text);const w=s[3]==='v'&&re.test(JSON.stringify(D.sources[s[8]]||''));flagged+=a;want+=w;if(w&&!a)miss++}return {flagged,want,miss}})()""")
         res['_cov'] = cov
         for name, lat in [("Camino del Mar", 32.978), ("Jimmy Durante Boulevard", 32.972), ("Via de la Valle", 32.98)]:
             res[name] = pg.evaluate(POP + f"('{name}',{lat})")

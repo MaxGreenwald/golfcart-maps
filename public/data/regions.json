@@ -619,8 +619,8 @@
   "cover": "City of Avalon only (rental carts and permitted autoettes; most of the island outside town is closed to private vehicles). Pick another city in the menu above.",
   "rule": {
    "max_posted": 25,
-   "cite": "Avalon: car permits are capped, so visitors and most residents get around in rented golf carts or permitted autoettes; CVC 21115 golf carts on streets ≤25",
-   "url": "https://www.cityofavalon.com/"
+   "cite": "Avalon: all vehicles, golf carts included, need a City permit (AMC § 4-4.1702); visitors rent permitted autoettes (§ 4-4.1703(f)), residents get one per dwelling unit (§ 4-4.1703(g)); carts only on streets posted ≤25 mph (CVC 21716)",
+   "url": "https://ecode360.com/AV4054"
   },
   "slug": "catalina"
  },
