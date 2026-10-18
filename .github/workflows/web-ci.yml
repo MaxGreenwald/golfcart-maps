@@ -45,6 +45,8 @@ jobs:
         run: python scripts/test_ui.py
       - name: test_delmar_warning (Del Mar posted-limit warning shows until Nov 19 2026, then hides)
         run: python scripts/test_delmar_warning.py
+      - name: "test_safety_caution (SD stretches where signs or OSM show a higher limit; dashed orange, popup, route steps)"
+        run: python scripts/test_safety_caution.py
       - name: test_chips
         run: python scripts/test_chips.py
       - name: test_layout
