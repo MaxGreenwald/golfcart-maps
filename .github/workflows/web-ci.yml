@@ -13,6 +13,8 @@ jobs:
         with: {fetch-depth: 0}   # tests/test_web_build.py replays a real missed cache bump from history
       - name: public/ is the only copy of the web app (no committed ios/android/dist bundles)
         run: python scripts/check_single_source.py
+      - name: No 'verified' claims outside the coastal-SD verified badge
+        run: python scripts/check_verified_wording.py
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - name: Unit tests (roundabout rule, validators, SW cache name, single source)
