@@ -26,7 +26,7 @@ window.GCMCarPlay={
  // from/to: {lat,lon}. Returns null-route with reason when there's no legal way.
  async plan(from,to,mode,allowRisky){await ready();await regionFor(to.lat,to.lon);
   const lr=await window.testRoute([from.lat,from.lon],[to.lat,to.lon],!!allowRisky);const r=window._lastDetail;
-  if(!lr||!r)return {ok:false,reason:RULE.designated_only?'Every way there leaves the cart paths/designated roads.':`Every way there uses a ${RULE.max_posted+5}+ mph road.`};
+  if(!lr||!r)return {ok:false,reason:GCMRule.noRoute(RULE)};
   const line=[];r.legs.forEach(l=>l.p.forEach(p=>line.push([+p[1].toFixed(6),+p[0].toFixed(6)])));
   return {ok:true,mode:MODE,region:REG.id,meters:Math.round(r.dist),miles:lr.mi,roundTripMiles:lr.rt,minutes:lr.min,range:lr.range,
    risky:lr.risky,line,maneuvers:maneuvers(r)}},
