@@ -49,6 +49,8 @@ jobs:
         run: python scripts/test_layout.py
       - name: test_chip_overflow (WebKit + iOS-style select padding, every region at 375/390/430)
         run: python scripts/test_chip_overflow.py
+      - name: test_appstore (iOS build: no paywall/tip/beta labels, native share+haptics wired, launches with third-party hosts blocked)
+        run: python scripts/test_appstore.py
       - uses: actions/upload-artifact@v4
         if: failure()
         with: {name: ci-shots, path: ci-shots, if-no-files-found: ignore}

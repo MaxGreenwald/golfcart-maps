@@ -10,7 +10,8 @@ async function api(p,o){const r=await fetch((window.Capacitor&&window.Capacitor.
 const post=b=>({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
 function close(){const s=$('paySheet');if(s)s.remove()}
 function msg(t){const m=$('payMsg');if(m)m.textContent=t}
-function sheet(){close();const d=document.createElement('div');d.id='paySheet';d.innerHTML=`<div class="pbk"></div><div class="pcard" role="dialog" aria-label="Charging stations">
+function sheet(){close();if(IOS)return; // App Store 3.1.1: no external purchase or restore inside the iOS app (layer is hidden there)
+const d=document.createElement('div');d.id='paySheet';d.innerHTML=`<div class="pbk"></div><div class="pcard" role="dialog" aria-label="Charging stations">
 <button class="px" aria-label="Close">✕</button><h3>🔌 Charging stations${IOS?'':' — $10/year'}</h3>
 <p>See public EV chargers near your route, with plug types, hours and price.</p>
 ${IOS?'':'<button class="pbtn" id="paySub">Subscribe</button>'}
