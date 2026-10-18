@@ -4,19 +4,32 @@ whose intersection latitudes bound the segment (roads here run ~N-S; for E-W roa
 import json, os, re
 HERE = os.path.dirname(__file__)
 INTEL = json.load(open(os.path.join(HERE, "..", "research", "road_intel.json")))
-DM_SRC = "https://thecoastnews.com/del-mar-moves-to-lower-speed-limits-explore-additional-parking/"
-DM_NOTE = "adopted Oct 2026, signs may still show old limit"
-# Del Mar council speed ordinance (Oct 2026; user-provided map + Coast News article). Appended as extra intel entries.
-_DM = [("Camino del Mar", "Via de la Valle - San Dieguito Bridge", 30, True),
-       ("Camino del Mar", "Coast Blvd - Del Mar Plaza", 30, True),
-       ("Jimmy Durante Blvd", "Via de la Valle - Fairgrounds Gate 2", 40, False),
-       ("Jimmy Durante Blvd", "Fairgrounds Gate 2 - San Dieguito Dr", 30, True),
-       ("Jimmy Durante Blvd", "San Dieguito Dr - Camino del Mar", 30, True),
-       ("Via de la Valle", "Camino del Mar - Jimmy Durante Blvd", 35, True)]
+import datetime as _dt
+# Del Mar speed ordinance (Clerk's File 904-4): introduced Oct 6 2026, second reading Oct 20 2026, effective
+# Nov 19 2026 (30 days after adoption); the city replaces the signs after that. Source of truth: the Oct 20 2026
+# agenda packet, Item 6, Table 1 + Attachment A. Until a segment's new limit is in force AND the new signs are
+# confirmed (street imagery or a site visit), the map uses the limit that is posted TODAY. Showing the new, lower
+# limit early made three 40-45 mph stretches look LSV-legal (fixed Oct 18 2026).
+DM_SRC = "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943"
+DM_EFFECTIVE = "2026-11-19"
+DM_SIGNS_CONFIRMED = False   # set True only after the new signs are seen (Street View / Mapillary / site visit)
+# (road, segment, posted today, ordinance limit)
+_DM = [("Camino del Mar", "Via de la Valle - San Dieguito Bridge", 40, 30),
+       ("Camino del Mar", "Coast Blvd - Del Mar Plaza", 35, 30),
+       ("Jimmy Durante Blvd", "Via de la Valle - Fairgrounds Gate 2", 45, 40),
+       ("Jimmy Durante Blvd", "Fairgrounds Gate 2 - San Dieguito Dr", 45, 30),
+       ("Jimmy Durante Blvd", "San Dieguito Dr - Camino del Mar", 35, 30),
+       ("Via de la Valle", "Camino del Mar - Jimmy Durante Blvd", 40, 35)]
+def dm_in_force(today=None):
+    today = today or _dt.date.today().isoformat()
+    return today >= DM_EFFECTIVE and DM_SIGNS_CONFIRMED
 SURVEY = "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_09142026-3926"
 DM_BASE = len(INTEL)
-for road, seg, mph_, ok in _DM:
-    INTEL.append({"road": road, "city": "Del Mar", "from_to_segment_if_known": seg + " — " + DM_NOTE, "speed_mph": mph_, "lsv_ok": ok,
+for road, seg, now_, new_ in _DM:
+    use = new_ if dm_in_force() else now_
+    note = (f"ordinance limit {new_} mph, in force since {DM_EFFECTIVE}" if dm_in_force() else
+            f"posted {now_} mph today; ordinance lowers it to {new_} mph from {DM_EFFECTIVE}, once new signs are up")
+    INTEL.append({"road": road, "city": "Del Mar", "from_to_segment_if_known": seg + " — " + note, "speed_mph": use, "lsv_ok": use <= 35,
                   "source_url": DM_SRC, "confidence": "high"})
 PB = (32.755, -117.262, 32.815, -117.235); LJ = (32.795, -117.29, 32.885, -117.22)
 DM = (32.935, -117.275, 32.985, -117.24); SB = (32.97, -117.28, 33.01, -117.24)

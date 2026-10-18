@@ -1303,8 +1303,16 @@
   },
   {
    "road": "Camino del Mar",
+   "way": 34906973,
+   "override_mph": 40,
+   "mapillary_mph": 25,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.975660&lng=-117.269066&z=19&focus=map&mapFeatureId=936350457130040"
+  },
+  {
+   "road": "Camino del Mar",
    "way": 157272806,
-   "override_mph": 30,
+   "override_mph": 35,
    "mapillary_mph": 40,
    "signs": 2,
    "url": "https://www.mapillary.com/app/?lat=32.961678&lng=-117.265144&z=19&focus=map&mapFeatureId=145454770819176"
@@ -1312,26 +1320,10 @@
   {
    "road": "Camino del Mar",
    "way": 157531215,
-   "override_mph": 30,
+   "override_mph": 35,
    "mapillary_mph": 40,
    "signs": 2,
    "url": "https://www.mapillary.com/app/?lat=32.965714&lng=-117.265740&z=19&focus=map&mapFeatureId=271924811327901"
-  },
-  {
-   "road": "Camino del Mar",
-   "way": 157531218,
-   "override_mph": 30,
-   "mapillary_mph": 40,
-   "signs": 1,
-   "url": "https://www.mapillary.com/app/?lat=32.979840&lng=-117.269300&z=19&focus=map&mapFeatureId=530875514744452"
-  },
-  {
-   "road": "Via de la Valle",
-   "way": 436313336,
-   "override_mph": 35,
-   "mapillary_mph": 45,
-   "signs": 1,
-   "url": "https://www.mapillary.com/app/?lat=32.980175&lng=-117.267840&z=19&focus=map&mapFeatureId=504023740734970"
   },
   {
    "road": "South Coast Highway",
@@ -1376,10 +1368,18 @@
   {
    "road": "Camino del Mar",
    "way": 436404182,
-   "override_mph": 30,
+   "override_mph": 35,
    "mapillary_mph": 40,
    "signs": 1,
    "url": "https://www.mapillary.com/app/?lat=32.966568&lng=-117.266220&z=19&focus=map&mapFeatureId=240893514457524"
+  },
+  {
+   "road": "Jimmy Durante Boulevard",
+   "way": 436404192,
+   "override_mph": 45,
+   "mapillary_mph": 35,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=32.966990&lng=-117.265070&z=19&focus=map&mapFeatureId=590172539957096"
   },
   {
    "road": "South Coast Highway",
@@ -1396,14 +1396,6 @@
    "mapillary_mph": 40,
    "change": "newly forbidden",
    "url": "https://www.mapillary.com/app/?lat=32.948610&lng=-117.261024&z=19&focus=map&mapFeatureId=819419758673560"
-  },
-  {
-   "road": "Jimmy Durante Boulevard",
-   "way": 436425583,
-   "override_mph": 30,
-   "mapillary_mph": 45,
-   "signs": 1,
-   "url": "https://www.mapillary.com/app/?lat=32.971380&lng=-117.261880&z=19&focus=map&mapFeatureId=3603047079939484"
   },
   {
    "road": "Rancho Santa Fe Farms Road",
