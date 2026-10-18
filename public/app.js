@@ -36,9 +36,16 @@ const ADV=[{name:'Camino del Mar',src:'Via de la Valle - San Dieguito Bridge',no
  {name:'Jimmy Durante Boulevard',src:'Fairgrounds Gate 2 - San Dieguito Dr',now:45,next:30},
  {name:'Via de la Valle',src:'Camino del Mar - Jimmy Durante Blvd',now:40,next:35}];
 const advToday=()=>window.GCM_TODAY||new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'});
-function advOf(s){if(!REG||REG.id!=='sd'||advToday()>=ADV_UNTIL||s[3]!=='v'||!(s[2]<=35))return null;const n=D.names[s[0]],src=D.sources&&D.sources[s[8]];const lab=JSON.stringify(src||'');
- return ADV.find(a=>a.name===n&&lab.includes(a.src))||null}
-const advText=a=>`Posted ${a.now} mph today; the limit drops to ${a.next} mph on Nov 19, 2026, when Del Mar's new speed ordinance takes effect.`;
+// Safety cautions (Oct 18 2026): a dated sign photo or OpenStreetMap shows a different limit than the city's newer number. Matched by the
+// override labels in scripts/overrides.py (Safety caution block); evidence in research/sd_safety_caution.md. No expiry: remove once signs are confirmed.
+const CAU=[{src:'La Jolla Blvd (Loring St - Colima St: posted 35',text:'Signs photographed Jan 8, 2025 show 35 mph. San Diego voted to lower this stretch to 25 mph in March 2026, and new signs may not be up yet. Check posted signs.'},
+ {src:'Mission Blvd (Santa Clara Pl - Loring St: posted 30',text:'Signs photographed Jan 8, 2025 show 30 mph. San Diego is lowering this stretch to 25 mph, and new signs may not be up yet. Check posted signs.'},
+ {src:'Mission Bl (San Fernando Pl - Santa Clara Pl)',text:'San Diego lowered this stretch to 25 mph in March 2026, but signs seen in Dec 2024 showed 30 mph. Check posted signs.'},
+ {src:'Lomas Santa Fe Dr (at Hwy 101:',text:'Sources disagree here: Solana Beach lists 35 mph, OpenStreetMap says 50 mph. Check posted signs.'}];
+function advOf(s){if(!REG||REG.id!=='sd'||s[3]!=='v'||!(s[2]<=35))return null;const n=D.names[s[0]],src=D.sources&&D.sources[s[8]];const lab=JSON.stringify(src||'');
+ if(advToday()<ADV_UNTIL){const a=ADV.find(a=>a.name===n&&lab.includes(a.src));if(a)return a}
+ return CAU.find(c=>lab.includes(c.src))||null}
+const advText=a=>a.text||`Posted ${a.now} mph today; the limit drops to ${a.next} mph on Nov 19, 2026, when Del Mar's new speed ordinance takes effect.`;
 window.advOf=advOf;
 function mkLine(s){const c0=cls(s),c=s[3]==='c'?2:unk(s)?4:c0;const adv=advOf(s);const pl=L.polyline(s[7].map(p=>[p[1],p[0]]),adv?{color:'#f08c00',weight:4.2,dashArray:'8 6',renderer}:{...STY[c],renderer});
  pl.on('click',e=>{L.DomEvent.stopPropagation(e);if(active){setPt(e.latlng);return}const sp=s[2];window._pll=e.latlng;
@@ -90,7 +97,7 @@ let routing=false;async function route(){$('title').innerHTML='<span class="spin
  const min=Math.max(1,Math.round(r.dist/1609.34/22*60));
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
  $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:(RULE.designated_only?'All on cart paths & designated roads 🌴':(r.legs.some(l=>l.u)?`Mostly ≤${RULE.max_posted} mph roads; <b>❓ ${mi(r.legs.filter(l=>l.u).reduce((a,l)=>a+l.s._len,0))} speed unknown — check signs</b>`:`All on roads ≤${RULE.max_posted} mph 🌴`))+ruleNotes()+(da>150||db>150?' · snapped to nearest legal road':'');
- r.back=await backDist(a,b,a2,b2,r.dist);renderRange(r);if(r.legs.some(l=>l.a))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
+ r.back=await backDist(a,b,a2,b2,r.dist);renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
  setSnap('half');focusStart();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};window._lastDetail=r;return r}
 // return trip: one-way rules can differ, so route B->A; fall back to same distance
 async function backDist(a,b,a2,b2,d){if(a==null||b==null)return d;for(const [x,y] of [[b,a],[b2,a],[b,a2],[b2,a2]]){const p=astar(x,y);if(p)return summarize(p).dist}return d}

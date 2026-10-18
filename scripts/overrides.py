@@ -160,6 +160,24 @@ INTEL.append({"road": "Grand Ave", "city": "San Diego (Pacific Beach)", "from_to
 RULES[_GRB] = (r"^Grand Avenue$", (32.79, -117.262, 32.81, -117.21), r"^Mission Boulevard$", r"__MBD__", "lon")
 FIXED["__MBD__"] = -117.2140  # Grand Ave at Mission Bay Dr (east end of the city segment; Mission Bay Dr itself is outside the coastal strip)
 
+# ---- Safety caution (Oct 18 2026): stretches where a dated sign photo or OpenStreetMap shows a HIGHER limit than our source ----
+# Conservative rule: where a dated sign photo shows the higher posted limit, use it (a local limit only takes effect once its
+# signs are up, CVC 22357), and flag the stretch in the app (CAU list in public/app.js matches these labels). Where only
+# OpenStreetMap disagrees, keep the official value and flag it. Evidence: research/sd_safety_caution.md.
+_SC = len(INTEL)
+MLY = "https://www.mapillary.com/app/?lat=%s&lng=%s&z=19&focus=map&mapFeatureId=%s"
+INTEL.append({"road": "La Jolla Blvd", "city": "San Diego (Bird Rock)", "from_to_segment_if_known": "Loring St - Colima St: posted 35 \u2014 Mapillary sign photos Jan 8 2025; city voted 25 in Mar 2026 (R-316675), new signs not confirmed",
+              "speed_mph": 35, "lsv_ok": True, "source_url": MLY % ("32.810455", "-117.266100", "9238952249552002"), "confidence": "high"})
+INTEL.append({"road": "Mission Blvd", "city": "San Diego (Pacific Beach)", "from_to_segment_if_known": "Santa Clara Pl - Loring St: posted 30 \u2014 Mapillary sign photos Jan 8 2025; city lowering to 25 (R-316675), new signs not confirmed",
+              "speed_mph": 30, "lsv_ok": True, "source_url": MLY % ("32.803837", "-117.257860", "960076746257679"), "confidence": "high"})
+INTEL.append({"road": "Lomas Santa Fe Dr", "city": "Solana Beach", "from_to_segment_if_known": "at Hwy 101: city lists 35, OpenStreetMap says 50 \u2014 check posted signs",
+              "speed_mph": 35, "lsv_ok": True, "source_url": "https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf", "confidence": "high"})
+RULES[_SC] = (r"^La Jolla Boulevard$", (32.80, -117.275, 32.815, -117.25), r"^Loring Street$", r"^Colima Street$", "lat")
+RULES[_SC + 1] = (r"^Mission Boulevard$", PB, r"Santa Clara Place", r"Loring Street", "lat")   # replaces rule 0 (25, KPBS Feb 2025)
+RULES[_SC + 2] = (r"^Lomas Santa Fe Drive$", SB, r"(Highway 101|Coast Highway)", r"__LSF101E__", "lon")  # the 4 short ways OSM tags 50
+RULES.pop(0, None)
+FIXED["__LSF101E__"] = -117.2712  # east end of the OSM-50 ways at Hwy 101 (next way east is tagged 35)
+
 # ---- Accuracy sweep (Oct 13 2026) ----
 # research/accuracy_sweep.json: per-way overrides from official city speed lists (San Diego R-316675, Encinitas Ord. 2026-05
 # Exhibit A, Oceanside Traffic Code Art. XIV, Imperial Beach MC 10.28.020) and the Mapillary corridor rule (3+ distinct
