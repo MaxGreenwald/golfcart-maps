@@ -74,3 +74,9 @@ Reading the table:
 - Legend "Posted ≤35": now dynamic. The rule note, the risky-mode text and the no-route text are now per vehicle.
 - Disclaimer (index.html): added the CA golf cart ≤25 sentence.
 - NOT changed (og/meta, held for Max): meta description and JSON-LD "Free golf cart and LSV … legal road map … Routes avoid roads posted 40+ mph"; og:description and twitter:description "every golf cart & LSV-legal road"; llms.txt line 3 (the same as the meta description); privacy.html "roads posted 35 mph or under".
+
+## UI (per Max, Oct 18: "too much complex ui… a setting… default lsv")
+- The chip row is unchanged from master. Golf cart mode is an on/off switch in the existing ⚙️ Settings panel in the bottom sheet, above Chargers. The subtitle shows the active rule (e.g. "On: only roads posted ≤25 mph").
+- Default is LSV. The choice is saved in localStorage `gcm-veh`, and `?veh=golf_cart` sets it from a URL.
+- In LSV mode, popups still flag the mislabel: "OK for LSVs (not for golf carts: only roads ≤25 mph)".
+- CarPlay: `GCMCarPlay.status()` and `plan()` use the same saved setting, re-read on every call. `setMode('golf_cart'|'lsv')` changes it. The native `mode` argument (hard-coded 'lsv' in CarPlaySceneDelegate.swift) is ignored on purpose.
