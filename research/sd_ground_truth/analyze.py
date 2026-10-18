@@ -94,14 +94,17 @@ for wi, u in use.items():
     if w["id"] in SV: src.append(("streetview", SV[w["id"]][0], "Street View check (volunteer sheet)", SV[w["id"]][1]))
     off = [s for s in src if s[0] == "official"]; ind = [s for s in src if s[0] in ("osm", "mapillary", "streetview")]
     agree = [(o, i) for o in off for i in ind if o[1] == i[1]]
-    if agree: status, conf = "verified", "high"
-    elif off and ind: status, conf = "disagree", "medium"
+    vals = {x[1] for x in src}
+    if agree and len(vals) == 1: status, conf = "verified", "high"
+    elif (off and ind) or len(vals) > 1: status, conf = "disagree", "medium"   # any two sources that differ (a third source can break a pair)
     elif off: status, conf = "one official source", "medium"
     elif len({s[1] for s in ind}) == 1 and len({s[0] for s in ind}) >= 2: status, conf = "OSM + imagery agree (no official source)", "medium"
     elif ind: status, conf = "one unofficial source", "low"
     else: status, conf = "no posted-limit source (state default assumed)", "low"
     shown = u["shown"]
-    if status == "disagree":
+    if status == "disagree" and not off:
+        fix = "sources disagree (" + ", ".join(f"{i[0]} {i[1]}" for i in src) + f"); map shows {u['shown']}"
+    elif status == "disagree":
         o = off[0]
         fix = (f"held blocked: city code says {o[1]}, OSM says {HOLD[w['id']]['osm_mph']}; needs Street View" if w["id"] in HOLD else
                f"map uses the official {o[1]} mph" + (" (OSM/imagery: " + ", ".join(f"{i[0]} {i[1]}" for i in ind) + ")"))
@@ -110,7 +113,7 @@ for wi, u in use.items():
                  "length_m": round(wlen(w)), "map_mph": shown, "status": status, "confidence": conf,
                  "osm": next((s[1] for s in src if s[0] == "osm"), ""), "official": next((s[1] for s in off), ""), "official_source": next((s[2] for s in off), ""), "official_url": next((s[3] for s in off), ""),
                  "mapillary": next((s[1] for s in src if s[0] == "mapillary"), ""), "streetview": next((s[1] for s in src if s[0] == "streetview"), ""),
-                 "agree": "Y" if agree else ("N" if status == "disagree" else ""), "verified_mph": agree[0][0][1] if agree else "",
+                 "agree": "Y" if status == "verified" else ("N" if status == "disagree" else ""), "verified_mph": agree[0][0][1] if status == "verified" else "",
                  "fix": fix, "routes": "; ".join(sorted(u["routes"])), "key": way_key(w), "lat": round(mid["lat"], 5), "lon": round(mid["lon"], 5),
                  "sources": [[s[0], s[1], s[2], s[3]] for s in src]})
 rows.sort(key=lambda r: (r["city"], r["road"], r["lat"]))

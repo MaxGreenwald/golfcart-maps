@@ -2,9 +2,9 @@
 "date": "2026-10-18",
 "rule": "official source + independent source agree",
 "accuracy": {
-"share_by_length": 0.126,
-"ways": 613,
-"verified_ways": 74
+"share_by_length": 0.11,
+"ways": 623,
+"verified_ways": 66
 },
 "ways": {
 "Carlsbad Boulevard|33.0917140,-117.3142175|33.0877229,-117.3127498": {
@@ -22,24 +22,6 @@
 50,
 "Mapillary: 2 sign(s)",
 "https://www.mapillary.com/app/?lat=33.089950&lng=-117.313736&z=19&focus=map&mapFeatureId=462634128366157"
-]
-]
-},
-"Carlsbad Boulevard|33.0918146,-117.3138055|33.0934885,-117.3144632": {
-"mph": 50,
-"date": "2026-10-18",
-"sources": [
-[
-"official",
-50,
-"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
-"https://ecode360.com/44006773"
-],
-[
-"mapillary",
-50,
-"Mapillary: 1 sign(s)",
-"https://www.mapillary.com/app/?lat=33.092136&lng=-117.313866&z=19&focus=map&mapFeatureId=475872783473261"
 ]
 ]
 },
@@ -61,24 +43,6 @@
 ]
 ]
 },
-"Carlsbad Boulevard|33.0937004,-117.3145564|33.0976633,-117.3164904": {
-"mph": 50,
-"date": "2026-10-18",
-"sources": [
-[
-"official",
-50,
-"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
-"https://ecode360.com/44006773"
-],
-[
-"mapillary",
-50,
-"Mapillary: 1 sign(s)",
-"https://www.mapillary.com/app/?lat=33.097454&lng=-117.316320&z=19&focus=map&mapFeatureId=478839266784787"
-]
-]
-},
 "Carlsbad Boulevard|33.1017427,-117.3182341|33.0991352,-117.3171633": {
 "mph": 50,
 "date": "2026-10-18",
@@ -94,24 +58,6 @@
 50,
 "Mapillary: 3 sign(s)",
 "https://www.mapillary.com/app/?lat=33.101246&lng=-117.318100&z=19&focus=map&mapFeatureId=2720460914911662"
-]
-]
-},
-"Carlsbad Boulevard|33.1017756,-117.3180696|33.1052406,-117.3196015": {
-"mph": 50,
-"date": "2026-10-18",
-"sources": [
-[
-"official",
-50,
-"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
-"https://ecode360.com/44006773"
-],
-[
-"mapillary",
-50,
-"Mapillary: 1 sign(s)",
-"https://www.mapillary.com/app/?lat=33.102657&lng=-117.318370&z=19&focus=map&mapFeatureId=130176495744652"
 ]
 ]
 },
@@ -151,42 +97,6 @@
 ]
 ]
 },
-"Carlsbad Boulevard|33.1077691,-117.3207707|33.1117882,-117.3223682": {
-"mph": 50,
-"date": "2026-10-18",
-"sources": [
-[
-"official",
-50,
-"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
-"https://ecode360.com/44006773"
-],
-[
-"mapillary",
-50,
-"Mapillary: 1 sign(s)",
-"https://www.mapillary.com/app/?lat=33.109127&lng=-117.321240&z=19&focus=map&mapFeatureId=195571832390876"
-]
-]
-},
-"Carlsbad Boulevard|33.1338701,-117.3364255|33.1333580,-117.3360670": {
-"mph": 35,
-"date": "2026-10-18",
-"sources": [
-[
-"official",
-35,
-"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",
-"https://ecode360.com/44006773"
-],
-[
-"mapillary",
-35,
-"Mapillary: 1 sign(s)",
-"https://www.mapillary.com/app/?lat=33.133633&lng=-117.336150&z=19&focus=map&mapFeatureId=197529525546396"
-]
-]
-},
 "Carlsbad Boulevard|33.1376760,-117.3385716|33.1346945,-117.3370498": {
 "mph": 35,
 "date": "2026-10-18",
@@ -220,42 +130,6 @@
 35,
 "Mapillary: 2 sign(s)",
 "https://www.mapillary.com/app/?lat=33.142950&lng=-117.341470&z=19&focus=map&mapFeatureId=3336182376484519"
-]
-]
-},
-"Carlsbad Boulevard|33.1452990,-117.3434665|33.1449667,-117.3431620": {
-"mph": 35,
-"date": "2026-10-18",
-"sources": [
-[
-"official",
-35,
-"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",
-"https://ecode360.com/44006773"
-],
-[
-"mapillary",
-35,
-"Mapillary: 1 sign(s)",
-"https://www.mapillary.com/app/?lat=33.145090&lng=-117.343280&z=19&focus=map&mapFeatureId=198371332003433"
-]
-]
-},
-"Carlsbad Boulevard|33.1468531,-117.3448299|33.1458514,-117.3439733": {
-"mph": 35,
-"date": "2026-10-18",
-"sources": [
-[
-"official",
-35,
-"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",
-"https://ecode360.com/44006773"
-],
-[
-"mapillary",
-35,
-"Mapillary: 3 sign(s)",
-"https://www.mapillary.com/app/?lat=33.146404&lng=-117.344420&z=19&focus=map&mapFeatureId=198283382012228"
 ]
 ]
 },
@@ -997,24 +871,6 @@
 ]
 ]
 },
-"Camino del Mar|32.9802192,-117.2691789|32.9782319,-117.2693060": {
-"mph": 40,
-"date": "2026-10-18",
-"sources": [
-[
-"official",
-40,
-"Camino del Mar (Via de la Valle - San Dieguito Bridge \u2014 posted 40 mph today; ordinance lowers it to 30 mph from 2026-11-19, once new signs are up)",
-"https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943"
-],
-[
-"mapillary",
-40,
-"Mapillary: 1 sign(s)",
-"https://www.mapillary.com/app/?lat=32.979840&lng=-117.269300&z=19&focus=map&mapFeatureId=530875514744452"
-]
-]
-},
 "San Elijo Avenue|33.0361784,-117.2911595|33.0227901,-117.2835347": {
 "mph": 25,
 "date": "2026-10-18",
@@ -1042,24 +898,6 @@
 25,
 "OSM maxspeed tag",
 "https://www.openstreetmap.org/way/224931510"
-],
-[
-"official",
-25,
-"S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing)",
-"https://ecode360.com/EN5042/laws/LF2740111.pdf"
-]
-]
-},
-"South Coast Highway|33.0391676,-117.2929171|33.0376245,-117.2926698": {
-"mph": 25,
-"date": "2026-10-18",
-"sources": [
-[
-"osm",
-25,
-"OSM maxspeed tag",
-"https://www.openstreetmap.org/way/437779286"
 ],
 [
 "official",
@@ -1105,24 +943,6 @@
 ]
 ]
 },
-"South Coast Highway|33.0407370,-117.2931290|33.0397473,-117.2929973": {
-"mph": 25,
-"date": "2026-10-18",
-"sources": [
-[
-"osm",
-25,
-"OSM maxspeed tag",
-"https://www.openstreetmap.org/way/436442869"
-],
-[
-"official",
-25,
-"S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing)",
-"https://ecode360.com/EN5042/laws/LF2740111.pdf"
-]
-]
-},
 "South Coast Highway|33.0411632,-117.2931884|33.0407370,-117.2931290": {
 "mph": 25,
 "date": "2026-10-18",
@@ -1132,24 +952,6 @@
 25,
 "OSM maxspeed tag",
 "https://www.openstreetmap.org/way/1353155386"
-],
-[
-"official",
-25,
-"S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing)",
-"https://ecode360.com/EN5042/laws/LF2740111.pdf"
-]
-]
-},
-"South Coast Highway|33.0418245,-117.2932807|33.0411632,-117.2931884": {
-"mph": 25,
-"date": "2026-10-18",
-"sources": [
-[
-"osm",
-25,
-"OSM maxspeed tag",
-"https://www.openstreetmap.org/way/436442870"
 ],
 [
 "official",
@@ -1186,24 +988,6 @@
 25,
 "OSM maxspeed tag",
 "https://www.openstreetmap.org/way/391851509"
-],
-[
-"official",
-25,
-"S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing)",
-"https://ecode360.com/EN5042/laws/LF2740111.pdf"
-]
-]
-},
-"South Coast Highway|33.0429891,-117.2934427|33.0424444,-117.2933650": {
-"mph": 25,
-"date": "2026-10-18",
-"sources": [
-[
-"osm",
-25,
-"OSM maxspeed tag",
-"https://www.openstreetmap.org/way/436442868"
 ],
 [
 "official",
@@ -1371,6 +1155,90 @@
 "official",
 35,
 "Lomas Santa Fe Dr (Hwy 101 - Stevens Ave)",
+"https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf"
+]
+]
+},
+"South Sierra Avenue|32.9871954,-117.2719445|32.9802210,-117.2702640": {
+"mph": 25,
+"date": "2026-10-18",
+"sources": [
+[
+"osm",
+25,
+"OSM maxspeed tag",
+"https://www.openstreetmap.org/way/168702022"
+],
+[
+"official",
+25,
+"Sierra Ave (Plaza St - Border Ave)",
+"https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf"
+],
+[
+"mapillary",
+25,
+"Mapillary: 1 sign(s)",
+"https://www.mapillary.com/app/?lat=32.987000&lng=-117.271890&z=19&focus=map&mapFeatureId=4079269152137773"
+]
+]
+},
+"South Sierra Avenue|32.9871954,-117.2719445|32.9892607,-117.2724373": {
+"mph": 25,
+"date": "2026-10-18",
+"sources": [
+[
+"osm",
+25,
+"OSM maxspeed tag",
+"https://www.openstreetmap.org/way/663590532"
+],
+[
+"official",
+25,
+"Sierra Ave (Plaza St - Border Ave)",
+"https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf"
+],
+[
+"mapillary",
+25,
+"Mapillary: 3 sign(s)",
+"https://www.mapillary.com/app/?lat=32.989147&lng=-117.272430&z=19&focus=map&mapFeatureId=1133418590503297"
+]
+]
+},
+"South Sierra Avenue|32.9892607,-117.2724373|32.9897439,-117.2725709": {
+"mph": 25,
+"date": "2026-10-18",
+"sources": [
+[
+"osm",
+25,
+"OSM maxspeed tag",
+"https://www.openstreetmap.org/way/663590531"
+],
+[
+"official",
+25,
+"Sierra Ave (Plaza St - Border Ave)",
+"https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf"
+]
+]
+},
+"South Sierra Avenue|32.9897439,-117.2725709|32.9916384,-117.2731215": {
+"mph": 25,
+"date": "2026-10-18",
+"sources": [
+[
+"osm",
+25,
+"OSM maxspeed tag",
+"https://www.openstreetmap.org/way/32778678"
+],
+[
+"official",
+25,
+"Sierra Ave (Plaza St - Border Ave)",
 "https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf"
 ]
 ]

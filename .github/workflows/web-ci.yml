@@ -45,6 +45,8 @@ jobs:
         run: python scripts/test_sw.py
       - name: test_ui
         run: python scripts/test_ui.py
+      - name: test_verified ('verified' only on two-source coastal SD segments; other regions never)
+        run: python scripts/test_verified.py
       - name: test_delmar_warning (Del Mar posted-limit warning shows until Nov 19 2026, then hides)
         run: python scripts/test_delmar_warning.py
       - name: test_chips

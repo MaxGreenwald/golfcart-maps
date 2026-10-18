@@ -5,8 +5,8 @@ from playwright.sync_api import sync_playwright
 import os, json
 URL = os.environ.get("URL", "http://localhost:8765/"); fails = []
 def ck(n, c, x=""): print(("PASS " if c else "FAIL ") + n, x); c or fails.append(n)
-POP = """(async(want)=>{await new Promise(r=>setTimeout(r,800));const out=[];for(const s of D.segs){if(out.length>=1)break;if(!want(s))continue;
-  const q=s[7][0];map.setView([q[1],q[0]],17);await new Promise(r=>setTimeout(r,300));const pl=Object.values(layer._layers).find(l=>l.getLatLngs&&l.getLatLngs()[0]&&Math.abs(l.getLatLngs()[0].lat-q[1])<1e-6&&Math.abs(l.getLatLngs()[0].lng-q[0])<1e-6);
+POP = """(async(want)=>{if(REG.id==="sd")await ensure(32.53,-117.42,33.3,-117.1);await new Promise(r=>setTimeout(r,800));const out=[];for(const s of D.segs){if(out.length>=1)break;if(!want(s))continue;
+  const q=s[7][0];map.setView([q[1],q[0]],17);await new Promise(r=>setTimeout(r,900));let pl=null;const z=s[7][s[7].length-1];layer.eachLayer(g=>(g.eachLayer?g:{eachLayer:f=>f(g)}).eachLayer(l=>{const A=l.getLatLngs&&l.getLatLngs();if(A&&A.length&&Math.abs(A[0].lat-q[1])<1e-6&&Math.abs(A[0].lng-q[0])<1e-6&&Math.abs(A[A.length-1].lat-z[1])<1e-6&&Math.abs(A[A.length-1].lng-z[0])<1e-6)pl=l}));
   if(!pl)continue;pl.fire('click',{latlng:L.latLng(q[1],q[0])});await new Promise(r=>setTimeout(r,200));const p=document.querySelector('.leaflet-popup-content');out.push(p?p.innerText:'')}return out[0]||null})"""
 with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_page(viewport={"width": 1200, "height": 900}); pg.add_init_script("window.NO_TRACK=1")

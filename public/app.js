@@ -44,7 +44,7 @@ window.advOf=advOf;
 // ---- Source wording + confidence. "Verified" is reserved for coastal San Diego segments where two independent
 // sources agree (data/sd/verified.json, built from research/sd_ground_truth); every other region shows no verified badge.
 const OFFICIAL_RE=/docs\.sandiego\.gov|sandiego\.gov|ecode360\.com|gocodebook\.com|municipal\.codes|cityofsolanabeach|delmar\.ca\.us|imperialbeach|escribemeetings|carlsbadca\.gov|ci\.oceanside|coronado\.ca\.us|dot\.ca\.gov|\.gov\/|\.us\//i;
-function srcKind(s){const u=(D&&D.sources&&D.sources[s[8]]&&D.sources[s[8]][0])||'';return OFFICIAL_RE.test(u)?'📄 city/county source':/mapillary\.com/.test(u)?'📷 posted sign (Mapillary)':/google\.com\/maps/.test(u)?'📷 Street View check':u?'📰 local report':'📄 local source'}
+function srcKind(s){const e=(D&&D.sources&&D.sources[s[8]])||[],u=e[0]||'',t=e[1]||'';return /DOT\b|Department of Transportation|Caltrans/i.test(t)||/dot\.|fdot|maine\.gov/i.test(u)?'📄 state DOT data':OFFICIAL_RE.test(u)||/municipal code|\bMC \d|resolution|ordinance|E&TS|speed survey|county code/i.test(t)?'📄 city/county source':/mapillary\.com/.test(u)?'📷 posted sign (Mapillary)':/google\.com\/maps/.test(u)?'📷 Street View check':u?'📰 local report':'📄 local source'}
 let VER=null;const vkey=s=>{const a=s[7][0],b=s[7][s[7].length-1];return a[0].toFixed(5)+','+a[1].toFixed(5)+'|'+b[0].toFixed(5)+','+b[1].toFixed(5)};
 const fmtDate=d=>{try{return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}catch(_){return d}};
 function verOf(s){return VER&&REG&&REG.id==='sd'&&VER.segs[vkey(s)]||null}

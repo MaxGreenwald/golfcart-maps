@@ -46,7 +46,10 @@ def heading(g):
     return round(math.degrees(math.atan2((b["lon"] - a["lon"]) * math.cos(math.radians(a["lat"])), b["lat"] - a["lat"])) % 360)
 R = list(csv.DictReader(open(os.path.join(HERE, "segments.csv"))))
 nroutes = lambda r: len([x for x in r["routes"].split(";") if x.strip()])
-dis = [r for r in R if r["status"] == "disagree"]
+def permissive(r):   # the map allows more than a posted-sign or OSM reading says: check these first (safety)
+    m = int(r["map_mph"]) if r["map_mph"].isdigit() else 99
+    return any(v.isdigit() and m != 99 and int(v) > m for v in (r["osm"], r["mapillary"], r["streetview"]))
+dis = sorted([r for r in R if r["status"] == "disagree"], key=lambda r: (not permissive(r), -nroutes(r), -int(r["length_m"])))[:100]
 one = sorted([r for r in R if r["status"] == "one official source" and r["highway"] not in ("residential", "service", "unclassified", "living_street")],
              key=lambda r: (-nroutes(r), -int(r["length_m"])))[:100 - len(dis)]
 pick = sorted(dis + one, key=lambda r: (r["city"], r["road"], float(r["lat"])))
@@ -67,7 +70,7 @@ for r in pick:
                  "street_view_link": f"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint={lat:.6f},{lon:.6f}&heading={heading(g) if g else 0}",
                  "map_link": f"https://www.google.com/maps/search/?api=1&query={lat:.6f},{lon:.6f}", "status": "pending",
                  "our_gis_survey_mph": r["official"], "gis_survey_source": r["official_source"], "source_link": r["official_url"],
-                 "why_in_batch": ("sources disagree: " + r["fix"]) if r["status"] == "disagree" else "one official source; most-used arterial",
+                 "why_in_batch": (("SAFETY: map allows more than a sign/OSM reading; " if permissive(r) else "sources disagree: ") + r["fix"]) if r["status"] == "disagree" else "one official source; most-used arterial",
                  "routes_using": nroutes(r), "length_m": r["length_m"]})
 wb = Workbook(); ws = wb.active; ws.title = "Roads"; ws.append(COLS)
 ci = {c: i + 1 for i, c in enumerate(COLS)}; L = lambda c: ws.cell(1, ci[c]).column_letter
