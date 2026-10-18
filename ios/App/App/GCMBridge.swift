@@ -83,4 +83,16 @@ final class GCMBridge {
             }
         }
     }
+
+    /// Analytics hook for CarPlay (public/carplay.js GCMCarPlay.track -> public/track.js). Town level only, anonymous
+    /// install id, platform "carplay"; the web layer drops it under GPC/Do Not Track/opt-out. Allowed: session,
+    /// route_started, route_completed (mi rounded to 0.5). DEBUG builds log the result so the simulator run can check it.
+    func track(_ name: String, _ props: [String: Any] = [:]) {
+        call("track(n,p)", ["n": name, "p": props]) { any in
+            #if DEBUG
+            let ok = (any as? [String: Any])?["ok"] as? Bool ?? false
+            NSLog("GCMTrack %@ %@", name, ok ? "ok" : "failed: \(String(describing: any))")
+            #endif
+        }
+    }
 }
