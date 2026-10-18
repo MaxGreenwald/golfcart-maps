@@ -24,6 +24,6 @@ The one deploy command (needs `CLOUDFLARE_API_TOKEN`):
     scripts/deploy_web.sh production         # https://golfcartmap.com, from master, only with Max's OK
 
 ## Legal notes (not legal advice)
-- Golf carts: roads posted ≤25 mph (CVC 21115) or city-designated golf cart routes (CVC 21115.1, 1950x).
+- Golf carts: roads posted ≤25 mph (CVC 21716) or city-designated golf cart routes (CVC 21115 golf-course combined use, 21115.1, S&H 1950x).
 - LSVs: may not operate on roads with speed limit >35 mph (CVC 21260/21266); may cross them at intersections.
 - OSM is volunteer data; posted signs and local rules always win.
