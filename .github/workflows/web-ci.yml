@@ -15,6 +15,8 @@ jobs:
         run: python scripts/check_single_source.py
       - name: No 'verified' claims outside the coastal-SD verified badge
         run: python scripts/check_verified_wording.py
+      - name: Analytics schema / PII guard (node --test)
+        run: node --test tests/analytics.test.mjs
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - name: Unit tests (roundabout rule, validators, SW cache name, single source)
@@ -47,6 +49,8 @@ jobs:
         run: python scripts/test_sw.py
       - name: test_ui
         run: python scripts/test_ui.py
+      - name: test_analytics (events, attribution, arrival, CarPlay hooks, GPC/DNT opt-out; local sink, nothing sent)
+        run: python scripts/test_analytics.py
       - name: test_delmar_warning (Del Mar posted-limit warning shows until Nov 19 2026, then hides)
         run: python scripts/test_delmar_warning.py
       - name: "test_safety_caution (SD stretches where signs or OSM show a higher limit; dashed orange, popup, route steps)"
@@ -59,6 +63,8 @@ jobs:
         run: python scripts/test_chip_overflow.py
       - name: "test_vehicle (golf cart / LSV toggle, CA golf carts <=25)"
         run: python scripts/test_vehicle.py
+      - name: "test_appstore (iOS build - no paywall, tip or beta labels; native share and haptics wired; launches with third-party hosts blocked)"
+        run: python scripts/test_appstore.py
       - uses: actions/upload-artifact@v4
         if: failure()
         with: {name: ci-shots, path: ci-shots, if-no-files-found: ignore}
