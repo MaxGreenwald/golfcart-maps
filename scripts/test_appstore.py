@@ -1,6 +1,7 @@
 """App Store review guards for the iOS build, run against the built dist/ with a simulated Capacitor iOS bridge.
 - 3.1.1: no Stripe paywall, restore or Venmo tip link inside the iOS app.
 - 2.2: no visible "beta" labels inside the iOS app.
+- Risky mode (short illegal stretches) is hidden in the iOS app: no chip, no "What's Risky?", no risky legend/disclaimer, setRisky(true) and CarPlay allowRisky are ignored.
 - 4.2: native share sheet and haptics are wired (calls reach the Share/Haptics plugins).
 - Offline launch: the app needs nothing from third-party hosts to start (Leaflet is bundled, not loaded from unpkg).
 - The website (no Capacitor) is unchanged: Venmo link, chargers chip and beta badge still show there.
@@ -37,11 +38,18 @@ with sync_playwright() as p:
     check('iOS: no "(beta)" in area picker', not any('beta' in t.lower() for t in opts))
     pg.evaluate("window.PAY&&PAY.sheet()")
     check('iOS: paywall sheet never opens', pg.locator('#paySheet').count() == 0)
+    check('iOS: Risky chip hidden', not vis(pg, '#cRisk'))
+    pg.evaluate("setRisky(true)")
+    check('iOS: setRisky(true) ignored', pg.evaluate('!document.getElementById("cRisk").classList.contains("on")'))
     r = pg.evaluate(f'testRoute({A},{B})')
     check('iOS: route found', r and r.get('mi', 0) > 0, str(r))
     pg.evaluate("setMenu(true)"); pg.wait_for_timeout(300)
     txt = pg.inner_text('body')
     check('iOS: no visible "beta" text', not re.search(r'\bbeta\b', txt, re.I), str(re.findall(r'.{30}\bbeta\b.{30}', txt, re.I)[:2]))
+    check('iOS: no visible Risky mode text', not re.search(r'risky', txt, re.I), str(re.findall(r'.{30}risky.{30}', txt, re.I)[:2]))
+    check('iOS: What\'s Risky link hidden', not vis(pg, '#whatRisky'))
+    cp = pg.evaluate(f"GCMCarPlay.plan({{lat:{A[0]},lon:{A[1]}}},{{lat:{B[0]},lon:{B[1]}}},'lsv',true)")
+    check('iOS: CarPlay allowRisky ignored (legal-only plan)', cp and cp.get('ok') and not cp.get('risky'), str({k: cp.get(k) for k in ('ok','risky')} if cp else cp))
     check('iOS: no visible Venmo/Stripe/$ price', not re.search(r'venmo|stripe|\$\d', txt, re.I))
     check('iOS: haptic fired on route', any(k.startswith('Haptics.') for k, _ in pg.evaluate('__calls')))
     check('iOS: Share button visible after route', vis(pg, '#share'))
@@ -57,6 +65,7 @@ with sync_playwright() as p:
     pg.evaluate("setMenu(true)"); pg.wait_for_timeout(300)
     check('web: chargers chip still shown', vis(pg, '#cChg'))
     check('web: beta badge still shown', vis(pg, '#cityBeta'))
+    check('web: Risky chip still shown', vis(pg, '#cRisk'))
     check('web: native helpers report web', pg.evaluate('window.GCM_IOS===false&&window.GCM_NATIVE===false'))
     c.close(); b.close()
 print('RESULT', 'ALL PASS' if ok else 'FAIL'); sys.exit(0 if ok else 1)
