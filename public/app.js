@@ -1,4 +1,9 @@
 try{localStorage.removeItem('gcm-mode')}catch(_){}
+// ---- usage analytics (public/track.js): town level only, never coordinates or free text ----
+const track=(e,p,o)=>{try{window.GCMTrack&&window.GCMTrack.track(e,p,o)}catch(_){}};
+let _rtKey=null,_rtAt=0,_doneKey=null,_wasFar=null; // route_completed = live location reaches the destination after being 150+ m away
+function trackRoute(ok,mi,reason){const k=(to&&to.ll?to.ll.lat.toFixed(4)+','+to.ll.lng.toFixed(4):'')+'|'+risky;const now=Date.now();if(k===_rtKey&&now-_rtAt<600000)return;_rtKey=k;_rtAt=now;
+ track('route_searched',ok?{ok:true,risky:!!risky,mi:mi!=null&&isFinite(mi)?Math.round(mi*2)/2:undefined}:{ok:false,risky:!!risky,reason:reason||'no_legal_route'},window._trackOpts)}
 const map=L.map('map',{preferCanvas:true,zoomControl:false,attributionControl:true}).setView([32.8565,-117.2555],15);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
 const renderer=L.canvas({tolerance:8});
@@ -89,8 +94,8 @@ window.popSet=f=>{if(inMX(window._pll))return;map.closePopup();setField(f,{ll:wi
 const ft=m=>Math.round(m*3.281)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
 let routing=false;async function route(){$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
  await new Promise(r=>setTimeout(r,0));let parts=null;if(a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
- if(!parts){$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
- const r=summarize(parts);routeG=L.layerGroup().addTo(map);
+ if(!parts){trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
+ const r=summarize(parts);trackRoute(true,r.dist/1609.34);routeG=L.layerGroup().addTo(map);
  const all=[];r.legs.forEach(l=>all.push(...l.p));
  L.polyline(all.map(p=>[p[1],p[0]]),{color:'#fff',weight:10,opacity:.9,renderer,interactive:false}).addTo(routeG);
  L.polyline(all.map(p=>[p[1],p[0]]),{color:'#1d6fe0',weight:6,renderer,interactive:false}).addTo(routeG);
@@ -169,7 +174,8 @@ function locate(){if(!navigator.geolocation){$('sub').textContent='Location not 
  const ok=p=>{myLL=L.latLng(p.coords.latitude,p.coords.longitude);const acc=p.coords.accuracy;
   if(!me){meAcc=L.circle(myLL,{radius:acc,color:'#1d6fe0',weight:1,fillColor:'#1d6fe0',fillOpacity:.12,interactive:false,renderer}).addTo(map);me=meMarker(myLL)}
   else{me.setLatLng(myLL);meAcc.setLatLng(myLL).setRadius(acc)}
-  if(first){first=false;const rg=regionAt(myLL.lat,myLL.lng);if(rg&&REG&&rg.id!==REG.id){setURL(rg.id,false);loadRegion(rg.id,true)}map.setView(myLL,16);$('showloc').style.display='none';if(to&&to.me){sync();if(start&&end)route()}else setField('from',{me:true})}else if((from&&from.me)||(to&&to.me)){sync()}};
+  try{if(routeG&&end&&_rtKey&&myLL.distanceTo(end)>150)_wasFar=_rtKey;if(routeG&&end&&_rtKey&&_wasFar===_rtKey&&_doneKey!==_rtKey&&myLL.distanceTo(end)<40){_doneKey=_rtKey;track('route_completed',window.lastRoute&&window.lastRoute.mi!=null?{mi:Math.round(window.lastRoute.mi*2)/2}:{})}}catch(_){}
+  if(first){first=false;const rg=regionAt(myLL.lat,myLL.lng);if(rg&&REG&&rg.id!==REG.id){setURL(rg.id,false);window._regHow='auto';loadRegion(rg.id,true)}map.setView(myLL,16);$('showloc').style.display='none';if(to&&to.me){sync();if(start&&end)route()}else setField('from',{me:true})}else if((from&&from.me)||(to&&to.me)){sync()}};
  const err=e=>{$('showloc').textContent='📍 Show my location';$('sub').textContent=e.code===1?'Location is blocked. Turn it on in Settings › Safari › Location.':'Couldn’t find you: '+e.message};
  if(watching){navigator.geolocation.getCurrentPosition(p=>{first=true;ok(p)},err,{enableHighAccuracy:true});return}
  watching=true;navigator.geolocation.watchPosition(ok,err,{enableHighAccuracy:true,maximumAge:5000})}
@@ -221,7 +227,7 @@ async function loadRegion(id,keepView){const r=REGIONS.find(x=>x.id===id)||REGIO
  if(!keepView)map.setView(r.center,r.zoom);
  fetch(BASE+'pois.json').then(x=>x.ok?x.json():[]).then(j=>{if(REG===r)POIS=j}).catch(()=>{});
  const j=await (await fetch(BASE+'index.json')).json();if(REG!==r)return;$('lgCart').style.display=j.meta.stats&&j.meta.stats.cartpath?'':'none';D={...j,segs:[],tileSet:new Set(j.meta.tiles)};readyRes();
- CHG=null;if(chgOn)showChg(true);$('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;draw();if(!keepView)clearR();else sync();await onMove();window.ready=true}
+ CHG=null;if(chgOn)showChg(true);$('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;draw();if(!keepView)clearR();else sync();await onMove();window.ready=true;track('town_viewed',{how:window._regHow||'default'},window._trackOpts);window._regHow=null}
 window.loadRegion=loadRegion;
 // ---- Report a bad road: small form -> mailto (static site, no backend) ----
 const APPV='mr-2026.10.13',RPT_TO='maxgreenwald.assistant@gmail.com';
@@ -238,7 +244,7 @@ function buildReport(seg,issue,speed,notes){const ll=seg.ll,z=map.getZoom(),lat=
  return {subject,body:decodeURIComponent(url.split('&body=')[1]),url}}
 window.buildReport=buildReport;
 $('rpCancel').onclick=()=>{$('rpt').style.display='none'};
-$('rpSend').onclick=()=>{const r=buildReport(window._rseg,$('rpIssue').value,$('rpSpeed').value,$('rpNotes').value);window.lastReport=r;$('rpt').style.display='none';if(!window.NO_MAILTO)location.href=r.url};
+$('rpSend').onclick=()=>{track('road_report_filed',{issue:$('rpIssue').value});const r=buildReport(window._rseg,$('rpIssue').value,$('rpSpeed').value,$('rpNotes').value);window.lastReport=r;$('rpt').style.display='none';if(!window.NO_MAILTO)location.href=r.url};
 $('rpGen').onclick=e=>{e.preventDefault();reportRoad({road:'(general problem)',ll:map.getCenter()})};
 
 // Tappable markers: 44px hit area, cursor/touch-action set, and an explicit pointerup handler that opens the popup
@@ -265,14 +271,15 @@ function nearestChg(ll){if(!CHG||!ll)return null;let b=null,bd=1e18;for(const c 
 const SLUG={'sd':'sandiego','villages':'villages','ptc':'peachtreecity','hhi':'hiltonhead','myrtle':'myrtlebeach','chs':'charleston','30a':'30a','gulfshores':'gulfshores','portaransas':'portaransas','suncity':'suncity','coachella':'coachella','naples':'naples','goldenisles':'stsimons','tybee':'tybee','galveston':'galveston','ocoast':'occoast','annamaria':'annamaria','putinbay':'putinbay','southpadre':'southpadre','siesta':'siestakey','destin':'destin','pcb':'panamacitybeach','staug':'staugustine','amelia':'ameliaisland','keywest':'keywest','suncitycenter':'suncitycenter','lwr':'lakewoodranch','bhi':'southport','obx':'outerbanks','avalon':'catalina','rockport':'rockport','wailea':'wailea','kaanapali':'kaanapali','poipu':'poipu','waikoloa':'waikoloa','kailua':'kailua','oob':'oldorchardbeach'};const slugOf=id=>SLUG[id]||id;
 function idFromPath(){const s=location.pathname.replace(/^\/+|\/+$/g,'').toLowerCase();if(!s)return '';for(const k in SLUG)if(SLUG[k]===s)return k;return null}
 function setURL(id,push){const p='/'+slugOf(id);if(location.pathname===p)return;const u=p+location.search.replace(/([?&])r=[^&]*&?/,'$1').replace(/[?&]$/,'')+location.hash;try{history[push?'pushState':'replaceState']({r:id},'',u)}catch(_){}}
-window.addEventListener('popstate',()=>{const id=idFromPath();loadRegion(id||'sd')});
-$('city').onchange=e=>{setURL(e.target.value,true);loadRegion(e.target.value)};
+window.addEventListener('popstate',()=>{const id=idFromPath();window._regHow='link';loadRegion(id||'sd')});
+$('city').onchange=e=>{setURL(e.target.value,true);window._regHow='picker';loadRegion(e.target.value)};
 (async()=>{const q=new URLSearchParams(location.search).get('r');[REGIONS,RULES]=await Promise.all([fetch('data/regions.json').then(r=>r.json()),fetch('data/rules.json').then(r=>r.json())]);
  $('city').innerHTML=REGIONS.filter(r=>!r.hidden||r.id===q).map(r=>`<option value="${r.id}">${r.short}${r.beta&&!window.GCM_IOS?' (beta)':''}</option>`).join('');
  let saved=null;try{saved=localStorage.getItem('gcm-region')}catch(_){}
  const pid=idFromPath();let id=(pid&&REGIONS.some(r=>r.id===pid))?pid:(pid===null)?'sd':(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;
  if(!id&&navigator.permissions&&navigator.geolocation){try{const p=await navigator.permissions.query({name:'geolocation'});if(p.state==='granted'){const pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:4000,maximumAge:600000}));const r=regionAt(pos.coords.latitude,pos.coords.longitude);if(r)id=r.id}}catch(_){}}
- await loadRegion(id||'sd');if(!REG.hidden)setURL(REG.id,false);const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');if(la&&lo)map.setView([la,lo],+P.get('z')||17)})();
+ const how0=(pid&&id===pid)||(q&&id===q)?'link':(saved&&id===saved)?'restore':id?'auto':'default';
+ if(!window._regHow)window._regHow=how0;await loadRegion(id||'sd');if(!REG.hidden)setURL(REG.id,false);const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');if(la&&lo)map.setView([la,lo],+P.get('z')||17)})();
 
 // ---- bottom sheet: pointer-driven, translateY snapping ----
 const sheet=$('sheet'),shead=$('shead');let snap='full';
