@@ -1,5 +1,397 @@
 [
  {
+  "road": "Tamarack Avenue",
+  "way": 436430704,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1516065,
+   -117.3376206
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430705,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1484977,
+   -117.343733
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430706,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1521025,
+   -117.336535
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430708,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1478102,
+   -117.3449076
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430709,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1477248,
+   -117.3450337
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430711,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1512295,
+   -117.3386545
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430712,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1518471,
+   -117.3370741
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430713,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.148373,
+   -117.343948
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430715,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1519948,
+   -117.336763
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430717,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1516785,
+   -117.3374479
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430718,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1485715,
+   -117.3436056
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430719,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1482328,
+   -117.3441852
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430722,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1512272,
+   -117.3383855
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430723,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1481591,
+   -117.3443097
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430724,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1507574,
+   -117.339441
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430726,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1507574,
+   -117.339441
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430727,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.15146,
+   -117.3381626
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430728,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1511388,
+   -117.3388338
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436430729,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1495686,
+   -117.3418627
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 436591952,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1514546,
+   -117.3380024
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 501235506,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1503471,
+   -117.340345
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 681960000,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1495686,
+   -117.3418627
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 681960007,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1495701,
+   -117.3417981
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 681960014,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1498917,
+   -117.3412943
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 1075318807,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1510362,
+   -117.3387684
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 1432072682,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1494224,
+   -117.3420835
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Tamarack Avenue",
+  "way": 1432072683,
+  "osm_mph": 99,
+  "source_mph": 30,
+  "source": "Tamarack Ave (Carlsbad Blvd - I-5 (MC 10.44.300 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1495538,
+   -117.3418844
+  ],
+  "final_mph": 35,
+  "final_source": "Mapillary corridor: 4 spots on Tamarack Avenue with posted <= 35 signs ([(30, 3), (35, 1)])"
+ },
+ {
+  "road": "Grand Avenue",
+  "way": 6004950,
+  "osm_mph": 99,
+  "source_mph": 25,
+  "source": "Grand Ave (Ocean St - I-5 (MC 10.44.440))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1618757,
+   -117.3475458
+  ],
+  "final_mph": 25,
+  "final_source": "Mapillary: 1 posted 25 mph sign(s) detected"
+ },
+ {
   "road": "Carlsbad Village Drive",
   "way": 436473399,
   "osm_mph": 40,
@@ -9,7 +401,373 @@
   "at": [
    33.166061,
    -117.337929
-  ]
+  ],
+  "final_mph": 40,
+  "final_source": "tagged"
+ },
+ {
+  "road": "Jefferson Street",
+  "way": 6002615,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Jefferson St (Grand Ave - north city limit (MC 10.44.050))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1652199,
+   -117.3483913
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Jefferson Street",
+  "way": 6002624,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Jefferson St (Grand Ave - north city limit (MC 10.44.050))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1652199,
+   -117.3483913
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Jefferson Street",
+  "way": 225875520,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Jefferson St (Grand Ave - north city limit (MC 10.44.050))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.170677,
+   -117.348412
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Jefferson Street",
+  "way": 594047188,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Jefferson St (Grand Ave - north city limit (MC 10.44.050))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1648685,
+   -117.3483808
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Jefferson Street",
+  "way": 1238465650,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Jefferson St (Grand Ave - north city limit (MC 10.44.050))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1710123,
+   -117.3485332
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Jefferson Street",
+  "way": 26599459,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Jefferson St (Grand Ave - north city limit (MC 10.44.050))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1730228,
+   -117.347759
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Jefferson Street",
+  "way": 26599462,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Jefferson St (Grand Ave - north city limit (MC 10.44.050))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1722097,
+   -117.3486075
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Poinsettia Lane",
+  "way": 435651740,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Poinsettia Ln (Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1034147,
+   -117.3101897
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Poinsettia Lane",
+  "way": 435654186,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Poinsettia Ln (Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1030761,
+   -117.3117723
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Poinsettia Lane",
+  "way": 435654189,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Poinsettia Ln (Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1017756,
+   -117.3180696
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Poinsettia Lane",
+  "way": 436457747,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Poinsettia Ln (Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1032761,
+   -117.3108581
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Poinsettia Lane",
+  "way": 467662741,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Poinsettia Ln (Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1021886,
+   -117.3163556
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Poinsettia Lane",
+  "way": 467662742,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Poinsettia Ln (Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1022998,
+   -117.3158039
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Poinsettia Lane",
+  "way": 467667316,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Poinsettia Ln (Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1025112,
+   -117.3146666
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Poinsettia Lane",
+  "way": 467667318,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Poinsettia Ln (Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1029576,
+   -117.312399
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Poinsettia Lane",
+  "way": 467667319,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Poinsettia Ln (Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.102744,
+   -117.3135279
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Poinsettia Lane",
+  "way": 467667320,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Poinsettia Ln (Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1035168,
+   -117.3096684
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Poinsettia Lane",
+  "way": 467667321,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Poinsettia Ln (Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1036587,
+   -117.3089432
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Poinsettia Lane",
+  "way": 1140667825,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Poinsettia Ln (Carlsbad Blvd - Paseo del Norte (MC 10.44.360 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1017427,
+   -117.3182341
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 26587781,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.132538,
+   -117.335487
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436425147,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1332652,
+   -117.333329
+  ],
+  "final_mph": 35,
+  "final_source": "Short piece of Cannon Road with no limit of its own; uses the adjoining 35 mph posting"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436425148,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.133709,
+   -117.3316093
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436425160,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1340573,
+   -117.3310047
+  ],
+  "final_mph": 35,
+  "final_source": "Short piece of Cannon Road with no limit of its own; uses the adjoining 35 mph posting"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436431220,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.132862,
+   -117.334579
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436431221,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1327373,
+   -117.3349285
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436431222,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1330233,
+   -117.3341097
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
  },
  {
   "road": "Cannon Road",
@@ -21,7 +779,135 @@
   "at": [
    33.1348513,
    -117.328465
-  ]
+  ],
+  "final_mph": 50,
+  "final_source": "tagged"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436575419,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1345685,
+   -117.329631
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436575423,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1341985,
+   -117.3306341
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436575425,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1351195,
+   -117.3280914
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436575431,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1349928,
+   -117.3284815
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436575434,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1341877,
+   -117.3302602
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436575440,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.134316,
+   -117.3303151
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436575451,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1336524,
+   -117.332014
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 436575454,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.135507,
+   -117.3269467
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 864933740,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1339434,
+   -117.330935
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
  },
  {
   "road": "Cannon Road",
@@ -33,7 +919,79 @@
   "at": [
    33.1353552,
    -117.3270085
-  ]
+  ],
+  "final_mph": 50,
+  "final_source": "tagged"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 1018528779,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1354654,
+   -117.3270728
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 1053611675,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1345981,
+   -117.32915
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 1062136659,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.134057,
+   -117.330613
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 1062136660,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1345175,
+   -117.3293679
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
+ },
+ {
+  "road": "Cannon Road",
+  "way": 1342383136,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Cannon Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.380 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1336737,
+   -117.3317783
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
  },
  {
   "road": "Palomar Airport Road",
@@ -45,7 +1003,9 @@
   "at": [
    33.1222055,
    -117.3226172
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -57,7 +1017,9 @@
   "at": [
    33.1220621,
    -117.3224715
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -69,7 +1031,9 @@
   "at": [
    33.1223166,
    -117.3249574
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -81,7 +1045,23 @@
   "at": [
    33.1220888,
    -117.3237691
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 33748799,
+  "osm_mph": 99,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1222036,
+   -117.3225511
+  ],
+  "final_mph": 99,
+  "final_source": "inferred_high"
  },
  {
   "road": "Palomar Airport Road",
@@ -93,7 +1073,9 @@
   "at": [
    33.1221795,
    -117.3216714
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -105,7 +1087,9 @@
   "at": [
    33.1221387,
    -117.3198729
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -117,7 +1101,9 @@
   "at": [
    33.1220019,
    -117.3200726
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -129,7 +1115,37 @@
   "at": [
    33.1221515,
    -117.320257
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 436424231,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1221195,
+   -117.3191415
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
+ },
+ {
+  "road": "Palomar Airport Road",
+  "way": 436424232,
+  "osm_mph": 45,
+  "source_mph": 35,
+  "source": "Palomar Airport Rd (Carlsbad Blvd - Paseo del Norte (MC 10.44.170 A))",
+  "url": "https://ecode360.com/44006773#10.44-coastal-streets",
+  "at": [
+   33.1220672,
+   -117.3229682
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -141,7 +1157,9 @@
   "at": [
    33.1221759,
    -117.3210132
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -153,7 +1171,9 @@
   "at": [
    33.122044,
    -117.3215716
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -165,7 +1185,9 @@
   "at": [
    33.1220254,
    -117.320673
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -177,7 +1199,9 @@
   "at": [
    33.1224719,
    -117.325659
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -189,7 +1213,9 @@
   "at": [
    33.1219907,
    -117.3197244
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -201,7 +1227,9 @@
   "at": [
    33.1222374,
    -117.3239265
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -213,7 +1241,9 @@
   "at": [
    33.1221408,
    -117.324317
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -225,7 +1255,9 @@
   "at": [
    33.1220386,
    -117.3210104
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -237,7 +1269,9 @@
   "at": [
    33.1220093,
    -117.320262
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  },
  {
   "road": "Palomar Airport Road",
@@ -249,6 +1283,8 @@
   "at": [
    33.122238,
    -117.3246945
-  ]
+  ],
+  "final_mph": 45,
+  "final_source": "tagged"
  }
 ]

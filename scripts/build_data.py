@@ -113,12 +113,17 @@ for wi in list(ov):
     url = ov[wi][2]
     if url in overrides.CORROBORATE_FLIP:
         s_osm, how = classify(wl[wi]["tags"])
-        if how == "tagged" and s_osm > 35 and ov[wi][0] <= 35 and not (wi in mly and mly[wi][0] <= 35):
-            FLIPHOLD.append({"road": wl[wi]["tags"].get("name", ""), "way": wl[wi]["id"], "osm_mph": s_osm, "source_mph": ov[wi][0], "source": ov[wi][3], "url": url,
+        # Hold every ordinance-only flip from blocked to legal: OSM-tagged 40+ AND untagged major roads
+        # (inferred_high 99). Max, Oct 18: the 64 Carlsbad ordinance-only segments stay blocked until a
+        # second source agrees (2+ Mapillary posted <=35 signs, or another official list via the sweep).
+        if s_osm > 35 and ov[wi][0] <= 35 and not (wi in mly and mly[wi][0] <= 35 and mly[wi][2] >= 2):
+            FLIPHOLD.append({"wi": wi, "road": wl[wi]["tags"].get("name", ""), "way": wl[wi]["id"], "osm_mph": s_osm, "source_mph": ov[wi][0], "source": ov[wi][3], "url": url,
                              "at": [wl[wi]["geometry"][0]["lat"], wl[wi]["geometry"][0]["lon"]]})
             del ov[wi]
+            # fall back to the next source in line (accuracy sweep: other official lists / Mapillary corridor), as on master
+            e = overrides.SWEEP.get(overrides.way_key(wl[wi]["tags"], wl[wi]["nodes"]))
+            if e: ov[wi] = (e["mph"], e["mph"] < 40, e["url"], e["label"])
 print("held (needs a 2nd source to become legal)", len(FLIPHOLD))
-json.dump(FLIPHOLD, open(os.path.join(os.path.dirname(__file__), "..", "research", "sd_flip_hold.json"), "w"), indent=1)
 _spd = []
 for wi, w in enumerate(wl):
     s0, src0 = classify(w["tags"])
@@ -192,6 +197,12 @@ for wi, w in enumerate(wl):
 # Roundabouts with no limit of their own take the highest posted limit of their connecting roads (see build_data_lib).
 from build_data_lib import roundabout_inherit
 RBX = roundabout_inherit(wl, WS, lambda w: True)
+# Carlsbad hold guard: a held way may end up legal only through a different source (sweep / 2+ Mapillary signs / stub
+# inheritance from such a neighbour), never on the held ordinance alone. Record the final result for tests/test_carlsbad_hold.py.
+for h in FLIPHOLD:
+    wi = h.pop("wi"); fm, fs = WS[wi]; h["final_mph"] = fm; h["final_source"] = sources[out[WOUT[wi][0]][8]][1] if WOUT[wi] and len(out[WOUT[wi][0]]) > 8 else fs
+    assert not (fm <= 35 and h["final_source"] == h["source"]), ("held Carlsbad way is legal on the ordinance alone", h)
+json.dump(FLIPHOLD, open(os.path.join(os.path.dirname(__file__), "..", "research", "sd_flip_hold.json"), "w"), indent=1)
 for wi, (nmph, rcode) in RBX["set"].items():
     for i in WOUT[wi]: out[i][2] = nmph; out[i][3] = rcode
 stats["roundabout_inherited"] = len(RBX["set"])
