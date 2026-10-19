@@ -1,4 +1,4 @@
-// Golf Cart Map usage analytics (web, iPhone app, CarPlay). Privacy rules, enforced again server-side
+// Golf Cart Maps usage analytics (web, iPhone app, CarPlay). Privacy rules, enforced again server-side
 // in lib/analytics.js: no cookies; no names, emails, notes, IPs or coordinates; town level only.
 // One random install id + a 30-minute session id live in localStorage. Honors Global Privacy
 // Control and Do Not Track, and the "gcm-notrack" localStorage flag. Failures never touch the app.

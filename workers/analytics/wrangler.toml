@@ -1,4 +1,4 @@
-# Anonymous usage analytics for Golf Cart Map (see lib/analytics.js for the event allowlist).
+# Anonymous usage analytics for Golf Cart Maps (see lib/analytics.js for the event allowlist).
 #   preview:    wrangler deploy --env preview   -> gcm-analytics-preview (used by *.golfcart-maps.pages.dev)
 #   production: wrangler deploy                 -> gcm-analytics (used by golfcartmap.com; only with Max's OK)
 # STATS_KEY is a secret: wrangler secret put STATS_KEY [--env preview]
