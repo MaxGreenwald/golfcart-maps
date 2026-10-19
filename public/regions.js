@@ -1,6 +1,6 @@
 // regions.js: the city picker list. Sorted A-Z by display name at render time, so new regions in
 // data/regions.json always land in order (regions.json itself keeps San Diego first: it's the default
-// and REGIONS[0] fallback). Used by app.js (Settings > City) and the Node test tests/test_city_order.py.
+// and REGIONS[0] fallback). Used by app.js (the city chip in the top row) and the Node test tests/test_city_order.py.
 (function(root){
 const label=r=>r.short||r.name||r.id;
 const byName=(a,b)=>label(a).localeCompare(label(b),'en',{sensitivity:'base',numeric:true})||String(a.id).localeCompare(String(b.id));

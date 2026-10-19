@@ -13,7 +13,7 @@ ROUTE="(window._lastDetail=null,testRoute([33.1595,-117.3505],[33.1335,-117.3360
 with sync_playwright() as p:
     b=p.chromium.launch();ctx=b.new_context(**p.devices["iPhone 13"]);pg=ctx.new_page();pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000)
     ck("default vehicle is LSV (no change for existing users)",pg.evaluate("MODE")=="lsv")
-    ck("chip row has no vehicle or city chip (both live in Settings)",pg.evaluate("[...document.querySelectorAll('#chips>*')].map(e=>e.id||e.className).join()")=="cNorm,cRisk,useme,reset",pg.evaluate("[...document.querySelectorAll('#chips>*')].map(e=>e.id||e.className).join()"))
+    ck("chip row has no vehicle chip (same as master)",pg.evaluate("[...document.querySelectorAll('#chips>*')].map(e=>e.id||e.className).join()")=="chip city,cNorm,cRisk,useme,reset",pg.evaluate("[...document.querySelectorAll('#chips>*')].map(e=>e.id||e.className).join()"))
     ck("settings toggle off by default",pg.evaluate("$('vehCart').checked")==False and "Off" in pg.inner_text("#vehSub"))
     ck("CarPlay status reads LSV",pg.evaluate("GCMCarPlay.status().then(s=>s.mode)")=="lsv")
     ck("rule note names LSVs",pg.inner_text("#rnote").startswith("California, LSVs: roads posted ≤35 mph"),pg.inner_text("#rnote"))

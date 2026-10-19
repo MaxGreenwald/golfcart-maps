@@ -1,4 +1,4 @@
-"""City picker (Settings > City): A-Z by display name, sorted in code at render time (public/regions.js),
+"""City picker (city chip in the top chip row): A-Z by display name, sorted in code at render time (public/regions.js),
 so a new region added anywhere in data/regions.json lands in order. San Diego stays the default."""
 import json, os, re, subprocess, unittest
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
@@ -50,12 +50,13 @@ class CityOrder(unittest.TestCase):
         self.assertIn("await loadRegion(id||'sd')", app)
         self.assertIn("GCMRegions.pickerList(REGIONS", app)
 
-    def test_picker_lives_in_settings(self):
+    def test_picker_is_top_chip(self):
         html = read(os.path.join(PUB, "index.html"))
-        chips = re.search(r'<div id="chips">(.*?)</div>', html, re.S).group(1)
-        self.assertNotIn('id="city"', chips)
+        chips = re.search(r'<div id="chips">(.*?)<div id="help">', html, re.S).group(1)
+        self.assertRegex(chips, r'^<label class="chip city"[^>]*>.*<select id="city"')   # first chip in the top row
         panel = html[html.index('<div id="setPanel"'):]
-        self.assertIn('<select id="city"', panel[:panel.index('<details id="more"')])
+        self.assertNotIn('id="city"', panel[:panel.index('<details id="more"')])   # not in Settings
+        self.assertNotIn('id="cityNow"', html)
         self.assertLess(html.index('src="regions.js"'), html.index('src="app.js"'))
         self.assertIn("'regions.js'", read(os.path.join(PUB, "sw.js")))
 
