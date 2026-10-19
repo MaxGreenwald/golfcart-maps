@@ -1,4 +1,4 @@
-"""WebKit (Safari engine) layout test for the region chip, with iOS-style <select> padding injected.
+"""WebKit (Safari engine) layout test for the chip row and the Settings > City select, with iOS-style <select> padding injected.
 Why: on iPhone, WebKit adds its own inner padding to native <select> controls, which truncated the region
 name with "..." (build 8, Oct 17). Desktop/Linux engines don't add it, so we simulate it here.
 Asserts for every visible region at 375/390/430 px: no chip text overflows (scrollWidth > clientWidth,
@@ -11,9 +11,9 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 REGS = [r["id"] for r in json.load(open(os.path.join(ROOT, "public/data/regions.json"))) if not r.get("hidden")]
 IOS_SELECT = "select{padding-left:10px!important;padding-right:24px!important}"   # ~ what iOS WebKit adds around menulist text
 UA = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1"
-JS = """()=>{const C=document.querySelector('#chips');const els=[...C.querySelectorAll('*')].filter(e=>e.offsetParent&&e.tagName!=='OPTION');const bad=[];
-for(const e of els){const cs=getComputedStyle(e);if(cs.opacity==='0')continue;
- if(e.tagName==='SELECT'){const cx=document.createElement('canvas').getContext('2d');cx.font=cs.font;const t=e.selectedOptions[0]?e.selectedOptions[0].text:'';
+JS = """()=>{const C=document.querySelector('#chips');const els=[...C.querySelectorAll('*'),document.querySelector('#city')].filter(e=>e.offsetParent&&e.tagName!=='OPTION');const bad=[];
+for(const e of els){const cs=getComputedStyle(e);if(cs.opacity==='0'&&e.id!=='city')continue;
+ if(e.tagName==='SELECT'){const cx=document.createElement('canvas').getContext('2d');cx.font=cs.font;const t=e.id==='city'?[...e.options].map(o=>o.text).sort((a,b)=>cx.measureText(b).width-cx.measureText(a).width)[0]:e.selectedOptions[0]?e.selectedOptions[0].text:'';
   const need=cx.measureText(t).width+parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight);if(need>e.clientWidth+0.5)bad.push('select text "'+t+'" needs '+Math.round(need)+'px, has '+e.clientWidth)}
  else if(e.children.length===0&&e.textContent.trim()&&e.scrollWidth>e.clientWidth+0.5&&cs.display!=='inline')bad.push('"'+e.textContent.trim()+'" scrollWidth '+e.scrollWidth+' > '+e.clientWidth);
  if(cs.textOverflow==='ellipsis'&&e.scrollWidth>e.clientWidth+0.5)bad.push('ellipsis on '+(e.id||e.className))}

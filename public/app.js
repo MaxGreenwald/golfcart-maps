@@ -276,9 +276,10 @@ const SLUG={'sd':'sandiego','villages':'villages','ptc':'peachtreecity','hhi':'h
 function idFromPath(){const s=location.pathname.replace(/^\/+|\/+$/g,'').toLowerCase();if(!s)return '';for(const k in SLUG)if(SLUG[k]===s)return k;return null}
 function setURL(id,push){const p='/'+slugOf(id);if(location.pathname===p)return;const u=p+location.search.replace(/([?&])r=[^&]*&?/,'$1').replace(/[?&]$/,'')+location.hash;try{history[push?'pushState':'replaceState']({r:id},'',u)}catch(_){}}
 window.addEventListener('popstate',()=>{const id=idFromPath();window._regHow='link';loadRegion(id||'sd')});
-$('city').onchange=e=>{setURL(e.target.value,true);window._regHow='picker';loadRegion(e.target.value)};
+$('city').onchange=e=>{setURL(e.target.value,true);window._regHow='picker';loadRegion(e.target.value);try{if(!DESK())setSnap('collapsed')}catch(_){}};  // Settings > City: show the new area's map
+$('cityNow').addEventListener('click',e=>{e.stopPropagation();setMenu(true)});  // header city label -> Settings
 (async()=>{const q=new URLSearchParams(location.search).get('r');[REGIONS,RULES]=await Promise.all([fetch('data/regions.json').then(r=>r.json()),fetch('data/rules.json').then(r=>r.json())]);
- $('city').innerHTML=REGIONS.filter(r=>!r.hidden||r.id===q).map(r=>`<option value="${r.id}">${r.short}${r.beta&&!window.GCM_IOS?' (beta)':''}</option>`).join('');
+ $('city').innerHTML=GCMRegions.pickerList(REGIONS,q,!!window.GCM_IOS).map(o=>`<option value="${o.id}">${o.text}</option>`).join('');  // A-Z (Settings > City)
  let saved=null;try{saved=localStorage.getItem('gcm-region')}catch(_){}
  const pid=idFromPath();let id=(pid&&REGIONS.some(r=>r.id===pid))?pid:(pid===null)?'sd':(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;
  if(!id&&navigator.permissions&&navigator.geolocation){try{const p=await navigator.permissions.query({name:'geolocation'});if(p.state==='granted'){const pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:4000,maximumAge:600000}));const r=regionAt(pos.coords.latitude,pos.coords.longitude);if(r)id=r.id}}catch(_){}}
@@ -304,7 +305,7 @@ function de(y){if(!drag)return;const d=y-drag.y0,v=d/Math.max(1,Date.now()-drag.
  if(!moved){setSnap(ORDER[(ORDER.indexOf(snap)+1)%3]);return}
  const S=snaps();let best=Object.keys(S).reduce((a,b)=>Math.abs(S[a]-curY)<Math.abs(S[b]-curY)?a:b);
  if(best===snap&&Math.abs(v)>0.3){const i=ORDER.indexOf(snap)+(v>0?-1:1);best=ORDER[Math.max(0,Math.min(2,i))]}setSnap(best)}
-const isBtn=e=>e.target.closest&&e.target.closest('#chev');
+const isBtn=e=>e.target.closest&&e.target.closest('#chev,#cityNow');
 if(window.PointerEvent){
  shead.addEventListener('pointerdown',e=>{if(isBtn(e))return;e.preventDefault();try{shead.setPointerCapture(e.pointerId)}catch(_){}ds(e.clientY,e.pointerId)},{passive:false});
  shead.addEventListener('pointermove',e=>{if(drag){e.preventDefault();dm(e.clientY)}},{passive:false});

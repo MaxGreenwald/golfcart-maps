@@ -8,7 +8,8 @@ with sync_playwright() as p:
     b=p.chromium.launch()
     ctx=b.new_context(**p.devices["iPhone 13"]);pg=ctx.new_page();pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000)
     ck("default region sd",pg.evaluate("REG.id")=="sd")
-    ck("picker shows every region in regions.json, in order",pg.evaluate("[...document.querySelectorAll('#city option')].map(o=>o.value).join()")==",".join(r["id"] for r in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","public/data/regions.json")))))
+    _R=[r for r in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","public/data/regions.json"))) if not r.get("hidden")]
+    ck("Settings picker shows every visible region, A-Z",pg.evaluate("[...document.querySelectorAll('#setPanel #city option')].map(o=>o.value).join()")==",".join(r["id"] for r in sorted(_R,key=lambda r:(r.get("short") or r["name"]).casefold())))
     pg.select_option("#city","villages");pg.wait_for_function("window.ready===true&&REG.id==='villages'",timeout=120000);pg.wait_for_timeout(2500)
     ck("picker switched to villages",pg.evaluate("REG.id")=="villages")
     pg.screenshot(path=f"{OUT}/picker-villages-mobile.png")
