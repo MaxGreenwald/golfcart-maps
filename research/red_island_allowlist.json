@@ -1,0 +1,2799 @@
+{
+ "_note": "Same-road red islands (scripts/islands.py) that CI accepts, matched by region + road + within 150 m. status: 'real' = checked by a person (cite = the evidence), 'source-confirmed' = red because an official/DOT list, two agreeing sources or 2+ Mapillary signs say 40+ (cite = that source; still worth a look), 'unreviewed' = no limit of its own or one source, but a side of the road is only ASSUMED <=35, so the builder won't heal it automatically. To clear one: fix the data (override/speed_names) or check it and set status 'real' with a cite. Never add an island here just to make CI pass without looking at it.",
+ "islands": [
+  {
+   "region": "sd",
+   "road": "7th Street",
+   "at": [
+    32.58387,
+    -117.11803
+   ],
+   "m": 77,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "West Plaza Boulevard",
+   "at": [
+    32.67388,
+    -117.10701
+   ],
+   "m": 271,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Ocean Boulevard",
+   "at": [
+    32.6842,
+    -117.18449
+   ],
+   "m": 465,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Osborn Street",
+   "at": [
+    32.68273,
+    -117.10962
+   ],
+   "m": 249,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "West 18th Street",
+   "at": [
+    32.66553,
+    -117.1096
+   ],
+   "m": 303,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Civic Center Drive",
+   "at": [
+    32.66942,
+    -117.11272
+   ],
+   "m": 106,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "1st Street",
+   "at": [
+    32.6988,
+    -117.17241
+   ],
+   "m": 588,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Boston Avenue",
+   "at": [
+    32.69384,
+    -117.13349
+   ],
+   "m": 201,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "1st Street",
+   "at": [
+    32.69973,
+    -117.17463
+   ],
+   "m": 692,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Kettner Boulevard",
+   "at": [
+    32.70811,
+    -117.16962
+   ],
+   "m": 461,
+   "mph": [
+    40
+   ],
+   "sides": [
+    15,
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "North 19th Street",
+   "at": [
+    32.71154,
+    -117.14671
+   ],
+   "m": 299,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Lincoln Avenue",
+   "at": [
+    32.75037,
+    -117.12292
+   ],
+   "m": 81,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "J Street",
+   "at": [
+    32.70942,
+    -117.14714
+   ],
+   "m": 124,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Mission Avenue",
+   "at": [
+    32.76097,
+    -117.13977
+   ],
+   "m": 138,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "K Street",
+   "at": [
+    32.70832,
+    -117.16011
+   ],
+   "m": 88,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Boundary Street",
+   "at": [
+    32.74743,
+    -117.1229
+   ],
+   "m": 121,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Pacific Highway",
+   "at": [
+    32.71251,
+    -117.17114
+   ],
+   "m": 475,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Park Boulevard",
+   "at": [
+    32.71573,
+    -117.15384
+   ],
+   "m": 701,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Upas Street",
+   "at": [
+    32.74111,
+    -117.12985
+   ],
+   "m": 94,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Morena Boulevard",
+   "at": [
+    32.76501,
+    -117.19819
+   ],
+   "m": 572,
+   "mph": [
+    40,
+    99
+   ],
+   "sides": [
+    30,
+    35
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": [
+    "Mapillary: 1 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "Morena Boulevard",
+   "at": [
+    32.76607,
+    -117.19853
+   ],
+   "m": 162,
+   "mph": [
+    99
+   ],
+   "sides": [
+    30,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Camino del Este",
+   "at": [
+    32.7731,
+    -117.1449
+   ],
+   "m": 742,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Wabash Avenue",
+   "at": [
+    32.74899,
+    -117.12074
+   ],
+   "m": 49,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Park Boulevard",
+   "at": [
+    32.74088,
+    -117.14744
+   ],
+   "m": 178,
+   "mph": [
+    40,
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 1 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "Mission Valley Road",
+   "at": [
+    32.77792,
+    -117.15606
+   ],
+   "m": 461,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Fort Stockton Drive",
+   "at": [
+    32.75088,
+    -117.17924
+   ],
+   "m": 123,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Hotel Circle South",
+   "at": [
+    32.7592,
+    -117.18401
+   ],
+   "m": 424,
+   "mph": [
+    65
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 3 posted 65 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "Market Street",
+   "at": [
+    32.71154,
+    -117.14523
+   ],
+   "m": 283,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "6th Avenue",
+   "at": [
+    32.74104,
+    -117.15944
+   ],
+   "m": 25,
+   "mph": [
+    99
+   ],
+   "sides": [
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Lincoln Avenue",
+   "at": [
+    32.75036,
+    -117.1249
+   ],
+   "m": 145,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "East C Street",
+   "at": [
+    32.7168,
+    -117.14942
+   ],
+   "m": 84,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Florida Drive",
+   "at": [
+    32.72671,
+    -117.14276
+   ],
+   "m": 540,
+   "mph": [
+    50
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 3 posted 50 mph sign(s) detected",
+    "Mapillary: 5 posted 50 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "Wightman Street",
+   "at": [
+    32.74791,
+    -117.11836
+   ],
+   "m": 124,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "India Street",
+   "at": [
+    32.74163,
+    -117.17978
+   ],
+   "m": 36,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "North 16th Street",
+   "at": [
+    32.71762,
+    -117.14951
+   ],
+   "m": 107,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Clairemont Drive",
+   "at": [
+    32.79623,
+    -117.19328
+   ],
+   "m": 347,
+   "mph": [
+    99
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Aero Drive",
+   "at": [
+    32.81033,
+    -117.15165
+   ],
+   "m": 527,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 1 posted 40 mph sign(s) detected",
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "Sandrock Road",
+   "at": [
+    32.80412,
+    -117.13997
+   ],
+   "m": 543,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Camino del Sur",
+   "at": [
+    32.9405,
+    -117.152
+   ],
+   "m": 202,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Rancho Santa Fe Farms Road",
+   "at": [
+    32.96864,
+    -117.17853
+   ],
+   "m": 52,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Point Loma Avenue",
+   "at": [
+    32.73597,
+    -117.25431
+   ],
+   "m": 400,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Dana Landing Road",
+   "at": [
+    32.76547,
+    -117.23694
+   ],
+   "m": 736,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 45 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "Nimitz Boulevard",
+   "at": [
+    32.73672,
+    -117.23044
+   ],
+   "m": 87,
+   "mph": [
+    99
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Nimitz Boulevard",
+   "at": [
+    32.73911,
+    -117.23142
+   ],
+   "m": 87,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Scott Street",
+   "at": [
+    32.72136,
+    -117.23046
+   ],
+   "m": 654,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "North Mission Bay Drive",
+   "at": [
+    32.79789,
+    -117.21137
+   ],
+   "m": 20,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Campus Point Drive",
+   "at": [
+    32.88726,
+    -117.22197
+   ],
+   "m": 712,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 1 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "John Jay Hopkins Drive",
+   "at": [
+    32.89613,
+    -117.23969
+   ],
+   "m": 659,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Nobel Drive",
+   "at": [
+    32.86831,
+    -117.22766
+   ],
+   "m": 706,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 1 posted 40 mph sign(s) detected",
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "Nobel Drive",
+   "at": [
+    32.86821,
+    -117.22918
+   ],
+   "m": 392,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 3 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "Nobel Drive",
+   "at": [
+    32.86851,
+    -117.22567
+   ],
+   "m": 306,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Regents Road",
+   "at": [
+    32.87057,
+    -117.21823
+   ],
+   "m": 472,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Nobel Drive",
+   "at": [
+    32.86716,
+    -117.2184
+   ],
+   "m": 536,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Nobel Drive",
+   "at": [
+    32.86759,
+    -117.21893
+   ],
+   "m": 279,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "Villa La Jolla Drive",
+   "at": [
+    32.86714,
+    -117.23337
+   ],
+   "m": 45,
+   "mph": [
+    40
+   ],
+   "sides": [
+    30
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "Clairemont Drive",
+   "at": [
+    32.82668,
+    -117.20607
+   ],
+   "m": 790,
+   "mph": [
+    99
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Scholars Drive South",
+   "at": [
+    32.87607,
+    -117.24321
+   ],
+   "m": 244,
+   "mph": [
+    45
+   ],
+   "sides": [
+    15,
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 45 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "John Jay Hopkins Drive",
+   "at": [
+    32.89128,
+    -117.23902
+   ],
+   "m": 77,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 1 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "John Jay Hopkins Drive",
+   "at": [
+    32.89208,
+    -117.23909
+   ],
+   "m": 97,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "La Jolla Scenic Drive South",
+   "at": [
+    32.83458,
+    -117.24891
+   ],
+   "m": 321,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Roselle Street",
+   "at": [
+    32.90007,
+    -117.22322
+   ],
+   "m": 275,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Carmel Creek Road",
+   "at": [
+    32.93693,
+    -117.22901
+   ],
+   "m": 193,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Carmel Creek Road",
+   "at": [
+    32.93772,
+    -117.22926
+   ],
+   "m": 195,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Del Mar Heights Road",
+   "at": [
+    32.94847,
+    -117.25974
+   ],
+   "m": 517,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 1 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "San Andres Drive",
+   "at": [
+    32.98651,
+    -117.24575
+   ],
+   "m": 270,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "sd",
+   "road": "Paseo Delicias",
+   "at": [
+    33.02101,
+    -117.20186
+   ],
+   "m": 334,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Town Center Place",
+   "at": [
+    33.06791,
+    -117.26493
+   ],
+   "m": 612,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Roosevelt Street",
+   "at": [
+    33.16012,
+    -117.34763
+   ],
+   "m": 294,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Grandview Street",
+   "at": [
+    33.18943,
+    -117.35581
+   ],
+   "m": 440,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Cassidy Street",
+   "at": [
+    33.1804,
+    -117.35351
+   ],
+   "m": 550,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Avocado Road",
+   "at": [
+    33.18342,
+    -117.34113
+   ],
+   "m": 121,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Seagaze Drive",
+   "at": [
+    33.19517,
+    -117.37868
+   ],
+   "m": 545,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "South Pacific Street",
+   "at": [
+    33.17645,
+    -117.36811
+   ],
+   "m": 536,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Surfrider Way",
+   "at": [
+    33.19771,
+    -117.38515
+   ],
+   "m": 647,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Cassidy Street",
+   "at": [
+    33.17376,
+    -117.36469
+   ],
+   "m": 162,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "sd",
+   "road": "Cassidy Street",
+   "at": [
+    33.17419,
+    -117.36403
+   ],
+   "m": 285,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "ptc",
+   "road": "Fischer Road",
+   "at": [
+    33.398,
+    -84.62262
+   ],
+   "m": 223,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "myrtle",
+   "road": "8th Avenue North",
+   "at": [
+    33.69292,
+    -78.88385
+   ],
+   "m": 100,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "myrtle",
+   "road": "3rd Avenue",
+   "at": [
+    33.82938,
+    -79.0566
+   ],
+   "m": 413,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "myrtle",
+   "road": "3rd Avenue",
+   "at": [
+    33.83132,
+    -79.05443
+   ],
+   "m": 7,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "chs",
+   "road": "Battery Island Drive",
+   "at": [
+    32.69216,
+    -79.96315
+   ],
+   "m": 178,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "SCDOT Speed Limits: 10040017100N posted 45 mph"
+   ]
+  },
+  {
+   "region": "suncity",
+   "road": "West Union Hills Drive",
+   "at": [
+    33.65261,
+    -112.27328
+   ],
+   "m": 753,
+   "mph": [
+    40
+   ],
+   "sides": [
+    30
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "suncity",
+   "road": "West Cactus Road",
+   "at": [
+    33.59449,
+    -112.32657
+   ],
+   "m": 221,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "suncity",
+   "road": "West Thompson Ranch Road",
+   "at": [
+    33.61495,
+    -112.31244
+   ],
+   "m": 301,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "suncity",
+   "road": "North Dysart Road",
+   "at": [
+    33.6386,
+    -112.34212
+   ],
+   "m": 62,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "suncity",
+   "road": "West Bell Road",
+   "at": [
+    33.63873,
+    -112.34586
+   ],
+   "m": 283,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 07  BELL                RD posted 45 mph"
+   ]
+  },
+  {
+   "region": "suncity",
+   "road": "West Thompson Ranch Road",
+   "at": [
+    33.61884,
+    -112.31708
+   ],
+   "m": 43,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "suncity",
+   "road": "North El Mirage Road",
+   "at": [
+    33.68338,
+    -112.32603
+   ],
+   "m": 329,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": [
+    "Mapillary: 1 posted 45 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "suncity",
+   "road": "North El Mirage Road",
+   "at": [
+    33.66218,
+    -112.32424
+   ],
+   "m": 657,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "suncity",
+   "road": "West Deer Valley Drive",
+   "at": [
+    33.68207,
+    -112.3512
+   ],
+   "m": 193,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "coachella",
+   "road": "Van Buren Street",
+   "at": [
+    33.67085,
+    -116.19904
+   ],
+   "m": 124,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "coachella",
+   "road": "Oasis Street",
+   "at": [
+    33.71016,
+    -116.22085
+   ],
+   "m": 406,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "naples",
+   "road": "Bayshore Drive",
+   "at": [
+    26.12648,
+    -81.7705
+   ],
+   "m": 534,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FDOT Maximum Speed Limit (TDA): 03530000 posted 45 mph"
+   ]
+  },
+  {
+   "region": "goldenisles",
+   "road": "Yacht Circle",
+   "at": [
+    31.16549,
+    -81.41031
+   ],
+   "m": 423,
+   "mph": [
+    45,
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 11271000025SEINC posted 45 mph"
+   ]
+  },
+  {
+   "region": "galveston",
+   "road": "Virginia Point Drive",
+   "at": [
+    29.30559,
+    -94.90332
+   ],
+   "m": 388,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "TxDOT Speed Limits: IH0045-AG posted 45 mph"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Cristianitos Road",
+   "at": [
+    33.39612,
+    -117.5918
+   ],
+   "m": 13,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "ocoast",
+   "road": "Airoso Street",
+   "at": [
+    33.54723,
+    -117.59664
+   ],
+   "m": 143,
+   "mph": [
+    65
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "ocoast",
+   "road": "Via Canon",
+   "at": [
+    33.464,
+    -117.67038
+   ],
+   "m": 443,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "ocoast",
+   "road": "Via California",
+   "at": [
+    33.46638,
+    -117.66691
+   ],
+   "m": 231,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "ocoast",
+   "road": "East Avenida Palizada",
+   "at": [
+    33.43013,
+    -117.61541
+   ],
+   "m": 231,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "ocoast",
+   "road": "Del Obispo Street",
+   "at": [
+    33.48466,
+    -117.68412
+   ],
+   "m": 164,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 45 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Avenida Vista Hermosa",
+   "at": [
+    33.44194,
+    -117.63218
+   ],
+   "m": 221,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Avenida Vista Hermosa",
+   "at": [
+    33.43977,
+    -117.63078
+   ],
+   "m": 128,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 3 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Avenida Vista Hermosa",
+   "at": [
+    33.43738,
+    -117.62872
+   ],
+   "m": 148,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Camino de Los Mares",
+   "at": [
+    33.47725,
+    -117.62858
+   ],
+   "m": 349,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 45 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Camino del Rio",
+   "at": [
+    33.47486,
+    -117.62252
+   ],
+   "m": 671,
+   "mph": [
+    40
+   ],
+   "sides": [
+    14,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 1 posted 40 mph sign(s) detected",
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Avenida Vista Hermosa",
+   "at": [
+    33.44143,
+    -117.63183
+   ],
+   "m": 87,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Avenida Vista Hermosa",
+   "at": [
+    33.43642,
+    -117.6281
+   ],
+   "m": 173,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Meandering Trail",
+   "at": [
+    33.59201,
+    -117.62275
+   ],
+   "m": 369,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Greenfield Drive",
+   "at": [
+    33.55772,
+    -117.68566
+   ],
+   "m": 775,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "ocoast",
+   "road": "Camino Capistrano",
+   "at": [
+    33.5488,
+    -117.67407
+   ],
+   "m": 220,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "ocoast",
+   "road": "O'Neill Drive",
+   "at": [
+    33.54521,
+    -117.64121
+   ],
+   "m": 503,
+   "mph": [
+    40
+   ],
+   "sides": [
+    15
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "O'Neill Drive",
+   "at": [
+    33.55017,
+    -117.64593
+   ],
+   "m": 591,
+   "mph": [
+    40
+   ],
+   "sides": [
+    15
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 1 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "O'Neill Drive",
+   "at": [
+    33.55056,
+    -117.64598
+   ],
+   "m": 594,
+   "mph": [
+    40
+   ],
+   "sides": [
+    15
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 1 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Meandering Trail",
+   "at": [
+    33.59509,
+    -117.62448
+   ],
+   "m": 59,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Esencia Drive",
+   "at": [
+    33.53549,
+    -117.60318
+   ],
+   "m": 246,
+   "mph": [
+    65
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "ocoast",
+   "road": "Camino Capistrano",
+   "at": [
+    33.54176,
+    -117.67466
+   ],
+   "m": 28,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "ocoast",
+   "road": "Serrano Road",
+   "at": [
+    33.64761,
+    -117.69791
+   ],
+   "m": 617,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 3 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Toledo Way",
+   "at": [
+    33.63305,
+    -117.68614
+   ],
+   "m": 82,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 45 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Toledo Way",
+   "at": [
+    33.63682,
+    -117.69049
+   ],
+   "m": 494,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "ocoast",
+   "road": "Pacific Coast Highway",
+   "at": [
+    33.46563,
+    -117.70874
+   ],
+   "m": 197,
+   "mph": [
+    50
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 1 posted 50 mph sign(s) detected",
+    "Mapillary: 3 posted 50 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Stonehill Drive",
+   "at": [
+    33.47634,
+    -117.69875
+   ],
+   "m": 348,
+   "mph": [
+    40,
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 3 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "La Mirage Circle",
+   "at": [
+    33.55597,
+    -117.73033
+   ],
+   "m": 539,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 45 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Cliff Drive",
+   "at": [
+    33.5438,
+    -117.78799
+   ],
+   "m": 74,
+   "mph": [
+    55,
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): SHS_001._P posted 55 mph"
+   ]
+  },
+  {
+   "region": "ocoast",
+   "road": "Alta Laguna Boulevard",
+   "at": [
+    33.54567,
+    -117.75369
+   ],
+   "m": 72,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "ocoast",
+   "road": "Thalia Street",
+   "at": [
+    33.53617,
+    -117.77795
+   ],
+   "m": 105,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "siesta",
+   "road": "South Osprey Avenue",
+   "at": [
+    27.30233,
+    -82.53365
+   ],
+   "m": 239,
+   "mph": [
+    50
+   ],
+   "sides": [
+    30
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 50 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "siesta",
+   "road": "South Gulf of Mexico Drive",
+   "at": [
+    27.33722,
+    -82.58848
+   ],
+   "m": 205,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 45 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "siesta",
+   "road": "South Shade Avenue",
+   "at": [
+    27.30974,
+    -82.52207
+   ],
+   "m": 788,
+   "mph": [
+    40
+   ],
+   "sides": [
+    15,
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FDOT Maximum Speed Limit (TDA): 17000052 posted 40 mph"
+   ]
+  },
+  {
+   "region": "siesta",
+   "road": "Tuttle Avenue",
+   "at": [
+    27.39049,
+    -82.51377
+   ],
+   "m": 125,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "siesta",
+   "road": "Bayshore Gardens Parkway",
+   "at": [
+    27.42979,
+    -82.57343
+   ],
+   "m": 308,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "siesta",
+   "road": "Whitfield Avenue",
+   "at": [
+    27.41813,
+    -82.53125
+   ],
+   "m": 762,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 3 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "siesta",
+   "road": "53rd Avenue East",
+   "at": [
+    27.44739,
+    -82.53458
+   ],
+   "m": 59,
+   "mph": [
+    40
+   ],
+   "sides": [
+    20,
+    30
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 13160000 posted 40 mph"
+   ]
+  },
+  {
+   "region": "pcb",
+   "road": "Collegiate Drive",
+   "at": [
+    30.18651,
+    -85.73008
+   ],
+   "m": 430,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FDOT Maximum Speed Limit (TDA): 46140000 posted 45 mph"
+   ]
+  },
+  {
+   "region": "pcb",
+   "road": "Nautilus Street",
+   "at": [
+    30.21049,
+    -85.84924
+   ],
+   "m": 157,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "amelia",
+   "road": "Amelia Road",
+   "at": [
+    30.61925,
+    -81.45722
+   ],
+   "m": 45,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FDOT Maximum Speed Limit (TDA): 74530000 posted 45 mph"
+   ]
+  },
+  {
+   "region": "suncitycenter",
+   "road": "30th Street Northeast",
+   "at": [
+    27.73096,
+    -82.39208
+   ],
+   "m": 730,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 5 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "suncitycenter",
+   "road": "24th Street Southeast",
+   "at": [
+    27.69488,
+    -82.40228
+   ],
+   "m": 469,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FDOT Maximum Speed Limit (TDA): 10000038 posted 45 mph"
+   ]
+  },
+  {
+   "region": "suncitycenter",
+   "road": "24th Street Southeast",
+   "at": [
+    27.7116,
+    -82.40222
+   ],
+   "m": 198,
+   "mph": [
+    50
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 10120000 posted 50 mph"
+   ]
+  },
+  {
+   "region": "lwr",
+   "road": "Lorraine Road",
+   "at": [
+    27.38491,
+    -82.39826
+   ],
+   "m": 535,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "lwr",
+   "road": "Lorraine Road",
+   "at": [
+    27.38841,
+    -82.3983
+   ],
+   "m": 524,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "lwr",
+   "road": "Honore Avenue",
+   "at": [
+    27.39202,
+    -82.4631
+   ],
+   "m": 111,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "lwr",
+   "road": "44th Avenue East",
+   "at": [
+    27.46065,
+    -82.40961
+   ],
+   "m": 791,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 3 posted 45 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "rockport",
+   "road": "East 5th Street",
+   "at": [
+    28.00469,
+    -97.06103
+   ],
+   "m": 399,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "TxDOT Speed Limits: SL0070-KG posted 40 mph"
+   ]
+  },
+  {
+   "region": "rockport",
+   "road": "East Market Street",
+   "at": [
+    28.02,
+    -97.05285
+   ],
+   "m": 267,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "wailea",
+   "road": "Piilani Highway",
+   "at": [
+    20.6953,
+    -156.43192
+   ],
+   "m": 87,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 31 posted 45 mph"
+   ]
+  }
+ ]
+}

@@ -116,19 +116,33 @@ if os.path.exists(dotp) and not CFG.get("no_dot"):
         ax, ay, bx, by, px, py = a[0]*kx2, a[1]*ky2, b[0]*kx2, b[1]*ky2, p[0]*kx2, p[1]*ky2
         vx, vy = bx-ax, by-ay; L = vx*vx + vy*vy; u = max(0, min(1, ((px-ax)*vx + (py-ay)*vy) / L)) if L else 0
         return math.hypot(px-ax-u*vx, py-ay-u*vy)
+    def _len_m(g): return sum(math.hypot((g[k+1]["lon"]-g[k]["lon"])*kx2, (g[k+1]["lat"]-g[k]["lat"])*ky2) for k in range(len(g)-1))
+    def dot_aligned(u, v, max_deg=30):
+        ux, uy, vx, vy = u[0] * kx2, u[1] * ky2, v[0] * kx2, v[1] * ky2
+        nu, nv = math.hypot(ux, uy), math.hypot(vx, vy)
+        if not nu or not nv: return True
+        return abs(ux * vx + uy * vy) / (nu * nv) >= math.cos(math.radians(max_deg))   # undirected: either way along the line
     DOTCLS = set("motorway motorway_link trunk trunk_link primary primary_link secondary secondary_link tertiary tertiary_link unclassified".split())
     for wi, w in enumerate(wl):
         if w["tags"]["highway"] not in DOTCLS and not (CFG.get("dot_all_classes") and w["tags"]["highway"] in ROADS): continue
         g = w["geometry"]; smp = g[:: max(1, len(g) // 8)] + [g[-1]]; votes = {}
         for q in smp:
-            p = (q["lon"], q["lat"]); best = (12, None)
+            p = (q["lon"], q["lat"]); best = (12, None, None)
             for dx in (-1, 0, 1):
                 for dy in (-1, 0, 1):
                     for li, k in dg.get((int(p[0]*1000)+dx, int(p[1]*1000)+dy), ()):
                         dd = dseg2(p, dl[li]["coords"][k], dl[li]["coords"][k+1])
-                        if dd < best[0]: best = (dd, li)
+                        if dd < best[0]: best = (dd, li, k)
             if best[1] is not None:
-                o = dl[best[1]]; votes.setdefault(o["mph"], []).append(o)
+                o = dl[best[1]]; votes.setdefault(o["mph"], []).append((o, best[2]))
+        if votes and _len_m(g) < 150:
+            # A short side street that meets a DOT road lies within 12 m of it near the junction and used to take the DOT road's
+            # 45-55 mph (red stubs at junctions; scripts/islands.py found ~70). A short way only takes a DOT speed when it runs
+            # along the DOT line (chord within 45 degrees of the matched DOT segment), not across it.
+            ch = (g[-1]["lon"] - g[0]["lon"], g[-1]["lat"] - g[0]["lat"])
+            votes = {m_: [(o, k) for o, k in v if dot_aligned(ch, (o["coords"][k+1][0] - o["coords"][k][0], o["coords"][k+1][1] - o["coords"][k][1]), 45)] for m_, v in votes.items()}
+            votes = {m_: v for m_, v in votes.items() if v}
+        votes = {m_: [o for o, k in v] for m_, v in votes.items()}
         if votes:
             mph_, vs = max(votes.items(), key=lambda x: (len(x[1]), x[0]))
             if len(vs) >= 0.6 * len(smp): DOT[wi] = vs[0]
@@ -248,6 +262,9 @@ for wi, w in enumerate(wl):
 # ---- Roundabouts: OSM rarely tags maxspeed on the ring itself, so an untagged major-class ring (secondary etc.)
 # fell to 99 "inferred_high" and showed red even when every approach is posted <=35. A ring with no limit of its own
 # takes the HIGHEST known limit among its connecting roads (conservative: a ring touching a 40+ road stays red). ----
+# Same-road islands first (scripts/islands.py), so roundabouts/turn lanes next to a healed piece see its limit; again at the end.
+import islands as _ISL
+_HEAL0 = _ISL.heal(out, names, sources); _ISL.sync_ws(out, WOUT, WS)
 from build_data_lib import roundabout_inherit
 RBX = roundabout_inherit(wl, WS, lambda w: w["tags"]["highway"] in ROADS)
 for wi, (nmph, rcode) in RBX["set"].items():
@@ -271,6 +288,12 @@ if _re:
     for x in _re: print("  ERROR: roundabout still unknown but all approaches <=35:", x["lat"], x["lon"], x.get("name"))
     if os.environ.get("VALIDATE") != "warn": sys.exit("roundabout validation failed (VALIDATE=warn to override)")
 if os.environ.get("RB_DEBUG"): json.dump(RBX["log"], open("/tmp/rb_%s.json" % RID, "w"), indent=0)
+# ---- Same-road red islands (scripts/islands.py): a short piece of a road with no limit of its own, or with one source that
+# disagrees with the same road posted <=35 on both sides, can't turn that road red on its own. Runs last, on the final segments. ----
+import islands as _ISL
+_HEAL = _HEAL0 + _ISL.heal(out, names, sources)
+stats["same_road_gap"] = sum(c["code"] == "n" for c in _HEAL); stats["same_road_disagree"] = sum(c["code"] == "q" for c in _HEAL)
+for c in _HEAL: print("  same-road island healed:", c)
 POLY = CFG.get("poly") or [[W, N], [E, N], [E, S], [W, S]]
 meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": len(wl), "segments": len(out), "stats": stats, "poly": POLY, "region": RID, "unverified": CFG.get("unverified", []), "changes": CHG, "dot_conflicts": CONF, "xnodes": sorted(nids[n] for n in XN if n in nids), "crossings": XING}
 TS = 0.1; tiles = {}

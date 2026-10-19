@@ -11,6 +11,7 @@ t('CA: 30 and 35 mph roads are Avoid for golf carts',()=>{a.equal(R.cls(seg(30),
 t('CA: 30 and 35 mph roads OK for LSVs (CVC 21260)',()=>{a.equal(R.cls(seg(30),lsv),0);a.equal(R.cls(seg(35),lsv),0)});
 t('CA: 40 mph Avoid for both',()=>{a.equal(R.cls(seg(40),cart),3);a.equal(R.cls(seg(40),lsv),3)});
 t('unknown speed (99) Avoid unless lenient',()=>{a.equal(R.cls(seg(99),lsv),3);a.notEqual(R.cls(seg(99),lsv,true),3);a.equal(R.cls(seg(null),cart),3)});
+t("same-road codes 'n'/'q' (scripts/islands.py) count as posted; golf carts still follow the limit",()=>{for(const c of ['n','q']){a.equal(R.cls(seg(35,c,'secondary'),lsv),0);a.equal(R.cls(seg(35,c,'secondary'),cart),3);a.equal(R.cls(seg(25,c),cart),0)}});
 t('cart paths OK for every vehicle in every region',()=>{for(const r of regs)for(const v of R.VEHICLES)a.equal(R.cls(seg(null,'c','path'),R.ruleFor(rules,r,v)),0,r.id+' '+v)});
 t('every CA region: golf cart cap <= 25',()=>{for(const r of regs.filter(r=>r.state==='CA')){const g=R.ruleFor(rules,r,'golf_cart');a.ok(g.max_posted<=25,r.id);a.equal(R.cls(seg(30),g),3,r.id)}});
 t('every state has a golf_cart and an lsv profile with a cite',()=>{for(const st of new Set(regs.map(r=>r.state))){for(const v of R.VEHICLES){a.ok(rules[st][v],st+' '+v);a.ok(rules[st][v].cite,st+' '+v+' cite')}}});
@@ -26,7 +27,7 @@ t('vehicle names and popup reasons',()=>{a.equal(R.vname(cart),'golf carts');a.e
 t('unknown vehicle falls back to golf cart; default is a known vehicle',()=>{a.equal(R.ruleFor(rules,CA,'bogus').veh,'golf_cart');a.ok(R.VEHICLES.includes(R.DEFAULT_VEH))});
 t('LSV rule unchanged from master (<=35 everywhere except region caps)',()=>{for(const r of regs){const l=R.ruleFor(rules,r,'lsv');a.equal(l.max_posted,(r.rule&&r.rule.max_posted)||35,r.id);a.ok(!l.designated_only,r.id)}});
 t('LSV mode classifies every real segment exactly like master app.js did',()=>{
-  const old=(s,RULE,LEN)=>{const desig=s=>s[3]==='c'||s[3]==='d'||(RULE.assume&&RULE.assume.includes(s[1])&&s[2]!=null&&s[2]<=RULE.max_posted);if(s[3]==='c')return 0;if(s[9]===1&&/^(motorway|trunk|primary)/.test(s[1]))return 3;if(s[2]==null||(s[2]>RULE.max_posted&&!(LEN&&s[2]===99)))return 3;if(RULE.designated_only&&!desig(s))return 3;return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'||s[3]==='r'||s[3]==='k'?0:1};
+  const old=(s,RULE,LEN)=>{const desig=s=>s[3]==='c'||s[3]==='d'||(RULE.assume&&RULE.assume.includes(s[1])&&s[2]!=null&&s[2]<=RULE.max_posted);if(s[3]==='c')return 0;if(s[9]===1&&/^(motorway|trunk|primary)/.test(s[1]))return 3;if(s[2]==null||(s[2]>RULE.max_posted&&!(LEN&&s[2]===99)))return 3;if(RULE.designated_only&&!desig(s))return 3;return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'||s[3]==='r'||s[3]==='k'||s[3]==='n'||s[3]==='q'?0:1};  // + same-road codes n/q (Oct 18 2026)
   let k=0;for(const r of regs){const dir=path.join(PUB,'data',r.id,'tiles');if(!fs.existsSync(dir))continue;const st=rules[r.state]||rules.CA,M={...st.lsv,...(r.rule||{})},N=R.ruleFor(rules,r,'lsv');
     for(const f of fs.readdirSync(dir))for(const s of JSON.parse(fs.readFileSync(path.join(dir,f)))){for(const L of [false,true])a.equal(R.cls(s,N,L),old(s,M,L),r.id+' '+JSON.stringify(s.slice(0,4)));k++}}
   a.ok(k>100000,'segments checked '+k)});
