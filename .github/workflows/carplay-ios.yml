@@ -2,7 +2,7 @@ name: carplay-ios
 on:
   workflow_dispatch:
   push:
-    branches: [carplay]
+    branches: [carplay, ios-analytics]
 jobs:
   ios-sim:
     runs-on: macos-15
@@ -29,6 +29,14 @@ jobs:
         continue-on-error: true
         env: {CARPLAY_TAPS: "200,250 97,212"}
         run: bash scripts/ci_carplay_shots.sh
+      # 3) Analytics hooks: if the CarPlay scene connected in the simulator run, its DEBUG log must show the hooks fired.
+      - name: CarPlay analytics hooks fired (session on connect, route_started on Go)
+        run: |
+          L=shots-ci/app-log.txt; touch "$L"
+          if ! grep -q "GCMCarPlay scene connected" "$L"; then echo "::warning::CarPlay scene did not connect in this run; hook check skipped"; exit 0; fi
+          grep -E "GCMTrack (session|route_started|route_completed)" "$L" | tee shots-ci/analytics-hooks.txt
+          grep -q "GCMTrack session ok" "$L" || { echo "::error::no 'GCMTrack session ok' after CarPlay connected"; exit 1; }
+          grep -q "GCMTrack route_started ok" "$L" || echo "::warning::demo trip did not start guidance; route_started not seen"
       - uses: actions/upload-artifact@v4
         if: always()
         with: {name: carplay-shots, path: shots-ci/, if-no-files-found: warn}

@@ -114,6 +114,10 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         loc.requestWhenInUseAuthorization()
         loc.startUpdatingLocation()
         #if DEBUG
+        NSLog("GCMCarPlay scene connected")
+        #endif
+        GCMBridge.shared.track("session")
+        #if DEBUG
         // CI screenshot hook: `simctl launch <dev> <bundle> -GCMCarPlayDemo YES` plans a demo trip, then starts guidance.
         if UserDefaults.standard.bool(forKey: "GCMCarPlayDemo") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
@@ -295,6 +299,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         mapTemplate.hideTripPreviews()
         let s = mapTemplate.startNavigationSession(for: trip)
         session = s
+        GCMBridge.shared.track("route_started", ["mi": p.miles])
         step = p.maneuvers.count > 1 ? 1 : 0
         s.upcomingManeuvers = p.maneuvers.dropFirst(step).prefix(2).map(cpManeuver)
         let end = CPBarButton(title: "End") { [weak self] _ in self?.endTrip(arrived: false) }
@@ -313,6 +318,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         return c
     }
     func endTrip(arrived: Bool) {
+        if arrived, session != nil { GCMBridge.shared.track("route_completed", ["mi": plan?.miles ?? 0]) }
         if arrived { session?.finishTrip() } else { session?.cancelTrip() }
         session = nil; plan = nil
         mapVC.map.removeOverlays(mapVC.map.overlays.filter { $0 is RouteLine })
