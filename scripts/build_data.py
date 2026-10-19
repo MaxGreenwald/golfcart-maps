@@ -96,6 +96,16 @@ ov, rep = overrides.build([(w["tags"], [[q["lon"], q["lat"]] for q in w["geometr
 for r in rep: print("override", *r)
 mly, mst = mapillary_signs.match([(w["tags"], [[q["lon"], q["lat"]] for q in w["geometry"]]) for w in wl])
 print("mapillary", json.dumps(mst))
+# Trails / bike paths mapped as roads are not cart/LSV roads: drop them from the output (see build_data_lib.is_trail).
+# Overrides, Mapillary matching and junction splits above still see them, so no other road's result changes.
+from build_data_lib import is_trail
+_keep = [i for i, w in enumerate(wl) if not is_trail(w["tags"])]
+TRAILS_DROPPED = sorted((w["tags"].get("name", ""), w["id"]) for w in wl if is_trail(w["tags"]))
+_remap = {o: n for n, o in enumerate(_keep)}
+wl = [wl[i] for i in _keep]
+ov = {_remap[i]: v for i, v in ov.items() if i in _remap}
+mly = {_remap[i]: v for i, v in mly.items() if i in _remap}
+print("trails dropped", len(TRAILS_DROPPED), TRAILS_DROPPED)
 conf = []
 sources = []; sidx = {}
 names, out, stats = [], [], {"tagged": 0, "inferred": 0, "unknown": 0, "inferred_high": 0, "verified": 0, "mapillary": 0}

@@ -204,6 +204,20 @@ RULES[_SC + 2] = (r"^Lomas Santa Fe Drive$", SB, r"(Highway 101|Coast Highway)",
 RULES.pop(0, None)
 FIXED["__LSF101E__"] = -117.2712  # east end of the OSM-50 ways at Hwy 101 (next way east is tagged 35)
 
+# ---- Coronado data gaps (Oct 19 2026, Max approved; ships with sd-ground-truth) ----
+# OSM has no maxspeed on these secondary ways, so they showed as Avoid (99). Posted 25 per sign evidence:
+# 1st St (Alameda Blvd - A Ave, ~0.8 mi secondary + short residential ends): Mapillary posted-25 sign photos at 3 points along 1st St (2 near I Ave, 1 at D Ave; ids 1169196367926774, 616959614370248, 557327596618729), the
+#   corridor rule (3+ distinct spots on one named road agreeing on <=35); each OSM piece only matched one sign, below the 2-sign flip rule.
+# Ocean Blvd (Alameda Blvd - Marina Ave, ~0.3 mi): the adjoining Ocean Blvd ways west of Alameda are OSM maxspeed=25 with
+#   source:maxspeed=sign; 4 Mapillary posted-25 signs at the Ocean/Alameda corner; Alameda Blvd 4th St - Ocean Blvd set to 25 by council (UT, 2006).
+_CO1 = len(INTEL)
+INTEL.append({"road": "1st St", "city": "Coronado", "from_to_segment_if_known": "Alameda Blvd - east end past A Ave: posted 25 \u2014 Mapillary sign photos at 3 spots on 1st St",
+              "speed_mph": 25, "lsv_ok": True, "source_url": MLY % ("32.701412", "-117.178925", "1169196367926774"), "confidence": "high"})
+INTEL.append({"road": "Ocean Blvd", "city": "Coronado", "from_to_segment_if_known": "Alameda Blvd - Marina Ave: posted 25 \u2014 adjoining Ocean Blvd posted 25 (OSM, from signs); Mapillary 25 signs at Alameda",
+              "speed_mph": 25, "lsv_ok": True, "source_url": MLY % ("32.684986", "-117.185486", "1896489327421672"), "confidence": "high"})
+RULES[_CO1] = (r"^1st Street$", (32.695, -117.1825, 32.7035, -117.1675), None, None, "lon")
+RULES[_CO1 + 1] = (r"^Ocean Boulevard$", (32.6815, -117.1850, 32.6852, -117.1795), None, None, "lon")
+
 # ---- Accuracy sweep (Oct 13 2026) ----
 # research/accuracy_sweep.json: per-way overrides from official city speed lists (San Diego R-316675, Encinitas Ord. 2026-05
 # Exhibit A, Oceanside Traffic Code Art. XIV, Imperial Beach MC 10.28.020) and the Mapillary corridor rule (3+ distinct
