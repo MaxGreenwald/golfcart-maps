@@ -32,4 +32,4 @@ Any public road with a posted speed limit of 35 mph or less, unless a city or th
 Under CVC 385.5, a low-speed vehicle is a motor vehicle with four wheels that can go faster than 20 mph but no faster than 25 mph, weighs less than 3,000 pounds gross, and meets federal LSV safety standards (FMVSS 500). LSVs must be registered, insured and driven by a licensed driver.
 
 ### Where does Golf Cart Map get speed limits?
-OpenStreetMap speed tags, posted speed-limit signs detected in Mapillary street imagery, and verified city sources such as council speed surveys. Small residential streets without a posted limit are assumed to be 25 mph. Posted signs always take precedence over the map.
+OpenStreetMap speed tags, posted speed-limit signs detected in Mapillary street imagery, and official city sources such as council speed surveys. Small residential streets without a posted limit are assumed to be 25 mph. Posted signs always take precedence over the map.

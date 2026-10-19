@@ -13,12 +13,16 @@ jobs:
         with: {fetch-depth: 0}   # tests/test_web_build.py replays a real missed cache bump from history
       - name: public/ is the only copy of the web app (no committed ios/android/dist bundles)
         run: python scripts/check_single_source.py
+      - name: No 'verified' claims outside the coastal-SD verified badge
+        run: python scripts/check_verified_wording.py
       - name: Analytics schema / PII guard (node --test)
         run: node --test tests/analytics.test.mjs
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - name: Unit tests (roundabout rule, validators, SW cache name, single source)
         run: python -m unittest discover -s tests -v
+      - name: "Road rule unit tests (golf cart vs LSV; CA golf carts <=25, CVC 21716)"
+        run: node scripts/test_roadrule.js && node scripts/test_range.js
       - name: Validate built region data (red islands / ring codes vs research/validation_baseline.json)
         run: python scripts/validate_data.py
   browser:
@@ -49,12 +53,16 @@ jobs:
         run: python scripts/test_analytics.py
       - name: test_delmar_warning (Del Mar posted-limit warning shows until Nov 19 2026, then hides)
         run: python scripts/test_delmar_warning.py
+      - name: "test_safety_caution (SD stretches where signs or OSM show a higher limit; dashed orange, popup, route steps)"
+        run: python scripts/test_safety_caution.py
       - name: test_chips
         run: python scripts/test_chips.py
       - name: test_layout
         run: python scripts/test_layout.py
       - name: test_chip_overflow (WebKit + iOS-style select padding, every region at 375/390/430)
         run: python scripts/test_chip_overflow.py
+      - name: "test_vehicle (golf cart / LSV toggle, CA golf carts <=25)"
+        run: python scripts/test_vehicle.py
       - uses: actions/upload-artifact@v4
         if: failure()
         with: {name: ci-shots, path: ci-shots, if-no-files-found: ignore}

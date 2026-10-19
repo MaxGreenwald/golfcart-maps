@@ -1,1 +1,160 @@
-{"_note":"Per-state rule profiles. lsv/golf_cart: max_posted = highest posted mph allowed; designated_only = only cart paths + designated roads; assume_designated = OSM highway classes treated as designated where the region says so (UNVERIFIED unless sourced); radius_mi = max distance from home/registration; daylight_only; cross = may cross faster roads at intersections.","CA":{"name":"California","lsv":{"max_posted":35,"cross":true,"cite":"CVC 21260"},"golf_cart":{"max_posted":25,"cross":true,"cite":"CVC 21115/21716 (local ordinances may add routes)"}},"FL":{"name":"Florida","lsv":{"max_posted":35,"cross":true,"cite":"F.S. 316.2122"},"golf_cart":{"max_posted":30,"designated_only":true,"cross":true,"daylight_only":true,"cite":"F.S. 316.212 (designated roads; daylight unless lights per 316.212(6))"}},"GA":{"name":"Georgia","lsv":{"max_posted":35,"cross":true,"cite":"O.C.G.A. 40-6-362"},"golf_cart":{"max_posted":35,"designated_only":true,"cross":true,"cite":"O.C.G.A. 40-6-331 (local designation)"}},"SC":{"name":"South Carolina","lsv":{"max_posted":35,"cross":true,"cite":"S.C. 56-5-820"},"golf_cart":{"max_posted":35,"radius_mi":4,"daylight_only":true,"cross":true,"cite":"S.C. 56-2-105 (secondary roads ≤35, 4 mi of registration, daylight unless local ordinance)"}},"TX":{"name":"Texas","lsv":{"max_posted":35,"cross":true,"cite":"Single app rule ≤35 (Tex. Transp. Code 551.403 carts ≤35 by local authorization; NEV law allows ≤45 but app uses 35)"}},"AL":{"name":"Alabama","lsv":{"max_posted":35,"cross":true,"cite":"Single app rule ≤35; Gulf Shores/Orange Beach region cap ≤25 (regions.json rule)"}},"AZ":{"name":"Arizona","lsv":{"max_posted":35,"cross":true,"cite":"A.R.S. 28-966 (NEV/LSV ≤35)"}},"OH":{"name":"Ohio","lsv":{"max_posted":35,"cross":true,"cite":"ORC 4511.214 (under-speed/LSV on ≤35 roads where locally authorized; Put-in-Bay village permits carts)"}},"NC":{"name":"North Carolina","lsv":{"max_posted":35,"cross":true,"cite":"N.C.G.S. 20-121.1 (LSV ≤35); golf carts by local ordinance (G.S. 160A-300.6)"}},"HI":{"name":"Hawaii","lsv":{"max_posted":35,"cross":true,"who":"street-legal electric LSVs","note":"street-legal electric LSVs (NEVs) only, max 25 mph; plain golf carts aren't street-legal in Hawaii","cite":"HRS 291C-134 (neighborhood electric vehicles: roads posted ≤35 mph, may cross at intersections, no controlled-access highways); HRS 291C-53"}},"ME":{"name":"Maine","lsv":{"max_posted":35,"cross":true,"who":"street-legal LSVs","note":"registered LSVs only; plain golf carts aren't road-legal in Maine","cite":"29-A M.R.S. §2089 (LSVs on roads posted ≤35 mph, may cross at intersections); §501(2-A) golf carts only on islands without state roads"}}}
+{
+ "_note": "Per-state rule profiles. lsv/golf_cart: max_posted = highest posted mph allowed; designated_only = only cart paths + designated roads; assume_designated = OSM highway classes treated as designated where the region says so (UNVERIFIED unless sourced); radius_mi = max distance from home/registration; daylight_only; cross = may cross faster roads at intersections. golf_cart = plain golf cart / PTV / motorized cart (no VIN-based FMVSS 500 compliance); lsv = street-legal low-speed vehicle / NEV. not_street_legal = plain golf carts may not use public roads (cart paths only). The app's vehicle toggle picks which profile applies (public/roadrule.js).",
+ "CA": {
+  "name": "California",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "cite": "CVC 21260"
+  },
+  "golf_cart": {
+   "max_posted": 25,
+   "cross": true,
+   "cite": "CVC 21716 (golf carts only on highways posted ≤25 mph, within a business/residence district); CVC 21115 + Streets & Highways Code §1950-1965 golf cart transportation plans may designate other routes"
+  }
+ },
+ "FL": {
+  "name": "Florida",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "cite": "F.S. 316.2122"
+  },
+  "golf_cart": {
+   "max_posted": 35,
+   "designated_only": true,
+   "cross": true,
+   "daylight_only": true,
+   "cite": "F.S. 316.212(1) (golf carts only on roads a county/city has designated and signed, based on speed and traffic); 316.212(6)-(8) daylight unless equipped; 316.2126 municipal use. FLHSMV/FDOT guidance cites designated roads posted ≤30 mph; app uses the designation (≤35) and flags this. UNCONFIRMED"
+  }
+ },
+ "GA": {
+  "name": "Georgia",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "cite": "O.C.G.A. 40-6-362"
+  },
+  "golf_cart": {
+   "max_posted": 25,
+   "cross": true,
+   "cite": "O.C.G.A. 40-6-331 (PTVs only where a local ordinance allows); app uses the common local cap of ≤25 mph (Glynn County, Tybee, Peachtree City streets except Hwy 74/54/Peachtree Pkwy). UNCONFIRMED per town"
+  }
+ },
+ "SC": {
+  "name": "South Carolina",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "cite": "S.C. 56-5-820"
+  },
+  "golf_cart": {
+   "max_posted": 35,
+   "radius_mi": 4,
+   "daylight_only": true,
+   "cross": true,
+   "cite": "S.C. 56-2-105 (secondary roads posted ≤35 mph, within 4 mi of registration address, daylight unless local ordinance; permit + decal)"
+  }
+ },
+ "TX": {
+  "name": "Texas",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "cite": "Tex. Transp. Code 551.304 (NEV/LSV on roads ≤45; app uses ≤35)"
+  },
+  "golf_cart": {
+   "max_posted": 35,
+   "daylight_only": true,
+   "cross": true,
+   "cite": "Tex. Transp. Code 551.403-551.404 (golf cart plate required, 551.402; daytime on roads ≤35 within 2 mi of where parked or in a master-planned community, or where the city/county authorizes)"
+  }
+ },
+ "AL": {
+  "name": "Alabama",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "cite": "Single app rule ≤35 (Code of Ala. 32-1-1.1 LSV); Gulf Shores/Orange Beach region cap ≤25 (regions.json rule)"
+  },
+  "golf_cart": {
+   "max_posted": 25,
+   "cross": true,
+   "cite": "No state golf-cart road statute; local ordinance (Gulf Shores Sec. 21-13, Orange Beach Sec. 70-273: streets ≤25 mph)"
+  }
+ },
+ "AZ": {
+  "name": "Arizona",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "cite": "A.R.S. 28-966 (NEV/LSV ≤35)"
+  },
+  "golf_cart": {
+   "max_posted": 35,
+   "cross": true,
+   "cite": "Arizona: golf carts must be registered/insured to use public streets; local police guidance (e.g. Marana PD) allows streets ≤35 mph. Sun City: A.R.S. 28-721(C) keep right. UNCONFIRMED"
+  }
+ },
+ "OH": {
+  "name": "Ohio",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "cite": "ORC 4511.214 (under-speed/LSV on ≤35 roads where locally authorized; Put-in-Bay village permits carts)"
+  },
+  "golf_cart": {
+   "max_posted": 35,
+   "cross": true,
+   "cite": "ORC 4511.214 (under-speed vehicles on roads ≤35 mph where the local authority allows; titled, inspected, plated); Put-in-Bay Codified Ord. 490.02"
+  }
+ },
+ "NC": {
+  "name": "North Carolina",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "cite": "N.C.G.S. 20-121.1 (LSV ≤35); golf carts by local ordinance (G.S. 160A-300.6)"
+  },
+  "golf_cart": {
+   "max_posted": 25,
+   "cross": true,
+   "note": "golf cart rules vary by town (Duck ≤25, Nags Head ≤35, Kill Devil Hills: LSVs only)",
+   "cite": "N.C.G.S. 160A-300.6 / 153A-245 (golf carts only where a town/county ordinance allows); app uses the most common cap of ≤25. UNCONFIRMED per town"
+  }
+ },
+ "HI": {
+  "name": "Hawaii",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "who": "street-legal electric LSVs",
+   "note": "street-legal electric LSVs (NEVs) only, max 25 mph; plain golf carts aren't street-legal in Hawaii",
+   "cite": "HRS 291C-134 (neighborhood electric vehicles: roads posted ≤35 mph, may cross at intersections, no controlled-access highways); HRS 291C-53"
+  },
+  "golf_cart": {
+   "not_street_legal": true,
+   "max_posted": 0,
+   "cross": false,
+   "note": "plain golf carts aren't street-legal in Hawaii. Switch to LSV if yours is a registered NEV",
+   "cite": "HRS 291C-134 (only neighborhood electric vehicles), HRS 286-2 (golf carts not registrable motor vehicles)"
+  }
+ },
+ "ME": {
+  "name": "Maine",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "who": "street-legal LSVs",
+   "note": "registered LSVs only; plain golf carts aren't road-legal in Maine",
+   "cite": "29-A M.R.S. §2089 (LSVs on roads posted ≤35 mph, may cross at intersections); §501(2-A) golf carts only on islands without state roads"
+  },
+  "golf_cart": {
+   "not_street_legal": true,
+   "max_posted": 0,
+   "cross": false,
+   "note": "plain golf carts aren't road-legal in Maine. Switch to LSV if yours is a registered LSV",
+   "cite": "29-A M.R.S. §501(2-A) (golf carts only on islands without state roads); §2089 LSVs"
+  }
+ }
+}
