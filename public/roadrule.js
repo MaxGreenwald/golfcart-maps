@@ -19,9 +19,10 @@ function ruleFor(rules,reg,veh){
 const vname=r=>r.who||VNAME[r.veh]||'carts & LSVs';
 const desig=(s,R)=>s[3]==='c'||s[3]==='d'||!!(R.assume&&R.assume.includes(s[1])&&s[2]!=null&&s[2]<=R.max_posted);
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden. Cart paths ('c') always ok; designated ('d') ok in designated-only mode.
+// 'n'/'q' (scripts/islands.py): short same-road piece that takes the limit posted on both sides ('q' = sources disagree; app warns).
 function cls(s,R,lenient){if(s[3]==='c')return 0;if(R.not_street_legal)return 3;if(s[9]===1&&/^(motorway|trunk|primary)/.test(s[1]))return 3;
   if(s[2]==null||(s[2]>R.max_posted&&!(lenient&&s[2]===99)))return 3;if(R.designated_only&&!desig(s,R))return 3;
-  return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'||s[3]==='r'||s[3]==='k'?0:1}
+  return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'||s[3]==='r'||s[3]==='k'||s[3]==='n'||s[3]==='q'?0:1}
 const nextBand=m=>m%5?m+1:m+(m===25?1:5);
 // why a segment is forbidden for this vehicle (popup text); '' when allowed
 function why(s,R,Rother){if(cls(s,R)!==3)return '';if(R.not_street_legal)return `Avoid: plain golf carts aren't street-legal here${R.unconfirmed?' (no rule on file)':''}${Rother&&cls(s,Rother)!==3?` (OK for ${vname(Rother)})`:''}`;

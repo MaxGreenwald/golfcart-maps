@@ -178,6 +178,9 @@ for wi, w in enumerate(wl):
         WOUT[wi].append(len(out))
         out.append([nidx[nm], t["highway"], s, src[0], ow, nid(nodes[sg[0]]), nid(nodes[sg[-1]]), pts] + ([si] if si >= 0 else []))
 # Roundabouts with no limit of their own take the highest posted limit of their connecting roads (see build_data_lib).
+# Same-road islands first (scripts/islands.py), so roundabouts/turn lanes next to a healed piece see its limit; again at the end.
+import islands as _ISL
+_HEAL0 = _ISL.heal(out, names, sources); _ISL.sync_ws(out, WOUT, WS)
 from build_data_lib import roundabout_inherit
 RBX = roundabout_inherit(wl, WS, lambda w: True)
 for wi, (nmph, rcode) in RBX["set"].items():
@@ -201,10 +204,17 @@ if _re:
     for x in _re: print("  ERROR: roundabout still unknown but all approaches <=35:", x["lat"], x["lon"], x.get("name"))
     if os.environ.get("VALIDATE") != "warn": sys.exit("roundabout validation failed (VALIDATE=warn to override)")
 if os.environ.get("RB_DEBUG"): json.dump(RBX["log"], open("/tmp/rb_sd.json", "w"), indent=0)
+# ---- Same-road red islands (scripts/islands.py): a short piece of a road with no limit of its own, or with one source that
+# disagrees with the same road posted <=35 on both sides, can't turn that road red on its own. Runs last, on the final segments. ----
+import islands as _ISL
+_HEAL = _HEAL0 + _ISL.heal(out, names, sources)
+_HS = {"same_road_gap": sum(c["code"] == "n" for c in _HEAL), "same_road_disagree": sum(c["code"] == "q" for c in _HEAL)}   # not in stats: stats sum = ways
+for c in _HEAL: print("  same-road island healed:", c)
 os.makedirs(os.path.join(os.path.dirname(__file__), "..", "research"), exist_ok=True)
 json.dump({"stats": mst, "changes": conf}, open(os.path.join(os.path.dirname(__file__), "..", "research", "mapillary_report.json"), "w"), indent=1)
 total = sum(stats.values())
 meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": total, "segments": len(out), "stats": stats, "poly": POLY}
+meta["stats"] = {**stats, **_HS}
 os.makedirs(OUT, exist_ok=True)
 TS = 0.1  # output tile size (degrees); segment goes to tile of its first point
 tiles = {}

@@ -1,7 +1,10 @@
 {
- "_note": "Reviewed known cases. Fail = more than this. Lower when fixed; raise only after checking the listed islands.",
+ "_note": "Reviewed known cases. Fail = more than this. Lower when fixed; raise only after checking the listed islands. Same-road islands are checked by location instead: research/red_island_allowlist.json.",
+ "_islands_explained": {
+  "poipu": "Kaumualii Hwy (HI-50, state highway, untagged) at Omao Rd/Lawai: correctly red"
+ },
  "red_islands": {
-  "30a": 1,
+  "30a": 0,
   "amelia": 0,
   "annamaria": 0,
   "avalon": 0,
@@ -13,34 +16,31 @@
   "goldenisles": 1,
   "gulfshores": 0,
   "hhi": 0,
-  "keywest": 1,
-  "lwr": 2,
-  "myrtle": 3,
-  "naples": 2,
+  "kaanapali": 0,
+  "kailua": 0,
+  "keywest": 0,
+  "lwr": 0,
+  "myrtle": 2,
+  "naples": 0,
   "obx": 0,
-  "ocoast": 14,
+  "ocoast": 9,
+  "oob": 0,
   "pcb": 1,
+  "poipu": 1,
   "portaransas": 2,
   "ptc": 0,
   "putinbay": 1,
   "rockport": 0,
-  "sd": 77,
+  "sd": 54,
   "siesta": 0,
   "southpadre": 0,
   "staug": 5,
-  "suncity": 5,
+  "suncity": 1,
   "suncitycenter": 0,
   "tybee": 0,
-  "villages": 7,
-  "wailea": 0,
-  "kaanapali": 0,
-  "poipu": 1,
+  "villages": 6,
   "waikoloa": 0,
-  "kailua": 0,
-  "oob": 0
+  "wailea": 0
  },
- "ring_code_errors": {},
- "_islands_explained": {
-  "poipu": "Kaumualii Hwy (HI-50, state highway, untagged) at Omao Rd/Lawai: correctly red"
- }
+ "ring_code_errors": {}
 }
