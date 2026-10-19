@@ -7,15 +7,15 @@
  "verified_length_m": 9293,
  "share_verified_by_length": 0.11,
  "share_verified_by_ways": 0.106,
- "share_two_sources_any_kind_by_length": 0.2,
- "disagreements": 115,
+ "share_two_sources_any_kind_by_length": 0.203,
+ "disagreements": 104,
  "held_blocked": 0,
  "by_status": {
-  "OSM + imagery agree (no official source)": 41,
-  "disagree": 115,
-  "no posted-limit source (state default assumed)": 259,
-  "one official source": 74,
-  "one unofficial source": 68,
+  "OSM + imagery agree (no official source)": 47,
+  "disagree": 104,
+  "no posted-limit source (state default assumed)": 187,
+  "one official source": 73,
+  "one unofficial source": 146,
   "verified": 66
  },
  "by_city": {

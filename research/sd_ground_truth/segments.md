@@ -1,6 +1,6 @@
 # Coastal San Diego ground truth: top-route segments (2026-10-18)
 
-**Accuracy figure: 11% of top-route road length (66 of 623 OSM ways) verified by two agreeing sources.** 115 disagreements (0 held blocked for a Street View check).
+**Accuracy figure: 11% of top-route road length (66 of 623 OSM ways) verified by two agreeing sources.** 104 disagreements (0 held blocked for a Street View check).
 
 Rule: **verified** = an official source (city code / council resolution / engineering & traffic survey / ordinance) and an independent source (OSM maxspeed tag, Mapillary sign or Street View) give the same posted limit. Per-way detail: segments.csv.
 
@@ -71,7 +71,7 @@ Rule: **verified** = an official source (city code / council resolution / engine
 | La Jolla | Fern Glen | 1 | 201 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | La Jolla | Girard Avenue | 1 | 109 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | La Jolla | Herschel Avenue | 1 | 594 | 25 | – | – | – | 0% | one unofficial source |  |  |
-| La Jolla | La Jolla Boulevard | 46 | 2723 | 35 | – | 25/35 | – | 0% | disagree, no posted-limit source (state default assumed), one unofficial source | sources disagree (osm 35, news 25); map shows 25; sources disagree (osm 35, news 25, mapillary 35); map shows 25 |  |
+| La Jolla | La Jolla Boulevard | 46 | 2723 | 35 | – | 25/35 | – | 0% | OSM + imagery agree (no official source), no posted-limit source (state default assumed), one unofficial source |  |  |
 | La Jolla | Little Street | 1 | 118 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | La Jolla | Lowry Place | 1 | 78 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | La Jolla | Lowry Terrace | 1 | 171 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
@@ -108,9 +108,9 @@ Rule: **verified** = an official source (city code / council resolution / engine
 | Pacific Beach / Mission Beach | El Carmel Place | 1 | 421 | – | – | 15 | – | 0% | one unofficial source |  |  |
 | Pacific Beach / Mission Beach | Grand Avenue | 1 | 137 | 45 | – | 35 | – | 0% | disagree | sources disagree (osm 45, mapillary 35, mapillary 35); map shows 35 |  |
 | Pacific Beach / Mission Beach | Hornblend Street | 1 | 113 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
-| Pacific Beach / Mission Beach | La Jolla Boulevard | 15 | 580 | – | 25 | 35 | – | 0% | disagree, no posted-limit source (state default assumed), one official source | map uses the official 25 mph (OSM/imagery: mapillary 35); sources disagree (news 25, mapillary 35); map shows 25 | [link](https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf) |
+| Pacific Beach / Mission Beach | La Jolla Boulevard | 15 | 580 | – | – | 35 | – | 0% | one unofficial source |  |  |
 | Pacific Beach / Mission Beach | Loring Street | 3 | 273 | – | – | 25 | – | 0% | no posted-limit source (state default assumed), one unofficial source |  |  |
-| Pacific Beach / Mission Beach | Mission Boulevard | 87 | 4911 | – | 25 | 25/30 | – | 0% | disagree, no posted-limit source (state default assumed), one official source, one unofficial source | map uses the official 25 mph (OSM/imagery: mapillary 30); sources disagree (news 25, mapillary 30); map shows 25 | [link](https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf) |
+| Pacific Beach / Mission Beach | Mission Boulevard | 87 | 4911 | – | 25 | 30 | – | 0% | disagree, one official source, one unofficial source | map uses the official 25 mph (OSM/imagery: mapillary 30); sources disagree (mapillary 30, mapillary 25); map shows 25 | [link](https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf) |
 | Pacific Beach / Mission Beach | Pacific View Drive | 1 | 179 | – | – | 25 | – | 0% | one unofficial source |  |  |
 | Pacific Beach / Mission Beach | Santa Clara Place | 2 | 128 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Pacific Beach / Mission Beach | Ventura Place | 4 | 107 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |

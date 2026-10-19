@@ -336,18 +336,18 @@ La Jolla,El Paseo Grande,6000946,residential,844,25,,,,,25,,,,one unofficial sou
 La Jolla,Fern Glen,6012226,tertiary,201,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_village->lj_windansea,32.83346,-117.28061
 La Jolla,Girard Avenue,5979547,tertiary,109,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_cove->lj_shores; lj_village->lj_cove,32.8483,-117.27424
 La Jolla,Herschel Avenue,1030373435,tertiary,594,25,25,,,,,,,,one unofficial source,low,,lj_village->lj_cove; lj_village->lj_windansea,32.84577,-117.27289
-La Jolla,La Jolla Boulevard,38093737,primary,143,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80814,-117.26309
-La Jolla,La Jolla Boulevard,436570658,primary,38,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80899,-117.26417
-La Jolla,La Jolla Boulevard,436402146,primary,51,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80932,-117.26456
-La Jolla,La Jolla Boulevard,6055286,primary,24,25,35,,,,,,N,,disagree,medium,"sources disagree (osm 35, news 25); map shows 25",lj_birdrock->pb_tourmaline,32.80941,-117.26465
-La Jolla,La Jolla Boulevard,436402150,primary,12,25,35,,,,,,N,,disagree,medium,"sources disagree (osm 35, news 25); map shows 25",lj_birdrock->pb_tourmaline,32.80954,-117.26483
-La Jolla,La Jolla Boulevard,1090776665,primary,28,25,35,,,,,,N,,disagree,medium,"sources disagree (osm 35, news 25); map shows 25",lj_birdrock->pb_tourmaline,32.80972,-117.26504
-La Jolla,La Jolla Boulevard,1427018603,primary,62,25,35,,,,,,N,,disagree,medium,"sources disagree (osm 35, news 25); map shows 25",lj_birdrock->pb_tourmaline,32.81012,-117.26551
-La Jolla,La Jolla Boulevard,204762551,primary,87,25,35,,,,35,,N,,disagree,medium,"sources disagree (osm 35, news 25, mapillary 35); map shows 25",lj_birdrock->pb_tourmaline,32.81067,-117.26616
-La Jolla,La Jolla Boulevard,1090776664,primary,14,25,35,,,,,,N,,disagree,medium,"sources disagree (osm 35, news 25); map shows 25",lj_birdrock->pb_tourmaline,32.81077,-117.26625
-La Jolla,La Jolla Boulevard,1090776663,primary,21,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81079,-117.26631
-La Jolla,La Jolla Boulevard,685352242,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81096,-117.2665
-La Jolla,La Jolla Boulevard,685352243,primary,16,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81108,-117.26673
+La Jolla,La Jolla Boulevard,38093737,primary,143,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80814,-117.26309
+La Jolla,La Jolla Boulevard,436570658,primary,38,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80899,-117.26417
+La Jolla,La Jolla Boulevard,436402146,primary,51,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80932,-117.26456
+La Jolla,La Jolla Boulevard,6055286,primary,24,25,35,,,,35,,,,OSM + imagery agree (no official source),medium,,lj_birdrock->pb_tourmaline,32.80941,-117.26465
+La Jolla,La Jolla Boulevard,436402150,primary,12,25,35,,,,35,,,,OSM + imagery agree (no official source),medium,,lj_birdrock->pb_tourmaline,32.80954,-117.26483
+La Jolla,La Jolla Boulevard,1090776665,primary,28,25,35,,,,35,,,,OSM + imagery agree (no official source),medium,,lj_birdrock->pb_tourmaline,32.80972,-117.26504
+La Jolla,La Jolla Boulevard,1427018603,primary,62,25,35,,,,35,,,,OSM + imagery agree (no official source),medium,,lj_birdrock->pb_tourmaline,32.81012,-117.26551
+La Jolla,La Jolla Boulevard,204762551,primary,87,25,35,,,,35,,,,OSM + imagery agree (no official source),medium,,lj_birdrock->pb_tourmaline,32.81067,-117.26616
+La Jolla,La Jolla Boulevard,1090776664,primary,14,25,35,,,,35,,,,OSM + imagery agree (no official source),medium,,lj_birdrock->pb_tourmaline,32.81077,-117.26625
+La Jolla,La Jolla Boulevard,1090776663,primary,21,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.81079,-117.26631
+La Jolla,La Jolla Boulevard,685352242,primary,30,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.81096,-117.2665
+La Jolla,La Jolla Boulevard,685352243,primary,16,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.81108,-117.26673
 La Jolla,La Jolla Boulevard,38093579,primary,183,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81187,-117.26757
 La Jolla,La Jolla Boulevard,38093577,primary,26,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81254,-117.26837
 La Jolla,La Jolla Boulevard,305848067,primary,149,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.81343,-117.26925
@@ -482,21 +482,21 @@ Pacific Beach / Mission Beach,Bayside Lane,6008316,living_street,1343,25,,,,,,,,
 Pacific Beach / Mission Beach,El Carmel Place,5957496,residential,421,15,,,,,15,,,,one unofficial source,low,,mb_belmont->mb_bay,32.77831,-117.25251
 Pacific Beach / Mission Beach,Grand Avenue,436316485,primary,137,35,45,,,,35,,N,,disagree,medium,"sources disagree (osm 45, mapillary 35, mapillary 35); map shows 35",pb_pier->pb_garnet,32.79783,-117.24079
 Pacific Beach / Mission Beach,Hornblend Street,1459181460,residential,113,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79557,-117.25551
-Pacific Beach / Mission Beach,La Jolla Boulevard,6055287,primary,54,25,,25,"San Diego R-316675 Table 7, posted: La Jolla Bl (Loring St - Colima St)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_tourmaline->pb_pier,32.8049,-117.25831
-Pacific Beach / Mission Beach,La Jolla Boulevard,436401815,primary,31,25,,25,"San Diego R-316675 Table 7, posted: La Jolla Bl (Loring St - Colima St)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,35,,N,,disagree,medium,map uses the official 25 mph (OSM/imagery: mapillary 35),lj_birdrock->pb_tourmaline,32.80499,-117.25859
-Pacific Beach / Mission Beach,La Jolla Boulevard,436401826,primary,48,25,,,,,35,,N,,disagree,medium,"sources disagree (news 25, mapillary 35); map shows 25",lj_birdrock->pb_tourmaline,32.80539,-117.25888
-Pacific Beach / Mission Beach,La Jolla Boulevard,1036494576,primary,29,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.8056,-117.25904
-Pacific Beach / Mission Beach,La Jolla Boulevard,1046077657,primary,20,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80582,-117.25921
-Pacific Beach / Mission Beach,La Jolla Boulevard,436402151,primary,13,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80596,-117.25935
-Pacific Beach / Mission Beach,La Jolla Boulevard,436402149,primary,80,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80612,-117.25951
-Pacific Beach / Mission Beach,La Jolla Boulevard,436402148,primary,38,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80664,-117.26009
-Pacific Beach / Mission Beach,La Jolla Boulevard,436402152,primary,18,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80683,-117.2603
-Pacific Beach / Mission Beach,La Jolla Boulevard,1024173606,primary,27,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80694,-117.26044
-Pacific Beach / Mission Beach,La Jolla Boulevard,436402155,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80711,-117.26065
-Pacific Beach / Mission Beach,La Jolla Boulevard,436402153,primary,57,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80761,-117.26125
-Pacific Beach / Mission Beach,La Jolla Boulevard,1057078945,primary,32,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80773,-117.26142
-Pacific Beach / Mission Beach,La Jolla Boulevard,641851357,primary,51,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80787,-117.26175
-Pacific Beach / Mission Beach,La Jolla Boulevard,38093741,primary,52,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80796,-117.26242
+Pacific Beach / Mission Beach,La Jolla Boulevard,6055287,primary,54,25,,,,,35,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.8049,-117.25831
+Pacific Beach / Mission Beach,La Jolla Boulevard,436401815,primary,31,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80499,-117.25859
+Pacific Beach / Mission Beach,La Jolla Boulevard,436401826,primary,48,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80539,-117.25888
+Pacific Beach / Mission Beach,La Jolla Boulevard,1036494576,primary,29,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.8056,-117.25904
+Pacific Beach / Mission Beach,La Jolla Boulevard,1046077657,primary,20,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80582,-117.25921
+Pacific Beach / Mission Beach,La Jolla Boulevard,436402151,primary,13,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80596,-117.25935
+Pacific Beach / Mission Beach,La Jolla Boulevard,436402149,primary,80,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80612,-117.25951
+Pacific Beach / Mission Beach,La Jolla Boulevard,436402148,primary,38,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80664,-117.26009
+Pacific Beach / Mission Beach,La Jolla Boulevard,436402152,primary,18,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80683,-117.2603
+Pacific Beach / Mission Beach,La Jolla Boulevard,1024173606,primary,27,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80694,-117.26044
+Pacific Beach / Mission Beach,La Jolla Boulevard,436402155,primary,30,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80711,-117.26065
+Pacific Beach / Mission Beach,La Jolla Boulevard,436402153,primary,57,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80761,-117.26125
+Pacific Beach / Mission Beach,La Jolla Boulevard,1057078945,primary,32,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80773,-117.26142
+Pacific Beach / Mission Beach,La Jolla Boulevard,641851357,primary,51,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80787,-117.26175
+Pacific Beach / Mission Beach,La Jolla Boulevard,38093741,primary,52,25,,,,,35,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline,32.80796,-117.26242
 Pacific Beach / Mission Beach,Loring Street,6040353,residential,188,25,,,,,25,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline; pb_tourmaline->pb_pier,32.8048,-117.25895
 Pacific Beach / Mission Beach,Loring Street,1490384280,residential,48,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80484,-117.25861
 Pacific Beach / Mission Beach,Loring Street,1490384279,residential,37,25,,,,,,,,,no posted-limit source (state default assumed),low,,lj_birdrock->pb_tourmaline,32.80492,-117.25867
@@ -528,65 +528,65 @@ Pacific Beach / Mission Beach,Mission Boulevard,1025161220,primary,72,25,,25,"Sa
 Pacific Beach / Mission Beach,Mission Boulevard,1025161219,primary,187,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.77933,-117.25262
 Pacific Beach / Mission Beach,Mission Boulevard,436400716,primary,26,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.78045,-117.25259
 Pacific Beach / Mission Beach,Mission Boulevard,1187547621,primary,184,25,,25,"San Diego R-316675 Table 7, posted: Mission Bl (San Fernando Pl - Santa Clara Pl)",https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf,,,,,one official source,medium,,pb_pier->mb_belmont,32.78119,-117.25256
-Pacific Beach / Mission Beach,Mission Boulevard,436400937,primary,33,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.78252,-117.25254
-Pacific Beach / Mission Beach,Mission Boulevard,1187547622,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.78263,-117.25255
-Pacific Beach / Mission Beach,Mission Boulevard,436400934,primary,5,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.78284,-117.25257
-Pacific Beach / Mission Beach,Mission Boulevard,51757241,primary,166,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.7837,-117.25271
-Pacific Beach / Mission Beach,Mission Boulevard,1025213750,primary,62,25,,,,,25,,,,one unofficial source,low,,pb_pier->mb_belmont,32.78453,-117.25288
-Pacific Beach / Mission Beach,Mission Boulevard,1025213749,primary,57,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.78508,-117.25305
-Pacific Beach / Mission Beach,Mission Boulevard,897526121,primary,168,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.7861,-117.25342
-Pacific Beach / Mission Beach,Mission Boulevard,1036262975,primary,69,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.78715,-117.25355
-Pacific Beach / Mission Beach,Mission Boulevard,864926367,primary,281,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.78861,-117.25334
-Pacific Beach / Mission Beach,Mission Boulevard,436401834,primary,23,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79002,-117.25353
-Pacific Beach / Mission Beach,Mission Boulevard,436401830,primary,18,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79022,-117.25359
-Pacific Beach / Mission Beach,Mission Boulevard,436401850,primary,46,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.7904,-117.25364
-Pacific Beach / Mission Beach,Mission Boulevard,436401829,primary,18,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.7908,-117.25376
-Pacific Beach / Mission Beach,Mission Boulevard,436401838,primary,34,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79106,-117.2538
-Pacific Beach / Mission Beach,Mission Boulevard,35340212,primary,147,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79177,-117.25402
-Pacific Beach / Mission Beach,Mission Boulevard,436401831,primary,28,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79269,-117.2543
-Pacific Beach / Mission Beach,Mission Boulevard,436401851,primary,17,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79284,-117.25434
-Pacific Beach / Mission Beach,Mission Boulevard,1084582945,primary,11,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79292,-117.25437
-Pacific Beach / Mission Beach,Mission Boulevard,436401853,primary,47,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79321,-117.25446
-Pacific Beach / Mission Beach,Mission Boulevard,436401840,primary,29,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79355,-117.25456
-Pacific Beach / Mission Beach,Mission Boulevard,436401832,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79375,-117.25463
-Pacific Beach / Mission Beach,Mission Boulevard,436401844,primary,49,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79415,-117.25475
-Pacific Beach / Mission Beach,Mission Boulevard,436401848,primary,7,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79442,-117.25483
-Pacific Beach / Mission Beach,Mission Boulevard,772456688,primary,21,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79453,-117.25487
-Pacific Beach / Mission Beach,Mission Boulevard,436401827,primary,15,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79461,-117.25489
-Pacific Beach / Mission Beach,Mission Boulevard,436401833,primary,21,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79482,-117.25495
-Pacific Beach / Mission Beach,Mission Boulevard,772456690,primary,22,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79512,-117.25504
-Pacific Beach / Mission Beach,Mission Boulevard,138875256,primary,35,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_pier->mb_belmont,32.79531,-117.2551
-Pacific Beach / Mission Beach,Mission Boulevard,436401842,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79574,-117.25523
-Pacific Beach / Mission Beach,Mission Boulevard,436401847,primary,37,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79611,-117.25535
-Pacific Beach / Mission Beach,Mission Boulevard,436401852,primary,15,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79637,-117.25543
-Pacific Beach / Mission Beach,Mission Boulevard,1011674984,primary,22,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.7965,-117.25547
-Pacific Beach / Mission Beach,Mission Boulevard,436401843,primary,36,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79667,-117.25552
-Pacific Beach / Mission Beach,Mission Boulevard,436401854,primary,9,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79695,-117.25561
-Pacific Beach / Mission Beach,Mission Boulevard,1031090708,primary,64,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79718,-117.25568
-Pacific Beach / Mission Beach,Mission Boulevard,436608596,primary,78,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79798,-117.25592
-Pacific Beach / Mission Beach,Mission Boulevard,436608585,primary,26,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79843,-117.25606
-Pacific Beach / Mission Beach,Mission Boulevard,436608582,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79852,-117.25609
-Pacific Beach / Mission Beach,Mission Boulevard,436608594,primary,52,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79891,-117.25621
-Pacific Beach / Mission Beach,Mission Boulevard,436608577,primary,28,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79938,-117.25636
-Pacific Beach / Mission Beach,Mission Boulevard,436608573,primary,27,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.79962,-117.25643
-Pacific Beach / Mission Beach,Mission Boulevard,436608595,primary,52,25,,,,,30,,N,,disagree,medium,"sources disagree (news 25, mapillary 30); map shows 25",pb_tourmaline->pb_pier,32.79984,-117.2565
-Pacific Beach / Mission Beach,Mission Boulevard,436608578,primary,26,25,,,,,30,,N,,disagree,medium,"sources disagree (news 25, mapillary 30); map shows 25",pb_tourmaline->pb_pier,32.80031,-117.25664
-Pacific Beach / Mission Beach,Mission Boulevard,436608575,primary,27,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80055,-117.25672
-Pacific Beach / Mission Beach,Mission Boulevard,436608588,primary,52,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80077,-117.25678
-Pacific Beach / Mission Beach,Mission Boulevard,436608586,primary,26,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80106,-117.25687
-Pacific Beach / Mission Beach,Mission Boulevard,436608583,primary,30,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.8015,-117.257
-Pacific Beach / Mission Beach,Mission Boulevard,436608591,primary,53,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.8017,-117.25706
-Pacific Beach / Mission Beach,Mission Boulevard,436608574,primary,24,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80217,-117.25721
-Pacific Beach / Mission Beach,Mission Boulevard,436608572,primary,29,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80242,-117.25729
-Pacific Beach / Mission Beach,Mission Boulevard,436608593,primary,47,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80264,-117.25735
-Pacific Beach / Mission Beach,Mission Boulevard,436608576,primary,31,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.8031,-117.25749
-Pacific Beach / Mission Beach,Mission Boulevard,436608580,primary,8,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80318,-117.25751
-Pacific Beach / Mission Beach,Mission Boulevard,436608589,primary,90,25,,,,,30,,N,,disagree,medium,"sources disagree (news 25, mapillary 30); map shows 25",pb_tourmaline->pb_pier,32.80356,-117.25764
-Pacific Beach / Mission Beach,Mission Boulevard,1546555793,primary,7,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80402,-117.25777
-Pacific Beach / Mission Beach,Mission Boulevard,436608592,primary,11,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80412,-117.2578
-Pacific Beach / Mission Beach,Mission Boulevard,436608590,primary,53,25,,,,,30,,N,,disagree,medium,"sources disagree (news 25, mapillary 30); map shows 25",pb_tourmaline->pb_pier,32.80451,-117.25792
-Pacific Beach / Mission Beach,Mission Boulevard,436608581,primary,10,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80468,-117.25798
-Pacific Beach / Mission Beach,Mission Boulevard,436608587,primary,36,25,,,,,,,,,no posted-limit source (state default assumed),low,,pb_tourmaline->pb_pier,32.80489,-117.25805
+Pacific Beach / Mission Beach,Mission Boulevard,436400937,primary,33,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.78252,-117.25254
+Pacific Beach / Mission Beach,Mission Boulevard,1187547622,primary,30,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.78263,-117.25255
+Pacific Beach / Mission Beach,Mission Boulevard,436400934,primary,5,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.78284,-117.25257
+Pacific Beach / Mission Beach,Mission Boulevard,51757241,primary,166,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.7837,-117.25271
+Pacific Beach / Mission Beach,Mission Boulevard,1025213750,primary,62,25,,,,,30,,N,,disagree,medium,"sources disagree (mapillary 30, mapillary 25); map shows 25",pb_pier->mb_belmont,32.78453,-117.25288
+Pacific Beach / Mission Beach,Mission Boulevard,1025213749,primary,57,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.78508,-117.25305
+Pacific Beach / Mission Beach,Mission Boulevard,897526121,primary,168,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.7861,-117.25342
+Pacific Beach / Mission Beach,Mission Boulevard,1036262975,primary,69,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.78715,-117.25355
+Pacific Beach / Mission Beach,Mission Boulevard,864926367,primary,281,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.78861,-117.25334
+Pacific Beach / Mission Beach,Mission Boulevard,436401834,primary,23,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79002,-117.25353
+Pacific Beach / Mission Beach,Mission Boulevard,436401830,primary,18,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79022,-117.25359
+Pacific Beach / Mission Beach,Mission Boulevard,436401850,primary,46,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.7904,-117.25364
+Pacific Beach / Mission Beach,Mission Boulevard,436401829,primary,18,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.7908,-117.25376
+Pacific Beach / Mission Beach,Mission Boulevard,436401838,primary,34,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79106,-117.2538
+Pacific Beach / Mission Beach,Mission Boulevard,35340212,primary,147,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79177,-117.25402
+Pacific Beach / Mission Beach,Mission Boulevard,436401831,primary,28,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79269,-117.2543
+Pacific Beach / Mission Beach,Mission Boulevard,436401851,primary,17,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79284,-117.25434
+Pacific Beach / Mission Beach,Mission Boulevard,1084582945,primary,11,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79292,-117.25437
+Pacific Beach / Mission Beach,Mission Boulevard,436401853,primary,47,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79321,-117.25446
+Pacific Beach / Mission Beach,Mission Boulevard,436401840,primary,29,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79355,-117.25456
+Pacific Beach / Mission Beach,Mission Boulevard,436401832,primary,30,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79375,-117.25463
+Pacific Beach / Mission Beach,Mission Boulevard,436401844,primary,49,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79415,-117.25475
+Pacific Beach / Mission Beach,Mission Boulevard,436401848,primary,7,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79442,-117.25483
+Pacific Beach / Mission Beach,Mission Boulevard,772456688,primary,21,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79453,-117.25487
+Pacific Beach / Mission Beach,Mission Boulevard,436401827,primary,15,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79461,-117.25489
+Pacific Beach / Mission Beach,Mission Boulevard,436401833,primary,21,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79482,-117.25495
+Pacific Beach / Mission Beach,Mission Boulevard,772456690,primary,22,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79512,-117.25504
+Pacific Beach / Mission Beach,Mission Boulevard,138875256,primary,35,25,,,,,30,,,,one unofficial source,low,,pb_pier->mb_belmont,32.79531,-117.2551
+Pacific Beach / Mission Beach,Mission Boulevard,436401842,primary,30,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79574,-117.25523
+Pacific Beach / Mission Beach,Mission Boulevard,436401847,primary,37,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79611,-117.25535
+Pacific Beach / Mission Beach,Mission Boulevard,436401852,primary,15,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79637,-117.25543
+Pacific Beach / Mission Beach,Mission Boulevard,1011674984,primary,22,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.7965,-117.25547
+Pacific Beach / Mission Beach,Mission Boulevard,436401843,primary,36,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79667,-117.25552
+Pacific Beach / Mission Beach,Mission Boulevard,436401854,primary,9,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79695,-117.25561
+Pacific Beach / Mission Beach,Mission Boulevard,1031090708,primary,64,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79718,-117.25568
+Pacific Beach / Mission Beach,Mission Boulevard,436608596,primary,78,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79798,-117.25592
+Pacific Beach / Mission Beach,Mission Boulevard,436608585,primary,26,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79843,-117.25606
+Pacific Beach / Mission Beach,Mission Boulevard,436608582,primary,30,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79852,-117.25609
+Pacific Beach / Mission Beach,Mission Boulevard,436608594,primary,52,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79891,-117.25621
+Pacific Beach / Mission Beach,Mission Boulevard,436608577,primary,28,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79938,-117.25636
+Pacific Beach / Mission Beach,Mission Boulevard,436608573,primary,27,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79962,-117.25643
+Pacific Beach / Mission Beach,Mission Boulevard,436608595,primary,52,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.79984,-117.2565
+Pacific Beach / Mission Beach,Mission Boulevard,436608578,primary,26,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80031,-117.25664
+Pacific Beach / Mission Beach,Mission Boulevard,436608575,primary,27,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80055,-117.25672
+Pacific Beach / Mission Beach,Mission Boulevard,436608588,primary,52,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80077,-117.25678
+Pacific Beach / Mission Beach,Mission Boulevard,436608586,primary,26,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80106,-117.25687
+Pacific Beach / Mission Beach,Mission Boulevard,436608583,primary,30,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.8015,-117.257
+Pacific Beach / Mission Beach,Mission Boulevard,436608591,primary,53,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.8017,-117.25706
+Pacific Beach / Mission Beach,Mission Boulevard,436608574,primary,24,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80217,-117.25721
+Pacific Beach / Mission Beach,Mission Boulevard,436608572,primary,29,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80242,-117.25729
+Pacific Beach / Mission Beach,Mission Boulevard,436608593,primary,47,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80264,-117.25735
+Pacific Beach / Mission Beach,Mission Boulevard,436608576,primary,31,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.8031,-117.25749
+Pacific Beach / Mission Beach,Mission Boulevard,436608580,primary,8,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80318,-117.25751
+Pacific Beach / Mission Beach,Mission Boulevard,436608589,primary,90,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80356,-117.25764
+Pacific Beach / Mission Beach,Mission Boulevard,1546555793,primary,7,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80402,-117.25777
+Pacific Beach / Mission Beach,Mission Boulevard,436608592,primary,11,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80412,-117.2578
+Pacific Beach / Mission Beach,Mission Boulevard,436608590,primary,53,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80451,-117.25792
+Pacific Beach / Mission Beach,Mission Boulevard,436608581,primary,10,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80468,-117.25798
+Pacific Beach / Mission Beach,Mission Boulevard,436608587,primary,36,25,,,,,30,,,,one unofficial source,low,,pb_tourmaline->pb_pier,32.80489,-117.25805
 Pacific Beach / Mission Beach,Pacific View Drive,6011830,residential,179,25,,,,,25,,,,one unofficial source,low,,lj_birdrock->pb_tourmaline; pb_tourmaline->pb_pier,32.80503,-117.26068
 Pacific Beach / Mission Beach,Santa Clara Place,1187547623,residential,115,25,,,,,,,,,no posted-limit source (state default assumed),low,,mb_belmont->mb_bay,32.7827,-117.25153
 Pacific Beach / Mission Beach,Santa Clara Place,356662587,residential,13,25,,,,,,,,,no posted-limit source (state default assumed),low,,mb_belmont->mb_bay,32.78275,-117.25109
@@ -598,10 +598,10 @@ Solana Beach,(unnamed),742023810,service,53,25,,,,,,,,,no posted-limit source (s
 Solana Beach,(unnamed),578626278,service,82,25,,,,,,,,,no posted-limit source (state default assumed),low,,sb_fletcher->dm_dogbeach,32.99042,-117.27189
 Solana Beach,(unnamed),737897992,service,43,25,,,,,,,,,no posted-limit source (state default assumed),low,,sb_fletcher->sb_cedros,32.99347,-117.26933
 Solana Beach,Acacia Avenue,5993071,residential,904,25,,,,,,,,,no posted-limit source (state default assumed),low,,sb_tide->sb_fletcher,32.99427,-117.27302
-Solana Beach,Lomas Santa Fe Drive,26328612,primary,13,35,50,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 50),sb_fletcher->sb_cedros,32.99188,-117.27161
-Solana Beach,Lomas Santa Fe Drive,436403292,primary,17,35,50,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 50),sb_fletcher->sb_cedros,32.99189,-117.27151
-Solana Beach,Lomas Santa Fe Drive,32677195,primary,18,35,50,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 50),sb_fletcher->sb_cedros,32.99194,-117.27124
-Solana Beach,Lomas Santa Fe Drive,436403302,primary,11,35,50,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 50),sb_fletcher->sb_cedros,32.99196,-117.27113
+Solana Beach,Lomas Santa Fe Drive,26328612,primary,13,35,50,35,"Lomas Santa Fe Dr (at Hwy 101: city lists 35, OpenStreetMap says 50 — check posted signs)",https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 50),sb_fletcher->sb_cedros,32.99188,-117.27161
+Solana Beach,Lomas Santa Fe Drive,436403292,primary,17,35,50,35,"Lomas Santa Fe Dr (at Hwy 101: city lists 35, OpenStreetMap says 50 — check posted signs)",https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 50),sb_fletcher->sb_cedros,32.99189,-117.27151
+Solana Beach,Lomas Santa Fe Drive,32677195,primary,18,35,50,35,"Lomas Santa Fe Dr (at Hwy 101: city lists 35, OpenStreetMap says 50 — check posted signs)",https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 50),sb_fletcher->sb_cedros,32.99194,-117.27124
+Solana Beach,Lomas Santa Fe Drive,436403302,primary,11,35,50,35,"Lomas Santa Fe Dr (at Hwy 101: city lists 35, OpenStreetMap says 50 — check posted signs)",https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,N,,disagree,medium,map uses the official 35 mph (OSM/imagery: osm 50),sb_fletcher->sb_cedros,32.99196,-117.27113
 Solana Beach,Lomas Santa Fe Drive,436403296,primary,9,35,35,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,Y,35,verified,high,,sb_fletcher->sb_cedros,32.99198,-117.27103
 Solana Beach,Lomas Santa Fe Drive,436403290,primary,23,35,35,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,Y,35,verified,high,,sb_fletcher->sb_cedros,32.99202,-117.27079
 Solana Beach,Lomas Santa Fe Drive,436403298,primary,16,35,35,35,Lomas Santa Fe Dr (Hwy 101 - Stevens Ave),https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf,,,Y,35,verified,high,,sb_fletcher->sb_cedros,32.99202,-117.27077
