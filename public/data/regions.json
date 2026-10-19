@@ -233,7 +233,13 @@
   ],
   "beta": true,
   "cover": "Palm Desert, Indian Wells and La Quinta only. Pick another city in the menu above.",
-  "slug": "coachella"
+  "slug": "coachella",
+  "rule": {
+   "golf_cart": {
+    "note": "Palm Desert and La Quinta golf cart plans may allow carts on some signed routes above 25 mph; we only show roads posted 25 or less for plain carts",
+    "cite": "CVC 21716; CVC 21115 + Sts. & Hwys. Code §1950 golf cart transportation plans (Palm Desert, La Quinta)"
+   }
+  }
  },
  {
   "id": "naples",
@@ -332,7 +338,13 @@
   ],
   "beta": true,
   "cover": "Laguna Woods, Laguna Beach, Dana Point and San Clemente only. Pick another city in the menu above.",
-  "slug": "occoast"
+  "slug": "occoast",
+  "rule": {
+   "golf_cart": {
+    "note": "plain golf carts: public streets posted 25 or less (inside Laguna Woods Village, follow community rules)",
+    "cite": "CVC 21716"
+   }
+  }
  },
  {
   "id": "annamaria",
@@ -575,7 +587,10 @@
   "rule": {
    "max_posted": 35,
    "cite": "Bald Head Island has no cars (golf carts and bikes only; ferry access). Southport and Oak Island: NC LSV ≤35 (G.S. 20-121.1), carts by town ordinance",
-   "url": "https://villagebhi.org/"
+   "url": "https://villagebhi.org/",
+   "golf_cart": {
+    "note": "Bald Head Island: carts on island roads; Southport and Oak Island allow golf carts only by town ordinance, check local rules"
+   }
   },
   "slug": "southport"
  },
@@ -619,8 +634,8 @@
   "cover": "City of Avalon only (rental carts and permitted autoettes; most of the island outside town is closed to private vehicles). Pick another city in the menu above.",
   "rule": {
    "max_posted": 25,
-   "cite": "Avalon: car permits are capped, so visitors and most residents get around in rented golf carts or permitted autoettes; CVC 21115 golf carts on streets ≤25",
-   "url": "https://www.cityofavalon.com/"
+   "cite": "Avalon: all vehicles, golf carts included, need a City permit (AMC § 4-4.1702); visitors rent permitted autoettes (§ 4-4.1703(f)), residents get one per dwelling unit (§ 4-4.1703(g)); carts only on streets posted ≤25 mph (CVC 21716)",
+   "url": "https://ecode360.com/AV4054"
   },
   "slug": "catalina"
  },

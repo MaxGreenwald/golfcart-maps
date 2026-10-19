@@ -6,7 +6,7 @@ const R2D=180/Math.PI;
 const brg=(a,b)=>{const r=Math.PI/180,y=Math.sin((b[0]-a[0])*r)*Math.cos(b[1]*r),x=Math.cos(a[1]*r)*Math.sin(b[1]*r)-Math.sin(a[1]*r)*Math.cos(b[1]*r)*Math.cos((b[0]-a[0])*r);return (Math.atan2(y,x)*R2D+360)%360};
 const turnOf=d=>{d=((d+540)%360)-180;const a=Math.abs(d);if(a<25)return 'straight';if(a<60)return d>0?'slight_right':'slight_left';if(a<150)return d>0?'right':'left';return 'uturn'};
 const inBox=(r,lat,lon)=>lat>=r.bbox[0]&&lat<=r.bbox[2]&&lon>=r.bbox[1]&&lon<=r.bbox[3];
-async function ready(){await READY;for(let i=0;i<200&&!window.ready;i++)await new Promise(r=>setTimeout(r,50))}
+async function ready(){await READY;for(let i=0;i<200&&!window.ready;i++)await new Promise(r=>setTimeout(r,50));if(window.vehSync)await window.vehSync()}  // pick up the phone's Golf cart mode setting
 // Analytics: everything CarPlay triggers is tagged platform 'carplay' (public/track.js; town level only).
 const CP={platform:'carplay'};
 async function asCarPlay(f){const prev=window._trackOpts;window._trackOpts=CP;try{return await f()}finally{window._trackOpts=prev}}
@@ -30,11 +30,13 @@ window.GCMCarPlay={
  track:cpTrack,
  async status(){await ready();return {region:REG&&REG.id,regionName:REG&&REG.short,mode:MODE,center:REG&&REG.center,
   regions:REGIONS.map(r=>({id:r.id,name:r.short||r.name,center:r.center,hidden:!!r.hidden})),range:GCMRange.rangeFor(),battery:(GCMRange.load().battery??100)}},
- async setMode(m){await ready();return 'lsv'},  // mode switch removed; always LSV rules
+ // vehicle = phone Settings > Golf cart mode (localStorage 'gcm-veh', default 'lsv'); setMode changes it for phone + CarPlay
+ async setMode(m){await ready();if((m==='golf_cart'||m==='lsv')&&m!==MODE){window.setVeh(m);await READY;for(let i=0;i<200&&!window.ready;i++)await new Promise(r=>setTimeout(r,50))}return MODE},
+ // `mode` arg is ignored on purpose (native still passes a fixed 'lsv'); the saved setting decides.
  // from/to: {lat,lon}. Returns null-route with reason when there's no legal way.
  async plan(from,to,mode,allowRisky){await ready();await regionFor(to.lat,to.lon);
   const lr=await asCarPlay(()=>window.testRoute([from.lat,from.lon],[to.lat,to.lon],!!allowRisky));const r=window._lastDetail;
-  if(!lr||!r)return {ok:false,reason:RULE.designated_only?'Every way there leaves the cart paths/designated roads.':`Every way there uses a ${RULE.max_posted+5}+ mph road.`};
+  if(!lr||!r)return {ok:false,reason:GCMRule.noRoute(RULE)};
   const line=[];r.legs.forEach(l=>l.p.forEach(p=>line.push([+p[1].toFixed(6),+p[0].toFixed(6)])));
   return {ok:true,mode:MODE,region:REG.id,meters:Math.round(r.dist),miles:lr.mi,roundTripMiles:lr.rt,minutes:lr.min,range:lr.range,
    risky:lr.risky,line,maneuvers:maneuvers(r)}},
