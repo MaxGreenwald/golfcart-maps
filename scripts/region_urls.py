@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """City URLs come from one place: the "slug" of each region in public/data/regions.json.
-This writes everything derived from it: public/_redirects (Cloudflare rewrites /<slug> to the app),
+This writes everything derived from it: public/_redirects (trailing-slash 301s to the region pages),
 the city entries of public/sitemap.xml, and the SLUG map in public/app.js.
 (Peachtree City and Hilton Head were in the picker without a URL, so their links 404'd on reload.)
 
@@ -26,7 +26,8 @@ def regions():
 
 
 def want(rs, cur):
-    red = "".join(f"/{r['slug']} / 200\n/{r['slug']}/ / 200\n" for r in rs)
+    # /<slug> is now a prerendered region page (dist/<slug>.html, scripts/seo_pages.py); just fold the trailing slash
+    red = "".join(f"/{r['slug']}/ /{r['slug']} 301\n" for r in rs)
     sm = cur["sitemap"]
     old = dict(re.findall(r"<loc>" + re.escape(SITE) + r"/([a-z0-9]+)</loc><lastmod>([^<]*)</lastmod>", sm))
     today = time.strftime("%Y-%m-%d")

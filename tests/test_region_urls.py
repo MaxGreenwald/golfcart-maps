@@ -14,11 +14,12 @@ class RegionUrls(unittest.TestCase):
         rs = U.regions()   # raises on a missing/duplicate slug
         self.assertEqual(len({r["slug"] for r in rs}), len(rs))
 
-    def test_every_picker_region_rewrites_to_the_app(self):
+    def test_every_region_slash_folds_to_its_page(self):
         red = open(os.path.join(ROOT, "public", "_redirects")).read().split("\n")
         for r in U.regions():
             with self.subTest(region=r["id"]):
-                self.assertIn(f"/{r['slug']} / 200", red)
+                self.assertIn(f"/{r['slug']}/ /{r['slug']} 301", red)
+                self.assertNotIn(f"/{r['slug']} / 200", red)
 
 
 if __name__ == "__main__":
