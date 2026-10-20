@@ -108,7 +108,7 @@ let routing=false;async function route(){$('title').innerHTML='<span class="spin
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
  $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:(RULE.designated_only?'All on cart paths & designated roads 🌴':(r.legs.some(l=>l.u)?`Mostly ≤${RULE.max_posted} mph roads; <b>❓ ${mi(r.legs.filter(l=>l.u).reduce((a,l)=>a+l.s._len,0))} speed unknown — check signs</b>`:`All on roads ≤${RULE.max_posted} mph 🌴`))+ruleNotes()+(da>150||db>150?' · snapped to nearest legal road':'');
  r.back=await backDist(a,b,a2,b2,r.dist);renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
- setSnap('half');focusStart();window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};window._lastDetail=r;return r}
+ try{wxCheck(L.latLng((start.lat+end.lat)/2,(start.lng+end.lng)/2))}catch(_){}setSnap('half');focusStart();window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};window._lastDetail=r;return r}
 // return trip: one-way rules can differ, so route B->A; fall back to same distance
 async function backDist(a,b,a2,b2,d){if(a==null||b==null)return d;for(const [x,y] of [[b,a],[b2,a],[b,a2],[b2,a2]]){const p=astar(x,y);if(p)return summarize(p).dist}return d}
 let lastR=null;function renderRange(r){if(r)lastR=r;r=lastR;if(!r)return;const R=GCMRange,s=R.load(),rng=R.rangeFor(s),bat=s.battery==null?100:s.battery;
@@ -142,7 +142,7 @@ function sync(){start=P(from);end=P(to);mk.forEach(m=>map.removeLayer(m));mk=[];
  $('fF').classList.toggle('act',active==='from');$('useme').style.display=(active||((from||to)&&!(from&&to)&&!(from&&from.me)&&!(to&&to.me)))?'':'none';$('fT').classList.toggle('act',active==='to');
  $('reset').style.display=$('acts').style.display=(from||to)?'':'none';
  $('help').textContent=active==='from'?'Tip: tap the map to drop your start pin':active==='to'||(from&&!to)?'Tip: tap the map to drop a pin for your destination':(from&&to)?'Tip: tap any road for its speed & length':'Tip: tap the map twice (start, then destination), or tap a road for its speed & length';
- if(routeG&&!(start&&end)){map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('range').style.display='none'}
+ if(routeG&&!(start&&end)){map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('wx').style.display='none';$('range').style.display='none'}
  if(!(from||to)){$('title').innerHTML='🏖️ Golf Cart Maps';$('sub').innerHTML='Tap a road to see its speed limit and length, or plan a route above.'}
  else if(!(start&&end)){$('title').innerHTML=from?'📍 Start set':'🏖️ Destination set';$('sub').textContent=from?'Now pick where you’re headed.':'Now pick a start, or hit 📍 to start from you.'}}
 function setField(f,pt){if(f==='from')from=pt;else to=pt;active=null;sync();if(start&&end)route();window.state=st()}
@@ -319,3 +319,17 @@ L.DomEvent.disableClickPropagation(sheet);L.DomEvent.disableScrollPropagation(sh
 map.on('click',()=>{if(!routeG&&!from&&snap!=='collapsed')setSnap('collapsed')});
 addEventListener('resize',()=>{sizeSheet();setSnap(snap)});
 sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));
+
+// ---- weather alerts (weather.js, Open-Meteo): one banner for the route area, rain / lightning / high wind in the next 3 h.
+// Checked only when a route is shown, cached 30 min per ~10 km, a dismissed alert stays quiet 6 h; off switch in Settings.
+const wxGet=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch(_){return null}},wxSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(_){}};
+let WXON=wxGet('gcm-wx')!==false;const wxCache=new Map();
+async function wxCheck(ll){const el=$('wx');if(!WXON){el.style.display='none';return}const key=ll.lat.toFixed(1)+','+ll.lng.toFixed(1),now=Date.now();let c=wxCache.get(key);
+ if(!c||now-c.t>GCMWeather.CACHE_MS){try{const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),5000);const j=await (await fetch(window.GCM_WX_URL||GCMWeather.url(ll.lat,ll.lng),{signal:ac.signal})).json();clearTimeout(tm);c={t:now,list:GCMWeather.alerts(j)};wxCache.set(key,c)}catch(_){return}}
+ window._wx=c.list;const a=GCMWeather.pick(c.list,wxGet('gcm-wx-dis')||{},now);if(!a||!routeG){el.style.display='none';return}
+ el.className='wx '+a.kind;el.innerHTML=`<div><b>${a.title}</b><br>${esc(a.text)} <small>Forecast: Open-Meteo</small></div><button class="wxx" aria-label="Dismiss weather alert">✕</button>`;el.style.display='flex';
+ if(el.dataset.k!==a.kind+a.at){el.dataset.k=a.kind+a.at;track('weather_alert',{kind:a.kind,act:'shown'})}
+ el.querySelector('.wxx').onclick=()=>{const d=wxGet('gcm-wx-dis')||{};d[a.kind]=Date.now();wxSet('gcm-wx-dis',d);el.style.display='none';track('weather_alert',{kind:a.kind,act:'dismissed'})}}
+window.wxCheck=wxCheck;
+function setWx(v){WXON=!!v;wxSet('gcm-wx',WXON);$('setWx').checked=WXON;if(!WXON)$('wx').style.display='none';else if(start&&end)wxCheck(L.latLng((start.lat+end.lat)/2,(start.lng+end.lng)/2))}
+window.setWx=setWx;$('setWx').checked=WXON;$('setWx').onchange=e=>setWx(e.target.checked);
