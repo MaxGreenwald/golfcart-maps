@@ -1,7 +1,8 @@
 # Road/hazard report review queue for Golf Cart Map (see lib/reports.js).
 #   preview:    wrangler deploy --env preview   -> gcm-reports-preview (used by *.golfcart-maps.pages.dev)
 #   production: wrangler deploy                 -> gcm-reports (used by golfcartmap.com; only with Max's OK)
-# REVIEW_KEY is a secret: wrangler secret put REVIEW_KEY [--env preview]
+# Secrets: REVIEW_KEY, MAILER_KEY (gcm-mailer bearer key) — wrangler secret put <NAME> [--env preview]
+# New reports email max@golfcartmap.com via gcm-mailer (lib/report_notify.js): max 1 email / 5 min, rest digested.
 name = "gcm-reports"
 main = "src/index.js"
 compatibility_date = "2026-10-15"
@@ -12,8 +13,16 @@ class_name = "Queue"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["Queue"]
+[[services]]
+binding = "MAILER"
+service = "gcm-mailer"
 [env.preview]
 name = "gcm-reports-preview"
+[env.preview.vars]
+ENV_NAME = "preview"
+[[env.preview.services]]
+binding = "MAILER"
+service = "gcm-mailer"
 [[env.preview.durable_objects.bindings]]
 name = "QUEUE"
 class_name = "Queue"
