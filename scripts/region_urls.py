@@ -31,7 +31,7 @@ def want(rs, cur):
     old = dict(re.findall(r"<loc>" + re.escape(SITE) + r"/([a-z0-9]+)</loc><lastmod>([^<]*)</lastmod>", sm))
     today = time.strftime("%Y-%m-%d")
     head = sm[:sm.index("<urlset")]
-    keep = [u for u in re.findall(r"<url>.*?</url>", sm) if re.search(r"<loc>" + re.escape(SITE) + r"/(privacy)?</loc>", u)]
+    keep = [u for u in re.findall(r"<url>.*?</url>", sm) if re.search(r"<loc>" + re.escape(SITE) + r"/(privacy|compare)?</loc>", u)]
     city = [f"<url><loc>{SITE}/{r['slug']}</loc><lastmod>{old.get(r['slug'], today)}</lastmod><changefreq>weekly</changefreq></url>" for r in rs]
     sm2 = head + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(keep + city) + "</urlset>\n"
     app = cur["app"]

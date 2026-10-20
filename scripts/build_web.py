@@ -74,6 +74,8 @@ def build(src=os.path.join(ROOT, "public"), out=os.path.join(ROOT, "dist")):
     swp = os.path.join(out, "sw.js")
     txt = open(swp, encoding="utf-8").read()
     open(swp, "w", encoding="utf-8").write(stamp(txt, name))
+    import seo_compare
+    seo_compare.build(out)   # static /compare page (not precached)
     return name
 
 
