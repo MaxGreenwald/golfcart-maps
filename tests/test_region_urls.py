@@ -18,7 +18,7 @@ class RegionUrls(unittest.TestCase):
         red = open(os.path.join(ROOT, "public", "_redirects")).read().split("\n")
         for r in U.regions():
             with self.subTest(region=r["id"]):
-                self.assertIn(f"/{r['slug']} / 200", red)
+                self.assertIn(f"/{r['slug']} /map 200", red)
 
 
 if __name__ == "__main__":
