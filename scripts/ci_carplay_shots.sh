@@ -9,10 +9,10 @@ grep -q libswiftWebKit shots-ci/linked-libs.txt && echo "WARNING: links libswift
 brew install cliclick >/dev/null 2>&1 || true
 DEV=$(xcrun simctl list devices available -j | python3 -c "import json,sys;d=json.load(sys.stdin)['devices'];print([x['udid'] for k,v in d.items() if 'iOS' in k for x in v if x['name'].startswith('iPhone 16')][0])")
 xcrun simctl boot "$DEV"; open -a Simulator; xcrun simctl bootstatus "$DEV" -b
-xcrun simctl location "$DEV" set 32.8328,-117.2713 || true
+xcrun simctl location "$DEV" set ${DEMO_FROM:-32.8328,-117.2713} || true
 xcrun simctl install "$DEV" "$APP"
 xcrun simctl privacy "$DEV" grant location-always com.matchimus.golfcartmaps || xcrun simctl privacy "$DEV" grant location com.matchimus.golfcartmaps || true
-(xcrun simctl launch --console-pty "$DEV" com.matchimus.golfcartmaps -GCMCarPlayDemo YES > shots-ci/app-console.txt 2>&1 &)
+(xcrun simctl launch --console-pty "$DEV" com.matchimus.golfcartmaps -GCMCarPlayDemo YES -GCMCarPlayDemoTo "${DEMO_TO:-32.7950,-117.2560,Crystal Pier}" -GCMCarPlayDemoDrive ${DEMO_DRIVE:-0} > shots-ci/app-console.txt 2>&1 &)
 sleep 25
 xcrun simctl io "$DEV" screenshot shots-ci/phone.png
 osascript -e 'tell application "Simulator" to activate' -e 'delay 1' -e 'tell application "System Events" to tell process "Simulator" to click menu item "CarPlay" of menu 1 of menu item "External Displays" of menu 1 of menu bar item "I/O" of menu bar 1' 2> shots-ci/osascript.txt
@@ -29,6 +29,8 @@ sleep 20
 screencapture -x shots-ci/carplay-preview.png
 sleep 35
 screencapture -x shots-ci/carplay-guidance.png
-xcrun simctl spawn "$DEV" log show --last 3m --predicate 'process == "App"' --style compact > shots-ci/app-log.txt 2>&1
+# demo drive: one shot every 4 s while the car steps through the maneuvers
+if [ "${DEMO_DRIVE:-0}" != "0" ]; then for i in $(seq -w 1 22); do sleep 4; screencapture -x shots-ci/carplay-drive-$i.png; done; fi
+xcrun simctl spawn "$DEV" log show --last 6m --predicate 'process == "App"' --style compact > shots-ci/app-log.txt 2>&1
 cp ~/Library/Logs/DiagnosticReports/App*.ips shots-ci/ 2>/dev/null
 ls -la shots-ci

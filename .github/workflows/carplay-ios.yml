@@ -2,7 +2,7 @@ name: carplay-ios
 on:
   workflow_dispatch:
   push:
-    branches: [carplay, ios-analytics]
+    branches: [carplay, ios-analytics, carplay-cpmaneuver]
 jobs:
   ios-sim:
     runs-on: macos-15
@@ -27,7 +27,7 @@ jobs:
             -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= build | tail -n 40
       - name: Run in simulator + screenshots (phone + CarPlay external display)
         continue-on-error: true
-        env: {CARPLAY_TAPS: "200,250 97,212"}
+        env: {CARPLAY_TAPS: "200,250 97,212", DEMO_FROM: "33.1590,-117.3440", DEMO_TO: "33.1680,-117.3565,Carlsbad North Beach", DEMO_DRIVE: "12"}
         run: bash scripts/ci_carplay_shots.sh
       # 3) Analytics hooks: if the CarPlay scene connected in the simulator run, its DEBUG log must show the hooks fired.
       - name: CarPlay analytics hooks fired (session on connect, route_started on Go)

@@ -6,13 +6,20 @@ import CoreLocation
 // MARK: - Models decoded from GCMCarPlay.plan()
 
 struct GCMManeuver {
-    let type: String, text: String, road: String, meters: Double, risky: Bool, coord: CLLocationCoordinate2D
+    // meters = length of the road after this maneuver; toMeters = distance driven to reach it.
+    // turn = signed turn angle in degrees (+ right, - left); used for the junction diagram and junctionExitAngle.
+    let type: String, text: String, short: String, road: String, meters: Double, toMeters: Double, turn: Double, mph: Int?, risky: Bool, coord: CLLocationCoordinate2D
     init?(_ d: [String: Any]) {
         guard let t = d["type"] as? String, let lat = d["lat"] as? Double, let lon = d["lon"] as? Double else { return nil }
         type = t; text = d["text"] as? String ?? ""; road = d["road"] as? String ?? ""
+        short = d["short"] as? String ?? text
         meters = (d["meters"] as? NSNumber)?.doubleValue ?? 0; risky = d["risky"] as? Bool ?? false
+        toMeters = (d["toMeters"] as? NSNumber)?.doubleValue ?? 0
+        turn = (d["turn"] as? NSNumber)?.doubleValue ?? 0
+        mph = (d["mph"] as? NSNumber)?.intValue
         coord = CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
+    var isTurn: Bool { ["left", "right", "slight_left", "slight_right", "uturn"].contains(type) }
     var symbol: String {
         switch type {
         case "left": return "arrow.turn.up.left"
@@ -21,8 +28,47 @@ struct GCMManeuver {
         case "slight_right": return "arrow.up.right"
         case "uturn": return "arrow.uturn.down"
         case "arrive": return "mappin.circle.fill"
+        case "depart": return "location.north.fill"
         default: return "arrow.up"
         }
+    }
+    @available(iOS 17.4, *)
+    var cpType: CPManeuverType {
+        switch type {
+        case "left": return .leftTurn
+        case "right": return .rightTurn
+        case "slight_left": return .slightLeftTurn
+        case "slight_right": return .slightRightTurn
+        case "uturn": return .uTurn
+        case "arrive": return .arriveAtDestination
+        case "depart": return .startRoute
+        default: return .straightAhead
+        }
+    }
+}
+
+// Junction diagram for CPManeuver.junctionImage: approach road from the bottom, exit road at the real turn angle,
+// drawn from the route geometry (no lane data exists in our road graph, so no lane arrows).
+enum JunctionArt {
+    static func image(turn: Double, size: CGFloat = 120) -> UIImage {
+        UIGraphicsImageRenderer(size: CGSize(width: size, height: size)).image { ctx in
+            let g = ctx.cgContext, c = CGPoint(x: size / 2, y: size * 0.55)
+            g.setLineCap(.round); g.setLineJoin(.round)
+            // cross street stubs (grey), then approach + exit (white)
+            g.setStrokeColor(UIColor(white: 0.55, alpha: 1).cgColor); g.setLineWidth(size * 0.1)
+            for a in [-90.0, 90.0, 0.0] where abs(a - turn) > 20 { g.move(to: c); g.addLine(to: pt(c, a, size * 0.42)) }
+            g.strokePath()
+            g.setStrokeColor(UIColor.white.cgColor); g.setLineWidth(size * 0.12)
+            g.move(to: CGPoint(x: c.x, y: size)); g.addLine(to: c); g.addLine(to: pt(c, turn, size * 0.42)); g.strokePath()
+            // arrow head on the exit
+            let tip = pt(c, turn, size * 0.46), l = pt(tip, turn + 150, size * 0.16), r = pt(tip, turn - 150, size * 0.16)
+            g.setFillColor(UIColor.white.cgColor); g.move(to: tip); g.addLine(to: l); g.addLine(to: r); g.closePath(); g.fillPath()
+        }
+    }
+    // angle 0 = straight up, + = clockwise (right)
+    static func pt(_ c: CGPoint, _ deg: Double, _ r: CGFloat) -> CGPoint {
+        let a = deg * .pi / 180
+        return CGPoint(x: c.x + r * CGFloat(sin(a)), y: c.y - r * CGFloat(cos(a)))
     }
 }
 
@@ -43,6 +89,8 @@ struct GCMPlan {
         line = (d["line"] as? [[Double]] ?? []).compactMap { $0.count == 2 ? CLLocationCoordinate2D(latitude: $0[0], longitude: $0[1]) : nil }
         maneuvers = (d["maneuvers"] as? [[String: Any]] ?? []).compactMap(GCMManeuver.init)
     }
+    /// average planned speed (m/s) used for per-maneuver time estimates
+    var speed: Double { max(3, meters / max(60, minutes * 60)) }
     var rangeText: String {
         switch rangeStatus {
         case "ok": return "Round trip \(String(format: "%.1f", roundTrip)) mi · battery OK (\(rangePct)%)"
@@ -121,11 +169,15 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         // CI screenshot hook: `simctl launch <dev> <bundle> -GCMCarPlayDemo YES` plans a demo trip, then starts guidance.
         if UserDefaults.standard.bool(forKey: "GCMCarPlayDemo") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
-                self?.choose(["name": "Crystal Pier", "lat": 32.7950, "lon": -117.2560])
+                // -GCMCarPlayDemoTo "lat,lon,Name" (default Crystal Pier)
+                let a = (UserDefaults.standard.string(forKey: "GCMCarPlayDemoTo") ?? "32.7950,-117.2560,Crystal Pier").split(separator: ",", maxSplits: 2).map(String.init)
+                if a.count == 3, let lat = Double(a[0]), let lon = Double(a[1]) { self?.choose(["name": a[2], "lat": lat, "lon": lon]) }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 40) { [weak self] in
                 guard let self = self, let trip = self.lastTrip, let c = trip.routeChoices.first else { return }
                 self.mapTemplate(self.mapTemplate, startedTrip: trip, using: c)
+                let every = UserDefaults.standard.double(forKey: "GCMCarPlayDemoDrive")
+                if every > 0 { self.demoDrive(every: every) }
             }
         }
         #endif
@@ -277,8 +329,11 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             self.mapTemplate.update(self.estimates(p.meters, p.minutes * 60), for: trip, with: .default)
         }
     }
+    // Under 0.1 mi CarPlay shows feet (rounded to 50 ft) instead of "0 mi".
     func estimates(_ m: Double, _ s: Double) -> CPTravelEstimates {
-        CPTravelEstimates(distanceRemaining: Measurement(value: m / 1609.34, unit: UnitLength.miles), timeRemaining: s)
+        let mi = m / 1609.34
+        let d = mi < 0.1 ? Measurement(value: max(50, (m * 3.28084 / 50).rounded() * 50), unit: UnitLength.feet) : Measurement(value: (mi * 10).rounded() / 10, unit: UnitLength.miles)
+        return CPTravelEstimates(distanceRemaining: d, timeRemaining: max(0, s))
     }
     func drawRoute(_ p: GCMPlan) {
         let m = mapVC.map
@@ -301,7 +356,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         session = s
         GCMBridge.shared.track("route_started", ["mi": p.miles])
         step = p.maneuvers.count > 1 ? 1 : 0
-        s.upcomingManeuvers = p.maneuvers.dropFirst(step).prefix(2).map(cpManeuver)
+        pushManeuvers(s, p)
+        mapTemplate.update(estimates(p.meters, p.minutes * 60), for: trip, with: .default)
         let end = CPBarButton(title: "End") { [weak self] _ in self?.endTrip(arrived: false) }
         mapTemplate.trailingNavigationBarButtons = [end]
         if let c = loc.location?.coordinate {
@@ -309,13 +365,40 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             mapVC.map.setUserTrackingMode(.followWithHeading, animated: true)
         }
     }
+    // CPManeuver from one step of the legal-road route (public/carplay.js maneuvers()).
     func cpManeuver(_ m: GCMManeuver) -> CPManeuver {
         let c = CPManeuver()
-        c.instructionVariants = [m.text, m.road.isEmpty ? m.text : m.road]
-        c.symbolImage = UIImage(systemName: m.symbol)
-        c.initialTravelEstimates = estimates(m.meters, m.meters / 9.8)
+        let speed = plan?.speed ?? 9.8
+        // longest first; CarPlay picks the variant that fits the guidance card
+        c.instructionVariants = [m.text, m.short, m.road.isEmpty ? m.short : m.road]
+        c.dashboardInstructionVariants = [m.short]
+        c.notificationInstructionVariants = [m.text]
+        let cfg = UIImage.SymbolConfiguration(pointSize: 40, weight: .bold)
+        c.symbolImage = UIImage(systemName: m.symbol, withConfiguration: cfg)?.withRenderingMode(.alwaysTemplate)
+        c.dashboardSymbolImage = c.symbolImage
+        c.notificationSymbolImage = c.symbolImage
+        c.initialTravelEstimates = estimates(m.toMeters, m.toMeters / speed)
+        if m.isTurn { c.junctionImage = JunctionArt.image(turn: m.turn) }
         if m.risky { c.attributedInstructionVariants = [NSAttributedString(string: "⚠️ " + m.text)] }
+        c.userInfo = ["road": m.road, "mph": m.mph ?? 0]
+        if #available(iOS 17.4, *) {
+            c.maneuverType = m.cpType
+            c.trafficSide = .right
+            if !m.road.isEmpty { c.roadFollowingManeuverVariants = [m.road] }
+            if m.isTurn {
+                c.junctionType = .intersection
+                c.junctionExitAngle = Measurement(value: m.turn, unit: UnitAngle.degrees)
+            }
+        }
         return c
+    }
+    // current maneuver + the one after it (CarPlay shows the second as the "then" row)
+    func pushManeuvers(_ s: CPNavigationSession, _ p: GCMPlan) {
+        s.upcomingManeuvers = p.maneuvers.dropFirst(step).prefix(2).map(cpManeuver)
+        if #available(iOS 17.4, *) {
+            let road = p.maneuvers[max(0, step - 1)].road
+            s.currentRoadNameVariants = road.isEmpty ? [] : [road]
+        }
     }
     func endTrip(arrived: Bool) {
         if arrived, session != nil { GCMBridge.shared.track("route_completed", ["mi": plan?.miles ?? 0]) }
@@ -327,18 +410,48 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let s = session, let p = plan, let here = locations.last, step < p.maneuvers.count else { return }
+        guard let here = locations.last else { return }
+        progress(here)
+    }
+    func progress(_ here: CLLocation) {
+        guard let s = session, let p = plan, step < p.maneuvers.count else { return }
         let next = p.maneuvers[step]
         let d = here.distance(from: CLLocation(latitude: next.coord.latitude, longitude: next.coord.longitude))
         if d < 25 {
             if next.type == "arrive" { endTrip(arrived: true); return }
             step += 1
-            s.upcomingManeuvers = p.maneuvers.dropFirst(step).prefix(2).map(cpManeuver)
+            pushManeuvers(s, p)
+            progress(here); return
         }
         if let cur = s.upcomingManeuvers.first {
-            s.updateEstimates(estimates(d, d / 9.8), for: cur)
+            s.updateEstimates(estimates(d, d / p.speed), for: cur)
+            if #available(iOS 17.4, *) { s.maneuverState = d < 60 ? .execute : d < 250 ? .prepare : .continue }
         }
-        let rest = p.maneuvers.dropFirst(step).reduce(d) { $0 + $1.meters }
-        mapTemplate.update(estimates(rest, rest / 9.8), for: s.trip, with: .default)
+        let rest = p.maneuvers.dropFirst(step + 1).reduce(d) { $0 + $1.toMeters }
+        mapTemplate.update(estimates(rest, rest / p.speed), for: s.trip, with: .default)
     }
+
+    #if DEBUG
+    // CI screenshot hook: pretend to drive. Places the car ~120 m before each maneuver in turn.
+    func demoDrive(every sec: Double) {
+        var shown = false
+        Timer.scheduledTimer(withTimeInterval: sec, repeats: true) { [weak self] t in
+            guard let self = self, let p = self.plan, let s = self.session else { t.invalidate(); return }
+            if shown { self.step += 1; guard self.step < p.maneuvers.count else { t.invalidate(); return }; self.pushManeuvers(s, p) }
+            let here = self.pointBefore(p.maneuvers[self.step].coord, on: p.line, meters: 120)
+            self.mapVC.map.setRegion(MKCoordinateRegion(center: here.coordinate, latitudinalMeters: 700, longitudinalMeters: 700), animated: true)
+            self.progress(here); shown = true
+            NSLog("GCMCarPlay demo step %d: %@", self.step, s.upcomingManeuvers.first?.instructionVariants.first ?? "")
+        }
+    }
+    func pointBefore(_ target: CLLocationCoordinate2D, on line: [CLLocationCoordinate2D], meters: Double) -> CLLocation {
+        let L = line.map { CLLocation(latitude: $0.latitude, longitude: $0.longitude) }
+        guard !L.isEmpty else { return CLLocation(latitude: target.latitude, longitude: target.longitude) }
+        let t = CLLocation(latitude: target.latitude, longitude: target.longitude)
+        var i = L.indices.min(by: { L[$0].distance(from: t) < L[$1].distance(from: t) }) ?? 0
+        var left = meters
+        while i > 0, left > 0 { left -= L[i].distance(from: L[i - 1]); i -= 1 }
+        return L[i]
+    }
+    #endif
 }
