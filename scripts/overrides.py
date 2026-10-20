@@ -147,7 +147,11 @@ INTEL.append({"road": "S Coast Hwy 101", "city": "Encinitas (Cardiff)", "from_to
 RULES.pop(39, None); RULES.pop(26, None)
 RULES[_SVB] = (r"^(Orange Avenue|R\.H\. Dana Place)$", CO, r"__SOUTH__", r"__CO10__", "lat")  # incl. RH Dana Pl at the Hotel del end
 RULES[_SVB + 1] = (r"^Orange Avenue$", CO, r"__CO10__", r"__NORTH__", "lat")
-RULES[_SVB + 2] = (r"^(South Coast Highway 101|South Highway 101|South Coast Highway|US 101 Hist|Coast Highway 101)$", (32.99, -117.31, 33.035, -117.26), r"__SWAMIS__", r"__SOUTH__", "lat")
+RULES[_SVB + 2] = (r"^(South Coast Highway 101|South Highway 101|South Coast Highway|US 101 Hist|Coast Highway 101)$", (32.99, -117.31, 33.035, -117.26), r"__SWAMIS__", r"__SEB__", "lat")
+# Stops at the San Elijo Lagoon bridge (Encinitas/Solana Beach line). It used to run to __SOUTH__ and put Encinitas' 30 on
+# Solana Beach's 101 between the bridge and Lomas Santa Fe, where the Solana E&TS says 35 and the posted signs read 35
+# (volunteer Street View SOL-B1-007, Mapillary). Max, Oct 20 2026: a real source overrides OSM; signs + city list agree here.
+FIXED["__SEB__"] = 33.0000
 FIXED["__CO10__"] = 32.6866  # Orange Ave at 10th St (~1466 Orange)
 
 # ---- Carlsbad Municipal Code ch. 10.44 Article II speed limits (E&TS-based; https://ecode360.com/44006773), coastal streets (Oct 18 2026) ----

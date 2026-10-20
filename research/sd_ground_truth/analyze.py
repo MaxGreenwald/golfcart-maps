@@ -83,6 +83,21 @@ def city_of(lat, lon):
         if s <= lat < n and w_ <= lon < e: return nm
     return "San Diego"
 
+def classify(src):
+    """Max's rule (Oct 20 2026): a real source (city/official data, a posted sign seen in Street View or Mapillary, a survey)
+    overrides OSM. OSM disagreeing alone never blocks 'verified' or makes a way 'disagree'. Real sources that conflict with
+    each other stay unresolved ('disagree'). OSM still counts as the second source only when it is the ONLY other source
+    (Batch 0 rule: official + OSM agree, no sign reading)."""
+    off = [s for s in src if s[0] == "official"]; signs = [s for s in src if s[0] in ("mapillary", "streetview")]
+    osm = [s for s in src if s[0] == "osm"]; real = off + signs; rv = {s[1] for s in real}
+    if len(rv) > 1: return "disagree", "medium", off, signs + osm, real
+    ind = signs if signs else osm
+    if off and any(i[1] == off[0][1] for i in ind): return "verified", "high", off, ind, real
+    if off: return "one official source", "medium", off, ind, real
+    if len(signs) >= 2 or (signs and osm and osm[0][1] == signs[0][1]): return "OSM + imagery agree (no official source)", "medium", off, ind, real
+    if signs or osm: return "one unofficial source", "low", off, ind, real
+    return "no posted-limit source (state default assumed)", "low", off, ind, real
+
 rows = []
 for wi, u in use.items():
     w = wl[wi]; t = w["tags"]; g = w["geometry"]; mid = g[len(g) // 2]
@@ -92,15 +107,8 @@ for wi, u in use.items():
     if w["id"] in HOLD: h = HOLD[w["id"]]; src.append(("official", h["source_mph"], h["source"] + " (held: OSM says %d)" % h["osm_mph"], h["url"]))
     if wi in mly: src.append(("mapillary", mly[wi][0], f"Mapillary: {mly[wi][2]} sign(s)", mly[wi][1]))
     if w["id"] in SV: src.append(("streetview", SV[w["id"]][0], "Street View check (volunteer sheet)", SV[w["id"]][1]))
-    off = [s for s in src if s[0] == "official"]; ind = [s for s in src if s[0] in ("osm", "mapillary", "streetview")]
+    status, conf, off, ind, real = classify(src)
     agree = [(o, i) for o in off for i in ind if o[1] == i[1]]
-    vals = {x[1] for x in src}
-    if agree and len(vals) == 1: status, conf = "verified", "high"
-    elif (off and ind) or len(vals) > 1: status, conf = "disagree", "medium"   # any two sources that differ (a third source can break a pair)
-    elif off: status, conf = "one official source", "medium"
-    elif len({s[1] for s in ind}) == 1 and len({s[0] for s in ind}) >= 2: status, conf = "OSM + imagery agree (no official source)", "medium"
-    elif ind: status, conf = "one unofficial source", "low"
-    else: status, conf = "no posted-limit source (state default assumed)", "low"
     shown = u["shown"]
     if status == "disagree" and not off:
         fix = "sources disagree (" + ", ".join(f"{i[0]} {i[1]}" for i in src) + f"); map shows {u['shown']}"
@@ -150,6 +158,6 @@ json.dump(acc, open(os.path.join(HERE, "accuracy.json"), "w"), indent=1)
 md[1:1] = ["", f"**Accuracy figure: {round(100*acc['share_verified_by_length'])}% of top-route road length ({acc['verified_ways']} of {acc['ways']} OSM ways) verified by two agreeing sources.** {acc['disagreements']} disagreements ({acc['held_blocked']} held blocked for a Street View check)."]
 open(os.path.join(HERE, "segments.md"), "w").write("\n".join(md) + "\n")
 ver = {r["key"]: {"mph": r["verified_mph"], "date": TODAY, "sources": [s for s in r["sources"] if s[1] == r["verified_mph"] and s[0] != "news"]} for r in rows if r["status"] == "verified"}
-json.dump({"date": TODAY, "rule": "official source + independent source agree", "accuracy": {"share_by_length": acc["share_verified_by_length"], "ways": acc["ways"], "verified_ways": acc["verified_ways"]}, "ways": ver},
+json.dump({"date": TODAY, "rule": "official source + independent source agree; a real source (official, sign photo, survey) overrides OSM (Max, Oct 20 2026)", "accuracy": {"share_by_length": acc["share_verified_by_length"], "ways": acc["ways"], "verified_ways": acc["verified_ways"]}, "ways": ver},
           open(os.path.join(HERE, "verified_ways.json"), "w"), indent=0)
 print(json.dumps({k: v for k, v in acc.items() if k != "by_city"}, indent=1)); print(json.dumps(acc["by_city"], indent=1))

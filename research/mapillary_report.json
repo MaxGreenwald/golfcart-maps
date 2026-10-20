@@ -1360,7 +1360,7 @@
   {
    "road": "South Coast Highway",
    "way": 436403281,
-   "override_mph": 30,
+   "override_mph": 35,
    "mapillary_mph": 40,
    "signs": 2,
    "url": "https://www.mapillary.com/app/?lat=32.997210&lng=-117.273400&z=19&focus=map&mapFeatureId=1426942724323756"

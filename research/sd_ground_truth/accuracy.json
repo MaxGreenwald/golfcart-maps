@@ -1,43 +1,43 @@
 {
  "market": "Coastal San Diego",
  "date": "2026-10-20",
- "ways": 623,
- "verified_ways": 66,
- "length_m": 84819,
- "verified_length_m": 9293,
- "share_verified_by_length": 0.11,
- "share_verified_by_ways": 0.106,
- "share_two_sources_any_kind_by_length": 0.203,
- "disagreements": 104,
+ "ways": 629,
+ "verified_ways": 86,
+ "length_m": 84753,
+ "verified_length_m": 13167,
+ "share_verified_by_length": 0.155,
+ "share_verified_by_ways": 0.137,
+ "share_two_sources_any_kind_by_length": 0.254,
+ "disagreements": 29,
  "held_blocked": 0,
  "by_status": {
-  "OSM + imagery agree (no official source)": 48,
-  "disagree": 104,
-  "no posted-limit source (state default assumed)": 187,
-  "one official source": 73,
-  "one unofficial source": 145,
-  "verified": 66
+  "OSM + imagery agree (no official source)": 54,
+  "disagree": 29,
+  "no posted-limit source (state default assumed)": 184,
+  "one official source": 121,
+  "one unofficial source": 155,
+  "verified": 86
  },
  "by_city": {
   "Carlsbad": {
-   "ways": 124,
-   "verified_ways": 45,
-   "share_by_length": 0.389
+   "ways": 128,
+   "verified_ways": 61,
+   "share_by_length": 0.656
   },
   "Coronado": {
-   "ways": 35,
+   "ways": 37,
    "verified_ways": 0,
    "share_by_length": 0.0
   },
   "Del Mar": {
    "ways": 33,
-   "verified_ways": 1,
-   "share_by_length": 0.036
+   "verified_ways": 2,
+   "share_by_length": 0.083
   },
   "Encinitas": {
    "ways": 103,
-   "verified_ways": 8,
-   "share_by_length": 0.125
+   "verified_ways": 9,
+   "share_by_length": 0.128
   },
   "Imperial Beach": {
    "ways": 22,
@@ -61,8 +61,8 @@
   },
   "Solana Beach": {
    "ways": 28,
-   "verified_ways": 11,
-   "share_by_length": 0.27
+   "verified_ways": 13,
+   "share_by_length": 0.353
   }
  }
 }

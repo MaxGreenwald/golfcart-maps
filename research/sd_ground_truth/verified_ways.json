@@ -1,12 +1,30 @@
 {
 "date": "2026-10-20",
-"rule": "official source + independent source agree",
+"rule": "official source + independent source agree; a real source (official, sign photo, survey) overrides OSM (Max, Oct 20 2026)",
 "accuracy": {
-"share_by_length": 0.11,
-"ways": 623,
-"verified_ways": 66
+"share_by_length": 0.155,
+"ways": 629,
+"verified_ways": 86
 },
 "ways": {
+"Carlsbad Boulevard|33.0878380,-117.3123206|33.0901462,-117.3131901": {
+"mph": 50,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+50,
+"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
+"https://ecode360.com/44006773"
+],
+[
+"streetview",
+50,
+"Street View check (volunteer sheet)",
+"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=33.089322,-117.312881&heading=343"
+]
+]
+},
 "Carlsbad Boulevard|33.0917140,-117.3142175|33.0877229,-117.3127498": {
 "mph": 50,
 "date": "2026-10-20",
@@ -22,6 +40,48 @@
 50,
 "Mapillary: 2 sign(s)",
 "https://www.mapillary.com/app/?lat=33.089950&lng=-117.313736&z=19&focus=map&mapFeatureId=462634128366157"
+]
+]
+},
+"Carlsbad Boulevard|33.0901462,-117.3131901|33.0918146,-117.3138055": {
+"mph": 50,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+50,
+"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
+"https://ecode360.com/44006773"
+],
+[
+"streetview",
+50,
+"Street View check (volunteer sheet)",
+"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=33.091718,-117.313771&heading=343"
+]
+]
+},
+"Carlsbad Boulevard|33.0918146,-117.3138055|33.0934885,-117.3144632": {
+"mph": 50,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+50,
+"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
+"https://ecode360.com/44006773"
+],
+[
+"mapillary",
+50,
+"Mapillary: 1 sign(s)",
+"https://www.mapillary.com/app/?lat=33.092136&lng=-117.313866&z=19&focus=map&mapFeatureId=475872783473261"
+],
+[
+"streetview",
+50,
+"Street View check (volunteer sheet)",
+"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=33.092685,-117.314142&heading=342"
 ]
 ]
 },
@@ -43,6 +103,30 @@
 ]
 ]
 },
+"Carlsbad Boulevard|33.0937004,-117.3145564|33.0976633,-117.3164904": {
+"mph": 50,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+50,
+"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
+"https://ecode360.com/44006773"
+],
+[
+"mapillary",
+50,
+"Mapillary: 1 sign(s)",
+"https://www.mapillary.com/app/?lat=33.097454&lng=-117.316320&z=19&focus=map&mapFeatureId=478839266784787"
+],
+[
+"streetview",
+50,
+"Street View check (volunteer sheet)",
+"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=33.096467,-117.315979&heading=337"
+]
+]
+},
 "Carlsbad Boulevard|33.1017427,-117.3182341|33.0991352,-117.3171633": {
 "mph": 50,
 "date": "2026-10-20",
@@ -58,6 +142,60 @@
 50,
 "Mapillary: 3 sign(s)",
 "https://www.mapillary.com/app/?lat=33.101246&lng=-117.318100&z=19&focus=map&mapFeatureId=2720460914911662"
+]
+]
+},
+"Carlsbad Boulevard|33.0984188,-117.3167419|33.1011812,-117.3178298": {
+"mph": 50,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+50,
+"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
+"https://ecode360.com/44006773"
+],
+[
+"streetview",
+50,
+"Street View check (volunteer sheet)",
+"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=33.100764,-117.317648&heading=341"
+]
+]
+},
+"Carlsbad Boulevard|33.1012392,-117.3178537|33.1017756,-117.3180696": {
+"mph": 50,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+50,
+"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
+"https://ecode360.com/44006773"
+],
+[
+"streetview",
+50,
+"Street View check (volunteer sheet)",
+"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=33.101712,-117.318044&heading=341"
+]
+]
+},
+"Carlsbad Boulevard|33.1017756,-117.3180696|33.1052406,-117.3196015": {
+"mph": 50,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+50,
+"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
+"https://ecode360.com/44006773"
+],
+[
+"mapillary",
+50,
+"Mapillary: 1 sign(s)",
+"https://www.mapillary.com/app/?lat=33.102657&lng=-117.318370&z=19&focus=map&mapFeatureId=130176495744652"
 ]
 ]
 },
@@ -79,6 +217,24 @@
 ]
 ]
 },
+"Carlsbad Boulevard|33.1059842,-117.3199755|33.1068608,-117.3203944": {
+"mph": 50,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+50,
+"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
+"https://ecode360.com/44006773"
+],
+[
+"streetview",
+50,
+"Street View check (volunteer sheet)",
+"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=33.106389,-117.320184&heading=337"
+]
+]
+},
 "Carlsbad Boulevard|33.1117095,-117.3226375|33.1067828,-117.3206237": {
 "mph": 50,
 "date": "2026-10-20",
@@ -94,6 +250,96 @@
 50,
 "Mapillary: 3 sign(s)",
 "https://www.mapillary.com/app/?lat=33.108530&lng=-117.321440&z=19&focus=map&mapFeatureId=139304718133343"
+]
+]
+},
+"Carlsbad Boulevard|33.1077691,-117.3207707|33.1117882,-117.3223682": {
+"mph": 50,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+50,
+"Carlsbad Blvd (Island Way - south city limit (Batiquitos Lagoon to Leucadia))",
+"https://ecode360.com/44006773"
+],
+[
+"mapillary",
+50,
+"Mapillary: 1 sign(s)",
+"https://www.mapillary.com/app/?lat=33.109127&lng=-117.321240&z=19&focus=map&mapFeatureId=195571832390876"
+]
+]
+},
+"Carlsbad Boulevard|33.1298875,-117.3336512|33.1288769,-117.3329348": {
+"mph": 35,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+35,
+"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",
+"https://ecode360.com/44006773"
+],
+[
+"mapillary",
+35,
+"Mapillary: 1 sign(s)",
+"https://www.mapillary.com/app/?lat=33.129597&lng=-117.333336&z=19&focus=map&mapFeatureId=196296812336334"
+]
+]
+},
+"Carlsbad Boulevard|33.1317701,-117.3349654|33.1300890,-117.3337940": {
+"mph": 35,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+35,
+"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",
+"https://ecode360.com/44006773"
+],
+[
+"mapillary",
+35,
+"Mapillary: 1 sign(s)",
+"https://www.mapillary.com/app/?lat=33.131530&lng=-117.334915&z=19&focus=map&mapFeatureId=377358580287800"
+]
+]
+},
+"Carlsbad Boulevard|33.1329695,-117.3357922|33.1325380,-117.3354870": {
+"mph": 35,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+35,
+"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",
+"https://ecode360.com/44006773"
+],
+[
+"streetview",
+35,
+"Street View check (volunteer sheet)",
+"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=33.132611,-117.335539&heading=149"
+]
+]
+},
+"Carlsbad Boulevard|33.1338701,-117.3364255|33.1333580,-117.3360670": {
+"mph": 35,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+35,
+"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",
+"https://ecode360.com/44006773"
+],
+[
+"mapillary",
+35,
+"Mapillary: 1 sign(s)",
+"https://www.mapillary.com/app/?lat=33.133633&lng=-117.336150&z=19&focus=map&mapFeatureId=197529525546396"
 ]
 ]
 },
@@ -130,6 +376,42 @@
 35,
 "Mapillary: 2 sign(s)",
 "https://www.mapillary.com/app/?lat=33.142950&lng=-117.341470&z=19&focus=map&mapFeatureId=3336182376484519"
+]
+]
+},
+"Carlsbad Boulevard|33.1452990,-117.3434665|33.1449667,-117.3431620": {
+"mph": 35,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+35,
+"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",
+"https://ecode360.com/44006773"
+],
+[
+"mapillary",
+35,
+"Mapillary: 1 sign(s)",
+"https://www.mapillary.com/app/?lat=33.145090&lng=-117.343280&z=19&focus=map&mapFeatureId=198371332003433"
+]
+]
+},
+"Carlsbad Boulevard|33.1468531,-117.3448299|33.1458514,-117.3439733": {
+"mph": 35,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+35,
+"Carlsbad Blvd (Tamarack - 1,400 ft S of Manzano Dr)",
+"https://ecode360.com/44006773"
+],
+[
+"mapillary",
+35,
+"Mapillary: 3 sign(s)",
+"https://www.mapillary.com/app/?lat=33.146404&lng=-117.344420&z=19&focus=map&mapFeatureId=198283382012228"
 ]
 ]
 },
@@ -715,6 +997,24 @@
 ]
 ]
 },
+"Carlsbad Boulevard|33.1663534,-117.3547586|33.1659695,-117.3545861": {
+"mph": 35,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+35,
+"Carlsbad Blvd (North city limit - State St)",
+"https://ecode360.com/44006773"
+],
+[
+"streetview",
+35,
+"Street View check (volunteer sheet)",
+"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=33.166139,-117.354677&heading=155"
+]
+]
+},
 "Carlsbad Boulevard|33.1663534,-117.3547586|33.1665690,-117.3549120": {
 "mph": 35,
 "date": "2026-10-20",
@@ -871,6 +1171,24 @@
 ]
 ]
 },
+"Camino del Mar|32.9759554,-117.2691663|32.9742971,-117.2689001": {
+"mph": 25,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+25,
+"Camino del Mar (San Dieguito Bridge - Coast Blvd: posted 25 (survey seg 3))",
+"https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_09142026-3926"
+],
+[
+"streetview",
+25,
+"Street View check (volunteer sheet)",
+"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=32.974297,-117.268900&heading=172"
+]
+]
+},
 "San Elijo Avenue|33.0361784,-117.2911595|33.0227901,-117.2835347": {
 "mph": 25,
 "date": "2026-10-20",
@@ -1015,6 +1333,24 @@
 ]
 ]
 },
+"South Coast Highway|33.0438111,-117.2935505|33.0433805,-117.2934906": {
+"mph": 25,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+25,
+"S Coast Hwy 101 (Encinitas Blvd - Swami's Ped Crossing)",
+"https://ecode360.com/EN5042/laws/LF2740111.pdf"
+],
+[
+"streetview",
+25,
+"Street View check (volunteer sheet)",
+"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=33.043461,-117.293501&heading=173"
+]
+]
+},
 "The Strand South|33.1926929,-117.3828260|33.1860388,-117.3772035": {
 "mph": 15,
 "date": "2026-10-20",
@@ -1156,6 +1492,42 @@
 35,
 "Lomas Santa Fe Dr (Hwy 101 - Stevens Ave)",
 "https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf"
+]
+]
+},
+"South Coast Highway|32.9947718,-117.2724535|32.9929400,-117.2719986": {
+"mph": 35,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+35,
+"Highway 101 (S Coast Hwy / Camino del Mar) (North City Limit - Dahlia Dr)",
+"https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf"
+],
+[
+"streetview",
+35,
+"Street View check (volunteer sheet)",
+"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=32.993363,-117.272100&heading=169"
+]
+]
+},
+"South Coast Highway|32.9967814,-117.2733910|32.9947718,-117.2724535": {
+"mph": 35,
+"date": "2026-10-20",
+"sources": [
+[
+"official",
+35,
+"Highway 101 (S Coast Hwy / Camino del Mar) (North City Limit - Dahlia Dr)",
+"https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf"
+],
+[
+"mapillary",
+35,
+"Mapillary: 2 sign(s)",
+"https://www.mapillary.com/app/?lat=32.995758&lng=-117.272870&z=19&focus=map&mapFeatureId=325399355611720"
 ]
 ]
 },
