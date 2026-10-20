@@ -142,7 +142,7 @@ function sync(){start=P(from);end=P(to);mk.forEach(m=>map.removeLayer(m));mk=[];
  $('fF').classList.toggle('act',active==='from');$('useme').style.display=(active||((from||to)&&!(from&&to)&&!(from&&from.me)&&!(to&&to.me)))?'':'none';$('fT').classList.toggle('act',active==='to');
  $('reset').style.display=$('acts').style.display=(from||to)?'':'none';
  $('help').textContent=active==='from'?'Tip: tap the map to drop your start pin':active==='to'||(from&&!to)?'Tip: tap the map to drop a pin for your destination':(from&&to)?'Tip: tap any road for its speed & length':'Tip: tap the map twice (start, then destination), or tap a road for its speed & length';
- if(routeG&&!(start&&end)){map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('range').style.display='none'}
+ updStar();if(routeG&&!(start&&end)){map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('range').style.display='none'}
  if(!(from||to)){$('title').innerHTML='🏖️ Golf Cart Maps';$('sub').innerHTML='Tap a road to see its speed limit and length, or plan a route above.'}
  else if(!(start&&end)){$('title').innerHTML=from?'📍 Start set':'🏖️ Destination set';$('sub').textContent=from?'Now pick where you’re headed.':'Now pick a start, or hit 📍 to start from you.'}}
 function setField(f,pt){if(f==='from')from=pt;else to=pt;active=null;sync();if(start&&end)route();window.state=st()}
@@ -157,11 +157,11 @@ function clearR(){from=to=null;active=null;if(routeG)map.removeLayer(routeG);rou
 window.resetRoute=clearR;
 map.on('click',e=>{if(!setPt(e.latlng))map.closePopup()});
 // long-press (mobile) / right-click: report here
-map.on('contextmenu',e=>{window._rseg={road:'(not a specific road)',ll:e.latlng};L.popup(popOpts()).setLatLng(e.latlng).setContent('<button class="pbtn rpt" onclick="reportRoad()">🚩 Report a problem here</button>').openOn(map)});$('clr').onclick=clearR;$('reset').onclick=clearR;
+map.on('contextmenu',e=>{if(window.NAV)return;window._rseg={road:'(not a specific road)',ll:e.latlng};window._pll=e.latlng;L.popup(popOpts()).setLatLng(e.latlng).setContent('<div class="cpop"><b>📍 Dropped pin</b><div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="popSet(\'from\')">Start here</button><button class="pbtn" onclick="popSet(\'to\')">Go here</button></div><div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="savePlaceAt(window._pll)">☆ Save</button><button class="pbtn" onclick="sharePlace({name:\'Dropped pin\',lat:window._pll.lat,lon:window._pll.lng})">📤 Share</button></div><button class="pbtn rpt" onclick="reportRoad()">🚩 Report a problem here</button></div>').openOn(map);track('pin_dropped',{})});$('clr').onclick=clearR;$('reset').onclick=clearR;
 function swap(){[from,to]=[to,from];active=null;sync();if(start&&end)route();else if(routeG){map.removeLayer(routeG);routeG=null}window.state=st()}
 $('swap').onclick=swap;function shareBtn(){const b=$('share');if(b)b.style.display=window.gcmCanShare&&gcmCanShare()?'':'none'}window.shareBtn=shareBtn;$('share').onclick=async()=>{const lr=window.lastRoute,dest=($('q').value||'').trim(),url='https://golfcartmap.com/'+(SLUG[REG.id]||'');const text=lr?`Cart-legal route${dest?' to '+dest:''} in ${REG.short}: ${lr.min} min, ${lr.mi} mi`+(lr.risky.length?` (${lr.risky.length} risky stretch${lr.risky.length>1?'es':''})`:''):`Golf cart and LSV legal streets in ${REG.short}`;const r=await gcmShare({title:'Golf Cart Maps',text,url});if(r==='copied'){const b=$('share'),t=b.textContent;b.textContent='✓ Link copied';setTimeout(()=>b.textContent=t,1500)}};$('swap2').onclick=swap;window.swapRoute=swap;
 for(const [f,id,x] of [['from','qf','xf'],['to','q','xt']]){
- $(id).addEventListener('focus',()=>{active=f;$(id).select();sync();curField=f});
+ $(id).addEventListener('focus',()=>{active=f;$(id).select();sync();curField=f;if(!$(id).value||/^(Your location|Dropped pin)/.test($(id).value))showSaved()});
  $(id).addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();clearField(f);$(id).value='';$('sugg').style.display='none'}});
  $(x).onclick=e=>{e.preventDefault();clearField(f);$('sugg').style.display='none'}}
 let curField='to';
@@ -202,9 +202,9 @@ async function remote(q){const key=(REG?REG.id:'')+'|'+norm(q);if(qcache.has(key
  qcache.set(key,res);return res}
 function showSugg(list){list=list.filter(x=>!inMX(L.latLng(x.lat,x.lon)));const sg=$('sugg');sg.innerHTML='';sg.style.display=list.length?'block':'none';
  list.forEach(x=>{const d=document.createElement('div');d.innerHTML=`<b>${x.name}</b><br><small style="color:#6b8592">${x.sub||''}</small>`;d.onclick=()=>pick(x);sg.appendChild(d)})}
-function pick(x){$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();const ll=L.latLng(x.lat,x.lon);map.setView(ll,16);active=curField;setPt(ll,x.name)}
+function pick(x){$('sugg').style.display='none';if(REG)GCMPlaces.addRecent(REG.id,x);document.activeElement&&document.activeElement.blur();const ll=L.latLng(x.lat,x.lon);map.setView(ll,16);active=curField;setPt(ll,x.name)}
 const spin=v=>$('qspin').style.display=v?'inline-block':'none';
-const onq=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<2){$('sugg').style.display='none';spin(false);return}
+const onq=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<2){spin(false);showSaved();return}
  const loc=D?localMatches(v):[];showSugg(loc);
  if(v.length<3)return;spin(true);const my=++qseq;
  tmr=setTimeout(async()=>{const r=await remote(v);if(my!==qseq)return;spin(false);
@@ -283,7 +283,7 @@ $('city').onchange=e=>{setURL(e.target.value,true);window._regHow='picker';loadR
  const pid=idFromPath();let id=(pid&&REGIONS.some(r=>r.id===pid))?pid:(pid===null)?'sd':(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;
  if(!id&&navigator.permissions&&navigator.geolocation){try{const p=await navigator.permissions.query({name:'geolocation'});if(p.state==='granted'){const pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:4000,maximumAge:600000}));const r=regionAt(pos.coords.latitude,pos.coords.longitude);if(r)id=r.id}}catch(_){}}
  const how0=(pid&&id===pid)||(q&&id===q)?'link':(saved&&id===saved)?'restore':id?'auto':'default';
- if(!window._regHow)window._regHow=how0;await loadRegion(id||'sd');if(!REG.hidden)setURL(REG.id,false);const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');if(la&&lo)map.setView([la,lo],+P.get('z')||17)})();
+ if(!window._regHow)window._regHow=how0;await loadRegion(id||'sd');if(!REG.hidden)setURL(REG.id,false);const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');if(la&&lo)map.setView([la,lo],+P.get('z')||17);const pn=GCMPlaces.parsePin(location.search);if(pn&&!inMX(L.latLng(pn.lat,pn.lon))){to={ll:L.latLng(pn.lat,pn.lon),label:pn.name};active=null;sync();window.state=st()}})();
 
 // ---- bottom sheet: pointer-driven, translateY snapping ----
 const sheet=$('sheet'),shead=$('shead');let snap='full';
@@ -319,3 +319,46 @@ L.DomEvent.disableClickPropagation(sheet);L.DomEvent.disableScrollPropagation(sh
 map.on('click',()=>{if(!routeG&&!from&&snap!=='collapsed')setSnap('collapsed')});
 addEventListener('resize',()=>{sizeSheet();setSnap(snap)});
 sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));
+
+// ---- saved places: Home first, then favorites, plus recent searches; per region, localStorage only (places.js) ----
+function showSaved(){if(!REG)return;const sg=$('sugg'),R=REG.id,ps=GCMPlaces.list(R),rc=GCMPlaces.recents(R);sg.innerHTML='';
+ const hm=GCMPlaces.get(R,'home');
+ const q=document.createElement('div');q.className='qk';q.innerHTML=`<button class="qb" id="qkHome">🏠 <b>Home</b><small>${hm?esc(hm.name):'Set Home'}</small></button>`;sg.appendChild(q);
+ const qh=q.querySelector('#qkHome');qh.onmousedown=e=>e.preventDefault();qh.onclick=e=>{e.preventDefault();if(hm)goPlace(hm);else{$('sugg').style.display='none';hintSet()}};
+ const favs=ps.filter(p=>p.kind!=='home');
+ if(favs.length){const h=document.createElement('div');h.className='sh';h.textContent='Saved places';sg.appendChild(h)}
+ for(const p of favs)sg.appendChild(row(p,'⭐',true));
+ if(rc.length){const h=document.createElement('div');h.className='sh';h.innerHTML='Recent<a href="#" id="rcClr">Clear</a>';sg.appendChild(h);h.querySelector('#rcClr').onmousedown=e=>e.preventDefault();h.querySelector('#rcClr').onclick=e=>{e.preventDefault();GCMPlaces.clearRecents(R);showSaved()}}
+ for(const x of rc)sg.appendChild(row(x,'🕘',false));
+ if(!favs.length&&!rc.length&&!hm){const h=document.createElement('div');h.className='sh none';h.textContent='Tap ☆ Save on a route, or long-press the map, to save a place here.';sg.appendChild(h)}
+ sg.style.display='block'}
+window.showSaved=showSaved;
+function row(x,ic,saved){const d=document.createElement('div');d.className='srow';const sv=saved?x:GCMPlaces.find(REG.id,x.lat,x.lon);
+ d.innerHTML=`<span class="ic">${ic}</span><span class="sm"><b>${esc(x.name)}</b><br><small style="color:#6b8592">${esc(x.sub||(saved?'Saved place':''))}</small></span>`+(saved?`<button class="star ed" aria-label="Edit ${esc(x.name)}">✎</button>`:`<button class="star${sv?' on':''}" aria-label="Save place">${sv?'★':'☆'}</button>`);
+ d.onmousedown=e=>e.preventDefault();d.onclick=()=>goPlace(x);const b=d.querySelector('.star');b.onclick=e=>{e.stopPropagation();if(saved)editPlace(x.id);else starToggle(x,b)};return d}
+function hintSet(){$('help').textContent='';$('sub').innerHTML='To set Home: search for it or long-press the map, tap <b>☆ Save</b>, then choose 🏠 Home.';setSnap('half')}
+// one tap: route from your location (or the start you already picked) to a saved/recent place
+function goPlace(x){$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();if(REG)GCMPlaces.addRecent(REG.id,x);const ll=L.latLng(x.lat,x.lon),pt={ll,label:x.name};track('place_used',{kind:x.kind||'recent'});
+ if(curField==='from'&&active==='from'){setField('from',pt);return}
+ to=pt;active=null;if(!from){if(myLL){from={me:true}}else{sync();locate();return}}sync();if(start&&end)route();window.state=st()}
+window.goPlace=goPlace;
+function starToggle(x,btn){const R=REG.id,sv=GCMPlaces.find(R,x.lat,x.lon);if(sv){editPlace(sv.id);return}const p=GCMPlaces.add(R,x);track('place_saved',{kind:'fav'});if(btn){btn.textContent='★';btn.classList.add('on')}updStar();toast('⭐ Saved '+p.name)}
+window.savePlaceAt=(ll,name)=>{map.closePopup();ll=ll||map.getCenter();const p=GCMPlaces.add(REG.id,{name:name||'Saved spot',sub:ll.lat.toFixed(4)+', '+ll.lng.toFixed(4),lat:ll.lat,lon:ll.lng});track('place_saved',{kind:'fav'});updStar();editPlace(p.id,true)};
+function updStar(){const b=$('save');if(!b)return;if(!(to&&end&&!to.me)){b.style.display='none';return}b.style.display='';const sv=REG&&GCMPlaces.find(REG.id,end.lat,end.lng);b.textContent=sv?'★ Saved':'☆ Save';b.classList.toggle('on',!!sv)}
+$('save').onclick=()=>{if(!(to&&end))return;const sv=GCMPlaces.find(REG.id,end.lat,end.lng);if(sv){editPlace(sv.id);return}const p=GCMPlaces.add(REG.id,{name:to.label&&!/^Dropped pin/.test(to.label)?to.label:'Saved spot',sub:to.label,lat:end.lat,lon:end.lng});track('place_saved',{kind:'fav'});updStar();editPlace(p.id,true)};
+let edId=null;function editPlace(id,isNew){const p=GCMPlaces.list(REG.id).find(q=>q.id===id);if(!p)return;edId=id;$('peH').textContent=isNew?'⭐ Saved! Name it':'✎ Edit place';$('peName').value=p.name;setKindBtns(p.kind==='home'?'home':'fav');$('pe').style.display='flex';setTimeout(()=>{try{$('peName').focus();$('peName').select()}catch(_){}},50)}
+window.editPlace=editPlace;
+let edKind='fav';function setKindBtns(k){edKind=k;document.querySelectorAll('#peKind button').forEach(b=>b.classList.toggle('on',b.dataset.k===k))}
+document.querySelectorAll('#peKind button').forEach(b=>b.onclick=()=>setKindBtns(b.dataset.k));
+const closePE=()=>{$('pe').style.display='none';edId=null;updStar()};
+$('peSave').onclick=()=>{if(edId){GCMPlaces.rename(REG.id,edId,$('peName').value);const was=GCMPlaces.list(REG.id).find(q=>q.id===edId);if(was&&was.kind!==edKind&&edKind==='home')track('place_saved',{kind:'home'});GCMPlaces.setKind(REG.id,edId,edKind)}closePE()};
+$('peDel').onclick=()=>{if(edId)GCMPlaces.remove(REG.id,edId);toast('Removed');closePE()};
+$('peShare').onclick=()=>{const p=edId&&GCMPlaces.list(REG.id).find(q=>q.id===edId);if(p)sharePlace(p)};
+$('peCancel').onclick=closePE;$('peName').addEventListener('keydown',e=>{if(e.key==='Enter')$('peSave').click()});
+// share a place: Web Share API (or the app's share sheet), else copy the link, else show the link to copy by hand
+async function sharePlace(p){map.closePopup();const url=GCMPlaces.link(SLUG[REG.id]||'',p);window.lastShareUrl=url;let r=false;
+ try{r=window.gcmShare?await gcmShare({title:'Golf Cart Maps',text:`${p.name} on Golf Cart Maps (${REG.short})`,url}):false}catch(_){r=false}
+ track('place_shared',{how:r==='shared'?'share':r==='copied'?'copy':'link'});
+ if(r==='copied')toast('✓ Link copied');else if(!r){$('shLink').value=url;$('shBox').style.display='flex';setTimeout(()=>{try{$('shLink').select()}catch(_){}},50)}}
+window.sharePlace=sharePlace;$('shClose').onclick=()=>{$('shBox').style.display='none'};
+let tt;function toast(t){const el=$('toast');el.textContent=t;el.style.display='block';clearTimeout(tt);tt=setTimeout(()=>el.style.display='none',2200)}
