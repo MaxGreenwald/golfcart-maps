@@ -1,4 +1,4 @@
-# Coastal San Diego ground truth: top-route segments (2026-10-18)
+# Coastal San Diego ground truth: top-route segments (2026-10-20)
 
 **Accuracy figure: 11% of top-route road length (66 of 623 OSM ways) verified by two agreeing sources.** 104 disagreements (0 held blocked for a Street View check).
 
@@ -8,7 +8,7 @@ Rule: **verified** = an official source (city code / council resolution / engine
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | Carlsbad | (unnamed) | 3 | 151 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Carlsbad | Cannon Road | 2 | 92 | – | 35 | – | – | 0% | one official source |  | [link](https://ecode360.com/44006773#10.44-coastal-streets) |
-| Carlsbad | Carlsbad Boulevard | 97 | 10216 | 10/15/20/25/30/35 | 30/35/50 | 25/30/35/50 | – | 44% | disagree, one official source, verified | map uses the official 30 mph (OSM/imagery: mapillary 25); map uses the official 30 mph (OSM/imagery: osm 15); map uses the official 30 mph (OSM/imagery: osm 20); map uses the offic | [link](https://ecode360.com/44006773) |
+| Carlsbad | Carlsbad Boulevard | 97 | 10216 | 10/15/20/25/30/35 | 30/35/50 | 25/30/35/50 | 25/35/50 | 44% | disagree, one official source, verified | map uses the official 30 mph (OSM/imagery: mapillary 25); map uses the official 30 mph (OSM/imagery: osm 15); map uses the official 30 mph (OSM/imagery: osm 20); map uses the offic | [link](https://ecode360.com/44006773) |
 | Carlsbad | Carlsbad Village Drive | 3 | 159 | 25 | – | – | – | 0% | one unofficial source |  |  |
 | Carlsbad | Grand Avenue | 4 | 271 | 25 | 25 | 25 | – | 100% | verified |  | [link](https://ecode360.com/44006773#10.44-coastal-streets) |
 | Carlsbad | La Costa Avenue | 2 | 50 | 40 | 30 | – | – | 0% | disagree, one official source | map uses the official 30 mph (OSM/imagery: osm 40) | [link](https://ecode360.com/EN5042/laws/LF2740111.pdf) |
@@ -38,7 +38,7 @@ Rule: **verified** = an official source (city code / council resolution / engine
 | Del Mar | 21st Street | 1 | 72 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Del Mar | 25th Street | 2 | 87 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Del Mar | Border Avenue | 1 | 101 | 25 | – | – | – | 0% | one unofficial source |  |  |
-| Del Mar | Camino del Mar | 15 | 1830 | 45 | 25 | 25/30/40 | – | 8% | disagree, no posted-limit source (state default assumed), one official source, verified | map uses the official 25 mph (OSM/imagery: mapillary 30); map uses the official 25 mph (OSM/imagery: osm 45); map uses the official 25 mph (OSM/imagery: osm 45, mapillary 30); sour | [link](https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_09142026-3926) |
+| Del Mar | Camino del Mar | 15 | 1830 | 45 | 25 | 25/30/40 | 25 | 8% | disagree, no posted-limit source (state default assumed), one official source, verified | map uses the official 25 mph (OSM/imagery: mapillary 30); map uses the official 25 mph (OSM/imagery: osm 45, mapillary 30); map uses the official 25 mph (OSM/imagery: osm 45, stree | [link](https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_09142026-3926) |
 | Del Mar | Coast Boulevard | 6 | 931 | 25 | – | 25 | – | 0% | OSM + imagery agree (no official source), no posted-limit source (state default assumed), one unofficial source |  |  |
 | Del Mar | Ocean Front | 2 | 556 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Del Mar | Sandy Lane | 3 | 27 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
@@ -52,11 +52,11 @@ Rule: **verified** = an official source (city code / council resolution / engine
 | Encinitas | Jasper Street | 1 | 235 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Encinitas | La Veta Avenue | 1 | 832 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Encinitas | Montgomery Avenue | 3 | 1699 | 20 | – | – | – | 0% | no posted-limit source (state default assumed), one unofficial source |  |  |
-| Encinitas | North Coast Highway | 23 | 3130 | 35 | 25 | 35 | – | 0% | disagree, one official source | map uses the official 25 mph (OSM/imagery: mapillary 35); map uses the official 25 mph (OSM/imagery: osm 35); map uses the official 25 mph (OSM/imagery: osm 35, mapillary 35) | [link](https://ecode360.com/EN5042/laws/LF2740111.pdf) |
+| Encinitas | North Coast Highway | 23 | 3130 | 35 | 25 | 35 | 25 | 0% | disagree, one official source | map uses the official 25 mph (OSM/imagery: mapillary 35); map uses the official 25 mph (OSM/imagery: mapillary 35, streetview 25); map uses the official 25 mph (OSM/imagery: osm 35 | [link](https://ecode360.com/EN5042/laws/LF2740111.pdf) |
 | Encinitas | North Court | 1 | 51 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Encinitas | San Elijo Avenue | 1 | 1648 | 25 | 25 | – | – | 100% | verified |  | [link](https://ecode360.com/EN5042/laws/LF2740111.pdf) |
-| Encinitas | South Coast Highway | 47 | 5312 | 25/30 | 25 | 30/40/45 | 30 | 6% | OSM + imagery agree (no official source), disagree, verified | map uses the official 25 mph (OSM/imagery: osm 25, mapillary 30); map uses the official 25 mph (OSM/imagery: osm 30); map uses the official 25 mph (OSM/imagery: osm 30, mapillary 4 | [link](https://ecode360.com/EN5042/laws/LF2740111.pdf) |
-| Encinitas | South Vulcan Avenue | 12 | 1411 | 30/35/40 | 30 | – | – | 0% | disagree, one unofficial source | map uses the official 30 mph (OSM/imagery: osm 40) | [link](https://ecode360.com/EN5042/laws/LF2740111.pdf) |
+| Encinitas | South Coast Highway | 47 | 5312 | 25/30 | 25 | 30/40/45 | 25/30 | 6% | OSM + imagery agree (no official source), disagree, verified | map uses the official 25 mph (OSM/imagery: osm 25, mapillary 30); map uses the official 25 mph (OSM/imagery: osm 30); map uses the official 25 mph (OSM/imagery: osm 30, mapillary 4 | [link](https://ecode360.com/EN5042/laws/LF2740111.pdf) |
+| Encinitas | South Vulcan Avenue | 12 | 1411 | 30/35/40 | 30 | – | 25 | 0% | disagree, one unofficial source | map uses the official 30 mph (OSM/imagery: osm 40); map uses the official 30 mph (OSM/imagery: osm 40, streetview 25) | [link](https://ecode360.com/EN5042/laws/LF2740111.pdf) |
 | Imperial Beach | 3rd Street | 1 | 404 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Imperial Beach | 4th Street | 2 | 233 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Imperial Beach | Dahlia Avenue | 3 | 199 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
@@ -71,7 +71,7 @@ Rule: **verified** = an official source (city code / council resolution / engine
 | La Jolla | Fern Glen | 1 | 201 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | La Jolla | Girard Avenue | 1 | 109 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | La Jolla | Herschel Avenue | 1 | 594 | 25 | – | – | – | 0% | one unofficial source |  |  |
-| La Jolla | La Jolla Boulevard | 46 | 2723 | 35 | – | 25/35 | – | 0% | OSM + imagery agree (no official source), no posted-limit source (state default assumed), one unofficial source |  |  |
+| La Jolla | La Jolla Boulevard | 46 | 2723 | 35 | – | 25/35 | 35 | 0% | OSM + imagery agree (no official source), no posted-limit source (state default assumed), one unofficial source |  |  |
 | La Jolla | Little Street | 1 | 118 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | La Jolla | Lowry Place | 1 | 78 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | La Jolla | Lowry Terrace | 1 | 171 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
@@ -106,11 +106,11 @@ Rule: **verified** = an official source (city code / council resolution / engine
 | Pacific Beach / Mission Beach | (unnamed) | 11 | 2942 | 25 | – | – | – | 0% | no posted-limit source (state default assumed), one unofficial source |  |  |
 | Pacific Beach / Mission Beach | Bayside Lane | 1 | 1343 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Pacific Beach / Mission Beach | El Carmel Place | 1 | 421 | – | – | 15 | – | 0% | one unofficial source |  |  |
-| Pacific Beach / Mission Beach | Grand Avenue | 1 | 137 | 45 | – | 35 | – | 0% | disagree | sources disagree (osm 45, mapillary 35, mapillary 35); map shows 35 |  |
+| Pacific Beach / Mission Beach | Grand Avenue | 1 | 137 | 45 | – | 35 | 35 | 0% | disagree | sources disagree (osm 45, mapillary 35, mapillary 35, streetview 35); map shows 35 |  |
 | Pacific Beach / Mission Beach | Hornblend Street | 1 | 113 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Pacific Beach / Mission Beach | La Jolla Boulevard | 15 | 580 | – | – | 35 | – | 0% | one unofficial source |  |  |
 | Pacific Beach / Mission Beach | Loring Street | 3 | 273 | – | – | 25 | – | 0% | no posted-limit source (state default assumed), one unofficial source |  |  |
-| Pacific Beach / Mission Beach | Mission Boulevard | 87 | 4911 | – | 25 | 30 | – | 0% | disagree, one official source, one unofficial source | map uses the official 25 mph (OSM/imagery: mapillary 30); sources disagree (mapillary 30, mapillary 25); map shows 25 | [link](https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf) |
+| Pacific Beach / Mission Beach | Mission Boulevard | 87 | 4911 | – | 25 | 30 | 30 | 0% | OSM + imagery agree (no official source), disagree, one official source, one unofficial source | map uses the official 25 mph (OSM/imagery: mapillary 30); sources disagree (mapillary 30, mapillary 25); map shows 25 | [link](https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf) |
 | Pacific Beach / Mission Beach | Pacific View Drive | 1 | 179 | – | – | 25 | – | 0% | one unofficial source |  |  |
 | Pacific Beach / Mission Beach | Santa Clara Place | 2 | 128 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
 | Pacific Beach / Mission Beach | Ventura Place | 4 | 107 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
@@ -119,6 +119,6 @@ Rule: **verified** = an official source (city code / council resolution / engine
 | Solana Beach | Lomas Santa Fe Drive | 11 | 217 | 35/50 | 35 | – | – | 73% | disagree, verified | map uses the official 35 mph (OSM/imagery: osm 50) | [link](https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf) |
 | Solana Beach | North Rios Avenue | 1 | 1286 | – | – | 25 | – | 0% | one unofficial source |  |  |
 | Solana Beach | Ocean Street | 1 | 213 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |
-| Solana Beach | South Coast Highway | 6 | 1113 | 45 | 35 | 35 | 30 | 0% | disagree | map uses the official 35 mph (OSM/imagery: osm 45); sources disagree (osm 45, streetview 30); map shows 30; sources disagree (osm 45, streetview 30, mapillary 35); map shows 30 | [link](https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf) |
+| Solana Beach | South Coast Highway | 6 | 1113 | 45 | 35 | 35 | 30 | 0% | disagree | map uses the official 35 mph (OSM/imagery: osm 45); sources disagree (osm 45, streetview 30); map shows 30; sources disagree (osm 45, streetview 30, mapillary 35); map shows 30; so | [link](https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf) |
 | Solana Beach | South Sierra Avenue | 4 | 1300 | 25 | 25 | 25 | – | 100% | verified |  | [link](https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf) |
 | Solana Beach | West Cliff Street | 1 | 189 | – | – | – | – | 0% | no posted-limit source (state default assumed) |  |  |

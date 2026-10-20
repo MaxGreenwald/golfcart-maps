@@ -1,6 +1,6 @@
 {
  "market": "Coastal San Diego",
- "date": "2026-10-18",
+ "date": "2026-10-20",
  "ways": 623,
  "verified_ways": 66,
  "length_m": 84819,
@@ -11,11 +11,11 @@
  "disagreements": 104,
  "held_blocked": 0,
  "by_status": {
-  "OSM + imagery agree (no official source)": 47,
+  "OSM + imagery agree (no official source)": 48,
   "disagree": 104,
   "no posted-limit source (state default assumed)": 187,
   "one official source": 73,
-  "one unofficial source": 146,
+  "one unofficial source": 145,
   "verified": 66
  },
  "by_city": {
