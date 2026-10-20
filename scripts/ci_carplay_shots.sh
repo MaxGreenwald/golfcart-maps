@@ -27,10 +27,11 @@ osascript -e "$WIN" -e 'tell application "System Events" to tell process "Simula
 for xy in ${CARPLAY_TAPS:-}; do cliclick m:$xy w:300 dd:. w:120 du:. ; sleep 4; screencapture -x shots-ci/carplay-tap-$xy.png; done
 sleep 20
 screencapture -x shots-ci/carplay-preview.png
+xcrun simctl io "$DEV" screenshot --display=external shots-ci/cp-ext-preview.png 2>>shots-ci/ext-err.txt || true
 sleep 35
 screencapture -x shots-ci/carplay-guidance.png
 # demo drive: one shot every 4 s while the car steps through the maneuvers
-if [ "${DEMO_DRIVE:-0}" != "0" ]; then for i in $(seq -w 1 22); do sleep 4; screencapture -x shots-ci/carplay-drive-$i.png; done; fi
+if [ "${DEMO_DRIVE:-0}" != "0" ]; then for i in $(seq -w 1 22); do sleep 4; screencapture -x shots-ci/carplay-drive-$i.png; xcrun simctl io "$DEV" screenshot --display=external shots-ci/cp-ext-$i.png 2>>shots-ci/ext-err.txt || true; done; fi
 xcrun simctl spawn "$DEV" log show --last 6m --predicate 'process == "App"' --style compact > shots-ci/app-log.txt 2>&1
 cp ~/Library/Logs/DiagnosticReports/App*.ips shots-ci/ 2>/dev/null
 ls -la shots-ci

@@ -47,31 +47,6 @@ struct GCMManeuver {
     }
 }
 
-// Junction diagram for CPManeuver.junctionImage: approach road from the bottom, exit road at the real turn angle,
-// drawn from the route geometry (no lane data exists in our road graph, so no lane arrows).
-enum JunctionArt {
-    static func image(turn: Double, size: CGFloat = 120) -> UIImage {
-        UIGraphicsImageRenderer(size: CGSize(width: size, height: size)).image { ctx in
-            let g = ctx.cgContext, c = CGPoint(x: size / 2, y: size * 0.55)
-            g.setLineCap(.round); g.setLineJoin(.round)
-            // cross street stubs (grey), then approach + exit (white)
-            g.setStrokeColor(UIColor(white: 0.55, alpha: 1).cgColor); g.setLineWidth(size * 0.1)
-            for a in [-90.0, 90.0, 0.0] where abs(a - turn) > 20 { g.move(to: c); g.addLine(to: pt(c, a, size * 0.42)) }
-            g.strokePath()
-            g.setStrokeColor(UIColor.white.cgColor); g.setLineWidth(size * 0.12)
-            g.move(to: CGPoint(x: c.x, y: size)); g.addLine(to: c); g.addLine(to: pt(c, turn, size * 0.42)); g.strokePath()
-            // arrow head on the exit
-            let tip = pt(c, turn, size * 0.46), l = pt(tip, turn + 150, size * 0.16), r = pt(tip, turn - 150, size * 0.16)
-            g.setFillColor(UIColor.white.cgColor); g.move(to: tip); g.addLine(to: l); g.addLine(to: r); g.closePath(); g.fillPath()
-        }
-    }
-    // angle 0 = straight up, + = clockwise (right)
-    static func pt(_ c: CGPoint, _ deg: Double, _ r: CGFloat) -> CGPoint {
-        let a = deg * .pi / 180
-        return CGPoint(x: c.x + r * CGFloat(sin(a)), y: c.y - r * CGFloat(cos(a)))
-    }
-}
-
 struct GCMPlan {
     let meters: Double, miles: Double, roundTrip: Double, minutes: Double
     let rangeStatus: String, rangePct: Int, rangeMi: Double, riskyCount: Int
@@ -378,7 +353,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         c.dashboardSymbolImage = c.symbolImage
         c.notificationSymbolImage = c.symbolImage
         c.initialTravelEstimates = estimates(m.toMeters, m.toMeters / speed)
-        if m.isTurn { c.junctionImage = JunctionArt.image(turn: m.turn) }
+        // No junctionImage: CarPlay draws it in place of the instruction text, and our road graph has no lane or
+        // junction artwork worth showing at simple intersections. Junction geometry goes in junctionExitAngle below.
         if m.risky { c.attributedInstructionVariants = [NSAttributedString(string: "⚠️ " + m.text)] }
         c.userInfo = ["road": m.road, "mph": m.mph ?? 0]
         if #available(iOS 17.4, *) {
