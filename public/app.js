@@ -77,14 +77,14 @@ function nearest(ll){const q=[ll.lng,ll.lat],kx=Math.cos(ll.lat*Math.PI/180);let
  if(!best)return [null,1e9];return [best[0],Math.sqrt(bd)*111320,best[1]]}
 // A* over (node, metres-of-current-forbidden-run). Legal mode: forbidden edges never used.
 // Crossing a forbidden road = passing through a shared node between two allowed edges (CVC 21260(b)(1)).
-function astar(s,t){const key=(n,r)=>n+'|'+Math.round(r);const T=nodes[t];const g=new Map(),prev=new Map();const k0=key(s,0);g.set(k0,0);
+function astar(s,t,prof){const PC=prof&&GCMRouteOpts.PROFILES[prof]&&GCMRouteOpts.PROFILES[prof].cost;const key=(n,r)=>n+'|'+Math.round(r);const T=nodes[t];const g=new Map(),prev=new Map();const k0=key(s,0);g.set(k0,0);
  const h=[[hav(nodes[s],T),s,0,k0]],done=new Set();
  const push=x=>{h.push(x);let i=h.length-1;while(i>0){const p=(i-1)>>1;if(h[p][0]<=h[i][0])break;[h[p],h[i]]=[h[i],h[p]];i=p}};
  const pop=()=>{const top=h[0],l=h.pop();if(h.length){h[0]=l;let i=0;for(;;){let a=2*i+1,b=a+1,m=i;if(a<h.length&&h[a][0]<h[m][0])m=a;if(b<h.length&&h[b][0]<h[m][0])m=b;if(m===i)break;[h[m],h[i]]=[h[i],h[m]];i=m}}return top};
  let goal=null;
  while(h.length){const [,u,run,ku]=pop();if(done.has(ku))continue;done.add(ku);if(u===t&&run===0){goal=ku;break}
-  for(const [v,w,si,rev,f] of adj[u]||[]){let nr,cost=w;
-   if(!f&&RULE.cross===false&&fnode.has(v)&&!cnode.has(v)&&v!==t)continue;if(f){if(!risky)continue;nr=run+w;if(nr>RISKY_MAX)continue;cost=w*6+60}else{nr=0;if(fast.has(v))cost+=150}
+  for(const [v,w,si,rev,f] of adj[u]||[]){let nr,cost=w;if(PC&&!f){const sg=D.segs[si];cost=PC(sg,w,cls(sg),{scenic:SCN&&SCN(sg),caution:sg[3]==='q'||unk(sg)})}
+   if(!f&&(RULE.cross===false||AVOID)&&fnode.has(v)&&!cnode.has(v)&&v!==t)continue;if(f){if(!risky)continue;nr=run+w;if(nr>RISKY_MAX)continue;cost=w*6+60}else{nr=0;if(fast.has(v))cost+=150}
    const kv=key(v,nr),ng=g.get(ku)+cost;if(!g.has(kv)||ng<g.get(kv)){g.set(kv,ng);prev.set(kv,[ku,si,rev]);push([ng+hav(nodes[v],T),v,nr,kv])}}}
  if(!goal)return null;const parts=[];let x=goal;while(x!==k0){const [pk,si,rev]=prev.get(x);parts.push([si,rev]);x=pk}parts.reverse();return parts}
 function summarize(parts){let dist=0,stretches=[],cur=null,line=[];const legs=[];
@@ -97,18 +97,18 @@ function summarize(parts){let dist=0,stretches=[],cur=null,line=[];const legs=[]
 window.popSet=f=>{if(inMX(window._pll))return;map.closePopup();setField(f,{ll:window._pll,label:lbl(window._pll)})};
 const ft=m=>Math.round(m*3.281)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
 let routing=false;async function route(){$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
- await new Promise(r=>setTimeout(r,0));let parts=null;if(a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
- if(!parts){trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
- const r=summarize(parts);trackRoute(true,r.dist/1609.34);routeG=L.layerGroup().addTo(map);
+ await new Promise(r=>setTimeout(r,0));let parts=null;const _t0=performance.now();const OPTS=a!=null&&b!=null?await routeOptions(a,a2,b,b2):[];window._routeOpts=OPTS;window._routeMs=Math.round(performance.now()-_t0);const pick=OPTS.find(o=>o.id===ROPT)||OPTS[0];parts=pick?pick.parts:null;$('acts').style.display='flex';
+ if(!parts){trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';$('ropts').innerHTML='';setSnap('half');return null}
+ const r=summarize(parts);trackRoute(true,r.dist/1609.34);r.opt=pick.id;r.score=pick.score;routeG=L.layerGroup().addTo(map);
  const all=[];r.legs.forEach(l=>all.push(...l.p));
  L.polyline(all.map(p=>[p[1],p[0]]),{color:'#fff',weight:10,opacity:.9,renderer,interactive:false}).addTo(routeG);
  L.polyline(all.map(p=>[p[1],p[0]]),{color:'#1d6fe0',weight:6,renderer,interactive:false}).addTo(routeG);
  r.stretches.forEach(s=>L.polyline(s.p.map(p=>[p[1],p[0]]),{color:'#ffc400',weight:8,renderer}).addTo(routeG).bindTooltip(`Risky: ${ft(s.len)} on ${s.name}`));
- const min=Math.max(1,Math.round(r.dist/1609.34/22*60));
+ const min=pick.min;
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
  $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:(RULE.designated_only?'All on cart paths & designated roads 🌴':(r.legs.some(l=>l.u)?`Mostly ≤${RULE.max_posted} mph roads; <b>❓ ${mi(r.legs.filter(l=>l.u).reduce((a,l)=>a+l.s._len,0))} speed unknown — check signs</b>`:`All on roads ≤${RULE.max_posted} mph 🌴`))+ruleNotes()+(da>150||db>150?' · snapped to nearest legal road':'');
  r.back=await backDist(a,b,a2,b2,r.dist);renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
- setSnap('half');focusStart();window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};window._lastDetail=r;return r}
+ renderOpts(OPTS,pick);setSnap('half');focusStart();window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={opt:pick.id,score:pick.score,opts:OPTS.map(o=>o.id),mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};window._lastDetail=r;return r}
 // return trip: one-way rules can differ, so route B->A; fall back to same distance
 async function backDist(a,b,a2,b2,d){if(a==null||b==null)return d;for(const [x,y] of [[b,a],[b2,a],[b,a2],[b2,a2]]){const p=astar(x,y);if(p)return summarize(p).dist}return d}
 let lastR=null;function renderRange(r){if(r)lastR=r;r=lastR;if(!r)return;const R=GCMRange,s=R.load(),rng=R.rangeFor(s),bat=s.battery==null?100:s.battery;
@@ -142,7 +142,7 @@ function sync(){start=P(from);end=P(to);mk.forEach(m=>map.removeLayer(m));mk=[];
  $('fF').classList.toggle('act',active==='from');$('useme').style.display=(active||((from||to)&&!(from&&to)&&!(from&&from.me)&&!(to&&to.me)))?'':'none';$('fT').classList.toggle('act',active==='to');
  $('reset').style.display=$('acts').style.display=(from||to)?'':'none';
  $('help').textContent=active==='from'?'Tip: tap the map to drop your start pin':active==='to'||(from&&!to)?'Tip: tap the map to drop a pin for your destination':(from&&to)?'Tip: tap any road for its speed & length':'Tip: tap the map twice (start, then destination), or tap a road for its speed & length';
- if(routeG&&!(start&&end)){map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('range').style.display='none'}
+ if(routeG&&!(start&&end)){map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('ropts').innerHTML='';$('range').style.display='none'}
  if(!(from||to)){$('title').innerHTML='🏖️ Golf Cart Maps';$('sub').innerHTML='Tap a road to see its speed limit and length, or plan a route above.'}
  else if(!(start&&end)){$('title').innerHTML=from?'📍 Start set':'🏖️ Destination set';$('sub').textContent=from?'Now pick where you’re headed.':'Now pick a start, or hit 📍 to start from you.'}}
 function setField(f,pt){if(f==='from')from=pt;else to=pt;active=null;sync();if(start&&end)route();window.state=st()}
@@ -319,3 +319,28 @@ L.DomEvent.disableClickPropagation(sheet);L.DomEvent.disableScrollPropagation(sh
 map.on('click',()=>{if(!routeG&&!from&&snap!=='collapsed')setSnap('collapsed')});
 addEventListener('resize',()=>{sizeSheet();setSnap(snap)});
 sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));
+
+// ---- route choices (routeopts.js): Fastest, Most verified, Shortest, Scenic + "avoid crossing restricted roads" (Settings) ----
+// All choices use the same legal graph; profiles only re-weight allowed roads. Alternatives are computed after yielding
+// to the UI and skipped when they duplicate one already found, so phones stay responsive.
+let ROPT=(()=>{try{return localStorage.getItem('gcm-ropt')||'fastest'}catch(_){return 'fastest'}})(),AVOID=(()=>{try{return localStorage.getItem('gcm-avoid')==='1'}catch(_){return false}})(),SCN=null,SCNR=null;
+function scenicFn(){if(SCNR!==REG||!SCN){if(!POIS.length)return null;SCN=GCMRouteOpts.scenicIndex(POIS);SCNR=REG}return SCN}
+async function routeOptions(a,a2,b,b2){const o1=await routeOptions0(a,a2,b,b2);if(o1.length||!AVOID)return o1;AVOID=false;try{const o2=await routeOptions0(a,a2,b,b2);o2.forEach(o=>o.avoidFailed=true);return o2}finally{AVOID=true}}
+async function routeOptions0(a,a2,b,b2){scenicFn();const out=[],pairs=[[a,b],[a2,b],[a,b2],[a2,b2]];
+ for(const id of GCMRouteOpts.ORDER){let parts=null;for(const [x,y] of pairs){if(x==null||y==null)continue;parts=astar(x,y,id);if(parts)break}
+  if(!parts){if(!out.length)return out;continue}
+  const pl=parts.map(([si])=>[si,0,D.segs[si]._len]);const dup=out.find(o=>GCMRouteOpts.same(o.pl,pl));
+  if(dup){dup.also.push(id);continue}
+  const dist=parts.reduce((s,[si])=>s+D.segs[si]._len,0),sec=parts.reduce((s,[si])=>{const g=D.segs[si];return s+g._len/(GCMRouteOpts.mph(g)*0.44704)},0);
+  const score=GCMRouteOpts.score(parts.map(([si])=>({s:D.segs[si]})),cls);
+  out.push({id,parts,pl,dist,min:Math.max(1,Math.round(sec/60)),score,also:[]});
+  await new Promise(r=>setTimeout(r,0))}
+ return out}
+window.routeOptions=routeOptions;
+function renderOpts(opts,pick){const el=$('ropts');if(!opts||opts.length<1){el.innerHTML='';return}const P=GCMRouteOpts.PROFILES;
+ el.innerHTML=opts.map(o=>`<button class="ro${o===pick?' on':''}" data-id="${o.id}"><b>${P[o.id].icon} ${[o.id,...o.also].map(i=>P[i].label).join(' · ')}</b><small>${o.min} min · ${(o.dist/1609.34).toFixed(1)} mi · ${o.score}% verified</small></button>`).join('')+
+  `<div class="rohelp">“Verified” = share of the route on roads with a posted or listed speed limit on file.${pick&&pick.avoidFailed?' No way around crossing a faster road here, so this route crosses one.':AVOID?' Avoiding crossings of faster roads.':''}</div>`;
+ el.querySelectorAll('.ro').forEach(b=>b.onclick=()=>{if(b.dataset.id===ROPT&&b.classList.contains('on'))return;setROpt(b.dataset.id,true)})}
+function setROpt(id,user){if(!GCMRouteOpts.PROFILES[id])return;ROPT=id;try{localStorage.setItem('gcm-ropt',id)}catch(_){}if(user)track('route_option',{opt:id});if(start&&end)route()}
+function setAvoid(v){AVOID=!!v;try{localStorage.setItem('gcm-avoid',v?'1':'0')}catch(_){}$('setAvoid').checked=AVOID;track('avoid_toggled',{on:AVOID});if(start&&end)route()}
+window.setROpt=setROpt;window.setAvoid=setAvoid;$('setAvoid').checked=AVOID;$('setAvoid').onchange=e=>setAvoid(e.target.checked);
