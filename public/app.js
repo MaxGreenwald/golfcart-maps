@@ -89,7 +89,7 @@ function astar(s,t){const key=(n,r)=>n+'|'+Math.round(r);const T=nodes[t];const 
  if(!goal)return null;const parts=[];let x=goal;while(x!==k0){const [pk,si,rev]=prev.get(x);parts.push([si,rev]);x=pk}parts.reverse();return parts}
 function summarize(parts){let dist=0,stretches=[],cur=null,line=[];const legs=[];
  for(const [si,rev] of parts){const s=D.segs[si];let p=s[7];if(rev)p=p.slice().reverse();dist+=s._len;const f=cls(s)===3;
-  legs.push({p,f,s,u:!f&&unk(s),a:f?null:advOf(s)});
+  legs.push({p,f,s,e:rev?s[5]:s[6],u:!f&&unk(s),a:f?null:advOf(s)});
   if(f){if(!cur){cur={len:0,name:D.names[s[0]]||'unnamed road',sp:s[2],p:[]};stretches.push(cur)}cur.len+=s._len;cur.p.push(...p)}else cur=null}
  // turn-by-turn by street name
  const steps=[];for(const l of legs){const n=D.names[l.s[0]]||'unnamed road';const last=steps[steps.length-1];if(last&&last.n===n&&last.f===l.f&&last.u===l.u&&last.a===l.a)last.d+=l.s._len;else steps.push({n,d:l.s._len,f:l.f,u:l.u,sp:l.s[2],a:l.a})}
@@ -98,8 +98,8 @@ window.popSet=f=>{if(inMX(window._pll))return;map.closePopup();setField(f,{ll:wi
 const ft=m=>Math.round(m*3.281)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
 let routing=false;async function route(){$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
  await new Promise(r=>setTimeout(r,0));let parts=null;if(a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
- if(!parts){trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
- const r=summarize(parts);trackRoute(true,r.dist/1609.34);routeG=L.layerGroup().addTo(map);
+ if(!parts){lastLegs=null;$('go').style.display='none';trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
+ const r=summarize(parts);trackRoute(true,r.dist/1609.34);lastLegs=navLegs(r);$('go').style.display='';routeG=L.layerGroup().addTo(map);
  const all=[];r.legs.forEach(l=>all.push(...l.p));
  L.polyline(all.map(p=>[p[1],p[0]]),{color:'#fff',weight:10,opacity:.9,renderer,interactive:false}).addTo(routeG);
  L.polyline(all.map(p=>[p[1],p[0]]),{color:'#1d6fe0',weight:6,renderer,interactive:false}).addTo(routeG);
@@ -319,3 +319,60 @@ L.DomEvent.disableClickPropagation(sheet);L.DomEvent.disableScrollPropagation(sh
 map.on('click',()=>{if(!routeG&&!from&&snap!=='collapsed')setSnap('collapsed')});
 addEventListener('resize',()=>{sizeSheet();setSnap(snap)});
 sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));
+
+// ---- voice turn-by-turn (logic in nav.js; this is the phone UI + GPS/speech/wake lock glue) ----
+// Settings: voice on/off (gcm-mute) and north-up/heading-up (gcm-hup), both remembered in localStorage.
+let lastLegs=null;
+function xingOf(l,last){if(last||!fnode.has(l.e)||cnode.has(l.e))return null;for(const [,,si,,f] of adj[l.e]||[])if(f){const s=D.segs[si];return{name:D.names[s[0]]||'',sp:s[2]}}return{name:'',sp:null}}
+function navLegs(r){return r.legs.map((l,i)=>({p:l.p,name:D.names[l.s[0]]||'',len:l.s._len,f:l.f,hw:l.s[1],sp:l.s[2],cart:l.s[3]==='c',xing:l.f?null:xingOf(l,i===r.legs.length-1)}))}
+window.navLegs=navLegs;
+async function planLegs(a,b){const P=0.03;await ensure(Math.min(a.lat,b.lat)-P,Math.min(a.lng,b.lng)-P,Math.max(a.lat,b.lat)+P,Math.max(a.lng,b.lng)+P);
+ const [x,,x2]=nearest(a),[y,,y2]=nearest(b);if(x==null||y==null)return null;for(const [u,v] of [[x,y],[x2,y],[x,y2],[x2,y2]]){if(u==null||v==null)continue;const p=astar(u,v);if(p)return navLegs(summarize(p))}return null}
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(_){return null}},lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}};
+let NAV=null,navWatch=null,wake=null,navLine=null,navMk=null,muted=lsGet('gcm-mute')==='1',headUp=lsGet('gcm-hup')==='1',navFollow=true,gpsHead=null;
+const ARW={left:'⬅️',right:'➡️',slight_left:'↖️',slight_right:'↗️',straight:'⬆️',depart:'⬆️',uturn:'↩️',arrive:'🏁'};
+let voice=null;function pickVoice(){try{const vs=speechSynthesis.getVoices();voice=vs.find(v=>/^en[-_]US/i.test(v.lang)&&/samantha|google us|aria|jenny/i.test(v.name))||vs.find(v=>/^en[-_]US/i.test(v.lang))||null}catch(_){}}
+if(window.speechSynthesis){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function speak(t){(window.navSaid=window.navSaid||[]).push(t);$('nvSay').textContent=t;if(muted||!window.speechSynthesis)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=1.02;if(voice)u.voice=voice;u.lang='en-US';speechSynthesis.speak(u)}catch(_){}}
+async function wakeOn(){try{if('wakeLock' in navigator&&document.visibilityState==='visible'){wake=await navigator.wakeLock.request('screen');wake.addEventListener&&wake.addEventListener('release',()=>{wake=null})}}catch(_){wake=null}}
+document.addEventListener('visibilitychange',()=>{if(NAV&&document.visibilityState==='visible'&&!wake)wakeOn()});
+function drawNavLine(legs){if(navLine)map.removeLayer(navLine);const pts=[];legs.forEach(l=>l.p.forEach(p=>pts.push([p[1],p[0]])));navLine=L.layerGroup([L.polyline(pts,{color:'#fff',weight:12,opacity:.9,renderer,interactive:false}),L.polyline(pts,{color:'#1d6fe0',weight:7,renderer,interactive:false})]).addTo(map)}
+const headIcon=()=>L.divIcon({className:'',html:'<div class="hdg"><div class="hdgb"></div><div class="hdgd"></div></div>',iconSize:[60,60],iconAnchor:[30,30]});
+function applyHeading(h){window.navHeading=h;const el=navMk&&navMk.getElement();const rot=h==null?0:h;
+ if(el){const b=el.querySelector('.hdgb');if(b){b.style.display=h==null?'none':'';b.style.transform=`rotate(${headUp?0:rot}deg)`}}
+ const m=$('map'),on=!!(NAV&&headUp);m.style.transform=on&&h!=null?`rotate(${-rot}deg)`:'';if(m.classList.contains('hup')!==on){m.classList.toggle('hup',on);map.invalidateSize({pan:false})}}
+function navUI(i){if(!NAV)return;const m=i.next;window.navInfo=i;
+ if(i.state==='rerouting'){$('nvArw').textContent='🔄';$('nvDist').textContent='Rerouting…';$('nvTxt').textContent='Finding a legal way from here';$('nvThen').textContent='';$('navui').classList.add('rr')}
+ else if(i.state==='off'){$('navui').classList.add('rr');$('nvArw').textContent='↩️';$('nvDist').textContent='Off route';$('nvTxt').textContent='Head back toward the blue line';$('nvThen').textContent=''}
+ else if(i.state==='arrived'){$('navui').classList.remove('rr');$('nvArw').textContent='🏁';$('nvDist').textContent='You’ve arrived';$('nvTxt').textContent=to&&!to.me?to.label:'Destination';$('nvThen').textContent=''}
+ else if(m){$('navui').classList.remove('rr');$('nvArw').textContent=ARW[m.type]||'⬆️';$('nvDist').textContent=GCMNav.showDist(i.toNext);$('nvTxt').textContent=m.type==='arrive'?'Arrive at destination':m.text;const t=i.then;$('nvThen').textContent=t&&m.type!=='arrive'&&t.at-m.at<160?'Then '+(ARW[t.type]||'')+' '+(t.type==='arrive'?'arrive':t.text.replace(/^Turn /,'').replace(/^Continue/,'continue')):''}
+ // live speed-limit sign: the posted limit of the road you're on (hidden on cart paths; "?" when no limit is on file)
+ const lim=$('nvLim');lim.style.display=i.cartPath?'none':'';$('nvLimN').textContent=i.limit!=null?i.limit:'?';lim.title=i.assumed?'No posted limit on file (assumed 25)':'Posted speed limit';
+ const hz=$('nvHz');if(i.hazard){hz.style.display='';hz.textContent='⛔ '+(i.hazard.kind==='risky'?'Non-LSV road':'Crossing a non-LSV road')+' in '+GCMNav.showDist(i.hazard.dist)+(i.hazard.road?': '+i.hazard.road:'')}else hz.style.display='none';
+ applyHeading(gpsHead!=null?gpsHead:i.heading);
+ const min=Math.max(1,Math.round(i.remainingSec/60)),eta=new Date(Date.now()+i.remainingSec*1000);
+ $('nvRem').innerHTML=`<b>${min} min</b>${GCMNav.showDist(i.remaining)} · arrive ${eta.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}`}
+function onFix(f){if(!NAV)return;myLL=L.latLng(f.lat,f.lon);gpsHead=f.heading!=null&&!isNaN(f.heading)&&(f.speed==null||f.speed>1)?f.heading:null;
+ if(!navMk)navMk=L.marker(myLL,{icon:headIcon(),interactive:false,keyboard:false,zIndexOffset:2000}).addTo(map);else navMk.setLatLng(myLL);
+ if(navFollow)map.setView(myLL,Math.max(map.getZoom(),17),{animate:!window.NAV_NOANIM});NAV.update(f)}
+window.navFix=(lat,lon,t,speed,heading)=>onFix({lat,lon,t:t??Date.now(),speed,heading,acc:5});
+function startNav(){if(!lastLegs||!end)return;const dest=L.latLng(end.lat,end.lng);
+ // iOS: speech only plays if the first utterance starts inside a user gesture; NAV.start() speaks synchronously in this tap
+ if(window.speechSynthesis&&!muted){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}catch(_){}}
+ window.navSaid=[];document.body.classList.add('nav');$('navui').style.display='flex';$('sugg').style.display='none';map.closePopup();if(routeG)map.removeLayer(routeG);drawNavLine(lastLegs);
+ NAV=new GCMNav.Navigator(lastLegs,'lsv',{say:speak,onUpdate:navUI,onArrive:()=>{setTimeout(()=>{if(NAV&&NAV.state==='arrived')endNav()},window.NAV_ARRIVE_MS??6000)},
+  reroute:async f=>{const legs=await planLegs(L.latLng(f.lat,f.lon),dest);if(legs)drawNavLine(legs);return legs}},{limitTxt:'non-LSV'});
+ window.NAV=NAV;$('nvMute').textContent=muted?'🔇':'🔊';NAV.start();wakeOn();track('nav_started',{voice:!muted,heading_up:headUp});
+ if(navigator.geolocation&&!window.NAV_SIM)navWatch=navigator.geolocation.watchPosition(p=>onFix({lat:p.coords.latitude,lon:p.coords.longitude,t:p.timestamp||Date.now(),acc:p.coords.accuracy,speed:p.coords.speed,heading:p.coords.heading}),e=>{if(e.code===1)speak('Location is off. Turn it on to navigate.')},{enableHighAccuracy:true,maximumAge:1000,timeout:15000});
+ if(myLL)map.setView(myLL,17);else map.setView(start,17)}
+function endNav(){if(navWatch!=null)navigator.geolocation.clearWatch(navWatch);navWatch=null;if(NAV)NAV.stop();NAV=null;window.NAV=null;try{window.speechSynthesis&&speechSynthesis.cancel()}catch(_){}
+ if(wake){try{wake.release()}catch(_){}wake=null}if(navLine){map.removeLayer(navLine);navLine=null}if(navMk){map.removeLayer(navMk);navMk=null}applyHeading(null);
+ document.body.classList.remove('nav');$('navui').style.display='none';$('navui').classList.remove('rr');if(routeG)routeG.addTo(map);setSnap('half')}
+window.startNav=startNav;window.endNav=endNav;
+$('go').onclick=startNav;$('nvEnd').onclick=endNav;
+function setMute(v,from){muted=v;lsSet('gcm-mute',v?'1':'0');$('nvMute').textContent=v?'🔇':'🔊';$('setVoice').checked=!v;if(v)try{speechSynthesis.cancel()}catch(_){}else if(NAV)speak('Voice on.');track('voice_toggled',{on:!v})}
+function setHeadUp(v){headUp=v;lsSet('gcm-hup',v?'1':'0');$('setHup').checked=v;if(NAV)applyHeading(window.navHeading);track('heading_mode',{mode:v?'heading_up':'north_up'})}
+window.setMute=setMute;window.setHeadUp=setHeadUp;
+$('nvMute').onclick=()=>setMute(!muted);$('setVoice').checked=!muted;$('setVoice').onchange=e=>setMute(!e.target.checked);
+$('setHup').checked=headUp;$('setHup').onchange=e=>setHeadUp(e.target.checked);
+$('nvCenter').onclick=()=>{navFollow=true;if(myLL)map.setView(myLL,17)};map.on('dragstart',()=>{if(NAV)navFollow=false});
