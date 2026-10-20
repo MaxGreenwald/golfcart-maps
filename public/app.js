@@ -96,8 +96,8 @@ function summarize(parts){let dist=0,stretches=[],cur=null,line=[];const legs=[]
  return {dist,stretches,legs,steps}}
 window.popSet=f=>{if(inMX(window._pll))return;map.closePopup();setField(f,{ll:window._pll,label:lbl(window._pll)})};
 const ft=m=>Math.round(m*3.281)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
-let routing=false;async function route(){$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
- await new Promise(r=>setTimeout(r,0));let parts=null;if(a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
+let routing=false;async function route(){$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;for(const s of stops)await ensure(Math.min(s.ll.lat,start.lat)-P,Math.min(s.ll.lng,start.lng)-P,Math.max(s.ll.lat,start.lat)+P,Math.max(s.ll.lng,start.lng)+P);const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
+ await new Promise(r=>setTimeout(r,0));let parts=null;if(a!=null&&b!=null){parts=stops.length?multiLeg([start,...stops.map(s=>s.ll),end]):null;if(!stops.length)for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
  if(!parts){trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
  const r=summarize(parts);trackRoute(true,r.dist/1609.34);routeG=L.layerGroup().addTo(map);
  const all=[];r.legs.forEach(l=>all.push(...l.p));
@@ -107,18 +107,24 @@ let routing=false;async function route(){$('title').innerHTML='<span class="spin
  const min=Math.max(1,Math.round(r.dist/1609.34/22*60));
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
  $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:(RULE.designated_only?'All on cart paths & designated roads 🌴':(r.legs.some(l=>l.u)?`Mostly ≤${RULE.max_posted} mph roads; <b>❓ ${mi(r.legs.filter(l=>l.u).reduce((a,l)=>a+l.s._len,0))} speed unknown — check signs</b>`:`All on roads ≤${RULE.max_posted} mph 🌴`))+ruleNotes()+(da>150||db>150?' · snapped to nearest legal road':'');
- r.back=await backDist(a,b,a2,b2,r.dist);renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
- setSnap('half');focusStart();window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};window._lastDetail=r;return r}
+ r.back=await backDist(a,b,a2,b2,stops.length?null:r.dist);r.stops=stops.length;renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
+ setSnap('half');focusStart();window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={stops:stops.length,arrival:window._arrival,mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};window._lastDetail=r;return r}
 // return trip: one-way rules can differ, so route B->A; fall back to same distance
-async function backDist(a,b,a2,b2,d){if(a==null||b==null)return d;for(const [x,y] of [[b,a],[b2,a],[b,a2],[b2,a2]]){const p=astar(x,y);if(p)return summarize(p).dist}return d}
-let lastR=null;function renderRange(r){if(r)lastR=r;r=lastR;if(!r)return;const R=GCMRange,s=R.load(),rng=R.rangeFor(s),bat=s.battery==null?100:s.battery;
- const one=r.dist/1609.34,rt=(r.dist+r.back)/1609.34,c=R.check(rt,rng,bat);window._rangeRes=c;
+async function backDist(a,b,a2,b2,d){if(a==null||b==null)return d;for(const [x,y] of [[b,a],[b2,a],[b,a2],[b2,a2]]){const p=astar(x,y);if(p)return summarize(p).dist}return d??0}
+let lastR=null;function renderRange(r){if(r)lastR=r;r=lastR;if(!r)return;const R=GCMRange,s=R.load(),rng=R.effRange(s),bat=s.battery==null?100:s.battery;
+ const one=r.dist/1609.34,rt=(r.dist+r.back)/1609.34,c=R.check(rt,rng,bat),ar=R.arrival(one,rt,rng,bat);window._rangeRes=c;window._arrival=ar;
  const txt={ok:'✅ Plenty of charge',tight:'⚠️ Tight, charge up first',no:'🔋 Not enough range'}[c.status];
- const el=$('range');el.style.display='block';
- el.innerHTML=`<div><span class="rd">${one.toFixed(1)} mi</span> one way · <span class="rd">${rt.toFixed(1)} mi</span> round trip</div><div class="rs ${c.status}">${txt}: round trip ${rt.toFixed(1)} mi, about ${c.pct}% of your ${c.eff} mi range</div><details${el.querySelector('details[open]')?' open':''}><summary>🔋 Range settings <span class="car">▸</span></summary><label>Cart range <input id="rgMi" type="number" inputmode="decimal" min="1" max="150" value="${rng}"> mi</label><label>Battery <input id="rgBat" type="number" inputmode="numeric" min="0" max="100" value="${bat}"> %</label><div class="rh">Estimate. We flag trips over ${Math.round(R.MARGIN*100)}% of your range; hills, heat and passengers cut range.</div></details>`;
- const upd=()=>{const s=R.load();const m=+$('rgMi').value,b=+$('rgBat').value;if(m>0)s.range=m;if(b>=0&&b<=100)s.battery=b;s.profile=null;R.save(s);renderRange();if(window.lastRoute)window.lastRoute.range=window._rangeRes};
+ const el=$('range');el.style.display='block';const pf=s.profile&&R.profiles[s.profile];
+ const opts=Object.entries(R.profiles).filter(([k])=>k!=='generic').map(([k,p])=>`<option value="${k}"${s.profile===k?' selected':''}>${esc(p.label)} (~${p.mi} mi)</option>`).join('');
+ const stopTxt=r.stops?` with ${r.stops} stop${r.stops>1?'s':''}`:'';
+ el.innerHTML=`<div><span class="rd">${one.toFixed(1)} mi</span> ${r.stops?'trip'+stopTxt:'one way'} · <span class="rd">${rt.toFixed(1)} mi</span> round trip</div>`+
+  `<div class="ra">🔋 Battery on arrival <b>${ar.oneShort?'runs out':'~'+ar.one+'%'}</b> · back home <b>${ar.rtShort?'runs out':'~'+ar.rt+'%'}</b></div>`+
+  `<div class="rs ${c.status}">${txt}: round trip ${rt.toFixed(1)} mi, about ${c.pct}% of your ${c.eff} mi range</div>`+
+  (c.status!=='ok'||bat<60?`<div class="rtip">💡 Tip: plug your cart in overnight. A cart that wasn’t charged is the most common reason renters run low.</div>`:'')+
+  `<details${el.querySelector('details[open]')?' open':''}><summary>🔋 Range settings <span class="car">▸</span></summary><label>Cart <select id="rgPf"><option value="">Custom</option>${opts}</select></label><label>Cart range <input id="rgMi" type="number" inputmode="decimal" min="1" max="150" value="${R.rangeFor(s)}"${pf?' disabled':''}> mi</label><label>Battery <input id="rgBat" type="number" inputmode="numeric" min="0" max="100" value="${bat}"> %</label><label class="rfull"><input id="rgFull" type="checkbox"${s.full?' checked':''}> Full cart (5–6 riders)</label><div class="rh">${s.full?`Full cart: range lowered ${Math.round(R.FULL_DERATE*100)}% to ${rng} mi. This is an estimate, not a measured number. `:''}${pf&&pf.src?`${esc(pf.label)} range from ${esc(pf.src)}. `:''}Estimate. We flag trips over ${Math.round(R.MARGIN*100)}% of your range; hills, heat and passengers cut range.</div></details>`;
+ const upd=()=>{const s=R.load();const m=+$('rgMi').value,b=+$('rgBat').value,pv=$('rgPf').value;if(m>0&&!pv)s.range=m;if(b>=0&&b<=100)s.battery=b;s.profile=pv||null;s.full=$('rgFull').checked;R.save(s);renderRange();if(window.lastRoute){window.lastRoute.range=window._rangeRes;window.lastRoute.arrival=window._arrival}track('range_set',{profile:pv||'custom',full:!!s.full})};
  if(c.status!=='ok'&&(!window.PAY||PAY.unlocked())){const rt0=r;chargers().then(()=>{if(lastR!==rt0)return;const n=nearestChg(end);if(n&&n.mi<5&&!el.querySelector('.rc'))el.querySelector('.rs').insertAdjacentHTML('afterend',`<div class="rc">🔌 Nearest public charger to your destination: <b>${esc(n.c.name)}</b>, ${n.mi.toFixed(1)} mi away. <a href="#" onclick="showChg(true);map.setView([${n.c.lat},${n.c.lon}],16);return false">Show</a></div>`)})}
- $('rgMi').onchange=upd;$('rgBat').onchange=upd}
+ $('rgMi').onchange=upd;$('rgBat').onchange=upd;$('rgPf').onchange=upd;$('rgFull').onchange=upd}
 window.renderRange=renderRange;
 // center the START point (z16) inside the map area left visible by the top card and the sheet/desktop card
 function focusStart(){if(!start)return;const sz=map.getSize(),Z=16,top=$('top').getBoundingClientRect(),sh=$('sheet').getBoundingClientRect();
@@ -133,7 +139,7 @@ const pinIcon=(c,e)=>L.divIcon({className:'',html:`<div class="pin" style="backg
 let from=null,to=null,active=null; // active: field that the next map tap fills ('from'|'to'|null)
 const P=x=>x?(x.me?myLL:x.ll):null;
 const lbl=ll=>'Dropped pin · '+ll.lat.toFixed(4)+', '+ll.lng.toFixed(4);
-function sync(){start=P(from);end=P(to);mk.forEach(m=>map.removeLayer(m));mk=[];
+function sync(){start=P(from);end=P(to);if(typeof drawStops==='function'&&window.L)try{$('addStop').style.display=from&&to&&stops.length<MAXSTOPS?'':'none'}catch(_){}mk.forEach(m=>map.removeLayer(m));mk=[];
  // GPS point uses the live blue dot as its marker; a ring marks which end it is
  for(const [x,c,e] of [[from,'#14b8c4','🏠'],[to,'#ff7a59','🏖️']]){if(!x||!P(x))continue;
   mk.push(x.me?L.circleMarker(P(x),{radius:14,color:c,weight:3,fill:false,interactive:false,renderer}).addTo(map):L.marker(x.ll,{icon:pinIcon(c,e)}).addTo(map))}
@@ -151,9 +157,9 @@ window.getState=st;
 // a tap places a point: focused field first, else the first empty field. Returns false if nothing to fill.
 const inPoly=(x,y,P)=>{let c=false;for(let i=0,j=P.length-1;i<P.length;j=i++){const [x1,y1]=P[i],[x2,y2]=P[j];if((y1>y)!==(y2>y)&&x<(x2-x1)*(y-y1)/(y2-y1)+x1)c=!c}return c};
 const inMX=ll=>(REG&&REG.id==='sd'&&ll.lat<32.5343+(ll.lng+117.1235)*0.0367-0.0002)||!!(D&&D.meta.poly&&!inPoly(ll.lng,ll.lat,D.meta.poly));window.inMX=inMX;
-function setPt(ll,label){if(inMX(ll)){$('help').textContent='⚠️ That spot is outside the map — '+(REG&&REG.cover||'pick another area in the city menu above.');return true}const f=active||(!from?'from':!to?'to':null);if(!f)return false;setField(f,{ll,label:label||lbl(ll)});return true}
+function setPt(ll,label){if(inMX(ll)){$('help').textContent='⚠️ That spot is outside the map — '+(REG&&REG.cover||'pick another area in the city menu above.');return true}if(active==='stop'){addStop({ll,label:label||lbl(ll)});return true}const f=active||(!from?'from':!to?'to':null);if(!f)return false;setField(f,{ll,label:label||lbl(ll)});return true}
 function clearField(f){if(f==='from')from=null;else to=null;active=f;sync();window.state=st()}
-function clearR(){from=to=null;active=null;if(routeG)map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('range').style.display='none';map.closePopup();sync();window.state=st()}
+function clearR(){from=to=null;active=null;clearStops();if(routeG)map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('range').style.display='none';map.closePopup();sync();window.state=st()}
 window.resetRoute=clearR;
 map.on('click',e=>{if(!setPt(e.latlng))map.closePopup()});
 // long-press (mobile) / right-click: report here
@@ -319,3 +325,17 @@ L.DomEvent.disableClickPropagation(sheet);L.DomEvent.disableScrollPropagation(sh
 map.on('click',()=>{if(!routeG&&!from&&snap!=='collapsed')setSnap('collapsed')});
 addEventListener('resize',()=>{sizeSheet();setSnap(snap)});
 sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));
+
+// ---- multiple stops (up to 3) between start and destination: "+ Stop" then tap the map or search ----
+var MAXSTOPS=3,stops=[],stopMk=[];
+function drawStops(){stopMk.forEach(m=>map.removeLayer(m));stopMk=stops.map((s,i)=>L.marker(s.ll,{icon:pinIcon('#8b5cf6',String(i+1))}).addTo(map));
+ const el=$('stops');el.innerHTML=stops.map((s,i)=>`<div class="stp"><span class="badge">${i+1}</span><span>${esc(s.label)}</span><button class="sx" aria-label="Remove stop" data-i="${i}">✕</button></div>`).join('');
+ el.querySelectorAll('.sx').forEach(b=>b.onclick=()=>removeStop(+b.dataset.i));$('addStop').style.display=from&&to&&stops.length<MAXSTOPS?'':'none'}
+function addStop(s){if(stops.length>=MAXSTOPS)return;stops.push(s);active=null;drawStops();track('stop_added',{n:stops.length});if(start&&end)route()}
+function removeStop(i){stops.splice(i,1);drawStops();if(start&&end)route()}
+function clearStops(){stops=[];drawStops()}
+window.addStop=addStop;window.removeStop=removeStop;window.getStops=()=>stops.map(s=>[s.ll.lat,s.ll.lng]);
+$('addStop').onclick=()=>{active='stop';$('help').textContent='Tip: tap the map (or search) to add a stop';curField='stop';setSnap('collapsed')};
+// route through each point in order on legal roads; null if any leg has no legal route
+function multiLeg(pts){let all=[];for(let i=1;i<pts.length;i++){const [a,,a2]=nearest(pts[i-1]),[b,,b2]=nearest(pts[i]);if(a==null||b==null)return null;let p=null;
+  for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){if(x==null||y==null)continue;p=astar(x,y);if(p)break}if(!p)return null;all=all.concat(p)}return all}
