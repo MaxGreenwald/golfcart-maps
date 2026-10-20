@@ -83,7 +83,7 @@ function astar(s,t){const key=(n,r)=>n+'|'+Math.round(r);const T=nodes[t];const 
  const pop=()=>{const top=h[0],l=h.pop();if(h.length){h[0]=l;let i=0;for(;;){let a=2*i+1,b=a+1,m=i;if(a<h.length&&h[a][0]<h[m][0])m=a;if(b<h.length&&h[b][0]<h[m][0])m=b;if(m===i)break;[h[m],h[i]]=[h[i],h[m]];i=m}}return top};
  let goal=null;
  while(h.length){const [,u,run,ku]=pop();if(done.has(ku))continue;done.add(ku);if(u===t&&run===0){goal=ku;break}
-  for(const [v,w,si,rev,f] of adj[u]||[]){let nr,cost=w;
+  for(const [v,w,si,rev,f] of adj[u]||[]){let nr,cost=w;if(AVOIDS.length&&avoided(D.segs[si]))cost=w*AVOID_W;
    if(!f&&RULE.cross===false&&fnode.has(v)&&!cnode.has(v)&&v!==t)continue;if(f){if(!risky)continue;nr=run+w;if(nr>RISKY_MAX)continue;cost=w*6+60}else{nr=0;if(fast.has(v))cost+=150}
    const kv=key(v,nr),ng=g.get(ku)+cost;if(!g.has(kv)||ng<g.get(kv)){g.set(kv,ng);prev.set(kv,[ku,si,rev]);push([ng+hav(nodes[v],T),v,nr,kv])}}}
  if(!goal)return null;const parts=[];let x=goal;while(x!==k0){const [pk,si,rev]=prev.get(x);parts.push([si,rev]);x=pk}parts.reverse();return parts}
@@ -107,7 +107,7 @@ let routing=false;async function route(){$('title').innerHTML='<span class="spin
  const min=Math.max(1,Math.round(r.dist/1609.34/22*60));
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
  $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:(RULE.designated_only?'All on cart paths & designated roads 🌴':(r.legs.some(l=>l.u)?`Mostly ≤${RULE.max_posted} mph roads; <b>❓ ${mi(r.legs.filter(l=>l.u).reduce((a,l)=>a+l.s._len,0))} speed unknown — check signs</b>`:`All on roads ≤${RULE.max_posted} mph 🌴`))+ruleNotes()+(da>150||db>150?' · snapped to nearest legal road':'');
- r.back=await backDist(a,b,a2,b2,r.dist);renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
+ r.back=await backDist(a,b,a2,b2,r.dist);renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(AVOIDS.length&&r.legs.some(l=>avoided(l.s)))$('sub').innerHTML+=' · <span class="advw">🚧 Passes a reported closure or hazard (reviewed). Use caution</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
  setSnap('half');focusStart();window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};window._lastDetail=r;return r}
 // return trip: one-way rules can differ, so route B->A; fall back to same distance
 async function backDist(a,b,a2,b2,d){if(a==null||b==null)return d;for(const [x,y] of [[b,a],[b2,a],[b,a2],[b2,a2]]){const p=astar(x,y);if(p)return summarize(p).dist}return d}
@@ -231,14 +231,14 @@ async function loadRegion(id,keepView){const r=REGIONS.find(x=>x.id===id)||REGIO
  if(!keepView)map.setView(r.center,r.zoom);
  fetch(BASE+'pois.json').then(x=>x.ok?x.json():[]).then(j=>{if(REG===r)POIS=j}).catch(()=>{});
  const j=await (await fetch(BASE+'index.json')).json();if(REG!==r)return;$('lgCart').style.display=j.meta.stats&&j.meta.stats.cartpath?'':'none';D={...j,segs:[],tileSet:new Set(j.meta.tiles)};readyRes();
- CHG=null;if(chgOn)showChg(true);$('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;draw();if(!keepView)clearR();else sync();await onMove();window.ready=true;track('town_viewed',{how:window._regHow||'default'},window._trackOpts);window._regHow=null}
+ CHG=null;if(chgOn)showChg(true);loadAvoids();$('dmeta').textContent=`Data: OSM ${j.meta.generated}.`;draw();if(!keepView)clearR();else sync();await onMove();window.ready=true;track('town_viewed',{how:window._regHow||'default'},window._trackOpts);window._regHow=null}
 window.loadRegion=loadRegion;
 // ---- Report a bad road: small form -> mailto (static site, no backend) ----
 const APPV='mr-2026.10.13',RPT_TO='maxgreenwald.assistant@gmail.com';
 function reportRoad(seg){seg=seg||window._rseg||{road:'(general)',ll:map.getCenter()};window._rseg=seg;map.closePopup();
  $('rpRoad').textContent=seg.road+(seg.sp?` · ${seg.sp} · ${seg.status}`:'');$('rpIssue').value=seg.sp?'wrong_speed':'other';$('rpSpeed').value='';$('rpNotes').value='';$('rpt').style.display='flex'}
 window.reportRoad=reportRoad;
-const ISS={wrong_speed:'Wrong speed limit',allow:'Should be allowed',block:'Should be blocked',closed:'Road closed or doesn\u2019t exist',other:'Other'};
+const ISS={wrong_speed:'Wrong speed limit',allow:'Should be allowed',block:'Should be blocked',closed:'Road closed or doesn\u2019t exist',hazard:'Hazard (construction, flooding, debris)',other:'Other'};
 function buildReport(seg,issue,speed,notes){const ll=seg.ll,z=map.getZoom(),lat=ll.lat.toFixed(5),lon=ll.lng.toFixed(5);
  const link=`https://golfcartmap.com/?r=${REG.id}&lat=${lat}&lon=${lon}&z=${Math.max(16,z)}`;
  const subject=`Golf Cart Maps road report: ${seg.road}`;
@@ -248,7 +248,22 @@ function buildReport(seg,issue,speed,notes){const ll=seg.ll,z=map.getZoom(),lat=
  return {subject,body:decodeURIComponent(url.split('&body=')[1]),url}}
 window.buildReport=buildReport;
 $('rpCancel').onclick=()=>{$('rpt').style.display='none'};
-$('rpSend').onclick=()=>{track('road_report_filed',{issue:$('rpIssue').value});const r=buildReport(window._rseg,$('rpIssue').value,$('rpSpeed').value,$('rpNotes').value);window.lastReport=r;$('rpt').style.display='none';if(!window.NO_MAILTO)location.href=r.url};
+// Reports go to the review queue (/api/report -> gcm-reports Worker). They never change the map's legality data;
+// a person reviews each one. If the queue can't be reached, fall back to the prefilled email as before.
+const RPT_API=()=>window.GCM_REPORT_URL||((window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform())||location.protocol==='file:'?'https://golfcartmap.com/api/report':'/api/report');
+async function sendReport(seg,issue,speed,notes){const body={issue,lat:seg.ll.lat,lon:seg.ll.lng,region:REG.id,road:seg.road,speed:speed||null,notes:notes||'',app:APPV};
+ try{const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),6000);const r=await fetch(RPT_API(),{method:'POST',body:JSON.stringify(body),headers:{'content-type':'application/json'},signal:ac.signal});clearTimeout(tm);if(r.ok){const j=await r.json();if(j&&j.ok)return j}}catch(_){}return null}
+window.sendReport=sendReport;
+$('rpSend').onclick=async()=>{const seg=window._rseg,iss=$('rpIssue').value,sp=$('rpSpeed').value,nt=$('rpNotes').value;track('road_report_filed',{issue:iss});const r=buildReport(seg,iss,sp,nt);window.lastReport=r;
+ $('rpSend').disabled=true;const q=await sendReport(seg,iss,sp,nt);$('rpSend').disabled=false;$('rpt').style.display='none';window.lastReportQueued=q;
+ if(q){rtoast('✅ Thanks! Your report is in our review queue. We check every one before anything on the map changes.')}else if(!window.NO_MAILTO)location.href=r.url};
+let rtt;function rtoast(t){const el=$('rtoast');el.textContent=t;el.style.display='block';clearTimeout(rtt);rtt=setTimeout(()=>el.style.display='none',4500)}
+// reviewed, temporary closures/hazards (never legality): routing steers around them with a heavy cost, they are not "forbidden"
+let AVOIDS=[],AVOIDR=null;const AVOID_M=35,AVOID_W=40;
+async function loadAvoids(){const r=REG;try{const j=await (await fetch(RPT_API())).json();if(REG!==r)return;AVOIDS=Array.isArray(j)?j.filter(a=>a&&isFinite(a.lat)&&isFinite(a.lon)&&a.until>Date.now()):[]}catch(_){AVOIDS=[]}AVOIDR=r;for(const s of D?D.segs:[])delete s._av}
+function avoided(s){if(!AVOIDS.length)return false;if(s._av!==undefined)return s._av;let hit=false;for(const a of AVOIDS){const q=[a.lon,a.lat];for(const p of s[7])if(hav(q,p)<AVOID_M){hit=true;break}if(hit)break}return s._av=hit}
+window.setAvoids=l=>{AVOIDS=l||[];for(const s of D.segs)delete s._av};window.avoided=avoided;
+
 $('rpGen').onclick=e=>{e.preventDefault();reportRoad({road:'(general problem)',ll:map.getCenter()})};
 
 // Tappable markers: 44px hit area, cursor/touch-action set, and an explicit pointerup handler that opens the popup
