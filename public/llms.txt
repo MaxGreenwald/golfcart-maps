@@ -1,35 +1,81 @@
-# Golf Cart Map
+# Golf Cart Maps
 
-> Free golf cart and LSV (low-speed vehicle) legal road map for coastal San Diego: Oceanside, Carlsbad, Encinitas, Solana Beach, Del Mar, La Jolla, Pacific Beach, Coronado and more. Routes avoid roads posted 40+ mph.
+> Golf Cart Maps (golfcartmap.com) is a golf cart and LSV (low-speed vehicle) map and route planner, now in beta. It shows which roads are legal for golf carts and street-legal LSVs in 37 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
 
 URL: https://golfcartmap.com/
 
 ## What it does
-- Shows which roads a golf cart / low-speed vehicle (LSV) may legally use in coastal San Diego County, from Oceanside to the US-Mexico border, about 6 miles inland.
-- Green = posted 35 mph or less (OK for LSVs); dashed green = small road, assumed 25 mph; red = posted 40+ mph or major road (avoid).
-- Plans routes that avoid 40+ mph roads; crossing a faster road at an intersection is allowed.
-- Optional risky mode highlights stretches of 500 ft or less on faster roads.
+- Colors every road: green = allowed for your vehicle, red = too fast or banned (avoid).
+- Plans routes on allowed roads; crossing a faster road at an intersection is allowed where state law permits it.
+- Battery range check for a trip, public EV chargers, and a way to report a wrong road.
+- Works in a web browser; an iPhone app is in App Store review.
 
-## Rules used
-- CVC 21260: LSVs only on roads posted 35 mph or less; may cross faster roads at intersections between 35-or-less roads.
-- CVC 385.5: LSV definition (4 wheels, top speed over 20 and at most 25 mph, under 3,000 lb GVWR).
+## Regions by state
+### Alabama
+- [Gulf Shores / Orange Beach, AL](https://golfcartmap.com/gulfshores)
+### Arizona
+- [Sun City / Sun City West, AZ](https://golfcartmap.com/suncity)
+### California
+- [Avalon (Catalina Island), CA](https://golfcartmap.com/catalina) (beta data)
+- [Coachella Valley, CA](https://golfcartmap.com/coachella) (beta data)
+- [Laguna Woods / OC coast, CA](https://golfcartmap.com/occoast) (beta data)
+- [San Diego coast](https://golfcartmap.com/sandiego)
+### Florida
+- [30A / South Walton, FL](https://golfcartmap.com/30a) (beta data)
+- [Amelia Island / Fernandina Beach, FL](https://golfcartmap.com/ameliaisland) (beta data)
+- [Anna Maria Island, FL](https://golfcartmap.com/annamaria) (beta data)
+- [Destin / Okaloosa Island, FL](https://golfcartmap.com/destin) (beta data)
+- [Key West, FL](https://golfcartmap.com/keywest) (beta data)
+- [Lakewood Ranch, FL](https://golfcartmap.com/lakewoodranch) (beta data)
+- [Naples / Marco Island, FL](https://golfcartmap.com/naples) (beta data)
+- [Panama City Beach, FL](https://golfcartmap.com/panamacitybeach) (beta data)
+- [Siesta Key / Sarasota keys, FL](https://golfcartmap.com/siestakey) (beta data)
+- [St. Augustine, FL](https://golfcartmap.com/staugustine) (beta data)
+- [Sun City Center, FL](https://golfcartmap.com/suncitycenter) (beta data)
+- [The Villages, FL](https://golfcartmap.com/villages) (beta data)
+### Georgia
+- [Peachtree City, GA](https://golfcartmap.com/peachtreecity) (beta data)
+- [St. Simons / Jekyll Island, GA](https://golfcartmap.com/stsimons) (beta data)
+- [Tybee Island, GA](https://golfcartmap.com/tybee)
+### Hawaii
+- [Kaanapali & Kapalua, Maui](https://golfcartmap.com/kaanapali) (beta data)
+- [Kailua, Oahu](https://golfcartmap.com/kailua) (beta data)
+- [Poipu & Koloa, Kauai](https://golfcartmap.com/poipu) (beta data)
+- [Waikoloa & Mauna Lani, Big Island](https://golfcartmap.com/waikoloa) (beta data)
+- [Wailea & Kihei, Maui](https://golfcartmap.com/wailea) (beta data)
+### Maine
+- [Old Orchard Beach, ME](https://golfcartmap.com/oldorchardbeach) (beta data)
+### North Carolina
+- [Outer Banks, NC](https://golfcartmap.com/outerbanks) (beta data)
+- [Bald Head Island / Southport, NC](https://golfcartmap.com/southport) (beta data)
+### Ohio
+- [Put-in-Bay, OH](https://golfcartmap.com/putinbay) (beta data)
+### South Carolina
+- [Charleston beach towns, SC](https://golfcartmap.com/charleston) (beta data)
+- [Hilton Head / Bluffton, SC](https://golfcartmap.com/hiltonhead) (beta data)
+- [Myrtle Beach / Grand Strand, SC](https://golfcartmap.com/myrtlebeach) (beta data)
+### Texas
+- [Galveston, TX](https://golfcartmap.com/galveston) (beta data)
+- [Port Aransas, TX](https://golfcartmap.com/portaransas) (beta data)
+- [Rockport / Fulton, TX](https://golfcartmap.com/rockport) (beta data)
+- [South Padre Island, TX](https://golfcartmap.com/southpadre) (beta data)
 
-## Coverage
-Oceanside, Carlsbad, Encinitas (Leucadia, Cardiff), Solana Beach, Del Mar, Carmel Valley, Torrey Pines, La Jolla, Pacific Beach, Mission Beach, Ocean Beach, Point Loma, Old Town, downtown San Diego, Coronado, Imperial Beach.
+## State rules used
+- Alabama: LSVs on roads posted 35 mph or less (Single app rule ≤35 (Code of Ala. 32-1-1.1 LSV); Gulf Shores/Orange Beach region cap ≤25 (regions.json rule)). Golf carts: No state golf-cart road statute; local ordinance (Gulf Shores Sec. 21-13, Orange Beach Sec. 70-273: streets ≤25 mph).
+- Arizona: LSVs on roads posted 35 mph or less (A.R.S. 28-966 (NEV/LSV ≤35)). Golf carts: Arizona: golf carts must be registered/insured to use public streets; local police guidance (e.g. Marana PD) allows streets ≤35 mph. Sun City: A.R.S. 28-721(C) keep right. UNCONFIRMED.
+- California: LSVs on roads posted 35 mph or less (CVC 21260). Golf carts: CVC 21716 (golf carts only on highways posted ≤25 mph, within a business/residence district); CVC 21115 + Streets & Highways Code §1950-1965 golf cart transportation plans may designate other routes.
+- Florida: LSVs on roads posted 35 mph or less (F.S. 316.2122). Golf carts: F.S. 316.212(1) (golf carts only on roads a county/city has designated and signed, based on speed and traffic); 316.212(6)-(8) daylight unless equipped; 316.2126 municipal use. FLHSMV/FDOT guidance cites designated roads posted ≤30 mph; app uses the designation (≤35) and flags this. UNCONFIRMED.
+- Georgia: LSVs on roads posted 35 mph or less (O.C.G.A. 40-6-362). Golf carts: O.C.G.A. 40-6-331 (PTVs only where a local ordinance allows); app uses the common local cap of ≤25 mph (Glynn County, Tybee, Peachtree City streets except Hwy 74/54/Peachtree Pkwy). UNCONFIRMED per town.
+- Hawaii: LSVs on roads posted 35 mph or less (HRS 291C-134 (neighborhood electric vehicles: roads posted ≤35 mph, may cross at intersections, no controlled-access highways); HRS 291C-53). Golf carts: HRS 291C-134 (only neighborhood electric vehicles), HRS 286-2 (golf carts not registrable motor vehicles).
+- Maine: LSVs on roads posted 35 mph or less (29-A M.R.S. §2089 (LSVs on roads posted ≤35 mph, may cross at intersections); §501(2-A) golf carts only on islands without state roads). Golf carts: 29-A M.R.S. §501(2-A) (golf carts only on islands without state roads); §2089 LSVs.
+- North Carolina: LSVs on roads posted 35 mph or less (N.C.G.S. 20-121.1 (LSV ≤35); golf carts by local ordinance (G.S. 160A-300.6)). Golf carts: N.C.G.S. 160A-300.6 / 153A-245 (golf carts only where a town/county ordinance allows); app uses the most common cap of ≤25. UNCONFIRMED per town.
+- Ohio: LSVs on roads posted 35 mph or less (ORC 4511.214 (under-speed/LSV on ≤35 roads where locally authorized; Put-in-Bay village permits carts)). Golf carts: ORC 4511.214 (under-speed vehicles on roads ≤35 mph where the local authority allows; titled, inspected, plated); Put-in-Bay Codified Ord. 490.02.
+- South Carolina: LSVs on roads posted 35 mph or less (S.C. 56-5-820). Golf carts: S.C. 56-2-105 (secondary roads posted ≤35 mph, within 4 mi of registration address, daylight unless local ordinance; permit + decal).
+- Texas: LSVs on roads posted 35 mph or less (Tex. Transp. Code 551.304 (NEV/LSV on roads ≤45; app uses ≤35)). Golf carts: Tex. Transp. Code 551.403-551.404 (golf cart plate required, 551.402; daytime on roads ≤35 within 2 mi of where parked or in a master-planned community, or where the city/county authorizes).
 
-## Data sources
-OpenStreetMap, Mapillary speed-limit sign detections, and city speed surveys/ordinances. Not legal advice; posted signs win.
+## How rules are sourced
+Priority: manual fixes from local reports, then posted speed-limit signs seen in Mapillary street imagery, then official city speed lists and ordinances, then OpenStreetMap speed tags. Small residential streets without a posted limit are assumed to be 25 mph. Not legal advice; posted signs win.
 
-## FAQ
-
-### Can I drive a golf cart on a 40 mph road in California?
-Not a street-legal low-speed vehicle (LSV). California Vehicle Code 21260 allows an LSV only on roadways with a posted speed limit of 35 mph or less. It may cross a faster road at an intersection when the crossing starts and ends on a roadway posted 35 mph or less. An ordinary golf cart that is not an LSV is more limited: it may only use roads where a local ordinance or golf cart transportation plan permits it.
-
-### What roads can an LSV use in San Diego?
-Any public road with a posted speed limit of 35 mph or less, unless a city or the state restricts LSVs on it (CVC 21260). Freeways and roads posted 40 mph or more are off limits except for crossing at intersections. Golf Cart Map shows these roads in green and the forbidden 40+ mph roads in red.
-
-### What is a low-speed vehicle (LSV) in California?
-Under CVC 385.5, a low-speed vehicle is a motor vehicle with four wheels that can go faster than 20 mph but no faster than 25 mph, weighs less than 3,000 pounds gross, and meets federal LSV safety standards (FMVSS 500). LSVs must be registered, insured and driven by a licensed driver.
-
-### Where does Golf Cart Map get speed limits?
-OpenStreetMap speed tags, posted speed-limit signs detected in Mapillary street imagery, and official city sources such as council speed surveys. Small residential streets without a posted limit are assumed to be 25 mph. Posted signs always take precedence over the map.
+## More
+- Privacy: https://golfcartmap.com/privacy
+- Sitemap: https://golfcartmap.com/sitemap.xml
