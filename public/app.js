@@ -133,11 +133,14 @@ const pinIcon=(c,e)=>L.divIcon({className:'',html:`<div class="pin" style="backg
 let from=null,to=null,active=null; // active: field that the next map tap fills ('from'|'to'|null)
 const P=x=>x?(x.me?myLL:x.ll):null;
 const lbl=ll=>'Dropped pin · '+ll.lat.toFixed(4)+', '+ll.lng.toFixed(4);
+// Write a search box from state, but never wipe what the user is typing: sync() runs on every GPS tick
+// (watchPosition while start = Your location), so only overwrite the focused box when its state actually changed.
+function setBox(id,x){const el=$(id),v=x?(x.me?'Your location':x.label):'';if(document.activeElement===el&&el.dataset.v===v)return;el.value=v;el.dataset.v=v}
 function sync(){start=P(from);end=P(to);mk.forEach(m=>map.removeLayer(m));mk=[];
  // GPS point uses the live blue dot as its marker; a ring marks which end it is
  for(const [x,c,e] of [[from,'#14b8c4','🏠'],[to,'#ff7a59','🏖️']]){if(!x||!P(x))continue;
   mk.push(x.me?L.circleMarker(P(x),{radius:14,color:c,weight:3,fill:false,interactive:false,renderer}).addTo(map):L.marker(x.ll,{icon:pinIcon(c,e)}).addTo(map))}
- $('qf').value=from?(from.me?'Your location':from.label):'';$('q').value=to?(to.me?'Your location':to.label):'';
+ setBox('qf',from);setBox('q',to);
  $('xf').style.visibility=from?'visible':'hidden';$('xt').style.visibility=to?'visible':'hidden';
  $('fF').classList.toggle('act',active==='from');$('useme').style.display=(active||((from||to)&&!(from&&to)&&!(from&&from.me)&&!(to&&to.me)))?'':'none';$('fT').classList.toggle('act',active==='to');
  $('reset').style.display=$('acts').style.display=(from||to)?'':'none';
