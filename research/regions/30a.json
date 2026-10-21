@@ -72,5 +72,20 @@
   "https://waltonso.org/wp-content/uploads/2022/10/lsv_map_102022.png"
  ],
  "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=30a loads it",
- "audit_2026_10_21": "Bans above from the Sheriff LSV map (image georeferenced to OSM US 98/331). See research/30a_audit_2026-10-21.md"
+ "audit_2026_10_21": "Bans above from the Sheriff LSV map (image georeferenced to OSM US 98/331). See research/30a_audit_2026-10-21.md",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Walton County Sheriff LSV laws",
+    "url": "https://waltonso.org/lsv/"
+   },
+   {
+    "label": "Walton County Sheriff LSV map (red = LSVs prohibited)",
+    "url": "https://waltonso.org/wp-content/uploads/2022/10/lsv_map_102022.png"
+   }
+  ],
+  "note": "Every red road on the sheriff's LSV map is in 'bans' (US 98, CR 283, CR 395 N of the Point Washington fire station, CR 83 Chat Holley Rd to US 98 per segment, Alys/Seacrest/Rosemary and Seaside town-center streets). 30A itself is not red on the map and stays allowed. Audit: research/30a_audit_2026-10-21.md."
+ }
 }

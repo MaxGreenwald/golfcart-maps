@@ -25,8 +25,10 @@ function cls(s,R,lenient){if(s[3]==='c')return 0;if(R.not_street_legal)return 3;
   return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'||s[3]==='r'||s[3]==='k'||s[3]==='n'||s[3]==='q'?0:1}
 const nextBand=m=>m%5?m+1:m+(m===25?1:5);
 // why a segment is forbidden for this vehicle (popup text); '' when allowed
-function why(s,R,Rother){if(cls(s,R)!==3)return '';if(R.not_street_legal)return `Avoid: plain golf carts aren't street-legal here${R.unconfirmed?' (no rule on file)':''}${Rother&&cls(s,Rother)!==3?` (OK for ${vname(Rother)})`:''}`;
+// src: the segment's source entry [url,label] (D.sources[s[8]]); a ban taken from a sheriff's LSV map names that map instead of the generic speed text.
+function why(s,R,Rother,src){if(cls(s,R)!==3)return '';if(R.not_street_legal)return `Avoid: plain golf carts aren't street-legal here${R.unconfirmed?' (no rule on file)':''}${Rother&&cls(s,Rother)!==3?` (OK for ${vname(Rother)})`:''}`;
   if(s[9]===1&&/^(motorway|trunk|primary)/.test(s[1]))return 'Avoid: carts not allowed (posted)';
+  if(s[2]===99&&s[3]==='v'&&src&&/Sheriff LSV map/.test(src[1]||''))return `Avoid: LSVs not allowed here (${(src[1].match(/^[^:(]*Sheriff LSV map/)||['Sheriff LSV map'])[0].trim()})`;
   if(s[2]!=null&&s[2]<=R.max_posted&&R.designated_only)return `Avoid: ${vname(R)} only on cart paths and designated roads`;
   return `Avoid: ${nextBand(R.max_posted)}+ mph or major road${Rother&&cls(s,Rother)!==3?` (OK for ${vname(Rother)})`:''}`}
 // text when no legal route exists
