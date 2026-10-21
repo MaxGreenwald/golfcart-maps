@@ -1,0 +1,5 @@
+2026-10-14 04:38:26.336 App[12832:47451] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/runner/Library/Developer/CoreSimulator/Devices/DC4CD8B3-4457-4153-9087-A0D7A2F9BFD9/data/Containers/Data/Application/0FD07A93-D159-473D-9CC0-B7E2184F9170/Library/Cookies/com.matchimus.golfcartmaps.binarycookies
+⚡️  Loading app at capacitor://localhost...
+⚡️  JS Eval error A JavaScript exception occurred
+⚡️  WebView loaded
+2026-10-14 04:39:16.322 App[12832:47451] CAMetalLayer ignoring invalid setDrawableSize width=0.000000 height=0.000000
