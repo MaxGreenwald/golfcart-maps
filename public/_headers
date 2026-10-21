@@ -16,6 +16,8 @@
   Cache-Control: public, max-age=0, must-revalidate
 /range.js
   Cache-Control: public, max-age=0, must-revalidate
+/regions.js
+  Cache-Control: public, max-age=0, must-revalidate
 
 /data/*
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400

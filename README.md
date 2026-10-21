@@ -7,6 +7,7 @@ Static web app showing which roads a golf cart (≤25 mph) or LSV (≤35 mph) ca
 Output: `public/data/roads.json` (compact array format: [nameIdx, highway, mph|null, srcFlag, oneway, fromNode, toNode, [[lon,lat]...]]).
 
 Classification: OSM `maxspeed` (mph) when tagged; else residential/living_street/service/unclassified → 25 (inferred); tertiary → unknown; secondary and above → assumed >35 (forbidden).
+A short piece of a road can't be red on its own when the same road is posted ≤35 on both sides (scripts/islands.py; CI checks every region against research/red_island_allowlist.json).
 
 ## Run locally
     cd public && python3 -m http.server 8000      # raw source; the service worker caches nothing here

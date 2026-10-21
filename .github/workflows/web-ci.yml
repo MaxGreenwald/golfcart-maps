@@ -23,7 +23,7 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: "Road rule unit tests (golf cart vs LSV; CA golf carts <=25, CVC 21716)"
         run: node scripts/test_roadrule.js && node scripts/test_range.js
-      - name: Validate built region data (red islands / ring codes vs research/validation_baseline.json)
+      - name: "Validate built region data (red islands / ring codes vs baseline; same-road islands vs research/red_island_allowlist.json)"
         run: python scripts/validate_data.py
   browser:
     name: browser tests (Chromium + WebKit)
@@ -57,6 +57,10 @@ jobs:
         run: python scripts/test_delmar_warning.py
       - name: "test_safety_caution (SD stretches where signs or OSM show a higher limit; dashed orange, popup, route steps)"
         run: python scripts/test_safety_caution.py
+      - name: "test_islands_ui (same-road islands: Soledad Mtn Rd carriageway green; 'sources disagree' caution)"
+        run: python scripts/test_islands_ui.py
+      - name: "test_city_chip (city chip in the top row, A-Z, San Diego default, switching re-centers, back/forward)"
+        run: python scripts/test_city_chip.py
       - name: test_chips
         run: python scripts/test_chips.py
       - name: test_layout

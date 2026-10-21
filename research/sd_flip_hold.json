@@ -1200,8 +1200,8 @@
    33.1224719,
    -117.325659
   ],
-  "final_mph": 45,
-  "final_source": "tagged"
+  "final_mph": 35,
+  "final_source": "Sources disagree: OpenStreetMap says 45 mph on this short stretch, but Palomar Airport Road is posted 35 mph on both sides. Check posted signs."
  },
  {
   "road": "Palomar Airport Road",

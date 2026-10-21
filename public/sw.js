@@ -1,6 +1,6 @@
 const C='gcm-__CONTENT_HASH__'; // stamped at build time by scripts/build_web.py (never edit by hand)
 const LIVE=!C.includes('__'); // unstamped (public/ served raw): pass straight to the network, cache nothing, so it can never go stale
-const PRE=['./','track.js','app.js','roadrule.js','range.js','pay.js','carplay.js','native.js','vendor/leaflet/leaflet.js','vendor/leaflet/leaflet.css','data/regions.json','data/rules.json','data/sd/chargers.json','data/villages/chargers.json'];
+const PRE=['./','track.js','app.js','roadrule.js','range.js','regions.js','pay.js','carplay.js','native.js','vendor/leaflet/leaflet.js','vendor/leaflet/leaflet.css','data/regions.json','data/rules.json','data/sd/chargers.json','data/villages/chargers.json'];
 // The start page is cached under './' only: Cloudflare 308-redirects /index.html to /, and a redirected response can't answer a navigation (offline open failed with ERR_FAILED).
 const clean=r=>r.redirected?r.blob().then(b=>new Response(b,{status:r.status,statusText:r.statusText,headers:r.headers})):r;
 self.addEventListener('install',e=>{self.skipWaiting();if(LIVE)e.waitUntil(caches.open(C).then(c=>Promise.all(PRE.map(u=>fetch(new Request(u,{cache:'reload'})).then(r=>r.ok?Promise.resolve(clean(r)).then(x=>c.put(u,x)):0).catch(()=>{})))))});

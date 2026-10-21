@@ -8,11 +8,12 @@ with sync_playwright() as p:
     b=p.chromium.launch()
     ctx=b.new_context(**p.devices["iPhone 13"]);pg=ctx.new_page();pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000)
     ck("default region sd",pg.evaluate("REG.id")=="sd")
-    ck("picker shows every region in regions.json, in order",pg.evaluate("[...document.querySelectorAll('#city option')].map(o=>o.value).join()")==",".join(r["id"] for r in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","public/data/regions.json")))))
+    _R=[r for r in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","public/data/regions.json"))) if not r.get("hidden")]
+    ck("city chip shows every visible region, A-Z",pg.evaluate("[...document.querySelectorAll('#chips #city option')].map(o=>o.value).join()")==",".join(r["id"] for r in sorted(_R,key=lambda r:(r.get("short") or r["name"]).casefold())))
     pg.select_option("#city","villages");pg.wait_for_function("window.ready===true&&REG.id==='villages'",timeout=120000);pg.wait_for_timeout(2500)
     ck("picker switched to villages",pg.evaluate("REG.id")=="villages")
     pg.screenshot(path=f"{OUT}/picker-villages-mobile.png")
-    pg.reload();pg.wait_for_function("window.ready===true",timeout=120000);ck("saved choice persists",pg.evaluate("REG.id")=="villages")
+    pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000);ck("saved choice persists",pg.evaluate("REG.id")=="villages")
     A,B=[28.9095,-81.9745],[28.9330,-81.9590]   # Spanish Springs area -> north residential
     r1=pg.evaluate(f"testRoute({A},{B})");ck("villages LSV route",bool(r1),r1)
     ck("no vehicle chip; Golf cart mode in settings, LSV by default",pg.locator("#cMode,#cVeh").count()==0 and pg.locator("#vehCart").count()==1 and pg.evaluate("MODE")=="lsv")
