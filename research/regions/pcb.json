@@ -12,5 +12,23 @@
  "sources": [
   "F.S. 316.212/316.2122"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_pending",
+  "sources": [
+   {
+    "label": "PCB Ord. 1434 / Code §22-107 golf cart prohibited streets",
+    "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/14445/857499/pdf?forceDownload=true"
+   },
+   {
+    "label": "PCB LSV page (no LSVs on US 98 or Hutchison Blvd)",
+    "url": "https://www.pcbfl.gov/183/Low-Speed-Vehicles-LSVs"
+   }
+  ],
+  "note": "US 98 / Back Beach ban applied. The §22-107 golf cart street list is already red in golf-cart mode (Florida golf-cart mode is designated-only). Hutchison LSV ban mostly covered by its 45 mph posting.",
+  "missing": [
+   "Hutchison Blvd: city bans LSVs; we show 0.07 mi (posted 30) as OK for LSVs."
+  ]
+ }
 }

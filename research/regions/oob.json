@@ -61,5 +61,20 @@
    "mph": 40
   }
  ],
- "_speed_names": "Hand-entered from MaineDOT's official speed regulations where OSM ways span two posted zones (the automatic DOT match needs 60% agreement)."
+ "_speed_names": "Hand-entered from MaineDOT's official speed regulations where OSM ways span two posted zones (the automatic DOT match needs 60% agreement).",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "Old Orchard Beach Code of Ordinances (ch. 54 traffic)",
+    "url": "https://oob-me.elaws.us/code/coor"
+   },
+   {
+    "label": "29-A M.R.S. §2089",
+    "url": "https://www.legislature.maine.gov/legis/statutes/29-A/title29-Asec2089.html"
+   }
+  ],
+  "note": "No town golf cart access-route list or ban list found in the town code."
+ }
 }

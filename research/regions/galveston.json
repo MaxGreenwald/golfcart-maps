@@ -35,5 +35,16 @@
   "https://library.municode.com/tx/galveston/codes/code_of_ordinances?nodeId=PTIICOCI_CH34TR_ARTIIIVEOP_SS34-78--34-85RE (speed zones)",
   "West-of-103rd St registration split not modeled"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=galveston loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=galveston loads it",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Galveston golf cart ordinance (June 2021)",
+    "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021"
+   }
+  ],
+  "note": "Seawall, Broadway, Harborside, 61st, Ave O/P etc. applied."
+ }
 }

@@ -23,6 +23,8 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: "Road rule unit tests (golf cart vs LSV; CA golf carts <=25, CVC 21716)"
         run: node scripts/test_roadrule.js && node scripts/test_range.js
+      - name: "Local enforcement gate (every live region records its sheriff/police/city cart source check)"
+        run: python scripts/check_enforcement.py
       - name: "Validate built region data (red islands / ring codes vs baseline; same-road islands vs research/red_island_allowlist.json)"
         run: python scripts/validate_data.py
   browser:

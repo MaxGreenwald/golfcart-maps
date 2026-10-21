@@ -11,5 +11,16 @@
   "CVC 21260 (LSV \u226435)",
   "https://www.palmdesert.gov/ (Palm Desert golf cart program; route map not digitized)"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=coachella loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=coachella loads it",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Palm Desert Code ch. 10.76 Golf Carts",
+    "url": "https://ecode360.com/43846799"
+   }
+  ],
+  "note": "SR 111/74, I-10 bans applied. Palm Desert's 2010 golf cart route map is not digitized (designation, not a ban list)."
+ }
 }

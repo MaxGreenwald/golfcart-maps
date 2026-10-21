@@ -352,5 +352,20 @@
    "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/12450/1321171/pdf",
    "label": "Orange Beach Sec. 70-273: carts incl. state-tagged LSVs only on designated cart streets (this street not on the list)"
   }
- ]
+ ],
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Gulf Shores designated cart streets list",
+    "url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15531?fileID=45381"
+   },
+   {
+    "label": "Orange Beach cart ordinance 2025-1521",
+    "url": "https://library.municode.com/al/orange_beach/ordinances/code_of_ordinances?nodeId=2025"
+   }
+  ],
+  "note": "Police-administered designated street lists; region capped at 25 mph."
+ }
 }

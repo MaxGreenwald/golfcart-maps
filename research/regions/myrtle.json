@@ -13,5 +13,20 @@
   "https://scdps.sc.gov/DrivinginSC/golf-cart-law",
   "Ocean Blvd closed to carts 29th Ave N south during Memorial Day weekend (not modeled)"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=myrtle loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=myrtle loads it",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "City of Myrtle Beach golf cart rules",
+    "url": "https://www.cityofmyrtlebeach.com/news_detail_T6_R2337.php"
+   },
+   {
+    "label": "Myrtle Beach beach safety PDF",
+    "url": "https://cms6.revize.com/revize/myrtlebeachsc/beachsafety.pdf"
+   }
+  ],
+  "note": "City list (US 17, US 501, Kings Hwy, SC 31/22/707/544) applied. Memorial Day Ocean Blvd closure not modeled."
+ }
 }

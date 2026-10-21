@@ -12,5 +12,19 @@
  "sources": [
   "F.S. 316.212/316.2122"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_pending",
+  "sources": [
+   {
+    "label": "Sarasota County BCC minutes: Res. 2014-150 bars LSVs on Midnight Pass Rd, Vista Hermosa Cir to Sanderling Rd",
+    "url": "https://sarasotacounty.granicus.com/MinutesViewer.php?clip_id=2789&view_id=37"
+   }
+  ],
+  "note": "US 41 ban applied; Midnight Pass LSV ban not applied.",
+  "missing": [
+   "Midnight Pass Road: Res. 2014-150 bans LSVs from Vista Hermosa Cir to Sanderling Rd (the stretch cut from 40 to 35 mph); we show ~4.3 mi of Midnight Pass Rd (posted 35 and assumed 25) as OK for LSVs. The banned stretch is inside that; endpoints still need a location check."
+  ]
+ }
 }

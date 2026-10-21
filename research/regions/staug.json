@@ -12,5 +12,20 @@
  "sources": [
   "F.S. 316.212/316.2122"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "St. Augustine Beach Police: golf carts/LSVs",
+    "url": "https://sabpd.org/golf-carts-lsv-e-bikes/"
+   },
+   {
+    "label": "City of St. Augustine Ord. 2019-02 (summary via golfcartsearch; official copy not yet read)",
+    "url": "https://golfcartsearch.com/golf-cart-laws/florida/st-augustine"
+   }
+  ],
+  "note": "US 1, SR 312/207/16 bans applied. Bridge of Lions and St. Augustine Beach streets are already red in golf-cart mode (Florida golf-cart mode is designated-only); LSVs are allowed on streets posted <=35 (SABPD). Official Ord. 2019-02 text not yet read."
+ }
 }

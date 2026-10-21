@@ -13,5 +13,27 @@
   "F.S. 316.2122",
   "Golf carts (non-LSV) are not allowed on any Walton County public road; private communities (Seaside, Rosemary, Alys, Sandestin) set own rules"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=30a loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=30a loads it",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_pending",
+  "sources": [
+   {
+    "label": "Walton County Sheriff LSV laws",
+    "url": "https://waltonso.org/lsv/"
+   },
+   {
+    "label": "Walton County Sheriff LSV map (red = LSVs prohibited)",
+    "url": "https://waltonso.org/wp-content/uploads/2022/10/lsv_map_102022.png"
+   }
+  ],
+  "note": "Ban list from the sheriff's map is applied on branch fix-30a-audit (Max approved for the next deploy). Flip to bans_applied when that branch merges.",
+  "missing": [
+   "CR 283 (bay to 30A at Grayton)",
+   "CR 395 north of the Point Washington fire station",
+   "CR 83 north of the TDC beach operations office to Chat Holley Rd",
+   "~70 streets in Alys Beach, Seacrest Beach, Rosemary Beach",
+   "12 Seaside town-center streets"
+  ]
+ }
 }

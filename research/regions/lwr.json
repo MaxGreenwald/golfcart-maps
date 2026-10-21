@@ -12,5 +12,20 @@
  "sources": [
   "F.S. 316.212/316.2122"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Manatee County Golf_Cart_Permitted_Road GIS layer",
+    "url": "https://www.mymanatee.org/gispw/rest/services/Cityworks_Work_Orders/WOs_Traffic/MapServer/90"
+   },
+   {
+    "label": "Lakewood Ranch FAQ",
+    "url": "https://lakewoodranch.com/connect/faq/"
+   }
+  ],
+  "note": "I-75 / University Pkwy bans applied. The county's permitted-road layer exists but is not yet compared road by road."
+ }
 }

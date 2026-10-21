@@ -6,5 +6,16 @@
  "sources": [
   "F.S. 316.212/316.2122"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Holmes Beach Code §62-56 (golf carts barred from Palm Dr, Gulf Dr, Marina Dr 5300-6600 blocks)",
+    "url": "https://library.municode.com/fl/holmes_beach/codes/code_of_ordinances?nodeId=PTIICOOR_CH62TRVE_ARTIIIREVE_S62-56DE"
+   }
+  ],
+  "note": "Holmes Beach §62-56 bars golf carts from Gulf Dr, Palm Dr and Marina Dr 5300-6600; Florida golf-cart mode is designated-only, so those roads are already red for carts. The code doesn't restrict LSVs on them."
+ }
 }

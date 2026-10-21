@@ -12,5 +12,16 @@
  "sources": [
   "Tex. Transp. Code 551.403 / 551.303"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Rockport Code ch. 98 art. VI (no carts on state highways / FM roads)",
+    "url": "https://ecode360.com/41825792"
+   }
+  ],
+  "note": "SH 35 ban applied; FM 1069/1781/2165/3036 are all posted 50-60 and already shown red."
+ }
 }

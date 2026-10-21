@@ -7,5 +7,16 @@
   "CVC 21716 (golf carts ≤25 mph) / CVC 21260 (LSVs)",
   "Avalon Municipal Code Title 4 Ch. 4-4 Art. 17 (§ 4-4.1702 permit required; § 4-4.1703(f) rental autoettes, (g) one per dwelling unit; § 4-4.1705(b) LSVs to 138x67 in) and Art. 19 (§ 4-4.1902 autoette import moratorium; § 4-4.1903 autoette = CVC golf cart): https://ecode360.com/AV4054"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Avalon Municipal Code Title 4 Ch. 4-4",
+    "url": "https://ecode360.com/AV4054"
+   }
+  ],
+  "note": "City permit rules applied (25 mph cap)."
+ }
 }

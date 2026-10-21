@@ -76,5 +76,16 @@
    -80.0,
    32.7
   ]
- ]
+ ],
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Isle of Palms Police: golf carts & LSVs",
+    "url": "https://www.isleofpalms.gov/police/golf-carts-low-speed-vehicles"
+   }
+  ],
+  "note": "IOP Connector, SC 517/703, US 17, Ben Sawyer, James Island Expwy bans applied."
+ }
 }
