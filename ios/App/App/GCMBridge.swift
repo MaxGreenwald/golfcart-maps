@@ -88,6 +88,10 @@ final class GCMBridge {
     /// install id, platform "carplay"; the web layer drops it under GPC/Do Not Track/opt-out. Allowed: session,
     /// route_started, route_completed (mi rounded to 0.5). DEBUG builds log the result so the simulator run can check it.
     func track(_ name: String, _ props: [String: Any] = [:]) {
+        #if DEBUG
+        // Debug/simulator/CI runs (incl. CarPlay screenshot runs) use a local sink: nothing reaches live analytics.
+        webView?.evaluateJavaScript("window.GCM_TRACK_SINK=window.GCM_TRACK_SINK||function(o){console.log('GCMTrack sink',o.e)};0", completionHandler: nil)
+        #endif
         call("track(n,p)", ["n": name, "p": props]) { any in
             #if DEBUG
             let ok = (any as? [String: Any])?["ok"] as? Bool ?? false

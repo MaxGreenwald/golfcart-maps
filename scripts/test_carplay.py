@@ -13,6 +13,7 @@ with sync_playwright() as p:
     ck("turn angles + short text",all("turn" in m and m.get("short") for m in ms) and all((m["turn"]>0)==(m["type"].endswith("right")) for m in ms if m["type"] in("left","right")),[(m["type"],m["turn"]) for m in ms])
     ck("no unnamed straights",not any(m["type"]=="straight" and m["road"]=="unnamed road" for m in ms),[m["text"] for m in ms])
     ck("range info",r["range"] and "status" in r["range"],r.get("range"))
+    pg.evaluate("GCMCarPlay.setMode('golf_cart')")  # plan() ignores its mode arg; the saved setting decides
     v=pg.evaluate("GCMCarPlay.plan({lat:28.9095,lon:-81.9745},{lat:28.9330,lon:-81.9590},'golf_cart')")
     ck("villages auto-region golf cart plan",v["ok"] and v["region"]=="villages" and v["mode"]=="golf_cart" and v["miles"]<3.5,{k:v[k] for k in v if k not in("line","maneuvers")})
     o=pg.evaluate("GCMCarPlay.overlay(28.90,-81.99,28.92,-81.96,800)");ck("overlay",len(o["ok"])>20,(len(o["ok"]),len(o["bad"])))
