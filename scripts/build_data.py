@@ -96,6 +96,16 @@ ov, rep = overrides.build([(w["tags"], [[q["lon"], q["lat"]] for q in w["geometr
 for r in rep: print("override", *r)
 mly, mst = mapillary_signs.match([(w["tags"], [[q["lon"], q["lat"]] for q in w["geometry"]]) for w in wl])
 print("mapillary", json.dumps(mst))
+# Trails / bike paths mapped as roads are not cart/LSV roads: drop them from the output (see build_data_lib.is_trail).
+# Overrides, Mapillary matching and junction splits above still see them, so no other road's result changes.
+from build_data_lib import is_trail
+_keep = [i for i, w in enumerate(wl) if not is_trail(w["tags"])]
+TRAILS_DROPPED = sorted((w["tags"].get("name", ""), w["id"]) for w in wl if is_trail(w["tags"]))
+_remap = {o: n for n, o in enumerate(_keep)}
+wl = [wl[i] for i in _keep]
+ov = {_remap[i]: v for i, v in ov.items() if i in _remap}
+mly = {_remap[i]: v for i, v in mly.items() if i in _remap}
+print("trails dropped", len(TRAILS_DROPPED), TRAILS_DROPPED)
 conf = []
 sources = []; sidx = {}
 names, out, stats = [], [], {"tagged": 0, "inferred": 0, "unknown": 0, "inferred_high": 0, "verified": 0, "mapillary": 0}
@@ -107,6 +117,23 @@ def nid(k): return nids.setdefault(k, len(nids))
 # isolated red stub between OK pieces. Inherit the adjoining same-street limit when both ends join <=35
 # roads and at least one end continues the same street with a known (tagged/verified/mapillary) <=35 limit.
 def _len_m(g): return sum(math.hypot((g[k+1]["lon"]-g[k]["lon"])*93500, (g[k+1]["lat"]-g[k]["lat"])*110540) for k in range(len(g)-1))
+# Overrides whose source needs a second source before they may turn a 40+/unknown-major road LSV-legal
+FLIPHOLD = []
+for wi in list(ov):
+    url = ov[wi][2]
+    if url in overrides.CORROBORATE_FLIP:
+        s_osm, how = classify(wl[wi]["tags"])
+        # Hold every ordinance-only flip from blocked to legal: OSM-tagged 40+ AND untagged major roads
+        # (inferred_high 99). Max, Oct 18: the 64 Carlsbad ordinance-only segments stay blocked until a
+        # second source agrees (2+ Mapillary posted <=35 signs, or another official list via the sweep).
+        if s_osm > 35 and ov[wi][0] <= 35 and not (wi in mly and mly[wi][0] <= 35 and mly[wi][2] >= 2):
+            FLIPHOLD.append({"wi": wi, "road": wl[wi]["tags"].get("name", ""), "way": wl[wi]["id"], "osm_mph": s_osm, "source_mph": ov[wi][0], "source": ov[wi][3], "url": url,
+                             "at": [wl[wi]["geometry"][0]["lat"], wl[wi]["geometry"][0]["lon"]]})
+            del ov[wi]
+            # fall back to the next source in line (accuracy sweep: other official lists / Mapillary corridor), as on master
+            e = overrides.SWEEP.get(overrides.way_key(wl[wi]["tags"], wl[wi]["nodes"]))
+            if e: ov[wi] = (e["mph"], e["mph"] < 40, e["url"], e["label"])
+print("held (needs a 2nd source to become legal)", len(FLIPHOLD))
 _spd = []
 for wi, w in enumerate(wl):
     s0, src0 = classify(w["tags"])
@@ -183,6 +210,12 @@ import islands as _ISL
 _HEAL0 = _ISL.heal(out, names, sources); _ISL.sync_ws(out, WOUT, WS)
 from build_data_lib import roundabout_inherit
 RBX = roundabout_inherit(wl, WS, lambda w: True)
+# Carlsbad hold guard: a held way may end up legal only through a different source (sweep / 2+ Mapillary signs / stub
+# inheritance from such a neighbour), never on the held ordinance alone. Record the final result for tests/test_carlsbad_hold.py.
+for h in FLIPHOLD:
+    wi = h.pop("wi"); fm, fs = WS[wi]; h["final_mph"] = fm; h["final_source"] = sources[out[WOUT[wi][0]][8]][1] if WOUT[wi] and len(out[WOUT[wi][0]]) > 8 else fs
+    assert not (fm <= 35 and h["final_source"] == h["source"]), ("held Carlsbad way is legal on the ordinance alone", h)
+json.dump(FLIPHOLD, open(os.path.join(os.path.dirname(__file__), "..", "research", "sd_flip_hold.json"), "w"), indent=1)
 for wi, (nmph, rcode) in RBX["set"].items():
     for i in WOUT[wi]: out[i][2] = nmph; out[i][3] = rcode
 stats["roundabout_inherited"] = len(RBX["set"])
@@ -210,6 +243,28 @@ import islands as _ISL
 _HEAL = _HEAL0 + _ISL.heal(out, names, sources)
 _HS = {"same_road_gap": sum(c["code"] == "n" for c in _HEAL), "same_road_disagree": sum(c["code"] == "q" for c in _HEAL)}   # not in stats: stats sum = ways
 for c in _HEAL: print("  same-road island healed:", c)
+_ISL.sync_ws(out, WOUT, WS)   # so the verified-segment guard below sees healed speeds
+# ---- Two-source verification (research/sd_ground_truth/verified_ways.json, made by analyze.py) -> map badge + regression guard ----
+_VP = os.path.join(os.path.dirname(__file__), "..", "research", "sd_ground_truth", "verified_ways.json")
+VER = json.load(open(_VP)) if os.path.exists(_VP) else None
+if VER:
+    vsegs, vsrc, vsidx, verr = {}, [], {}, []
+    for wi, w in enumerate(wl):
+        e = VER["ways"].get(overrides.way_key(w["tags"], w["nodes"]))
+        if not e: continue
+        if WS[wi][0] != e["mph"]:   # a verified road changed speed: never let that ship silently
+            verr.append(f'{w["tags"].get("name", "")} (way {w["id"]}): verified {e["mph"]} mph on {e["date"]}, build now says {WS[wi][0]}')
+            continue
+        lab = " + ".join(sorted({s[2] for s in e["sources"]}))
+        k = (e["date"], lab, next((s[3] for s in e["sources"] if s[0] == "official"), ""))
+        if k not in vsidx: vsidx[k] = len(vsrc); vsrc.append(list(k))
+        for i in WOUT[wi]:
+            p = out[i][7]; vsegs["%.5f,%.5f|%.5f,%.5f" % (p[0][0], p[0][1], p[-1][0], p[-1][1])] = [e["mph"], vsidx[k]]
+    for x in verr: print("  ERROR verified segment regressed:", x)
+    if verr and os.environ.get("VALIDATE") != "warn": sys.exit("verified segments changed speed; re-verify them (research/sd_ground_truth) or fix the data")
+    json.dump({"date": VER["date"], "rule": "Verified = an official source and an independent source (OSM, posted-sign photo or Street View) agree",
+               "accuracy": VER["accuracy"], "src": vsrc, "segs": vsegs}, open(os.path.join(OUT, "verified.json"), "w"), separators=(",", ":"))
+    print("verified segments", len(vsegs), "regressions", len(verr))
 os.makedirs(os.path.join(os.path.dirname(__file__), "..", "research"), exist_ok=True)
 json.dump({"stats": mst, "changes": conf}, open(os.path.join(os.path.dirname(__file__), "..", "research", "mapillary_report.json"), "w"), indent=1)
 total = sum(stats.values())

@@ -131,3 +131,26 @@ def link_inherit(wl, WS, is_road, cap=35, maxlen=400):
             for k in comp: res["set"][k] = (m, "k")
         res["log"].append(lg)
     return res
+
+# ---- Trails / bike paths are never cart or LSV roads (Oct 19 2026) ----
+# Other regions never fetch path/cycleway/footway ways unless OSM tags golf_cart (build_region.py), so bike paths are simply
+# absent. In San Diego a few trails are mapped as ordinary roads (e.g. San Diego River Trail North, Mission Valley:
+# highway=unclassified + bicycle=designated). Drop them the same way. A way is a trail when its highway type is a path type,
+# or it is a service/unclassified/track way that either carries a trail name plus trail-style tags (designated bike/foot,
+# hiking scale, dirt, no motor vehicles) or is closed to motor vehicles and designated for bikes (a bike path mapped as a road).
+# Deliberately narrow: motor_vehicle=private/no alone also marks gated streets and HOV lanes, which are handled elsewhere.
+# tests/test_trails_coronado.py guards the built tiles.
+TRAIL_HW = {"path", "cycleway", "footway", "bridleway", "track", "pedestrian", "steps"}
+TRAIL_NAME = re.compile(r"\b(Trails?|Bike ?Path|Bikeway|Greenway|Multi-?Use Path|Rail Trail)\b(\s+(North|South|East|West))?$", re.I)
+_CARTV = ("yes", "designated")
+def is_trail(t):
+    if t.get("golf_cart") in _CARTV: return False
+    hw = t.get("highway", "")
+    if hw in TRAIL_HW: return True
+    if hw not in ("service", "unclassified", "track"): return False
+    nomotor = any(t.get(k) == "no" for k in ("motor_vehicle", "vehicle", "motorcar"))
+    if nomotor and t.get("bicycle") == "designated": return True
+    if TRAIL_NAME.search(t.get("name", "")):
+        return (nomotor or t.get("bicycle") == "designated" or t.get("foot") == "designated" or "sac_scale" in t
+                or t.get("surface") in ("dirt", "ground", "unpaved", "gravel", "fine_gravel", "compacted"))
+    return False

@@ -47,8 +47,12 @@ jobs:
           for i in $(seq 1 20); do curl -sf http://localhost:8765/ >/dev/null && break; sleep 1; done
       - name: test_sw (stamped cache name, old caches dropped, works offline)
         run: python scripts/test_sw.py
+      - name: "test_search_keep_text (typed destination text survives GPS ticks; Phoenix->Sun City and SD)"
+        run: python -m unittest tests.test_search_keep_text -v
       - name: test_ui
         run: python scripts/test_ui.py
+      - name: test_verified ('verified' only on two-source coastal SD segments; other regions never)
+        run: python scripts/test_verified.py
       - name: test_analytics (events, attribution, arrival, CarPlay hooks, GPC/DNT opt-out; local sink, nothing sent)
         run: python scripts/test_analytics.py
       - name: test_delmar_warning (Del Mar posted-limit warning shows until Nov 19 2026, then hides)

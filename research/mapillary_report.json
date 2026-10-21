@@ -1574,14 +1574,6 @@
    "url": "https://www.mapillary.com/app/?lat=33.065050&lng=-117.290955&z=19&focus=map&mapFeatureId=469643921035416"
   },
   {
-   "road": "Cannon Road",
-   "way": 436425165,
-   "osm_mph": 99,
-   "mapillary_mph": 35,
-   "change": "newly allowed",
-   "url": "https://www.mapillary.com/app/?lat=33.133610&lng=-117.332570&z=19&focus=map&mapFeatureId=2351909735190048"
-  },
-  {
    "road": "La Costa Avenue",
    "way": 1073749480,
    "override_mph": 30,
