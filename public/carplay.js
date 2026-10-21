@@ -16,14 +16,21 @@ const CP_EVENTS={session:1,route_started:1,route_completed:1};
 function cpTrack(name,props){if(!CP_EVENTS[name])return {ok:false,reason:'not allowed'};const p={};if(props&&props.mi!=null&&isFinite(+props.mi))p.mi=Math.round(+props.mi*2)/2;
  if(!window.GCMTrack)return {ok:false,reason:'no tracker'};window.GCMTrack.track(name,p,name==='session'?{platform:'carplay',force:true}:CP);return {ok:true,event:name,platform:'carplay',props:p}}
 function maneuvers(r){
- // group legs by street name + risky flag, keep geometry, then derive turn types at joins
+ // group legs by street name + risky flag, keep geometry, then derive turn types at joins.
+ // Each maneuver: meters = length of the road AFTER it; toMeters = distance driven to reach it (CPManeuver.initialTravelEstimates);
+ // inBrg/outBrg/turn = approach + exit bearings and signed turn angle (junction diagram, CPManeuver junctionExitAngle).
  const g=[];for(const l of r.legs){const n=D.names[l.s[0]]||'unnamed road',last=g[g.length-1];
   if(last&&last.n===n&&last.f===l.f){last.d+=l.s._len;last.p.push(...l.p)}else g.push({n,f:l.f,d:l.s._len,p:l.p.slice(),sp:l.s[2]})}
  const m=g.filter((s,i)=>s.d>15||i===0);const out=[];
- m.forEach((s,i)=>{let type='depart';if(i>0){const pv=m[i-1].p,a=pv[Math.max(0,pv.length-2)],j=pv[pv.length-1],b=s.p[Math.min(1,s.p.length-1)];type=turnOf(brg(j,b)-brg(a,j))}
-  out.push({type,road:s.n,meters:Math.round(s.d),risky:!!s.f,mph:s.sp&&s.sp!==99?s.sp:null,lat:s.p[0][1],lon:s.p[0][0],
-   text:(type==='depart'?'Head out on ':type==='straight'?'Continue on ':type==='uturn'?'Make a U-turn onto ':'Turn '+type.replace('slight_','slight ')+' onto ')+s.n+(s.f?' (risky stretch)':'')})});
- const e=r.legs.length?r.legs[r.legs.length-1].p:null;if(e){const q=e[e.length-1];out.push({type:'arrive',road:'',meters:0,risky:false,lat:q[1],lon:q[0],text:'Arrive at destination'})}
+ m.forEach((s,i)=>{let type='depart',turn=0,inB=null,outB=null;const b=s.p[Math.min(1,s.p.length-1)];outB=Math.round(brg(s.p[0],b));
+  if(i>0){const pv=m[i-1].p,a=pv[Math.max(0,pv.length-2)],j=pv[pv.length-1];inB=Math.round(brg(a,j));turn=Math.round(((brg(j,b)-brg(a,j)+540)%360)-180);type=turnOf(turn)}
+  const verb=type==='depart'?'Head out on ':type==='straight'?'Continue on ':type==='uturn'?'Make a U-turn onto ':'Turn '+type.replace('slight_','slight ')+' onto ';
+  out.push({type,road:s.n,meters:Math.round(s.d),toMeters:i>0?Math.round(m[i-1].d):0,turn,inBrg:inB,outBrg:outB,risky:!!s.f,mph:s.sp&&s.sp!==99?s.sp:null,lat:s.p[0][1],lon:s.p[0][0],
+   text:verb+s.n+(s.f?' (risky stretch)':''),
+   short:(type==='depart'?'Head out on ':type==='straight'?'Continue on ':type==='uturn'?'U-turn onto ':(type.startsWith('slight_')?'Slight '+type.slice(7):type[0].toUpperCase()+type.slice(1))+' onto ')+s.n})});
+ // a "Continue on unnamed road" is noise on screen: fold it into the previous step
+ for(let i=out.length-1;i>0;i--){const x=out[i];if(x.type==='straight'&&x.road==='unnamed road'){out[i-1].meters+=x.meters;if(out[i+1])out[i+1].toMeters=out[i-1].meters;out.splice(i,1)}}
+ const e=r.legs.length?r.legs[r.legs.length-1].p:null;if(e){const q=e[e.length-1];const L=out.length>0?out[out.length-1].meters:0;out.push({type:'arrive',road:'',meters:0,toMeters:Math.round(L),turn:0,inBrg:null,outBrg:null,risky:false,lat:q[1],lon:q[0],text:'Arrive at destination',short:'Arrive'})}
  return out}
 window.GCMCarPlay={
  version:2,
