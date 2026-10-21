@@ -1,0 +1,31 @@
+<div>Case-ID: 22944196</div>
+<br>
+<div>Hello,</div>
+<br>
+<div>Thank you for reviewing our request. Attached are screenshots from the CarPlay Simulator showing how Golf Cart Maps (com.matchimus.golfcartmaps) populates turn-by-turn route guidance with CPManeuver. They were captured from our debug build on a real route in Carlsbad, CA (Carlsbad Village to Carlsbad North Beach), using only roads posted 35 mph or less.</div>
+<br>
+<div><b>Attachments</b></div>
+<ol>
+<li>cpmaneuver_1_trip_preview.jpg: trip preview (CPTrip / CPRouteChoice) with distance, time and a battery check before the driver taps Go.</li>
+<li>cpmaneuver_2_left_carlsbad_village_dr.jpg: guidance for "Turn left onto Carlsbad Village Drive", with the next maneuver below it.</li>
+<li>cpmaneuver_3_slight_left_beech_ave.jpg: guidance for "Turn slight left onto Beech Avenue".</li>
+<li>cpmaneuver_4_right_carlsbad_blvd.jpg: guidance for "Turn right onto Carlsbad Boulevard", followed by "Arrive at destination".</li>
+<li>cpmaneuver_5_field_map.jpg: one screen annotated to show which CPManeuver / CPNavigationSession property fills each field.</li>
+</ol>
+<div><b>How maneuvers are populated</b></div>
+<ul>
+<li>Our router plans a route on the legal road network. Each step of the route becomes one CPManeuver.</li>
+<li><b>instructionVariants</b>: long to short, e.g. "Turn right onto Carlsbad Boulevard", "Right onto Carlsbad Boulevard", "Carlsbad Boulevard". Dashboard and notification variants are set as well.</li>
+<li><b>symbolImage</b>: a turn arrow chosen from the maneuver type (left, right, slight left/right, U-turn, straight, arrive).</li>
+<li><b>initialTravelEstimates</b>: the distance and time to reach the maneuver. While driving, CPNavigationSession.updateEstimates(_:for:) updates it from the device location.</li>
+<li><b>upcomingManeuvers</b>: always the current and the next maneuver, so the driver sees what comes after the turn.</li>
+<li><b>Trip estimates</b>: CPMapTemplate.update(_:for:with:) keeps arrival time, minutes and miles remaining current.</li>
+<li>On iOS 17.4 and later we also set maneuverType, junctionType, junctionExitAngle (the real turn angle), trafficSide, roadFollowingManeuverVariants, maneuverState and currentRoadNameVariants.</li>
+</ul>
+<div>The map layer is a CPMapTemplate with our own base view that shows the route and highlights roads allowed for the driver's vehicle in green and roads to avoid in red.</div>
+<br>
+<div>Please let us know if you need anything else.</div>
+<br>
+<div>Thank you,</div>
+<div>Max Greenwald</div>
+<div>Golf Cart Maps</div>
