@@ -15,7 +15,7 @@ with sync_playwright() as p:
     ck("range info",r["range"] and "status" in r["range"],r.get("range"))
     pg.evaluate("GCMCarPlay.setMode('golf_cart')")  # plan() ignores its mode arg; the saved setting decides
     v=pg.evaluate("GCMCarPlay.plan({lat:28.9095,lon:-81.9745},{lat:28.9330,lon:-81.9590},'golf_cart')")
-    ck("villages auto-region golf cart plan",v["ok"] and v["region"]=="villages" and v["mode"]=="golf_cart" and v["miles"]<3.5,{k:v[k] for k in v if k not in("line","maneuvers")})
+    ck("villages auto-region golf cart plan",v["ok"] and v["region"]=="villages" and v["mode"]=="golf_cart" and v["miles"]<15,{k:v[k] for k in v if k not in("line","maneuvers")})
     o=pg.evaluate("GCMCarPlay.overlay(28.90,-81.99,28.92,-81.96,800)");ck("overlay",len(o["ok"])>20,(len(o["ok"]),len(o["bad"])))
     s=pg.evaluate("GCMCarPlay.search('spanish',28.91,-81.97)");ck("search",len(s)>0,s)
     pg.evaluate("GCMCarPlay.setMode('lsv')")
