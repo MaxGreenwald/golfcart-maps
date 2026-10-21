@@ -5,13 +5,72 @@
    "names": "^US ?98|^US ?331|Emerald Coast P|Scenic H(igh)?wy 98|^SR ?30\\b",
    "url": "https://waltonso.org/lsv/",
    "label": "Walton County Sheriff: LSVs may not drive on US 98 (cross at 4-way intersections only)"
+  },
+  {
+   "names": "County H(igh)?wa?y 283\\b|\\bCR ?283\\b",
+   "bbox": [
+    30.33,
+    -86.18,
+    30.41,
+    -86.14
+   ],
+   "url": "https://waltonso.org/lsv/",
+   "label": "Walton County Sheriff LSV map (red = prohibited): CR 283 (US 98 to the bay and south to 30A)"
+  },
+  {
+   "names": "County H(igh)?wa?y 83\\b|\\bCR ?83\\b|^Old Blue Mountain Road$|^South Eden Park Drive$",
+   "bbox": [
+    30.355,
+    -86.205,
+    30.392,
+    -86.188
+   ],
+   "url": "https://waltonso.org/lsv/",
+   "label": "Walton County Sheriff LSV map (red = prohibited): CR 83 from Chat Holley Rd south past US 98",
+   "per_segment": true
+  },
+  {
+   "names": "County H(igh)?wa?y 395\\b|\\bCR ?395\\b",
+   "north_of": 30.334,
+   "bbox": [
+    30.334,
+    -86.14,
+    30.4,
+    -86.09
+   ],
+   "url": "https://waltonso.org/lsv/",
+   "label": "Walton County Sheriff LSV map (red = prohibited): CR 395 from Point Washington south past US 98"
+  },
+  {
+   "names": "^(Abaco\\ Lane|Admiralty\\ Row|Atticus\\ Road|Barefoot\\ Lane|Blue\\ Crab\\ Loop\\ East|Blue\\ Crab\\ Loop\\ West|Blue\\ Dolphin\\ Loop|Bourne\\ Lane|Buggy\\ Whip\\ Lane|Caliza\\ Lane|Cast\\ Net\\ Lane|Charlestown\\ Avenue|Cobia\\ Run\\ East|Cobia\\ Run\\ West|Dunmore\\ Town\\ Lane|East\\ Long\\ Green\\ Road|East\\ Sugar\\ Lump\\ Lane|East\\ Water\\ Street|Elbow\\ Beach\\ Lane|Elbow\\ Beach\\ Road|Flip\\ Flop\\ Lane|Geoff\\ Wilder\\ Lane|Georgetown\\ Avenue|Hamilton\\ Lane|Hope\\ Town\\ Lane|Johnstown\\ Lane|Juan\\ Bermudez\\ Crescent|Kingston\\ Road|Lifeguard\\ Loop\\ East|Main\\ Street|Mark\\ Twain\\ Lane|Needle\\ and\\ Thread\\ Alley|Nevis\\ Lane|New\\ Providence\\ Lane|Nonesuch\\ Way|North\\ Barrett\\ Square|North\\ Cartagena\\ Lane|North\\ Castle\\ Harbor\\ Drive|North\\ Green\\ Turtle\\ Lane|North\\ Lane|North\\ Somerset\\ Street|North\\ Spanish\\ Town\\ Lane|North\\ Winston\\ Lane|Pinecrest\\ Circle|Rosemary\\ Avenue|Round\\ Road|Sailfish\\ Street|Seacrest\\ Beach\\ Boulevard\\ East|Seacrest\\ Beach\\ Boulevard\\ North|Seacrest\\ Beach\\ Boulevard\\ West|Shinbone\\ Court|South\\ Barrett\\ Square|South\\ Briland\\ Lane|South\\ Castle\\ Harbour\\ Drive|South\\ Green\\ Turtle\\ Lane|South\\ Somerset\\ Street|Spice\\ Berry\\ Alley|Sugar\\ Loaf\\ Alley|The\\ Village\\ Green|The\\ Village\\ Lane|Town\\ Hall\\ Road|Town\\ Road|Trigger\\ Trail\\ East|Trimingham\\ Lane|Tucker's\\ Lane|West\\ Long\\ Green\\ Road|West\\ Water\\ Street|Wiggle\\ Lane|Windward\\ Lane|Winston\\ Lane)$",
+   "bbox": [
+    30.27,
+    -86.036,
+    30.292,
+    -86.004
+   ],
+   "url": "https://waltonso.org/lsv/",
+   "label": "Walton County Sheriff LSV map (red = prohibited): Alys Beach / Seacrest / Rosemary Beach streets"
+  },
+  {
+   "names": "^(Cypress\\ Hill\\ Road|East\\ Ruskin\\ Street|Odessa\\ Street|Pensacola\\ Street|Roberts\\ Way|Ruskin\\ Place|Savannah\\ Street|Seaside\\ Avenue|Smolian\\ Circle|Tupelo\\ Street|Venice\\ Circle|West\\ Ruskin\\ Street)$",
+   "bbox": [
+    30.314,
+    -86.146,
+    30.326,
+    -86.128
+   ],
+   "url": "https://waltonso.org/lsv/",
+   "label": "Walton County Sheriff LSV map (red = prohibited): Seaside town-center streets"
   }
  ],
  "sources": [
   "https://waltonso.org/lsv/",
   "https://www.mywaltonfl.gov/DocumentCenter/View/43678/Ordinance-2025-03-LSV",
   "F.S. 316.2122",
-  "Golf carts (non-LSV) are not allowed on any Walton County public road; private communities (Seaside, Rosemary, Alys, Sandestin) set own rules"
+  "Golf carts (non-LSV) are not allowed on any Walton County public road; private communities (Seaside, Rosemary, Alys, Sandestin) set own rules",
+  "https://waltonso.org/wp-content/uploads/2022/10/lsv_map_102022.png"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=30a loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=30a loads it",
+ "audit_2026_10_21": "Bans above from the Sheriff LSV map (image georeferenced to OSM US 98/331). See research/30a_audit_2026-10-21.md"
 }
