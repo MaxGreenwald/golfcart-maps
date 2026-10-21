@@ -1,0 +1,78 @@
+[
+ {
+  "name": "1_villages",
+  "r": "villages",
+  "post": [
+   "map.setView([28.9365,-81.962],15)",
+   "setSnap('collapsed')"
+  ]
+ },
+ {
+  "name": "2_keywest",
+  "r": "keywest",
+  "a": [
+   24.5594,
+   -81.8065
+  ],
+  "b": [
+   24.5513,
+   -81.7745
+  ],
+  "qa": "Mallory Square",
+  "qb": "Smathers Beach",
+  "post": [
+   "const d=window._lastDetail;const pts=[];d.legs.forEach(l=>l.p.forEach(p=>pts.push([p[1],p[0]])));const W=innerWidth;map.fitBounds(L.latLngBounds(pts),W<700?{paddingTopLeft:[30,170],paddingBottomRight:[30,330]}:{paddingTopLeft:[440,60],paddingBottomRight:[60,60]})"
+  ]
+ },
+ {
+  "name": "3_destin",
+  "r": "destin",
+  "a": [
+   30.3935,
+   -86.5105
+  ],
+  "b": [
+   30.3846,
+   -86.4426
+  ],
+  "qa": "HarborWalk Village",
+  "qb": "Henderson Beach State Park",
+  "post": [
+   "const d=window._lastDetail;const pts=[];d.legs.forEach(l=>l.p.forEach(p=>pts.push([p[1],p[0]])));const W=innerWidth;map.fitBounds(L.latLngBounds(pts),W<700?{paddingTopLeft:[30,170],paddingBottomRight:[30,330]}:{paddingTopLeft:[440,60],paddingBottomRight:[60,60]})"
+  ]
+ },
+ {
+  "name": "4_wailea",
+  "r": "wailea",
+  "a": [
+   20.6837,
+   -156.4423
+  ],
+  "b": [
+   20.7115,
+   -156.4467
+  ],
+  "qa": "The Shops at Wailea",
+  "qb": "Kamaole Beach Park III",
+  "post": [
+   "const d=window._lastDetail;const pts=[];d.legs.forEach(l=>l.p.forEach(p=>pts.push([p[1],p[0]])));const W=innerWidth;map.fitBounds(L.latLngBounds(pts),W<700?{paddingTopLeft:[30,170],paddingBottomRight:[30,330]}:{paddingTopLeft:[440,60],paddingBottomRight:[60,60]})"
+  ]
+ },
+ {
+  "name": "5_hhi",
+  "r": "hhi",
+  "a": [
+   32.1384,
+   -80.8105
+  ],
+  "b": [
+   32.1427,
+   -80.7514
+  ],
+  "qa": "Harbour Town",
+  "qb": "Coligny Beach",
+  "post": [
+   "const d=window._lastDetail;const pts=[];d.legs.forEach(l=>l.p.forEach(p=>pts.push([p[1],p[0]])));const W=innerWidth;map.fitBounds(L.latLngBounds(pts),W<700?{paddingTopLeft:[30,170],paddingBottomRight:[30,330]}:{paddingTopLeft:[440,60],paddingBottomRight:[60,60]})"
+  ]
+ }
+]

@@ -1,0 +1,29 @@
+Know where your golf cart or LSV can go before you pull out of the driveway.
+
+Golf Cart Maps colors every street in your town: green for roads your cart or low-speed vehicle can use, red for the fast or banned roads to avoid. Search for the beach, a restaurant or your rental, and get a route that sticks to legal streets and cart paths.
+
+WHAT YOU CAN DO
+• See legal streets at a glance: green for roads posted 35 mph or under (or the local limit), red for 40+ mph, highways and roads where carts aren't allowed.
+• Get cart-friendly routes that stay off fast and banned roads.
+• Show your location and start a route from where you are. Your location stays on your phone.
+• Check battery range for a round trip.
+• Report a road that looks wrong, right from the map.
+• Road data is built into the app, so the legal-street map and routing keep working with a weak signal.
+
+WHERE IT WORKS
+Florida: The Villages, Naples and Marco Island, 30A and South Walton, Destin, Panama City Beach, Anna Maria Island, Siesta Key, Lakewood Ranch, Sun City Center, St. Augustine, Amelia Island and Key West.
+California: the San Diego coast, Coachella Valley, Laguna Woods and the OC coast, and Avalon on Catalina Island.
+Hawaii: Wailea and Kihei, Kaanapali and Kapalua, Poipu and Koloa, Waikoloa and Mauna Lani, and Kailua.
+The Carolinas: Hilton Head and Bluffton, Myrtle Beach, the Charleston beach towns, the Outer Banks, and Bald Head Island and Southport.
+Georgia: Peachtree City, St. Simons and Jekyll Island, and Tybee Island.
+Texas: Port Aransas, Galveston, South Padre Island, and Rockport and Fulton.
+Also: Gulf Shores and Orange Beach (AL), Sun City (AZ), Put-in-Bay (OH) and Old Orchard Beach (ME).
+More towns are added often. Request yours from the app.
+
+HOW WE KNOW
+Speed limits come from OpenStreetMap, speed-limit signs spotted in street imagery, and city and state sources, checked against each state's golf cart and LSV laws. Each town shows the rule it follows, including where only street-legal LSVs are allowed (like Hawaii and Maine).
+
+PLEASE DRIVE SAFELY
+Golf Cart Maps is a planning guide, not legal advice. Road data can be wrong or out of date, and local rules change. Always follow posted signs, local ordinances and state law, and make sure your vehicle, driver and equipment meet local requirements.
+
+Questions or a town to add? Email max@golfcartmap.com.

@@ -1,0 +1,20 @@
+Golf Cart Maps helps golf cart and low-speed vehicle (LSV) drivers find streets they are legally allowed to drive on, and routes them around roads that are too fast or where carts are banned. It covers 37 U.S. cart communities (e.g. The Villages FL, Key West FL, Destin FL, Hilton Head SC, San Diego CA, Wailea HI). No login or account is needed.
+
+How to test:
+1. Open the app. It starts in San Diego. Tap the area chip at the top (San Diego ▾) and pick "The Villages" or "Key West" to switch towns.
+2. Green streets are legal for carts/LSVs; red streets are 40+ mph or banned. Tap any street to see its speed limit, its source, and the rule that applies.
+   The map follows street-legal LSV rules by default; Settings (gear) > "Golf cart mode" switches to the stricter rules for plain golf carts (for example, roads posted 25 mph or less in California).
+3. Type a place in the search box (e.g. "Spanish Springs" in The Villages, or "Duval St" in Key West), pick a result, and the app draws a cart-legal route in blue with distance, time and a battery round-trip check.
+4. Tap "Start from me" to route from your location (the location prompt appears here).
+
+What the native app adds beyond a website:
+- All road data for every town (about 50 MB of speed-limit and cart-rule data) and the routing engine are bundled in the app and run on the device, so the legal-street map and routing work with poor or no cell coverage, which is common on islands and beaches.
+- Core Location: shows your position, picks your nearest town, and starts routes from where you are. Location never leaves the device.
+- Native share sheet to send a route or a town map to the people riding with you, and haptic feedback when a route is found.
+
+Notes:
+- Road rules come from each state's golf cart/LSV statutes (cited in the app) and speed limits from OpenStreetMap, street-sign imagery and city sources. The app tells users to always follow posted signs and local law.
+- There are no in-app purchases, ads or accounts. The app sends a few anonymous usage events (session, town viewed, route searched/started/completed) with a random install ID and no location, name or contact data, to learn which towns and features help people. This is described in the privacy policy (https://golfcartmap.com/privacy) and the App Privacy answers (Usage Data > Product Interaction and Identifiers > Device ID, analytics, not linked, not used for tracking). Global Privacy Control / Do Not Track turns it off.
+- Map tiles are © OpenStreetMap contributors (ODbL); EV charger data is from the U.S. DOE Alternative Fuels Data Center (public domain).
+
+Contact: Max Greenwald, max@golfcartmap.com
