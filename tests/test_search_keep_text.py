@@ -2,13 +2,17 @@
 Cause: every GPS tick (watchPosition, start = Your location) ran sync(), which rewrote #q from state (to=null -> '').
 Out of region (Phoenix -> nearest-region fallback Sun City) and SD are both checked."""
 import functools, http.server, os, socketserver, threading, unittest
-from playwright.sync_api import sync_playwright
+try:
+    from playwright.sync_api import sync_playwright
+except ImportError:   # the unit-test CI job has no browser; the browser job runs this file explicitly
+    sync_playwright = None
 PUB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public")
 
 class _Quiet(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a): pass
 class _S(socketserver.ThreadingMixIn, http.server.HTTPServer): daemon_threads = True
 
+@unittest.skipIf(sync_playwright is None, "playwright not installed (runs in the browser CI job)")
 class SearchKeepsText(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
