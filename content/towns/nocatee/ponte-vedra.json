@@ -69,6 +69,16 @@
    "name": "Valley Ridge Blvd",
    "rule": "Posted 45 mph; carts not allowed in the street",
    "crossings_ok": true
+  },
+  {
+   "name": "Cross Town Dr",
+   "rule": "Multilane divided road posted 40 mph; carts use cart crossings only",
+   "crossings_ok": true
+  },
+  {
+   "name": "Crosswater Pkwy",
+   "rule": "Main road posted 35-45 mph; not shown as golf-cart legal",
+   "crossings_ok": true
   }
  ],
  "faq": [

@@ -163,7 +163,7 @@ P["nocatee"] = dict(
          ("Path speed","Golf carts and LSVs on a multi-use path are limited to 15 mph and must yield to pedestrians and bicycles","St. Johns County Ord. 2024-7",SJC),
          ("Drivers","Under 18 needs a learner's permit or driver's license; 18 and older needs government-issued photo ID","St. Johns County Ord. 2024-7",SJC),
          ("LSVs","Registered LSVs on roads posted 35 mph or less","F.S. 316.2122",FLS+"316.2122")],
-  banned=[("Nocatee Parkway (CR 210)","45-55 mph limited-access parkway",False),("CR 210 / Palm Valley Rd","County road over 35 mph",True),("US 1","State highway, 45+ mph",True),("Valley Ridge Blvd","Posted 45 mph; carts not allowed in the street",True)],
+  banned=[("Nocatee Parkway (CR 210)","45-55 mph limited-access parkway",False),("CR 210 / Palm Valley Rd","County road over 35 mph",True),("US 1","State highway, 45+ mph",True),("Valley Ridge Blvd","Posted 45 mph; carts not allowed in the street",True),("Cross Town Dr","Multilane divided road posted 40 mph; carts use cart crossings only",True),("Crosswater Pkwy","Main road posted 35-45 mph; not shown as golf-cart legal",True)],
   faq=[("Can I drive a golf cart on Valley Ridge Blvd in {n}?","No. Valley Ridge Blvd is posted 45 mph, so golf carts aren't allowed in the street. Use the greenway trails where they connect."),
        ("Can I drive a golf cart at night in {n}?","Only if it has headlights, brake lights, turn signals and a windshield, under the Nocatee golf cart rules.")],
   sources=[NOC, NOCREG, SJC, VRB, FLS+"316.212"])

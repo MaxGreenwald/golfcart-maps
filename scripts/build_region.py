@@ -267,6 +267,7 @@ for wi, w in enumerate(wl):
                 if ("south_of" in b and q_["lat"] >= b["south_of"]) or ("north_of" in b and q_["lat"] <= b["north_of"]): continue
                 if "bbox" in b and not (b["bbox"][0] <= q_["lat"] <= b["bbox"][2] and b["bbox"][1] <= q_["lon"] <= b["bbox"][3]): continue
                 if "only_codes" in b and scode not in b["only_codes"]: continue   # e.g. ["i"]: only stretches with no posted limit of their own
+                if "max_mph" in b and ss > b["max_mph"]: continue   # e.g. 25: only the pieces that would otherwise read as cart-legal
                 ss, ssi, sflag, scode = 99, src_i(b["url"], b["label"]), 1, "v"; stats["seg_banned"] = stats.get("seg_banned", 0) + 1; break
         if spn and src == "verified" and w["id"] not in OV and not lban:   # a long way can span two posted zones: decide per segment
             o2 = speed_name(t, g[sg[len(sg)//2]])
