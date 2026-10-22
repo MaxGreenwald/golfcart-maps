@@ -65,7 +65,7 @@ with sync_playwright() as p:
     check('web: Venmo tip link still present', pg.locator('#tip').count() == 1)
     pg.evaluate("setMenu(true)"); pg.wait_for_timeout(300)
     check('web: chargers chip still shown', vis(pg, '#cChg'))
-    check('web: beta badge still shown', vis(pg, '#cityBeta'))
+    check('web: no beta badge (Max, Oct 22)', not vis(pg, '#cityBeta'))
     check('web: Risky chip still shown', vis(pg, '#cRisk'))
     check('web: native helpers report web', pg.evaluate('window.GCM_IOS===false&&window.GCM_NATIVE===false'))
     c.close(); b.close()
