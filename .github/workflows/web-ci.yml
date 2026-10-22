@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
-      URL: http://localhost:8765/
+      URL: http://localhost:8765/map/   # dist/: / is the landing page, the map is /map (scripts/serve_dist.py mimics Pages routing)
       SHOTS: ${{ github.workspace }}/ci-shots/
       SHOTS_DIR: ${{ github.workspace }}/ci-shots/
     steps:
@@ -43,10 +43,11 @@ jobs:
         run: |
           mkdir -p ci-shots
           python scripts/build_web.py
-          (cd dist && python -m http.server 8765 >/dev/null 2>&1 &)
+          (python scripts/serve_dist.py 8765 dist >/dev/null 2>&1 &)
           for i in $(seq 1 20); do curl -sf http://localhost:8765/ >/dev/null && break; sleep 1; done
       - name: test_sw (stamped cache name, old caches dropped, works offline)
         run: python scripts/test_sw.py
+        env: {URL: "http://localhost:8765/"}
       - name: "test_search_keep_text (typed destination text survives GPS ticks; Phoenix->Sun City and SD)"
         run: python -m unittest tests.test_search_keep_text -v
       - name: test_ui

@@ -9,6 +9,7 @@ Usage: URL=http://localhost:8765/ python scripts/test_appstore.py"""
 import os, re, sys
 from playwright.sync_api import sync_playwright
 U = os.environ.get('URL', 'http://localhost:8765/').rstrip('/') + '/'
+ORIGIN = '/'.join(U.split('/')[:3]) + '/'   # same-origin assets (URL may be .../map/)
 STUB = """window.__calls=[];window.Capacitor={isNativePlatform:()=>true,getPlatform:()=>'ios',Plugins:{
  Haptics:{impact:o=>{__calls.push(['Haptics.impact',o]);return Promise.resolve()},notification:o=>{__calls.push(['Haptics.notification',o]);return Promise.resolve()}},
  Share:{share:o=>{__calls.push(['Share.share',o]);return Promise.resolve({})}}}};"""
@@ -24,7 +25,7 @@ with sync_playwright() as p:
     c.add_init_script(STUB)
     ext = []
     def block(route):
-        if not route.request.url.startswith(U): ext.append(route.request.url); return route.abort()
+        if not route.request.url.startswith(ORIGIN): ext.append(route.request.url); return route.abort()
         return route.continue_()
     c.route('**/*', block)
     pg = c.new_page(); pg.goto(U + '?r=villages')
