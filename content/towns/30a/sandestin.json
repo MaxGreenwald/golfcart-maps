@@ -96,6 +96,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Sandestin sets its own rules for carts on its private roads, so start with the resort's guest info.",
+   "name": "Sandestin Golf and Beach Resort",
+   "url": "https://www.sandestin.com/"
+  }
+ ],
  "nearby": [
   "miramar-beach",
   "dune-allen-beach",

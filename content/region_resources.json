@@ -1,0 +1,61 @@
+{
+ "annamaria": [
+  {
+   "lead": "The official Anna Maria Island visitor guide covers beaches, trolley and getting around.",
+   "name": "Anna Maria Island official visitor guide",
+   "url": "https://www.annamariaisland-longboatkey.com/"
+  }
+ ],
+ "ameliaisland": [
+  {
+   "lead": "Amelia Island's official tourism guide covers Fernandina Beach, beaches and events.",
+   "name": "Amelia Island official visitor guide",
+   "url": "https://www.ameliaisland.com/"
+  }
+ ],
+ "tybee": [
+  {
+   "lead": "Tybee Island's city site covers local parking and golf cart rules.",
+   "name": "City of Tybee Island official website",
+   "url": "https://www.cityoftybee.org/"
+  }
+ ],
+ "staugustine": [
+  {
+   "lead": "The official guide to St. Augustine and Ponte Vedra covers the old city, beaches and events.",
+   "name": "Florida's Historic Coast official visitor guide",
+   "url": "https://www.floridashistoriccoast.com/"
+  }
+ ],
+ "outerbanks": [
+  {
+   "lead": "The Outer Banks Visitors Bureau's official guide covers every town from Corolla to Ocracoke.",
+   "name": "Outer Banks official visitor guide",
+   "url": "https://www.outerbanks.org/"
+  },
+  {
+   "lead": "For Nags Head town rules, see the Town of Nags Head's official site.",
+   "name": "Town of Nags Head official website",
+   "url": "https://www.nagsheadnc.gov/"
+  }
+ ],
+ "southpadre": [
+  {
+   "lead": "For golf cart registration and local rules, see the City of South Padre Island's site.",
+   "name": "City of South Padre Island official website",
+   "url": "https://www.myspi.org/"
+  },
+  {
+   "lead": "Visit South Padre Island's official guide covers beaches, events and getting around the island.",
+   "name": "Visit South Padre Island official guide",
+   "url": "https://visitsouthpadreisland.com/"
+  }
+ ],
+ "charleston": [
+  {
+   "lead": "Explore Charleston's official guide covers the city and nearby beach towns like Folly and Isle of Palms.",
+   "name": "Explore Charleston official visitor guide",
+   "url": "https://www.charlestoncvb.com/"
+  }
+ ]
+}

@@ -96,6 +96,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "The Walton County Sheriff's Office lists LSV fines and a map of roads where LSVs are banned.",
+   "name": "Walton County Sheriff's LSV laws and prohibited-roads map",
+   "url": "https://waltonso.org/lsv/"
+  }
+ ],
  "nearby": [
   "dune-allen-beach",
   "blue-mountain-beach",

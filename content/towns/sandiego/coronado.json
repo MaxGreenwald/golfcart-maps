@@ -49,6 +49,18 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "The Coronado Visitor Center lists local golf cart rental shops and things to do.",
+   "name": "Coronado Visitor Center",
+   "url": "https://coronadovisitorcenter.com/"
+  },
+  {
+   "lead": "Coronado bans low-speed vehicles from sidewalks and some promenades; the city code lists them.",
+   "name": "Coronado rules for low-speed vehicles on paths",
+   "url": "https://coronado.municipal.codes/CMC/56.18.050"
+  }
+ ],
  "nearby": [
   "imperial-beach",
   "point-loma",

@@ -75,6 +75,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "North Myrtle Beach publishes a golf cart use map and its sunrise-to-sunset rule.",
+   "name": "North Myrtle Beach golf cart laws and use map",
+   "url": "https://www.nmb.us/600/Golf-Cart-Laws"
+  }
+ ],
  "nearby": [
   "myrtle-beach",
   "surfside-beach"

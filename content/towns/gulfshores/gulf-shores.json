@@ -75,6 +75,18 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Gulf Shores requires carts to be registered with the city; the city's page explains how.",
+   "name": "Gulf Shores golf cart registration and rules",
+   "url": "https://www.gulfshoresal.gov/984/Golf-Cart-Registration"
+  },
+  {
+   "lead": "For beaches, events and places to stay, see the official Gulf Shores & Orange Beach tourism guide.",
+   "name": "Gulf Shores & Orange Beach official visitor guide",
+   "url": "https://www.gulfshores.com/"
+  }
+ ],
  "nearby": [
   "orange-beach"
  ],

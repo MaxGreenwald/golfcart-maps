@@ -75,6 +75,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "The City of Myrtle Beach explains the state golf cart law as it applies inside city limits.",
+   "name": "Myrtle Beach golf cart laws (City of Myrtle Beach)",
+   "url": "https://www.cityofmyrtlebeach.com/i_want_to/learn_about/golf_cart_laws.php"
+  }
+ ],
  "nearby": [
   "north-myrtle-beach",
   "surfside-beach"

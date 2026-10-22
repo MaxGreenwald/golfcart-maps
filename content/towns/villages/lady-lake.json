@@ -71,6 +71,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "For Lady Lake town services and ordinances, see the Town of Lady Lake's official site.",
+   "name": "Town of Lady Lake official website",
+   "url": "https://www.ladylakefl.gov/"
+  }
+ ],
  "nearby": [
   "the-villages",
   "wildwood"

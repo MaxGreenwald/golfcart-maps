@@ -49,6 +49,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Discover Pacific Beach is the neighborhood's official guide to events, dining and parking.",
+   "name": "Discover Pacific Beach visitor guide",
+   "url": "https://www.pacificbeach.org/"
+  }
+ ],
  "nearby": [
   "mission-beach",
   "la-jolla",

@@ -96,6 +96,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "WaterColor's roads are private, so check with the WaterColor Inn concierge for community cart rules.",
+   "name": "WaterColor Inn & Resort guest information",
+   "url": "https://www.watercolorresort.com/"
+  }
+ ],
  "nearby": [
   "point-washington",
   "seaside",

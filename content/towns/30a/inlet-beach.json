@@ -96,6 +96,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Visit South Walton, the official tourism bureau, covers beaches, events and getting around 30A.",
+   "name": "Visit South Walton's official 30A travel guide",
+   "url": "https://www.visitsouthwalton.com/"
+  }
+ ],
  "nearby": [
   "rosemary-beach",
   "alys-beach",

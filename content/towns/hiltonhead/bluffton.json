@@ -75,6 +75,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "For local ordinances in Old Town Bluffton, check the Town of Bluffton's official site.",
+   "name": "Town of Bluffton official website",
+   "url": "https://www.townofbluffton.sc.gov/"
+  }
+ ],
  "nearby": [
   "hilton-head-island",
   "north-forest-beach",

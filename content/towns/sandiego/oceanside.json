@@ -49,6 +49,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Visit Oceanside's official guide covers the pier, harbor and beach neighborhoods.",
+   "name": "Visit Oceanside's official travel guide",
+   "url": "https://visitoceanside.org/"
+  }
+ ],
  "nearby": [
   "carlsbad",
   "leucadia",

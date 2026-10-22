@@ -49,6 +49,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "For Imperial Beach city services and rules, see the city's official site.",
+   "name": "City of Imperial Beach official website",
+   "url": "https://www.imperialbeachca.gov/"
+  }
+ ],
  "nearby": [
   "coronado",
   "point-loma",
