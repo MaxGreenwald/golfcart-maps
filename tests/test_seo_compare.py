@@ -8,7 +8,7 @@ class T(unittest.TestCase):
         self.assertIn('<link rel="canonical" href="https://golfcartmap.com/compare">', h)
         self.assertIn("<h1>How do golf cart navigation apps compare?</h1>", h)
         self.assertIn("as of 2026-10-19", text.lower())
-        self.assertNotRegex(text, r"(?i)\bfree\b|verified|carplay|android|\b(worst|bad|terrible|scam|outdated|abandoned)\b")
+        self.assertNotRegex(text, r"(?i)\bbeta\b|verified|carplay|android|\b(worst|bad|terrible|scam|outdated|abandoned)\b")
         for a in S.APPS: self.assertIn(S.e(a[0]), h)
         ld = json.loads(re.search(r'application/ld\+json">(.*?)</script>', h, re.S).group(1))
         self.assertEqual({x["@type"] for x in ld}, {"Organization", "WebSite", "FAQPage", "BreadcrumbList"})

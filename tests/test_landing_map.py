@@ -8,7 +8,7 @@ class Landing(unittest.TestCase):
             B.build(out=os.path.join(t, "w"), native=False); B.build(out=os.path.join(t, "n"), native=True)
             w, m = open(os.path.join(t, "w", "index.html")).read(), open(os.path.join(t, "w", "map.html")).read()
             n = open(os.path.join(t, "n", "index.html")).read()
-            self.assertIn("<h1>Not just 35 mph and under.", w); self.assertNotIn("leaflet", w.lower())
+            self.assertIn("<h1>Cruise anywhere your cart is legal.", w); self.assertNotIn("leaflet", w.lower())
             self.assertIn('id="map"', m); self.assertIn('<link rel="canonical" href="https://golfcartmap.com/map">', m)
             self.assertIn('id="map"', n); self.assertFalse(os.path.exists(os.path.join(t, "n", "map.html")))
             src = open(os.path.join(C.PUB, "index.html")).read()
@@ -23,7 +23,7 @@ class Landing(unittest.TestCase):
         self.assertEqual({x["@type"] for x in ld}, {"Organization", "WebSite", "SoftwareApplication", "FAQPage"})
         self.assertNotIn("offers", [x for x in ld if x["@type"] == "SoftwareApplication"][0])
         for q in [x for x in ld if x["@type"] == "FAQPage"][0]["mainEntity"]: self.assertIn(C.e(q["acceptedAnswer"]["text"]), h)
-        self.assertNotRegex(re.sub(r"<[^>]+>", " ", h), r"(?i)\bfree\b|verified|carplay|android")
+        self.assertNotRegex(re.sub(r"<[^>]+>", " ", h), r"(?i)\bbeta\b|verified|android")
         for r in C.regions(): self.assertIn(f'href="/{r["slug"]}"', h)
         self.assertIn("window.Capacitor", h)  # native app never shows the landing page
     def test_sw_shell_is_map(self):
