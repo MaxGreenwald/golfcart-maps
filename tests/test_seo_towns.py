@@ -17,7 +17,7 @@ class Towns(unittest.TestCase):
         self.assertNotRegex(re.sub(r"<[^>]+>", " ", h), r"(?i)verified|\bfree\b")
         self.assertIn('href="https://golfcartmap.com/sandiego/pacific-beach"', h)
         self.assertIn(">CVC 21260</a>", h); self.assertIn("Not legal advice; posted signs win.", h)
-        self.assertIn("/?r=sd&amp;lat=32.7978&amp;lon=-117.24&amp;z=16", h)
+        self.assertIn("/map?r=sd&amp;lat=32.7978&amp;lon=-117.24&amp;z=16", h)
         self.assertIn("<loc>https://golfcartmap.com/sandiego/pacific-beach</loc><lastmod>2026-10-20</lastmod>", sm)
         self.assertNotIn("noindex", h)
     def test_schema_matches_visible(self):

@@ -33,9 +33,9 @@ class T(unittest.TestCase):
                 self.assertIn(C.e(q["name"]), h); self.assertIn(C.e(q["acceptedAnswer"]["text"]), h)
     def test_cta_and_no_banned_words(self):
         for slug, h in self.pages.items():
-            self.assertRegex(h, r'class="cta" href="/\?r=[a-z0-9]+"')
+            self.assertRegex(h, r'class="cta" href="/map\?r=[a-z0-9]+"')
             text = re.sub(r"<[^>]+>", " ", h)
             self.assertNotRegex(text, r"(?i)\bfree\b|verified|carplay|android")
     def test_sw_caches_only_root_as_shell(self):
-        sw = open(os.path.join(C.PUB, "sw.js")).read(); self.assertIn("r.ok&&u.pathname==='/'", sw)
+        sw = open(os.path.join(C.PUB, "sw.js")).read(); self.assertIn("r.ok&&app&&!r.redirected", sw)  # only /map is the app shell
 if __name__ == "__main__": unittest.main()
