@@ -16,6 +16,9 @@ t('cart paths OK for every vehicle in every region',()=>{for(const r of regs)for
 t('every CA region: golf cart cap <= 25',()=>{for(const r of regs.filter(r=>r.state==='CA')){const g=R.ruleFor(rules,r,'golf_cart');a.ok(g.max_posted<=25,r.id);a.equal(R.cls(seg(30),g),3,r.id)}});
 t('every state has a golf_cart and an lsv profile with a cite',()=>{for(const st of new Set(regs.map(r=>r.state))){for(const v of R.VEHICLES){a.ok(rules[st][v],st+' '+v);a.ok(rules[st][v].cite,st+' '+v+' cite')}}});
 t('HI/ME: plain golf carts not street-legal, LSVs <=35',()=>{for(const id of ['wailea','kailua','waikoloa','oob']){const g=R.ruleFor(rules,reg(id),'golf_cart'),l=R.ruleFor(rules,reg(id),'lsv');a.ok(g.not_street_legal);a.equal(R.cls(seg(25),g),3);a.equal(R.cls(seg(35),l),0);a.match(R.why(seg(25),g,l),/aren't street-legal.*OK for/)}});
+t('Sheriff-map bans name the map, not the speed',()=>{const l=R.ruleFor(rules,reg('30a'),'lsv');const s=[0,'secondary',99,'v',0,0,1,[],0];
+  a.equal(R.why(s,l,null,['https://waltonso.org/lsv/','Walton County Sheriff LSV map (red = prohibited): CR 283 (US 98 to the bay and south to 30A)']),'Avoid: LSVs not allowed here (Walton County Sheriff LSV map)');
+  a.equal(R.why(s,l,null,['https://waltonso.org/lsv/','Walton County Sheriff: LSVs may not drive on US 98']),'Avoid: 40+ mph or major road');a.equal(R.why(s,l),'Avoid: 40+ mph or major road')});
 t('FL golf carts: designated roads only',()=>{const g=R.ruleFor(rules,reg('villages'),'golf_cart');a.ok(g.designated_only);a.equal(R.cls(seg(25,'t'),g),3);a.equal(R.cls(seg(25,'d'),g),0);a.equal(R.cls(seg(35,'d'),g),0);a.equal(R.cls(seg(40,'d'),g),3);a.match(R.why(seg(25,'t'),g),/designated/);
   a.equal(R.cls(seg(35,'t'),R.ruleFor(rules,reg('villages'),'lsv')),0)});
 t('region flat rule applies to both vehicles (Gulf Shores <=25)',()=>{for(const v of R.VEHICLES){const x=R.ruleFor(rules,reg('gulfshores'),v);a.equal(x.max_posted,25);a.equal(R.cls(seg(30),x),3)}});

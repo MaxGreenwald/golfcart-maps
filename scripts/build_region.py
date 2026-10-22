@@ -188,6 +188,7 @@ for wi, w in enumerate(wl):
     if hw in ROADS:
         mla, mlo = w["geometry"][len(w["geometry"])//2]["lat"], w["geometry"][len(w["geometry"])//2]["lon"]
         for b in CFG.get("bans", []):   # local ordinance / state-highway bans -> blocked for everyone (single rule)
+            if b.get("per_segment"): continue   # decided per segment below (a way that is only partly banned)
             if not any(re.search(b["names"], t.get(k, "")) for k in ("name", "ref")): continue
             if "south_of" in b and mla >= b["south_of"]: continue
             if "north_of" in b and mla <= b["north_of"]: continue
@@ -253,12 +254,19 @@ for wi, w in enumerate(wl):
         pts = simplify([[round(g[k]["lon"], 5), round(g[k]["lat"], 5)] for k in sg])
         ow = 1 if t.get("oneway") in ("yes", "1") else (-1 if t.get("oneway") == "-1" else 0)
         if t.get("junction") == "roundabout" and ow == 0: ow = 1
-        ss, ssi = s, si
+        ss, ssi, scode = s, si, code
+        if hw in ROADS and not lban and w["id"] not in OV:   # per-segment bans: only the stretch of the way inside the banned range
+            q_ = g[sg[len(sg)//2]]
+            for b in CFG.get("bans", []):
+                if not b.get("per_segment") or not any(re.search(b["names"], t.get(k, "")) for k in ("name", "ref")): continue
+                if ("south_of" in b and q_["lat"] >= b["south_of"]) or ("north_of" in b and q_["lat"] <= b["north_of"]): continue
+                if "bbox" in b and not (b["bbox"][0] <= q_["lat"] <= b["bbox"][2] and b["bbox"][1] <= q_["lon"] <= b["bbox"][3]): continue
+                ss, ssi, sflag, scode = 99, src_i(b["url"], b["label"]), 1, "v"; stats["seg_banned"] = stats.get("seg_banned", 0) + 1; break
         if spn and src == "verified" and w["id"] not in OV and not lban:   # a long way can span two posted zones: decide per segment
             o2 = speed_name(t, g[sg[len(sg)//2]])
             if o2: ss, ssi = o2["mph"], src_i(o2["url"], o2["label"])
         WOUT[wi].append(len(out))
-        out.append([nidx[nm], hw, ss, code, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([ssi, sflag] if sflag else [ssi] if ssi >= 0 else []))
+        out.append([nidx[nm], hw, ss, scode, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([ssi, sflag] if sflag else [ssi] if ssi >= 0 else []))
 # ---- Roundabouts: OSM rarely tags maxspeed on the ring itself, so an untagged major-class ring (secondary etc.)
 # fell to 99 "inferred_high" and showed red even when every approach is posted <=35. A ring with no limit of its own
 # takes the HIGHEST known limit among its connecting roads (conservative: a ring touching a 40+ road stays red). ----
