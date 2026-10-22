@@ -1,0 +1,101 @@
+{
+ "slug": "ponte-vedra",
+ "region": "nocatee",
+ "name": "Nocatee, Ponte Vedra",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Nocatee, Ponte Vedra?",
+ "answer_short": "Yes, electric golf carts. St. Johns and Duval county ordinances let them use Nocatee roads posted 25 mph or less, signed golf cart paths and designated multi-use trails. Street-legal LSVs may use roads posted 35 mph or less. Nocatee Parkway, CR 210, US 1 and Valley Ridge Blvd are off limits.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Nocatee roads posted 25 mph or less, signed cart paths and designated multi-use trails",
+  "speed_line": "25 mph",
+  "notes": "Electric carts only; 15 mph on multi-use paths"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and tagged"
+ },
+ "rules": [
+  {
+   "topic": "Golf cart roads",
+   "rule": "Roads within Nocatee with a posted speed limit of 25 mph or less and designated golf cart multi-use paths with signage are approved for electric golf carts",
+   "citation": "Nocatee Golf Cart Map",
+   "source_url": "https://www.nocatee.com/golfcartmap"
+  },
+  {
+   "topic": "Paths and trails",
+   "rule": "Signed golf cart paths at least 10 feet wide and multipurpose trails at least 16 feet wide designated for golf carts; not pedestrian sidewalks",
+   "citation": "St. Johns County and Duval County golf cart regulations for Nocatee",
+   "source_url": "https://tmwha.org/wp-content/uploads/2017/11/SJCGolfCartRegulations.pdf"
+  },
+  {
+   "topic": "Path speed",
+   "rule": "Golf carts and LSVs on a multi-use path are limited to 15 mph and must yield to pedestrians and bicycles",
+   "citation": "St. Johns County Ord. 2024-7",
+   "source_url": "https://www.sjcfl.us/st-johns-county-adopts-golf-cart-ordinance-conforming-to-state-statute/"
+  },
+  {
+   "topic": "Drivers",
+   "rule": "Under 18 needs a learner's permit or driver's license; 18 and older needs government-issued photo ID",
+   "citation": "St. Johns County Ord. 2024-7",
+   "source_url": "https://www.sjcfl.us/st-johns-county-adopts-golf-cart-ordinance-conforming-to-state-statute/"
+  },
+  {
+   "topic": "LSVs",
+   "rule": "Registered LSVs on roads posted 35 mph or less",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2026/316.2122"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Nocatee Parkway (CR 210)",
+   "rule": "45-55 mph limited-access parkway",
+   "crossings_ok": false
+  },
+  {
+   "name": "CR 210 / Palm Valley Rd",
+   "rule": "County road over 35 mph",
+   "crossings_ok": true
+  },
+  {
+   "name": "US 1",
+   "rule": "State highway, 45+ mph",
+   "crossings_ok": true
+  },
+  {
+   "name": "Valley Ridge Blvd",
+   "rule": "Posted 45 mph; carts not allowed in the street",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive a golf cart on Valley Ridge Blvd in Nocatee, Ponte Vedra?",
+   "a": "No. Valley Ridge Blvd is posted 45 mph, so golf carts aren't allowed in the street. Use the greenway trails where they connect."
+  },
+  {
+   "q": "Can I drive a golf cart at night in Nocatee, Ponte Vedra?",
+   "a": "Only if it has headlights, brake lights, turn signals and a windshield, under the Nocatee golf cart rules."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  30.105,
+  -81.415
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.nocatee.com/golfcartmap",
+  "https://tmwha.org/wp-content/uploads/2017/11/SJCGolfCartRegulations.pdf",
+  "https://www.sjcfl.us/st-johns-county-adopts-golf-cart-ordinance-conforming-to-state-statute/",
+  "https://www.artisanlakeshoa.com/editor_upload/File/General/2022-11-04%20Golf%20Carts%20on%20Valley%20Ridge.pdf",
+  "https://www.flsenate.gov/Laws/Statutes/2026/316.212"
+ ]
+}

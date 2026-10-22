@@ -149,6 +149,24 @@ P["suncity"] = dict(
   faq=[("Can I drive a golf cart on Bell Road?","The Maricopa County Sheriff's Office lists Bell Road as a higher-speed road that is unsafe for golf carts; stay on roads posted 35 mph or less."),
        ("Do golf carts in {n} need to be registered?","Yes. Golf carts on Sun City roads must be registered with the state, and the driver needs a valid driver's license.")],
   sources=[SCH, AZ])
+NOC = "https://www.nocatee.com/golfcartmap"
+NOCREG = "https://tmwha.org/wp-content/uploads/2017/11/SJCGolfCartRegulations.pdf"
+SJC = "https://www.sjcfl.us/st-johns-county-adopts-golf-cart-ordinance-conforming-to-state-statute/"
+VRB = "https://www.artisanlakeshoa.com/editor_upload/File/General/2022-11-04%20Golf%20Carts%20on%20Valley%20Ridge.pdf"
+P["nocatee"] = dict(
+  q="Can you drive a golf cart in {n}?",
+  a="Yes, electric golf carts. St. Johns and Duval county ordinances let them use Nocatee roads posted 25 mph or less, signed golf cart paths and designated multi-use trails. Street-legal LSVs may use roads posted 35 mph or less. Nocatee Parkway, CR 210, US 1 and Valley Ridge Blvd are off limits.",
+  gc=dict(allowed="yes", roads="Nocatee roads posted 25 mph or less, signed cart paths and designated multi-use trails", speed_line="25 mph", notes="Electric carts only; 15 mph on multi-use paths"),
+  lsv=dict(allowed="yes", roads="Roads posted 35 mph or less", speed_line="35 mph", notes="Registered and tagged"),
+  rules=[("Golf cart roads","Roads within Nocatee with a posted speed limit of 25 mph or less and designated golf cart multi-use paths with signage are approved for electric golf carts","Nocatee Golf Cart Map",NOC),
+         ("Paths and trails","Signed golf cart paths at least 10 feet wide and multipurpose trails at least 16 feet wide designated for golf carts; not pedestrian sidewalks","St. Johns County and Duval County golf cart regulations for Nocatee",NOCREG),
+         ("Path speed","Golf carts and LSVs on a multi-use path are limited to 15 mph and must yield to pedestrians and bicycles","St. Johns County Ord. 2024-7",SJC),
+         ("Drivers","Under 18 needs a learner's permit or driver's license; 18 and older needs government-issued photo ID","St. Johns County Ord. 2024-7",SJC),
+         ("LSVs","Registered LSVs on roads posted 35 mph or less","F.S. 316.2122",FLS+"316.2122")],
+  banned=[("Nocatee Parkway (CR 210)","45-55 mph limited-access parkway",False),("CR 210 / Palm Valley Rd","County road over 35 mph",True),("US 1","State highway, 45+ mph",True),("Valley Ridge Blvd","Posted 45 mph; carts not allowed in the street",True)],
+  faq=[("Can I drive a golf cart on Valley Ridge Blvd in {n}?","No. Valley Ridge Blvd is posted 45 mph, so golf carts aren't allowed in the street. Use the greenway trails where they connect."),
+       ("Can I drive a golf cart at night in {n}?","Only if it has headlights, brake lights, turn signals and a windshield, under the Nocatee golf cart rules.")],
+  sources=[NOC, NOCREG, SJC, VRB, FLS+"316.212"])
 # (region, slug, name, state, lat, lng, extra faq)
 T = [
  ("30a","miramar-beach","Miramar Beach","FL",30.3790,-86.3700),("30a","sandestin","Sandestin","FL",30.3830,-86.3270),
@@ -179,8 +197,9 @@ T = [
  ("naples","marco-island","Marco Island","FL",25.9410,-81.7180),
  ("suncity","sun-city","Sun City","AZ",33.6120,-112.2810),("suncity","sun-city-west","Sun City West","AZ",33.6620,-112.3410),
  ("suncity","youngtown","Youngtown","AZ",33.5940,-112.3030),
+ ("nocatee","ponte-vedra","Nocatee, Ponte Vedra","FL",30.1050,-81.4150),
 ]
-RID = {"30a":"30a","hiltonhead":"hhi","sandiego":"sd","villages":"villages","peachtreecity":"ptc","gulfshores":"gulfshores","myrtlebeach":"myrtle","portaransas":"portaransas","naples":"naples","suncity":"suncity"}
+RID = {"30a":"30a","hiltonhead":"hhi","sandiego":"sd","villages":"villages","peachtreecity":"ptc","gulfshores":"gulfshores","myrtlebeach":"myrtle","portaransas":"portaransas","naples":"naples","suncity":"suncity","nocatee":"nocatee"}
 EXTRA = {
  "seaside": ("Can I drive an LSV into Seaside's town center?","No. The 12 Seaside town-center streets are red on the Walton County Sheriff's LSV map, so LSVs are prohibited there. 30A itself stays open."),
  "alys-beach": ("Can I drive an LSV on Alys Beach streets?","No. The Alys Beach town streets are red on the Walton County Sheriff's LSV map, so LSVs are prohibited there; 30A through town stays open."),
