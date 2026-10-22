@@ -1,6 +1,6 @@
 {
  "unverified": [
-  "City-level cart designations not digitized; app applies the state LSV rule (posted \u226435)."
+  "City-level cart designations not digitized; app applies the state LSV rule (posted ≤35)."
  ],
  "bans": [
   {
@@ -10,7 +10,15 @@
   }
  ],
  "sources": [
-  "F.S. 316.212/316.2122"
+  "F.S. 316.212/316.2122",
+  "https://www.staugbch.com/413/Golf-CartsLow-Speed-Vehicles"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "cart_only_bans": [
+  {
+   "poly": "st_augustine_beach.json",
+   "url": "https://www.staugbch.com/413/Golf-CartsLow-Speed-Vehicles",
+   "label": "City of St. Augustine Beach: traditional golf carts may not be operated on public streets (LSVs on streets <=35 mph)"
+  }
+ ]
 }

@@ -12,7 +12,8 @@ class Nocatee(unittest.TestCase):
     def setUp(self):
         self.reg = next(r for r in J("public/data/regions.json") if r["id"] == "nocatee"); self.cfg = J("research/regions/nocatee.json")
     def test_beta_and_slug(self):
-        self.assertTrue(self.reg["beta"]); self.assertEqual(self.reg["slug"], "nocatee"); self.assertEqual(self.reg["state"], "FL")
+        st = J("research/beta_status.json")["regions"]["nocatee"]   # beta flag follows the v3 bar (Max, Oct 22 2026), not a fixed value
+        self.assertEqual(bool(self.reg.get("beta")), not st["passes"]); self.assertEqual(self.reg["slug"], "nocatee"); self.assertEqual(self.reg["state"], "FL")
     def test_cart_rule_25(self):
         g = self.reg["rule"]["golf_cart"]; self.assertEqual(g["max_posted"], 25); self.assertTrue(g["url"].startswith("https://"))
     def test_enforcement_source_recorded(self):

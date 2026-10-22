@@ -1,10 +1,31 @@
 {
  "unverified": [
-  "City-level cart designations not digitized; app applies the state LSV rule (posted \u226435)."
+  "City-level cart designations not digitized; app applies the state LSV rule (posted ≤35)."
  ],
  "bans": [],
  "sources": [
-  "F.S. 316.212/316.2122"
+  "F.S. 316.212/316.2122",
+  "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10998/1154989/pdf"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "cart_only_bans": [
+  {
+   "names": "^(Palm Drive|Gulf Drive)$",
+   "poly": "holmes_beach.json",
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10998/1154989/pdf",
+   "label": "Holmes Beach Code Sec. 62-39(e) (Ord. 2022): golf carts prohibited on Palm Drive and Gulf Drive"
+  },
+  {
+   "names": "^Marina Drive$",
+   "bbox": [
+    27.505,
+    -82.72,
+    27.5152,
+    -82.712
+   ],
+   "poly": "holmes_beach.json",
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10998/1154989/pdf",
+   "label": "Holmes Beach Code Sec. 62-39(e) (Ord. 2022): golf carts prohibited on the 5300-6600 blocks of Marina Drive"
+  }
+ ]
 }

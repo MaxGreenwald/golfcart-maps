@@ -11,12 +11,13 @@
   {
    "names": "James Island Expressway|^SC ?30\\b",
    "url": "https://gis.scdot.org/hosting/rest/services/Speed_Limits/FeatureServer/16",
-   "label": "James Island Expressway (SC 30): limited-access expressway, 45\u201355 mph per SCDOT/FHWA (OSM 25 tag is wrong)"
+   "label": "James Island Expressway (SC 30): limited-access expressway, 45–55 mph per SCDOT/FHWA (OSM 25 tag is wrong)"
   }
  ],
  "sources": [
-  "https://www.isleofpalms.gov/police/golf-carts-low-speed-vehicles",
-  "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+  "https://cityoffollybeach.com/rules_regulations/golf_carts.php",
+  "https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "https://www.isleofpalms.gov/police/golf-carts-low-speed-vehicles"
  ],
  "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=chs loads it",
  "poly": [
@@ -76,5 +77,19 @@
    -80.0,
    32.7
   ]
+ ],
+ "cart_only_bans": [
+  {
+   "names": "^Palm (Boulevard|Blvd)$|^SC ?703\\b|^S-?10-?703\\b",
+   "poly": "isle_of_palms.json",
+   "url": "https://www.isleofpalms.gov/police/golf-carts-low-speed-vehicles",
+   "label": "Isle of Palms: golf carts prohibited on SC-703 (Palm Blvd); may cross only"
+  },
+  {
+   "names": "^(Center Street|Folly Road)$|^SC ?171\\b",
+   "poly": "folly_beach.json",
+   "url": "https://cityoffollybeach.com/rules_regulations/golf_carts.php",
+   "label": "Folly Beach: golf carts may cross but not drive on Center Street or Folly Road"
+  }
  ]
 }

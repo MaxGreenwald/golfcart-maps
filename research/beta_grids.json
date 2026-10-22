@@ -1,0 +1,7 @@
+{"_note": "Rule 4 (Max, 2026-10-22): resort/town-centre grids. When the region has a local access source, residential/unclassified/living_street roads whose midpoint is inside a grid count as important roads (checked and scored). bbox = [S, W, N, E]. 30A boxes come from the Walton County Sheriff LSV-map bans in research/regions/30a.json; the Alys/Seacrest/Rosemary split is approximate by longitude.",
+ "regions": {
+  "30a": {"Seaside": [30.314, -86.146, 30.326, -86.128],
+          "Alys Beach": [30.27, -86.036, 30.292, -86.026],
+          "Seacrest": [30.27, -86.026, 30.292, -86.016],
+          "Rosemary Beach": [30.27, -86.016, 30.292, -86.004]}
+ }}

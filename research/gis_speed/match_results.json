@@ -1,0 +1,80 @@
+{
+ "fdot_naples": {
+  "region": "naples",
+  "features": 91,
+  "agree": [
+   876,
+   896
+  ],
+  "gap_mi": 20.1919278186828,
+  "region_mi": 465.94508802882456,
+  "before": 0.48824333415495424,
+  "after": 0.5315787578721664,
+  "more_permissive": 13
+ },
+ "fdot_villages": {
+  "region": "villages",
+  "features": 189,
+  "agree": [
+   42,
+   47
+  ],
+  "gap_mi": 101.52720647695605,
+  "region_mi": 384.9064706383195,
+  "before": 0.1951855016324611,
+  "after": 0.4589566102568129,
+  "more_permissive": 50
+ },
+ "ocgis_speed": {
+  "region": "ocoast",
+  "features": 26,
+  "agree": [
+   88,
+   99
+  ],
+  "gap_mi": 16.275418438592972,
+  "region_mi": 704.8895473626477,
+  "before": 0.25494631977764465,
+  "after": 0.2780356371032989,
+  "more_permissive": 64
+ },
+ "rivco_highways": {
+  "region": "coachella",
+  "features": 79,
+  "agree": [
+   0,
+   2
+  ],
+  "gap_mi": 0.2280332379308192,
+  "region_mi": 521.1714959008158,
+  "before": 0.17753206266392663,
+  "after": 0.17796960239839862,
+  "more_permissive": 0
+ },
+ "scdot_speed": {
+  "region": "myrtle",
+  "features": 193,
+  "agree": [
+   1399,
+   1476
+  ],
+  "gap_mi": 4.211716793273922,
+  "region_mi": 525.5735363791508,
+  "before": 0.4447357150917367,
+  "after": 0.4527492783740318,
+  "more_permissive": 17
+ },
+ "sumter_roads": {
+  "region": "villages",
+  "features": 11564,
+  "agree": [
+   0,
+   37
+  ],
+  "gap_mi": 166.0085599327355,
+  "region_mi": 384.9064706383195,
+  "before": 0.1951855016324611,
+  "after": 0.6264813425608584,
+  "more_permissive": 57
+ }
+}

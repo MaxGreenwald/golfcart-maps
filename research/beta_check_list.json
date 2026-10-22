@@ -1,0 +1,8957 @@
+{
+ "30a": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "West County Highway 30A",
+    "mi": 1.39,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West County Highway 30A",
+    "mi": 0.5,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "East County Highway 30A",
+    "mi": 0.17,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Scenic Gulf Drive",
+    "mi": 0.05,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "West County Highway 30A",
+    "mi": 1.39,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "West County Highway 30A",
+    "mi": 0.5,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "Pine Log Road",
+    "mi": 3.15,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Mack Bayou Road",
+    "mi": 2.21,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North County Highway 393",
+    "mi": 2.02,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South County Highway 83",
+    "mi": 1.14,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Forest Street",
+    "mi": 1.03,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South County Highway 395",
+    "mi": 0.69,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Western Lake Drive",
+    "mi": 0.67,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Breakers Street",
+    "mi": 0.62,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Defuniak Street",
+    "mi": 0.53,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Wall Street",
+    "mi": 0.51,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "East County Highway 30A",
+    "mi": 0.51,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Beach Bike Way",
+    "mi": 0.48,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Twin Lakes Drive",
+    "mi": 0.47,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Medley Street",
+    "mi": 0.46,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "amelia": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Clinch Drive",
+    "mi": 0.27,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "First Coast Highway",
+    "mi": 0.25,
+    "mph": 45,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "Courson Road",
+    "mi": 0.2,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Buccaneer Trail",
+    "mi": 0.18,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Amelia Road",
+    "mi": 0.06,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Amelia Island Parkway",
+    "mi": 0.02,
+    "mph": 40,
+    "kind": "sourced_red"
+   }
+  ],
+  "gap": []
+ },
+ "annamaria": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Cortez Road West",
+    "mi": 0.07,
+    "mph": 45,
+    "kind": "sourced_red"
+   }
+  ],
+  "gap": []
+ },
+ "avalon": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Stage Road",
+    "mi": 1.97,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Stage Road",
+    "mi": 0.63,
+    "mph": 20,
+    "conflict": false
+   }
+  ]
+ },
+ "bhi": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "North Howe Street",
+    "mi": 0.21,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "West Beach Drive",
+    "mi": 3.35,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Middleton Street",
+    "mi": 3.15,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "East Beach Drive",
+    "mi": 3.14,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Sunset Harbor Road Southeast",
+    "mi": 2.99,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "East Moore Street",
+    "mi": 2.27,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "chs": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Rifle Range Road",
+    "mi": 0.7,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Secessionville Road",
+    "mi": 0.7,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Secessionville Road",
+    "mi": 0.65,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Venning Road",
+    "mi": 0.57,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Bowman Road",
+    "mi": 0.54,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Battery Island Drive",
+    "mi": 0.33,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Old Military Road",
+    "mi": 0.21,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Rifle Range Road",
+    "mi": 0.16,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Rifle Range Road",
+    "mi": 0.09,
+    "mph": 40,
+    "kind": "sourced_red"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Waterway Boulevard",
+    "mi": 1.65,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Camp Road",
+    "mi": 1.52,
+    "mph": 99,
+    "conflict": false
+   }
+  ]
+ },
+ "coachella": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Monroe Street",
+    "mi": 7.1,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Washington Street",
+    "mi": 4.29,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Monroe Street",
+    "mi": 3.72,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Varner Road",
+    "mi": 2.63,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Cesar Chavez Street",
+    "mi": 2.3,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ramon Road",
+    "mi": 2.03,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Washington Street",
+    "mi": 1.56,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Washington Street",
+    "mi": 1.46,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ramon Road",
+    "mi": 1.22,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Bob Hope Drive",
+    "mi": 1.11,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Gerald Ford Drive",
+    "mi": 1.05,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Cesar Chavez Street",
+    "mi": 0.83,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Da Vall Drive",
+    "mi": 0.67,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Calle Tampico",
+    "mi": 0.51,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Dinah Shore Drive",
+    "mi": 0.49,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Cesar Chavez Street",
+    "mi": 0.46,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Monroe Street",
+    "mi": 0.32,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Gerald Ford Drive",
+    "mi": 0.31,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Da Vall Drive",
+    "mi": 0.25,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ramon Road",
+    "mi": 0.22,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Avenue 48",
+    "mi": 0.18,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "McCallum Way",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Avenue 48",
+    "mi": 0.06,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Monroe Street",
+    "mi": 7.1,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Washington Street",
+    "mi": 4.29,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Monroe Street",
+    "mi": 3.72,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Varner Road",
+    "mi": 2.63,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Cesar Chavez Street",
+    "mi": 2.3,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Ramon Road",
+    "mi": 2.03,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Washington Street",
+    "mi": 1.56,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Washington Street",
+    "mi": 1.46,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Fred Waring Drive",
+    "mi": 18.46,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Dillon Road",
+    "mi": 13.73,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Madison Street",
+    "mi": 9.16,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 52",
+    "mi": 7.29,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Van Buren Street",
+    "mi": 6.98,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 50",
+    "mi": 6.29,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Frank Sinatra Drive",
+    "mi": 6.14,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 42",
+    "mi": 6.03,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Jackson Street",
+    "mi": 6.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Airport Boulevard",
+    "mi": 5.51,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Country Club Drive",
+    "mi": 5.46,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Washington Street",
+    "mi": 5.37,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Miles Avenue",
+    "mi": 5.04,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Calhoun Street",
+    "mi": 5.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 54",
+    "mi": 4.76,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 58",
+    "mi": 4.68,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Hovley Lane East",
+    "mi": 4.24,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 40",
+    "mi": 4.2,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Frank Sinatra Drive",
+    "mi": 4.19,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Cook Street",
+    "mi": 3.95,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Varner Road",
+    "mi": 3.87,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Country Club Drive",
+    "mi": 3.51,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Country Club Drive",
+    "mi": 3.34,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Cook Street",
+    "mi": 3.28,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Jackson Street",
+    "mi": 3.19,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "El Dorado Drive",
+    "mi": 3.0,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Eisenhower Drive",
+    "mi": 2.96,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Monterey Avenue",
+    "mi": 2.96,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Dinah Shore Drive",
+    "mi": 2.81,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Ramon Road",
+    "mi": 2.8,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Portola Avenue",
+    "mi": 2.76,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Varner Road",
+    "mi": 2.72,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Adams Street",
+    "mi": 2.67,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 50",
+    "mi": 2.63,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 44",
+    "mi": 2.57,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Jefferson Street",
+    "mi": 2.53,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Doctor Carreon Boulevard",
+    "mi": 2.52,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Jefferson Street",
+    "mi": 2.51,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Jefferson Street",
+    "mi": 2.48,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Jefferson Street",
+    "mi": 2.48,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 54",
+    "mi": 2.34,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Adams Street",
+    "mi": 2.23,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Monterey Avenue",
+    "mi": 2.17,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Country Club Drive",
+    "mi": 2.09,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "42nd Avenue",
+    "mi": 2.04,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "42nd Avenue",
+    "mi": 2.03,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Los Alamos Road",
+    "mi": 2.02,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Fairway Drive",
+    "mi": 2.02,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Jackson Street",
+    "mi": 2.01,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 51",
+    "mi": 2.01,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Gerald Ford Drive",
+    "mi": 1.99,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Country Club Drive",
+    "mi": 1.97,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Washington Street",
+    "mi": 1.87,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Monroe Street",
+    "mi": 1.84,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Golf Center Parkway",
+    "mi": 1.83,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Clinton Street",
+    "mi": 1.82,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Dinah Shore Drive",
+    "mi": 1.78,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Portola Avenue",
+    "mi": 1.74,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Jackson Street",
+    "mi": 1.6,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Tamarisk Row Drive",
+    "mi": 1.59,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 52",
+    "mi": 1.57,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Dune Palms Road",
+    "mi": 1.57,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 52",
+    "mi": 1.57,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Thousand Palms Canyon Road",
+    "mi": 1.56,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Portola Avenue",
+    "mi": 1.56,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 50",
+    "mi": 1.51,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Warner Trail",
+    "mi": 1.47,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Washington Street",
+    "mi": 1.47,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "PGA Boulevard",
+    "mi": 1.45,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "PGA Boulevard",
+    "mi": 1.43,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Varner Road",
+    "mi": 1.43,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Ramon Road",
+    "mi": 1.43,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Avenue 44",
+    "mi": 1.42,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Van Buren Street",
+    "mi": 1.42,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Jefferson Street",
+    "mi": 1.41,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Mesa View Drive",
+    "mi": 1.35,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bob Hope Drive",
+    "mi": 1.32,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Haystack Road",
+    "mi": 1.32,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bob Hope Drive",
+    "mi": 1.32,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Dinah Shore Drive",
+    "mi": 1.28,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Golf Center Parkway",
+    "mi": 1.28,
+    "mph": 50,
+    "conflict": false
+   }
+  ]
+ },
+ "destin": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Calhoun Avenue",
+    "mi": 1.22,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Hollywood Boulevard Northeast",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Calhoun Avenue",
+    "mi": 1.22,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Gulf Shore Drive",
+    "mi": 2.08,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Main Street",
+    "mi": 1.58,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Parish Boulevard",
+    "mi": 1.34,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Kelly Street",
+    "mi": 1.28,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Beach Drive",
+    "mi": 1.17,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "galveston": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Stewart Road",
+    "mi": 6.54,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ball Street - Avenue H",
+    "mi": 0.94,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Camp Wallace Road",
+    "mi": 0.93,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Stewart Road",
+    "mi": 0.83,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "14th Street",
+    "mi": 0.77,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Park Road 66",
+    "mi": 0.63,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Jones Drive",
+    "mi": 0.6,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ball Street - Avenue H",
+    "mi": 0.58,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Central City Boulevard",
+    "mi": 0.58,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Church Street - Avenue F",
+    "mi": 0.51,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Mike Gaido Boulevard - 39th Street",
+    "mi": 0.48,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Stewart Road",
+    "mi": 0.4,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "35th Street",
+    "mi": 0.37,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Heards Lane",
+    "mi": 0.26,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.16,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Heards Lane",
+    "mi": 0.14,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "33rd Street",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "51st Street",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Avenue U",
+    "mi": 0.07,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Jones Drive",
+    "mi": 0.06,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "33rd Street",
+    "mi": 0.06,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "14th Street",
+    "mi": 0.05,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Virginia Point Drive",
+    "mi": 0.03,
+    "mph": 45,
+    "kind": "sourced_red"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Stewart Road",
+    "mi": 6.54,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Seawolf Parkway",
+    "mi": 2.56,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Avenue S",
+    "mi": 1.95,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "8 Mile Road",
+    "mi": 1.72,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Market Street",
+    "mi": 1.67,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "37th Street",
+    "mi": 1.62,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Tiki Drive",
+    "mi": 1.58,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Mary Moody Northern Boulevard - 53rd Street",
+    "mi": 1.47,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "43rd Street",
+    "mi": 1.45,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Martin Luther King Boulevard - 29th Street",
+    "mi": 1.45,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Tremont Avenue - 23rd Street",
+    "mi": 1.34,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "103rd Street",
+    "mi": 1.32,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "45th Street",
+    "mi": 1.3,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Cove View Boulevard",
+    "mi": 1.26,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Moody Avenue - 21st Street",
+    "mi": 1.24,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "19th Street",
+    "mi": 1.17,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "The Strand",
+    "mi": 1.07,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "goldenisles": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "East Beach Causeway",
+    "mi": 0.43,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.13,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.12,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Demere Road",
+    "mi": 0.08,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.05,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Frederica Road",
+    "mi": 3.58,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Riverview Drive",
+    "mi": 3.34,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Lawrence Road",
+    "mi": 2.96,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South Beachview Drive",
+    "mi": 2.61,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "North Beachview Drive",
+    "mi": 2.61,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "South Riverview Drive",
+    "mi": 2.4,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Sea Island Road",
+    "mi": 2.12,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Ocean Road",
+    "mi": 1.71,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Captain Wylly Road",
+    "mi": 1.3,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Frederica Road",
+    "mi": 1.1,
+    "mph": 35,
+    "conflict": false
+   }
+  ]
+ },
+ "gulfshores": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "County Road 6",
+    "mi": 3.27,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Waterway West Boulevard",
+    "mi": 2.77,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "County Road 49",
+    "mi": 2.55,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Cotton Creek Drive",
+    "mi": 2.52,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Bon Secour Highway",
+    "mi": 2.36,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "County Road 19",
+    "mi": 2.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Roscoe Road",
+    "mi": 1.62,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Refuge Road",
+    "mi": 1.54,
+    "mph": 35,
+    "conflict": false
+   }
+  ]
+ },
+ "hhi": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Marshland Road",
+    "mi": 4.6,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Bluffton Parkway",
+    "mi": 3.67,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Buckwalter Parkway",
+    "mi": 3.07,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Greenwood Drive",
+    "mi": 2.85,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Bluffton Parkway",
+    "mi": 2.29,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Okatie Highway",
+    "mi": 2.29,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Spanish Wells Road",
+    "mi": 2.17,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Burnt Church Road",
+    "mi": 0.36,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Greenwood Drive",
+    "mi": 0.3,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Okatie Highway",
+    "mi": 0.28,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Gumtree Road",
+    "mi": 0.26,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Marshland Road",
+    "mi": 4.6,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Bluffton Parkway",
+    "mi": 3.67,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Buckwalter Parkway",
+    "mi": 3.07,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Greenwood Drive",
+    "mi": 2.85,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Bluffton Parkway",
+    "mi": 2.29,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Bluffton Parkway",
+    "mi": 4.97,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Buckwalter Parkway",
+    "mi": 4.29,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Argent Boulevard",
+    "mi": 3.72,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Bluffton Parkway",
+    "mi": 2.85,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Bluffton Parkway",
+    "mi": 2.79,
+    "mph": 45,
+    "conflict": false
+   }
+  ]
+ },
+ "kaanapali": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Honoapiilani Highway",
+    "mi": 0.93,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Honoapiilani Highway",
+    "mi": 0.51,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Honoapiilani Highway",
+    "mi": 0.39,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lower Honoapi\u2018ilani Road",
+    "mi": 0.22,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Honoapiilani Highway",
+    "mi": 0.19,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Honoapiilani Highway",
+    "mi": 0.16,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Napilihau Street",
+    "mi": 0.15,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Honoapiilani Highway",
+    "mi": 0.12,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Honoapiilani Highway",
+    "mi": 3.26,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "kailua": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Kaneohe Bay Drive",
+    "mi": 1.49,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Kaneohe Bay Drive",
+    "mi": 1.11,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Auloa Road",
+    "mi": 0.12,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Waimanalo Road",
+    "mi": 0.06,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Waimanalo Road",
+    "mi": 0.01,
+    "mph": 45,
+    "kind": "sourced_red"
+   }
+  ],
+  "gap": []
+ },
+ "keywest": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Northside Drive",
+    "mi": 0.43,
+    "mph": 20,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "United Street",
+    "mi": 0.4,
+    "mph": 20,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Whitehead Street",
+    "mi": 0.32,
+    "mph": 20,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Fleming Street",
+    "mi": 0.27,
+    "mph": 20,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "14th Street",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Overseas Highway",
+    "mi": 0.13,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Caroline Street",
+    "mi": 0.1,
+    "mph": 20,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Truman Avenue",
+    "mi": 0.08,
+    "mph": 20,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Whitehead Street",
+    "mi": 0.08,
+    "mph": 20,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Reynolds Street",
+    "mi": 0.06,
+    "mph": 20,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "United Street",
+    "mi": 0.06,
+    "mph": 20,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Duval Street",
+    "mi": 1.08,
+    "mph": 20,
+    "conflict": false
+   },
+   {
+    "name": "Simonton Street",
+    "mi": 1.08,
+    "mph": 20,
+    "conflict": false
+   }
+  ]
+ },
+ "lwr": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Lorraine Road",
+    "mi": 2.88,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Bourneside Boulevard",
+    "mi": 2.04,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lakewood Ranch Boulevard",
+    "mi": 1.71,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Cattlemen Road",
+    "mi": 1.69,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "White Eagle Boulevard",
+    "mi": 1.44,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lorraine Road",
+    "mi": 1.07,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lakewood Ranch Boulevard",
+    "mi": 1.05,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "44th Avenue East",
+    "mi": 0.88,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Rangeland Parkway",
+    "mi": 0.66,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "White Eagle Boulevard",
+    "mi": 0.65,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Cattlemen Road",
+    "mi": 0.64,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Creekwood Boulevard",
+    "mi": 0.53,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "44th Avenue East",
+    "mi": 0.53,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lakewood Ranch Boulevard",
+    "mi": 0.52,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "44th Avenue East",
+    "mi": 0.49,
+    "mph": 45,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "Lakewood Ranch Boulevard",
+    "mi": 0.43,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Honore Avenue",
+    "mi": 0.43,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lorraine Road",
+    "mi": 0.33,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lakewood Ranch Boulevard",
+    "mi": 0.32,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Honore Avenue",
+    "mi": 0.27,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "44th Avenue East",
+    "mi": 0.22,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Creekwood Boulevard",
+    "mi": 0.21,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Post Boulevard",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lorraine Road",
+    "mi": 0.05,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Lorraine Road",
+    "mi": 2.88,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Lorraine Road",
+    "mi": 3.42,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Professional Parkway East",
+    "mi": 2.08,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "myrtle": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Water Tower Road",
+    "mi": 4.2,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Cates Bay Highway",
+    "mi": 3.94,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Tournament Boulevard",
+    "mi": 2.47,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Cox Ferry Road",
+    "mi": 1.94,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "SC 905",
+    "mi": 1.51,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Carolina Forest Boulevard",
+    "mi": 1.38,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "21st Avenue North",
+    "mi": 1.27,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Waccamaw Boulevard",
+    "mi": 1.19,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "48th Avenue North",
+    "mi": 0.82,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Carolina Forest Boulevard",
+    "mi": 0.79,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Carolina Forest Boulevard",
+    "mi": 0.75,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "21st Avenue North",
+    "mi": 0.72,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Main Street",
+    "mi": 0.7,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Highway 57",
+    "mi": 0.66,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "16th Avenue North",
+    "mi": 0.63,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Carolina Forest Boulevard",
+    "mi": 0.59,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "International Drive",
+    "mi": 0.57,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "82nd Parkway",
+    "mi": 0.56,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Seaboard Street",
+    "mi": 0.55,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Carolina Forest Boulevard",
+    "mi": 0.53,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Highway 90",
+    "mi": 0.51,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Carolina Forest Boulevard",
+    "mi": 0.45,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Old Highway 17",
+    "mi": 0.41,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lake Arrowhead Road",
+    "mi": 0.38,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Pine Lake Drive",
+    "mi": 0.37,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "29th Avenue North",
+    "mi": 0.34,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Old Highway 17",
+    "mi": 0.33,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Postal Way",
+    "mi": 0.33,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "67th Avenue North",
+    "mi": 0.32,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "International Drive",
+    "mi": 0.31,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Waccamaw Medical Park Drive",
+    "mi": 0.3,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "67th Avenue North",
+    "mi": 0.29,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Mr. Joe White Avenue",
+    "mi": 0.28,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "East Country Club Drive",
+    "mi": 0.27,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Seaboard Street",
+    "mi": 0.27,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "3rd Avenue",
+    "mi": 0.26,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Carolina Forest Boulevard",
+    "mi": 0.25,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Carolina Forest Boulevard",
+    "mi": 0.22,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Highway 90",
+    "mi": 0.18,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Highway 90",
+    "mi": 0.17,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Water Tower Road",
+    "mi": 4.2,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Cates Bay Highway",
+    "mi": 3.94,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Tournament Boulevard",
+    "mi": 2.47,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "West Cox Ferry Road",
+    "mi": 1.94,
+    "mph": 30,
+    "conflict": true
+   },
+   {
+    "name": "Highway 65",
+    "mi": 7.49,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Old Reaves Ferry Road",
+    "mi": 7.17,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Red Bluff Road",
+    "mi": 6.46,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Long Avenue Extension",
+    "mi": 6.16,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Highway 472",
+    "mi": 3.98,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Highway 19",
+    "mi": 3.56,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Gardner Lacy Road",
+    "mi": 3.48,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "McDowell Shortcut Road",
+    "mi": 3.34,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Enterprise Road",
+    "mi": 3.28,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Highway 31",
+    "mi": 3.17,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "South Waccamaw Drive",
+    "mi": 3.04,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Four Mile Road",
+    "mi": 3.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bucksville Drive",
+    "mi": 2.99,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Club Course Drive",
+    "mi": 2.89,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "McNeil Chapel Road",
+    "mi": 2.81,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Cultra Road",
+    "mi": 2.8,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Dunn Short Cut Road",
+    "mi": 2.76,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Coventry Boulevard",
+    "mi": 2.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Peachtree Road",
+    "mi": 2.54,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bay Road",
+    "mi": 2.48,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Palmetto Pointe Boulevard",
+    "mi": 2.41,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Ocean Boulevard",
+    "mi": 2.4,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South Ocean Boulevard",
+    "mi": 2.37,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "TPC Boulevard",
+    "mi": 2.28,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Myrtle Ridge Drive",
+    "mi": 2.28,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Highway 111",
+    "mi": 2.28,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Burcale Road",
+    "mi": 2.26,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Old Bucksville Road",
+    "mi": 2.26,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Holmestown Road",
+    "mi": 2.19,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Highway 814",
+    "mi": 2.19,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Pitch Landing Road",
+    "mi": 2.17,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Prince Creek Parkway",
+    "mi": 2.15,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Glenns Bay Road",
+    "mi": 2.1,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Wachesaw Road",
+    "mi": 2.08,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Freewoods Road",
+    "mi": 2.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Highway 66",
+    "mi": 1.97,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Collins-Jollie Road",
+    "mi": 1.93,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Dick Pond Road",
+    "mi": 1.83,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "International Drive",
+    "mi": 1.82,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Mill Pond Road",
+    "mi": 1.76,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Willow Springs Road",
+    "mi": 1.74,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Highway 15",
+    "mi": 1.69,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Elm Street",
+    "mi": 1.68,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Highway 668",
+    "mi": 1.66,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Barefoot Resort Bridge Road",
+    "mi": 1.64,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Highway 554",
+    "mi": 1.62,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Farrow Parkway",
+    "mi": 1.59,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Farrow Parkway",
+    "mi": 1.58,
+    "mph": 35,
+    "conflict": false
+   }
+  ]
+ },
+ "naples": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Vanderbilt Beach Road",
+    "mi": 7.18,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Vanderbilt Beach Road",
+    "mi": 7.18,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Golden Gate Parkway",
+    "mi": 3.31,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Logan Boulevard North",
+    "mi": 2.49,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Golden Gate Parkway",
+    "mi": 2.17,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Santa Barbara Boulevard",
+    "mi": 2.04,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Logan Boulevard South",
+    "mi": 1.96,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Orange Blossom Drive",
+    "mi": 1.81,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Immokalee Road",
+    "mi": 1.81,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Barfield Drive",
+    "mi": 1.64,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Goodlette-Frank Road North",
+    "mi": 1.3,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Thomasson Drive",
+    "mi": 1.28,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Gordon Drive",
+    "mi": 1.24,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Bald Eagle Drive",
+    "mi": 1.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Pine Ridge Road",
+    "mi": 1.06,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Heathwood Drive",
+    "mi": 0.96,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Collier Boulevard",
+    "mi": 0.92,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Broad Avenue South",
+    "mi": 0.81,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Immokalee Road",
+    "mi": 0.79,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Logan Boulevard North",
+    "mi": 0.67,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Road",
+    "mi": 0.62,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Wiggins Pass Road",
+    "mi": 0.54,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Airport-Pulling Road",
+    "mi": 0.5,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Sandpiper Street",
+    "mi": 0.47,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Collier Boulevard",
+    "mi": 0.46,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Golden Gate Parkway",
+    "mi": 0.4,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "4th Avenue North",
+    "mi": 0.35,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Immokalee Road",
+    "mi": 0.35,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Road",
+    "mi": 0.31,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Gordon Drive",
+    "mi": 0.31,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Immokalee Road",
+    "mi": 0.29,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Capri Boulevard",
+    "mi": 0.26,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Fleischmann Boulevard",
+    "mi": 0.22,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Collier Boulevard",
+    "mi": 0.22,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Sandpiper Street",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "9th Street South",
+    "mi": 0.1,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.09,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Central Avenue",
+    "mi": 0.06,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.06,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.06,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Vanderbilt Beach Road",
+    "mi": 7.18,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Vanderbilt Beach Road",
+    "mi": 7.18,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Golden Gate Parkway",
+    "mi": 3.31,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Logan Boulevard North",
+    "mi": 2.49,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Golden Gate Parkway",
+    "mi": 2.17,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Santa Barbara Boulevard",
+    "mi": 2.04,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Logan Boulevard South",
+    "mi": 1.96,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Orange Blossom Drive",
+    "mi": 1.81,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Immokalee Road",
+    "mi": 1.81,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Santa Barbara Boulevard",
+    "mi": 6.47,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Livingston Road",
+    "mi": 4.81,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Livingston Road",
+    "mi": 4.23,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Pelican Bay Boulevard North",
+    "mi": 4.09,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Goodlette-Frank Road North",
+    "mi": 4.01,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Immokalee Road",
+    "mi": 3.97,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Airport-Pulling Road",
+    "mi": 3.88,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "South Barfield Drive",
+    "mi": 3.75,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Wildflower Way",
+    "mi": 3.17,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Immokalee Road",
+    "mi": 3.09,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Green Boulevard",
+    "mi": 3.02,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Vineyards Boulevard",
+    "mi": 2.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Vineyards Boulevard",
+    "mi": 2.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Radio Road",
+    "mi": 2.51,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Pelican Bay Boulevard South",
+    "mi": 2.51,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Radio Road",
+    "mi": 2.5,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Lakewood Boulevard",
+    "mi": 2.43,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South Collier Boulevard",
+    "mi": 2.34,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Airport-Pulling Road",
+    "mi": 2.2,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Saint Andrews Boulevard",
+    "mi": 2.17,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Saint Andrews Boulevard",
+    "mi": 2.17,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Rattlesnake Hammock Road",
+    "mi": 2.13,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Grand Lely Drive",
+    "mi": 2.13,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Sunshine Boulevard",
+    "mi": 2.04,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "San Marco Road",
+    "mi": 1.99,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Pine Ridge Road",
+    "mi": 1.99,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Collier Boulevard",
+    "mi": 1.88,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Barefoot Williams Road",
+    "mi": 1.75,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "nocatee": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Preservation Trail",
+    "mi": 0.38,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Landrum Lane",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
+ },
+ "obx": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "N US Highway 64",
+    "mi": 0.8,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Kitty Hawk Road",
+    "mi": 0.45,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "US 64",
+    "mi": 0.34,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ananias Dare Street",
+    "mi": 0.3,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Sir Walter Raleigh Street",
+    "mi": 0.17,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ocean Boulevard",
+    "mi": 0.1,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Virginia Dare Trail",
+    "mi": 0.09,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Fernando Street",
+    "mi": 0.08,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "William B. Umstead Bridge",
+    "mi": 2.7,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Burnside Road",
+    "mi": 2.47,
+    "mph": 35,
+    "conflict": false
+   }
+  ]
+ },
+ "ocoast": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Rancho Viejo Road",
+    "mi": 3.02,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Trabuco Road",
+    "mi": 2.0,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "El Toro Road",
+    "mi": 1.93,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "La Paz Road",
+    "mi": 1.85,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Crown Valley Parkway",
+    "mi": 1.8,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Research Drive",
+    "mi": 1.79,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Jeronimo Road",
+    "mi": 1.79,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Trabuco Road",
+    "mi": 1.66,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Jeronimo Road",
+    "mi": 1.51,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Pacific Island Drive",
+    "mi": 1.46,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Esencia Drive",
+    "mi": 1.21,
+    "mph": 65,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ridgeway Avenue",
+    "mi": 1.17,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Moulton Parkway",
+    "mi": 1.09,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Moulton Parkway",
+    "mi": 0.98,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Cliff Drive",
+    "mi": 0.92,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Crown Valley Parkway",
+    "mi": 0.92,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Alton Parkway",
+    "mi": 0.89,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Glenneyre Street",
+    "mi": 0.86,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Camino Del Avion",
+    "mi": 0.85,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Aliso Niguel",
+    "mi": 0.79,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Chiquita Canyon Drive",
+    "mi": 0.78,
+    "mph": 65,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Jeronimo Road",
+    "mi": 0.78,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Golden Lantern Street",
+    "mi": 0.77,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Oso Parkway",
+    "mi": 0.77,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Del Obispo Street",
+    "mi": 0.72,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Airoso Street",
+    "mi": 0.66,
+    "mph": 65,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Enterprise",
+    "mi": 0.66,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Camino Del Avion",
+    "mi": 0.65,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "La Paz Road",
+    "mi": 0.64,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Santa Margarita Parkway",
+    "mi": 0.63,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Irvine Center Drive",
+    "mi": 0.6,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Irvine Center Drive",
+    "mi": 0.59,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Cabot Road",
+    "mi": 0.58,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Los Alisos Boulevard",
+    "mi": 0.58,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Sienna Parkway",
+    "mi": 0.58,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "La Paz Road",
+    "mi": 0.57,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Jeronimo Road",
+    "mi": 0.57,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "O'Neill Drive",
+    "mi": 0.57,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Windmill Avenue",
+    "mi": 0.54,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Rancho Viejo Road",
+    "mi": 0.52,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Rancho Viejo Road",
+    "mi": 3.02,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Trabuco Road",
+    "mi": 2.0,
+    "mph": 55,
+    "conflict": true
+   },
+   {
+    "name": "El Toro Road",
+    "mi": 1.93,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "La Paz Road",
+    "mi": 1.85,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Crown Valley Parkway",
+    "mi": 1.8,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Research Drive",
+    "mi": 1.79,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Jeronimo Road",
+    "mi": 1.79,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Trabuco Road",
+    "mi": 1.66,
+    "mph": 55,
+    "conflict": true
+   },
+   {
+    "name": "Jeronimo Road",
+    "mi": 1.51,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Pacific Island Drive",
+    "mi": 1.46,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Esencia Drive",
+    "mi": 1.21,
+    "mph": 65,
+    "conflict": true
+   },
+   {
+    "name": "Ridgeway Avenue",
+    "mi": 1.17,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Moulton Parkway",
+    "mi": 1.09,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Moulton Parkway",
+    "mi": 0.98,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Cliff Drive",
+    "mi": 0.92,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Crown Valley Parkway",
+    "mi": 0.92,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Alton Parkway",
+    "mi": 0.89,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Glenneyre Street",
+    "mi": 0.86,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Camino Del Avion",
+    "mi": 0.85,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Aliso Niguel",
+    "mi": 0.79,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Chiquita Canyon Drive",
+    "mi": 0.78,
+    "mph": 65,
+    "conflict": true
+   },
+   {
+    "name": "Jeronimo Road",
+    "mi": 0.78,
+    "mph": 40,
+    "conflict": true
+   },
+   {
+    "name": "Golden Lantern Street",
+    "mi": 0.77,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Oso Parkway",
+    "mi": 0.77,
+    "mph": 55,
+    "conflict": true
+   },
+   {
+    "name": "Del Obispo Street",
+    "mi": 0.72,
+    "mph": 40,
+    "conflict": true
+   },
+   {
+    "name": "Airoso Street",
+    "mi": 0.66,
+    "mph": 65,
+    "conflict": true
+   },
+   {
+    "name": "Enterprise",
+    "mi": 0.66,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "Camino Del Avion",
+    "mi": 0.65,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "La Paz Road",
+    "mi": 0.64,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Santa Margarita Parkway",
+    "mi": 0.63,
+    "mph": 55,
+    "conflict": true
+   },
+   {
+    "name": "Irvine Center Drive",
+    "mi": 0.6,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Irvine Center Drive",
+    "mi": 0.59,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Cabot Road",
+    "mi": 0.58,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Los Alisos Boulevard",
+    "mi": 0.58,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Sienna Parkway",
+    "mi": 0.58,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "La Paz Road",
+    "mi": 0.57,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Jeronimo Road",
+    "mi": 0.57,
+    "mph": 40,
+    "conflict": true
+   },
+   {
+    "name": "O'Neill Drive",
+    "mi": 0.57,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "Marguerite Parkway",
+    "mi": 3.36,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Nellie Gail Road",
+    "mi": 3.01,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Melinda Road",
+    "mi": 2.97,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Alicia Parkway",
+    "mi": 2.93,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Antonio Parkway",
+    "mi": 2.48,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Paseo de la Colinas",
+    "mi": 2.43,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Alicia Parkway",
+    "mi": 2.3,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Antonio Parkway",
+    "mi": 2.24,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "San Juan Creek Road",
+    "mi": 2.12,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Cow Camp Road",
+    "mi": 1.91,
+    "mph": 65,
+    "conflict": false
+   },
+   {
+    "name": "Alicia Parkway",
+    "mi": 1.87,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Chrisanta Drive",
+    "mi": 1.84,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Los Alisos Boulevard",
+    "mi": 1.84,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Avenida Presidio",
+    "mi": 1.83,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Avenida Salvador",
+    "mi": 1.77,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Temple Hills Drive",
+    "mi": 1.74,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Highlands Avenue",
+    "mi": 1.73,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "La Novia Avenue",
+    "mi": 1.72,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Club House Drive",
+    "mi": 1.72,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Parc Vista",
+    "mi": 1.71,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Vista Del Lago",
+    "mi": 1.66,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Camino Capistrano",
+    "mi": 1.65,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Crown Valley Parkway",
+    "mi": 1.64,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Covenant Hills Drive",
+    "mi": 1.63,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Santa Vittoria Drive",
+    "mi": 1.63,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Jeronimo Road",
+    "mi": 1.6,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "La Paz Road",
+    "mi": 1.58,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Avenida Vista Montana",
+    "mi": 1.57,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Marguerite Parkway",
+    "mi": 1.53,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Avenida de las Flores",
+    "mi": 1.51,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Pacific Island Drive",
+    "mi": 1.46,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Cristianitos Road",
+    "mi": 1.44,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Paseo de Valencia",
+    "mi": 1.39,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Santa Margarita Parkway",
+    "mi": 1.38,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Ridge Route Drive",
+    "mi": 1.36,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Pacific Coast Highway",
+    "mi": 1.36,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Gitano",
+    "mi": 1.33,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Kite Hill Drive",
+    "mi": 1.3,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Pacific Hills Drive",
+    "mi": 1.28,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Marina Hills Drive",
+    "mi": 1.25,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Marina Hills Drive",
+    "mi": 1.25,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Hidden Trail Road",
+    "mi": 1.23,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Crown Valley Parkway",
+    "mi": 1.22,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Skyline Drive",
+    "mi": 1.21,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Puerta Real",
+    "mi": 1.2,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Toro Road",
+    "mi": 1.19,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "College Drive West",
+    "mi": 1.17,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Calle Arroyo",
+    "mi": 1.16,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "San Juan Creek Road",
+    "mi": 1.15,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Paseo de Valencia",
+    "mi": 1.14,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Calle del Cerro",
+    "mi": 1.11,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Calle del Cerro",
+    "mi": 1.1,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Highland Drive",
+    "mi": 1.09,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Moulton Parkway",
+    "mi": 1.09,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Camino Tierra Grande",
+    "mi": 1.09,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "El Camino Montana",
+    "mi": 1.07,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Moulton Parkway",
+    "mi": 1.07,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Marine Way",
+    "mi": 1.07,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Calle Amanecer",
+    "mi": 1.06,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Beacon Hill Way",
+    "mi": 1.05,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Crown Valley Parkway",
+    "mi": 1.05,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Alicia Parkway",
+    "mi": 1.05,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Lake Forest Drive",
+    "mi": 1.04,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "La Mancha",
+    "mi": 0.99,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Muirlands Boulevard",
+    "mi": 0.98,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Marguerite Parkway",
+    "mi": 0.98,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Bluebird Canyon Drive",
+    "mi": 0.97,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Antonio Parkway",
+    "mi": 0.96,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "College Drive East",
+    "mi": 0.96,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bridlewood Drive",
+    "mi": 0.96,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Alicia Parkway",
+    "mi": 0.96,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Crown Valley Parkway",
+    "mi": 0.95,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "El Toro Road",
+    "mi": 0.95,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Avenida de Las Banderas",
+    "mi": 0.94,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Alma Aldea",
+    "mi": 0.94,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Alton Parkway",
+    "mi": 0.94,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Santa Maria Avenue",
+    "mi": 0.93,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Morningside Drive",
+    "mi": 0.93,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Aliso Hills Drive",
+    "mi": 0.93,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Mission Hills Drive",
+    "mi": 0.92,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "High Drive",
+    "mi": 0.91,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Arroyo Vista",
+    "mi": 0.9,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Moulton Parkway",
+    "mi": 0.89,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Santa Maria Avenue",
+    "mi": 0.89,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Hidden Hills Road",
+    "mi": 0.89,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Antonio Parkway",
+    "mi": 0.88,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Antonio Parkway",
+    "mi": 0.88,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Auto Center Drive",
+    "mi": 0.87,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Alicia Parkway",
+    "mi": 0.87,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "The Shops Boulevard",
+    "mi": 0.87,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Calle del Cerro",
+    "mi": 0.87,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Moulton Parkway",
+    "mi": 0.87,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Arroyo Vista",
+    "mi": 0.85,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "La Barca",
+    "mi": 0.83,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Pacific Island Drive",
+    "mi": 0.82,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Niguel Ranch Road",
+    "mi": 0.79,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Adelanto Drive",
+    "mi": 0.79,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Via de Agua",
+    "mi": 0.79,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Lazo",
+    "mi": 0.79,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Flying Cloud Drive",
+    "mi": 0.79,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Camino Viento Fuerte West",
+    "mi": 0.78,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Saint Christopher",
+    "mi": 0.78,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Camino Capistrano",
+    "mi": 0.76,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Paseo de Valencia",
+    "mi": 0.75,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Village Road",
+    "mi": 0.75,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Alicia Parkway",
+    "mi": 0.74,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Silleros",
+    "mi": 0.74,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Camino Las Ramblas",
+    "mi": 0.73,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Old Pacific Highway",
+    "mi": 0.73,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Esencia Drive",
+    "mi": 0.73,
+    "mph": 65,
+    "conflict": false
+   },
+   {
+    "name": "Rancho Niguel Road",
+    "mi": 0.72,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Mill Creek Drive",
+    "mi": 0.72,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Marguerite Parkway",
+    "mi": 0.71,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Benjamin Drive",
+    "mi": 0.71,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "La Plata Drive",
+    "mi": 0.7,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Santa Margarita Parkway",
+    "mi": 0.7,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "La Hermosa Avenue",
+    "mi": 0.7,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Summit Drive",
+    "mi": 0.69,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Augusta Drive",
+    "mi": 0.69,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "East Avenida San Juan",
+    "mi": 0.69,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Rapid Falls Road",
+    "mi": 0.69,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Trabuco Creek Road",
+    "mi": 0.69,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Avenida de Las Banderas",
+    "mi": 0.69,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Hidalgo",
+    "mi": 0.68,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "San Rafael",
+    "mi": 0.68,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Aventura",
+    "mi": 0.68,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Alicia Parkway",
+    "mi": 0.68,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Entertainment Way",
+    "mi": 0.68,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Toro Road",
+    "mi": 0.67,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Camino Vera Cruz",
+    "mi": 0.67,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Avenida San Pablo",
+    "mi": 0.66,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Alta Vista Way",
+    "mi": 0.66,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Calle Miguel",
+    "mi": 0.66,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Argonaut",
+    "mi": 0.65,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Knollcrest",
+    "mi": 0.65,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Muirlands Boulevard",
+    "mi": 0.65,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Son Serra",
+    "mi": 0.65,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Costeau Street",
+    "mi": 0.65,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Santa Margarita Parkway",
+    "mi": 0.65,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Antonio Parkway",
+    "mi": 0.64,
+    "mph": 60,
+    "conflict": false
+   },
+   {
+    "name": "Niguel Road",
+    "mi": 0.64,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Paseo de Valencia",
+    "mi": 0.64,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Quail Hill Parkway",
+    "mi": 0.63,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Park Avenue",
+    "mi": 0.62,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Avenida California",
+    "mi": 0.62,
+    "mph": 15,
+    "conflict": false
+   },
+   {
+    "name": "Scientific Way",
+    "mi": 0.62,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Avenida De La Carlota",
+    "mi": 0.62,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Hillhurst Drive",
+    "mi": 0.62,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Hillcrest",
+    "mi": 0.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Avenida de Los Lobos Marinos",
+    "mi": 0.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Saddle Way",
+    "mi": 0.61,
+    "mph": 65,
+    "conflict": false
+   },
+   {
+    "name": "Heather Ridge",
+    "mi": 0.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bake Parkway",
+    "mi": 0.6,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Avenida la Cuesta",
+    "mi": 0.6,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Moulton Parkway",
+    "mi": 0.6,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Nueva Vista Drive",
+    "mi": 0.6,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Los Alisos Boulevard",
+    "mi": 0.6,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Pacific Park Drive",
+    "mi": 0.6,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Santa Margarita Parkway",
+    "mi": 0.59,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Vantis Drive",
+    "mi": 0.59,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Via Arribo",
+    "mi": 0.59,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Lake Forest Drive",
+    "mi": 0.59,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Quail Hill Parkway",
+    "mi": 0.59,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Valle Vista Drive",
+    "mi": 0.58,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Alameda Avenue",
+    "mi": 0.58,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Park Avenue",
+    "mi": 0.57,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Alta Laguna Boulevard",
+    "mi": 0.57,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Stallion Ridge",
+    "mi": 0.57,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Indian Hill Lane",
+    "mi": 0.57,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Ca\u00f1ada Road",
+    "mi": 0.57,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Lake Forest Drive",
+    "mi": 0.57,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Via Lomas",
+    "mi": 0.57,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Camino Del Avion",
+    "mi": 0.56,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "El Paseo",
+    "mi": 0.56,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Santa Margarita Parkway",
+    "mi": 0.56,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Avery Parkway",
+    "mi": 0.55,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.55,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.55,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Via Positiva",
+    "mi": 0.55,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Wilkes Place",
+    "mi": 0.54,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Toro Road",
+    "mi": 0.54,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Antivo",
+    "mi": 0.54,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "oob": {
+  "reports": [],
+  "conflicts": [],
+  "gap": []
+ },
+ "pcb": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Thomas Drive",
+    "mi": 2.14,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Alf Coleman Road",
+    "mi": 1.12,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Magnolia Beach Road",
+    "mi": 0.61,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Lagoon Drive",
+    "mi": 0.36,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Laird Street",
+    "mi": 0.25,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.22,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Navy Boulevard",
+    "mi": 0.2,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Arnold Road",
+    "mi": 0.18,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Nautilus Street",
+    "mi": 0.17,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Joan Avenue",
+    "mi": 0.11,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.1,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Collegiate Drive",
+    "mi": 0.09,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Arnold Road",
+    "mi": 0.07,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
+ },
+ "poipu": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Maluhia Road",
+    "mi": 2.49,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ala Kalanikaumaka",
+    "mi": 0.85,
+    "mph": 40,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "Ala Kalanikaumaka",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Poipu Road",
+    "mi": 0.12,
+    "mph": 15,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
+ },
+ "portaransas": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "East Cotter Avenue",
+    "mi": 0.76,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Beach Street",
+    "mi": 0.59,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Alister Street",
+    "mi": 0.29,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "TX 361",
+    "mi": 0.12,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Alister Street",
+    "mi": 0.06,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Avenue A",
+    "mi": 2.01,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "ptc": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Fischer Road",
+    "mi": 4.42,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Minix Road",
+    "mi": 3.87,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "McIntosh Trail",
+    "mi": 3.27,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Lester Road",
+    "mi": 3.24,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "GA 85",
+    "mi": 2.99,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Reese Road",
+    "mi": 2.94,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Stallings Road",
+    "mi": 2.73,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Christopher Road",
+    "mi": 2.6,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Dividend Drive",
+    "mi": 2.57,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Veterans Parkway",
+    "mi": 1.86,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Ebenezer Church Road",
+    "mi": 1.55,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Lower Fayetteville Road",
+    "mi": 1.44,
+    "mph": 99,
+    "conflict": false
+   }
+  ]
+ },
+ "putinbay": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Langram Road",
+    "mi": 1.8,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Fox Road",
+    "mi": 1.35,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bayview Avenue",
+    "mi": 1.33,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Catawba Avenue",
+    "mi": 1.07,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "rockport": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "(unnamed)",
+    "mi": 0.23,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "East Market Street",
+    "mi": 0.17,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Broadway Street",
+    "mi": 0.16,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.15,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.15,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Broadway Street",
+    "mi": 0.15,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.14,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Market Street",
+    "mi": 0.09,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Loop 1781",
+    "mi": 5.79,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "sd": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Mission Avenue",
+    "mi": 3.98,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Rancho del Oro Drive",
+    "mi": 3.43,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Carlsbad Village Drive",
+    "mi": 3.37,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 2.95,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lake Boulevard",
+    "mi": 2.13,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.93,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.92,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "La Jolla Village Drive",
+    "mi": 1.91,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Quail Gardens Drive",
+    "mi": 1.84,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Morena Boulevard",
+    "mi": 1.83,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Morena Boulevard",
+    "mi": 1.83,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North El Camino Real",
+    "mi": 1.67,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Harbor Drive",
+    "mi": 1.65,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South El Camino Real",
+    "mi": 1.57,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Rancho Santa Fe Road",
+    "mi": 1.52,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Mission Avenue",
+    "mi": 1.45,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Harbor Drive",
+    "mi": 1.37,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Camino Santa Fe",
+    "mi": 1.36,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Nimitz Boulevard",
+    "mi": 1.29,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "San Dieguito Road",
+    "mi": 1.29,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Hotel Circle North",
+    "mi": 1.29,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Sports Arena Boulevard",
+    "mi": 1.24,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Camino Santa Fe",
+    "mi": 1.22,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Alicante Road",
+    "mi": 1.21,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.21,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Soledad Mountain Road",
+    "mi": 1.2,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Camino del Rio North",
+    "mi": 1.18,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Frazee Road",
+    "mi": 1.15,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Neptune Avenue",
+    "mi": 1.15,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Saxony Road",
+    "mi": 1.14,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lone Jack Road",
+    "mi": 1.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lomas Santa Fe Drive",
+    "mi": 1.12,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "El Cajon Boulevard",
+    "mi": 1.07,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Pershing Drive",
+    "mi": 1.05,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Frazee Road",
+    "mi": 1.02,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Via Las Cumbres",
+    "mi": 1.02,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Camino del Rio South",
+    "mi": 1.0,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "East Island Avenue",
+    "mi": 0.99,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Pacific Highway",
+    "mi": 0.99,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Balboa Avenue",
+    "mi": 0.99,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Mission Avenue",
+    "mi": 3.98,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Rancho del Oro Drive",
+    "mi": 3.43,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "Carlsbad Village Drive",
+    "mi": 3.37,
+    "mph": 40,
+    "conflict": true
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 2.95,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Lake Boulevard",
+    "mi": 2.13,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.93,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.92,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "La Jolla Village Drive",
+    "mi": 1.91,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Quail Gardens Drive",
+    "mi": 1.84,
+    "mph": 30,
+    "conflict": true
+   },
+   {
+    "name": "Morena Boulevard",
+    "mi": 1.83,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Morena Boulevard",
+    "mi": 1.83,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "North El Camino Real",
+    "mi": 1.67,
+    "mph": 30,
+    "conflict": true
+   },
+   {
+    "name": "North Harbor Drive",
+    "mi": 1.65,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "South El Camino Real",
+    "mi": 1.57,
+    "mph": 55,
+    "conflict": true
+   },
+   {
+    "name": "South Rancho Santa Fe Road",
+    "mi": 1.52,
+    "mph": 55,
+    "conflict": true
+   },
+   {
+    "name": "Mission Avenue",
+    "mi": 1.45,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "North Harbor Drive",
+    "mi": 1.37,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Camino Santa Fe",
+    "mi": 1.36,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Nimitz Boulevard",
+    "mi": 1.29,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "San Dieguito Road",
+    "mi": 1.29,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Hotel Circle North",
+    "mi": 1.29,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Sports Arena Boulevard",
+    "mi": 1.24,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "Camino Santa Fe",
+    "mi": 1.22,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Alicante Road",
+    "mi": 1.21,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.21,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Soledad Mountain Road",
+    "mi": 1.2,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Camino del Rio North",
+    "mi": 1.18,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Frazee Road",
+    "mi": 1.15,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Neptune Avenue",
+    "mi": 1.15,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Saxony Road",
+    "mi": 1.14,
+    "mph": 40,
+    "conflict": true
+   },
+   {
+    "name": "Lone Jack Road",
+    "mi": 1.13,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Lomas Santa Fe Drive",
+    "mi": 1.12,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "El Cajon Boulevard",
+    "mi": 1.07,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "Pershing Drive",
+    "mi": 1.05,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Frazee Road",
+    "mi": 1.02,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Via Las Cumbres",
+    "mi": 1.02,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Camino del Rio South",
+    "mi": 1.0,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "East Island Avenue",
+    "mi": 0.99,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Pacific Highway",
+    "mi": 0.99,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Balboa Avenue",
+    "mi": 0.99,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "Camino del Rio South",
+    "mi": 0.96,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Manchester Avenue",
+    "mi": 0.96,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 0.89,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Genesee Avenue",
+    "mi": 0.88,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Sea World Drive",
+    "mi": 0.88,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Camino Santa Fe",
+    "mi": 0.84,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "25th Street",
+    "mi": 0.84,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "East B Street",
+    "mi": 0.83,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Genesee Avenue",
+    "mi": 0.81,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Parkdale Avenue",
+    "mi": 0.8,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Market Street",
+    "mi": 0.8,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Kettner Boulevard",
+    "mi": 0.79,
+    "mph": 40,
+    "conflict": true
+   },
+   {
+    "name": "Ulric Street",
+    "mi": 0.79,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Sunset Drive",
+    "mi": 0.78,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Encinitas Boulevard",
+    "mi": 0.77,
+    "mph": 40,
+    "conflict": true
+   },
+   {
+    "name": "Mesa Drive",
+    "mi": 0.76,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Rio San Diego Drive",
+    "mi": 0.76,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Ocean View Boulevard",
+    "mi": 0.75,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Morena Boulevard",
+    "mi": 0.74,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "Morena Boulevard",
+    "mi": 0.74,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Main Street",
+    "mi": 0.73,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Cardeno Drive",
+    "mi": 0.72,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Genesee Avenue",
+    "mi": 0.72,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Mount Acadia Boulevard",
+    "mi": 0.71,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Avenida Encinas",
+    "mi": 0.68,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Vista Sorrento Parkway",
+    "mi": 0.66,
+    "mph": 55,
+    "conflict": true
+   },
+   {
+    "name": "Hacienda Drive",
+    "mi": 0.65,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Soledad Mountain Road",
+    "mi": 0.64,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Crouch Street",
+    "mi": 0.63,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "North El Camino Real",
+    "mi": 0.63,
+    "mph": 40,
+    "conflict": true
+   },
+   {
+    "name": "Carmel Country Road",
+    "mi": 0.62,
+    "mph": 40,
+    "conflict": true
+   },
+   {
+    "name": "Hidden Valley Road",
+    "mi": 0.62,
+    "mph": 40,
+    "conflict": true
+   },
+   {
+    "name": "North El Camino Real",
+    "mi": 0.62,
+    "mph": 40,
+    "conflict": true
+   },
+   {
+    "name": "North El Camino Real",
+    "mi": 0.61,
+    "mph": 55,
+    "conflict": true
+   },
+   {
+    "name": "La Jolla Village Drive",
+    "mi": 0.6,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Carmel View Road",
+    "mi": 0.6,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Nimitz Boulevard",
+    "mi": 0.59,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "La Jolla Mesa Drive",
+    "mi": 0.59,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Via de la Valle",
+    "mi": 0.59,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "North River Road",
+    "mi": 3.45,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Faraday Avenue",
+    "mi": 3.23,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Avenida de la Plata",
+    "mi": 3.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Batiquitos Drive",
+    "mi": 2.89,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Poinsettia Lane",
+    "mi": 2.73,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 2.72,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Poinsettia Lane",
+    "mi": 2.71,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "La Jolla Village Drive",
+    "mi": 2.59,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Del Mar Heights Road",
+    "mi": 2.58,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "High Bluff Drive",
+    "mi": 2.51,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Del Mar Heights Road",
+    "mi": 2.51,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Genesee Avenue",
+    "mi": 2.37,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Palomar Airport Road",
+    "mi": 2.33,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Palomar Airport Road",
+    "mi": 2.32,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Calle Cristobal",
+    "mi": 2.27,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Palomar Airport Road",
+    "mi": 2.26,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Douglas Drive",
+    "mi": 2.2,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Levante Street",
+    "mi": 2.2,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Palomar Airport Road",
+    "mi": 2.2,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Friars Road",
+    "mi": 2.15,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "San Elijo Avenue",
+    "mi": 2.12,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Old Grove Road",
+    "mi": 2.12,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Park Drive",
+    "mi": 2.11,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Old Grove Road",
+    "mi": 2.11,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Jefferson Street",
+    "mi": 2.1,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Carmel Mountain Road",
+    "mi": 2.09,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "East Harbor Drive",
+    "mi": 2.01,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Poinsettia Lane",
+    "mi": 2.0,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 1.98,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Miramar Road",
+    "mi": 1.96,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Mira Mesa Boulevard",
+    "mi": 1.95,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Vista Way",
+    "mi": 1.87,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Aviara Parkway",
+    "mi": 1.86,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Avenida Encinas",
+    "mi": 1.85,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.81,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Carmel Valley Road",
+    "mi": 1.79,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Douglas Drive",
+    "mi": 1.78,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Genesee Avenue",
+    "mi": 1.76,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 1.76,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Santa Helena",
+    "mi": 1.74,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Sorrento Valley Road",
+    "mi": 1.74,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Carmel Knolls Drive",
+    "mi": 1.71,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Fuerte Street",
+    "mi": 1.7,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "East Mission Bay Drive",
+    "mi": 1.68,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Miramar Road",
+    "mi": 1.64,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Carmel Country Road",
+    "mi": 1.63,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Rancho del Oro Road",
+    "mi": 1.62,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Governor Drive",
+    "mi": 1.62,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Armada Drive",
+    "mi": 1.61,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Las Colinas",
+    "mi": 1.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Cerro Street",
+    "mi": 1.58,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.56,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Melrose Drive",
+    "mi": 1.56,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Rancho del Oro Drive",
+    "mi": 1.55,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Commercial Street",
+    "mi": 1.54,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Stuart Mesa Road",
+    "mi": 1.54,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Commercial Street",
+    "mi": 1.53,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Alga Road",
+    "mi": 1.53,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Old Grove Road",
+    "mi": 1.52,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Regents Road",
+    "mi": 1.5,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.5,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Village Park Way",
+    "mi": 1.5,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Peacock Boulevard",
+    "mi": 1.49,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Fuerte Street",
+    "mi": 1.48,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Regents Road",
+    "mi": 1.47,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Oceanside Boulevard",
+    "mi": 1.47,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Avenida Maravillas",
+    "mi": 1.47,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Carroll Canyon Road",
+    "mi": 1.43,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Mission Avenue",
+    "mi": 1.43,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Faraday Drive",
+    "mi": 1.4,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Pio Pico Drive",
+    "mi": 1.4,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Vista Sorrento Parkway",
+    "mi": 1.4,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Carmel Country Road",
+    "mi": 1.38,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Carroll Canyon Road",
+    "mi": 1.38,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Tamarack Avenue",
+    "mi": 1.37,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Piraeus Street",
+    "mi": 1.37,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Aviara Parkway",
+    "mi": 1.36,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Eastgate Mall",
+    "mi": 1.36,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Cannon Road",
+    "mi": 1.36,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Highland Drive",
+    "mi": 1.36,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Science Center Drive",
+    "mi": 1.34,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.31,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Mesa College Circle",
+    "mi": 1.3,
+    "mph": 15,
+    "conflict": false
+   },
+   {
+    "name": "Thunder Drive",
+    "mi": 1.27,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Hillside Drive",
+    "mi": 1.26,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Barnard Drive",
+    "mi": 1.25,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Oceanside Boulevard",
+    "mi": 1.24,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Via Rancho Road",
+    "mi": 1.23,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Pontiac Drive",
+    "mi": 1.21,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Kearny Villa Road",
+    "mi": 1.2,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.2,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Alga Road",
+    "mi": 1.19,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Cadencia Street",
+    "mi": 1.19,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Via del Alba",
+    "mi": 1.19,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Park Village Road",
+    "mi": 1.18,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Capistrano Drive",
+    "mi": 1.18,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Vista Way",
+    "mi": 1.17,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Torrey Santa Fe Road",
+    "mi": 1.17,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Frazee Road",
+    "mi": 1.17,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "6th Street",
+    "mi": 1.15,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Paseo del Norte",
+    "mi": 1.15,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Mango Drive",
+    "mi": 1.15,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "La Costa Avenue",
+    "mi": 1.14,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Canyon Drive",
+    "mi": 1.14,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Morena Boulevard",
+    "mi": 1.14,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Cannon Road",
+    "mi": 1.14,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Sorrento Valley Road",
+    "mi": 1.14,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Industry Street",
+    "mi": 1.14,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Cannon Road",
+    "mi": 1.13,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Shadow Tree Drive",
+    "mi": 1.13,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Rivertree Drive",
+    "mi": 1.12,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 1.12,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Rio San Diego Drive",
+    "mi": 1.12,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Crest Drive",
+    "mi": 1.1,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Convoy Street",
+    "mi": 1.09,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Willowspring Drive North",
+    "mi": 1.09,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.08,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Pala Road",
+    "mi": 1.08,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South 32nd Street",
+    "mi": 1.08,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Calle Cristobal",
+    "mi": 1.08,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Midway Drive",
+    "mi": 1.07,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "West Broadway",
+    "mi": 1.07,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "La Costa Avenue",
+    "mi": 1.07,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Sorrento Valley Boulevard",
+    "mi": 1.06,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "El Vuelo",
+    "mi": 1.05,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Camino Junipero",
+    "mi": 1.05,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Towne Centre Drive",
+    "mi": 1.05,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Lansdale Drive",
+    "mi": 1.05,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Del Mar Trails Road",
+    "mi": 1.04,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South Rancho Santa Fe Road",
+    "mi": 1.04,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Unicornio Street",
+    "mi": 1.03,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Melba Road",
+    "mi": 1.03,
+    "mph": 20,
+    "conflict": false
+   },
+   {
+    "name": "Whiptail Loop",
+    "mi": 1.03,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Oceanside Boulevard",
+    "mi": 1.03,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "North Harbor Drive",
+    "mi": 1.02,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Lopelia Meadows Place",
+    "mi": 1.02,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Monroe Street",
+    "mi": 1.01,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 1.01,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Grapevine Road",
+    "mi": 1.01,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.01,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "La Gracia",
+    "mi": 1.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Carroll Road",
+    "mi": 1.0,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Adams Street",
+    "mi": 0.99,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Clairemont Mesa Boulevard",
+    "mi": 0.99,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Clairemont Mesa Boulevard",
+    "mi": 0.99,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "South Nardo Avenue",
+    "mi": 0.99,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Cameo Drive",
+    "mi": 0.99,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Laurel Road",
+    "mi": 0.98,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Aviara Parkway",
+    "mi": 0.97,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Copley Drive",
+    "mi": 0.97,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Basswood Avenue",
+    "mi": 0.97,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Carroll Canyon Road",
+    "mi": 0.97,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "8th Street",
+    "mi": 0.97,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Carroll Canyon Road",
+    "mi": 0.97,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 0.97,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Poinsettia Lane",
+    "mi": 0.97,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Camino Vida Roble",
+    "mi": 0.97,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Carmel Center Road",
+    "mi": 0.97,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Carmel Mountain Road",
+    "mi": 0.96,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Avenida del Oro",
+    "mi": 0.94,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Alga Road",
+    "mi": 0.94,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Stevens Avenue",
+    "mi": 0.94,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 0.94,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Front Street",
+    "mi": 0.93,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Los Morros",
+    "mi": 0.93,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Puerta del Sol",
+    "mi": 0.93,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Vista Way",
+    "mi": 0.92,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Bacon Street",
+    "mi": 0.92,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Ambrosia Lane",
+    "mi": 0.91,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Tamarack Avenue",
+    "mi": 0.91,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Melrose Way",
+    "mi": 0.91,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Los Arbolitos Boulevard",
+    "mi": 0.9,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Pacific Highlands Ranch Parkway",
+    "mi": 0.9,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Point Loma Boulevard",
+    "mi": 0.9,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "El Secreto",
+    "mi": 0.9,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Sea World Drive",
+    "mi": 0.9,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Sorrento Valley Road",
+    "mi": 0.9,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Marron Road",
+    "mi": 0.89,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Xana Way",
+    "mi": 0.89,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Lionshead Avenue",
+    "mi": 0.89,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 0.89,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Friars Road",
+    "mi": 0.89,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Hymettus Avenue",
+    "mi": 0.88,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Sorrento Valley Boulevard",
+    "mi": 0.87,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Carroll Road",
+    "mi": 0.87,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Camino de Los Coches",
+    "mi": 0.87,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Kearny Mesa Road",
+    "mi": 0.87,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "7th Avenue",
+    "mi": 0.87,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Oceanside Boulevard",
+    "mi": 0.86,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Olive Avenue",
+    "mi": 0.86,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "East Ocean Air Drive",
+    "mi": 0.85,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Glen Arbor Drive",
+    "mi": 0.85,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Regents Road",
+    "mi": 0.85,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Oceanside Boulevard",
+    "mi": 0.85,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Gilman Drive",
+    "mi": 0.84,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Old El Camino Real",
+    "mi": 0.84,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Aviara Parkway",
+    "mi": 0.84,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "K Street",
+    "mi": 0.84,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Willowspring Drive North",
+    "mi": 0.84,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Fuerte Street",
+    "mi": 0.83,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Old Carmel Valley Road",
+    "mi": 0.83,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Mission Bay Drive",
+    "mi": 0.83,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "El Fuerte Street",
+    "mi": 0.83,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "South Cedros Avenue",
+    "mi": 0.83,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Talbot Street",
+    "mi": 0.82,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Black Rail Road",
+    "mi": 0.82,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Wateridge Circle",
+    "mi": 0.82,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Federal Boulevard",
+    "mi": 0.81,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Sierra Morena Avenue",
+    "mi": 0.81,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Carmel Canyon Road",
+    "mi": 0.81,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Cannon Road",
+    "mi": 0.81,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Olivenhain Road",
+    "mi": 0.81,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Ingraham Street",
+    "mi": 0.81,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Oregon Street",
+    "mi": 0.8,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Mission Gate Drive",
+    "mi": 0.8,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "8th Avenue",
+    "mi": 0.79,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Mountain Vista Drive",
+    "mi": 0.79,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Carmel Park Drive",
+    "mi": 0.78,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Vista Sorrento Parkway",
+    "mi": 0.78,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Miramar Road",
+    "mi": 0.78,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "El Fuerte Street",
+    "mi": 0.78,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South Rancho Santa Fe Road",
+    "mi": 0.78,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Quivira Road",
+    "mi": 0.77,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Donna Drive",
+    "mi": 0.77,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Hosp Way",
+    "mi": 0.77,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Carmel Mountain Road",
+    "mi": 0.76,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Vandegrift Boulevard",
+    "mi": 0.75,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "California Street",
+    "mi": 0.75,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Coronado Cays Boulevard",
+    "mi": 0.75,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Lake Drive",
+    "mi": 0.75,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "West Morena Boulevard",
+    "mi": 0.74,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Charmant Drive",
+    "mi": 0.74,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Marron Road",
+    "mi": 0.74,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Glen Arbor Drive",
+    "mi": 0.74,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 0.74,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Vista Campana South",
+    "mi": 0.74,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Coronado Cays Boulevard",
+    "mi": 0.73,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Jade Coast Road",
+    "mi": 0.73,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Morena Boulevard",
+    "mi": 0.73,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Lusk Boulevard",
+    "mi": 0.73,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Kestrel Drive",
+    "mi": 0.73,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Montongo Street",
+    "mi": 0.73,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Orpheus Avenue",
+    "mi": 0.73,
+    "mph": 20,
+    "conflict": false
+   },
+   {
+    "name": "Carmel Mountain Road",
+    "mi": 0.72,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Park Center Drive",
+    "mi": 0.72,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Emerald Drive",
+    "mi": 0.72,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Fenton Parkway",
+    "mi": 0.72,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Elm Avenue",
+    "mi": 0.71,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Calle Cristobal",
+    "mi": 0.71,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Home Avenue",
+    "mi": 0.71,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "New Salem Street",
+    "mi": 0.7,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Oberlin Drive",
+    "mi": 0.7,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Cornish Drive",
+    "mi": 0.7,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Arroyo Sorrento Road",
+    "mi": 0.7,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Aviara Parkway",
+    "mi": 0.7,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Celinda Drive",
+    "mi": 0.69,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "La Costa Avenue",
+    "mi": 0.69,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Solterra Vista Parkway",
+    "mi": 0.68,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "D Avenue",
+    "mi": 0.68,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Santa Clara Drive",
+    "mi": 0.68,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 0.68,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Mission Avenue",
+    "mi": 0.68,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "East E Street",
+    "mi": 0.67,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Clairemont Mesa Boulevard",
+    "mi": 0.67,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Bush Street",
+    "mi": 0.67,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Vista Sorrento Parkway",
+    "mi": 0.67,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "River Road",
+    "mi": 0.67,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Camino Santa Fe",
+    "mi": 0.66,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Clairemont Mesa Boulevard",
+    "mi": 0.66,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Summers Ridge Road",
+    "mi": 0.66,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Lomaland Drive",
+    "mi": 0.66,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Pacific Highway",
+    "mi": 0.66,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Santa Rosita",
+    "mi": 0.65,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Friars Road",
+    "mi": 0.65,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Avocado Road",
+    "mi": 0.65,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Longhorn Drive",
+    "mi": 0.65,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South 31st Street",
+    "mi": 0.65,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Grand Caribe Causeway",
+    "mi": 0.64,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Qualcomm Way",
+    "mi": 0.64,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Tech Way",
+    "mi": 0.64,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Stewart Street",
+    "mi": 0.64,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Ocean Air Drive",
+    "mi": 0.64,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Via de la Cumbre",
+    "mi": 0.64,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Sorrento Valley Boulevard",
+    "mi": 0.64,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Calla Avenue",
+    "mi": 0.64,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Amargosa Drive",
+    "mi": 0.64,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Vista Way",
+    "mi": 0.63,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Valley Street",
+    "mi": 0.63,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Hemingway Drive",
+    "mi": 0.63,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Las Palomas",
+    "mi": 0.62,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Hoover Avenue",
+    "mi": 0.62,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Towne Centre Drive",
+    "mi": 0.62,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Benet Road",
+    "mi": 0.62,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Melrose Drive",
+    "mi": 0.62,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "El Mirador",
+    "mi": 0.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South 36th Street",
+    "mi": 0.61,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Harrison Avenue",
+    "mi": 0.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Ridge Road",
+    "mi": 0.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Avenida de Anita",
+    "mi": 0.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Derby Farms Road",
+    "mi": 0.6,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Monroe Street",
+    "mi": 0.6,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 0.6,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Palomar Airport Road",
+    "mi": 0.6,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Bachman Place",
+    "mi": 0.59,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Poinsettia Lane",
+    "mi": 0.59,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Cannon Road",
+    "mi": 0.59,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Lebon Drive",
+    "mi": 0.59,
+    "mph": 35,
+    "conflict": false
+   }
+  ]
+ },
+ "siesta": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Midnight Pass Road",
+    "mi": 3.07,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Bradenton Road",
+    "mi": 2.31,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Proctor Road",
+    "mi": 2.0,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Tuttle Avenue",
+    "mi": 1.58,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Webber Street",
+    "mi": 1.26,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "10th Street",
+    "mi": 1.06,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Lockwood Ridge Road",
+    "mi": 1.02,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Tuttle Avenue",
+    "mi": 0.75,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "9th Street East",
+    "mi": 0.63,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Lemon Avenue",
+    "mi": 0.52,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "57th Avenue West",
+    "mi": 0.5,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "17th Street",
+    "mi": 0.49,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "63rd Avenue East",
+    "mi": 0.46,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Lemon Avenue",
+    "mi": 0.46,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "63rd Avenue West",
+    "mi": 0.43,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "57th Avenue West",
+    "mi": 0.38,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Lockwood Ridge Road",
+    "mi": 0.37,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Washington Boulevard",
+    "mi": 0.36,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "33rd Street East",
+    "mi": 0.35,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ringling Boulevard",
+    "mi": 0.33,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Bahia Vista Street",
+    "mi": 0.32,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "37th Street East",
+    "mi": 0.3,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "El Conquistador Parkway",
+    "mi": 0.29,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Tuttle Avenue",
+    "mi": 0.28,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Siesta Drive",
+    "mi": 0.28,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Main Street",
+    "mi": 0.25,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "El Conquistador Parkway",
+    "mi": 0.25,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Whitfield Avenue",
+    "mi": 0.23,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Higel Avenue",
+    "mi": 0.22,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Gulfstream Avenue",
+    "mi": 0.21,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Bayshore Gardens Parkway",
+    "mi": 0.19,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "John Ringling Boulevard",
+    "mi": 0.18,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Tuttle Avenue",
+    "mi": 0.17,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Tuttle Avenue",
+    "mi": 0.17,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Whitfield Avenue",
+    "mi": 0.16,
+    "mph": 40,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "Bay Road",
+    "mi": 0.14,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Lockwood Ridge Road",
+    "mi": 0.13,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Higel Avenue",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Orange Avenue",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Gulf of Mexico Drive",
+    "mi": 0.13,
+    "mph": 45,
+    "kind": "sourced_red"
+   }
+  ],
+  "gap": []
+ },
+ "southpadre": {
+  "reports": [],
+  "conflicts": [],
+  "gap": []
+ },
+ "staug": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Shores Boulevard",
+    "mi": 2.36,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Holmes Boulevard",
+    "mi": 0.54,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Old Moultrie Road",
+    "mi": 0.13,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
+ },
+ "suncity": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "North 83rd Avenue",
+    "mi": 3.75,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Del Webb Boulevard",
+    "mi": 2.49,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Del Webb Boulevard",
+    "mi": 2.49,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Stardust Boulevard",
+    "mi": 1.65,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Litchfield Road",
+    "mi": 1.64,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Beardsley Road",
+    "mi": 1.54,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 103rd Avenue",
+    "mi": 1.51,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 107th Avenue",
+    "mi": 1.5,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Thunderbird Road",
+    "mi": 1.45,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Granite Valley Drive",
+    "mi": 1.07,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 79th Avenue",
+    "mi": 1.03,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Lake Pleasant Parkway",
+    "mi": 1.02,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Beardsley Road",
+    "mi": 0.99,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Conquistador Drive",
+    "mi": 0.95,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Thunderbird Road",
+    "mi": 0.93,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 103rd Avenue",
+    "mi": 0.92,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Beardsley Road",
+    "mi": 0.85,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Deer Valley Drive",
+    "mi": 0.85,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North El Mirage Road",
+    "mi": 0.84,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North R H Johnson Boulevard",
+    "mi": 0.82,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 79th Avenue",
+    "mi": 0.78,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Paradise Lane",
+    "mi": 0.76,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Sweetwater Avenue",
+    "mi": 0.75,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Desert Harbor Drive",
+    "mi": 0.72,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Greenway Road",
+    "mi": 0.64,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Deer Valley Road",
+    "mi": 0.62,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Stardust Boulevard",
+    "mi": 0.61,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 98th Avenue",
+    "mi": 0.56,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Thompson Ranch Road",
+    "mi": 0.54,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 87th Avenue",
+    "mi": 0.52,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Beardsley Road",
+    "mi": 0.51,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 107th Avenue",
+    "mi": 0.47,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Union Hills Drive",
+    "mi": 0.47,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Peoria Avenue",
+    "mi": 0.46,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Deer Valley Road",
+    "mi": 0.46,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Thunderbird Road",
+    "mi": 0.44,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 75th Avenue",
+    "mi": 0.43,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 75th Avenue",
+    "mi": 0.42,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Cactus Road",
+    "mi": 0.41,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 75th Avenue",
+    "mi": 0.36,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "North 83rd Avenue",
+    "mi": 3.75,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "North Del Webb Boulevard",
+    "mi": 2.49,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "North Del Webb Boulevard",
+    "mi": 2.49,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "West Stardust Boulevard",
+    "mi": 1.65,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "North Litchfield Road",
+    "mi": 1.64,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "West Beardsley Road",
+    "mi": 1.54,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "North 103rd Avenue",
+    "mi": 1.51,
+    "mph": 30,
+    "conflict": true
+   },
+   {
+    "name": "North 107th Avenue",
+    "mi": 1.5,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "West Thunderbird Road",
+    "mi": 1.45,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "West Granite Valley Drive",
+    "mi": 1.07,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "North 79th Avenue",
+    "mi": 1.03,
+    "mph": 30,
+    "conflict": true
+   },
+   {
+    "name": "West Lake Pleasant Parkway",
+    "mi": 1.02,
+    "mph": 40,
+    "conflict": true
+   },
+   {
+    "name": "North Dysart Road",
+    "mi": 6.88,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "West Happy Valley Road",
+    "mi": 5.76,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "North Litchfield Road",
+    "mi": 5.55,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "North 99th Avenue",
+    "mi": 5.08,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "North Bullard Avenue",
+    "mi": 4.49,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "West Mountain View Boulevard",
+    "mi": 3.84,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "North 99th Avenue",
+    "mi": 3.54,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "North Boswell Boulevard",
+    "mi": 3.25,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Reems Road",
+    "mi": 3.2,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "North Coyote Lakes Parkway",
+    "mi": 2.77,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Calle Lejos",
+    "mi": 2.71,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Country Club Parkway",
+    "mi": 2.7,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Pinnacle Peak Road",
+    "mi": 2.67,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West McMicken Way",
+    "mi": 2.58,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Hutton Drive",
+    "mi": 2.45,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Reems Road",
+    "mi": 2.32,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "North 91st Avenue",
+    "mi": 1.99,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "West Meeker Boulevard",
+    "mi": 1.87,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "West R H Johnson Boulevard",
+    "mi": 1.8,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "West Happy Valley Parkway",
+    "mi": 1.68,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "West Aleppo Drive",
+    "mi": 1.6,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "West Burns Drive",
+    "mi": 1.56,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Plaza Del Rio Boulevard",
+    "mi": 1.55,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North 127th Avenue",
+    "mi": 1.53,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Cactus Road",
+    "mi": 1.52,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "West Cactus Road",
+    "mi": 1.46,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North El Mirage Road",
+    "mi": 1.42,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "North Parkview Place",
+    "mi": 1.39,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Goldwater Ridge Drive",
+    "mi": 1.38,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "West Sweetwater Avenue",
+    "mi": 1.38,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "West Sweetwater Avenue",
+    "mi": 1.38,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "North 103rd Avenue",
+    "mi": 1.34,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "North Old El Mirage Road",
+    "mi": 1.34,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "North Westbrook Parkway",
+    "mi": 1.33,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Saint John Road",
+    "mi": 1.33,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Westbrook Parkway",
+    "mi": 1.32,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Sweetwater Avenue",
+    "mi": 1.31,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Goldwater Ridge Drive",
+    "mi": 1.3,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "North El Mirage Road",
+    "mi": 1.3,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "North Lake Pleasant Parkway",
+    "mi": 1.3,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "North 87th Avenue",
+    "mi": 1.27,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "West Williams Road",
+    "mi": 1.22,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Desert Harbor Drive",
+    "mi": 1.22,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North 85th Avenue",
+    "mi": 1.21,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "North Vista Ranch Road",
+    "mi": 1.19,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North West Point Parkway",
+    "mi": 1.19,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "North Coyote Lakes Parkwway",
+    "mi": 1.18,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Acoma Drive",
+    "mi": 1.16,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North 81st Avenue",
+    "mi": 1.15,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Deer Valley Road",
+    "mi": 1.13,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "West Deer Valley Road",
+    "mi": 1.12,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "North 137th Avenue",
+    "mi": 1.12,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Dysart Road",
+    "mi": 1.1,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "North Parkview Place",
+    "mi": 1.09,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "West Happy Valley Road",
+    "mi": 1.07,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "North Reems Road",
+    "mi": 1.07,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "North R H Johnson Boulevard",
+    "mi": 1.06,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "West Spanish Garden Drive",
+    "mi": 1.03,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Rancho Mercado Parkway",
+    "mi": 1.03,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "North Cotton Crossing",
+    "mi": 1.02,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "North 133rd Avenue",
+    "mi": 1.02,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "suncitycenter": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "14th Avenue Southeast",
+    "mi": 1.88,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "21st Avenue Southeast",
+    "mi": 1.52,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "30th Street Northeast",
+    "mi": 1.25,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "24th Street Southeast",
+    "mi": 0.84,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "33rd Street Southeast",
+    "mi": 0.53,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "24th Street Southeast",
+    "mi": 0.52,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "30th Street Northeast",
+    "mi": 0.45,
+    "mph": 40,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "South Pebble Beach Boulevard",
+    "mi": 0.43,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "24th Street Northeast",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "24th Street Southeast",
+    "mi": 0.01,
+    "mph": 40,
+    "kind": "sourced_red"
+   }
+  ],
+  "gap": [
+   {
+    "name": "14th Avenue Southeast",
+    "mi": 1.88,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "21st Avenue Southeast",
+    "mi": 1.52,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "30th Street Northeast",
+    "mi": 1.25,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Cypress Village Boulevard",
+    "mi": 3.39,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Del Webb Boulevard West",
+    "mi": 2.68,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "30th Street Northeast",
+    "mi": 2.35,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "tybee": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Taylor Street",
+    "mi": 0.1,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
+ },
+ "villages": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Fenney Way",
+    "mi": 2.31,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Fenney Way",
+    "mi": 2.31,
+    "mph": 30,
+    "conflict": true
+   },
+   {
+    "name": "Southeast 36th Avenue",
+    "mi": 6.53,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Marsh Bend Trail",
+    "mi": 3.87,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Southeast 145th Street",
+    "mi": 3.74,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Meggison Road",
+    "mi": 3.63,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Southeast 176th Street",
+    "mi": 2.97,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Lake Ella Road",
+    "mi": 2.95,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Saint Charles Place",
+    "mi": 2.87,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Canal Street",
+    "mi": 2.86,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Southeast 100th Avenue",
+    "mi": 2.8,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Moyer Loop",
+    "mi": 2.39,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Meggison Road",
+    "mi": 2.29,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Lake Griffin Road",
+    "mi": 2.29,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Meggison Road",
+    "mi": 2.29,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Pinellas Place",
+    "mi": 2.21,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "County Road 462",
+    "mi": 2.02,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Northeast 90th Street",
+    "mi": 1.99,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Camino Real",
+    "mi": 1.99,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Talley Ridge Drive",
+    "mi": 1.92,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Odell Circle",
+    "mi": 1.79,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Griffinview Drive",
+    "mi": 1.76,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Churchill Downs",
+    "mi": 1.75,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "McNeill Drive",
+    "mi": 1.74,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Marion County Road",
+    "mi": 1.51,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Stillwater Trail",
+    "mi": 1.5,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Countryside Boulevard",
+    "mi": 1.48,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Odell Circle",
+    "mi": 1.46,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Belvedere Boulevard",
+    "mi": 1.46,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Main Street",
+    "mi": 1.41,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Enrique Drive",
+    "mi": 1.39,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "SE 86th Belle Meade Cir",
+    "mi": 1.38,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Southeast 176th Place Road",
+    "mi": 1.37,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Corbin Trail",
+    "mi": 1.37,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Deskin Lane",
+    "mi": 1.35,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Rio Grande Avenue",
+    "mi": 1.32,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Avenida Central",
+    "mi": 1.29,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South Dixie Avenue",
+    "mi": 1.24,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Belle Meade Circle",
+    "mi": 1.15,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Southeast 172nd Legacy Lane",
+    "mi": 1.08,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bailey Trail",
+    "mi": 1.04,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Pinellas Place",
+    "mi": 0.98,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Bonita Boulevard",
+    "mi": 0.94,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Southeast 165th Mulberry Lane",
+    "mi": 0.93,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Chula Vista Avenue",
+    "mi": 0.9,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bigham Trail",
+    "mi": 0.9,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Southern Terrace",
+    "mi": 0.89,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "waikoloa": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "(unnamed)",
+    "mi": 0.06,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Queen Kaahumanu Highway",
+    "mi": 8.78,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Kawaihae Road",
+    "mi": 6.67,
+    "mph": 45,
+    "conflict": false
+   }
+  ]
+ },
+ "wailea": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Piilani Highway",
+    "mi": 5.01,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Piilani Highway",
+    "mi": 1.56,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Makena Alanui",
+    "mi": 0.4,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Piikea Avenue",
+    "mi": 0.19,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Kihei Road",
+    "mi": 0.16,
+    "mph": 20,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Piilani Highway",
+    "mi": 0.15,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Kihei Road",
+    "mi": 0.1,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Kulanihakoi Street",
+    "mi": 0.02,
+    "mph": 40,
+    "kind": "sourced_red"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Piilani Highway",
+    "mi": 5.01,
+    "mph": 35,
+    "conflict": true
+   }
+  ]
+ }
+}

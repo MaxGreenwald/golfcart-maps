@@ -182,6 +182,19 @@ CONF = []
 CHG = {"dot": 0, "dot_block": 0, "dot_open": 0, "desig_only_block": 0}
 names, out, sources, sidx, nidx, nids = [], [], [], {}, {}, {}
 stats = {"tagged": 0, "inferred": 0, "inferred_high": 0, "verified": 0, "mapillary": 0, "cartpath": 0, "designated": 0}
+# Golf-cart-only bans (research/regions/<id>.json "cart_only_bans"): flag s[9] = 4, s[10] = source index of the ordinance.
+# Each entry: url, label, and any of names (regex on name/ref), bbox [S, W, N, E], poly (research/city_limits/<file>.json).
+CBAN = CFG.get("cart_only_bans", [])
+for b in CBAN:
+    if "poly" in b:
+        gj = json.load(open(os.path.join(ROOT, "research/city_limits", b["poly"])))["geojson"]
+        b["_ring"] = gj["coordinates"][0] if gj["type"] == "Polygon" else max((p[0] for p in gj["coordinates"]), key=len)
+def _in_poly(x, y, ring):
+    c = False
+    for i in range(len(ring)):
+        (x1, y1), (x2, y2) = ring[i - 1][:2], ring[i][:2]
+        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1: c = not c
+    return c
 WS, WOUT = {}, {}   # wi -> final (mph, src); wi -> indices into out
 def src_i(url, label):
     if (url, label) not in sidx: sidx[(url, label)] = len(sources); sources.append([url, label])
@@ -271,12 +284,19 @@ for wi, w in enumerate(wl):
                 if "only_codes" in b and scode not in b["only_codes"]: continue   # e.g. ["i"]: only stretches with no posted limit of their own
                 if "max_mph" in b and ss > b["max_mph"]: continue   # e.g. 25: only the pieces that would otherwise read as cart-legal
                 ss, ssi, sflag, scode = 99, src_i(b["url"], b["label"]), 1, "v"; stats["seg_banned"] = stats.get("seg_banned", 0) + 1; break
+        if hw in ROADS and src != "cartpath" and sflag not in (1, 3) and CBAN:   # golf-cart-only local bans (flag 4): LSVs unaffected; a posted sign never lifts it
+            q_ = g[sg[len(sg)//2]]
+            for b in CBAN:
+                if "names" in b and not any(re.search(b["names"], t.get(k, "")) for k in ("name", "ref")): continue
+                if "bbox" in b and not (b["bbox"][0] <= q_["lat"] <= b["bbox"][2] and b["bbox"][1] <= q_["lon"] <= b["bbox"][3]): continue
+                if "poly" in b and not _in_poly(q_["lon"], q_["lat"], b["_ring"]): continue
+                sflag, cbi = 4, src_i(b["url"], b["label"]); stats["cart_only_banned"] = stats.get("cart_only_banned", 0) + 1; break
         if spn and src == "verified" and w["id"] not in OV and not lban:   # a long way can span two posted zones: decide per segment
             o2 = speed_name(t, g[sg[len(sg)//2]])
             if o2: ss, ssi = o2["mph"], src_i(o2["url"], o2["label"])
         WOUT[wi].append(len(out))
         if scode == "t" and _TO.explicit(t): EXPL.append(len(out))
-        out.append([nidx[nm], hw, ss, scode, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([ssi, sflag] if sflag else [ssi] if ssi >= 0 else []))
+        out.append([nidx[nm], hw, ss, scode, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([ssi, 4, cbi] if sflag == 4 else [ssi, sflag] if sflag else [ssi] if ssi >= 0 else []))
 # ---- Roundabouts: OSM rarely tags maxspeed on the ring itself, so an untagged major-class ring (secondary etc.)
 # fell to 99 "inferred_high" and showed red even when every approach is posted <=35. A ring with no limit of its own
 # takes the HIGHEST known limit among its connecting roads (conservative: a ring touching a 40+ road stays red). ----

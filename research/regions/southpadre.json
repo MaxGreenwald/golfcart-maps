@@ -1,6 +1,6 @@
 {
  "unverified": [
-  "City-level cart designations not digitized; app applies the state LSV rule (posted \u226435)."
+  "City-level cart designations not digitized; app applies the state LSV rule (posted ≤35)."
  ],
  "bans": [
   {
@@ -10,7 +10,8 @@
   }
  ],
  "sources": [
-  "Tex. Transp. Code 551.403 / 551.303"
+  "Tex. Transp. Code 551.403 / 551.303",
+  "https://www.myspi.org/egov/documents/1464795083_20813.pdf (South Padre Island Code Sec. 18-30(D)(7): motorized carts only on streets posted <=35 mph)"
  ],
  "status": "Beta (regions15, 2026-10-17)"
 }

@@ -22,7 +22,7 @@ def render():
     for st in sorted(by, key=lambda s: STATES.get(s, s)):
         o.append("### " + STATES.get(st, st))
         for r in sorted(by[st], key=lambda r: r.get("short") or r["name"]):
-            o.append("- [%s](https://golfcartmap.com/%s)%s" % (r["name"], r["slug"], " (beta data)" if r.get("beta") else ""))
+            o.append("- [%s](https://golfcartmap.com/%s)" % (r["name"], r["slug"]))
     o += ["", "## State rules used"]
     for st in sorted(by, key=lambda s: STATES.get(s, s)):
         s = rules.get(st)
