@@ -49,6 +49,8 @@ jobs:
         run: python scripts/test_sw.py
       - name: "test_search_keep_text (typed destination text survives GPS ticks; Phoenix->Sun City and SD)"
         run: python -m unittest tests.test_search_keep_text -v
+      - name: "test_paywall_ios (simulated iOS app: core map never gated; extra town -> driver plan sheet)"
+        run: python scripts/test_paywall_ios.py
       - name: test_ui
         run: python scripts/test_ui.py
       - name: test_verified ('verified' only on two-source coastal SD segments; other regions never)

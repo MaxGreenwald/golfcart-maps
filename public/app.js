@@ -291,7 +291,7 @@ const SLUG={'sd':'sandiego','villages':'villages','ptc':'peachtreecity','hhi':'h
 function idFromPath(){const s=location.pathname.replace(/^\/+|\/+$/g,'').toLowerCase();if(!s)return '';for(const k in SLUG)if(SLUG[k]===s)return k;return null}
 function setURL(id,push){const p='/'+slugOf(id);if(location.pathname===p)return;const u=p+location.search.replace(/([?&])r=[^&]*&?/,'$1').replace(/[?&]$/,'')+location.hash;try{history[push?'pushState':'replaceState']({r:id},'',u)}catch(_){}}
 window.addEventListener('popstate',()=>{const id=idFromPath();window._regHow='link';loadRegion(id||'sd')});
-$('city').onchange=e=>{setURL(e.target.value,true);window._regHow='picker';loadRegion(e.target.value)};
+$('city').onchange=e=>{const v=e.target.value,go=()=>{setURL(v,true);window._regHow='picker';loadRegion(v)};if(window.GCMEnt&&!GCMEnt.canTown(v)){const r=(REGIONS||[]).find(x=>x.id===v);if(REG)e.target.value=REG.id;GCMEnt.sheet({town:v,townName:r&&r.short,onUnlock:()=>{e.target.value=v;go()}});return}go()};  // extra towns: driver plan (iOS app only; home town always open)
 (async()=>{const q=new URLSearchParams(location.search).get('r');[REGIONS,RULES]=await Promise.all([fetch('data/regions.json').then(r=>r.json()),fetch('data/rules.json').then(r=>r.json())]);
  $('city').innerHTML=GCMRegions.pickerList(REGIONS,q,!!window.GCM_IOS).map(o=>`<option value="${o.id}">${o.text}</option>`).join('');  // A-Z (city chip in the top row)
  let saved=null;try{saved=localStorage.getItem('gcm-region')}catch(_){}

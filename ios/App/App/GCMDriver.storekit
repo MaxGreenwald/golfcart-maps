@@ -1,0 +1,30 @@
+{
+  "identifier" : "6A1C2B3D",
+  "nonRenewingSubscriptions" : [],
+  "products" : [],
+  "settings" : { "_failTransactionsEnabled" : false, "_locale" : "en_US", "_storefront" : "USA", "_storeKitErrors" : [] },
+  "subscriptionGroups" : [
+    {
+      "id" : "21000001",
+      "localizations" : [],
+      "name" : "Driver plan",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [], "codeOffers" : [], "displayPrice" : "1.00", "familyShareable" : false,
+          "groupNumber" : 1, "internalID" : "6739000001", "introductoryOffer" : null,
+          "localizations" : [ { "description" : "Extra towns, offline maps and voice routing", "displayName" : "Driver plan (monthly)", "locale" : "en_US" } ],
+          "productID" : "com.matchimus.golfcartmaps.driver.monthly", "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Driver monthly", "subscriptionGroupID" : "21000001", "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [], "codeOffers" : [], "displayPrice" : "10.00", "familyShareable" : false,
+          "groupNumber" : 1, "internalID" : "6739000002", "introductoryOffer" : null,
+          "localizations" : [ { "description" : "Extra towns, offline maps and voice routing", "displayName" : "Driver plan (yearly)", "locale" : "en_US" } ],
+          "productID" : "com.matchimus.golfcartmaps.driver.yearly", "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Driver yearly", "subscriptionGroupID" : "21000001", "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : { "major" : 3, "minor" : 0 }
+}

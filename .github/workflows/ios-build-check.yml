@@ -1,0 +1,26 @@
+name: ios-build-check
+# Compiles the iOS app for the simulator with no signing. Never archives, uploads or deploys.
+on:
+  push:
+    branches: [ios-paywall]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Xcode
+        run: |
+          X=$(ls -d /Applications/Xcode_26*.app | grep -v -i beta | sort -V | tail -1)
+          sudo xcode-select -s "$X" && xcodebuild -version
+      - uses: actions/setup-node@v4
+        with: {node-version: 20}
+      - run: python3 scripts/build_web.py && npm ci && npx cap sync ios
+      - name: Paywall gate tests
+        run: python3 -m unittest tests.test_paywall_gate -v
+      - name: Build (simulator, unsigned)
+        run: |
+          set -o pipefail
+          xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build | tail -40
