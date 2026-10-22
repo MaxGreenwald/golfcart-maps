@@ -13,14 +13,14 @@ class Landing(unittest.TestCase):
             self.assertIn('id="map"', n); self.assertFalse(os.path.exists(os.path.join(t, "n", "map.html")))
             src = open(os.path.join(C.PUB, "index.html")).read()
             for frozen in re.findall(r'<meta (?:property="og:description"|name="twitter:description")[^>]*>', src):
-                self.assertIn(frozen, m); self.assertTrue(frozen.endswith('Free.">'))   # frozen og/twitter text untouched
+                self.assertIn(frozen, m); self.assertTrue(frozen.endswith('Free to use.">'))   # og/twitter text: Max Oct 22 'Free to use'
     def test_landing_content(self):
         h = L.render()
         self.assertIn('<link rel="canonical" href="https://golfcartmap.com/">', h)
         self.assertEqual(len(re.findall(r'class="cta" href="/map" target="_blank" rel="noopener"', h)), 2)
         first_p = re.search(r"</h1>\s*<p>(.*?)</p>", h, re.S).group(1); self.assertLessEqual(len(first_p.split()), 60)
         ld = json.loads(re.search(r'application/ld\+json">(.*?)</script>', h, re.S).group(1))
-        self.assertEqual({x["@type"] for x in ld}, {"Organization", "WebSite", "SoftwareApplication", "FAQPage"})
+        self.assertEqual({x["@type"] for x in ld}, {"Organization", "WebSite", "SoftwareApplication", "MobileApplication", "FAQPage"})
         self.assertNotIn("offers", [x for x in ld if x["@type"] == "SoftwareApplication"][0])
         for q in [x for x in ld if x["@type"] == "FAQPage"][0]["mainEntity"]: self.assertIn(C.e(q["acceptedAnswer"]["text"]), h)
         self.assertNotRegex(re.sub(r"<[^>]+>", " ", h), r"(?i)\bbeta\b|verified|android")

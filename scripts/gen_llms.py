@@ -19,7 +19,12 @@ def render():
          "- Colors every road: green = allowed for your vehicle, red = too fast or banned (avoid).",
          "- Plans routes on allowed roads; crossing a faster road at an intersection is allowed where state law permits it.",
          "- Battery range check for a trip, public EV chargers, and a way to report a wrong road.",
-         "- Works in a web browser; an iPhone app is in App Store review.", "",
+         "- Works in any web browser.", "",
+         "## iPhone app + CarPlay",
+         "- Native iPhone app with Apple CarPlay: legal cart roads and turn-by-turn routes on your car's dashboard screen.",
+         "- Get it on TestFlight: https://testflight.apple.com/join/P7dVC4zh", "",
+         "## Contact",
+         "- Sales, partners, manufacturers and OEMs: max@golfcartmap.com", "",
          "## Regions by state"]
     for st in sorted(by, key=lambda s: STATES.get(s, s)):
         o.append("### " + STATES.get(st, st))

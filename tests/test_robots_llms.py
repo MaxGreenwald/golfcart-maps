@@ -13,7 +13,7 @@ class T(unittest.TestCase):
     def test_llms_current_and_clean(self):
         t = open(os.path.join(PUB, "llms.txt")).read()
         self.assertEqual(t, gen_llms.render(), "run scripts/gen_llms.py")
-        self.assertNotRegex(t, r"(?i)\bbeta\b|verified|carplay|android")
+        self.assertNotRegex(t, r"(?i)\bbeta\b|verified|android")
         self.assertIn("free to use", t)
         for s in ["sandiego", "villages", "30a", "keywest"]: self.assertIn("https://golfcartmap.com/%s)" % s, t)
 if __name__ == "__main__": unittest.main()

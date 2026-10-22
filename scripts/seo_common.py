@@ -7,6 +7,9 @@ PUB = os.path.join(ROOT, "public")
 SITE = "https://golfcartmap.com"
 BRAND = "Golf Cart Maps"
 LEGAL = "Golf Cart Maps LLC"
+CONTACT = "max@golfcartmap.com"
+SALES = "mailto:max@golfcartmap.com?subject=Golf%20Cart%20Maps%20sales%20inquiry"
+TESTFLIGHT = "https://testflight.apple.com/join/P7dVC4zh"  # Max Oct 22: TestFlight until the App Store listing is live
 APPSTORE = "https://apps.apple.com/us/app/golf-cart-maps/id0000000000"  # placeholder: set once the App Store listing is live
 STATES = {"CA":"California","FL":"Florida","GA":"Georgia","SC":"South Carolina","TX":"Texas","AL":"Alabama","AZ":"Arizona","OH":"Ohio","NC":"North Carolina","HI":"Hawaii","ME":"Maine"}
 BANNED = re.compile(r"(?i)\bbeta\b|verified|android")  # guard-change: free allowed (Max Oct 22), beta banned
@@ -32,13 +35,18 @@ def effective_rules():
     return json.loads(subprocess.run(["node", "-e", js], capture_output=True, text=True, check=True).stdout)
 
 def org():
-    return {"@context":"https://schema.org","@type":"Organization","@id":SITE+"/#org","name":BRAND,"legalName":LEGAL,"url":SITE+"/","logo":SITE+"/icon-512.png"}
+    return {"@context":"https://schema.org","@type":"Organization","@id":SITE+"/#org","name":BRAND,"legalName":LEGAL,"url":SITE+"/","logo":SITE+"/icon-512.png","email":CONTACT,"contactPoint":{"@type":"ContactPoint","contactType":"sales","email":CONTACT,"areaServed":"US","availableLanguage":"en"}}
 
 def website():
     return {"@context":"https://schema.org","@type":"WebSite","@id":SITE+"/#website","name":BRAND,"url":SITE+"/","publisher":{"@id":SITE+"/#org"}}
 
 def software():  # no offers block
     return {"@context":"https://schema.org","@type":"SoftwareApplication","name":BRAND,"applicationCategory":"NavigationApplication","operatingSystem":"iOS, Web","url":SITE+"/","publisher":{"@id":SITE+"/#org"}}
+
+def mobile_app():  # the iPhone app (CarPlay built in); no ratings until real App Store ratings exist
+    return {"@context":"https://schema.org","@type":"MobileApplication","name":BRAND,"operatingSystem":"iOS","applicationCategory":"NavigationApplication",
+            "description":"Golf cart and LSV legal-road map and routes for iPhone, with Apple CarPlay on your car's dashboard screen.",
+            "installUrl":TESTFLIGHT,"url":SITE+"/#iphone","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":SITE+"/#org"}}
 
 def faq_schema(faq):
     return {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q, a in faq]}
@@ -50,7 +58,7 @@ CSS = ("body{margin:0;font:17px/1.55 -apple-system,system-ui,Segoe UI,Roboto,san
        "header,main,footer{max-width:820px;margin:0 auto;padding:16px 20px}header{display:flex;gap:16px;align-items:center;flex-wrap:wrap}"
        "header a.home{font-weight:800;color:#0b6e86;text-decoration:none;font-size:19px}nav a{margin-right:14px;color:#0b6e86}"
        "h1{font-size:30px;line-height:1.2;margin:.4em 0}h2{margin-top:1.6em}a{color:#0b6e86}"
-       ".cta{display:inline-block;background:#0b9fb3;color:#fff;font-weight:800;padding:13px 22px;border-radius:28px;text-decoration:none;margin:8px 0}"
+       ".cta{display:inline-block;background:#0b7d91;color:#fff;font-weight:800;padding:13px 22px;border-radius:28px;text-decoration:none;margin:8px 0}"
        "table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #dde9ec;padding:8px;text-align:left;vertical-align:top}"
        ".muted{color:#5a7684;font-size:14px}footer{border-top:1px solid #dde9ec;margin-top:40px}ul.cols{columns:2}")
 
@@ -73,7 +81,7 @@ def page(title, desc, path, body, ld, extra_head=""):
 <main>
 {body}
 </main>
-<footer><p class="muted">{BRAND} (golfcartmap.com){POS.FOOTER_STATUS}. Not legal advice; posted signs and local law win. Updated {e(today())}. &copy; {LEGAL}. <a href="/privacy">Privacy</a></p></footer>
+<footer><p class="muted">{BRAND} (golfcartmap.com){POS.FOOTER_STATUS}. Not legal advice; posted signs and local law win. Updated {e(today())}. &copy; {LEGAL}. <a href="/privacy">Privacy</a> · Contact: <a href="mailto:{CONTACT}">{CONTACT}</a></p></footer>
 <script defer src="/track.js"></script><script>addEventListener('load',function(){{var T=window.GCMTrack;if(!T)return;document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.target.closest('a[data-ev]');if(a)T.track(a.dataset.ev,JSON.parse(a.dataset.p||'{{}}'))}})}})</script>
 </body></html>
 """
