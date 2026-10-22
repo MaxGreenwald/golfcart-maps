@@ -173,3 +173,64 @@ villages {'explicit_nosource': 152.5, 'none': 133.1, 'dot_gis': 20.4, 'sign_surv
 4. San Diego is excluded from the beta bar (Max: "keep San Diego live tho no beta"). Its numbers are shown for information only.
 
 Reproduce: `python3 research/beta_exit_gap_v2.py /workspace/gcm-sv2apply` (needs a built `public/data` and `cache/*_osm.json`). The raw output is in `beta_exit_gap_v2_2026-10-22.json`.
+
+## Final official measure (Max, 2026-10-22, all rules built in)
+
+A region leaves beta only when BOTH hold (San Diego is exempt and is never beta):
+1. **>= 70% of important-road miles are backed by a real source** (`v`, `m`, `d` with a source, and `o` trusted OSM once that branch ships). **Banned stretches are scored separately** and are not in the 70% (rule 3).
+2. **A local access source is recorded** in `research/access_sources.json` (a sheriff/county LSV map or an ordinance road list; state-highway-only bans don't count) (rule 2).
+
+The check list (`research/beta_check_list.json`, per region) puts work in this order:
+- shop/user reports from `research/road_reports.json`, each with a scan for similar roads (rule 5)
+- conflicts: a corridor posted differently by a real source right next to it, or a sourced piece that still draws red between <=35 pieces of the same road (rule 1)
+- then the remaining corridors of 0.25 mi or more, longest first
+
+Resort/town-centre grids (`research/beta_grids.json`) pull neighbourhood streets into the measure when an access source exists (rule 4). 30A has 4 grids: Seaside, Alys Beach, Seacrest and Rosemary Beach (from the Sheriff LSV-map bans). Assumed-speed county roads (`i` code on CR/County Road names) are counted per region so they can be checked against the access source.
+
+Fix vs the first v2 draft: that draft read the one-way field as the ban flag. Bans are now read from the real flag (and `v` 99). This changes the inference safety checks and the flagged counts, not the sourced miles.
+
+| Region | % important mi sourced (bans excluded) | Access source | Passes | Missing | Corridors to 70% (mi) | Conflicts to check | Ban mi (sourced) | Grid mi | Assumed county-road mi |
+|---|---:|---|---|---|---:|---:|---:|---:|---:|
+| oob | 97.3% | **no** | no | no local access source recorded | 0 (0) | 0 | 0 (0) | 0 | 0 |
+| annamaria | 97.0% | **no** | no | no local access source recorded | 0 (0) | 1 | 0 (0) | 0 | 0 |
+| amelia | 92.3% | **no** | no | no local access source recorded | 0 (0) | 6 | 0 (0) | 0 | 0 |
+| southpadre | 85.3% | **no** | no | no local access source recorded | 0 (0) | 0 | 0.2 (0.2) | 0 | 0 |
+| staug | 78.3% | **no** | no | no local access source recorded | 0 (0) | 4 | 41.1 (41.1) | 0 | 1.3 |
+| kailua | 72.0% | **no** | no | no local access source recorded | 0 (0) | 5 | 0 (0) | 0 | 0 |
+| tybee | 70.4% | **no** | no | no local access source recorded | 0 (0) | 1 | 5.4 (5.4) | 0 | 0 |
+| poipu | 68.9% | **no** | no | miles 68.9% < 70%; no local access source recorded | 0 (0) | 4 | 0 (0) | 0 | 0 |
+| siesta | 68.2% | **no** | no | miles 68.2% < 70%; no local access source recorded | 0 (0) | 68 | 28.7 (28.7) | 0 | 0 |
+| obx | 65.4% | **no** | no | miles 65.4% < 70%; no local access source recorded | 2 (5.2) | 8 | 0 (0) | 0 | 0 |
+| pcb | 65.4% | **no** | no | miles 65.4% < 70%; no local access source recorded | 0 (0) | 13 | 0 (0) | 0 | 0 |
+| portaransas | 64.2% | **no** | no | miles 64.2% < 70%; no local access source recorded | 1 (2.0) | 5 | 11.9 (11.9) | 0 | 0 |
+| chs | 62.8% | **no** | no | miles 62.8% < 70%; no local access source recorded | 2 (3.2) | 9 | 11.6 (11.6) | 0 | 0 |
+| keywest | 62.4% | **no** | no | miles 62.4% < 70%; no local access source recorded | 3 (3.2) | 12 | 0 (0) | 0 | 0 |
+| wailea | 60.8% | **no** | no | miles 60.8% < 70%; no local access source recorded | 1 (5.0) | 8 | 0 (0) | 0 | 0 |
+| lwr | 60.7% | **no** | no | miles 60.7% < 70%; no local access source recorded | 3 (8.4) | 25 | 16.5 (16.5) | 0 | 0 |
+| kaanapali | 58.6% | **no** | no | miles 58.6% < 70%; no local access source recorded | 1 (3.3) | 8 | 0 (0) | 0 | 0 |
+| rockport | 56.7% | **no** | no | miles 56.7% < 70%; no local access source recorded | 1 (5.8) | 8 | 17.9 (17.9) | 0 | 0 |
+| destin | 51.8% | **no** | no | miles 51.8% < 70%; no local access source recorded | 6 (8.7) | 2 | 0 (0) | 0 | 0 |
+| 30a | 45.2% | yes | no | miles 45.2% < 70% | 16 (16.5) | 4 | 19.5 (19.5) | 33.5 | 4.4 |
+| waikoloa | 39.9% | **no** | no | miles 39.9% < 70%; no local access source recorded | 2 (15.4) | 1 | 0 (0) | 0 | 0 |
+| galveston | 39.8% | yes | no | miles 39.8% < 70% | 17 (30.7) | 23 | 67.3 (67.3) | 0 | 0 |
+| naples | 39.7% | **no** | no | miles 39.7% < 70%; no local access source recorded | 38 (114.8) | 40 | 70.2 (70.2) | 0 | 0 |
+| bhi | 38.3% | **no** | no | miles 38.3% < 70%; no local access source recorded | 5 (14.9) | 1 | 0 (0) | 0 | 0 |
+| avalon | 36.2% | **no** | no | miles 36.2% < 70%; no local access source recorded | 2 (2.6) | 0 | 0 (0) | 0 | 0 |
+| sd (exempt) | 33.6% | **no** | no | miles 33.6% < 70%; no local access source recorded | 419 (464.5) | 428 | 0 (0) | 0 | 0.1 |
+| myrtle | 33.4% | **no** | no | miles 33.4% < 70%; no local access source recorded | 56 (152.3) | 54 | 87.3 (87.3) | 0 | 0 |
+| suncitycenter | 33.3% | **no** | no | miles 33.3% < 70%; no local access source recorded | 6 (13.1) | 10 | 19.9 (19.9) | 0 | 0 |
+| hhi | 30.0% | **no** | no | miles 30.0% < 70%; no local access source recorded | 10 (35.1) | 11 | 9.9 (9.9) | 0 | 0 |
+| suncity | 26.0% | **no** | no | miles 26.0% < 70%; no local access source recorded | 81 (150.5) | 105 | 0 (0) | 0 | 0 |
+| ocoast | 24.2% | **no** | no | miles 24.2% < 70%; no local access source recorded | 256 (246.6) | 286 | 12.2 (12.2) | 0 | 0 |
+| goldenisles | 16.1% | **no** | no | miles 16.1% < 70%; no local access source recorded | 11 (24.8) | 4 | 20.3 (20.3) | 0 | 0 |
+| villages | 7.2% | yes | no | miles 7.2% < 70% | 46 (89.3) | 1 | 242.9 (64.9) | 0 | 32.3 |
+| gulfshores | 5.7% | yes | no | miles 5.7% < 70% | 8 (18.6) | 0 | 62.6 (62.6) | 0 | 4.6 |
+| coachella | 5.6% | **no** | no | miles 5.6% < 70%; no local access source recorded | 92 (288.7) | 19 | 67.2 (67.2) | 0 | 0 |
+| ptc | 5.0% | yes | no | miles 5.0% < 70% | 12 (33.5) | 0 | 112.6 (48.6) | 0 | 0 |
+| putinbay | 0.0% | **no** | no | miles 0.0% < 70%; no local access source recorded | 4 (5.6) | 0 | 0 (0) | 0 | 0 |
+
+**Passing now: 0 of 37** (none). Regions that clear 70% by miles but have no access source: amelia, annamaria, kailua, oob, southpadre, staug, tybee.
+Regions with an access source: 30a, galveston, gulfshores, ptc, villages. Candidate leads are in `access_sources.json` under `candidates`.
+Reports recorded: 0 (none yet; add them to `road_reports.json`).
+
+Apply to the app: `python3 research/beta_exit_gap_v2.py && python3 scripts/apply_beta_bar.py && python3 scripts/gen_llms.py`. `tests/test_beta_bar.py` guards that the flags match this table.

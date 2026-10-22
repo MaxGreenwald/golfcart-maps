@@ -1,0 +1,696 @@
+{
+ "regions": {
+  "30a": {
+   "access_source": true,
+   "assumed_mi": 33.6,
+   "ban_mi": 19.5,
+   "ban_sourced_mi": 19.5,
+   "conflicts": 4,
+   "corridor_mi_to_70": 16.5,
+   "corridors_to_70": 16,
+   "county_assumed_mi": 4.4,
+   "grid_mi": 33.5,
+   "important_mi": 69.0,
+   "missing": [
+    "miles 45.2% < 70%"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 45.2
+  },
+  "amelia": {
+   "access_source": false,
+   "assumed_mi": 2.6,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 6,
+   "corridor_mi_to_70": 0,
+   "corridors_to_70": 0,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 51.7,
+   "missing": [
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 92.3
+  },
+  "annamaria": {
+   "access_source": false,
+   "assumed_mi": 0.1,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 1,
+   "corridor_mi_to_70": 0,
+   "corridors_to_70": 0,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 15.3,
+   "missing": [
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 97.0
+  },
+  "avalon": {
+   "access_source": false,
+   "assumed_mi": 2.0,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 0,
+   "corridor_mi_to_70": 2.6,
+   "corridors_to_70": 2,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 6.2,
+   "missing": [
+    "miles 36.2% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 36.2
+  },
+  "bhi": {
+   "access_source": false,
+   "assumed_mi": 11.1,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 1,
+   "corridor_mi_to_70": 14.9,
+   "corridors_to_70": 5,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 44.4,
+   "missing": [
+    "miles 38.3% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 38.3
+  },
+  "chs": {
+   "access_source": false,
+   "assumed_mi": 16.0,
+   "ban_mi": 11.6,
+   "ban_sourced_mi": 11.6,
+   "conflicts": 9,
+   "corridor_mi_to_70": 3.2,
+   "corridors_to_70": 2,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 45.5,
+   "missing": [
+    "miles 62.8% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 62.8
+  },
+  "coachella": {
+   "access_source": false,
+   "assumed_mi": 204.2,
+   "ban_mi": 67.2,
+   "ban_sourced_mi": 67.2,
+   "conflicts": 19,
+   "corridor_mi_to_70": 288.7,
+   "corridors_to_70": 92,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 453.9,
+   "missing": [
+    "miles 5.6% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 5.6
+  },
+  "destin": {
+   "access_source": false,
+   "assumed_mi": 20.1,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 2,
+   "corridor_mi_to_70": 8.7,
+   "corridors_to_70": 6,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 45.7,
+   "missing": [
+    "miles 51.8% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 51.8
+  },
+  "galveston": {
+   "access_source": true,
+   "assumed_mi": 62.6,
+   "ban_mi": 67.3,
+   "ban_sourced_mi": 67.3,
+   "conflicts": 23,
+   "corridor_mi_to_70": 30.7,
+   "corridors_to_70": 17,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 105.2,
+   "missing": [
+    "miles 39.8% < 70%"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 39.8
+  },
+  "goldenisles": {
+   "access_source": false,
+   "assumed_mi": 27.5,
+   "ban_mi": 20.3,
+   "ban_sourced_mi": 20.3,
+   "conflicts": 4,
+   "corridor_mi_to_70": 24.8,
+   "corridors_to_70": 11,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 44.5,
+   "missing": [
+    "miles 16.1% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 16.1
+  },
+  "gulfshores": {
+   "access_source": true,
+   "assumed_mi": 8.1,
+   "ban_mi": 62.6,
+   "ban_sourced_mi": 62.6,
+   "conflicts": 0,
+   "corridor_mi_to_70": 18.6,
+   "corridors_to_70": 8,
+   "county_assumed_mi": 4.6,
+   "grid_mi": 0,
+   "important_mi": 26.7,
+   "missing": [
+    "miles 5.7% < 70%"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 5.7
+  },
+  "hhi": {
+   "access_source": false,
+   "assumed_mi": 43.0,
+   "ban_mi": 9.9,
+   "ban_sourced_mi": 9.9,
+   "conflicts": 11,
+   "corridor_mi_to_70": 35.1,
+   "corridors_to_70": 10,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 85.9,
+   "missing": [
+    "miles 30.0% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 30.0
+  },
+  "kaanapali": {
+   "access_source": false,
+   "assumed_mi": 3.5,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 8,
+   "corridor_mi_to_70": 3.3,
+   "corridors_to_70": 1,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 23.9,
+   "missing": [
+    "miles 58.6% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 58.6
+  },
+  "kailua": {
+   "access_source": false,
+   "assumed_mi": 4.9,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 5,
+   "corridor_mi_to_70": 0,
+   "corridors_to_70": 0,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 40.2,
+   "missing": [
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 72.0
+  },
+  "keywest": {
+   "access_source": false,
+   "assumed_mi": 2.0,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 12,
+   "corridor_mi_to_70": 3.2,
+   "corridors_to_70": 3,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 34.9,
+   "missing": [
+    "miles 62.4% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 62.4
+  },
+  "lwr": {
+   "access_source": false,
+   "assumed_mi": 45.1,
+   "ban_mi": 16.5,
+   "ban_sourced_mi": 16.5,
+   "conflicts": 25,
+   "corridor_mi_to_70": 8.4,
+   "corridors_to_70": 3,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 141.9,
+   "missing": [
+    "miles 60.7% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 60.7
+  },
+  "myrtle": {
+   "access_source": false,
+   "assumed_mi": 184.2,
+   "ban_mi": 87.3,
+   "ban_sourced_mi": 87.3,
+   "conflicts": 54,
+   "corridor_mi_to_70": 152.3,
+   "corridors_to_70": 56,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 438.2,
+   "missing": [
+    "miles 33.4% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 33.4
+  },
+  "naples": {
+   "access_source": false,
+   "assumed_mi": 150.1,
+   "ban_mi": 70.2,
+   "ban_sourced_mi": 70.2,
+   "conflicts": 40,
+   "corridor_mi_to_70": 114.8,
+   "corridors_to_70": 38,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 395.7,
+   "missing": [
+    "miles 39.7% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 39.7
+  },
+  "obx": {
+   "access_source": false,
+   "assumed_mi": 17.5,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 8,
+   "corridor_mi_to_70": 5.2,
+   "corridors_to_70": 2,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 72.2,
+   "missing": [
+    "miles 65.4% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 65.4
+  },
+  "ocoast": {
+   "access_source": false,
+   "assumed_mi": 189.7,
+   "ban_mi": 12.2,
+   "ban_sourced_mi": 12.2,
+   "conflicts": 286,
+   "corridor_mi_to_70": 246.6,
+   "corridors_to_70": 256,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 692.7,
+   "missing": [
+    "miles 24.2% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 24.2
+  },
+  "oob": {
+   "access_source": false,
+   "assumed_mi": 0.8,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 0,
+   "corridor_mi_to_70": 0,
+   "corridors_to_70": 0,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 30.7,
+   "missing": [
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 97.3
+  },
+  "pcb": {
+   "access_source": false,
+   "assumed_mi": 10.6,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 13,
+   "corridor_mi_to_70": 0,
+   "corridors_to_70": 0,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 74.3,
+   "missing": [
+    "miles 65.4% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 65.4
+  },
+  "poipu": {
+   "access_source": false,
+   "assumed_mi": 5.4,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 4,
+   "corridor_mi_to_70": 0,
+   "corridors_to_70": 0,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 18.4,
+   "missing": [
+    "miles 68.9% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 68.9
+  },
+  "portaransas": {
+   "access_source": false,
+   "assumed_mi": 6.0,
+   "ban_mi": 11.9,
+   "ban_sourced_mi": 11.9,
+   "conflicts": 5,
+   "corridor_mi_to_70": 2.0,
+   "corridors_to_70": 1,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 27.7,
+   "missing": [
+    "miles 64.2% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 64.2
+  },
+  "ptc": {
+   "access_source": true,
+   "assumed_mi": 32.5,
+   "ban_mi": 112.6,
+   "ban_sourced_mi": 48.6,
+   "conflicts": 0,
+   "corridor_mi_to_70": 33.5,
+   "corridors_to_70": 12,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 50.4,
+   "missing": [
+    "miles 5.0% < 70%"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 5.0
+  },
+  "putinbay": {
+   "access_source": false,
+   "assumed_mi": 6.1,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 0,
+   "corridor_mi_to_70": 5.6,
+   "corridors_to_70": 4,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 7.9,
+   "missing": [
+    "miles 0.0% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 0.0
+  },
+  "rockport": {
+   "access_source": false,
+   "assumed_mi": 16.6,
+   "ban_mi": 17.9,
+   "ban_sourced_mi": 17.9,
+   "conflicts": 8,
+   "corridor_mi_to_70": 5.8,
+   "corridors_to_70": 1,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 38.4,
+   "missing": [
+    "miles 56.7% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 56.7
+  },
+  "sd": {
+   "access_source": false,
+   "assumed_mi": 510.1,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 428,
+   "corridor_mi_to_70": 464.5,
+   "corridors_to_70": 419,
+   "county_assumed_mi": 0.1,
+   "grid_mi": 0,
+   "important_mi": 1455.9,
+   "missing": [
+    "miles 33.6% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 33.6
+  },
+  "siesta": {
+   "access_source": false,
+   "assumed_mi": 68.1,
+   "ban_mi": 28.7,
+   "ban_sourced_mi": 28.7,
+   "conflicts": 68,
+   "corridor_mi_to_70": 0,
+   "corridors_to_70": 0,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 271.3,
+   "missing": [
+    "miles 68.2% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 68.2
+  },
+  "southpadre": {
+   "access_source": false,
+   "assumed_mi": 0.3,
+   "ban_mi": 0.2,
+   "ban_sourced_mi": 0.2,
+   "conflicts": 0,
+   "corridor_mi_to_70": 0,
+   "corridors_to_70": 0,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 25.5,
+   "missing": [
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 85.3
+  },
+  "staug": {
+   "access_source": false,
+   "assumed_mi": 18.4,
+   "ban_mi": 41.1,
+   "ban_sourced_mi": 41.1,
+   "conflicts": 4,
+   "corridor_mi_to_70": 0,
+   "corridors_to_70": 0,
+   "county_assumed_mi": 1.3,
+   "grid_mi": 0,
+   "important_mi": 89.9,
+   "missing": [
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 78.3
+  },
+  "suncity": {
+   "access_source": false,
+   "assumed_mi": 103.9,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 105,
+   "corridor_mi_to_70": 150.5,
+   "corridors_to_70": 81,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 458.5,
+   "missing": [
+    "miles 26.0% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 26.0
+  },
+  "suncitycenter": {
+   "access_source": false,
+   "assumed_mi": 24.7,
+   "ban_mi": 19.9,
+   "ban_sourced_mi": 19.9,
+   "conflicts": 10,
+   "corridor_mi_to_70": 13.1,
+   "corridors_to_70": 6,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 37.1,
+   "missing": [
+    "miles 33.3% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 33.3
+  },
+  "tybee": {
+   "access_source": false,
+   "assumed_mi": 0.3,
+   "ban_mi": 5.4,
+   "ban_sourced_mi": 5.4,
+   "conflicts": 1,
+   "corridor_mi_to_70": 0,
+   "corridors_to_70": 0,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 3.3,
+   "missing": [
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 70.4
+  },
+  "villages": {
+   "access_source": true,
+   "assumed_mi": 42.2,
+   "ban_mi": 242.9,
+   "ban_sourced_mi": 64.9,
+   "conflicts": 1,
+   "corridor_mi_to_70": 89.3,
+   "corridors_to_70": 46,
+   "county_assumed_mi": 32.3,
+   "grid_mi": 0,
+   "important_mi": 142.1,
+   "missing": [
+    "miles 7.2% < 70%"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 7.2
+  },
+  "waikoloa": {
+   "access_source": false,
+   "assumed_mi": 2.0,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 1,
+   "corridor_mi_to_70": 15.4,
+   "corridors_to_70": 2,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 48.1,
+   "missing": [
+    "miles 39.9% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 39.9
+  },
+  "wailea": {
+   "access_source": false,
+   "assumed_mi": 1.7,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 8,
+   "corridor_mi_to_70": 5.0,
+   "corridors_to_70": 1,
+   "county_assumed_mi": 0,
+   "grid_mi": 0,
+   "important_mi": 36.2,
+   "missing": [
+    "miles 60.8% < 70%",
+    "no local access source recorded"
+   ],
+   "passes": false,
+   "reports": 0,
+   "sourced_pct": 60.8
+  }
+ },
+ "rule": "pass = important miles (bans excluded) sourced by v/m/d+source >= 70% AND a local access source recorded; resort grids included when an access source exists; corridors >= 0.25 mi, conflicts and reports checked first; sd exempt (never beta)"
+}

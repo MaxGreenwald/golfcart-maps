@@ -12,9 +12,9 @@ URL: https://golfcartmap.com/
 
 ## Regions by state
 ### Alabama
-- [Gulf Shores / Orange Beach, AL](https://golfcartmap.com/gulfshores)
+- [Gulf Shores / Orange Beach, AL](https://golfcartmap.com/gulfshores) (beta data)
 ### Arizona
-- [Sun City / Sun City West, AZ](https://golfcartmap.com/suncity)
+- [Sun City / Sun City West, AZ](https://golfcartmap.com/suncity) (beta data)
 ### California
 - [Avalon (Catalina Island), CA](https://golfcartmap.com/catalina) (beta data)
 - [Coachella Valley, CA](https://golfcartmap.com/coachella) (beta data)
@@ -36,7 +36,7 @@ URL: https://golfcartmap.com/
 ### Georgia
 - [Peachtree City, GA](https://golfcartmap.com/peachtreecity) (beta data)
 - [St. Simons / Jekyll Island, GA](https://golfcartmap.com/stsimons) (beta data)
-- [Tybee Island, GA](https://golfcartmap.com/tybee)
+- [Tybee Island, GA](https://golfcartmap.com/tybee) (beta data)
 ### Hawaii
 - [Kaanapali & Kapalua, Maui](https://golfcartmap.com/kaanapali) (beta data)
 - [Kailua, Oahu](https://golfcartmap.com/kailua) (beta data)

@@ -1,0 +1,14 @@
+{"_note": "Rule 2 (Max, 2026-10-22): a region can't leave beta until a LOCAL access source is recorded: a sheriff/county LSV map or an ordinance road list (who may drive where). State-highway-only bans don't count. Add a region only with the source in hand; 'candidates' are leads, not recorded.",
+ "regions": {
+  "30a": {"kind": "sheriff LSV map", "url": "https://waltonso.org/wp-content/uploads/2022/10/lsv_map_102022.png", "label": "Walton County Sheriff LSV map (red = LSVs prohibited)", "applied": "research/regions/30a.json bans"},
+  "villages": {"kind": "ordinance road list + district map", "url": "https://www.sumtercountyfl.gov/AgendaModule/AI7446/Golf%20Cart%20Ordinance%20Amendment%20-%20Final%20(00268768).pdf", "label": "Sumter County golf cart ordinance; Wildwood golf cart district map; Fruitland Park ordinance road list", "applied": "research/regions/villages.json cart_ban_names / cart_allow_names / wildwood"},
+  "galveston": {"kind": "ordinance road list", "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021", "label": "Galveston golf cart ordinance (Sec. 34-203 prohibited streets; Avenue O/P limits)", "applied": "research/regions/galveston.json bans"},
+  "gulfshores": {"kind": "ordinance road list", "url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15531?fileID=45381", "label": "Gulf Shores Sec. 21-13(b)(1) designated cart streets", "applied": "research/regions/gulfshores.json"},
+  "ptc": {"kind": "ordinance", "url": "https://mcclibraryfunctions-stage.azurewebsites.us/api/ordinanceDownload/11414/1250481/pdf", "label": "Peachtree City cart ordinance (Peachtree Pkwy)", "applied": "research/regions/ptc.json bans"}
+ },
+ "candidates": {
+  "tybee": "carts prohibited on US 80/Butler Ave (city rule in tybee.json bans) - needs the city ordinance road list recorded",
+  "portaransas": "carts prohibited on Hwy 361 south of Avenue G - needs the city ordinance recorded",
+  "chs": "Isle of Palms primary-road prohibition - needs the IOP/Sullivan's/Folly ordinance lists",
+  "naples": "Marco Island code ch. 50 (municode) - City of Naples designations not digitized"
+ }}

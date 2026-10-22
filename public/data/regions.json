@@ -174,7 +174,8 @@
    "cite": "Gulf Shores Sec. 21-13 (Apr 13 2026) & Orange Beach Sec. 70-273 / Ala. Const. Baldwin Co. §1.570: carts/LSVs only on streets posted ≤25",
    "url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"
   },
-  "slug": "gulfshores"
+  "slug": "gulfshores",
+  "beta": true
  },
  {
   "id": "portaransas",
@@ -213,7 +214,8 @@
    -112.22
   ],
   "cover": "Sun City, Sun City West and Youngtown only. Pick another city in the menu above.",
-  "slug": "suncity"
+  "slug": "suncity",
+  "beta": true
  },
  {
   "id": "coachella",
@@ -298,7 +300,8 @@
    -80.82
   ],
   "cover": "Tybee Island only. Pick another city in the menu above.",
-  "slug": "tybee"
+  "slug": "tybee",
+  "beta": true
  },
  {
   "id": "galveston",

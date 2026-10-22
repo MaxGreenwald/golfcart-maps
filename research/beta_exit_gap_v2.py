@@ -10,8 +10,16 @@ Sourced = v | m | d-with-source (unchanged from v1). Adds:
   Corridors: remaining unsourced same-name connected runs, split where the current mph or class changes.
 """
 import json, glob, math, os, sys, re, collections
-ROOT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), "..")
+ROOT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+CACHE = os.environ.get("CACHE", os.path.join(ROOT, "cache"))   # OSM extracts (gitignored); only for the OSM-confidence columns
 IMP = {"primary", "secondary", "tertiary"}; MI = 0.621371; CORR_MIN = 0.25; RUN_MAX = 1.5; BAR = 0.70
+HERE = os.path.dirname(os.path.abspath(__file__))
+ACCESS = json.load(open(os.path.join(HERE, "access_sources.json")))["regions"]     # rule 2: local access source per region
+GRIDS = json.load(open(os.path.join(HERE, "beta_grids.json")))["regions"]          # rule 4: resort/town-centre grids
+REPORTS = json.load(open(os.path.join(HERE, "road_reports.json")))["reports"]      # rule 5: shop/user reports
+GRID_HW = {"residential", "unclassified", "living_street"}
+COUNTY = re.compile(r"\b(CR|County (Road|Highway|Hwy|Rd))\b|^C-?\d", re.I)
+def in_bb(p, bb): return bb[0] <= p[1] <= bb[2] and bb[1] <= p[0] <= bb[3]
 BIG = ["sd", "ocoast", "suncity", "coachella", "villages", "myrtle", "naples"]
 def km(g): return sum(math.hypot((g[i][1]-g[i-1][1])*110.574, (g[i][0]-g[i-1][0])*111.32*math.cos(math.radians(g[i][1]))) for i in range(1, len(g)))
 def mph_of(v):
@@ -27,8 +35,8 @@ def tier(t):
     if "fdot" in src or "dot" in src: return "dot_gis"
     return "explicit_nosource"
 def osm_files(r):
-    return sorted(glob.glob(f"{ROOT}/cache/v2_tile*.json") + glob.glob(f"{ROOT}/cache/tile[0-9]*.json")) if r == "sd" else [f"{ROOT}/cache/{r}_osm.json"]
-SIG = collections.Counter(); AGREE = collections.defaultdict(lambda: [0, 0]); out = []; corr_all = {}
+    return sorted(glob.glob(f"{CACHE}/v2_tile*.json") + glob.glob(f"{CACHE}/tile[0-9]*.json")) if r == "sd" else [f"{CACHE}/{r}_osm.json"]
+CHECK = {}; DUMPED = {}; SIG = collections.Counter(); AGREE = collections.defaultdict(lambda: [0, 0]); out = []; corr_all = {}
 for d in sorted(glob.glob(f"{ROOT}/public/data/*/index.json")):
     r = d.split("/")[-2]; names = json.load(open(d))["names"]
     # --- OSM tags by point
@@ -42,21 +50,26 @@ for d in sorted(glob.glob(f"{ROOT}/public/data/*/index.json")):
             for k in ("version", "timestamp"): SIG[k] += k in el
             for k in ("source:maxspeed", "maxspeed:type"): SIG[k] += k in t
             for p in el.get("geometry") or []: pt[(round(p["lon"], 5), round(p["lat"], 5))].add(el["id"])
-    segs = {}
+    segs = {}; nodenames = collections.defaultdict(set)
     for f in glob.glob(f"{ROOT}/public/data/{r}/tiles/*.json"):
         for s in json.load(open(f)):
+            nodenames[s[5]].add(names[s[0]]); nodenames[s[6]].add(names[s[0]])
             hw = s[1].replace("_link", "")
-            if not (hw in IMP or (hw == "trunk" and s[2] <= 35)): continue
+            mid = s[7][len(s[7])//2]
+            grid = next((gname for gname, bb in GRIDS.get(r, {}).items() if in_bb(mid, bb)), None) if s[1] in GRID_HW and r in ACCESS else None
+            if not (hw in IMP or (hw == "trunk" and s[2] <= 35) or grid): continue
             k = (min(s[5], s[6]), max(s[5], s[6]))
             if k in segs: continue
             src = len(s) > 8 and s[8] >= 0
-            ok = s[3] in ("v", "m") or (s[3] == "d" and src)
+            ok = s[3] in ("v", "m", "o") or (s[3] == "d" and src)   # o = trusted OSM (scripts/trusted_osm.py, Max OK 2026-10-22)
             ws = pt.get(tuple(s[7][0]), set()) & pt.get(tuple(s[7][-1]), set())
             w = next((x for x in ws if (tags[x].get("name") or tags[x].get("ref") or "") == names[s[0]]), next(iter(ws), None))
             t = tags.get(w, {}) if w else {}
-            segs[k] = dict(nm=names[s[0]], hw=s[1], mph=s[2], code=s[3], ban=s[4] == 1, a=s[5], b=s[6], L=km(s[7])*MI, ok=ok,
-                           tier=(tier(t) if w else ("unmatched" if have_osm else "no_extract")), osm=mph_of(t.get("maxspeed")) if w else None)
-    S = list(segs.values()); L = sum(x["L"] for x in S) or 1e-9
+            segs[k] = dict(nm=names[s[0]], hw=s[1], mph=s[2], code=s[3], ban=(len(s) > 9 and s[9] == 1) or (s[3] == "v" and s[2] >= 99), grid=grid, a=s[5], b=s[6], L=km(s[7])*MI, ok=ok,
+                           tier=(tier(t) if w else ("unmatched" if have_osm else "no_extract")), osm=mph_of(t.get("maxspeed")) if w else None, way=w, g=s[7])
+    S = list(segs.values())
+    BANS = [x for x in S if x["ban"]]   # rule 3: banned stretches are scored on their own and are not in the 70%
+    L = sum(x["L"] for x in S if not x["ban"]) or 1e-9
     byn = collections.defaultdict(list)
     for x in S: byn[(x["a"], x["nm"])].append(x); byn[(x["b"], x["nm"])].append(x)
     def nbrs(x): return [y for n in (x["a"], x["b"]) for y in byn[(n, x["nm"])] if y is not x]
@@ -94,11 +107,11 @@ for d in sorted(glob.glob(f"{ROOT}/public/data/*/index.json")):
         if rule == "sign": return x["tier"] == "sign_survey"
         if rule == "nbr": return (x["osm"] in [y["mph"] for y in nbrs(x) if y["ok"] and y["mph"] < 99])
         return False
-    Ls = sum(x["L"] for x in S if x["ok"]); Li = Ls + sum(x["L"] for x in S if id(x) in inf)
+    Ls = sum(x["L"] for x in S if x["ok"] and not x["ban"]); Li = Ls + sum(x["L"] for x in S if id(x) in inf and not x["ban"])
     row = dict(r=r, L=L, s=Ls/L, si=Li/L, flagged=flagged, have=have_osm)
     for rule in ("none", "sign", "nbr"):
-        cov = lambda x: x["ok"] or id(x) in inf or trusted(x, rule)
-        row["st_" + rule] = sum(x["L"] for x in S if cov(x))/L
+        cov = lambda x: x["ban"] or x["ok"] or id(x) in inf or trusted(x, rule)   # bans never become corridors (scored apart)
+        row["st_" + rule] = sum(x["L"] for x in S if cov(x) and not x["ban"])/L
         # corridors over uncovered segments, split on mph/class change
         cs, sn = [], set()
         for x in S:
@@ -109,17 +122,61 @@ for d in sorted(glob.glob(f"{ROOT}/public/data/*/index.json")):
                 for y in nbrs(c) if c["nm"] else []:
                     if not cov(y) and id(y) not in sn and y["mph"] == c["mph"] and y["hw"].replace("_link","") == c["hw"].replace("_link",""):
                         sn.add(id(y)); st.append(y)
-            cs.append((sum(c["L"] for c in comp), comp[0]["nm"] or "(unnamed)", comp[0]["mph"], comp[0]["hw"], collections.Counter(c["tier"] for c in comp).most_common(1)[0][0]))
-        cs.sort(reverse=True); need = max(0.0, BAR*L - row["st_" + rule]*L); acc = 0; n = 0
+            cs.append((sum(c["L"] for c in comp), comp[0]["nm"] or "(unnamed)", comp[0]["mph"], comp[0]["hw"], collections.Counter(c["tier"] for c in comp).most_common(1)[0][0], comp))
+        # rule 1, conflict-first: a corridor whose road is posted differently right next to it by a real source
+        cs = [c + (any(y["ok"] and not y["ban"] and y["mph"] < 99 and y["mph"] != c[2] for z in c[5] for y in nbrs(z)),) for c in cs]
+        cs.sort(key=lambda c: -c[0]); need = max(0.0, BAR*L - row["st_" + rule]*L); acc = 0; n = 0
         for c in cs:
             if acc >= need or c[0] < CORR_MIN: break
             acc += c[0]; n += 1
         row["c_" + rule] = (n, acc, need, acc + 1e-9 >= need, len([c for c in cs if c[0] >= CORR_MIN]), sum(c[0] for c in cs if c[0] >= CORR_MIN))
-        if rule in ("none", "nbr"): corr_all[(r, rule)] = cs
+        if rule in ("none", "nbr"): corr_all[(r, rule)] = [c[:5] for c in cs]
+        if rule == "none":
+            pick = cs[:n]
+            # sourced pieces that still render red (> 35, not banned) between pieces of the same road posted <= 35
+            sred = []
+            for x in S:
+                if x["ok"] and not x["ban"] and 35 < x["mph"] < 99:
+                    nb = [y for y in nbrs(x) if y["mph"] <= 35 and not y["ban"]]
+                    if len({id(y) for y in nb}) >= 2: sred.append((x["L"], x["nm"] or "(unnamed)", x["mph"], x["hw"], "sourced_red", [x], True))
+            conf = [c for c in cs if c[6] and c[0] >= CORR_MIN / 5]
+            # rule 5: every shop/user report is a corridor to re-check, plus similar roads in the region
+            rep = []
+            for q in [q for q in REPORTS if q["region"] == r]:
+                P = [q["lon"], q["lat"]]
+                near = min(S, key=lambda x: min(math.hypot((p[0]-P[0])*math.cos(math.radians(P[1])), p[1]-P[1]) for p in x["g"]), default=None)
+                if near is None: continue
+                same = [c for c in cs if any(z is near for z in c[5])]
+                cor = same[0] if same else (near["L"], near["nm"] or "(unnamed)", near["mph"], near["hw"], near["tier"], [near], False)
+                similar = [c for c in cs if c is not cor and c[3] == cor[3] and c[2] == cor[2] and c[0] >= CORR_MIN][:10]
+                rep.append(dict(report=q, corridor=dict(name=cor[1], mi=round(cor[0], 2), mph=cor[2]), similar=[dict(name=c[1], mi=round(c[0], 2)) for c in similar]))
+            CHECK[r] = dict(reports=rep, conflicts=[dict(name=c[1], mi=round(c[0], 2), mph=c[2], kind=c[4] if c[4] == "sourced_red" else "neighbour_disagrees") for c in sorted(sred + conf, key=lambda c: -c[0])[:40]],
+                            gap=[dict(name=c[1], mi=round(c[0], 2), mph=c[2], conflict=c[6]) for c in sorted(pick, key=lambda c: (not c[6], -c[0]))])
+            row["n_conf"] = len(sred) + len(conf)
+        if rule == "none" and r in os.environ.get("DUMP", "").split(","):
+            DUMPED[r] = [dict(L=c[0], nm=c[1], mph=c[2], hw=c[3], tier=c[4], segs=[{k: v for k, v in y.items() if k in ("a", "b", "g", "osm", "way", "code", "L")} for y in c[5]],
+                              cross={n: sorted(nodenames[n] - {c[1], ""}) for y in c[5] for n in (y["a"], y["b"])}) for c in cs[:n]]
+    row["ban_mi"] = sum(x["L"] for x in BANS); row["ban_src_mi"] = sum(x["L"] for x in BANS if x["ok"])
+    row["grid_mi"] = sum(x["L"] for x in S if x["grid"]); row["county_assumed_mi"] = sum(x["L"] for x in S if x["code"] == "i" and COUNTY.search(x["nm"] or ""))
+    row["assumed_mi"] = sum(x["L"] for x in S if x["code"] == "i" and not x["ban"])
     gap = collections.Counter()
     for x in S:
         if not (x["ok"] or id(x) in inf): gap[x["tier"]] += x["L"]
     row["gap"] = gap; out.append(row)
+# Official beta bar (Max, 2026-10-22): >= 70% of important MILES backed by a real source. Corridors >= 0.25 mi are the to-do list.
+STATUS = {}
+for x in out:
+    miss = ([] if x["s"] >= BAR else [f"miles {100*x['s']:.1f}% < 70%"]) + ([] if x["r"] in ACCESS else ["no local access source recorded"])
+    STATUS[x["r"]] = dict(important_mi=round(x["L"], 1), sourced_pct=round(100*x["s"], 1), access_source=x["r"] in ACCESS,
+                          passes=not miss, missing=miss, corridors_to_70=x["c_none"][0], corridor_mi_to_70=round(x["c_none"][1], 1),
+                          conflicts=x["n_conf"], ban_mi=round(x["ban_mi"], 1), ban_sourced_mi=round(x["ban_src_mi"], 1),
+                          grid_mi=round(x["grid_mi"], 1), county_assumed_mi=round(x["county_assumed_mi"], 1), assumed_mi=round(x["assumed_mi"], 1),
+                          reports=len(CHECK.get(x["r"], {}).get("reports", [])))
+json.dump(CHECK, open(os.path.join(HERE, "beta_check_list.json"), "w"), indent=1)
+if not os.environ.get("NO_STATUS"):
+    json.dump(dict(rule="pass = important miles (bans excluded) sourced by v/m/d+source >= 70% AND a local access source recorded; resort grids included when an access source exists; corridors >= 0.25 mi, conflicts and reports checked first; sd exempt (never beta)", regions=STATUS),
+              open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "beta_status.json"), "w"), indent=1, sort_keys=True)
+if DUMPED: json.dump(DUMPED, open("/tmp/bg2_dump.json", "w"))
 json.dump(dict(rows=[{**r, "gap": dict(r["gap"])} for r in out], agree={k: v for k, v in AGREE.items()}, signals=dict(SIG),
                corridors={f"{k[0]}|{k[1]}": v[:15] for k, v in corr_all.items() if k[0] in BIG}), open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "beta_exit_gap_v2_2026-10-22.json"), "w"))
 print("signals present (count of ways carrying them):", dict(SIG))
