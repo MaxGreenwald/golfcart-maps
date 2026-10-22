@@ -1,0 +1,80 @@
+{
+ "slug": "peachtree-city",
+ "region": "peachtreecity",
+ "name": "Peachtree City",
+ "state": "GA",
+ "question_title": "Can you drive a golf cart in Peachtree City?",
+ "answer_short": "Yes. Golf carts use the Peachtree City multi-use path network. The city ordinance bars carts from Hwy 74, Hwy 54, Peachtree Parkway and Crosstown Rd between Peachtree Parkway and Hwy 74, except at crossings. Street-legal LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Multi-use paths and city streets the ordinance allows",
+  "speed_line": "n/a",
+  "notes": "Not on Hwy 74, Hwy 54 or Peachtree Pkwy"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Georgia LSV law"
+ },
+ "rules": [
+  {
+   "topic": "Barred roads",
+   "rule": "Carts barred from Hwy 74, Hwy 54, Peachtree Pkwy and Crosstown Rd (Peachtree Pkwy to Hwy 74) except to cross",
+   "citation": "Peachtree City cart ordinance",
+   "source_url": "https://mcclibraryfunctions-stage.azurewebsites.us/api/ordinanceDownload/11414/1250481/pdf"
+  },
+  {
+   "topic": "Paths",
+   "rule": "Golf carts use the city's multi-use path network",
+   "citation": "Peachtree City: Paths and motorized carts",
+   "source_url": "https://peachtree-city.org/navigateptc"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Hwy 74 (Joel Cowan Pkwy)",
+   "rule": "Carts barred except at crossings",
+   "crossings_ok": true
+  },
+  {
+   "name": "Hwy 54",
+   "rule": "Carts barred except at crossings",
+   "crossings_ok": true
+  },
+  {
+   "name": "Peachtree Parkway / N Peachtree Parkway",
+   "rule": "Carts barred except at crossings",
+   "crossings_ok": true
+  },
+  {
+   "name": "Crosstown Rd (Peachtree Pkwy to Hwy 74)",
+   "rule": "Carts barred except at crossings",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive a golf cart on Peachtree Parkway?",
+   "a": "No. The city ordinance bars carts from Peachtree Parkway except to cross it."
+  },
+  {
+   "q": "Where can golf carts go in Peachtree City?",
+   "a": "On the city's multi-use path network and the streets the ordinance allows, crossing the big highways at the path tunnels and bridges."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  33.397,
+  -84.596
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://mcclibraryfunctions-stage.azurewebsites.us/api/ordinanceDownload/11414/1250481/pdf",
+  "https://peachtree-city.org/navigateptc"
+ ]
+}

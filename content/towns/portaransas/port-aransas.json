@@ -1,0 +1,79 @@
+{
+ "slug": "port-aransas",
+ "region": "portaransas",
+ "name": "Port Aransas",
+ "state": "TX",
+ "question_title": "Can you drive a golf cart in Port Aransas?",
+ "answer_short": "Yes, with a city golf cart plate. In Port Aransas, a licensed, insured golf cart with lights, reflectors, seat belts and a slow-moving vehicle emblem may use city streets. Carts are prohibited on Hwy 361 south of Avenue G. ATVs and UTVs are not allowed.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "City streets with a city golf cart plate",
+  "speed_line": "n/a",
+  "notes": "Plate renews every Jan 1"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 45 mph or less under state law; the map plans on 35 mph or less",
+  "speed_line": "45 mph",
+  "notes": "State-registered LSV/NEV (Tex. Transp. Code 551.304)"
+ },
+ "rules": [
+  {
+   "topic": "Golf cart plate",
+   "rule": "City golf cart license and plate required on public streets; renews each calendar year",
+   "citation": "Port Aransas Golf Cart Ordinance Art. VIII",
+   "source_url": "https://cityofportaransas.org/golf-cart-information-and-regulations/"
+  },
+  {
+   "topic": "Equipment",
+   "rule": "Head lamps, tail lamps, reflectors, seat belts, SMV emblem, parking brake, mirror; no engine mods",
+   "citation": "Port Aransas golf cart regulations",
+   "source_url": "https://cityofportaransas.org/golf-cart-information-and-regulations/"
+  },
+  {
+   "topic": "Hwy 361",
+   "rule": "Carts prohibited on Hwy 361 south of Avenue G",
+   "citation": "Port Aransas: Golf Cart Laws Strictly Enforced",
+   "source_url": "https://cityofportaransas.org/wp-content/uploads/2026/02/Golf-Cart-Laws-Strictly-Enforced.pdf"
+  },
+  {
+   "topic": "ATVs",
+   "rule": "ATVs and UTVs are not golf carts and are not allowed in city limits, including the beach",
+   "citation": "Port Aransas golf cart regulations",
+   "source_url": "https://cityofportaransas.org/golf-cart-information-and-regulations/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Hwy 361 south of Avenue G",
+   "rule": "Carts prohibited",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "How much is a Port Aransas golf cart plate?",
+   "a": "$50 a year for year-round residents and $100 for non-residents; plates expire December 31."
+  },
+  {
+   "q": "Can I drive a UTV or ATV in Port Aransas?",
+   "a": "No. The city says ATVs and UTVs are not golf carts and are not allowed anywhere in city limits, including the beach."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "mustang-island"
+ ],
+ "map_center": [
+  27.834,
+  -97.061
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://cityofportaransas.org/golf-cart-information-and-regulations/",
+  "https://cityofportaransas.org/wp-content/uploads/2026/02/Golf-Cart-Laws-Strictly-Enforced.pdf"
+ ]
+}

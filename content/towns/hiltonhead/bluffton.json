@@ -1,0 +1,95 @@
+{
+ "slug": "bluffton",
+ "region": "hiltonhead",
+ "name": "Bluffton",
+ "state": "SC",
+ "question_title": "Can you drive a golf cart in Bluffton?",
+ "answer_short": "Yes, with limits. In Bluffton, a permitted, insured golf cart may use secondary roads posted 35 mph or less, in daylight, within 4 miles of its registration address. Street-legal LSVs may use roads posted 35 mph or less. Carts stay off US 278 and the Cross Island Parkway.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Secondary roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Daylight, within 4 mi of registration, SCDMV permit and insurance"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured like a car"
+ },
+ "rules": [
+  {
+   "topic": "Golf cart roads",
+   "rule": "Secondary highway or street posted 35 mph or less",
+   "citation": "S.C. golf cart law (SCDPS)",
+   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+  },
+  {
+   "topic": "Distance",
+   "rule": "Within 4 miles of the registration address (or a gated community entrance)",
+   "citation": "S.C. golf cart law (SCDPS)",
+   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+  },
+  {
+   "topic": "Hours",
+   "rule": "Daylight only, unless a local ordinance says otherwise",
+   "citation": "S.C. Code 56-2-90 (SCDPS)",
+   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+  },
+  {
+   "topic": "Driver and permit",
+   "rule": "Driver 16+ with a license; cart permitted, registered with SCDMV and insured",
+   "citation": "S.C. golf cart law (SCDPS)",
+   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 278 (William Hilton Pkwy, Fording Island Rd)",
+   "rule": "Primary road; carts not allowed",
+   "crossings_ok": true
+  },
+  {
+   "name": "Cross Island Parkway",
+   "rule": "Primary road; carts not allowed",
+   "crossings_ok": false
+  },
+  {
+   "name": "SC 46",
+   "rule": "Primary road; carts not allowed",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive a golf cart at night in Bluffton?",
+   "a": "Not under the state default. South Carolina allows golf carts on public roads in daylight only unless a local ordinance sets other hours."
+  },
+  {
+   "q": "How far can I drive a golf cart from home?",
+   "a": "Within 4 miles of the address on the cart's SCDMV registration, or of a gated community entrance if you live inside one."
+  },
+  {
+   "q": "Can I drive a golf cart on US 278?",
+   "a": "No. US 278 is a primary road, and South Carolina only allows golf carts on secondary roads posted 35 mph or less."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "hilton-head-island",
+  "north-forest-beach",
+  "south-forest-beach"
+ ],
+ "map_center": [
+  32.237,
+  -80.86
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "https://hiltonheadislandsc.gov/news/news.cfm?NewsID=3193"
+ ]
+}

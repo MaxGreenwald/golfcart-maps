@@ -18,7 +18,7 @@ def town_page(t, reg, path, noindex=False):
     rslug, n = t["region"], t["name"]
     url = f"/{rslug}/{t['slug']}"
     lat, lon = t["map_center"]
-    mapurl = f"/map?r={reg['id']}&lat={lat}&lon={lon}&z={t['zoom']}"
+    mapurl = f"/map/{rslug}?lat={lat}&lon={lon}&z={t['zoom']}"
     faq = [(f["q"], f["a"]) for f in t["faq"]]
     veh = lambda lab, v: f"<tr><th scope=row>{lab}</th><td>{e(v.get('allowed',''))}</td><td>{e(v.get('roads',''))}</td><td>{e(v.get('speed_line',''))}</td><td>{e(v.get('notes',''))}</td></tr>"
     rules = "".join(f"<tr><td>{e(r['topic'])}</td><td>{e(r['rule'])}</td><td><a href=\"{e(r['source_url'])}\" rel=nofollow>{e(r['citation'])}</a></td></tr>" for r in t["rules"])
@@ -28,7 +28,7 @@ def town_page(t, reg, path, noindex=False):
     body = f"""<nav aria-label="Breadcrumb" class="muted"><a href="/">Home</a> › <a href="/{rslug}">{e(reg['name'])}</a> › {e(n)}</nav>
 <h1>{e(t['question_title'])}</h1>
 <p>{e(t['answer_short'])}</p>
-<p class="muted">Rules last checked {e(t['last_checked'])}{(' by ' + e(t['checked_by'])) if t.get('checked_by') else ''}. Published {e(t['published'])}.</p>
+<p class="muted checked">Rules last checked {e(t['last_checked'])}{(' by ' + e(t['checked_by'])) if t.get('checked_by') else ''}. Published {e(t['published'])}.</p>
 <table><thead><tr><th>Vehicle</th><th>Allowed</th><th>Roads</th><th>Speed</th><th>Notes</th></tr></thead><tbody>{veh('Golf cart', t['golf_cart'])}{veh('Street-legal LSV', t['lsv'])}</tbody></table>
 <h2>The rules</h2><table><thead><tr><th>Topic</th><th>Rule</th><th>Law</th></tr></thead><tbody>{rules}</tbody></table>
 {('<h2>Roads to avoid</h2><ul>' + banned + '</ul>') if banned else ''}

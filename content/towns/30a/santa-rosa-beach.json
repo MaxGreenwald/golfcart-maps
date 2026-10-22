@@ -1,0 +1,116 @@
+{
+ "slug": "santa-rosa-beach",
+ "region": "30a",
+ "name": "Santa Rosa Beach",
+ "state": "FL",
+ "question_title": "Can I drive a golf cart in Santa Rosa Beach?",
+ "answer_short": "In Santa Rosa Beach, street-legal LSVs yes; regular golf carts no. The Walton County Sheriff says golf carts are not permitted on any public road. Registered LSVs may use roads posted 35 mph or less, but not US 98 or the roads marked red on the sheriff's LSV map.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not on any public road",
+  "speed_line": "n/a",
+  "notes": "Walton County Sheriff"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less, except red roads on the sheriff's map",
+  "speed_line": "35 mph",
+  "notes": "Cross US 98 only at a four-way intersection"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts are not legally permitted on any public roadway at any time",
+   "citation": "Walton County Sheriff LSV laws",
+   "source_url": "https://waltonso.org/lsv/"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "LSVs only on roads with speed limits of 35 mph or less; not on sidewalks or bike paths",
+   "citation": "Walton County Sheriff LSV laws",
+   "source_url": "https://waltonso.org/lsv/"
+  },
+  {
+   "topic": "US 98",
+   "rule": "No LSVs on US 98 or its sidewalk; cross only at a four-way intersection",
+   "citation": "Walton County Sheriff LSV laws",
+   "source_url": "https://waltonso.org/lsv/"
+  },
+  {
+   "topic": "LSV equipment",
+   "rule": "Registered, tagged LSV with a VIN, seat belts, lights and mirrors; licensed driver",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2026/316.2122"
+  },
+  {
+   "topic": "Safety sticker",
+   "rule": "LSVs on county-jurisdiction roads must display the county LSV safety sticker",
+   "citation": "Walton County Sheriff LSV laws",
+   "source_url": "https://waltonso.org/lsv/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 98",
+   "rule": "No LSVs; cross only at a four-way intersection",
+   "crossings_ok": true
+  },
+  {
+   "name": "CR 283 (US 98 to the bay and south to 30A)",
+   "rule": "Red on the sheriff's LSV map",
+   "crossings_ok": false
+  },
+  {
+   "name": "CR 395 north of the Point Washington fire station",
+   "rule": "Red on the sheriff's LSV map",
+   "crossings_ok": false
+  },
+  {
+   "name": "CR 83 from Chat Holley Rd south past US 98",
+   "rule": "Red on the sheriff's LSV map",
+   "crossings_ok": false
+  },
+  {
+   "name": "Alys Beach, Seacrest Beach and Rosemary Beach town streets (about 70)",
+   "rule": "Red on the sheriff's LSV map",
+   "crossings_ok": false
+  },
+  {
+   "name": "Seaside town-center streets (12)",
+   "rule": "Red on the sheriff's LSV map",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive a regular golf cart on 30A?",
+   "a": "No. The Walton County Sheriff says golf carts are not legally permitted on any public roadway. Only registered, tagged LSVs may use 30A."
+  },
+  {
+   "q": "Can an LSV drive on 30A itself?",
+   "a": "Yes. 30A is not red on the sheriff's LSV map, so registered LSVs may use it. US 98 is off limits except to cross at a four-way intersection."
+  },
+  {
+   "q": "Where do I get the LSV safety sticker?",
+   "a": "The Walton County Sheriff's Office hands it out at its Santa Rosa Beach administration office, 133 Sheriff Drive, weekdays 8 am to 5 pm."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "dune-allen-beach",
+  "blue-mountain-beach",
+  "sandestin"
+ ],
+ "map_center": [
+  30.372,
+  -86.228
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://waltonso.org/lsv/",
+  "https://waltonso.org/wp-content/uploads/2022/10/lsv_map_102022.png"
+ ]
+}

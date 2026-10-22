@@ -1,0 +1,92 @@
+{
+ "slug": "orange-beach",
+ "region": "gulfshores",
+ "name": "Orange Beach",
+ "state": "AL",
+ "question_title": "Can you drive a golf cart in Orange Beach?",
+ "answer_short": "Yes, on low-speed streets. In Orange Beach, state-tagged golf carts and LSVs may only use streets posted 25 mph or less, and not the state highways (AL 59, 180, 182 and 161). Posted signs win.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Streets posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "State tag required"
+ },
+ "lsv": {
+  "allowed": "limited",
+  "roads": "Streets posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Local cap is lower than the usual 35"
+ },
+ "rules": [
+  {
+   "topic": "Speed cap",
+   "rule": "Carts and LSVs not on streets posted over 25 mph",
+   "citation": "Gulf Shores Sec. 21-13 (Apr 13 2026)",
+   "source_url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"
+  },
+  {
+   "topic": "Designated streets",
+   "rule": "City list of designated cart streets",
+   "citation": "Gulf Shores designated cart streets",
+   "source_url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15531?fileID=45381"
+  },
+  {
+   "topic": "Orange Beach",
+   "rule": "Orange Beach cart ordinance (designated streets, 25 mph cap)",
+   "citation": "Orange Beach Ord. 2025-1521",
+   "source_url": "https://library.municode.com/al/orange_beach/ordinances/code_of_ordinances?nodeId=2025"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "AL 59",
+   "rule": "State highway",
+   "crossings_ok": true
+  },
+  {
+   "name": "AL 180 (Fort Morgan Rd / Canal Rd)",
+   "rule": "State highway",
+   "crossings_ok": true
+  },
+  {
+   "name": "AL 182 (Beach Blvd / Perdido Beach Blvd)",
+   "rule": "State highway",
+   "crossings_ok": true
+  },
+  {
+   "name": "AL 161",
+   "rule": "State highway",
+   "crossings_ok": true
+  },
+  {
+   "name": "Foley Beach Express",
+   "rule": "Not a cart street",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive a golf cart on Beach Blvd?",
+   "a": "No. Beach Blvd is AL 182, a state highway, and carts and LSVs are limited to streets posted 25 mph or less."
+  },
+  {
+   "q": "Does an LSV get more roads than a golf cart in Orange Beach?",
+   "a": "Not here. The local rule caps both at streets posted 25 mph or less."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "gulf-shores"
+ ],
+ "map_center": [
+  30.27,
+  -87.586
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"
+ ]
+}
