@@ -4,6 +4,8 @@ classify them for golf cart (<=25 mph) and LSV (<=35 mph) use.
 Output: public/data/roads.json (compact) + gzip. Stdlib only."""
 import json, re, time, urllib.request, urllib.parse, gzip, os, math, sys
 sys.path.insert(0, os.path.dirname(__file__)); import overrides, mapillary_signs
+import trusted_osm as _TO
+EXPL = []
 S, W, N, E = 32.53, -117.42, 33.30, -116.95
 TILES_LAT, TILES_LON = 6, 3
 PREFIX = "v2_tile"
@@ -213,6 +215,7 @@ for wi, w in enumerate(wl):
         ow = 1 if t.get("oneway") in ("yes", "1") else (-1 if t.get("oneway") == "-1" else 0)
         if t.get("junction") == "roundabout" and ow == 0: ow = 1
         WOUT[wi].append(len(out))
+        if src[0] == "t" and _TO.explicit(t): EXPL.append(len(out))
         out.append([nidx[nm], t["highway"], s, src[0], ow, nid(nodes[sg[0]]), nid(nodes[sg[-1]]), pts] + ([si] if si >= 0 else []))
 # Roundabouts with no limit of their own take the highest posted limit of their connecting roads (see build_data_lib).
 # Same-road islands first (scripts/islands.py), so roundabouts/turn lanes next to a healed piece see its limit; again at the end.
@@ -278,7 +281,9 @@ if VER:
 os.makedirs(os.path.join(os.path.dirname(__file__), "..", "research"), exist_ok=True)
 json.dump({"stats": mst, "changes": conf}, open(os.path.join(os.path.dirname(__file__), "..", "research", "mapillary_report.json"), "w"), indent=1)
 total = sum(stats.values())
-meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": total, "segments": len(out), "stats": stats, "poly": POLY}
+# ---- Trusted OSM (scripts/trusted_osm.py): relabel 't' -> 'o' where the tag matches an adjacent real source. Speed unchanged. ----
+_TON = _TO.mark(out, EXPL); print("trusted OSM ('o') segments", _TON)
+meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": total, "trusted_osm": _TON, "segments": len(out), "stats": stats, "poly": POLY}
 meta["stats"] = {**stats, **_HS}
 os.makedirs(OUT, exist_ok=True)
 TS = 0.1  # output tile size (degrees); segment goes to tile of its first point

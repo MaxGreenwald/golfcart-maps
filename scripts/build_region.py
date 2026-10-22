@@ -8,6 +8,8 @@ import json, os, sys, math, gzip, time, re
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, "..")
 sys.path.insert(0, HERE)
 import mapillary_signs as M
+import trusted_osm as _TO
+EXPL = []
 from build_data_lib import mph, simplify, classify
 RID = sys.argv[1]
 REG = next(r for r in json.load(open(os.path.join(ROOT, "public/data/regions.json"))) if r["id"] == RID)
@@ -272,6 +274,7 @@ for wi, w in enumerate(wl):
             o2 = speed_name(t, g[sg[len(sg)//2]])
             if o2: ss, ssi = o2["mph"], src_i(o2["url"], o2["label"])
         WOUT[wi].append(len(out))
+        if scode == "t" and _TO.explicit(t): EXPL.append(len(out))
         out.append([nidx[nm], hw, ss, scode, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([ssi, sflag] if sflag else [ssi] if ssi >= 0 else []))
 # ---- Roundabouts: OSM rarely tags maxspeed on the ring itself, so an untagged major-class ring (secondary etc.)
 # fell to 99 "inferred_high" and showed red even when every approach is posted <=35. A ring with no limit of its own
@@ -309,6 +312,8 @@ _HEAL = _HEAL0 + _ISL.heal(out, names, sources)
 stats["same_road_gap"] = sum(c["code"] == "n" for c in _HEAL); stats["same_road_disagree"] = sum(c["code"] == "q" for c in _HEAL)
 for c in _HEAL: print("  same-road island healed:", c)
 print("street view signs applied", len(SV_APPLIED), "of", len(SVS), "conflicts kept official", SV_CONFLICT)
+# ---- Trusted OSM (scripts/trusted_osm.py): relabel 't' -> 'o' where the tag matches an adjacent real source. Speed unchanged. ----
+stats["trusted_osm"] = _TO.mark(out, EXPL); print("trusted OSM ('o') segments", stats["trusted_osm"])
 POLY = CFG.get("poly") or [[W, N], [E, N], [E, S], [W, S]]
 meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": len(wl), "segments": len(out), "stats": stats, "poly": POLY, "region": RID, "unverified": CFG.get("unverified", []), "changes": CHG, "dot_conflicts": CONF, "xnodes": sorted(nids[n] for n in XN if n in nids), "crossings": XING}
 TS = 0.1; tiles = {}

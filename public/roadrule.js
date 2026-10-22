@@ -22,7 +22,7 @@ const desig=(s,R)=>s[3]==='c'||s[3]==='d'||!!(R.assume&&R.assume.includes(s[1])&
 // 'n'/'q' (scripts/islands.py): short same-road piece that takes the limit posted on both sides ('q' = sources disagree; app warns).
 function cls(s,R,lenient){if(s[3]==='c')return 0;if(R.not_street_legal)return 3;if(s[9]===1&&/^(motorway|trunk|primary)/.test(s[1]))return 3;
   if(s[2]==null||(s[2]>R.max_posted&&!(lenient&&s[2]===99)))return 3;if(R.designated_only&&!desig(s,R))return 3;
-  return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'||s[3]==='r'||s[3]==='k'||s[3]==='n'||s[3]==='q'?0:1}
+  return s[3]==='t'||s[3]==='o'||s[3]==='v'||s[3]==='m'||s[3]==='d'||s[3]==='r'||s[3]==='k'||s[3]==='n'||s[3]==='q'?0:1}
 const nextBand=m=>m%5?m+1:m+(m===25?1:5);
 // why a segment is forbidden for this vehicle (popup text); '' when allowed
 // src: the segment's source entry [url,label] (D.sources[s[8]]); a ban taken from a sheriff's LSV map names that map instead of the generic speed text.
