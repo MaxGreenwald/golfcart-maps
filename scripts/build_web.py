@@ -25,7 +25,7 @@ def _entry_path(url):
     """'./' and '' are the start page, which the server answers with index.html."""
     u = url[2:] if url.startswith("./") else url
     u = u.lstrip("/")
-    return u or "index.html"
+    return "index.html" if u in ("", "map") else u   # public/index.html is the map; dist serves it at /map
 
 
 def cache_name(read):
@@ -66,7 +66,10 @@ def stamp(sw_txt, name):
     return sw_txt.replace(PLACEHOLDER, name, 1)
 
 
-def build(src=os.path.join(ROOT, "public"), out=os.path.join(ROOT, "dist")):
+def build(src=os.path.join(ROOT, "public"), out=os.path.join(ROOT, "dist"), native=None):
+    """Web: dist/index.html = landing page, dist/map.html = the map (served at /map).
+    Native (--native or GCM_NATIVE=1, for the Capacitor iOS/Android webDir): dist/index.html stays the map, no landing page."""
+    if native is None: native = os.environ.get("GCM_NATIVE") == "1"
     name = cache_name(read_dir(src))
     if os.path.exists(out):
         shutil.rmtree(out)
@@ -74,6 +77,10 @@ def build(src=os.path.join(ROOT, "public"), out=os.path.join(ROOT, "dist")):
     swp = os.path.join(out, "sw.js")
     txt = open(swp, encoding="utf-8").read()
     open(swp, "w", encoding="utf-8").write(stamp(txt, name))
+    if not native:
+        shutil.copyfile(os.path.join(out, "index.html"), os.path.join(out, "map.html"))
+        import seo_landing
+        open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(seo_landing.render())
     return name
 
 
@@ -83,7 +90,7 @@ def main(a):
     elif "--name" in a:
         print(cache_name(read_dir(os.path.join(ROOT, "public"))))
     else:
-        print("built dist/ cache", build())
+        print("built dist/ cache", build(native=True if "--native" in a else None), "(native: map is index.html)" if "--native" in a or os.environ.get("GCM_NATIVE") == "1" else "")
     return 0
 
 

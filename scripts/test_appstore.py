@@ -55,7 +55,7 @@ with sync_playwright() as p:
     check('iOS: Share button visible after route', vis(pg, '#share'))
     pg.click('#share'); pg.wait_for_timeout(300)
     sh = [o for k, o in pg.evaluate('__calls') if k == 'Share.share']
-    check('iOS: Share opens native share sheet with town link', sh and sh[0]['url'] == 'https://golfcartmap.com/villages' and 'min' in sh[0]['text'], str(sh[:1]))
+    check('iOS: Share opens native share sheet with town link', sh and sh[0]['url'] == 'https://golfcartmap.com/map/villages' and 'min' in sh[0]['text'], str(sh[:1]))
     c.close()
     # --- website: unchanged ---
     c = b.new_context(viewport={'width': 440, 'height': 956})

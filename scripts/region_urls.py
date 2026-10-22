@@ -26,7 +26,7 @@ def regions():
 
 
 def want(rs, cur):
-    red = "".join(f"/{r['slug']} / 200\n/{r['slug']}/ / 200\n" for r in rs)
+    red = "".join(f"/{r['slug']} /map 200\n/{r['slug']}/ /map 200\n" for r in rs) + "/map/ /map 301\n/map/:slug /map 200\n/map/:slug/ /map 200\n"   # old /<slug> links still open the map
     sm = cur["sitemap"]
     old = dict(re.findall(r"<loc>" + re.escape(SITE) + r"/([a-z0-9]+)</loc><lastmod>([^<]*)</lastmod>", sm))
     today = time.strftime("%Y-%m-%d")
