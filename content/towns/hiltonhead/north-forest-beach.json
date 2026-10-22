@@ -75,6 +75,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "South Carolina's Department of Public Safety lists the state golf cart rules: permit, 35 mph roads, daylight, 4 miles.",
+   "name": "South Carolina golf cart law checklist (SCDPS)",
+   "url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+  }
+ ],
  "nearby": [
   "bluffton",
   "south-forest-beach",

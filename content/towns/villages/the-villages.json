@@ -71,6 +71,18 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "The Villages' district government publishes the official golf car rules of the road.",
+   "name": "The Villages golf car rules of the road (District Government)",
+   "url": "https://www.districtgov.org/wp-content/uploads/2025/05/VCDD001-Golf-Car-Safety-Flyer-5.5x8.5-1224-1544944.pdf"
+  },
+  {
+   "lead": "Villages-News.com covers golf cart path changes and safety news in The Villages.",
+   "name": "Villages-News local news",
+   "url": "https://www.villages-news.com/"
+  }
+ ],
  "nearby": [
   "lady-lake",
   "wildwood"

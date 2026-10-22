@@ -49,6 +49,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "For local rules in Solana Beach, see the City of Solana Beach's official site.",
+   "name": "City of Solana Beach official website",
+   "url": "https://cityofsolanabeach.ca.gov/en"
+  }
+ ],
  "nearby": [
   "del-mar",
   "cardiff",

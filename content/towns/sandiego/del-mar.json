@@ -49,6 +49,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "For Del Mar's local traffic rules, see the City of Del Mar's official site.",
+   "name": "City of Del Mar official website",
+   "url": "https://www.delmar.ca.us/"
+  }
+ ],
  "nearby": [
   "la-jolla",
   "solana-beach",

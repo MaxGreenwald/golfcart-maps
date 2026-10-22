@@ -75,6 +75,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Every cart in Orange Beach needs a city permit and inspection; the city lists dates and requirements.",
+   "name": "Orange Beach golf cart permit and inspection rules",
+   "url": "https://orangebeachal.gov/295/Codes-Ordinances"
+  }
+ ],
  "nearby": [
   "gulf-shores"
  ],

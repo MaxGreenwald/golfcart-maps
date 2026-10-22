@@ -29,6 +29,16 @@ def faq_for(g, R):
     out.append((f"Is {BRAND} legal advice?", "No. It's a map to help you plan; always follow posted signs."))
     return out
 
+RES = os.path.join(ROOT, "content", "region_resources.json")
+
+def region_resources(slug, path=RES):
+    """Local resources for a region page: content/region_resources.json maps region slug -> [{lead, name, url}] (followed links)."""
+    return json.load(open(path, encoding="utf-8")).get(slug, []) if os.path.exists(path) else []
+
+def resources_html(items):
+    lis = "".join(f"<li>{e(r['lead'])} See <a href=\"{e(r['url'])}\">{e(r['name'])}</a>.</li>" for r in items)
+    return f"<h2>Local resources</h2><ul>{lis}</ul>" if lis else ""
+
 def region_page(g, R):
     n, st, slug = g["name"], STATES.get(g["state"], g["state"]), g["slug"]
     title = f"Golf Cart & LSV Rules and Legal Roads in {n} ({month()})"
@@ -47,6 +57,7 @@ def region_page(g, R):
 <h2>Coverage</h2><p>{e(g.get('cover',''))}</p>
 <h2>FAQ</h2>
 {''.join(f'<h3>{e(q)}</h3><p>{e(a)}</p>' for q, a in faq)}
+{resources_html(region_resources(slug))}
 <p><a class="cta" href="{mapurl}" data-ev="cta_try_map_click" data-p='{{"position":"footer","region":"{e(g['id'])}"}}'>Open the {e(g['short'] or n)} map</a></p>"""
     ld = [org(), website(), software(), faq_schema(faq), crumbs([("Home", "/"), (n, "/" + slug)])]
     # old share links with map state (?lat, ?lon, ?veh, ?z, ?r) go straight to the map

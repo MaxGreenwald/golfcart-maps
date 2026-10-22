@@ -64,6 +64,18 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Peachtree City's official page covers cart registration and rules for its path network.",
+   "name": "Peachtree City golf cart path rules and registration",
+   "url": "https://www.peachtree-city.org/216/Paths-Golf-Carts"
+  },
+  {
+   "lead": "Visit Peachtree City's guide to the town's 100 miles of cart paths is a good place to plan a ride.",
+   "name": "Visit Peachtree City's guide to 100 miles of cart paths",
+   "url": "https://visitpeachtreecity.com/explore-local-attractions/explore-100-miles-of-cart-paths/"
+  }
+ ],
  "nearby": [],
  "map_center": [
   33.397,

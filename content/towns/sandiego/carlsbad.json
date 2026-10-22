@@ -49,6 +49,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Visit Carlsbad's official guide covers beaches, the Village and getting around.",
+   "name": "Visit Carlsbad's official travel guide",
+   "url": "https://visitcarlsbad.com/"
+  }
+ ],
  "nearby": [
   "leucadia",
   "oceanside",

@@ -100,6 +100,18 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Before you roll out on 30A, read 30A.com's plain-English guide to where carts and LSVs can go.",
+   "name": "golf cart and LSV rules in South Walton (30A.com)",
+   "url": "https://30a.com/golf-carts/"
+  },
+  {
+   "lead": "Planning a Seaside stay? The town's official site covers dining, events and where to park.",
+   "name": "Seaside, Florida visitor guide",
+   "url": "https://seasidefl.com/"
+  }
+ ],
  "nearby": [
   "watercolor",
   "seagrove-beach",

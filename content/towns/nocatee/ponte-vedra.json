@@ -92,6 +92,23 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Nocatee publishes its own map of cart paths and roads open to golf carts.",
+   "name": "Nocatee's official golf cart map",
+   "url": "https://www.nocatee.com/golfcartmap"
+  },
+  {
+   "lead": "Nocatee's electric vehicle path guide covers path widths and speed limits for carts.",
+   "name": "Nocatee electric vehicle path rules",
+   "url": "https://www.nocatee.com/lifestyle/electric-vehicle-paths/"
+  },
+  {
+   "lead": "The Ponte Vedra Recorder explains how golf carts became legal in the Duval County part of Nocatee.",
+   "name": "golf carts in the Duval County part of Nocatee (Ponte Vedra Recorder)",
+   "url": "https://pontevedrarecorder.com/stories/jacksonville-city-council-passes-bill-allowing-golf-carts-in-duval-countys-portion-of-nocateeby,3397"
+  }
+ ],
  "nearby": [],
  "map_center": [
   30.105,

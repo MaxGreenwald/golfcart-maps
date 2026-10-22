@@ -75,6 +75,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "The Hilton Head Island Visitor & Convention Bureau's official guide covers beaches, golf and events.",
+   "name": "official Hilton Head Island travel guide",
+   "url": "https://www.hiltonheadisland.org/"
+  }
+ ],
  "nearby": [
   "north-forest-beach",
   "bluffton",

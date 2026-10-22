@@ -60,6 +60,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "The Sun City HOA explains golf cart rules and which busy roads to avoid.",
+   "name": "golf cart rules in Sun City (SCHOA)",
+   "url": "https://suncityhoa.org/golf-carts-in-sun-city/"
+  }
+ ],
  "nearby": [
   "sun-city-west",
   "youngtown"

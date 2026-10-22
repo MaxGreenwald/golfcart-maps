@@ -71,6 +71,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Wildwood's city site has local news and ordinances, including golf cart updates.",
+   "name": "City of Wildwood official website",
+   "url": "https://www.wildwood-fl.gov/"
+  }
+ ],
  "nearby": [
   "lady-lake",
   "the-villages"

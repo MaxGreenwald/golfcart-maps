@@ -49,6 +49,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "La Jolla by the Sea is a local guide to shops, dining and the village.",
+   "name": "La Jolla by the Sea local guide",
+   "url": "https://lajollabythesea.com/"
+  }
+ ],
  "nearby": [
   "pacific-beach",
   "del-mar",

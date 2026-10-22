@@ -61,6 +61,18 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "The City of Port Aransas lists its golf cart registration rules and where carts can drive.",
+   "name": "Port Aransas golf cart regulations (City of Port Aransas)",
+   "url": "https://cityofportaransas.org/golf-cart-information-and-regulations/"
+  },
+  {
+   "lead": "Renting a cart? The Port Aransas Chamber lists local golf cart rental companies.",
+   "name": "Port Aransas golf cart rentals (Port Aransas Chamber)",
+   "url": "https://www.portaransas.org/things-to-do/beach-cart-rentals/"
+  }
+ ],
  "nearby": [
   "mustang-island"
  ],
