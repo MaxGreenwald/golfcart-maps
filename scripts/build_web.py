@@ -81,6 +81,8 @@ def build(src=os.path.join(ROOT, "public"), out=os.path.join(ROOT, "dist"), nati
         shutil.copyfile(os.path.join(out, "index.html"), os.path.join(out, "map.html"))
         import seo_landing
         open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(seo_landing.render())
+        import seo_pages
+        seo_pages.build(out)   # static /<slug> region pages (not precached)
     return name
 
 
