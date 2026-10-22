@@ -9,7 +9,7 @@ BRAND = "Golf Cart Maps"
 LEGAL = "Golf Cart Maps LLC"
 CONTACT = "max@golfcartmap.com"
 SALES = "mailto:max@golfcartmap.com?subject=Golf%20Cart%20Maps%20sales%20inquiry"
-TESTFLIGHT = "https://testflight.apple.com/join/P7dVC4zh"  # Max Oct 22: TestFlight until the App Store listing is live
+TESTFLIGHT = "https://testflight.apple.com/join/P7dVC4zh"  # Max Oct 22: shown as the App Store badge; never say the word on the page
 APPSTORE = "https://apps.apple.com/us/app/golf-cart-maps/id0000000000"  # placeholder: set once the App Store listing is live
 STATES = {"CA":"California","FL":"Florida","GA":"Georgia","SC":"South Carolina","TX":"Texas","AL":"Alabama","AZ":"Arizona","OH":"Ohio","NC":"North Carolina","HI":"Hawaii","ME":"Maine"}
 BANNED = re.compile(r"(?i)\bbeta\b|verified|android")  # guard-change: free allowed (Max Oct 22), beta banned

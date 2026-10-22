@@ -10,10 +10,10 @@ FAQ = [
     ("What is the difference between a golf cart and an LSV?", "An LSV is street-legal: VIN, plate, insurance, 20 to 25 mph top speed. Most states allow LSVs on roads posted 35 mph or less. Plain golf carts usually get fewer roads."),
     ("Where do the rules come from?", "State vehicle codes, local ordinances and posted speed limits. Each town page cites the law behind each rule."),
     ("Is it legal advice?", "No. Posted signs and local law always win."),
-    ("Is there an iPhone app with CarPlay?", "Yes. The iPhone app shows legal cart roads and routes on your phone and on your CarPlay dashboard screen. Get it on TestFlight; the web map works in any browser."),
+    ("Is there an iPhone app with CarPlay?", "Yes. The iPhone app shows legal cart roads and routes on your phone and on your CarPlay dashboard screen. Download it on the App Store; the web map works in any browser."),
 ]
 PARTNER = "mailto:max@golfcartmap.com?subject=Partner%20with%20Golf%20Cart%20Maps"
-LCSS = (".hero h1{font-size:40px;line-height:1.1}.hero h1+p{font-size:20px}"
+LCSS = (".appstore{display:inline-block;vertical-align:middle;line-height:0}.appstore img{display:block}.hero h1{font-size:40px;line-height:1.1}.hero h1+p{font-size:20px}"
         ".stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0;padding:18px;background:#0b6e86;color:#fff;border-radius:16px;text-align:center}"
         ".stats b{display:block;font-size:30px;line-height:1.1}.stats span{font-size:13px;opacity:.9}"
         ".grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;padding:0;list-style:none}"
@@ -44,7 +44,7 @@ def render():
     body = f"""<section class="hero"><h1>Cruise anywhere your cart is legal.</h1>
 <p>Every legal golf cart and LSV road, on one map. Pick a town, pick a place, and ride roads your city actually allows.</p>
 <p>{cta("hero")}</p>
-<p><a href="{TESTFLIGHT}" data-ev="testflight_click" data-p=\'{{"position":"hero"}}\'>📱 iPhone app + CarPlay: get it on TestFlight</a></p>
+<p><a class="appstore" href="{TESTFLIGHT}" data-ev="app_store_click" data-p=\'{{"position":"hero"}}\'><img src="/download-on-the-app-store.svg" width="143" height="48" alt="Download on the App Store"></a> <small>iPhone app + CarPlay</small></p>
 <p><label><input type="checkbox" id="remember"> Always open the map when I visit</label></p></section>
 <div class="stats" role="list"><div role="listitem"><b>{k(st["road_mi"])}</b><span>road miles mapped</span></div><div role="listitem"><b>{n}</b><span>regions live</span></div><div role="listitem"><b>{ns}</b><span>states</span></div><div role="listitem"><b>{len(towns)}</b><span>town guides</span></div></div>
 <img src="/og-v4.png" width="1200" height="630" alt="Golf Cart Maps map: legal golf cart and LSV roads in green, roads to avoid in red" style="width:100%;height:auto;border-radius:14px" loading="eager">
@@ -55,7 +55,7 @@ def render():
 <h3>Town guides</h3><p class="towns">{tl}</p>
 <section class="band app" id="iphone"><h2>iPhone app + CarPlay</h2>
 <p>Take Golf Cart Maps on the road. The native iPhone app works with Apple CarPlay, so legal cart roads and turn-by-turn routes show up right on your car's dashboard screen.</p>
-<p><a class="cta" href="{TESTFLIGHT}" data-ev="testflight_click" data-p=\'{{"position":"app_section"}}\'>Get the iPhone app on TestFlight</a></p></section>
+<p><a class="appstore" href="{TESTFLIGHT}" data-ev="app_store_click" data-p=\'{{"position":"app_section"}}\'><img src="/download-on-the-app-store.svg" width="161" height="54" alt="Download on the App Store"></a></p></section>
 <section class="band oem"><h2>For manufacturers and OEMs</h2>
 <p>We work with cart manufacturers and OEMs to bring legal-road maps to in-dash screens: town-by-town road rules for golf carts and LSVs, with the law behind each one.</p>
 <p><a class="cta" href="{PARTNER}" data-ev="partner_click" data-p=\'{{"section":"oem"}}\'>Partner with us</a> <a href="{SALES}" data-ev="sales_click" data-p=\'{{"section":"oem"}}\'>Contact sales</a></p></section>
