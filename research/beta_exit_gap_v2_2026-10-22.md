@@ -234,3 +234,50 @@ Regions with an access source: 30a, galveston, gulfshores, ptc, villages. Candid
 Reports recorded: 0 (none yet; add them to `road_reports.json`).
 
 Apply to the app: `python3 research/beta_exit_gap_v2.py && python3 scripts/apply_beta_bar.py && python3 scripts/gen_llms.py`. `tests/test_beta_bar.py` guards that the flags match this table.
+
+
+## v3 relaxed bar (ANALYSIS ONLY, not applied, not merged), 2026-10-22
+
+Rules: >=70% of important-road miles sourced, cited bans counted as sourced; >=50% of non-ban miles sourced; access check pass/fail = local-rules search recorded in access_sources.json (local source, or "state law, no local ordinance found" + what was searched); grids and reports stay on the check list only; SD exempt. Cells are no-o / with-o.
+
+| region | % miles (bans in) | % non-ban | access | pass (no o) | pass (with o) | fail reason |
+|---|---|---|---|---|---|---|
+| oob | 97.3 / 97.3 | 97.3 / 97.3 | yes | PASS | PASS |  |
+| annamaria | 97.0 / 97.9 | 97.0 / 97.9 | yes | PASS | PASS |  |
+| amelia | 92.3 / 92.9 | 92.3 / 92.9 | yes | PASS | PASS |  |
+| tybee | 88.5 / 88.9 | 70.4 / 71.2 | yes | PASS | PASS |  |
+| southpadre | 85.4 / 85.9 | 85.3 / 85.8 | yes | PASS | PASS |  |
+| staug | 85.1 / 85.3 | 78.3 / 78.6 | yes | PASS | PASS |  |
+| portaransas | 75.0 / 75.0 | 64.2 / 64.2 | yes | PASS | PASS |  |
+| kailua | 72.0 / 72.0 | 72.0 / 72.0 | yes | PASS | PASS |  |
+| gulfshores | 71.8 / 71.8 | 5.7 / 5.7 | yes | fail | fail | non-ban 5.7% < 50% floor |
+| siesta | 71.2 / 72.6 | 68.2 / 69.7 | yes | PASS | PASS |  |
+| rockport | 70.5 / 70.5 | 56.7 / 56.7 | yes | PASS | PASS |  |
+| 30a | 70.4 / 71.5 | 65.6 / 66.9 | yes | PASS | PASS |  |
+| chs | 70.4 / 70.4 | 62.8 / 62.8 | yes | PASS | PASS |  |
+| poipu | 68.9 / 68.9 | 68.9 / 68.9 | no | fail | fail | 68.9% < 70% (bans in); no local-rules search recorded |
+| obx | 65.4 / 65.7 | 65.4 / 65.7 | no | fail | fail | 65.4% < 70% (bans in); no local-rules search recorded |
+| pcb | 65.4 / 67.5 | 65.4 / 67.5 | no | fail | fail | 65.4% < 70% (bans in); no local-rules search recorded |
+| lwr | 64.8 / 65.6 | 60.7 / 61.6 | no | fail | fail | 64.8% < 70% (bans in); no local-rules search recorded |
+| galveston | 63.3 / 63.3 | 39.8 / 39.8 | yes | fail | fail | 63.3% < 70% (bans in); non-ban 39.8% < 50% floor |
+| keywest | 62.4 / 64.2 | 62.4 / 64.2 | no | fail | fail | 62.4% < 70% (bans in); no local-rules search recorded |
+| wailea | 60.8 / 60.8 | 60.8 / 60.8 | no | fail | fail | 60.8% < 70% (bans in); no local-rules search recorded |
+| kaanapali | 58.6 / 58.6 | 58.6 / 58.6 | no | fail | fail | 58.6% < 70% (bans in); no local-rules search recorded |
+| suncitycenter | 56.6 / 56.6 | 33.3 / 33.3 | no | fail | fail | 56.6% < 70% (bans in); non-ban 33.3% < 50% floor; no local-rules search recorded |
+| destin | 51.8 / 51.9 | 51.8 / 51.9 | no | fail | fail | 51.8% < 70% (bans in); no local-rules search recorded |
+| naples | 48.8 / 49.4 | 39.7 / 40.4 | no | fail | fail | 48.8% < 70% (bans in); non-ban 39.7% < 50% floor; no local-rules search recorded |
+| myrtle | 44.5 / 46.0 | 33.4 / 35.2 | no | fail | fail | 44.5% < 70% (bans in); non-ban 33.4% < 50% floor; no local-rules search recorded |
+| goldenisles | 42.3 / 42.7 | 16.1 / 16.7 | no | fail | fail | 42.3% < 70% (bans in); non-ban 16.1% < 50% floor; no local-rules search recorded |
+| waikoloa | 39.9 / 39.9 | 39.9 / 39.9 | no | fail | fail | 39.9% < 70% (bans in); non-ban 39.9% < 50% floor; no local-rules search recorded |
+| bhi | 38.3 / 39.4 | 38.3 / 39.4 | no | fail | fail | 38.3% < 70% (bans in); non-ban 38.3% < 50% floor; no local-rules search recorded |
+| hhi | 37.2 / 37.2 | 30.0 / 30.0 | no | fail | fail | 37.2% < 70% (bans in); non-ban 30.0% < 50% floor; no local-rules search recorded |
+| avalon | 36.2 / 36.3 | 36.2 / 36.3 | no | fail | fail | 36.2% < 70% (bans in); non-ban 36.2% < 50% floor; no local-rules search recorded |
+| sd | 33.6 / 36.0 | 33.6 / 36.0 | no | PASS | PASS | SD exempt |
+| ptc | 31.4 / 31.4 | 5.0 / 5.0 | yes | fail | fail | 31.4% < 70% (bans in); non-ban 5.0% < 50% floor |
+| suncity | 26.0 / 30.6 | 26.0 / 30.6 | no | fail | fail | 26.0% < 70% (bans in); non-ban 26.0% < 50% floor; no local-rules search recorded |
+| ocoast | 25.5 / 31.4 | 24.2 / 30.2 | no | fail | fail | 25.5% < 70% (bans in); non-ban 24.2% < 50% floor; no local-rules search recorded |
+| villages | 20.1 / 20.1 | 7.2 / 7.2 | yes | fail | fail | 20.1% < 70% (bans in); non-ban 7.2% < 50% floor |
+| coachella | 17.8 / 18.8 | 5.6 / 6.7 | no | fail | fail | 17.8% < 70% (bans in); non-ban 5.6% < 50% floor; no local-rules search recorded |
+| putinbay | 0.0 / 0.0 | 0.0 / 0.0 | no | fail | fail | 0.0% < 70% (bans in); non-ban 0.0% < 50% floor; no local-rules search recorded |
+
+Passing (excl. SD exempt): without o 12, with o 12

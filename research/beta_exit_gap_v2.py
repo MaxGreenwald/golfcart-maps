@@ -65,7 +65,7 @@ for d in sorted(glob.glob(f"{ROOT}/public/data/*/index.json")):
             ws = pt.get(tuple(s[7][0]), set()) & pt.get(tuple(s[7][-1]), set())
             w = next((x for x in ws if (tags[x].get("name") or tags[x].get("ref") or "") == names[s[0]]), next(iter(ws), None))
             t = tags.get(w, {}) if w else {}
-            segs[k] = dict(nm=names[s[0]], hw=s[1], mph=s[2], code=s[3], ban=(len(s) > 9 and s[9] == 1) or (s[3] == "v" and s[2] >= 99), grid=grid, a=s[5], b=s[6], L=km(s[7])*MI, ok=ok,
+            segs[k] = dict(nm=names[s[0]], hw=s[1], mph=s[2], code=s[3], ban=(len(s) > 9 and s[9] == 1) or (s[3] == "v" and s[2] >= 99), grid=grid, a=s[5], b=s[6], L=km(s[7])*MI, ok=ok, src=len(s) > 8 and s[8] >= 0,
                            tier=(tier(t) if w else ("unmatched" if have_osm else "no_extract")), osm=mph_of(t.get("maxspeed")) if w else None, way=w, g=s[7])
     S = list(segs.values())
     BANS = [x for x in S if x["ban"]]   # rule 3: banned stretches are scored on their own and are not in the 70%
@@ -156,6 +156,11 @@ for d in sorted(glob.glob(f"{ROOT}/public/data/*/index.json")):
         if rule == "none" and r in os.environ.get("DUMP", "").split(","):
             DUMPED[r] = [dict(L=c[0], nm=c[1], mph=c[2], hw=c[3], tier=c[4], segs=[{k: v for k, v in y.items() if k in ("a", "b", "g", "osm", "way", "code", "L")} for y in c[5]],
                               cross={n: sorted(nodenames[n] - {c[1], ""}) for y in c[5] for n in (y["a"], y["b"])}) for c in cs[:n]]
+    # v3 (relaxed bar, analysis only): grid streets excluded from the %, cited bans count as sourced
+    NG = [x for x in S if not x["grid"]]
+    row["v3_all"] = sum(x["L"] for x in NG); row["v3_ban"] = sum(x["L"] for x in NG if x["ban"])
+    row["v3_ban_cited"] = sum(x["L"] for x in NG if x["ban"] and (x["ok"] or x["code"] == "v" or x.get("src")))
+    row["v3_src_nb"] = sum(x["L"] for x in NG if x["ok"] and not x["ban"])
     row["ban_mi"] = sum(x["L"] for x in BANS); row["ban_src_mi"] = sum(x["L"] for x in BANS if x["ok"])
     row["grid_mi"] = sum(x["L"] for x in S if x["grid"]); row["county_assumed_mi"] = sum(x["L"] for x in S if x["code"] == "i" and COUNTY.search(x["nm"] or ""))
     row["assumed_mi"] = sum(x["L"] for x in S if x["code"] == "i" and not x["ban"])
@@ -172,6 +177,16 @@ for x in out:
                           conflicts=x["n_conf"], ban_mi=round(x["ban_mi"], 1), ban_sourced_mi=round(x["ban_src_mi"], 1),
                           grid_mi=round(x["grid_mi"], 1), county_assumed_mi=round(x["county_assumed_mi"], 1), assumed_mi=round(x["assumed_mi"], 1),
                           reports=len(CHECK.get(x["r"], {}).get("reports", [])))
+V3 = {}
+ACC3 = json.load(open(os.path.join(HERE, "access_sources.json")))
+for x in out:
+    a, b, bc, sn = x["v3_all"] or 1e-9, x["v3_ban"], x["v3_ban_cited"], x["v3_src_nb"]
+    p_in = (sn + bc) / a; p_nb = sn / max(a - b, 1e-9)
+    acc = x["r"] in ACC3["regions"] or x["r"] in ACC3.get("state_law", {})
+    why = ([] if p_in >= BAR else [f"{100*p_in:.1f}% < 70% (bans in)"]) + ([] if p_nb >= 0.5 else [f"non-ban {100*p_nb:.1f}% < 50% floor"]) + ([] if acc else ["no local-rules search recorded"])
+    V3[x["r"]] = dict(pct_bans_in=round(100*p_in, 1), pct_nonban=round(100*p_nb, 1), access_check=acc, passes=(not why) or x["r"] == "sd", why=["SD exempt"] if x["r"] == "sd" else why)
+json.dump(dict(rule="v3 relaxed (analysis only): >=70% of important miles sourced with cited bans counted as sourced; >=50% of non-ban miles sourced; local-rules search recorded (ordinance or state law); grids/reports on check list only; sd exempt", regions=V3),
+          open(os.path.join(HERE, os.environ.get("V3_OUT", "beta_status_v3.json")), "w"), indent=1, sort_keys=True)
 json.dump(CHECK, open(os.path.join(HERE, "beta_check_list.json"), "w"), indent=1)
 if not os.environ.get("NO_STATUS"):
     json.dump(dict(rule="pass = important miles (bans excluded) sourced by v/m/d+source >= 70% AND a local access source recorded; resort grids included when an access source exists; corridors >= 0.25 mi, conflicts and reports checked first; sd exempt (never beta)", regions=STATUS),

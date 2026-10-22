@@ -1,14 +1,107 @@
-{"_note": "Rule 2 (Max, 2026-10-22): a region can't leave beta until a LOCAL access source is recorded: a sheriff/county LSV map or an ordinance road list (who may drive where). State-highway-only bans don't count. Add a region only with the source in hand; 'candidates' are leads, not recorded.",
+{
+ "_note": "Rule 2 (Max, 2026-10-22): a region can't leave beta until a LOCAL access source is recorded: a sheriff/county LSV map or an ordinance road list (who may drive where). State-highway-only bans don't count. Add a region only with the source in hand; 'candidates' are leads, not recorded.",
  "regions": {
-  "30a": {"kind": "sheriff LSV map", "url": "https://waltonso.org/wp-content/uploads/2022/10/lsv_map_102022.png", "label": "Walton County Sheriff LSV map (red = LSVs prohibited)", "applied": "research/regions/30a.json bans"},
-  "villages": {"kind": "ordinance road list + district map", "url": "https://www.sumtercountyfl.gov/AgendaModule/AI7446/Golf%20Cart%20Ordinance%20Amendment%20-%20Final%20(00268768).pdf", "label": "Sumter County golf cart ordinance; Wildwood golf cart district map; Fruitland Park ordinance road list", "applied": "research/regions/villages.json cart_ban_names / cart_allow_names / wildwood"},
-  "galveston": {"kind": "ordinance road list", "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021", "label": "Galveston golf cart ordinance (Sec. 34-203 prohibited streets; Avenue O/P limits)", "applied": "research/regions/galveston.json bans"},
-  "gulfshores": {"kind": "ordinance road list", "url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15531?fileID=45381", "label": "Gulf Shores Sec. 21-13(b)(1) designated cart streets", "applied": "research/regions/gulfshores.json"},
-  "ptc": {"kind": "ordinance", "url": "https://mcclibraryfunctions-stage.azurewebsites.us/api/ordinanceDownload/11414/1250481/pdf", "label": "Peachtree City cart ordinance (Peachtree Pkwy)", "applied": "research/regions/ptc.json bans"}
+  "30a": {
+   "kind": "sheriff LSV map",
+   "url": "https://waltonso.org/wp-content/uploads/2022/10/lsv_map_102022.png",
+   "label": "Walton County Sheriff LSV map (red = LSVs prohibited)",
+   "applied": "research/regions/30a.json bans"
+  },
+  "villages": {
+   "kind": "ordinance road list + district map",
+   "url": "https://www.sumtercountyfl.gov/AgendaModule/AI7446/Golf%20Cart%20Ordinance%20Amendment%20-%20Final%20(00268768).pdf",
+   "label": "Sumter County golf cart ordinance; Wildwood golf cart district map; Fruitland Park ordinance road list",
+   "applied": "research/regions/villages.json cart_ban_names / cart_allow_names / wildwood"
+  },
+  "galveston": {
+   "kind": "ordinance road list",
+   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+   "label": "Galveston golf cart ordinance (Sec. 34-203 prohibited streets; Avenue O/P limits)",
+   "applied": "research/regions/galveston.json bans"
+  },
+  "gulfshores": {
+   "kind": "ordinance road list",
+   "url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15531?fileID=45381",
+   "label": "Gulf Shores Sec. 21-13(b)(1) designated cart streets",
+   "applied": "research/regions/gulfshores.json"
+  },
+  "ptc": {
+   "kind": "ordinance",
+   "url": "https://mcclibraryfunctions-stage.azurewebsites.us/api/ordinanceDownload/11414/1250481/pdf",
+   "label": "Peachtree City cart ordinance (Peachtree Pkwy)",
+   "applied": "research/regions/ptc.json bans"
+  },
+  "annamaria": {
+   "kind": "ordinance",
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/12892/1003462/pdf",
+   "label": "Bradenton Beach Ord. 19-514 (carts/LSVs on city roads <=35 mph except listed); Holmes Beach Sec. 62-39 bans carts on Palm Dr, Gulf Dr, Marina Dr 5300-6600 (https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10998/1154989/pdf)",
+   "applied": "not yet applied to tiles"
+  },
+  "southpadre": {
+   "kind": "ordinance",
+   "url": "https://www.myspi.org/egov/documents/1464795083_20813.pdf",
+   "label": "South Padre Island Code Sec. 18-30: carts on streets posted <=35 mph; not SH-100/causeway",
+   "applied": "not yet applied to tiles"
+  },
+  "staug": {
+   "kind": "city rule page",
+   "url": "https://www.staugbch.com/413/Golf-CartsLow-Speed-Vehicles",
+   "label": "St. Augustine Beach: golf carts not allowed on public streets; LSVs on streets <=35 mph",
+   "applied": "not yet applied to tiles"
+  },
+  "tybee": {
+   "kind": "city rule sheet",
+   "url": "https://www.cityoftybee.org/DocumentCenter/View/409/Use-and-Registration-Requirements-for-Golf-Carts-on-Tybee-Island-PDF?bidId=",
+   "label": "Tybee: carts on city streets except US 80/Butler Ave; cross only at 14th St, Campbell Ave, Jones Ave",
+   "applied": "research/regions/tybee.json bans"
+  },
+  "portaransas": {
+   "kind": "ordinance",
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10718/623522/pdf",
+   "label": "Port Aransas cart ordinance: no Hwy 361 south of Avenue G; crossings list https://cityofportaransas.org/wp-content/uploads/2021/02/Golf-Cart-Crossings-for-Hwy-361.pdf",
+   "applied": "research/regions/portaransas.json bans"
+  },
+  "rockport": {
+   "kind": "ordinance",
+   "url": "https://ecode360.com/41825792",
+   "label": "Rockport Ch. 98 Art. VI: carts on city streets <=35 mph; not state highways / FM roads",
+   "applied": "not yet applied to tiles"
+  },
+  "chs": {
+   "kind": "ordinance/city pages",
+   "url": "https://www.isleofpalms.gov/police/golf-carts-low-speed-vehicles",
+   "label": "Isle of Palms: no Palm Blvd / IOP Connector; Folly Beach: cross only Center St & Folly Rd (https://cityoffollybeach.com/rules_regulations/golf_carts.php). Sullivan's Island not found",
+   "applied": "not yet applied to tiles"
+  }
  },
  "candidates": {
-  "tybee": "carts prohibited on US 80/Butler Ave (city rule in tybee.json bans) - needs the city ordinance road list recorded",
-  "portaransas": "carts prohibited on Hwy 361 south of Avenue G - needs the city ordinance recorded",
-  "chs": "Isle of Palms primary-road prohibition - needs the IOP/Sullivan's/Folly ordinance lists",
   "naples": "Marco Island code ch. 50 (municode) - City of Naples designations not digitized"
- }}
+ },
+ "state_law": {
+  "oob": {
+   "text": "state law, no local ordinance found",
+   "law": "Maine 29-A MRSA \u00a72093: golf carts only on municipally designated, signed golf cart access routes",
+   "law_url": "https://legislature.maine.gov/legis/bills/bills_128th/billtexts/HP062701.asp",
+   "searched": "Old Orchard Beach code of ordinances (https://oob-me.elaws.us/code/coor) and Ch. 54 Traffic; web search 'Old Orchard Beach golf cart LSV ordinance'"
+  },
+  "amelia": {
+   "text": "state law, no local ordinance found",
+   "law": "Florida 316.212 (carts) / 316.2122 (LSVs on roads <=35 mph)",
+   "law_url": "https://www.flsenate.gov/Laws/Statutes/2026/0316.212",
+   "searched": "Fernandina Beach Ch. 78 Traffic (https://library.municode.com/fl/fernandina_beach/codes/code_of_ordinances?nodeId=PTIICOOR_CH78TRVE); Nassau County; note private Amelia Island Plantation rule: carts not on/across A1A (https://seadunesaip.com/wp-content/uploads/2022/04/Rules-of-the-Road-within-AIP.pdf)"
+  },
+  "kailua": {
+   "text": "state law, no local ordinance found",
+   "law": "Hawaii: only registered LSVs on roads <=35 mph; plain golf carts not street legal",
+   "law_url": "https://www.staradvertiser.com/2011/07/12/hawaii-news/kokua-line/customized-golf-carts-not-street-legal-for-public-roads/",
+   "searched": "Honolulu ROH Ch. 15 Traffic (https://codelibrary.amlegal.com/codes/honolulu/latest/honolulu/0-0-0-10522); web search 'Kailua Oahu golf cart LSV ordinance'"
+  },
+  "siesta": {
+   "text": "state law, no local ordinance found",
+   "law": "Florida 316.212 / 316.2122; no Sarasota County cart-designated roads on Siesta Key found",
+   "law_url": "https://www.flsenate.gov/Laws/Statutes/2026/0316.212",
+   "searched": "web search 'Siesta Key Sarasota County golf cart LSV ordinance'; FLHSMV LSV page https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+  }
+ },
+ "_note_v3": "v3 (Max 2026-10-22, analysis only): access check = a local-rules search is recorded: 'regions' (local source) or 'state_law' (no local ordinance found, with what was searched). Quick searches 2026-10-22; 'not yet applied' = rules not yet in tiles."
+}

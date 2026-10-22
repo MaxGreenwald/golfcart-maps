@@ -30,3 +30,19 @@ class BetaBar(unittest.TestCase):
     def test_apply_check_clean(self):
         self.assertEqual(subprocess.run([sys.executable, os.path.join(ROOT, "scripts/apply_beta_bar.py"), "--check"], capture_output=True).returncode, 0)
 if __name__ == "__main__": unittest.main()
+
+
+def test_v3_variant_rules():
+    import json, os
+    here = os.path.join(os.path.dirname(__file__), "..", "research")
+    acc = json.load(open(os.path.join(here, "access_sources.json")))
+    for f in ("beta_status_v3.json", "beta_status_v3_with_o.json"):
+        st = json.load(open(os.path.join(here, f)))["regions"]
+        for r, x in st.items():
+            if r == "sd":
+                assert x["passes"]; continue
+            a = r in acc["regions"] or r in acc.get("state_law", {})
+            assert x["access_check"] == a
+            assert x["passes"] == (x["pct_bans_in"] >= 70 and x["pct_nonban"] >= 50 and a), r
+    for r, v in acc.get("state_law", {}).items():
+        assert v["text"] == "state law, no local ordinance found" and v["searched"] and v["law_url"].startswith("http")
