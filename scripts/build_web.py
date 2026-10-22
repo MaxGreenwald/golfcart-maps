@@ -83,6 +83,8 @@ def build(src=os.path.join(ROOT, "public"), out=os.path.join(ROOT, "dist"), nati
         open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(seo_landing.render())
         import seo_pages
         seo_pages.build(out)   # static /<slug> region pages (not precached)
+        import seo_towns
+        seo_towns.build(out)   # static /<region>/<town> pages from content/towns/ (not precached)
     return name
 
 
