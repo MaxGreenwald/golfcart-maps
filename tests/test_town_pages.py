@@ -35,7 +35,7 @@ class TownPages(unittest.TestCase):
     def test_no_free_wording(self):
         for t, h in self.pages():
             self.assertNotRegex(re.sub(r"<[^>]+>", " ", h), r"(?i)\bfree\b|verified", t["slug"])
-            self.assertIn("is in beta", h); self.assertIn("Golf Cart Maps", h)
+            self.assertIn("is a map to help you plan", h); self.assertNotIn("is in beta", h); self.assertIn("Golf Cart Maps", h)
     def test_map_and_nearby_links(self):
         for t, h in self.pages():
             r = REGS[t["region"]]; lat, lon = t["map_center"]; b = r["bbox"]

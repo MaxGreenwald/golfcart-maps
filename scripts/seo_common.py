@@ -72,7 +72,7 @@ def page(title, desc, path, body, ld, extra_head=""):
 <main>
 {body}
 </main>
-<footer><p class="muted">{BRAND} (golfcartmap.com) is in beta. Not legal advice; posted signs and local law win. Updated {e(today())}. &copy; {LEGAL}. <a href="/privacy">Privacy</a></p></footer>
+<footer><p class="muted">{BRAND} (golfcartmap.com) is a map to help you plan. Not legal advice; posted signs and local law win. Updated {e(today())}. &copy; {LEGAL}. <a href="/privacy">Privacy</a></p></footer>
 <script defer src="/track.js"></script><script>addEventListener('load',function(){{var T=window.GCMTrack;if(!T)return;document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.target.closest('a[data-ev]');if(a)T.track(a.dataset.ev,JSON.parse(a.dataset.p||'{{}}'))}})}})</script>
 </body></html>
 """
