@@ -11,6 +11,7 @@ fails = []
 def ck(n, c, x=""): print(("PASS " if c else "FAIL ") + n, x); c or fails.append(n)
 READY = "window.ready===true&&window.REG"
 def go(pg, path):
+    if not LOCAL and not path.startswith("/map"): path = "/map" + path[1:]   # / is the landing page on deployed sites; the map is /map
     pg.goto(U + path); pg.wait_for_function(READY, timeout=120000); pg.wait_for_timeout(800)
 with sync_playwright() as p:
     b = p.chromium.launch()
@@ -34,7 +35,7 @@ with sync_playwright() as p:
     c = pg.evaluate("(()=>{const c=map.getCenter(),b=REG.bbox;return [c.lat,c.lng,c.lat>=b[0]&&c.lat<=b[2]&&c.lng>=b[1]&&c.lng<=b[3]]})()")
     ck("chip pick loads Tybee and re-centers the map", c[2], c)
     ck("chip label follows", pg.inner_text("#cityLbl") == "Tybee Island", pg.inner_text("#cityLbl"))
-    ck("URL is /tybee and the pick is saved", pg.evaluate("location.pathname") == "/tybee" and pg.evaluate("localStorage.getItem('gcm-region')") == "tybee")
+    ck("URL is /tybee and the pick is saved", pg.evaluate("location.pathname") in ("/tybee", "/map/tybee") and pg.evaluate("localStorage.getItem('gcm-region')") == "tybee")
     pg.go_back(); pg.wait_for_function("window.ready===true&&REG.id==='sd'", timeout=120000)
     ck("back button returns to San Diego", pg.evaluate("REG.id") == "sd" and pg.evaluate("$('city').value") == "sd")
     pg.go_forward(); pg.wait_for_function("window.ready===true&&REG.id==='tybee'", timeout=120000)
@@ -44,9 +45,9 @@ with sync_playwright() as p:
     go(pg, "/?r=naples")
     ck("?r= link still wins", pg.evaluate("REG.id") == "naples")
     if not LOCAL:   # region paths need Cloudflare _redirects
-        go(pg, "/sandiego"); ck("/sandiego opens San Diego", pg.evaluate("REG.id") == "sd")
-        go(pg, "/tybee"); ck("/tybee opens Tybee", pg.evaluate("REG.id") == "tybee")
-        r = pg.goto(U + "/carlsbad")
+        go(pg, "/map/sandiego"); ck("/map/sandiego opens San Diego", pg.evaluate("REG.id") == "sd")
+        go(pg, "/map/tybee"); ck("/map/tybee opens Tybee", pg.evaluate("REG.id") == "tybee")
+        r = pg.goto(U + "/map/carlsbad")
         if r and r.ok:
             pg.wait_for_function(READY, timeout=120000); ck("/carlsbad (unknown path) falls back to San Diego", pg.evaluate("REG.id") == "sd", pg.evaluate("REG.id"))
         else: print("INFO /carlsbad not served:", r and r.status)
