@@ -39,8 +39,8 @@ class CityOrder(unittest.TestCase):
         self.assertIn("zz_new", ids)   # appended last in regions.json, still sorted into place by assertAZ above
         self.assertIn("hid", [o["id"] for o in self.r["keep"]])   # hidden region opened by ?r= stays selectable
 
-    def test_beta_tag_web_only(self):
-        self.assertTrue(any(o["text"].endswith(" (beta)") for o in self.r["web"]))
+    def test_no_beta_tag_anywhere(self):  # Max Oct 22: beta dropped everywhere (was: web-only tag)
+        self.assertFalse(any("(beta)" in o["text"] for o in self.r["web"]))
         self.assertFalse(any("(beta)" in o["text"] for o in self.r["ios"]))
 
     def test_san_diego_default(self):

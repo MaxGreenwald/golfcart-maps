@@ -14,7 +14,7 @@ class Towns(unittest.TestCase):
         h, sm = self.render()
         self.assertIn("<h1>Can you drive a golf cart in Pacific Beach?</h1>", h)
         self.assertIn("Rules last checked 2026-10-20", h)
-        self.assertNotRegex(re.sub(r"<[^>]+>", " ", h), r"(?i)verified|\bfree\b")
+        self.assertNotRegex(re.sub(r"<[^>]+>", " ", h), r"(?i)verified|\bbeta\b")
         self.assertIn('href="https://golfcartmap.com/sandiego/pacific-beach"', h)
         self.assertIn(">CVC 21260</a>", h); self.assertIn("Not legal advice; posted signs win.", h)
         self.assertIn("/map/sandiego?lat=32.7978&amp;lon=-117.24&amp;z=16", h)
@@ -28,7 +28,7 @@ class Towns(unittest.TestCase):
         for q in [x for x in ld if x["@type"] == "FAQPage"][0]["mainEntity"]:
             self.assertIn(C.e(q["name"]), h); self.assertIn(C.e(q["acceptedAnswer"]["text"]), h)
     def test_rejects_bad_copy(self):
-        for mut in (lambda t: t.update(answer_short="This is free. " * 3), lambda t: t.update(faq=[{"q": "Verified?", "a": "Yes"}]),
+        for mut in (lambda t: t.update(answer_short="This is beta. " * 3), lambda t: t.update(faq=[{"q": "Verified?", "a": "Yes"}]),
                     lambda t: t.update(answer_short="word " * 61), lambda t: t.pop("last_checked")):
             with self.assertRaises(SystemExit): self.render(mut)
     def test_example_is_noindex_preview(self):

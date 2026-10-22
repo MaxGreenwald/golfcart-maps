@@ -1,6 +1,7 @@
 """Shared bits for the static SEO pages (region, town, compare, landing). Plain HTML, no map JS.
-Product name on these pages: "Golf Cart Maps" (Max, Oct 19). Never "free" (beta), never "verified", no CarPlay/Android claims."""
+Product name on these pages: "Golf Cart Maps" (Max, Oct 19). Never "beta" (Max Oct 22: say "Free to use"), never "verified", no CarPlay/Android claims."""
 import html, json, os, re, subprocess, datetime
+import positioning as POS
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 PUB = os.path.join(ROOT, "public")
 SITE = "https://golfcartmap.com"
@@ -8,7 +9,7 @@ BRAND = "Golf Cart Maps"
 LEGAL = "Golf Cart Maps LLC"
 APPSTORE = "https://apps.apple.com/us/app/golf-cart-maps/id0000000000"  # placeholder: set once the App Store listing is live
 STATES = {"CA":"California","FL":"Florida","GA":"Georgia","SC":"South Carolina","TX":"Texas","AL":"Alabama","AZ":"Arizona","OH":"Ohio","NC":"North Carolina","HI":"Hawaii","ME":"Maine"}
-BANNED = re.compile(r"(?i)\bfree\b|verified|carplay|android")
+BANNED = re.compile(r"(?i)\bbeta\b|verified|carplay|android")  # guard-change: free allowed (Max Oct 22), beta banned
 e = lambda s: html.escape(str(s), quote=True)
 
 def today():
@@ -36,7 +37,7 @@ def org():
 def website():
     return {"@context":"https://schema.org","@type":"WebSite","@id":SITE+"/#website","name":BRAND,"url":SITE+"/","publisher":{"@id":SITE+"/#org"}}
 
-def software():  # no offers block: never declare a price (beta)
+def software():  # no offers block
     return {"@context":"https://schema.org","@type":"SoftwareApplication","name":BRAND,"applicationCategory":"NavigationApplication","operatingSystem":"iOS, Web","url":SITE+"/","publisher":{"@id":SITE+"/#org"}}
 
 def faq_schema(faq):
@@ -72,7 +73,7 @@ def page(title, desc, path, body, ld, extra_head=""):
 <main>
 {body}
 </main>
-<footer><p class="muted">{BRAND} (golfcartmap.com) is in beta. Not legal advice; posted signs and local law win. Updated {e(today())}. &copy; {LEGAL}. <a href="/privacy">Privacy</a></p></footer>
+<footer><p class="muted">{BRAND} (golfcartmap.com){POS.FOOTER_STATUS}. Not legal advice; posted signs and local law win. Updated {e(today())}. &copy; {LEGAL}. <a href="/privacy">Privacy</a></p></footer>
 <script defer src="/track.js"></script><script>addEventListener('load',function(){{var T=window.GCMTrack;if(!T)return;document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.target.closest('a[data-ev]');if(a)T.track(a.dataset.ev,JSON.parse(a.dataset.p||'{{}}'))}})}})</script>
 </body></html>
 """

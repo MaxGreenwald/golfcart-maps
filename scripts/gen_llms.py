@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Write public/llms.txt (national) from public/data/regions.json + rules.json. Run after adding regions."""
-import json, os
+import json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import positioning as POS
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 P = lambda *a: os.path.join(ROOT, "public", *a)
 STATES = {"CA":"California","FL":"Florida","GA":"Georgia","SC":"South Carolina","TX":"Texas","AL":"Alabama","AZ":"Arizona","OH":"Ohio","NC":"North Carolina","HI":"Hawaii","ME":"Maine"}
@@ -11,7 +13,7 @@ def render():
     by = {}
     for r in regs: by.setdefault(r["state"], []).append(r)
     o = ["# Golf Cart Maps", "",
-         "> Golf Cart Maps (golfcartmap.com) is a golf cart and LSV (low-speed vehicle) map and route planner, now in beta. It shows which roads are legal for golf carts and street-legal LSVs in %d beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule." % len(regs), "",
+         "> Golf Cart Maps (golfcartmap.com) is a golf cart and LSV (low-speed vehicle) map and route planner, %s. It shows which roads are legal for golf carts and street-legal LSVs in %d beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule." % (POS.STATUS_PHRASE, len(regs)), "",
          "URL: https://golfcartmap.com/", "",
          "## What it does",
          "- Colors every road: green = allowed for your vehicle, red = too fast or banned (avoid).",
@@ -22,7 +24,7 @@ def render():
     for st in sorted(by, key=lambda s: STATES.get(s, s)):
         o.append("### " + STATES.get(st, st))
         for r in sorted(by[st], key=lambda r: r.get("short") or r["name"]):
-            o.append("- [%s](https://golfcartmap.com/%s)%s" % (r["name"], r["slug"], " (beta data)" if r.get("beta") else ""))
+            o.append("- [%s](https://golfcartmap.com/%s)%s" % (r["name"], r["slug"], POS.LLMS_REGION_TAG if r.get("quality_hold") else ""))
     o += ["", "## State rules used"]
     for st in sorted(by, key=lambda s: STATES.get(s, s)):
         s = rules.get(st)
