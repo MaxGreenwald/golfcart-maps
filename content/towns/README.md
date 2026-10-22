@@ -5,7 +5,7 @@ by `scripts/seo_towns.py` (called from build_web.py). Schema (all strings plain 
     { "slug", "region" (region slug), "name", "state", "question_title" (the H1, a question),
       "answer_short" (<=60 words), "golf_cart": {"allowed", "roads", "speed_line", "notes"}, "lsv": {...same},
       "rules": [{"topic","rule","citation","source_url"}], "banned_roads": [{"name","rule","crossings_ok"}],
-      "faq": [{"q","a"}], "rental_shops": [{"name","url"}], "nearby": [town slugs in the same region],
+      "faq": [{"q","a"}], "rental_shops": [{"name","url"}], "local_resources": [{"lead","name","url"}] (optional, followed links), "nearby": [town slugs in the same region],
       "map_center": [lat, lng], "zoom", "published" (YYYY-MM-DD), "last_checked" (YYYY-MM-DD), "checked_by" }
 
 The build fails on the words free / verified / CarPlay / Android, on an answer over 60 words, or a missing field.

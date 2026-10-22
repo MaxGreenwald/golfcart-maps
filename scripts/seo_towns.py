@@ -24,6 +24,7 @@ def town_page(t, reg, path, noindex=False):
     rules = "".join(f"<tr><td>{e(r['topic'])}</td><td>{e(r['rule'])}</td><td><a href=\"{e(r['source_url'])}\" rel=nofollow>{e(r['citation'])}</a></td></tr>" for r in t["rules"])
     banned = "".join(f"<li>{e(b['name'])}: {e(b['rule'])}{' (crossing at intersections OK)' if b.get('crossings_ok') else ''}</li>" for b in t.get("banned_roads", []))
     shops = "".join(f"<li><a href=\"{e(s['url'])}\" rel=nofollow>{e(s['name'])}</a></li>" for s in t.get("rental_shops", []))
+    res = "".join(f"<li>{e(r['lead'])} See <a href=\"{e(r['url'])}\">{e(r['name'])}</a>.</li>" for r in t.get("local_resources", []))
     near = "".join(f"<li><a href=\"/{rslug}/{e(s)}\">{e(s.replace('-', ' ').title())}</a></li>" for s in t.get("nearby", []))
     body = f"""<nav aria-label="Breadcrumb" class="muted"><a href="/">Home</a> › <a href="/{rslug}">{e(reg['name'])}</a> › {e(n)}</nav>
 <h1>{e(t['question_title'])}</h1>
@@ -35,6 +36,7 @@ def town_page(t, reg, path, noindex=False):
 <p><a class="cta" href="{e(mapurl)}" data-ev="cta_try_map_click" data-p='{{"position":"town","region":"{e(reg['id'])}"}}'>Open the live {e(n)} map in {BRAND} (golfcartmap.com)</a></p>
 {('<h2>FAQ</h2>' + ''.join(f'<h3>{e(q)}</h3><p>{e(a)}</p>' for q, a in faq)) if faq else ''}
 {('<h2>Golf cart rentals</h2><ul>' + shops + '</ul>') if shops else ''}
+{('<h2>Local resources</h2><ul>' + res + '</ul>') if res else ''}
 {('<h2>Nearby towns</h2><ul>' + near + '</ul>') if near else ''}
 <p class="muted">Not legal advice; posted signs win.</p>"""
     webpage = {"@context":"https://schema.org","@type":"WebPage","name":t["question_title"],"url":SITE+url,"datePublished":t["published"],"dateModified":t["last_checked"],"isPartOf":{"@id":SITE+"/#website"}}
