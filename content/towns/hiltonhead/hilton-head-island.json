@@ -75,6 +75,13 @@
   }
  ],
  "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Renting a cart?",
+   "name": "HHI.com's golf cart rentals guide",
+   "url": "https://hhi.com/plan-your-trip/getting-around/golf-cart-rentals/"
+  }
+ ],
  "nearby": [
   "bluffton",
   "north-forest-beach",
