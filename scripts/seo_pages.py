@@ -26,7 +26,7 @@ def faq_for(g, R):
     out.append((f"Can I drive a golf cart on the street in {n}?", f"{vrow('', c)[1]} Source: {c.get('cite','state law')}."))
     out.append((f"What is the difference between a golf cart and an LSV in {st}?", "A low-speed vehicle (LSV) is a street-legal vehicle with a VIN, plate and insurance that meets federal FMVSS 500 (top speed over 20 and at most 25 mph). A plain golf cart has none of that, so most states limit it to fewer roads."))
     out.append(("Where do the rules come from?", "State vehicle codes and local ordinances, plus posted speed limits from city speed lists, street-level sign imagery (Mapillary) and OpenStreetMap. Unsigned small residential streets are assumed to be 25 mph. Posted signs always win."))
-    out.append((f"Is {BRAND} legal advice?", "No. It is a beta map to help you plan. Follow posted signs and local law."))
+    out.append((f"Is {BRAND} legal advice?", "No. It's a map to help you plan; always follow posted signs."))
     return out
 
 def region_page(g, R):
@@ -45,7 +45,6 @@ def region_page(g, R):
 <h2>The rules in {e(n)}</h2>
 <table><thead><tr><th>Vehicle</th><th>Where it may drive</th><th>Law</th></tr></thead><tbody>{rows}</tbody></table>
 <h2>Coverage</h2><p>{e(g.get('cover',''))}</p>
-{('<p class="muted">Beta data: speed limits here come mostly from OpenStreetMap and are still being checked against posted signs.</p>' if g.get('beta') else '')}
 <h2>FAQ</h2>
 {''.join(f'<h3>{e(q)}</h3><p>{e(a)}</p>' for q, a in faq)}
 <p><a class="cta" href="{mapurl}" data-ev="cta_try_map_click" data-p='{{"position":"footer","region":"{e(g['id'])}"}}'>Open the {e(g['short'] or n)} map</a></p>"""
