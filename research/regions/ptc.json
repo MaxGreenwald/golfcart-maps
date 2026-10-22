@@ -9,11 +9,20 @@
    "names": "^(GA|SR) ?(54|74)\\b|^Joel Cowan Pkwy",
    "url": "https://costacarts.com/are-golf-carts-street-legal-by-state/",
    "label": "GA state routes 54/74 (state highway; carts use path tunnels/bridges)"
+  },
+  {
+   "names": "^(North )?Peachtree P(arkway|kwy)$",
+   "per_segment": true,
+   "only_codes": [
+    "i"
+   ],
+   "url": "https://mcclibraryfunctions-stage.azurewebsites.us/api/ordinanceDownload/11414/1250481/pdf",
+   "label": "Peachtree City cart ordinance: carts barred from Peachtree Pkwy except to cross (stretches with no posted limit of their own)"
   }
  ],
  "sources": [
   "https://costacarts.com/are-golf-carts-street-legal-by-state/",
-  "O.C.G.A. 40-6-331 (local designation), 40-6-362 (LSV \u226435)"
+  "O.C.G.A. 40-6-331 (local designation), 40-6-362 (LSV ≤35)"
  ],
  "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=ptc loads it"
 }
