@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Set the "beta" flag in public/data/regions.json from research/beta_status.json (written by research/beta_exit_gap_v2.py).
-Bar (Max, 2026-10-22): a region leaves beta when >= 70% of its important-road miles are backed by a real source.
+Bar v3 (Max, Oct 22 2026): >= 70% of important miles sourced (cited bans count), >= 50% of non-ban miles, local-rules check recorded.
 San Diego is always exempt and never beta (Max: "keep san Diego live tho no beta").
 Usage: apply_beta_bar.py [--check]   (--check: exit 1 if regions.json disagrees, write nothing)"""
 import json, os, sys

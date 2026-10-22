@@ -12,7 +12,8 @@ Sourced = v | m | d-with-source (unchanged from v1). Adds:
 import json, glob, math, os, sys, re, collections
 ROOT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 CACHE = os.environ.get("CACHE", os.path.join(ROOT, "cache"))   # OSM extracts (gitignored); only for the OSM-confidence columns
-IMP = {"primary", "secondary", "tertiary"}; MI = 0.621371; CORR_MIN = 0.25; RUN_MAX = 1.5; BAR = 0.70
+IMP = {"primary", "secondary", "tertiary"}; MI = 0.621371; CORR_MIN = 0.25; RUN_MAX = 1.5; BAR = 0.70; FLOOR = 0.50; EXEMPT = {"sd"}
+RULE_TEXT = "v3 (official, Max 2026-10-22): pass = >=70% of important miles (town grids excluded) sourced by v/m/o/d+source with cited bans counted as sourced, AND >=50% of non-ban important miles sourced, AND a local-rules check recorded (ordinance/map or state law when no local ordinance); grids and reports stay on the check list; sd exempt (never beta)"
 HERE = os.path.dirname(os.path.abspath(__file__))
 ACCESS = json.load(open(os.path.join(HERE, "access_sources.json")))["regions"]     # rule 2: local access source per region
 GRIDS = json.load(open(os.path.join(HERE, "beta_grids.json")))["regions"]          # rule 4: resort/town-centre grids
@@ -168,28 +169,29 @@ for d in sorted(glob.glob(f"{ROOT}/public/data/*/index.json")):
     for x in S:
         if not (x["ok"] or id(x) in inf): gap[x["tier"]] += x["L"]
     row["gap"] = gap; out.append(row)
-# Official beta bar (Max, 2026-10-22): >= 70% of important MILES backed by a real source. Corridors >= 0.25 mi are the to-do list.
-STATUS = {}
-for x in out:
-    miss = ([] if x["s"] >= BAR else [f"miles {100*x['s']:.1f}% < 70%"]) + ([] if x["r"] in ACCESS else ["no local access source recorded"])
-    STATUS[x["r"]] = dict(important_mi=round(x["L"], 1), sourced_pct=round(100*x["s"], 1), access_source=x["r"] in ACCESS,
-                          passes=not miss, missing=miss, corridors_to_70=x["c_none"][0], corridor_mi_to_70=round(x["c_none"][1], 1),
-                          conflicts=x["n_conf"], ban_mi=round(x["ban_mi"], 1), ban_sourced_mi=round(x["ban_src_mi"], 1),
-                          grid_mi=round(x["grid_mi"], 1), county_assumed_mi=round(x["county_assumed_mi"], 1), assumed_mi=round(x["assumed_mi"], 1),
-                          reports=len(CHECK.get(x["r"], {}).get("reports", [])))
-V3 = {}
+# OFFICIAL beta bar v3 (Max, Oct 22 2026, 2:47 PM ET: "Use the relaxed bar"). Town grid streets are left out of the %
+# (still on the check list); reports stay on the check list and don't move the %. A region passes when ALL hold:
+#   1. >= 70% of important miles sourced (v/m/o or d+source), cited bans counted as sourced;
+#   2. >= 50% of non-banned important miles sourced (floor);
+#   3. local-rules check recorded: research/access_sources.json "regions" (local ordinance/map) or "state_law" (none found).
+# San Diego is exempt: always passes, never beta.
 ACC3 = json.load(open(os.path.join(HERE, "access_sources.json")))
+STATUS = {}
 for x in out:
     a, b, bc, sn = x["v3_all"] or 1e-9, x["v3_ban"], x["v3_ban_cited"], x["v3_src_nb"]
     p_in = (sn + bc) / a; p_nb = sn / max(a - b, 1e-9)
     acc = x["r"] in ACC3["regions"] or x["r"] in ACC3.get("state_law", {})
-    why = ([] if p_in >= BAR else [f"{100*p_in:.1f}% < 70% (bans in)"]) + ([] if p_nb >= 0.5 else [f"non-ban {100*p_nb:.1f}% < 50% floor"]) + ([] if acc else ["no local-rules search recorded"])
-    V3[x["r"]] = dict(pct_bans_in=round(100*p_in, 1), pct_nonban=round(100*p_nb, 1), access_check=acc, passes=(not why) or x["r"] == "sd", why=["SD exempt"] if x["r"] == "sd" else why)
-json.dump(dict(rule="v3 relaxed (analysis only): >=70% of important miles sourced with cited bans counted as sourced; >=50% of non-ban miles sourced; local-rules search recorded (ordinance or state law); grids/reports on check list only; sd exempt", regions=V3),
-          open(os.path.join(HERE, os.environ.get("V3_OUT", "beta_status_v3.json")), "w"), indent=1, sort_keys=True)
+    why = ([] if p_in >= BAR else [f"{100*p_in:.1f}% < 70% (bans in)"]) + ([] if p_nb >= FLOOR else [f"non-ban {100*p_nb:.1f}% < 50% floor"]) + ([] if acc else ["no local-rules check recorded"])
+    sd = x["r"] in EXEMPT
+    STATUS[x["r"]] = dict(pct_bans_in=round(100*p_in, 1), pct_nonban=round(100*p_nb, 1), access_check=acc, exempt=sd,
+                          passes=sd or not why, missing=[] if sd else why, important_mi=round(x["L"], 1),
+                          corridors_to_70=x["c_none"][0], corridor_mi_to_70=round(x["c_none"][1], 1),
+                          conflicts=x["n_conf"], ban_mi=round(x["ban_mi"], 1), ban_sourced_mi=round(x["ban_src_mi"], 1),
+                          grid_mi=round(x["grid_mi"], 1), county_assumed_mi=round(x["county_assumed_mi"], 1), assumed_mi=round(x["assumed_mi"], 1),
+                          reports=len(CHECK.get(x["r"], {}).get("reports", [])))
 json.dump(CHECK, open(os.path.join(HERE, "beta_check_list.json"), "w"), indent=1)
 if not os.environ.get("NO_STATUS"):
-    json.dump(dict(rule="pass = important miles (bans excluded) sourced by v/m/d+source >= 70% AND a local access source recorded; resort grids included when an access source exists; corridors >= 0.25 mi, conflicts and reports checked first; sd exempt (never beta)", regions=STATUS),
+    json.dump(dict(rule=RULE_TEXT, regions=STATUS),
               open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "beta_status.json"), "w"), indent=1, sort_keys=True)
 if DUMPED: json.dump(DUMPED, open("/tmp/bg2_dump.json", "w"))
 json.dump(dict(rows=[{**r, "gap": dict(r["gap"])} for r in out], agree={k: v for k, v in AGREE.items()}, signals=dict(SIG),

@@ -1,6 +1,6 @@
 {
  "unverified": [
-  "City-level cart designations not digitized; app applies the state LSV rule (posted \u226435)."
+  "City-level cart designations not digitized; app applies the state LSV rule (posted ≤35)."
  ],
  "bans": [
   {
@@ -10,7 +10,16 @@
   }
  ],
  "sources": [
-  "Tex. Transp. Code 551.403 / 551.303"
+  "Tex. Transp. Code 551.403 / 551.303",
+  "https://ecode360.com/41825792 (Rockport Ch. 98 Art. VI: carts on city streets posted <=35 mph, Sec. 98-132(b))"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "cart_only_bans": [
+  {
+   "names": "^(SH|TX|FM|SR|State Highway|Farm[- ]to[- ]Market|Business|Bus\\.?|Loop|Park Road|PR)[ -]?\\d|^(Texas )?State Highway|^FM ?\\d",
+   "poly": "rockport_tx.json",
+   "url": "https://ecode360.com/41825792",
+   "label": "Rockport Code Sec. 98-133(a): golf carts prohibited on the state highway system incl. farm-to-market roads in city limits, regardless of speed"
+  }
+ ]
 }

@@ -35,4 +35,7 @@ t('LSV mode classifies every real segment exactly like master app.js did',()=>{
     for(const f of fs.readdirSync(dir))for(const s of JSON.parse(fs.readFileSync(path.join(dir,f)))){const s0=s[3]==='o'?[...s.slice(0,3),'t',...s.slice(4)]:s;  // trusted OSM 'o' must classify exactly like the OSM tag 't' it relabels
     for(const L of [false,true])a.equal(R.cls(s,N,L),old(s0,M,L),r.id+' '+JSON.stringify(s.slice(0,4)));k++}}
   a.ok(k>100000,'segments checked '+k)});
+t('flag 4 (local golf-cart-only ban): Avoid for golf carts, LSVs unaffected, a posted sign never lifts it',()=>{for(const id of ['annamaria','rockport','chs','staug']){const g=R.ruleFor(rules,reg(id),'golf_cart'),l=R.ruleFor(rules,reg(id),'lsv');
+  for(const c of ['t','v','m','o','d']){const s=[0,'residential',25,c,0,0,1,[],-1,4,0];a.equal(R.cls(s,g),3,id+' '+c);a.equal(R.cls(s,l),0,id+' '+c);a.match(R.why(s,g,l),/golf carts not allowed on this road \(local ordinance\).*OK for/)}}});
+t('South Padre: local cap 35 cites Sec. 18-30',()=>{for(const v of R.VEHICLES){const x=R.ruleFor(rules,reg('southpadre'),v);a.equal(x.max_posted,35);a.match(x.cite,/18-30/);a.equal(R.cls(seg(40),x),3)}});
 console.log(`RESULT ALL PASS (${n})`);

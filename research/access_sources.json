@@ -35,19 +35,19 @@
    "kind": "ordinance",
    "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/12892/1003462/pdf",
    "label": "Bradenton Beach Ord. 19-514 (carts/LSVs on city roads <=35 mph except listed); Holmes Beach Sec. 62-39 bans carts on Palm Dr, Gulf Dr, Marina Dr 5300-6600 (https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10998/1154989/pdf)",
-   "applied": "not yet applied to tiles"
+   "applied": "research/regions/annamaria.json cart_only_bans (Holmes Beach Gulf/Palm/Marina Dr, flag 4)"
   },
   "southpadre": {
    "kind": "ordinance",
    "url": "https://www.myspi.org/egov/documents/1464795083_20813.pdf",
-   "label": "South Padre Island Code Sec. 18-30: carts on streets posted <=35 mph; not SH-100/causeway",
-   "applied": "not yet applied to tiles"
+   "label": "South Padre Island Code Sec. 18-30(D)(7): motorized carts only on streets posted <=35 mph (Padre Blvd / Park Road 100 is allowed where posted <=35; the earlier note 'not SH-100' was not in the code). Queen Isabella Causeway ban kept.",
+   "applied": "regions.json rule max_posted 35 citing Sec. 18-30(D)(7)"
   },
   "staug": {
    "kind": "city rule page",
    "url": "https://www.staugbch.com/413/Golf-CartsLow-Speed-Vehicles",
-   "label": "St. Augustine Beach: golf carts not allowed on public streets; LSVs on streets <=35 mph",
-   "applied": "not yet applied to tiles"
+   "label": "City of St. Augustine Beach: traditional golf carts not allowed on public streets; LSVs on streets <=35 mph (city of St. Augustine itself: state rule, F.S. 316.212 designated roads only)",
+   "applied": "research/regions/staug.json cart_only_bans (all public streets in St. Augustine Beach city limits, flag 4)"
   },
   "tybee": {
    "kind": "city rule sheet",
@@ -65,13 +65,19 @@
    "kind": "ordinance",
    "url": "https://ecode360.com/41825792",
    "label": "Rockport Ch. 98 Art. VI: carts on city streets <=35 mph; not state highways / FM roads",
-   "applied": "not yet applied to tiles"
+   "applied": "research/regions/rockport.json cart_only_bans (state highway/FM roads in city limits, flag 4); <=35 is the app's TX cap"
   },
   "chs": {
    "kind": "ordinance/city pages",
    "url": "https://www.isleofpalms.gov/police/golf-carts-low-speed-vehicles",
    "label": "Isle of Palms: no Palm Blvd / IOP Connector; Folly Beach: cross only Center St & Folly Rd (https://cityoffollybeach.com/rules_regulations/golf_carts.php). Sullivan's Island not found",
-   "applied": "not yet applied to tiles"
+   "applied": "research/regions/chs.json cart_only_bans (IOP Palm Blvd; Folly Beach Center St/Folly Rd, flag 4)"
+  },
+  "nocatee": {
+   "kind": "ordinance + circulation map",
+   "url": "https://www.sjcfl.us/wp-content/uploads/2024/11/golf-cart-ord2024-7.pdf",
+   "label": "St. Johns County Ord. 2018-42 as amended by 2024-7 (Nocatee roads posted <=25); City of Jacksonville Ord. 2017-66 Exh. 1 Nocatee golf cart/LSV circulation map (https://cityclts.coj.net/docs/2017-0066/Substitutes/2017-66%20Exh%201.pdf)",
+   "applied": "research/regions/nocatee.json bans + regions.json rule.golf_cart (max 25)"
   }
  },
  "candidates": {
@@ -80,8 +86,8 @@
  "state_law": {
   "oob": {
    "text": "state law, no local ordinance found",
-   "law": "Maine 29-A MRSA \u00a72093: golf carts only on municipally designated, signed golf cart access routes",
-   "law_url": "https://legislature.maine.gov/legis/bills/bills_128th/billtexts/HP062701.asp",
+   "law": "Maine 29-A M.R.S. §501(2-A) (golf carts only on islands without state roads) and §2089 (LSVs on roads posted <=35). The 'golf cart access route' bill (LD 878 / HP0627, 2017) cited before was never enacted: today's §2093 is 'Snow and ice'. So plain golf carts stay not street-legal in OOB.",
+   "law_url": "https://legislature.maine.gov/statutes/29-A/title29-Asec2089.html",
    "searched": "Old Orchard Beach code of ordinances (https://oob-me.elaws.us/code/coor) and Ch. 54 Traffic; web search 'Old Orchard Beach golf cart LSV ordinance'"
   },
   "amelia": {
@@ -103,5 +109,5 @@
    "searched": "web search 'Siesta Key Sarasota County golf cart LSV ordinance'; FLHSMV LSV page https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
   }
  },
- "_note_v3": "v3 (Max 2026-10-22, analysis only): access check = a local-rules search is recorded: 'regions' (local source) or 'state_law' (no local ordinance found, with what was searched). Quick searches 2026-10-22; 'not yet applied' = rules not yet in tiles."
+ "_note_v3": "v3 is the OFFICIAL bar (Max, Oct 22 2026, 2:47 PM ET): access check = a local-rules search is recorded: 'regions' (local source) or 'state_law' (no local ordinance found, with what was searched)."
 }

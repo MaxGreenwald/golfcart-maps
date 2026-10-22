@@ -128,7 +128,6 @@
    32.86,
    -79.7
   ],
-  "beta": true,
   "cover": "Isle of Palms, Sullivan's Island and Folly Beach (plus access roads) only. Pick another city in the menu above.",
   "slug": "charleston"
  },
@@ -148,7 +147,6 @@
    30.4,
    -85.9
   ],
-  "beta": true,
   "cover": "South Walton (Miramar Beach to Inlet Beach) only. Pick another city in the menu above.",
   "slug": "30a"
  },
@@ -193,7 +191,6 @@
    27.88,
    -97.03
   ],
-  "beta": true,
   "cover": "Port Aransas / north Mustang Island only. Pick another city in the menu above.",
   "slug": "portaransas"
  },
@@ -300,8 +297,7 @@
    -80.82
   ],
   "cover": "Tybee Island only. Pick another city in the menu above.",
-  "slug": "tybee",
-  "beta": true
+  "slug": "tybee"
  },
  {
   "id": "galveston",
@@ -365,7 +361,6 @@
    27.55,
    -82.67
   ],
-  "beta": true,
   "cover": "Anna Maria, Holmes Beach and Bradenton Beach only. Pick another city in the menu above.",
   "slug": "annamaria"
  },
@@ -405,9 +400,13 @@
    26.17,
    -97.15
   ],
-  "beta": true,
   "cover": "South Padre Island and Port Isabel only. Pick another city in the menu above.",
-  "slug": "southpadre"
+  "slug": "southpadre",
+  "rule": {
+   "max_posted": 35,
+   "cite": "South Padre Island Code Sec. 18-30(D)(7): motorized carts only on streets posted 35 mph or less",
+   "url": "https://www.myspi.org/egov/documents/1464795083_20813.pdf"
+  }
  },
  {
   "id": "siesta",
@@ -425,7 +424,6 @@
    27.45,
    -82.5
   ],
-  "beta": true,
   "cover": "Siesta Key, Lido, St. Armands and Longboat Key area only. Pick another city in the menu above.",
   "slug": "siestakey"
  },
@@ -485,7 +483,6 @@
    29.95,
    -81.25
   ],
-  "beta": true,
   "cover": "St. Augustine, Anastasia Island and St. Augustine Beach only. Pick another city in the menu above.",
   "slug": "staugustine"
  },
@@ -505,7 +502,6 @@
    30.71,
    -81.42
   ],
-  "beta": true,
   "cover": "Amelia Island only. Pick another city in the menu above.",
   "slug": "ameliaisland"
  },
@@ -525,7 +521,6 @@
    30.17,
    -81.37
   ],
-  "beta": true,
   "cover": "Nocatee (St. Johns and Duval counties) only. Pick another city in the menu above.",
   "rule": {
    "golf_cart": {
@@ -686,7 +681,6 @@
    28.12,
    -97.0
   ],
-  "beta": true,
   "cover": "Rockport and Fulton only. Pick another city in the menu above.",
   "slug": "rockport"
  },
@@ -790,7 +784,6 @@
    21.43,
    -157.7
   ],
-  "beta": true,
   "cover": "Kailua (windward Oahu) only. Pick another city in the menu above.",
   "slug": "kailua"
  },
@@ -810,7 +803,6 @@
    43.55,
    -70.33
   ],
-  "beta": true,
   "cover": "Old Orchard Beach and Ocean Park only. Pick another city in the menu above.",
   "slug": "oldorchardbeach"
  }

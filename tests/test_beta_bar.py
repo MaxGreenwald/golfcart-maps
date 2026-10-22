@@ -1,4 +1,5 @@
-"""Beta bar (Max, 2026-10-22): beta = < 70% of important miles sourced; San Diego never beta."""
+"""Beta bar v3 (Max, Oct 22 2026, 2:47 PM ET): >=70% of important miles sourced with cited bans counted, >=50% of non-ban miles,
+local-rules check recorded (ordinance or state law); San Diego exempt and never beta."""
 import json, os, subprocess, sys, unittest
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 REGS = json.load(open(os.path.join(ROOT, "public/data/regions.json")))
@@ -12,10 +13,25 @@ class BetaBar(unittest.TestCase):
         for r in REGS:
             if r["id"] == "sd": continue
             self.assertEqual(bool(r.get("beta")), not ST[r["id"]]["passes"], r["id"])
-    def test_pass_needs_miles_and_access_source(self):
-        acc = json.load(open(os.path.join(ROOT, "research/access_sources.json")))["regions"]
+    def test_pass_needs_v3_bar(self):
+        acc = json.load(open(os.path.join(ROOT, "research/access_sources.json")))
         for rid, v in ST.items():
-            self.assertEqual(v["passes"], v["sourced_pct"] >= 70 and rid in acc, rid)
+            if rid == "sd": self.assertTrue(v["passes"] and v["exempt"]); continue
+            a = rid in acc["regions"] or rid in acc.get("state_law", {})
+            self.assertEqual(v["access_check"], a, rid)
+            self.assertEqual(v["passes"], v["pct_bans_in"] >= 70 and v["pct_nonban"] >= 50 and a, rid)
+    def test_v3_floor_blocks_ban_heavy_regions(self):
+        # cited bans can lift the headline %, but never past the 50% non-ban floor
+        for rid, v in ST.items():
+            if rid != "sd" and v["pct_nonban"] < 50: self.assertFalse(v["passes"], rid)
+    def test_state_law_entries_record_the_search(self):
+        acc = json.load(open(os.path.join(ROOT, "research/access_sources.json")))
+        for r, v in acc.get("state_law", {}).items():
+            self.assertEqual(v["text"], "state law, no local ordinance found", r); self.assertTrue(v["searched"], r); self.assertTrue(v["law_url"].startswith("http"), r)
+        for r, v in acc["regions"].items(): self.assertTrue(v["url"].startswith("http"), r)
+    def test_nocatee_has_access_source(self):
+        acc = json.load(open(os.path.join(ROOT, "research/access_sources.json")))["regions"]
+        self.assertIn("nocatee", acc); self.assertIn("2017-66", acc["nocatee"]["label"])
     def test_bans_scored_apart(self):
         for rid, v in ST.items():
             self.assertIn("ban_mi", v); self.assertLessEqual(v["ban_sourced_mi"], v["ban_mi"] + 0.05, rid)
@@ -31,18 +47,3 @@ class BetaBar(unittest.TestCase):
         self.assertEqual(subprocess.run([sys.executable, os.path.join(ROOT, "scripts/apply_beta_bar.py"), "--check"], capture_output=True).returncode, 0)
 if __name__ == "__main__": unittest.main()
 
-
-def test_v3_variant_rules():
-    import json, os
-    here = os.path.join(os.path.dirname(__file__), "..", "research")
-    acc = json.load(open(os.path.join(here, "access_sources.json")))
-    for f in ("beta_status_v3.json", "beta_status_v3_with_o.json"):
-        st = json.load(open(os.path.join(here, f)))["regions"]
-        for r, x in st.items():
-            if r == "sd":
-                assert x["passes"]; continue
-            a = r in acc["regions"] or r in acc.get("state_law", {})
-            assert x["access_check"] == a
-            assert x["passes"] == (x["pct_bans_in"] >= 70 and x["pct_nonban"] >= 50 and a), r
-    for r, v in acc.get("state_law", {}).items():
-        assert v["text"] == "state law, no local ordinance found" and v["searched"] and v["law_url"].startswith("http")
