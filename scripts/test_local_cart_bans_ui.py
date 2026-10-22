@@ -6,7 +6,7 @@ fails = []
 def check(n, ok, d=""):
     print(("PASS " if ok else "FAIL ") + n, d)
     if not ok: fails.append(n)
-CASES = [("annamaria", "Gulf Drive", "62-39"), ("chs", "Palm Boulevard", "Isle of Palms"), ("rockport", "FM", "98-133"), ("staug", "A1A Beach Boulevard", "St. Augustine Beach")]
+CASES = [c for c in [("annamaria", "Gulf Drive", "62-39"), ("chs", "Palm Boulevard", "Isle of Palms"), ("rockport", "FM", "98-133"), ("staug", "A1A Beach Boulevard", "St. Augustine Beach")] if c[0] in os.environ.get("ONLY", c[0]).split(",")]
 with sync_playwright() as p:
     b = p.chromium.launch()
     for rid, road, cite in CASES:
@@ -19,9 +19,9 @@ with sync_playwright() as p:
             check(f"{rid}: flag-4 {road} present", pos is not None)
             if not pos: pg.close(); continue
             pg.evaluate("([la,lo])=>{map.setView([la,lo],18)}", pos); pg.wait_for_timeout(5000)
-            hit = pg.evaluate("""()=>{const keys=new Set(window._C.map(s=>s[7][0][1].toFixed(5)+','+s[7][0][0].toFixed(5)));let hit=null;
+            hit = pg.evaluate("""()=>{const k2=(a,b)=>a.toFixed(5)+','+b.toFixed(5);const keys=new Set(window._C.map(s=>k2(s[7][0][1],s[7][0][0])+'|'+k2(s[7][1][1],s[7][1][0])));let hit=null;
               map.eachLayer(l=>{if(hit||!l.getLatLngs)return;const p=l.getLatLngs();if(p.length<2||p[0].lat===undefined)return;
-                if(keys.has(p[0].lat.toFixed(5)+','+p[0].lng.toFixed(5))&&map.getBounds().contains(p[0]))hit=l});
+                if(keys.has(k2(p[0].lat,p[0].lng)+'|'+k2(p[1].lat,p[1].lng))&&map.getBounds().contains(p[0]))hit=l});
               if(!hit)return null;const p=hit.getLatLngs(),m=L.latLng((p[0].lat+p[1].lat)/2,(p[0].lng+p[1].lng)/2);
               hit.fire('click',{latlng:m,originalEvent:new MouseEvent('click')});map.panTo(m);return 1}""")
             pg.wait_for_timeout(1500)
