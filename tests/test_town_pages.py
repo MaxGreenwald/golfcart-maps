@@ -1,5 +1,5 @@
 """Published town pages (content/towns/<region>/*.json -> dist/<region>/<town>.html): JSON-LD valid with FAQPage that
-matches the visible FAQ, every page cites an http(s) source and shows 'Rules last checked YYYY-MM-DD', no 'free'
+matches the visible FAQ, every page cites an http(s) source and shows 'Rules last checked YYYY-MM-DD', no 'beta'
 wording, Open-the-map link goes to /map/<live region slug> with a center inside that region, nearby links resolve,
 and every page is in the sitemap. Set URL=https://<preview>/ to also fetch every page and map link over HTTP."""
 import glob, json, os, re, shutil, sys, tempfile, unittest, urllib.request
@@ -32,10 +32,10 @@ class TownPages(unittest.TestCase):
             self.assertTrue(t["rules"] and all(re.match(r"^https?://", r["source_url"]) for r in t["rules"]), t["slug"])
             self.assertRegex(h, r'<td><a href="https?://[^"]+" rel=nofollow>')
             self.assertRegex(h, r"Rules last checked \d{4}-\d{2}-\d{2}")
-    def test_no_free_wording(self):
+    def test_no_beta_wording(self):
         for t, h in self.pages():
-            self.assertNotRegex(re.sub(r"<[^>]+>", " ", h), r"(?i)\bfree\b|verified", t["slug"])
-            self.assertIn("is a map to help you plan", h); self.assertNotIn("is in beta", h); self.assertIn("Golf Cart Maps", h)
+            self.assertNotRegex(re.sub(r"<[^>]+>", " ", h), r"(?i)\bbeta\b|verified", t["slug"])
+            self.assertIn("is free to use", h); self.assertNotIn("is in beta", h); self.assertIn("Golf Cart Maps", h)
     def test_map_and_nearby_links(self):
         for t, h in self.pages():
             r = REGS[t["region"]]; lat, lon = t["map_center"]; b = r["bbox"]

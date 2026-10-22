@@ -35,7 +35,7 @@ class T(unittest.TestCase):
         for slug, h in self.pages.items():
             self.assertRegex(h, r'class="cta" href="/map\?r=[a-z0-9]+"')
             text = re.sub(r"<[^>]+>", " ", h)
-            self.assertNotRegex(text, r"(?i)\bfree\b|verified|carplay|android")
+            self.assertNotRegex(text, r"(?i)\bbeta\b|verified|carplay|android")
     def test_sw_caches_only_root_as_shell(self):
         sw = open(os.path.join(C.PUB, "sw.js")).read(); self.assertIn("r.ok&&app&&!r.redirected", sw)  # only /map is the app shell
 if __name__ == "__main__": unittest.main()

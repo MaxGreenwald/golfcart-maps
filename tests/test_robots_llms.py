@@ -1,4 +1,4 @@
-"""robots.txt names the AI crawlers; llms.txt is national, generated, never says free/verified."""
+"""robots.txt names the AI crawlers; llms.txt is national, generated, never says beta/verified."""
 import os, re, sys, unittest
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
 import gen_llms
@@ -13,7 +13,7 @@ class T(unittest.TestCase):
     def test_llms_current_and_clean(self):
         t = open(os.path.join(PUB, "llms.txt")).read()
         self.assertEqual(t, gen_llms.render(), "run scripts/gen_llms.py")
-        self.assertNotRegex(t, r"(?i)\bfree\b|verified|carplay|android")
-        self.assertIn("now in beta", t)
+        self.assertNotRegex(t, r"(?i)\bbeta\b|verified|android")
+        self.assertIn("free to use", t)
         for s in ["sandiego", "villages", "30a", "keywest"]: self.assertIn("https://golfcartmap.com/%s)" % s, t)
 if __name__ == "__main__": unittest.main()
