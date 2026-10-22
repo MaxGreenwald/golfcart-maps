@@ -13,7 +13,7 @@ import math, re
 ISLAND_M = 805            # 0.5 mi
 SINGLE_M = 300            # one disagreeing source is only overruled on short stretches; a longer 40+ run may be a real zone
 CAP = 35                  # LSV cap; "red" here means over 35 mph or no limit
-KNOWN = set("tvmdrkn")    # codes that carry a real posted limit (tag, official, Mapillary, designated, inherited, same-road)
+KNOWN = set("tvmdrkno")   # o = trusted OSM (scripts/trusted_osm.py)    # codes that carry a real posted limit (tag, official, Mapillary, designated, inherited, same-road)
 SKIP_HW = ("motorway", "trunk")   # freeways/expressways: red is expected
 NOT_ROAD = {"path", "footway", "cycleway", "track", "pedestrian", "steps", "bridleway"}
 
@@ -71,7 +71,7 @@ def kind(isl, segs, sources=None):
     'confirmed' = an official/verified source, two agreeing sources, or 2+ Mapillary signs."""
     c = set(isl["codes"])
     if c <= {"i"} and all(segs[k][2] in (None, 99) for k in isl["idx"]): return "gap"
-    if c <= {"t", "i"}: return "single"
+    if c <= {"t", "o", "i"}: return "single"
     if c <= {"m", "i"} and sources is not None and all(_mly_signs(segs[k], sources) < 2 for k in isl["idx"] if segs[k][3] == "m"): return "single"
     return "confirmed"
 

@@ -32,6 +32,7 @@ t('LSV rule unchanged from master (<=35 everywhere except region caps)',()=>{for
 t('LSV mode classifies every real segment exactly like master app.js did',()=>{
   const old=(s,RULE,LEN)=>{const desig=s=>s[3]==='c'||s[3]==='d'||(RULE.assume&&RULE.assume.includes(s[1])&&s[2]!=null&&s[2]<=RULE.max_posted);if(s[3]==='c')return 0;if(s[9]===1&&/^(motorway|trunk|primary)/.test(s[1]))return 3;if(s[2]==null||(s[2]>RULE.max_posted&&!(LEN&&s[2]===99)))return 3;if(RULE.designated_only&&!desig(s))return 3;return s[3]==='t'||s[3]==='v'||s[3]==='m'||s[3]==='d'||s[3]==='r'||s[3]==='k'||s[3]==='n'||s[3]==='q'?0:1};  // + same-road codes n/q (Oct 18 2026)
   let k=0;for(const r of regs){const dir=path.join(PUB,'data',r.id,'tiles');if(!fs.existsSync(dir))continue;const st=rules[r.state]||rules.CA,M={...st.lsv,...(r.rule||{})},N=R.ruleFor(rules,r,'lsv');
-    for(const f of fs.readdirSync(dir))for(const s of JSON.parse(fs.readFileSync(path.join(dir,f)))){for(const L of [false,true])a.equal(R.cls(s,N,L),old(s,M,L),r.id+' '+JSON.stringify(s.slice(0,4)));k++}}
+    for(const f of fs.readdirSync(dir))for(const s of JSON.parse(fs.readFileSync(path.join(dir,f)))){const s0=s[3]==='o'?[...s.slice(0,3),'t',...s.slice(4)]:s;  // trusted OSM 'o' must classify exactly like the OSM tag 't' it relabels
+    for(const L of [false,true])a.equal(R.cls(s,N,L),old(s0,M,L),r.id+' '+JSON.stringify(s.slice(0,4)));k++}}
   a.ok(k>100000,'segments checked '+k)});
 console.log(`RESULT ALL PASS (${n})`);
