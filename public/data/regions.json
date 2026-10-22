@@ -510,6 +510,34 @@
   "slug": "ameliaisland"
  },
  {
+  "id": "nocatee",
+  "name": "Nocatee / Ponte Vedra, FL",
+  "short": "Nocatee",
+  "state": "FL",
+  "center": [
+   30.105,
+   -81.415
+  ],
+  "zoom": 14,
+  "bbox": [
+   30.06,
+   -81.47,
+   30.17,
+   -81.37
+  ],
+  "beta": true,
+  "cover": "Nocatee (St. Johns and Duval counties) only. Pick another city in the menu above.",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 25,
+    "designated_only": false,
+    "cite": "St. Johns Co. Res. 2009-11, Ord. 2010-48, Ord. 2018-42 as amended by 2024-7; Duval (Jacksonville) Ord. 2017-66; F.S. 316.212: electric golf carts on Nocatee roads posted 25 mph or less, signed golf cart paths (10 ft+) and designated multi-use trails (16 ft+), 15 mph on multi-use paths",
+    "url": "https://www.nocatee.com/golfcartmap"
+   }
+  },
+  "slug": "nocatee"
+ },
+ {
   "id": "keywest",
   "name": "Key West, FL",
   "short": "Key West",

@@ -1,6 +1,6 @@
 # Golf Cart Maps
 
-> Golf Cart Maps (golfcartmap.com) is a golf cart and LSV (low-speed vehicle) map and route planner, now in beta. It shows which roads are legal for golf carts and street-legal LSVs in 37 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
+> Golf Cart Maps (golfcartmap.com) is a golf cart and LSV (low-speed vehicle) map and route planner, now in beta. It shows which roads are legal for golf carts and street-legal LSVs in 38 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
 
 URL: https://golfcartmap.com/
 
@@ -28,6 +28,7 @@ URL: https://golfcartmap.com/
 - [Key West, FL](https://golfcartmap.com/keywest) (beta data)
 - [Lakewood Ranch, FL](https://golfcartmap.com/lakewoodranch) (beta data)
 - [Naples / Marco Island, FL](https://golfcartmap.com/naples) (beta data)
+- [Nocatee / Ponte Vedra, FL](https://golfcartmap.com/nocatee) (beta data)
 - [Panama City Beach, FL](https://golfcartmap.com/panamacitybeach) (beta data)
 - [Siesta Key / Sarasota keys, FL](https://golfcartmap.com/siestakey) (beta data)
 - [St. Augustine, FL](https://golfcartmap.com/staugustine) (beta data)
