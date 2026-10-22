@@ -74,6 +74,8 @@ jobs:
         run: python scripts/test_vehicle.py
       - name: "test_appstore (iOS build - no paywall, tip or beta labels; native share and haptics wired; launches with third-party hosts blocked)"
         run: python scripts/test_appstore.py
+      - name: test_sv_label (Street View check photos labeled as Street View, not local report)
+        run: python scripts/test_sv_label.py
       - uses: actions/upload-artifact@v4
         if: failure()
         with: {name: ci-shots, path: ci-shots, if-no-files-found: ignore}

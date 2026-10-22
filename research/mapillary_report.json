@@ -30,14 +30,6 @@
    "url": "https://www.mapillary.com/app/?lat=32.731070&lng=-117.241830&z=19&focus=map&mapFeatureId=278276523921401"
   },
   {
-   "road": "Catalina Boulevard",
-   "way": 5963449,
-   "osm_mph": 99,
-   "mapillary_mph": 30,
-   "change": "newly allowed",
-   "url": "https://www.mapillary.com/app/?lat=32.732136&lng=-117.242700&z=19&focus=map&mapFeatureId=3972280463099767"
-  },
-  {
    "road": "East G Street",
    "way": 5980595,
    "osm_mph": 99,
@@ -168,9 +160,9 @@
   {
    "road": "Nimitz Boulevard",
    "way": 159947684,
-   "osm_mph": 99,
+   "override_mph": 45,
    "mapillary_mph": 25,
-   "change": "newly allowed",
+   "signs": 2,
    "url": "https://www.mapillary.com/app/?lat=32.739777&lng=-117.231650&z=19&focus=map&mapFeatureId=623781320410731"
   },
   {
@@ -232,9 +224,9 @@
   {
    "road": "Hotel Circle South",
    "way": 233700529,
-   "osm_mph": 35,
+   "override_mph": 35,
    "mapillary_mph": 65,
-   "change": "newly forbidden",
+   "signs": 3,
    "url": "https://www.mapillary.com/app/?lat=32.759180&lng=-117.182076&z=19&focus=map&mapFeatureId=812216806371785"
   },
   {
@@ -1040,9 +1032,9 @@
   {
    "road": "Villa La Jolla Drive",
    "way": 229021196,
-   "osm_mph": 30,
+   "override_mph": 30,
    "mapillary_mph": 40,
-   "change": "newly forbidden",
+   "signs": 2,
    "url": "https://www.mapillary.com/app/?lat=32.867280&lng=-117.233430&z=19&focus=map&mapFeatureId=537132808915957"
   },
   {
@@ -1572,6 +1564,14 @@
    "mapillary_mph": 40,
    "signs": 1,
    "url": "https://www.mapillary.com/app/?lat=33.065050&lng=-117.290955&z=19&focus=map&mapFeatureId=469643921035416"
+  },
+  {
+   "road": "Palomar Airport Road",
+   "way": 436424232,
+   "override_mph": 55,
+   "mapillary_mph": 35,
+   "signs": 1,
+   "url": "https://www.mapillary.com/app/?lat=33.121933&lng=-117.322870&z=19&focus=map&mapFeatureId=1002985545288517"
   },
   {
    "road": "La Costa Avenue",

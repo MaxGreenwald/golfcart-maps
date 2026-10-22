@@ -2794,6 +2794,49 @@
    "cite": [
     "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 31 posted 45 mph"
    ]
+  },
+  {
+   "region": "sd",
+   "road": "Admiral Boland Way",
+   "at": [
+    32.73542,
+    -117.17976
+   ],
+   "m": 336,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [],
+   "note": "Appeared Oct 22 2026 when Street View batch 2 (RG) posted signs set both neighbours <=35; this piece has no sign read yet (stays red, conservative). Check in Street View batch 3."
+  },
+  {
+   "region": "sd",
+   "road": "Nimitz Boulevard",
+   "at": [
+    32.72593,
+    -117.22158
+   ],
+   "m": 614,
+   "mph": [
+    40,
+    99
+   ],
+   "sides": [
+    30,
+    35
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": [
+    "Mapillary: 1 posted 40 mph sign(s) detected"
+   ],
+   "note": "Appeared Oct 22 2026 when Street View batch 2 (RG) posted signs set both neighbours <=35; this piece has no sign read yet (stays red, conservative). Check in Street View batch 3."
   }
  ]
 }

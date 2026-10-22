@@ -60,7 +60,10 @@ except Exception as e: print("mapillary skipped:", e)
 print("mapillary", mst)
 import re
 BAN = re.compile(CFG["cart_ban_names"]) if CFG.get("cart_ban_names") else None
-OV = {o["way"]: o for o in CFG.get("overrides", [])}   # {"way": osm id, "mph": n, "url":..., "label":...}
+OV = {o["way"]: o for o in CFG.get("overrides", [])}
+import streetview_signs as _SV
+SVS = _SV.for_region(RID); SV_APPLIED = []
+SV_CONFLICT = [{"way": k, "road": e["road"], "check_id": e["check_id"], "sign_mph": e["mph"], "kept_mph": OV[k]["mph"], "kept_source": OV[k]["label"]} for k, e in SVS.items() if k in OV and OV[k]["mph"] != e["mph"]]   # {"way": osm id, "mph": n, "url":..., "label":...}
 XING = CFG.get("crossings", []); XN = set()
 def near(la, lo, R=40):
     return any(math.hypot((la - x["lat"]) * 110540, (lo - x["lon"]) * 111320 * math.cos(math.radians(la))) < R for x in XING)
@@ -200,6 +203,8 @@ for wi, w in enumerate(wl):
         o = OV[w["id"]]; s, src = o["mph"], "verified"; si = src_i(o["url"], o["label"])
     elif lban:
         s, src = 99, "verified"; si = src_i(lban["url"], lban["label"])
+    elif w["id"] in SVS:   # Street View posted sign (batch 2, RG): beats OSM/Mapillary/DOT/speed_names; never lifts a ban
+        e = SVS[w["id"]]; s, src = e["mph"], "verified"; si = src_i(e["url"], e["label"]); SV_APPLIED.append(w["id"])
     elif spn:
         s, src = spn["mph"], "verified"; si = src_i(spn["url"], spn["label"]); CHG["speed_names"] = CHG.get("speed_names", 0) + 1
     elif wi in DOT and src == "tagged" and DOT[wi]["src"] == "FHWA" and (s > 35) != (DOT[wi]["mph"] > 35):
@@ -303,6 +308,7 @@ import islands as _ISL
 _HEAL = _HEAL0 + _ISL.heal(out, names, sources)
 stats["same_road_gap"] = sum(c["code"] == "n" for c in _HEAL); stats["same_road_disagree"] = sum(c["code"] == "q" for c in _HEAL)
 for c in _HEAL: print("  same-road island healed:", c)
+print("street view signs applied", len(SV_APPLIED), "of", len(SVS), "conflicts kept official", SV_CONFLICT)
 POLY = CFG.get("poly") or [[W, N], [E, N], [E, S], [W, S]]
 meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": len(wl), "segments": len(out), "stats": stats, "poly": POLY, "region": RID, "unverified": CFG.get("unverified", []), "changes": CHG, "dot_conflicts": CONF, "xnodes": sorted(nids[n] for n in XN if n in nids), "crossings": XING}
 TS = 0.1; tiles = {}
