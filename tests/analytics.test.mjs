@@ -80,3 +80,19 @@ test('/api/e forwards only the sanitized row and always answers 204', async () =
     assert.equal(calls.length, 1);
   } finally { globalThis.fetch = realFetch }
 });
+
+test('App Store badge event is accepted (and legacy testflight_click still counts)', () => {
+  for (const e of ['app_store_click', 'testflight_click']) {
+    const r = sanitize({ v: 1, e, pl: 'web', i: 'abcdefgh12', s: 'abcdefgh34', p: { position: 'app_section' } });
+    assert.ok(r, e); assert.equal(r.props.position, 'app_section');
+  }
+});
+
+test('every data-ev used by the site generators is on the allowlist', async () => {
+  const fs = await import('node:fs');
+  const files = ['scripts/seo_landing.py', 'scripts/seo_common.py', 'public/app.js', 'public/carplay.js'];
+  for (const f of files) {
+    if (!fs.existsSync(f)) continue;
+    for (const m of fs.readFileSync(f, 'utf8').matchAll(/data-ev=["'\\]*([a-z_]+)/g)) assert.ok(EVENTS[m[1]], `${f}: ${m[1]} not in EVENTS`);
+  }
+});
