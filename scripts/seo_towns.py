@@ -33,7 +33,7 @@ def town_page(t, reg, path, noindex=False):
 <table><thead><tr><th>Vehicle</th><th>Allowed</th><th>Roads</th><th>Speed</th><th>Notes</th></tr></thead><tbody>{veh('Golf cart', t['golf_cart'])}{veh('Street-legal LSV', t['lsv'])}</tbody></table>
 <h2>The rules</h2><table><thead><tr><th>Topic</th><th>Rule</th><th>Law</th></tr></thead><tbody>{rules}</tbody></table>
 {('<h2>Roads to avoid</h2><ul>' + banned + '</ul>') if banned else ''}
-<p><a class="cta" href="{e(mapurl)}" data-ev="cta_try_map_click" data-p='{{"position":"town","region":"{e(reg['id'])}"}}'>Open the live {e(n)} map in {BRAND} (golfcartmap.com)</a></p>
+<p><a class="cta" href="{e(mapurl)}" data-ev="cta_try_map_click" data-p='{{"position":"town","region":"{e(reg['id'])}"}}'>Open the live {e(n)} golf cart map in {BRAND} (golfcartmap.com)</a></p>
 {('<h2>FAQ</h2>' + ''.join(f'<h3>{e(q)}</h3><p>{e(a)}</p>' for q, a in faq)) if faq else ''}
 {('<h2>Golf cart rentals</h2><ul>' + shops + '</ul>') if shops else ''}
 {('<h2>Local resources</h2><ul>' + res + '</ul>') if res else ''}

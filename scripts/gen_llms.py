@@ -13,8 +13,9 @@ def render():
     by = {}
     for r in regs: by.setdefault(r["state"], []).append(r)
     o = ["# Golf Cart Maps", "",
-         "> Golf Cart Maps (golfcartmap.com) is a golf cart and LSV (low-speed vehicle) map and route planner, %s. It shows which roads are legal for golf carts and street-legal LSVs in %d beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule." % (POS.STATUS_PHRASE, len(regs)), "",
-         "URL: https://golfcartmap.com/", "",
+         "> Golf Cart Maps (golfcartmap.com) is a golf cart map and route planner for golf carts and LSVs (low-speed vehicles), %s. It shows which roads are legal for golf carts and street-legal LSVs in %d beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule." % (POS.STATUS_PHRASE, len(regs)), "",
+         "URL: https://golfcartmap.com/",
+         "Also written: Golf Cart Map, GolfCartMap (same site).", "",
          "## What it does",
          "- Colors every road: green = allowed for your vehicle, red = too fast or banned (avoid).",
          "- Plans routes on allowed roads; crossing a faster road at an intersection is allowed where state law permits it.",

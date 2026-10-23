@@ -1,8 +1,9 @@
 # Golf Cart Maps
 
-> Golf Cart Maps (golfcartmap.com) is a golf cart and LSV (low-speed vehicle) map and route planner, free to use. It shows which roads are legal for golf carts and street-legal LSVs in 64 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
+> Golf Cart Maps (golfcartmap.com) is a golf cart map and route planner for golf carts and LSVs (low-speed vehicles), free to use. It shows which roads are legal for golf carts and street-legal LSVs in 64 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
 
 URL: https://golfcartmap.com/
+Also written: Golf Cart Map, GolfCartMap (same site).
 
 ## What it does
 - Colors every road: green = allowed for your vehicle, red = too fast or banned (avoid).

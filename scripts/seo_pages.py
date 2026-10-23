@@ -50,7 +50,7 @@ def region_page(g, R):
     rows = "".join(f"<tr><th scope=row>{e(a)}</th><td>{e(b)}</td><td>{e(c)}{(' <a href=\"'+e(u)+'\" rel=nofollow>source</a>') if u else ''}</td></tr>" for a, b, c, u in (lsv, cart))
     body = f"""<nav aria-label="Breadcrumb" class="muted"><a href="/">Home</a> › {e(st)} › {e(n)}</nav>
 <h1>Where can you drive a golf cart or LSV in {e(n)}?</h1>
-<p>{e(lsv[1])} Plain golf carts: {e(cart[1][0].lower()+cart[1][1:])} {BRAND} (golfcartmap.com) maps every road in {e(n)} and plans routes that stay on legal ones. Rules last checked {e(month())}.</p>
+<p>{e(lsv[1])} Plain golf carts: {e(cart[1][0].lower()+cart[1][1:])} The {e(g['short'] or n)} golf cart map on {BRAND} (golfcartmap.com) colors every road and plans routes that stay on legal ones. Rules last checked {e(month())}.</p>
 <p><a class="cta" href="{mapurl}" data-ev="cta_try_map_click" data-p='{{"position":"region","region":"{e(g['id'])}"}}'>Open the {e(g['short'] or n)} map</a></p>
 <h2>The rules in {e(n)}</h2>
 <table><thead><tr><th>Vehicle</th><th>Where it may drive</th><th>Law</th></tr></thead><tbody>{rows}</tbody></table>
