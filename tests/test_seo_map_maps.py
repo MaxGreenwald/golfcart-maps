@@ -2,7 +2,7 @@
 The brand stays "Golf Cart Maps"; the home page, llms.txt and the region/town templates also say "golf cart map" naturally."""
 import json, os, re, sys, unittest
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
-import gen_llms, seo_landing, seo_common
+import gen_llms, seo_landing, seo_common, seo_pages, seo_towns
 PUB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public")
 SING = re.compile(r"(?i)\bgolf cart map\b(?!s)")
 PLUR = re.compile(r"(?i)\bgolf cart maps\b")
@@ -33,5 +33,36 @@ class T(unittest.TestCase):
     def test_map_page_both(self):
         h = open(os.path.join(PUB, "index.html"), encoding="utf-8").read()
         self.assertTrue(has_both(re.search(r"<title>(.*?)</title>", h).group(1)))
+
+    # Max Oct 23 11:56 AM PT: LSV targeting next to golf cart map(s), accurate to our LSV rules (not a blanket 35 mph)
+    def test_home_lsv(self):
+        h = seo_landing.render(); txt = re.sub(r"<[^>]+>", " ", h)
+        for pat in [r"\bLSV map\b", r"\bLSV map app\b", r"(?i)\blow speed vehicle map\b", r"(?i)\bstreet[- ]legal golf cart\b", r"35 mph or less"]:
+            self.assertRegex(txt, pat)
+        self.assertRegex(re.search(r"<title>(.*?)</title>", h).group(1), r"\bLSV Map\b")
+        ld = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', h, re.S).group(1))
+        sw = next(x for x in ld if x["@type"] == "SoftwareApplication"); self.assertIn("LSV map app", sw["description"])
+        fq = next(x for x in ld if x["@type"] == "FAQPage"); qs = [q["name"] for q in fq["mainEntity"]]
+        self.assertIn("Is there an LSV map app?", qs); self.assertIn("Where can I drive my LSV?", qs)
+
+    def test_lsv_limit_not_overclaimed(self):
+        """Regions whose LSV limit isn't 35 mph are named wherever the home page and llms.txt give the 35 mph number."""
+        L = seo_common.lsv_limits(); h = seo_landing.render(); t = open(os.path.join(PUB, "llms.txt")).read()
+        self.assertIn("35 mph or less in %d of our %d regions" % (L["n35"], L["n"]), t)
+        for mp, gs in L["other"].items():
+            for g in gs: self.assertIn(g["name"], t); self.assertIn(seo_common.e(g["name"]), h)
+
+    def test_llms_lsv(self):
+        t = open(os.path.join(PUB, "llms.txt")).read()
+        self.assertRegex(t.splitlines()[2], r"\bLSV map\b"); self.assertRegex(t, r"(?i)low speed vehicle map")
+
+    def test_region_and_town_templates_lsv(self):
+        R = seo_common.effective_rules(); regs = {g["slug"]: g for g in seo_common.regions()}
+        for slug in ("sandiego", "oceancitynj"):
+            g = regs[slug]; h = seo_pages.region_page(g, R[g["id"]])
+            self.assertIn("Where can I drive my LSV in", h); self.assertRegex(h, SING); self.assertIn("LSV map", h)
+            self.assertIn("LSVs on roads posted %s mph or less" % R[g["id"]]["lsv"]["max_posted"], h)
+        f = os.path.join(seo_towns.TOWNS, "30a", "seaside.json"); tw = json.load(open(f))
+        h = seo_towns.town_page(tw, regs["30a"], f); self.assertIn("Where can I drive my LSV in Seaside?", h); self.assertRegex(h, SING)
 
 if __name__ == "__main__": unittest.main()
