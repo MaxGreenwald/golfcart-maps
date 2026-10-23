@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Golf Cart Maps coverage: Bintelli stores and dealers</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+<style>
+:root{--g:#1f9d55;--a:#e8a317;--r:#d64545;--ink:#1d2b24;--mut:#5b6b63;--line:#e3e8e5}
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:#f6f8f7}
+header{padding:20px 20px 8px;max-width:1100px;margin:0 auto}h1{font-size:24px;margin:0 0 4px}header p{margin:4px 0;color:var(--mut)}
+a{color:#17663b}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px 40px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}.big{font-size:30px;font-weight:800}.card small{color:var(--mut)}
+#map{height:520px;border-radius:12px;border:1px solid var(--line);margin:8px 0}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--mut);margin:6px 0 2px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}.sq{border-radius:2px;transform:rotate(45deg)}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}th{background:#eef3f0;font-weight:700}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;color:#fff;font-size:12px;font-weight:700}
+.covered{background:var(--g)}.partly{background:var(--a)}.gap{background:var(--r)}
+h2{font-size:18px;margin:26px 0 8px}.note{color:var(--mut);font-size:13px}
+.filters{display:flex;gap:14px;font-size:14px;margin:6px 0}
+</style>
+</head>
+<body>
+<header>
+<h1>Golf Cart Maps coverage of Bintelli locations</h1>
+<p>Every Bintelli Golf Carts store and listed dealer, checked against the cities and beach towns Golf Cart Maps covers today. Private link, prepared <span id="date"></span>.</p>
+</header>
+<div class="wrap">
+<div class="stats" id="stats"></div>
+<div class="filters"><label><input type="checkbox" id="fOwn" checked> Bintelli Golf Carts stores</label><label><input type="checkbox" id="fDlr" checked> Dealers</label><label><input type="checkbox" id="fReg" checked> Golf Cart Maps regions</label></div>
+<div id="map"></div>
+<div class="legend">
+<span><i class="dot sq" style="background:#333"></i>Bintelli Golf Carts store (diamond)</span><span><i class="dot" style="background:#333"></i>Dealer (circle)</span>
+<span><i class="dot covered"></i>Covered (inside or within 10 mi of a region)</span><span><i class="dot partly"></i>Nearby (10 to 25 mi)</span><span><i class="dot gap"></i>Not covered yet</span>
+<span><i class="dot" style="background:#2b6cb0;opacity:.5;border-radius:2px"></i>Golf Cart Maps region</span>
+</div>
+<h2>Bintelli Golf Carts stores</h2>
+<table id="own"><thead><tr><th>Market</th><th>Stores</th><th>Coverage</th><th>Golf Cart Maps region</th></tr></thead><tbody></tbody></table>
+<h2>Dealer network</h2>
+<p class="note" id="dlrnote"></p>
+<table id="dlr"><thead><tr><th>Market</th><th>Dealers</th><th>Coverage</th><th>Golf Cart Maps region</th></tr></thead><tbody></tbody></table>
+<h2>Uncovered dealer markets by state</h2>
+<table id="st"><thead><tr><th>State</th><th>Dealers not covered yet</th><th>Markets</th></tr></thead><tbody></tbody></table>
+<p class="note">Locations come from the public store and dealer lists on bintelligolfcarts.com and bintelli.com. Coverage is the distance from each location to the nearest Golf Cart Maps region. Each covered region's map is open at <a href="https://golfcartmap.com/">golfcartmap.com</a>, free to use in any browser.</p>
+</div>
+<script src="/vendor/leaflet/leaflet.js"></script>
+<script>
+(async()=>{
+const D=await (await fetch('data.json',{cache:'no-cache'})).json();
+const C={covered:'#1f9d55',partly:'#e8a317',gap:'#d64545'}, L2={covered:'Covered',partly:'Nearby',gap:'Not yet'};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+document.getElementById('date').textContent='October 23, 2026';
+const O=D.summary.own_store, R=D.summary.dealer;
+document.getElementById('stats').innerHTML=
+ `<div class="card"><div class="big">${O.covered} of ${O.n}</div>Bintelli Golf Carts stores covered (${O.pct_covered}%)<br><small>${O.covered+O.partly} of ${O.n} covered or nearby (${O.pct_covered_or_partly}%)</small></div>`+
+ `<div class="card"><div class="big">${R.covered} of ${R.n}</div>dealers covered (${R.pct_covered}%)<br><small>${R.covered+R.partly} covered or nearby (${R.pct_covered_or_partly}%)</small></div>`+
+ `<div class="card"><div class="big">${D.regions.length}</div>Golf Cart Maps regions live<br><small>beach towns, islands and golf cart communities</small></div>`;
+const map=L.map('map',{scrollWheelZoom:false}).setView([33,-88],5);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
+const gReg=L.layerGroup().addTo(map), gOwn=L.layerGroup(), gDlr=L.layerGroup();
+for(const r of D.regions){const b=r.b; L.rectangle([[b[0],b[1]],[b[2],b[3]]],{color:'#2b6cb0',weight:1.5,fillOpacity:.18}).bindPopup(`<b>${esc(r.n)}</b><br><a href="https://golfcartmap.com/${esc(r.s)}" target="_blank" rel="noopener">Open the map</a>`).addTo(gReg)}
+for(const p of D.points){
+ const own=p.k==='o', col=C[p.s];
+ const pop=`<b>${esc(p.n)}</b><br>${esc(p.c)}<br>${own?'Bintelli Golf Carts store':'Dealer'}<br><span class="pill ${p.s}">${L2[p.s]}</span> ${p.mi<=0.05?'inside':p.mi+' mi from'} ${esc(p.rg)}`;
+ const m=own?L.marker([p.la,p.lo],{icon:L.divIcon({className:'',html:`<div style="width:16px;height:16px;background:${col};border:2px solid #111;transform:rotate(45deg)"></div>`,iconSize:[16,16],iconAnchor:[8,8]}),zIndexOffset:1000})
+            :L.circleMarker([p.la,p.lo],{radius:5,color:'#222',weight:1,fillColor:col,fillOpacity:.9});
+ m.bindPopup(pop).addTo(own?gOwn:gDlr);
+}
+gDlr.addTo(map); gOwn.addTo(map);
+const tog=(id,g)=>document.getElementById(id).onchange=e=>e.target.checked?g.addTo(map):map.removeLayer(g);
+tog('fOwn',gOwn);tog('fDlr',gDlr);tog('fReg',gReg);
+const slug={};for(const r of D.regions)slug[r.n]=r.s;
+const row=(m,isOwn)=>`<tr><td>${esc(m.market.replace(/ area$/,''))}</td><td>${m.n}</td><td><span class="pill ${m.coverage}">${L2[m.coverage]}</span></td><td>${m.coverage==='gap'?`nearest: ${esc(m.nearest_region)} (${Math.round(m.miles)} mi)`:`<a href="https://golfcartmap.com/${slug[m.nearest_region]}" target="_blank" rel="noopener">${esc(m.nearest_region)}</a>${m.miles>0.05?` (${m.miles} mi)`:''}`}</td></tr>`;
+document.querySelector('#own tbody').innerHTML=O.markets.map(m=>row(m,1)).join('');
+const near=R.markets.filter(m=>m.coverage!=='gap');
+document.querySelector('#dlr tbody').innerHTML=near.map(m=>row(m,0)).join('');
+document.getElementById('dlrnote').textContent=`${R.n} dealer locations in ${R.n_markets} markets. ${R.covered} are covered and ${R.partly} are nearby, in the ${near.length} markets below. The rest are listed by state after this table.`;
+const st={};for(const p of D.points){if(p.k!=='d'||p.s!=='gap')continue;const s=p.c.split(', ').pop()||'Other';(st[s]=st[s]||{n:0,m:new Set()}).n++;st[s].m.add(p.m)}
+document.querySelector('#st tbody').innerHTML=Object.entries(st).sort((a,b)=>b[1].n-a[1].n).map(([s,v])=>`<tr><td>${esc(s)}</td><td>${v.n}</td><td>${esc([...v.m].sort().join('; '))}</td></tr>`).join('');
+window.ready=true;
+})();
+</script>
+</body>
+</html>
