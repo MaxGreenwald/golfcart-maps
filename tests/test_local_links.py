@@ -11,7 +11,7 @@ def all_resources():
 class LocalLinks(unittest.TestCase):
     def test_counts_and_shape(self):
         items = [(p, r) for p, L in all_resources() for r in L]
-        self.assertEqual(len(items), 49)
+        self.assertEqual(len(items), 60)   # +11 South Bay (8 city sites, Rolling Hills, 2 SBCCOG LTN on the region page)
         urls = [r["url"] for _, r in items]; self.assertEqual(len(urls), len(set(urls)))
         self.assertFalse(DROPPED & set(urls))
         for p, r in items:
