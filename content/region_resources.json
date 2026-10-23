@@ -57,5 +57,17 @@
    "name": "Explore Charleston official visitor guide",
    "url": "https://www.charlestoncvb.com/"
   }
+ ],
+ "southbay": [
+  {
+   "lead": "The South Bay Cities Council of Governments is building a Local Travel Network of low-speed streets for NEVs, e-bikes and scooters across the South Bay.",
+   "name": "South Bay Local Travel Network map (SBCCOG)",
+   "url": "https://storymaps.arcgis.com/stories/abba551598c748a3a7ff055a09446496"
+  },
+  {
+   "lead": "SBCCOG's program page explains the Local Travel Network and which cities have built segments.",
+   "name": "Local Travel Network program (SBCCOG)",
+   "url": "https://southbaycities.org/programs/local-travel-network/"
+  }
  ]
 }

@@ -7316,6 +7316,252 @@
   ],
   "gap": []
  },
+ "southbay": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Palos Verdes Drive North",
+    "mi": 7.46,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Anza Avenue",
+    "mi": 1.1,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Redondo Beach Boulevard",
+    "mi": 0.74,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Rolling Hills Road",
+    "mi": 0.71,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Crest Road",
+    "mi": 0.49,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Sepulveda Boulevard",
+    "mi": 0.41,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Main Street",
+    "mi": 0.4,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Harkness Lane",
+    "mi": 0.32,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Redondo Beach Boulevard",
+    "mi": 0.29,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West 235th Street",
+    "mi": 0.27,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Del Amo Boulevard",
+    "mi": 0.26,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Crenshaw Boulevard",
+    "mi": 0.26,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Crest Road",
+    "mi": 0.25,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "15th Street",
+    "mi": 0.24,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Plaza del Amo",
+    "mi": 0.22,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Carson Street",
+    "mi": 0.22,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Del Amo Boulevard",
+    "mi": 0.22,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Del Amo Boulevard",
+    "mi": 0.21,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Crenshaw Boulevard",
+    "mi": 0.2,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West 235th Street",
+    "mi": 0.2,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Knob Hill Avenue",
+    "mi": 0.19,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Medical Center Drive",
+    "mi": 0.19,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Del Amo Boulevard",
+    "mi": 0.18,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Manhattan Avenue",
+    "mi": 0.18,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Vista del Mar",
+    "mi": 0.17,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Plaza del Amo",
+    "mi": 0.15,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Valley Drive",
+    "mi": 0.14,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Maple Avenue",
+    "mi": 0.14,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Sepulveda Boulevard",
+    "mi": 0.14,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Redondo Beach Boulevard",
+    "mi": 0.12,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Highland Avenue",
+    "mi": 0.11,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lomita Boulevard",
+    "mi": 0.11,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Manhattan Beach Boulevard",
+    "mi": 0.11,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Redondo Avenue",
+    "mi": 0.11,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Plaza del Amo",
+    "mi": 0.09,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Hawthorne Boulevard",
+    "mi": 0.07,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Fisk Lane",
+    "mi": 0.06,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Highland Avenue",
+    "mi": 0.06,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Rosecrans Avenue",
+    "mi": 0.06,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Main Street",
+    "mi": 0.05,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
+ },
  "southpadre": {
   "reports": [],
   "conflicts": [],

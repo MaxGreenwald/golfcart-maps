@@ -638,6 +638,33 @@
   "slug": "outerbanks"
  },
  {
+  "id": "southbay",
+  "name": "South Bay LA, CA",
+  "short": "South Bay",
+  "state": "CA",
+  "center": [
+   33.845,
+   -118.385
+  ],
+  "zoom": 13,
+  "bbox": [
+   33.7,
+   -118.43,
+   33.935,
+   -118.29
+  ],
+  "cover": "Manhattan Beach, Hermosa Beach, Redondo Beach, Torrance, El Segundo and the Palos Verdes Peninsula (Palos Verdes Estates, Rancho Palos Verdes, Rolling Hills Estates) only. Pick another city in the menu above.",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 25,
+    "note": "plain golf carts: local streets posted 25 mph or less; cross PCH/Sepulveda (SR-1) only at intersections; never on the Strand or walk streets",
+    "cite": "CVC 21716 (golf carts only where posted 25 mph or less); state highways need Caltrans approval for any golf cart route (S&H Code 1953)",
+    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716."
+   }
+  },
+  "slug": "southbay"
+ },
+ {
   "id": "avalon",
   "name": "Avalon (Catalina Island), CA",
   "short": "Avalon",

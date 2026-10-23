@@ -635,6 +635,25 @@
    "pct_nonban": 72.0,
    "reports": 0
   },
+  "southbay": {
+   "access_check": true,
+   "assumed_mi": 71.2,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 40,
+   "corridor_mi_to_70": 0,
+   "corridors_to_70": 0,
+   "county_assumed_mi": 0,
+   "exempt": false,
+   "grid_mi": 0,
+   "important_mi": 417.2,
+   "missing": [],
+   "override": null,
+   "passes": true,
+   "pct_bans_in": 79.5,
+   "pct_nonban": 79.5,
+   "reports": 0
+  },
   "southpadre": {
    "access_check": true,
    "assumed_mi": 0.3,

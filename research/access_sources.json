@@ -92,6 +92,12 @@
    "label": "Dare County GIS golf cart & LSV map (per-town rules); Nags Head Code Sec. 42-92(b) (https://nagsheadnc.gov/FAQ.aspx?QID=118); Duck Ord. 18-04 (https://ducknc.gov/golf-carts-in-duck/); Manteo Code Sec. 46-152 and KDH staff memo (https://www.kdhnc.com/DocumentCenter/View/14549/20221114_BOC_C1OB1Golf_Carts); N.C.G.S. 20-121.1, G.S. 160A-300.6",
    "applied": "research/regions/obx.json cart_only_bans (KDH, Kitty Hawk, Southern Shores, Nags Head, Colington, unincorporated Manteo: all roads; Duck: NC 12; Manteo: US 64; flag 4) and bans (US 158 cited)",
    "checked": "2026-10-22"
+  },
+  "southbay": {
+   "kind": "ordinance road lists (city speed-zone codes + Strand/pier bans)",
+   "url": "https://gocodebook.com/library/us/ca/manhattan-beach/title-14-traffic/chapter-14.28-miscellaneous-driving-rules",
+   "label": "Manhattan Beach MC ch. 14.28 and Hermosa Beach MC 12.20.220 (no motor vehicles on the Strand/piers); speed-zone road lists: MBMC 14.56, HBMC 10.40.020, RBMC 3-7.503, TMC 61.10, PVEMC 10.56, ESMC 8-4, RPV 2018 TIA; SHC 1953 (no golf carts on state highways except crossings)",
+   "applied": "research/regions/southbay.json bans + cart_only_bans + speed_names; regions.json rule.golf_cart (max 25)"
   }
  },
  "candidates": {
