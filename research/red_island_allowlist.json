@@ -2837,6 +2837,85 @@
     "Mapillary: 1 posted 40 mph sign(s) detected"
    ],
    "note": "Appeared Oct 22 2026 when Street View batch 2 (RG) posted signs set both neighbours <=35; this piece has no sign read yet (stays red, conservative). Check in Street View batch 3."
+  },
+  {
+   "region": "southbay",
+   "road": "Plaza del Amo",
+   "at": [
+    33.82377,
+    -118.31267
+   ],
+   "m": 240,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [],
+   "note": "Torrance Municipal Code 61.10 lists Plaza del Amo only Carson St-Border Ave (30) and Madrona Ave-Crenshaw Blvd (35); this stretch is not listed, so no posted limit is known. Kept red (unknown)."
+  },
+  {
+   "region": "southbay",
+   "road": "Plaza del Amo",
+   "at": [
+    33.8292,
+    -118.34604
+   ],
+   "m": 141,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [],
+   "note": "Torrance Municipal Code 61.10 lists Plaza del Amo only Carson St-Border Ave (30) and Madrona Ave-Crenshaw Blvd (35); this stretch is not listed, so no posted limit is known. Kept red (unknown)."
+  },
+  {
+   "region": "southbay",
+   "road": "Manhattan Beach Boulevard",
+   "at": [
+    33.8851,
+    -118.40972
+   ],
+   "m": 273,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [],
+   "note": "MBMC ch. 14.56 lists MB Blvd only east of Valley Dr; downtown stretch west of Valley Dr has no listed limit. Kept red (unknown)."
+  },
+  {
+   "region": "southbay",
+   "road": "15th Street",
+   "at": [
+    33.88767,
+    -118.41079
+   ],
+   "m": 383,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [],
+   "note": "Not in MBMC ch. 14.56 special speed zones; no posted limit found. Kept red (unknown)."
   }
  ]
 }

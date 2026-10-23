@@ -167,6 +167,26 @@ P["nocatee"] = dict(
   faq=[("Can I drive a golf cart on Valley Ridge Blvd in {n}?","No. Valley Ridge Blvd is posted 45 mph, so golf carts aren't allowed in the street. Use the greenway trails where they connect."),
        ("Can I drive a golf cart at night in {n}?","Only if it has headlights, brake lights, turn signals and a windshield, under the Nocatee golf cart rules.")],
   sources=[NOC, NOCREG, SJC, VRB, FLS+"316.212"])
+SHC = "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=1953."
+MB1428 = "https://gocodebook.com/library/us/ca/manhattan-beach/title-14-traffic/chapter-14.28-miscellaneous-driving-rules"
+HB1220 = "https://online.encodeplus.com/regs/hermosabeach-ca/doc-view.aspx?secid=1685"
+HB1040 = "https://gocodebook.com/library/us/ca/hermosa-beach/title-10-vehicles-and-traffic/chapter-10.40-speed-regulations"
+P["southbay"] = dict(
+  q="Can you drive a golf cart in {n}?",
+  a="A street-legal LSV can drive on {n} streets posted 35 mph or less (CVC 21260). A plain golf cart is limited to streets posted 25 mph or less in a business or residence district (CVC 21716) and may only cross Pacific Coast Highway. Freeways and the Strand are off limits. Posted signs win.",
+  gc=dict(allowed="limited", roads="Streets posted 25 mph or less", speed_line="25 mph", notes="Business or residence district only; cross PCH at intersections"),
+  lsv=dict(allowed="yes", roads="Streets posted 35 mph or less", speed_line="35 mph", notes="May cross faster roads at intersections"),
+  rules=[("LSV roads","Only roads posted 35 mph or less","CVC 21260",CA+"21260."),
+         ("Golf carts","Roads posted 25 mph or less in a business or residence district","CVC 21716",CA+"21716."),
+         ("State highways","A golf cart plan can't put carts on a state highway such as PCH (SR-1), except to cross it","Streets & Highways Code 1953",SHC),
+         ("The Strand, Manhattan Beach","No motor vehicles on the Strand or the pier","Manhattan Beach Municipal Code ch. 14.28",MB1428),
+         ("The Strand, Hermosa Beach","No motor vehicles on the Strand or Pier Plaza","Hermosa Beach Municipal Code 12.20.220",HB1220),
+         ("Hermosa Beach streets","Every street not listed in the code is 25 mph","Hermosa Beach Municipal Code 10.40.020",HB1040)],
+  banned=[("I-405, I-105, I-110 and SR-91","Freeway",False),("The Strand","Beach walkway closed to motor vehicles in Manhattan Beach and Hermosa Beach",False),
+          ("Pacific Coast Highway (SR-1)","State highway: golf carts may only cross. LSVs only where it's posted 35 mph or less",True)],
+  faq=[("Can I drive a golf cart on Pacific Coast Highway in {n}?","No. PCH is a state highway posted over 25 mph, so a plain golf cart may only cross it at intersections. A street-legal LSV may use stretches posted 35 mph or less."),
+       ("Can I drive an LSV on the Strand?","No. The Strand in Manhattan Beach and Hermosa Beach is a beach walkway closed to motor vehicles under each city's code, so it isn't drawn on the map.")],
+  sources=[CA+"21260.", CA+"21716.", SHC, MB1428, HB1220, HB1040], day="2026-10-22")
 # (region, slug, name, state, lat, lng, extra faq)
 T = [
  ("30a","miramar-beach","Miramar Beach","FL",30.3790,-86.3700),("30a","sandestin","Sandestin","FL",30.3830,-86.3270),
@@ -198,9 +218,21 @@ T = [
  ("suncity","sun-city","Sun City","AZ",33.6120,-112.2810),("suncity","sun-city-west","Sun City West","AZ",33.6620,-112.3410),
  ("suncity","youngtown","Youngtown","AZ",33.5940,-112.3030),
  ("nocatee","ponte-vedra","Nocatee, Ponte Vedra","FL",30.1050,-81.4150),
+ ("southbay","el-segundo","El Segundo","CA",33.9192,-118.4165),("southbay","manhattan-beach","Manhattan Beach","CA",33.8847,-118.4109),
+ ("southbay","hermosa-beach","Hermosa Beach","CA",33.8622,-118.3995),("southbay","redondo-beach","Redondo Beach","CA",33.8492,-118.3884),
+ ("southbay","torrance","Torrance","CA",33.8358,-118.3406),("southbay","palos-verdes-estates","Palos Verdes Estates","CA",33.7870,-118.3965),
+ ("southbay","rolling-hills-estates","Rolling Hills Estates","CA",33.7878,-118.3581),("southbay","rancho-palos-verdes","Rancho Palos Verdes","CA",33.7445,-118.3870),
 ]
-RID = {"30a":"30a","hiltonhead":"hhi","sandiego":"sd","villages":"villages","peachtreecity":"ptc","gulfshores":"gulfshores","myrtlebeach":"myrtle","portaransas":"portaransas","naples":"naples","suncity":"suncity","nocatee":"nocatee"}
+RID = {"30a":"30a","hiltonhead":"hhi","sandiego":"sd","villages":"villages","peachtreecity":"ptc","gulfshores":"gulfshores","myrtlebeach":"myrtle","portaransas":"portaransas","naples":"naples","suncity":"suncity","nocatee":"nocatee","southbay":"southbay"}
 EXTRA = {
+ "manhattan-beach": ("Can I drive an LSV on Sepulveda Boulevard in Manhattan Beach?","Yes, an LSV may: Sepulveda (SR-1) is posted 35 mph through Manhattan Beach. A plain golf cart may only cross it."),
+ "hermosa-beach": ("What is the speed limit on most Hermosa Beach streets?","25 mph. Hermosa Beach Municipal Code 10.40.020 makes every street it doesn't list 25 mph, so most Hermosa residential streets are golf-cart legal."),
+ "redondo-beach": ("Can I drive an LSV on PCH in Redondo Beach?","Only where it's posted 35 mph or less. Redondo's code posts PCH at 35 mph from Palos Verdes Boulevard north to 190th Street and 40-45 mph farther southeast."),
+ "torrance": ("Can I drive an LSV on PCH in Torrance?","Only west of Palos Verdes Boulevard, where Torrance's code posts PCH at 35 mph. East of there it's posted 40-45 mph."),
+ "palos-verdes-estates": ("Can I drive an LSV on Palos Verdes Drive West in Palos Verdes Estates?","Yes. Palos Verdes Estates' code posts it 35 mph, so LSVs may use it. A plain golf cart may not, because it's over 25 mph."),
+ "rolling-hills-estates": ("Can I drive into Rolling Hills from Rolling Hills Estates?","Only with resident gate access. Rolling Hills is a gated private city, so its roads aren't drawn on the map."),
+ "rancho-palos-verdes": ("Can I drive an LSV on Hawthorne Boulevard in Rancho Palos Verdes?","No. Hawthorne Boulevard is posted 45 mph in Rancho Palos Verdes, above the 35 mph LSV limit. Cross it only at intersections."),
+ "el-segundo": ("Can I drive an LSV on Vista del Mar in El Segundo?","No. El Segundo's code posts Vista del Mar at 45 mph, above the 35 mph LSV limit."),
  "seaside": ("Can I drive an LSV into Seaside's town center?","No. The 12 Seaside town-center streets are red on the Walton County Sheriff's LSV map, so LSVs are prohibited there. 30A itself stays open."),
  "alys-beach": ("Can I drive an LSV on Alys Beach streets?","No. The Alys Beach town streets are red on the Walton County Sheriff's LSV map, so LSVs are prohibited there; 30A through town stays open."),
  "rosemary-beach": ("Can I drive an LSV on Rosemary Beach streets?","No. Rosemary Beach's town streets are red on the Walton County Sheriff's LSV map, so LSVs are prohibited there; 30A stays open."),
@@ -221,8 +253,12 @@ def main():
              "rules": [{"topic": a, "rule": b, "citation": c, "source_url": d} for a, b, c, d in p["rules"]],
              "banned_roads": [{"name": a, "rule": b, "crossings_ok": c} for a, b, c in p["banned"]],
              "faq": faq, "rental_shops": [], "nearby": nearby(i), "map_center": [lat, lng], "zoom": 15,
-             "published": DAY, "last_checked": DAY, "checked_by": "Golf Cart Maps", "sources": p["sources"]}
+             "published": p.get("day", DAY), "last_checked": p.get("day", DAY), "checked_by": "Golf Cart Maps", "sources": p["sources"]}
         d = os.path.join(out, reg); os.makedirs(d, exist_ok=True)
-        json.dump(t, open(os.path.join(d, slug + ".json"), "w"), indent=1, ensure_ascii=False)
+        fp = os.path.join(d, slug + ".json")   # keep hand-added local_resources (followed links) on regenerate
+        if os.path.exists(fp) and json.load(open(fp)).get("local_resources"):
+            ks = list(t); cut = ks.index("rental_shops") + 1
+            t = {**{k: t[k] for k in ks[:cut]}, "local_resources": json.load(open(fp))["local_resources"], **{k: t[k] for k in ks[cut:]}}
+        json.dump(t, open(fp, "w"), indent=1, ensure_ascii=False)
     print(len(T), "towns")
 if __name__ == "__main__": main()
