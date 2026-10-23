@@ -1,0 +1,10 @@
+{
+ "_note": "Per-region beta-bar overrides approved by Max. The v3 bar itself is unchanged; an override only lets one named region pass while its measured numbers stay at or above what Max accepted (min_pct_bans_in, with the 50% non-ban floor and the local-rules check still required). If the region drops below that, it goes back to beta. San Diego's exemption is separate (EXEMPT).",
+ "galveston": {
+  "approved_by": "Max",
+  "date": "2026-10-22 9:40 PM PT",
+  "quote": "yes. Galveston is fine",
+  "context": "Galveston measured 69.997% of important miles sourced (bans in), floored to 69.9%, just under the 70% bar; Max accepted it as passing.",
+  "min_pct_bans_in": 69.9
+ }
+}

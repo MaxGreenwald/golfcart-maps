@@ -1,12 +1,29 @@
 """Beta bar v3 (Max, Oct 22 2026, 2:47 PM ET): >=70% of important miles sourced with cited bans counted, >=50% of non-ban miles,
-local-rules check recorded (ordinance or state law); San Diego exempt and never beta."""
+local-rules check recorded (ordinance or state law); San Diego exempt and never beta.
+Overrides: research/beta_overrides.json (Galveston, Max Oct 22 2026 9:40 PM PT: "yes. Galveston is fine")."""
 import json, os, subprocess, sys, unittest
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 REGS = json.load(open(os.path.join(ROOT, "public/data/regions.json")))
 ST = json.load(open(os.path.join(ROOT, "research/beta_status.json")))["regions"]
+OVR = {k: v for k, v in json.load(open(os.path.join(ROOT, "research/beta_overrides.json"))).items() if not k.startswith("_")}
 class BetaBar(unittest.TestCase):
     def test_sd_never_beta(self):
         self.assertFalse(next(r for r in REGS if r["id"] == "sd").get("beta"))
+    def test_overrides_are_documented_and_narrow(self):
+        # only Galveston, approved by Max in his words; the bar constants are untouched
+        self.assertEqual(set(OVR), {"galveston"})
+        g = OVR["galveston"]
+        self.assertEqual(g["quote"], "yes. Galveston is fine"); self.assertEqual(g["approved_by"], "Max"); self.assertIn("2026-10-22", g["date"])
+        self.assertGreaterEqual(g["min_pct_bans_in"], 69.9)
+        src = open(os.path.join(ROOT, "research/beta_exit_gap_v2.py")).read()
+        self.assertIn("BAR = 0.70", src); self.assertIn("FLOOR = 0.50", src); self.assertIn('EXEMPT = {"sd"}', src)
+    def test_galveston_override(self):
+        v = ST["galveston"]
+        self.assertTrue(v["passes"]); self.assertTrue(v["override"]["applied"]); self.assertFalse(v["exempt"])
+        self.assertLess(v["pct_bans_in"], 70); self.assertTrue(v["missing"])   # real gap stays visible
+        self.assertFalse(next(r for r in REGS if r["id"] == "galveston").get("beta"))
+        for rid, v in ST.items():
+            if rid not in OVR: self.assertFalse(v.get("override"), rid)
     def test_every_region_measured(self):
         self.assertEqual(sorted(r["id"] for r in REGS), sorted(ST))
     def test_flags_match_bar(self):
@@ -19,7 +36,11 @@ class BetaBar(unittest.TestCase):
             if rid == "sd": self.assertTrue(v["passes"] and v["exempt"]); continue
             a = rid in acc["regions"] or rid in acc.get("state_law", {})
             self.assertEqual(v["access_check"], a, rid)
-            self.assertEqual(v["passes"], v["pct_bans_in"] >= 70 and v["pct_nonban"] >= 50 and a, rid)
+            bar = v["pct_bans_in"] >= 70 and v["pct_nonban"] >= 50 and a
+            o = OVR.get(rid)   # Max-approved override: only down to its min_pct_bans_in; floor and access check still required
+            ovr = bool(o) and v["pct_bans_in"] >= o["min_pct_bans_in"] and v["pct_nonban"] >= 50 and a
+            self.assertEqual(v["passes"], bar or ovr, rid)
+            if not bar and v["passes"]: self.assertTrue(v["override"]["applied"], rid)
     def test_v3_floor_blocks_ban_heavy_regions(self):
         # cited bans can lift the headline %, but never past the 50% non-ban floor
         for rid, v in ST.items():

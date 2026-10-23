@@ -315,7 +315,6 @@
    29.35,
    -94.72
   ],
-  "beta": true,
   "cover": "Galveston Island only. Pick another city in the menu above.",
   "slug": "galveston"
  },
@@ -588,7 +587,6 @@
    27.47,
    -82.33
   ],
-  "beta": true,
   "cover": "Lakewood Ranch only. Pick another city in the menu above.",
   "slug": "lakewoodranch"
  },
@@ -636,7 +634,6 @@
    36.2,
    -75.6
   ],
-  "beta": true,
   "cover": "Nags Head, Kill Devil Hills, Kitty Hawk, Southern Shores and Duck only. Pick another city in the menu above.",
   "slug": "outerbanks"
  },

@@ -13,7 +13,7 @@ import json, glob, math, os, sys, re, collections
 ROOT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 CACHE = os.environ.get("CACHE", os.path.join(ROOT, "cache"))   # OSM extracts (gitignored); only for the OSM-confidence columns
 IMP = {"primary", "secondary", "tertiary"}; MI = 0.621371; CORR_MIN = 0.25; RUN_MAX = 1.5; BAR = 0.70; FLOOR = 0.50; EXEMPT = {"sd"}
-RULE_TEXT = "v3 (official, Max 2026-10-22): pass = >=70% of important miles (town grids excluded) sourced by v/m/o/d+source with cited bans counted as sourced, AND >=50% of non-ban important miles sourced, AND a local-rules check recorded (ordinance/map or state law when no local ordinance); grids and reports stay on the check list; sd exempt (never beta)"
+RULE_TEXT = "v3 (official, Max 2026-10-22): pass = >=70% of important miles (town grids excluded) sourced by v/m/o/d+source with cited bans counted as sourced, AND >=50% of non-ban important miles sourced, AND a local-rules check recorded (ordinance/map or state law when no local ordinance); grids and reports stay on the check list; sd exempt (never beta); per-region overrides approved by Max in research/beta_overrides.json (galveston)"
 HERE = os.path.dirname(os.path.abspath(__file__))
 ACCESS = json.load(open(os.path.join(HERE, "access_sources.json")))["regions"]     # rule 2: local access source per region
 GRIDS = json.load(open(os.path.join(HERE, "beta_grids.json")))["regions"]          # rule 4: resort/town-centre grids
@@ -179,7 +179,11 @@ for d in sorted(glob.glob(f"{ROOT}/public/data/*/index.json")):
 #   2. >= 50% of non-banned important miles sourced (floor);
 #   3. local-rules check recorded: research/access_sources.json "regions" (local ordinance/map) or "state_law" (none found).
 # San Diego is exempt: always passes, never beta.
+# research/beta_overrides.json: per-region passes approved by Max (Galveston, Oct 22 2026 9:40 PM PT: "yes. Galveston is fine").
+# The bar is unchanged; an override only covers a shortfall on the 70% line down to its min_pct_bans_in, and the 50% floor and
+# local-rules check still apply. "missing" keeps the real gap so it stays visible.
 ACC3 = json.load(open(os.path.join(HERE, "access_sources.json")))
+OVR = {k: v for k, v in json.load(open(os.path.join(HERE, "beta_overrides.json"))).items() if not k.startswith("_")}
 STATUS = {}
 for x in out:
     a, b, bc, sn = x["v3_all"] or 1e-9, x["v3_ban"], x["v3_ban_cited"], x["v3_src_nb"]
@@ -187,9 +191,11 @@ for x in out:
     acc = x["r"] in ACC3["regions"] or x["r"] in ACC3.get("state_law", {})
     why = ([] if p_in >= BAR else [f"{math.floor(1000*p_in + 1e-9)/10:.1f}% < 70% (bans in)"]) + ([] if p_nb >= FLOOR else [f"non-ban {math.floor(1000*p_nb + 1e-9)/10:.1f}% < 50% floor"]) + ([] if acc else ["no local-rules check recorded"])
     sd = x["r"] in EXEMPT
+    o = OVR.get(x["r"]); pin = math.floor(1000*p_in + 1e-9)/10
+    ovr = bool(o) and pin >= o["min_pct_bans_in"] and p_nb >= FLOOR and acc
     # percentages are floored to 0.1 so a stored 70.0 always means the region really reached 70% (Galveston, Oct 22: 69.997%)
-    STATUS[x["r"]] = dict(pct_bans_in=math.floor(1000*p_in + 1e-9)/10, pct_nonban=math.floor(1000*p_nb + 1e-9)/10, access_check=acc, exempt=sd,
-                          passes=sd or not why, missing=[] if sd else why, important_mi=round(x["L"], 1),
+    STATUS[x["r"]] = dict(pct_bans_in=math.floor(1000*p_in + 1e-9)/10, pct_nonban=math.floor(1000*p_nb + 1e-9)/10, access_check=acc, exempt=sd, override=(dict(o, applied=ovr) if o else None),
+                          passes=sd or not why or ovr, missing=[] if sd else why, important_mi=round(x["L"], 1),
                           corridors_to_70=x["c_none"][0], corridor_mi_to_70=round(x["c_none"][1], 1),
                           conflicts=x["n_conf"], ban_mi=round(x["ban_mi"], 1), ban_sourced_mi=round(x["ban_src_mi"], 1),
                           grid_mi=round(x["grid_mi"], 1), county_assumed_mi=round(x["county_assumed_mi"], 1), assumed_mi=round(x["assumed_mi"], 1),

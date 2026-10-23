@@ -2,6 +2,8 @@
 """Set the "beta" flag in public/data/regions.json from research/beta_status.json (written by research/beta_exit_gap_v2.py).
 Bar v3 (Max, Oct 22 2026): >= 70% of important miles sourced (cited bans count), >= 50% of non-ban miles, local-rules check recorded.
 San Diego is always exempt and never beta (Max: "keep san Diego live tho no beta").
+Per-region overrides (research/beta_overrides.json, e.g. Galveston, Max Oct 22 2026 9:40 PM PT: "yes. Galveston is fine") are
+already folded into "passes" by beta_exit_gap_v2.py; this script just follows "passes".
 Usage: apply_beta_bar.py [--check]   (--check: exit 1 if regions.json disagrees, write nothing)"""
 import json, os, sys
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")

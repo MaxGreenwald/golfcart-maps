@@ -1,17 +1,69 @@
 {
  "unverified": [
-  "City-level cart designations not digitized; app applies the state LSV rule (posted \u226435)."
+  "Plain golf carts: Dare County map + town codes applied (KDH, Kitty Hawk, Southern Shores, Nags Head, Colington, unincorporated Roanoke Island: not on public roads; Duck: not on NC 12; Manteo: permitted road-legal carts, not on US 64). LSVs: state rule (posted <=35)."
  ],
  "bans": [
   {
    "names": "^US ?158|Croatan H",
-   "url": "",
-   "label": "US 158 bypass: 45+ mph"
+   "url": "https://gis.darecountync.gov/golfcarts/",
+   "label": "US 158 / Croatan Hwy: 45+ mph, not an LSV road on the Dare County golf cart & LSV map (Nags Head: cross only at a traffic light)"
   }
  ],
  "sources": [
   "N.C.G.S. 20-121.1",
-  "G.S. 160A-300.6"
+  "G.S. 160A-300.6",
+  "https://gis.darecountync.gov/golfcarts/ (Dare County GIS 'Where can you roll? Golf cart & LSV friendly roads', per-town rules)",
+  "https://nagsheadnc.gov/FAQ.aspx?QID=118 (Nags Head: unregistered golf carts not on town streets, Code Sec. 42-92(b))",
+  "https://ducknc.gov/golf-carts-in-duck/ (Duck Ord. 18-04: golf carts on side streets, not along Duck Road / NC 12)",
+  "https://www.kdhnc.com/DocumentCenter/View/14549/20221114_BOC_C1OB1Golf_Carts (KDH: no cart ordinance; Manteo Code Sec. 46-152: road-legal carts, not on US 64)"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "cart_only_bans": [
+  {
+   "poly": "kill_devil_hills.json",
+   "url": "https://gis.darecountync.gov/golfcarts/",
+   "label": "Dare County golf cart & LSV map: golf carts are not permitted on roadways in Kill Devil Hills (no town cart ordinance under G.S. 160A-300.6); LSVs on roads <=35 mph"
+  },
+  {
+   "poly": "kitty_hawk.json",
+   "url": "https://gis.darecountync.gov/golfcarts/",
+   "label": "Dare County golf cart & LSV map: golf carts are not permitted on roadways in Kitty Hawk; LSVs on roads <=35 mph"
+  },
+  {
+   "poly": "southern_shores.json",
+   "url": "https://gis.darecountync.gov/golfcarts/",
+   "label": "Dare County golf cart & LSV map: golf carts are not permitted on roadways in Southern Shores; LSVs on roads <=35 mph"
+  },
+  {
+   "poly": "nags_head.json",
+   "url": "https://nagsheadnc.gov/FAQ.aspx?QID=118",
+   "label": "Nags Head Code Sec. 42-92(b): unregistered low-speed motorized vehicles incl. golf carts may not be driven on town streets (only DMV-registered and tagged; Dare County map: golf carts not permitted on Nags Head roadways)"
+  },
+  {
+   "poly": "dare_colington.json",
+   "url": "https://gis.darecountync.gov/golfcarts/",
+   "label": "Dare County golf cart & LSV map: golf carts are not permitted on roadways on Colington Island; LSVs on roads <=35 mph"
+  },
+  {
+   "names": "^US 64|US Highway 64",
+   "poly": "manteo.json",
+   "url": "https://www.kdhnc.com/DocumentCenter/View/14549/20221114_BOC_C1OB1Golf_Carts",
+   "label": "Town of Manteo Code Sec. 46-152(b): golf carts shall not be operated upon US Hwy 64 (cross only at a perpendicular intersection); permitted road-legal carts on other town streets <=35 mph"
+  },
+  {
+   "poly": "dare_manteo_out.json",
+   "not_poly": [
+    "manteo.json",
+    "dare_pirates_cove.json"
+   ],
+   "url": "https://gis.darecountync.gov/golfcarts/",
+   "label": "Dare County golf cart & LSV map: golf carts are not permitted on roadways in unincorporated Manteo (Roanoke Island outside town limits and Pirate's Cove); LSVs on roads <=35 mph"
+  },
+  {
+   "names": "^(Duck Road|NC 12)$",
+   "poly": "duck_nc.json",
+   "url": "https://ducknc.gov/golf-carts-in-duck/",
+   "label": "Town of Duck Ord. 18-04: golf carts may not operate along Duck Road (NC 12), only cross it at a right angle; side streets OK (registered, 16+)"
+  }
+ ]
 }
