@@ -216,6 +216,12 @@
    "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10527/1231701/pdf",
    "label": "Town of Chincoteague Sec. 8-2-13 golf carts",
    "applied": "research/regions/chincoteague.json cart_only_bans + regions.json rule.golf_cart"
+  },
+  "southbay": {
+   "kind": "ordinance road lists (city speed-zone codes + Strand/pier bans)",
+   "url": "https://gocodebook.com/library/us/ca/manhattan-beach/title-14-traffic/chapter-14.28-miscellaneous-driving-rules",
+   "label": "Manhattan Beach MC ch. 14.28 and Hermosa Beach MC 12.20.220 (no motor vehicles on the Strand/piers); speed-zone road lists: MBMC 14.56, HBMC 10.40.020, RBMC 3-7.503, TMC 61.10, PVEMC 10.56, ESMC 8-4, RPV 2018 TIA; SHC 1953 (no golf carts on state highways except crossings)",
+   "applied": "research/regions/southbay.json bans + cart_only_bans + speed_names; regions.json rule.golf_cart (max 25)"
   }
  },
  "candidates": {

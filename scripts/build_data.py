@@ -136,7 +136,7 @@ for wi in list(ov):
             e = overrides.SWEEP.get(overrides.way_key(wl[wi]["tags"], wl[wi]["nodes"]))
             if e: ov[wi] = (e["mph"], e["mph"] < 40, e["url"], e["label"])
 print("held (needs a 2nd source to become legal)", len(FLIPHOLD))
-# Street View posted signs (batch 2, RG): beat OSM/Mapillary/sweep; an official curated limit that differs stays (conflict listed)
+# Street View posted signs (batches 2 and 4, RG): beat OSM/Mapillary/sweep; an official curated limit that differs stays (conflict listed)
 import streetview_signs as _SV
 _SVS = _SV.for_region("sd"); SV_APPLIED, SV_CONFLICT = [], []
 for wi, w in enumerate(wl):

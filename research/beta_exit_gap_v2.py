@@ -37,7 +37,7 @@ def tier(t):
     return "explicit_nosource"
 def osm_files(r):
     return sorted(glob.glob(f"{CACHE}/v2_tile*.json") + glob.glob(f"{CACHE}/tile[0-9]*.json")) if r == "sd" else [f"{CACHE}/{r}_osm.json"]
-CHECK = {}; DUMPED = {}; SIG = collections.Counter(); AGREE = collections.defaultdict(lambda: [0, 0]); out = []; corr_all = {}
+CHECK = {}; DUMPED = {}; CONFD = {}; SIG = collections.Counter(); AGREE = collections.defaultdict(lambda: [0, 0]); out = []; corr_all = {}
 for d in sorted(glob.glob(f"{ROOT}/public/data/*/index.json")):
     r = d.split("/")[-2]; names = json.load(open(d))["names"]
     # --- OSM tags by point
@@ -154,6 +154,10 @@ for d in sorted(glob.glob(f"{ROOT}/public/data/*/index.json")):
             CHECK[r] = dict(reports=rep, conflicts=[dict(name=c[1], mi=round(c[0], 2), mph=c[2], kind=c[4] if c[4] == "sourced_red" else "neighbour_disagrees") for c in sorted(sred + conf, key=lambda c: -c[0])[:40]],
                             gap=[dict(name=c[1], mi=round(c[0], 2), mph=c[2], conflict=c[6]) for c in sorted(pick, key=lambda c: (not c[6], -c[0]))])
             row["n_conf"] = len(sred) + len(conf)
+            if os.environ.get("DUMP_CONF"):   # batch-4 Street View list: geometry for every listed conflict
+                CONFD[r] = [dict(L=c[0], nm=c[1], mph=c[2], hw=c[3], kind=c[4] if c[4] == "sourced_red" else "neighbour_disagrees",
+                                 segs=[{k: v for k, v in y.items() if k in ("a", "b", "g", "osm", "way", "code", "L")} for y in c[5]],
+                                 cross={n: sorted(nodenames[n] - {c[1], ""}) for y in c[5] for n in (y["a"], y["b"])}) for c in sorted(sred + conf, key=lambda c: -c[0])[:40]]
         if rule == "none" and r in os.environ.get("DUMP", "").split(","):
             DUMPED[r] = [dict(L=c[0], nm=c[1], mph=c[2], hw=c[3], tier=c[4], segs=[{k: v for k, v in y.items() if k in ("a", "b", "g", "osm", "way", "code", "L")} for y in c[5]],
                               cross={n: sorted(nodenames[n] - {c[1], ""}) for y in c[5] for n in (y["a"], y["b"])}) for c in cs[:n]]
@@ -181,9 +185,10 @@ for x in out:
     a, b, bc, sn = x["v3_all"] or 1e-9, x["v3_ban"], x["v3_ban_cited"], x["v3_src_nb"]
     p_in = (sn + bc) / a; p_nb = sn / max(a - b, 1e-9)
     acc = x["r"] in ACC3["regions"] or x["r"] in ACC3.get("state_law", {})
-    why = ([] if p_in >= BAR else [f"{100*p_in:.1f}% < 70% (bans in)"]) + ([] if p_nb >= FLOOR else [f"non-ban {100*p_nb:.1f}% < 50% floor"]) + ([] if acc else ["no local-rules check recorded"])
+    why = ([] if p_in >= BAR else [f"{math.floor(1000*p_in + 1e-9)/10:.1f}% < 70% (bans in)"]) + ([] if p_nb >= FLOOR else [f"non-ban {math.floor(1000*p_nb + 1e-9)/10:.1f}% < 50% floor"]) + ([] if acc else ["no local-rules check recorded"])
     sd = x["r"] in EXEMPT
-    STATUS[x["r"]] = dict(pct_bans_in=round(100*p_in, 1), pct_nonban=round(100*p_nb, 1), access_check=acc, exempt=sd,
+    # percentages are floored to 0.1 so a stored 70.0 always means the region really reached 70% (Galveston, Oct 22: 69.997%)
+    STATUS[x["r"]] = dict(pct_bans_in=math.floor(1000*p_in + 1e-9)/10, pct_nonban=math.floor(1000*p_nb + 1e-9)/10, access_check=acc, exempt=sd,
                           passes=sd or not why, missing=[] if sd else why, important_mi=round(x["L"], 1),
                           corridors_to_70=x["c_none"][0], corridor_mi_to_70=round(x["c_none"][1], 1),
                           conflicts=x["n_conf"], ban_mi=round(x["ban_mi"], 1), ban_sourced_mi=round(x["ban_src_mi"], 1),
@@ -194,6 +199,7 @@ if not os.environ.get("NO_STATUS"):
     json.dump(dict(rule=RULE_TEXT, regions=STATUS),
               open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "beta_status.json"), "w"), indent=1, sort_keys=True)
 if DUMPED: json.dump(DUMPED, open("/tmp/bg2_dump.json", "w"))
+if CONFD: json.dump(CONFD, open(os.environ["DUMP_CONF"], "w"))
 json.dump(dict(rows=[{**r, "gap": dict(r["gap"])} for r in out], agree={k: v for k, v in AGREE.items()}, signals=dict(SIG),
                corridors={f"{k[0]}|{k[1]}": v[:15] for k, v in corr_all.items() if k[0] in BIG}), open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "beta_exit_gap_v2_2026-10-22.json"), "w"))
 print("signals present (count of ways carrying them):", dict(SIG))

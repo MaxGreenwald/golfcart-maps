@@ -39,6 +39,21 @@ if CFG.get("poly"):   # clip ways to region polygon (midpoint + any vertex insid
             j = i
         return c
     ways = {k: w for k, w in ways.items() if any(_inp(q["lon"], q["lat"]) for q in w["geometry"][:: max(1, len(w["geometry"]) // 4)] + [w["geometry"][-1]])}
+# Private gated towns (research/regions/<id>.json "private_polys": [research/city_limits/<file>.json, ...]): their roads are
+# closed to the public even when OSM has no access tag, so a way whose middle vertex is inside is not drawn at all.
+# "private_keep": regex on name for public roads that run along or through the town's line (e.g. Palos Verdes Drive North).
+for _pf in CFG.get("private_polys", []):
+    _gj = json.load(open(os.path.join(ROOT, "research/city_limits", _pf)))["geojson"]
+    _pr = _gj["coordinates"][0] if _gj["type"] == "Polygon" else max((p[0] for p in _gj["coordinates"]), key=len)
+    def _inpr(x, y, r=_pr):
+        c = False
+        for i in range(len(r)):
+            (x1, y1), (x2, y2) = r[i - 1][:2], r[i][:2]
+            if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1: c = not c
+        return c
+    _drop = [k for k, w in ways.items() if not re.search(CFG.get("private_keep", "^\\b$"), w["tags"].get("name", "")) and _inpr(w["geometry"][len(w["geometry"]) // 2]["lon"], w["geometry"][len(w["geometry"]) // 2]["lat"])]
+    print("private_polys", _pf, "dropped ways", len(_drop), sorted({ways[k]["tags"].get("name", "") for k in _drop} - {""}))
+    for k in _drop: del ways[k]
 cnt = {}
 for w in ways.values():
     for n in w["nodes"]: cnt[n] = cnt.get(n, 0) + 1
@@ -167,13 +182,27 @@ for dsg in CFG.get("designated_names", []):
 print("designated (ordinance list) ways", len(DES))
 # Hand-entered posted limits by road name (research/regions/<id>.json "speed_names"), for main roads OSM doesn't tag:
 # {"names": regex on name/ref, "mph": n, "url": source, "label": text, optional "highway": regex, "bbox": [S,W,N,E],
-#  "north_of"/"south_of"/"east_of"/"west_of": the way's midpoint must be past that lat/lon}. First match wins.
+#  "north_of"/"south_of"/"east_of"/"west_of": the way's midpoint must be past that lat/lon,
+#  "bboxes": [[S,W,N,E], ...] (midpoint inside any one), "poly": research/city_limits/<file>.json (midpoint inside)}. First match wins.
+def _ring_of(f):
+    gj = json.load(open(os.path.join(ROOT, "research/city_limits", f)))["geojson"]
+    return gj["coordinates"][0] if gj["type"] == "Polygon" else max((p[0] for p in gj["coordinates"]), key=len)
+def _inr(x, y, ring):
+    c = False
+    for i in range(len(ring)):
+        (x1, y1), (x2, y2) = ring[i - 1][:2], ring[i][:2]
+        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1: c = not c
+    return c
+for o in CFG.get("speed_names", []):
+    if "poly" in o: o["_ring"] = _ring_of(o["poly"])
 def speed_name(t, mid):
     for o in CFG.get("speed_names", []):
         if not any(re.search(o["names"], t.get(k, "")) for k in ("name", "ref")): continue
         if "highway" in o and not re.search(o["highway"], t.get("highway", "")): continue
         la, lo = mid["lat"], mid["lon"]
         if "bbox" in o and not (o["bbox"][0] <= la <= o["bbox"][2] and o["bbox"][1] <= lo <= o["bbox"][3]): continue
+        if "bboxes" in o and not any(b[0] <= la <= b[2] and b[1] <= lo <= b[3] for b in o["bboxes"]): continue
+        if "poly" in o and not _inr(lo, la, o["_ring"]): continue
         if ("north_of" in o and la <= o["north_of"]) or ("south_of" in o and la >= o["south_of"]): continue
         if ("east_of" in o and lo <= o["east_of"]) or ("west_of" in o and lo >= o["west_of"]): continue
         return o
@@ -218,7 +247,7 @@ for wi, w in enumerate(wl):
         o = OV[w["id"]]; s, src = o["mph"], "verified"; si = src_i(o["url"], o["label"])
     elif lban:
         s, src = 99, "verified"; si = src_i(lban["url"], lban["label"])
-    elif w["id"] in SVS:   # Street View posted sign (batch 2, RG): beats OSM/Mapillary/DOT/speed_names; never lifts a ban
+    elif w["id"] in SVS:   # Street View posted sign (batches 2 and 4, RG): beats OSM/Mapillary/DOT/speed_names; never lifts a ban
         e = SVS[w["id"]]; s, src = e["mph"], "verified"; si = src_i(e["url"], e["label"]); SV_APPLIED.append(w["id"])
     elif spn:
         s, src = spn["mph"], "verified"; si = src_i(spn["url"], spn["label"]); CHG["speed_names"] = CHG.get("speed_names", 0) + 1

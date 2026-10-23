@@ -1,0 +1,118 @@
+{
+ "slug": "el-segundo",
+ "region": "southbay",
+ "name": "El Segundo",
+ "state": "CA",
+ "question_title": "Can you drive a golf cart in El Segundo?",
+ "answer_short": "A street-legal LSV can drive on El Segundo streets posted 35 mph or less (CVC 21260). A plain golf cart is limited to streets posted 25 mph or less in a business or residence district (CVC 21716) and may only cross Pacific Coast Highway. Freeways and the Strand are off limits. Posted signs win.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Streets posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Business or residence district only; cross PCH at intersections"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Streets posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "May cross faster roads at intersections"
+ },
+ "rules": [
+  {
+   "topic": "LSV roads",
+   "rule": "Only roads posted 35 mph or less",
+   "citation": "CVC 21260",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260."
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "Roads posted 25 mph or less in a business or residence district",
+   "citation": "CVC 21716",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716."
+  },
+  {
+   "topic": "State highways",
+   "rule": "A golf cart plan can't put carts on a state highway such as PCH (SR-1), except to cross it",
+   "citation": "Streets & Highways Code 1953",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=1953."
+  },
+  {
+   "topic": "The Strand, Manhattan Beach",
+   "rule": "No motor vehicles on the Strand or the pier",
+   "citation": "Manhattan Beach Municipal Code ch. 14.28",
+   "source_url": "https://gocodebook.com/library/us/ca/manhattan-beach/title-14-traffic/chapter-14.28-miscellaneous-driving-rules"
+  },
+  {
+   "topic": "The Strand, Hermosa Beach",
+   "rule": "No motor vehicles on the Strand or Pier Plaza",
+   "citation": "Hermosa Beach Municipal Code 12.20.220",
+   "source_url": "https://online.encodeplus.com/regs/hermosabeach-ca/doc-view.aspx?secid=1685"
+  },
+  {
+   "topic": "Hermosa Beach streets",
+   "rule": "Every street not listed in the code is 25 mph",
+   "citation": "Hermosa Beach Municipal Code 10.40.020",
+   "source_url": "https://gocodebook.com/library/us/ca/hermosa-beach/title-10-vehicles-and-traffic/chapter-10.40-speed-regulations"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "I-405, I-105, I-110 and SR-91",
+   "rule": "Freeway",
+   "crossings_ok": false
+  },
+  {
+   "name": "The Strand",
+   "rule": "Beach walkway closed to motor vehicles in Manhattan Beach and Hermosa Beach",
+   "crossings_ok": false
+  },
+  {
+   "name": "Pacific Coast Highway (SR-1)",
+   "rule": "State highway: golf carts may only cross. LSVs only where it's posted 35 mph or less",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive a golf cart on Pacific Coast Highway in El Segundo?",
+   "a": "No. PCH is a state highway posted over 25 mph, so a plain golf cart may only cross it at intersections. A street-legal LSV may use stretches posted 35 mph or less."
+  },
+  {
+   "q": "Can I drive an LSV on the Strand?",
+   "a": "No. The Strand in Manhattan Beach and Hermosa Beach is a beach walkway closed to motor vehicles under each city's code, so it isn't drawn on the map."
+  },
+  {
+   "q": "Can I drive an LSV on Vista del Mar in El Segundo?",
+   "a": "No. El Segundo's code posts Vista del Mar at 45 mph, above the 35 mph LSV limit."
+  }
+ ],
+ "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "The City of El Segundo posts local traffic news, street projects and its municipal code.",
+   "name": "City of El Segundo official site",
+   "url": "https://www.elsegundo.gov/"
+  }
+ ],
+ "nearby": [
+  "manhattan-beach",
+  "hermosa-beach",
+  "redondo-beach"
+ ],
+ "map_center": [
+  33.9192,
+  -118.4165
+ ],
+ "zoom": 15,
+ "published": "2026-10-22",
+ "last_checked": "2026-10-22",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260.",
+  "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716.",
+  "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=1953.",
+  "https://gocodebook.com/library/us/ca/manhattan-beach/title-14-traffic/chapter-14.28-miscellaneous-driving-rules",
+  "https://online.encodeplus.com/regs/hermosabeach-ca/doc-view.aspx?secid=1685",
+  "https://gocodebook.com/library/us/ca/hermosa-beach/title-10-vehicles-and-traffic/chapter-10.40-speed-regulations"
+ ]
+}
