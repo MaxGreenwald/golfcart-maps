@@ -1,6 +1,7 @@
 """Street View batch 4 (RG, Oct 22 2026; sheet 1rt3b8LJK-Bo6ItkZ9qaHd2GnfL-zT_5nAigcZV0AB3A, photos in Drive folder
 1xb9w8WsXiPPK_KkashiAco3ub_UUR2-M). Same rules as batch 2: a posted sign overrides OSM; no_sign / no_imagery / wrong_road
-and agreeing rows change nothing; signs never lift a ban; every changed way cites 'posted sign, Street View check (RG),
+rows change nothing; agreeing rows keep their speed but now cite the sign (Max, Oct 22 9:13 PM PT: "count the 26
+matching signs too"); signs never lift a ban; every changed way cites 'posted sign, Street View check (RG),
 photo <file>'. Hawaii rows are not applied (OSM build input missing on the box)."""
 import collections, csv, json, math, os, sys, unittest
 
@@ -17,7 +18,8 @@ SIGNS2 = json.load(open(os.path.join(ROOT, "research", "streetview_batch2", "sig
 PH = json.load(open(os.path.join(H, "photos.json")))
 COR = json.load(open(os.path.join(H, "corridors.json")))
 DONE = [r for r in ROWS if r["status"] == "done"]
-HAWAII_NOT_APPLIED = {"KAANAPALI-B4-358", "KAANAPALI-B4-378", "WAILEA-B4-375", "WAILEA-B4-377", "WAILEA-B4-409"}
+HAWAII_NOT_APPLIED = {"KAANAPALI-B4-358", "KAANAPALI-B4-378", "WAILEA-B4-375", "WAILEA-B4-377", "WAILEA-B4-409",
+                      "KAILUA-B4-130", "KAANAPALI-B4-371", "KAANAPALI-B4-404"}   # last three agree with the map
 # The 12 segments the checker reported as flipping out of cart/LSV-legal (posted > 35 mph -> red on the map).
 FLIPS_OUT = {"AMELIA-B4-360": 45, "COACHELLA-B4-036": 45, "HHI-B4-048": 45, "LWR-B3-003": 40, "LWR-B4-203": 40,
              "LWR-B4-204": 40, "LWR-B4-275": 40, "MYRTLE-B4-310": 45, "ROCKPORT-B4-383": 60, "SD-B4-125": 40,
@@ -59,10 +61,10 @@ class Batch4(unittest.TestCase):
     def test_one_photo_per_confirmed_sign(self):
         self.assertEqual(set(PH), {r["check_id"] for r in DONE})
 
-    def test_only_corrections_and_fills_change(self):
-        want = {r["check_id"] for r in DONE if R.kind(r) != "agree"} - HAWAII_NOT_APPLIED
+    def test_every_confirmed_sign_applied(self):
+        want = {r["check_id"] for r in DONE} - HAWAII_NOT_APPLIED
         self.assertEqual(set(APPLIED), want)
-        self.assertEqual(len(want), 63)
+        self.assertEqual(len(want), 86)   # 63 corrections/fills + 23 agreeing rows outside Hawaii
         ways = [(rid, e["way"]) for rid, v in SIGNS.items() for e in v]
         self.assertEqual(len(ways), len(set(ways)), "a way claimed by two rows")
         self.assertFalse(set(ways) & {(rid, e["way"]) for rid, v in SIGNS2.items() for e in v}, "batch 4 re-claims a batch-2 way")
@@ -97,8 +99,15 @@ class Batch4(unittest.TestCase):
     def test_unsigned_rows_unchanged(self):
         signed = {e["check_id"] for v in SIGNS.values() for e in v}
         for r in ROWS:
-            if r["status"] != "done" or R.kind(r) == "agree":
+            if r["status"] != "done":
                 self.assertNotIn(r["check_id"], signed)
+
+    def test_agreeing_rows_keep_their_speed(self):
+        agree = [e for v in SIGNS.values() for e in v if e["kind"] == "agree"]
+        self.assertEqual(len({e["check_id"] for e in agree}), 23)
+        for e in agree:
+            self.assertEqual(e["mph"], e["was"], e["check_id"])
+            self.assertEqual(int(float(BY[e["check_id"]]["our_speed_mph"])), e["mph"], e["check_id"])
 
     def test_batches_cannot_disagree(self):
         saved = dict(SV.ALL)

@@ -185,9 +185,10 @@ for x in out:
     a, b, bc, sn = x["v3_all"] or 1e-9, x["v3_ban"], x["v3_ban_cited"], x["v3_src_nb"]
     p_in = (sn + bc) / a; p_nb = sn / max(a - b, 1e-9)
     acc = x["r"] in ACC3["regions"] or x["r"] in ACC3.get("state_law", {})
-    why = ([] if p_in >= BAR else [f"{100*p_in:.1f}% < 70% (bans in)"]) + ([] if p_nb >= FLOOR else [f"non-ban {100*p_nb:.1f}% < 50% floor"]) + ([] if acc else ["no local-rules check recorded"])
+    why = ([] if p_in >= BAR else [f"{math.floor(1000*p_in + 1e-9)/10:.1f}% < 70% (bans in)"]) + ([] if p_nb >= FLOOR else [f"non-ban {math.floor(1000*p_nb + 1e-9)/10:.1f}% < 50% floor"]) + ([] if acc else ["no local-rules check recorded"])
     sd = x["r"] in EXEMPT
-    STATUS[x["r"]] = dict(pct_bans_in=round(100*p_in, 1), pct_nonban=round(100*p_nb, 1), access_check=acc, exempt=sd,
+    # percentages are floored to 0.1 so a stored 70.0 always means the region really reached 70% (Galveston, Oct 22: 69.997%)
+    STATUS[x["r"]] = dict(pct_bans_in=math.floor(1000*p_in + 1e-9)/10, pct_nonban=math.floor(1000*p_nb + 1e-9)/10, access_check=acc, exempt=sd,
                           passes=sd or not why, missing=[] if sd else why, important_mi=round(x["L"], 1),
                           corridors_to_70=x["c_none"][0], corridor_mi_to_70=round(x["c_none"][1], 1),
                           conflicts=x["n_conf"], ban_mi=round(x["ban_mi"], 1), ban_sourced_mi=round(x["ban_src_mi"], 1),

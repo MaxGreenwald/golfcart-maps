@@ -1,6 +1,16 @@
 [
  {
+  "check_id": "KAILUA-B4-130",
+  "road": "Kaneohe Bay Drive",
+  "why": "OSM build input missing on the box (cache/kailua_osm.json)"
+ },
+ {
   "check_id": "KAANAPALI-B4-358",
+  "road": "Honoapiilani Highway",
+  "why": "OSM build input missing on the box (cache/kaanapali_osm.json)"
+ },
+ {
+  "check_id": "KAANAPALI-B4-371",
   "road": "Honoapiilani Highway",
   "why": "OSM build input missing on the box (cache/kaanapali_osm.json)"
  },
@@ -17,6 +27,11 @@
  {
   "check_id": "KAANAPALI-B4-378",
   "road": "Napilihau Street",
+  "why": "OSM build input missing on the box (cache/kaanapali_osm.json)"
+ },
+ {
+  "check_id": "KAANAPALI-B4-404",
+  "road": "Honoapiilani Highway",
   "why": "OSM build input missing on the box (cache/kaanapali_osm.json)"
  },
  {

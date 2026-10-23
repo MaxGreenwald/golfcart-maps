@@ -12,8 +12,9 @@ Same method as research/streetview_batch2/resolve.py (imported, not copied), wit
     run vs the 2.9 km corridor that was looked at);
   - '(unnamed)' rows match the built data's '' name.
 Rules (Max): a posted sign is a real source and overrides OSM; rows with no sign change nothing; rows that agree with the
-map change nothing; a sign never lifts a ban (a stretch the built data cites as a ban is skipped and listed); regions whose
+map keep their speed but now cite the sign as a real source (Max, Oct 22 9:13 PM PT: "count the 26 matching signs too"); a sign never lifts a ban (a stretch the built data cites as a ban is skipped and listed); regions whose
 OSM build input is missing on the box (Hawaii: kaanapali, wailea, kailua) are not applied and listed.
+Run against the pre-batch-4 data (the 'was' column): resolve.py <master public/data before batch 4>.
 Output: signs.json {region: [{check_id, road, way, mph, was, kind, url, label, stretch_m, sheet_m}]}, unresolved.json.
 Usage: resolve.py [DATA_DIR]"""
 import csv, json, os, sys, collections
@@ -69,7 +70,7 @@ def resolve(r):
 def build():
     out, probs = collections.defaultdict(list), []
     for r in rows():
-        if r["status"] != "done" or kind(r) == "agree": continue
+        if r["status"] != "done": continue   # agreeing rows count too (Max, Oct 22 9:13 PM PT: "count the 26 matching signs too")
         if not has_input(r["region"]): probs.append((r["check_id"], r["road_name"], "OSM build input missing on the box (cache/%s_osm.json)" % r["region"])); continue
         res, why = resolve(r)
         if not res: probs.append((r["check_id"], r["road_name"], why)); continue

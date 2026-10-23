@@ -5,7 +5,7 @@
    "assumed_mi": 33.6,
    "ban_mi": 19.5,
    "ban_sourced_mi": 19.5,
-   "conflicts": 4,
+   "conflicts": 3,
    "corridor_mi_to_70": 16.4,
    "corridors_to_70": 16,
    "county_assumed_mi": 4.4,
@@ -14,8 +14,8 @@
    "important_mi": 69.0,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 71.5,
-   "pct_nonban": 66.9,
+   "pct_bans_in": 71.7,
+   "pct_nonban": 67.3,
    "reports": 0
   },
   "amelia": {
@@ -50,8 +50,8 @@
    "important_mi": 15.3,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 97.9,
-   "pct_nonban": 97.9,
+   "pct_bans_in": 97.8,
+   "pct_nonban": 97.8,
    "reports": 0
   },
   "avalon": {
@@ -67,13 +67,13 @@
    "grid_mi": 0,
    "important_mi": 6.2,
    "missing": [
-    "36.3% < 70% (bans in)",
-    "non-ban 36.3% < 50% floor",
+    "36.2% < 70% (bans in)",
+    "non-ban 36.2% < 50% floor",
     "no local-rules check recorded"
    ],
    "passes": false,
-   "pct_bans_in": 36.3,
-   "pct_nonban": 36.3,
+   "pct_bans_in": 36.2,
+   "pct_nonban": 36.2,
    "reports": 0
   },
   "bhi": {
@@ -164,7 +164,7 @@
    "assumed_mi": 51.5,
    "ban_mi": 67.3,
    "ban_sourced_mi": 67.3,
-   "conflicts": 21,
+   "conflicts": 20,
    "corridor_mi_to_70": 19.4,
    "corridors_to_70": 13,
    "county_assumed_mi": 0,
@@ -172,11 +172,11 @@
    "grid_mi": 0,
    "important_mi": 105.2,
    "missing": [
-    "69.8% < 70% (bans in)"
+    "69.9% < 70% (bans in)"
    ],
    "passes": false,
-   "pct_bans_in": 69.8,
-   "pct_nonban": 50.4,
+   "pct_bans_in": 69.9,
+   "pct_nonban": 50.7,
    "reports": 0
   },
   "goldenisles": {
@@ -193,12 +193,12 @@
    "important_mi": 44.5,
    "missing": [
     "42.7% < 70% (bans in)",
-    "non-ban 16.7% < 50% floor",
+    "non-ban 16.6% < 50% floor",
     "no local-rules check recorded"
    ],
    "passes": false,
    "pct_bans_in": 42.7,
-   "pct_nonban": 16.7,
+   "pct_nonban": 16.6,
    "reports": 0
   },
   "gulfshores": {
@@ -217,16 +217,16 @@
     "non-ban 5.7% < 50% floor"
    ],
    "passes": false,
-   "pct_bans_in": 71.8,
+   "pct_bans_in": 71.7,
    "pct_nonban": 5.7,
    "reports": 0
   },
   "hhi": {
    "access_check": false,
-   "assumed_mi": 38.6,
+   "assumed_mi": 38.2,
    "ban_mi": 9.9,
    "ban_sourced_mi": 9.9,
-   "conflicts": 9,
+   "conflicts": 8,
    "corridor_mi_to_70": 30.0,
    "corridors_to_70": 8,
    "county_assumed_mi": 0,
@@ -234,13 +234,13 @@
    "grid_mi": 0,
    "important_mi": 85.9,
    "missing": [
-    "41.9% < 70% (bans in)",
-    "non-ban 35.2% < 50% floor",
+    "42.1% < 70% (bans in)",
+    "non-ban 35.5% < 50% floor",
     "no local-rules check recorded"
    ],
    "passes": false,
-   "pct_bans_in": 41.9,
-   "pct_nonban": 35.2,
+   "pct_bans_in": 42.1,
+   "pct_nonban": 35.5,
    "reports": 0
   },
   "kaanapali": {
@@ -287,7 +287,7 @@
    "assumed_mi": 2.0,
    "ban_mi": 0,
    "ban_sourced_mi": 0,
-   "conflicts": 11,
+   "conflicts": 10,
    "corridor_mi_to_70": 2.2,
    "corridors_to_70": 2,
    "county_assumed_mi": 0,
@@ -295,12 +295,12 @@
    "grid_mi": 0,
    "important_mi": 34.9,
    "missing": [
-    "64.2% < 70% (bans in)",
+    "64.4% < 70% (bans in)",
     "no local-rules check recorded"
    ],
    "passes": false,
-   "pct_bans_in": 64.2,
-   "pct_nonban": 64.2,
+   "pct_bans_in": 64.4,
+   "pct_nonban": 64.4,
    "reports": 0
   },
   "lwr": {
@@ -309,19 +309,18 @@
    "ban_mi": 16.5,
    "ban_sourced_mi": 16.5,
    "conflicts": 18,
-   "corridor_mi_to_70": 3.4,
-   "corridors_to_70": 1,
+   "corridor_mi_to_70": 0,
+   "corridors_to_70": 0,
    "county_assumed_mi": 0,
    "exempt": false,
    "grid_mi": 0,
    "important_mi": 141.9,
    "missing": [
-    "69.5% < 70% (bans in)",
     "no local-rules check recorded"
    ],
    "passes": false,
-   "pct_bans_in": 69.5,
-   "pct_nonban": 65.9,
+   "pct_bans_in": 71.6,
+   "pct_nonban": 68.3,
    "reports": 0
   },
   "myrtle": {
@@ -329,21 +328,21 @@
    "assumed_mi": 183.9,
    "ban_mi": 87.3,
    "ban_sourced_mi": 87.3,
-   "conflicts": 49,
-   "corridor_mi_to_70": 144.5,
-   "corridors_to_70": 52,
+   "conflicts": 46,
+   "corridor_mi_to_70": 140.1,
+   "corridors_to_70": 50,
    "county_assumed_mi": 0,
    "exempt": false,
    "grid_mi": 0,
    "important_mi": 438.2,
    "missing": [
-    "46.1% < 70% (bans in)",
-    "non-ban 35.4% < 50% floor",
+    "47.0% < 70% (bans in)",
+    "non-ban 36.5% < 50% floor",
     "no local-rules check recorded"
    ],
    "passes": false,
-   "pct_bans_in": 46.1,
-   "pct_nonban": 35.4,
+   "pct_bans_in": 47.0,
+   "pct_nonban": 36.5,
    "reports": 0
   },
   "naples": {
@@ -351,21 +350,21 @@
    "assumed_mi": 148.9,
    "ban_mi": 70.2,
    "ban_sourced_mi": 70.2,
-   "conflicts": 41,
-   "corridor_mi_to_70": 112.4,
-   "corridors_to_70": 37,
+   "conflicts": 39,
+   "corridor_mi_to_70": 105.2,
+   "corridors_to_70": 34,
    "county_assumed_mi": 0,
    "exempt": false,
    "grid_mi": 0,
    "important_mi": 395.7,
    "missing": [
-    "49.6% < 70% (bans in)",
-    "non-ban 40.7% < 50% floor",
+    "50.8% < 70% (bans in)",
+    "non-ban 42.0% < 50% floor",
     "no local-rules check recorded"
    ],
    "passes": false,
-   "pct_bans_in": 49.6,
-   "pct_nonban": 40.7,
+   "pct_bans_in": 50.8,
+   "pct_nonban": 42.0,
    "reports": 0
   },
   "nocatee": {
@@ -382,16 +381,16 @@
    "important_mi": 41.5,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 82.4,
-   "pct_nonban": 74.3,
+   "pct_bans_in": 82.3,
+   "pct_nonban": 74.2,
    "reports": 0
   },
   "obx": {
    "access_check": false,
-   "assumed_mi": 17.1,
+   "assumed_mi": 17.0,
    "ban_mi": 0,
    "ban_sourced_mi": 0,
-   "conflicts": 6,
+   "conflicts": 5,
    "corridor_mi_to_70": 0,
    "corridors_to_70": 0,
    "county_assumed_mi": 0,
@@ -402,8 +401,8 @@
     "no local-rules check recorded"
    ],
    "passes": false,
-   "pct_bans_in": 70.6,
-   "pct_nonban": 70.6,
+   "pct_bans_in": 70.8,
+   "pct_nonban": 70.8,
    "reports": 0
   },
   "ocoast": {
@@ -411,21 +410,21 @@
    "assumed_mi": 188.5,
    "ban_mi": 12.2,
    "ban_sourced_mi": 12.2,
-   "conflicts": 280,
-   "corridor_mi_to_70": 219.6,
-   "corridors_to_70": 215,
+   "conflicts": 278,
+   "corridor_mi_to_70": 214.4,
+   "corridors_to_70": 211,
    "county_assumed_mi": 0,
    "exempt": false,
    "grid_mi": 0,
    "important_mi": 692.7,
    "missing": [
-    "32.2% < 70% (bans in)",
-    "non-ban 31.0% < 50% floor",
+    "32.8% < 70% (bans in)",
+    "non-ban 31.6% < 50% floor",
     "no local-rules check recorded"
    ],
    "passes": false,
-   "pct_bans_in": 32.2,
-   "pct_nonban": 31.0,
+   "pct_bans_in": 32.8,
+   "pct_nonban": 31.6,
    "reports": 0
   },
   "oob": {
@@ -451,7 +450,7 @@
    "assumed_mi": 10.2,
    "ban_mi": 0,
    "ban_sourced_mi": 0,
-   "conflicts": 12,
+   "conflicts": 11,
    "corridor_mi_to_70": 0,
    "corridors_to_70": 0,
    "county_assumed_mi": 0,
@@ -459,12 +458,12 @@
    "grid_mi": 0,
    "important_mi": 74.3,
    "missing": [
-    "67.9% < 70% (bans in)",
+    "69.4% < 70% (bans in)",
     "no local-rules check recorded"
    ],
    "passes": false,
-   "pct_bans_in": 67.9,
-   "pct_nonban": 67.9,
+   "pct_bans_in": 69.4,
+   "pct_nonban": 69.4,
    "reports": 0
   },
   "poipu": {
@@ -480,12 +479,12 @@
    "grid_mi": 0,
    "important_mi": 18.4,
    "missing": [
-    "68.9% < 70% (bans in)",
+    "68.8% < 70% (bans in)",
     "no local-rules check recorded"
    ],
    "passes": false,
-   "pct_bans_in": 68.9,
-   "pct_nonban": 68.9,
+   "pct_bans_in": 68.8,
+   "pct_nonban": 68.8,
    "reports": 0
   },
   "portaransas": {
@@ -502,7 +501,7 @@
    "important_mi": 27.7,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 75.0,
+   "pct_bans_in": 74.9,
    "pct_nonban": 64.2,
    "reports": 0
   },
@@ -519,11 +518,11 @@
    "grid_mi": 0,
    "important_mi": 50.4,
    "missing": [
-    "31.4% < 70% (bans in)",
+    "31.3% < 70% (bans in)",
     "non-ban 5.0% < 50% floor"
    ],
    "passes": false,
-   "pct_bans_in": 31.4,
+   "pct_bans_in": 31.3,
    "pct_nonban": 5.0,
    "reports": 0
   },
@@ -564,7 +563,7 @@
    "missing": [],
    "passes": true,
    "pct_bans_in": 70.7,
-   "pct_nonban": 57.1,
+   "pct_nonban": 57.0,
    "reports": 0
   },
   "sd": {
@@ -572,17 +571,17 @@
    "assumed_mi": 501.0,
    "ban_mi": 0,
    "ban_sourced_mi": 0,
-   "conflicts": 426,
-   "corridor_mi_to_70": 426.7,
-   "corridors_to_70": 376,
+   "conflicts": 424,
+   "corridor_mi_to_70": 419.5,
+   "corridors_to_70": 372,
    "county_assumed_mi": 0.1,
    "exempt": true,
    "grid_mi": 0,
    "important_mi": 1455.9,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 36.9,
-   "pct_nonban": 36.9,
+   "pct_bans_in": 37.3,
+   "pct_nonban": 37.3,
    "reports": 0
   },
   "siesta": {
@@ -599,7 +598,7 @@
    "important_mi": 271.3,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 74.7,
+   "pct_bans_in": 74.6,
    "pct_nonban": 72.0,
    "reports": 0
   },
@@ -636,7 +635,7 @@
    "missing": [],
    "passes": true,
    "pct_bans_in": 85.7,
-   "pct_nonban": 79.2,
+   "pct_nonban": 79.1,
    "reports": 0
   },
   "suncity": {
@@ -644,7 +643,7 @@
    "assumed_mi": 91.4,
    "ban_mi": 0,
    "ban_sourced_mi": 0,
-   "conflicts": 96,
+   "conflicts": 95,
    "corridor_mi_to_70": 126.0,
    "corridors_to_70": 65,
    "county_assumed_mi": 0,
@@ -652,13 +651,13 @@
    "grid_mi": 0,
    "important_mi": 458.5,
    "missing": [
-    "33.8% < 70% (bans in)",
-    "non-ban 33.8% < 50% floor",
+    "33.9% < 70% (bans in)",
+    "non-ban 33.9% < 50% floor",
     "no local-rules check recorded"
    ],
    "passes": false,
-   "pct_bans_in": 33.8,
-   "pct_nonban": 33.8,
+   "pct_bans_in": 33.9,
+   "pct_nonban": 33.9,
    "reports": 0
   },
   "suncitycenter": {
@@ -675,12 +674,12 @@
    "important_mi": 37.1,
    "missing": [
     "59.2% < 70% (bans in)",
-    "non-ban 37.4% < 50% floor",
+    "non-ban 37.3% < 50% floor",
     "no local-rules check recorded"
    ],
    "passes": false,
    "pct_bans_in": 59.2,
-   "pct_nonban": 37.4,
+   "pct_nonban": 37.3,
    "reports": 0
   },
   "tybee": {
@@ -697,7 +696,7 @@
    "important_mi": 3.3,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 88.9,
+   "pct_bans_in": 88.8,
    "pct_nonban": 71.2,
    "reports": 0
   },

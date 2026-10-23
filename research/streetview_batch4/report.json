@@ -1,6 +1,23 @@
 {
  "flips": [
   {
+   "check_id": "30A-B4-365",
+   "region": "30a",
+   "road": "East County Highway 30A",
+   "from": "North Winston Lane, Winston Lane",
+   "to": "CR 30A, US Highway 98 West",
+   "kind": "agree",
+   "was_mph": 30,
+   "now_mph": 30,
+   "was": "LSV",
+   "now": "LSV",
+   "confidence": "high",
+   "imagery_date": "2026-01",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "30a|30.27893,-86.01002"
+  },
+  {
    "check_id": "AMELIA-B4-360",
    "region": "amelia",
    "road": "Buccaneer Trail",
@@ -16,6 +33,23 @@
    "flip": "OUT",
    "cart_flip": "cart OUT",
    "gcm_ref": "amelia|30.60060,-81.45935"
+  },
+  {
+   "check_id": "ANNAMARIA-B4-008",
+   "region": "annamaria",
+   "road": "Cortez Road West",
+   "from": "115th Street West",
+   "to": "(see map link)",
+   "kind": "agree",
+   "was_mph": 45,
+   "now_mph": 45,
+   "was": "no",
+   "now": "no",
+   "confidence": "medium",
+   "imagery_date": "2026-04",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "annamaria|27.46739,-82.67828"
   },
   {
    "check_id": "COACHELLA-B4-016",
@@ -188,6 +222,23 @@
    "gcm_ref": "galveston|29.29094,-95.12494"
   },
   {
+   "check_id": "GALVESTON-B4-281",
+   "region": "galveston",
+   "road": "Stewart Road",
+   "from": "81st Street",
+   "to": "75th Street",
+   "kind": "agree",
+   "was_mph": 35,
+   "now_mph": 35,
+   "was": "LSV",
+   "now": "LSV",
+   "confidence": "high",
+   "imagery_date": "2024-05",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "galveston|29.25795,-94.84516"
+  },
+  {
    "check_id": "HHI-B4-046",
    "region": "hhi",
    "road": "Bluffton Parkway",
@@ -222,6 +273,57 @@
    "gcm_ref": "hhi|32.20746,-80.74803"
   },
   {
+   "check_id": "HHI-B4-315",
+   "region": "hhi",
+   "road": "Greenwood Drive",
+   "from": "Sea Pines Circle",
+   "to": "(see map link)",
+   "kind": "agree",
+   "was_mph": 25,
+   "now_mph": 25,
+   "was": "cart+LSV",
+   "now": "cart+LSV",
+   "confidence": "high",
+   "imagery_date": "2024-12",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "hhi|32.15529,-80.76469"
+  },
+  {
+   "check_id": "KEYWEST-B4-433",
+   "region": "keywest",
+   "road": "United Street",
+   "from": "(see map link)",
+   "to": "(see map link)",
+   "kind": "agree",
+   "was_mph": 20,
+   "now_mph": 20,
+   "was": "cart+LSV",
+   "now": "cart+LSV",
+   "confidence": "high",
+   "imagery_date": "2025-11",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "keywest|24.55234,-81.79064"
+  },
+  {
+   "check_id": "LWR-B3-002",
+   "region": "lwr",
+   "road": "Lorraine Road",
+   "from": "(see map link)",
+   "to": "(see map link)",
+   "kind": "agree",
+   "was_mph": 40,
+   "now_mph": 40,
+   "was": "no",
+   "now": "no",
+   "confidence": "high",
+   "imagery_date": "2026-03",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "lwr|27.38065,-82.39612"
+  },
+  {
    "check_id": "LWR-B3-003",
    "region": "lwr",
    "road": "Lorraine Road",
@@ -237,6 +339,23 @@
    "flip": "OUT",
    "cart_flip": "cart OUT",
    "gcm_ref": "lwr|27.37186,-82.39613"
+  },
+  {
+   "check_id": "LWR-B4-002",
+   "region": "lwr",
+   "road": "44th Avenue East",
+   "from": "Cool Blue Lane",
+   "to": "Azurite Way",
+   "kind": "agree",
+   "was_mph": 45,
+   "now_mph": 45,
+   "was": "no",
+   "now": "no",
+   "confidence": "medium",
+   "imagery_date": "2026-03",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "lwr|27.46065,-82.40961"
   },
   {
    "check_id": "LWR-B4-139",
@@ -324,6 +443,57 @@
    "gcm_ref": "lwr|27.39325,-82.46311"
   },
   {
+   "check_id": "MYRTLE-B4-041",
+   "region": "myrtle",
+   "road": "Tournament Boulevard",
+   "from": "McDowell Shortcut Road",
+   "to": "SC 707, TPC Boulevard",
+   "kind": "agree",
+   "was_mph": 35,
+   "now_mph": 35,
+   "was": "LSV",
+   "now": "LSV",
+   "confidence": "high",
+   "imagery_date": "2026-01",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "myrtle|33.58723,-79.04741"
+  },
+  {
+   "check_id": "MYRTLE-B4-058",
+   "region": "myrtle",
+   "road": "West Cox Ferry Road",
+   "from": "(see map link)",
+   "to": "Cox Ferry Circle",
+   "kind": "agree",
+   "was_mph": 30,
+   "now_mph": 30,
+   "was": "LSV",
+   "now": "LSV",
+   "confidence": "high",
+   "imagery_date": "2026-02",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "myrtle|33.79989,-79.03247"
+  },
+  {
+   "check_id": "MYRTLE-B4-227",
+   "region": "myrtle",
+   "road": "International Drive",
+   "from": "(see map link)",
+   "to": "(see map link)",
+   "kind": "agree",
+   "was_mph": 35,
+   "now_mph": 35,
+   "was": "LSV",
+   "now": "LSV",
+   "confidence": "high",
+   "imagery_date": "2026-03",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "myrtle|33.76941,-78.86756"
+  },
+  {
    "check_id": "MYRTLE-B4-310",
    "region": "myrtle",
    "road": "International Drive",
@@ -373,6 +543,40 @@
    "flip": "",
    "cart_flip": "",
    "gcm_ref": "myrtle|33.70251,-78.91519"
+  },
+  {
+   "check_id": "NAPLES-B4-029",
+   "region": "naples",
+   "road": "Golden Gate Parkway",
+   "from": "Estuary Boulevard",
+   "to": "(see map link)",
+   "kind": "agree",
+   "was_mph": 45,
+   "now_mph": 45,
+   "was": "no",
+   "now": "no",
+   "confidence": "high",
+   "imagery_date": "2025-11",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "naples|26.17465,-81.76020"
+  },
+  {
+   "check_id": "NAPLES-B4-049",
+   "region": "naples",
+   "road": "Golden Gate Parkway",
+   "from": "Livingston Road",
+   "to": "(see map link)",
+   "kind": "agree",
+   "was_mph": 45,
+   "now_mph": 45,
+   "was": "no",
+   "now": "no",
+   "confidence": "high",
+   "imagery_date": "2025-11",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "naples|26.17346,-81.78439"
   },
   {
    "check_id": "NAPLES-B4-126",
@@ -460,6 +664,40 @@
    "gcm_ref": "obx|35.90839,-75.67712"
   },
   {
+   "check_id": "OBX-B4-369",
+   "region": "obx",
+   "road": "Sir Walter Raleigh Street",
+   "from": "(see map link)",
+   "to": "Simon Street",
+   "kind": "agree",
+   "was_mph": 25,
+   "now_mph": 25,
+   "was": "cart+LSV",
+   "now": "cart+LSV",
+   "confidence": "high",
+   "imagery_date": "2026-06",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "obx|35.90502,-75.67719"
+  },
+  {
+   "check_id": "OCOAST-B4-032",
+   "region": "ocoast",
+   "road": "Rancho Viejo Road",
+   "from": "Ortega Highway",
+   "to": "(see map link)",
+   "kind": "agree",
+   "was_mph": 45,
+   "now_mph": 45,
+   "was": "no",
+   "now": "no",
+   "confidence": "high",
+   "imagery_date": "2025-08",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "ocoast|33.51676,-117.66346"
+  },
+  {
    "check_id": "OCOAST-B4-056",
    "region": "ocoast",
    "road": "Trabuco Road",
@@ -494,6 +732,23 @@
    "gcm_ref": "ocoast|33.49740,-117.70672"
   },
   {
+   "check_id": "OCOAST-B4-158",
+   "region": "ocoast",
+   "road": "Crown Valley Parkway",
+   "from": "Camino Del Avion, Pacific Island Drive",
+   "to": "West Nine Drive",
+   "kind": "agree",
+   "was_mph": 50,
+   "now_mph": 50,
+   "was": "no",
+   "now": "no",
+   "confidence": "high",
+   "imagery_date": "2025-04",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "ocoast|33.50193,-117.72034"
+  },
+  {
    "check_id": "OCOAST-B4-164",
    "region": "ocoast",
    "road": "Camino Del Avion",
@@ -509,6 +764,23 @@
    "flip": "",
    "cart_flip": "",
    "gcm_ref": "ocoast|33.49131,-117.69922"
+  },
+  {
+   "check_id": "OCOAST-B4-180",
+   "region": "ocoast",
+   "road": "Jeronimo Road",
+   "from": "(see map link)",
+   "to": "Rivendell Drive",
+   "kind": "agree",
+   "was_mph": 40,
+   "now_mph": 40,
+   "was": "no",
+   "now": "no",
+   "confidence": "high",
+   "imagery_date": "2025-11",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "ocoast|33.62777,-117.68968"
   },
   {
    "check_id": "OCOAST-B4-222",
@@ -545,6 +817,23 @@
    "gcm_ref": "ocoast|33.64542,-117.71220"
   },
   {
+   "check_id": "PCB-B4-127",
+   "region": "pcb",
+   "road": "Alf Coleman Road",
+   "from": "(see map link)",
+   "to": "(see map link)",
+   "kind": "agree",
+   "was_mph": 25,
+   "now_mph": 25,
+   "was": "cart+LSV",
+   "now": "cart+LSV",
+   "confidence": "high",
+   "imagery_date": "2026-02",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "pcb|30.20283,-85.81823"
+  },
+  {
    "check_id": "PCB-B4-292",
    "region": "pcb",
    "road": "North Lagoon Drive",
@@ -579,6 +868,40 @@
    "gcm_ref": "rockport|28.02956,-97.08264"
   },
   {
+   "check_id": "SD-B4-033",
+   "region": "sd",
+   "road": "College Boulevard",
+   "from": "San Luis Rey Mission Expressway",
+   "to": "(see map link)",
+   "kind": "agree",
+   "was_mph": 45,
+   "now_mph": 45,
+   "was": "no",
+   "now": "no",
+   "confidence": "high",
+   "imagery_date": "2025-08",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "sd|33.21303,-117.28670"
+  },
+  {
+   "check_id": "SD-B4-065",
+   "region": "sd",
+   "road": "Quail Gardens Drive",
+   "from": "(see map link)",
+   "to": "(see map link)",
+   "kind": "agree",
+   "was_mph": 30,
+   "now_mph": 30,
+   "was": "LSV",
+   "now": "LSV",
+   "confidence": "medium",
+   "imagery_date": "2025-09",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "sd|33.05273,-117.27905"
+  },
+  {
    "check_id": "SD-B4-066",
    "region": "sd",
    "road": "Morena Boulevard",
@@ -611,6 +934,23 @@
    "flip": "",
    "cart_flip": "",
    "gcm_ref": "sd|32.78841,-117.20608"
+  },
+  {
+   "check_id": "SD-B4-101",
+   "region": "sd",
+   "road": "Camino Santa Fe",
+   "from": "Mira Mesa Boulevard",
+   "to": "Trade Street",
+   "kind": "agree",
+   "was_mph": 50,
+   "now_mph": 50,
+   "was": "no",
+   "now": "no",
+   "confidence": "high",
+   "imagery_date": "2025-02",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "sd|32.89071,-117.16800"
   },
   {
    "check_id": "SD-B4-115",
@@ -747,6 +1087,23 @@
    "flip": "",
    "cart_flip": "",
    "gcm_ref": "sd|32.75072,-117.20018"
+  },
+  {
+   "check_id": "SD-B4-149",
+   "region": "sd",
+   "road": "Balboa Avenue",
+   "from": "Mercury Street",
+   "to": "Kearny Villa Road",
+   "kind": "agree",
+   "was_mph": 35,
+   "now_mph": 35,
+   "was": "LSV",
+   "now": "LSV",
+   "confidence": "high",
+   "imagery_date": "2025-02",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "sd|32.82168,-117.15565"
   },
   {
    "check_id": "SIESTA-B4-044",
@@ -1038,6 +1395,23 @@
    "gcm_ref": "suncity|33.68178,-112.25504"
   },
   {
+   "check_id": "SUNCITY-B4-279",
+   "region": "suncity",
+   "road": "West Cactus Road",
+   "from": "(see map link)",
+   "to": "North Reems Road",
+   "kind": "agree",
+   "was_mph": 35,
+   "now_mph": 35,
+   "was": "LSV",
+   "now": "LSV",
+   "confidence": "high",
+   "imagery_date": "2024-11",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "suncity|33.59504,-112.39578"
+  },
+  {
    "check_id": "SUNCITY-B4-293",
    "region": "suncity",
    "road": "North 75th Avenue",
@@ -1053,6 +1427,23 @@
    "flip": "",
    "cart_flip": "",
    "gcm_ref": "suncity|33.66948,-112.22030"
+  },
+  {
+   "check_id": "SUNCITYCENTER-B4-012",
+   "region": "suncitycenter",
+   "road": "24th Street Southeast",
+   "from": "East College Avenue",
+   "to": "(see map link)",
+   "kind": "agree",
+   "was_mph": 40,
+   "now_mph": 40,
+   "was": "no",
+   "now": "no",
+   "confidence": "medium",
+   "imagery_date": "2025-01",
+   "flip": "",
+   "cart_flip": "",
+   "gcm_ref": "suncitycenter|27.71336,-82.40210"
   },
   {
    "check_id": "SUNCITYCENTER-B4-087",
@@ -1073,6 +1464,16 @@
   }
  ],
  "green_miles": {
+  "30a": {
+   "before": [
+    696.26,
+    671.62
+   ],
+   "after": [
+    696.26,
+    671.62
+   ]
+  },
   "amelia": {
    "before": [
     248.46,
@@ -1081,6 +1482,16 @@
    "after": [
     248.27,
     222.38
+   ]
+  },
+  "annamaria": {
+   "before": [
+    94.34,
+    85.64
+   ],
+   "after": [
+    94.34,
+    85.64
    ]
   },
   "coachella": {
@@ -1111,6 +1522,16 @@
    "after": [
     1011.67,
     986.98
+   ]
+  },
+  "keywest": {
+   "before": [
+    158.52,
+    147.08
+   ],
+   "after": [
+    158.52,
+    147.08
    ]
   },
   "lwr": {
@@ -1246,7 +1667,17 @@
  },
  "not_applied": [
   {
+   "check_id": "KAILUA-B4-130",
+   "road": "Kaneohe Bay Drive",
+   "why": "OSM build input missing on the box (cache/kailua_osm.json)"
+  },
+  {
    "check_id": "KAANAPALI-B4-358",
+   "road": "Honoapiilani Highway",
+   "why": "OSM build input missing on the box (cache/kaanapali_osm.json)"
+  },
+  {
+   "check_id": "KAANAPALI-B4-371",
    "road": "Honoapiilani Highway",
    "why": "OSM build input missing on the box (cache/kaanapali_osm.json)"
   },
@@ -1263,6 +1694,11 @@
   {
    "check_id": "KAANAPALI-B4-378",
    "road": "Napilihau Street",
+   "why": "OSM build input missing on the box (cache/kaanapali_osm.json)"
+  },
+  {
+   "check_id": "KAANAPALI-B4-404",
+   "road": "Honoapiilani Highway",
    "why": "OSM build input missing on the box (cache/kaanapali_osm.json)"
   },
   {
