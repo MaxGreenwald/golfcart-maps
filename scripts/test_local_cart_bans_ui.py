@@ -6,7 +6,7 @@ fails = []
 def check(n, ok, d=""):
     print(("PASS " if ok else "FAIL ") + n, d)
     if not ok: fails.append(n)
-CASES = [c for c in [("annamaria", "Gulf Drive", "62-39"), ("chs", "Palm Boulevard", "Isle of Palms"), ("rockport", "FM", "98-133"), ("staug", "A1A Beach Boulevard", "St. Augustine Beach")] if c[0] in os.environ.get("ONLY", c[0]).split(",")]
+CASES = [c for c in [("annamaria", "Gulf Drive", "62-39"), ("chs", "Palm Boulevard", "Isle of Palms"), ("rockport", "FM", "98-133"), ("staug", "A1A Beach Boulevard", "St. Augustine Beach"), ("obx", "Duck Road", "18-04"), ("obx", "Colington Road", "Colington"), ("obx", "S US Highway 64", "46-152"), ("lwr", "Greenbrook Boulevard", "Greenbrook")] if c[0] in os.environ.get("ONLY", c[0]).split(",")]
 with sync_playwright() as p:
     b = p.chromium.launch()
     for rid, road, cite in CASES:
