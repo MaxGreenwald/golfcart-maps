@@ -173,14 +173,21 @@ add(id="newport", name="Newport Beach & Balboa, CA", short="Newport Beach", stat
     res=[("Balboa Island's community site explains golf cart rules on the island's narrow streets.", "Balboa Island golf cart guide", "https://www.balboaisland.com/golf-carts/")])
 
 SRIA = "https://visitpensacolabeach.com/beach-rules/"
+GBZ = "https://cityofgulfbreeze.us/golf-carts-and-the-loop/"
+PNJ14 = "https://www.pnj.com/story/news/2014/07/29/street-legal-insured-golf-carts-ok-pensacola-beach/13321889/"
+# Bob Sikes Bridge: OSM names the bridge ways "Pensacola Beach Boulevard" (bridge:name=Bob Sikes Bridge), so the golf-cart ban is scoped to the two bridge ways by OSM id.
+# The SRIA beach-rules page doesn't mention carts, so it is no longer cited for the bridge; Gulf Breeze (golf carts) is. No source found for an LSV ban on the bridge.
 add(id="pensacola", name="Pensacola Beach & Navarre Beach, FL", short="Pensacola Beach", state="FL", slug="pensacolabeach", bbox=[30.31, -87.20, 30.41, -86.84], zoom=13,
     cover="Pensacola Beach and Navarre Beach (Santa Rosa Island) only. Pick another city in the menu above.",
-    bans=[{"names": "^Bob Sikes Bridge$", "url": SRIA, "label": "Santa Rosa Island Authority beach rules: golf carts and LSVs may not use the Bob Sikes Bridge"}],
-    access=dict(kind="island authority rules", url=SRIA, label="Santa Rosa Island Authority beach rules (LSVs on Via de Luna, Fort Pickens Rd, Pensacola Beach Blvd; no bridges)", applied="research/regions/pensacola.json bans"),
-    enf=[src("Santa Rosa Island Authority beach rules", SRIA), src("FLHSMV low-speed vehicles", FLHSMV), src("Santa Rosa County golf cart ordinance (Navarre Beach designated county roads; not the Navarre Bridge)", NAVB)],
+    bans=[], cart_only=[{"names": "^Bob Sikes Bridge$|^Pensacola Beach Boulevard$", "ways": [11316834, 11316836], "url": GBZ,
+                         "label": "City of Gulf Breeze: it is unlawful to operate golf carts on the Bob Sikes Bridge (Pensacola Beach toll bridge); LSVs follow the posted limit"},
+                        {"names": "^Navarre Beach C(auseway|rossway)$", "ways": [83454308, 83454337], "url": NAVB,
+                         "label": "Santa Rosa County golf cart ordinance: golf carts may use Navarre Beach county roads excluding the Navarre Bridge"}],
+    access=dict(kind="county traffic director statement (news)", url=PNJ14, label="Pensacola News Journal 2014: Escambia County says street-legal LSVs may use all Pensacola Beach roads signed 35 mph or less; no county golf cart ordinance", applied="research/regions/pensacola.json cart_only_bans + FL state rule"),
+    enf=[src("Pensacola News Journal: street-legal golf carts OK on Pensacola Beach (2014)", PNJ14), src("City of Gulf Breeze: golf carts not allowed on the Bob Sikes Bridge", GBZ), src("FLHSMV low-speed vehicles", FLHSMV), src("Santa Rosa County golf cart ordinance (Navarre Beach designated county roads; not the Navarre Bridge)", NAVB)],
     unverified=["J Earle Bowden Way (Gulf Islands National Seashore) is shown at its posted 35 mph; National Park Service rules may differ.", "Golf cart designated roads on the island aren't digitized; plain golf carts show red outside tagged cart roads."],
     towns=[("pensacola-beach", "Pensacola Beach", 30.3330, -87.1420), ("navarre-beach", "Navarre Beach", 30.3800, -86.8630)],
-    res=[("The Santa Rosa Island Authority posts Pensacola Beach rules, including golf carts.", "Pensacola Beach rules from the island authority", SRIA)])
+    res=[("The Pensacola News Journal explains which carts may drive on Pensacola Beach roads.", "Street-legal golf carts on Pensacola Beach (PNJ)", PNJ14)])
 
 OIB = "https://www.oibgov.com/20855/golf-carts-low-speed-electric-vehicles"
 add(id="brunswick", name="Brunswick Islands, NC", short="Brunswick Islands", state="NC", slug="brunswickislands", bbox=[33.85, -78.56, 33.94, -78.25], zoom=13,

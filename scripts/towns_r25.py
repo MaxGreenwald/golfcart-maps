@@ -89,13 +89,14 @@ prof("newport", "Yes, with limits. In {n}, golf carts may use streets posted 25 
      [("Pacific Coast Highway", "No golf carts or LSVs", True)],
      [("Can I drive a golf cart on Balboa Island?", "Yes. Balboa Island streets are posted 25 mph or less, so golf carts may use them."),
       ("Can I drive a golf cart on PCH in Newport Beach?", "No. Pacific Coast Highway is posted well above 25 mph and police say carts aren't allowed on it.")])
-prof("pensacola", "Street-legal LSVs yes; plain golf carts only on designated roads. LSVs may use roads posted 35 mph or less in {n}; on Pensacola Beach that includes Via de Luna and Fort Pickens Road, but not the bridges.",
-     ("limited", "Designated roads only", "n/a", "No bridges"), ("yes", "Roads posted 35 mph or less", "35 mph", "No bridges"),
-     [FLGC, FLLSV, ("Bridges", "No golf carts or LSVs on the Bob Sikes Bridge", "Santa Rosa Island Authority", S.SRIA),
-      ("Navarre Beach", "Golf carts on designated county roads only, not the Navarre Bridge", "Santa Rosa County golf cart ordinance", S.NAVB)],
-     [("Bob Sikes Bridge", "No golf carts or LSVs", False)],
+prof("pensacola", "Street-legal LSVs yes; plain golf carts only on designated roads. LSVs may use roads posted 35 mph or less in {n}; on Pensacola Beach that includes Via de Luna and Fort Pickens Road. Golf carts can't cross the Bob Sikes Bridge or the Navarre Bridge.",
+     ("limited", "Designated roads only", "n/a", "No bridges"), ("yes", "Roads posted 35 mph or less", "35 mph", "Registered and insured"),
+     [FLGC, FLLSV, ("Pensacola Beach roads", "Registered LSVs may use Pensacola Beach roads signed 35 mph or less", "Pensacola News Journal (Escambia County traffic)", S.PNJ14),
+      ("Bob Sikes Bridge", "Golf carts aren't allowed on the Bob Sikes Bridge", "City of Gulf Breeze", S.GBZ),
+      ("Navarre Beach", "Golf carts on Navarre Beach county roads, not the Navarre Bridge", "Santa Rosa County golf cart ordinance", S.NAVB)],
+     [("Bob Sikes Bridge", "No golf carts", False), ("Navarre Bridge", "No golf carts", False)],
      [("Can I drive an LSV on Via de Luna?", "Yes. Via de Luna is posted 35 mph or less, so registered LSVs may use it."),
-      ("Can I take a golf cart over the bridge to Pensacola?", "No. Golf carts and LSVs can't use the Bob Sikes Bridge.")])
+      ("Can I take a golf cart over the bridge to Pensacola?", "No. Golf carts aren't allowed on the Bob Sikes Bridge.")])
 prof("brunswick", "Street-legal LSVs yes, plain golf carts no. Ocean Isle Beach and Holden Beach only allow carts that are registered, inspected and insured as LSVs. In {n}, LSVs may use roads posted 35 mph or less.",
      ("no", "Only if registered as an LSV", "n/a", "Gas carts can't pass NC inspection"), ("yes", "Roads posted 35 mph or less", "35 mph", "Registered, inspected, insured"),
      [("Golf carts", "Must be registered, tagged and insured LSVs to use public streets", "Town of Ocean Isle Beach", S.OIB),

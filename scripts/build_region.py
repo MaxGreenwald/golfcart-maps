@@ -237,6 +237,7 @@ for wi, w in enumerate(wl):
         for b in CFG.get("bans", []):   # local ordinance / state-highway bans -> blocked for everyone (single rule)
             if b.get("per_segment"): continue   # decided per segment below (a way that is only partly banned)
             if not any(re.search(b["names"], t.get(k, "")) for k in ("name", "ref")): continue
+            if "ways" in b and w["id"] not in b["ways"]: continue   # optional exact OSM way ids (e.g. a bridge OSM names after the road it carries)
             if "south_of" in b and mla >= b["south_of"]: continue
             if "north_of" in b and mla <= b["north_of"]: continue
             if "west_of" in b and mlo >= b["west_of"]: continue
@@ -317,6 +318,7 @@ for wi, w in enumerate(wl):
             q_ = g[sg[len(sg)//2]]
             for b in CBAN:
                 if "names" in b and not any(re.search(b["names"], t.get(k, "")) for k in ("name", "ref")): continue
+                if "ways" in b and w["id"] not in b["ways"]: continue   # optional exact OSM way ids
                 if "bbox" in b and not (b["bbox"][0] <= q_["lat"] <= b["bbox"][2] and b["bbox"][1] <= q_["lon"] <= b["bbox"][3]): continue
                 if "poly" in b and not _in_poly(q_["lon"], q_["lat"], b["_ring"]): continue
                 sflag, cbi = 4, src_i(b["url"], b["label"]); stats["cart_only_banned"] = stats.get("cart_only_banned", 0) + 1; break

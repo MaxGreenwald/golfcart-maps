@@ -140,10 +140,10 @@
    "applied": "research/regions/stpete.json cart_only_bans"
   },
   "pensacola": {
-   "kind": "island authority rules",
-   "url": "https://visitpensacolabeach.com/beach-rules/",
-   "label": "Santa Rosa Island Authority beach rules (LSVs on Via de Luna, Fort Pickens Rd, Pensacola Beach Blvd; no bridges)",
-   "applied": "research/regions/pensacola.json bans"
+   "kind": "county traffic director statement (news)",
+   "url": "https://www.pnj.com/story/news/2014/07/29/street-legal-insured-golf-carts-ok-pensacola-beach/13321889/",
+   "label": "Pensacola News Journal 2014: Escambia County says street-legal LSVs may use all Pensacola Beach roads signed 35 mph or less; no county golf cart ordinance",
+   "applied": "research/regions/pensacola.json cart_only_bans + FL state rule"
   },
   "brunswick": {
    "kind": "town police rules",

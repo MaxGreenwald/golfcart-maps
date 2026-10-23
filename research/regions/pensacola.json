@@ -353,11 +353,25 @@
    30.3226
   ]
  ],
- "bans": [
+ "bans": [],
+ "cart_only_bans": [
   {
-   "names": "^Bob Sikes Bridge$",
-   "url": "https://visitpensacolabeach.com/beach-rules/",
-   "label": "Santa Rosa Island Authority beach rules: golf carts and LSVs may not use the Bob Sikes Bridge"
+   "names": "^Bob Sikes Bridge$|^Pensacola Beach Boulevard$",
+   "ways": [
+    11316834,
+    11316836
+   ],
+   "url": "https://cityofgulfbreeze.us/golf-carts-and-the-loop/",
+   "label": "City of Gulf Breeze: it is unlawful to operate golf carts on the Bob Sikes Bridge (Pensacola Beach toll bridge); LSVs follow the posted limit"
+  },
+  {
+   "names": "^Navarre Beach C(auseway|rossway)$",
+   "ways": [
+    83454308,
+    83454337
+   ],
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/12483/400831/pdf",
+   "label": "Santa Rosa County golf cart ordinance: golf carts may use Navarre Beach county roads excluding the Navarre Bridge"
   }
  ],
  "unverified": [
@@ -365,7 +379,8 @@
   "Golf cart designated roads on the island aren't digitized; plain golf carts show red outside tagged cart roads."
  ],
  "sources": [
-  "Santa Rosa Island Authority beach rules https://visitpensacolabeach.com/beach-rules/",
+  "Pensacola News Journal: street-legal golf carts OK on Pensacola Beach (2014) https://www.pnj.com/story/news/2014/07/29/street-legal-insured-golf-carts-ok-pensacola-beach/13321889/",
+  "City of Gulf Breeze: golf carts not allowed on the Bob Sikes Bridge https://cityofgulfbreeze.us/golf-carts-and-the-loop/",
   "FLHSMV low-speed vehicles https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
   "Santa Rosa County golf cart ordinance (Navarre Beach designated county roads; not the Navarre Bridge) https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/12483/400831/pdf",
   "OpenStreetMap",
@@ -376,8 +391,12 @@
   "result": "local rules recorded",
   "sources": [
    {
-    "label": "Santa Rosa Island Authority beach rules",
-    "url": "https://visitpensacolabeach.com/beach-rules/"
+    "label": "Pensacola News Journal: street-legal golf carts OK on Pensacola Beach (2014)",
+    "url": "https://www.pnj.com/story/news/2014/07/29/street-legal-insured-golf-carts-ok-pensacola-beach/13321889/"
+   },
+   {
+    "label": "City of Gulf Breeze: golf carts not allowed on the Bob Sikes Bridge",
+    "url": "https://cityofgulfbreeze.us/golf-carts-and-the-loop/"
    },
    {
     "label": "FLHSMV low-speed vehicles",
