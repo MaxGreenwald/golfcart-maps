@@ -112,8 +112,8 @@
    "important_mi": 7.2,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 87.2,
-   "pct_nonban": 87.2,
+   "pct_bans_in": 87.1,
+   "pct_nonban": 87.1,
    "reports": 0
   },
   "brunswick": {
@@ -151,11 +151,11 @@
    "important_mi": 183.9,
    "missing": [
     "21.3% < 70% (bans in)",
-    "non-ban 21.3% < 50% floor"
+    "non-ban 21.2% < 50% floor"
    ],
    "passes": false,
    "pct_bans_in": 21.3,
-   "pct_nonban": 21.3,
+   "pct_nonban": 21.2,
    "reports": 0
   },
   "capesanblas": {
@@ -172,8 +172,8 @@
    "important_mi": 52.9,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 79.3,
-   "pct_nonban": 79.3,
+   "pct_bans_in": 79.2,
+   "pct_nonban": 79.2,
    "reports": 0
   },
   "carolinabeach": {
@@ -210,12 +210,12 @@
    "grid_mi": 0,
    "important_mi": 18.7,
    "missing": [
-    "47.9% < 70% (bans in)",
-    "non-ban 47.9% < 50% floor"
+    "47.8% < 70% (bans in)",
+    "non-ban 47.8% < 50% floor"
    ],
    "passes": false,
-   "pct_bans_in": 47.9,
-   "pct_nonban": 47.9,
+   "pct_bans_in": 47.8,
+   "pct_nonban": 47.8,
    "reports": 0
   },
   "chs": {
@@ -250,8 +250,8 @@
    "important_mi": 100.2,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 88.8,
-   "pct_nonban": 88.8,
+   "pct_bans_in": 88.7,
+   "pct_nonban": 88.7,
    "reports": 0
   },
   "coachella": {
@@ -327,11 +327,11 @@
    "grid_mi": 0,
    "important_mi": 76.5,
    "missing": [
-    "38.1% < 70% (bans in)",
+    "38.0% < 70% (bans in)",
     "non-ban 37.6% < 50% floor"
    ],
    "passes": false,
-   "pct_bans_in": 38.1,
+   "pct_bans_in": 38.0,
    "pct_nonban": 37.6,
    "reports": 0
   },
@@ -389,11 +389,11 @@
    "grid_mi": 0,
    "important_mi": 27.7,
    "missing": [
-    "68.7% < 70% (bans in)"
+    "68.6% < 70% (bans in)"
    ],
    "passes": false,
-   "pct_bans_in": 68.7,
-   "pct_nonban": 68.7,
+   "pct_bans_in": 68.6,
+   "pct_nonban": 68.6,
    "reports": 0
   },
   "fmb": {
@@ -410,8 +410,8 @@
    "important_mi": 7.9,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 91.7,
-   "pct_nonban": 91.7,
+   "pct_bans_in": 91.6,
+   "pct_nonban": 91.6,
    "reports": 0
   },
   "galveston": {
@@ -550,11 +550,11 @@
    "grid_mi": 0,
    "important_mi": 24.6,
    "missing": [
-    "63.0% < 70% (bans in)"
+    "62.9% < 70% (bans in)"
    ],
    "passes": false,
-   "pct_bans_in": 63.0,
-   "pct_nonban": 63.0,
+   "pct_bans_in": 62.9,
+   "pct_nonban": 62.9,
    "reports": 0
   },
   "keywest": {
@@ -676,11 +676,11 @@
    "grid_mi": 0,
    "important_mi": 89.2,
    "missing": [
-    "22.0% < 70% (bans in)",
+    "21.9% < 70% (bans in)",
     "non-ban 13.6% < 50% floor"
    ],
    "passes": false,
-   "pct_bans_in": 22.0,
+   "pct_bans_in": 21.9,
    "pct_nonban": 13.6,
    "reports": 0
   },
@@ -719,7 +719,7 @@
    ],
    "passes": false,
    "pct_bans_in": 60.7,
-   "pct_nonban": 54.2,
+   "pct_nonban": 54.1,
    "reports": 0
   },
   "obx": {
@@ -756,11 +756,11 @@
    "important_mi": 19.3,
    "missing": [
     "53.8% < 70% (bans in)",
-    "non-ban 16.8% < 50% floor"
+    "non-ban 16.7% < 50% floor"
    ],
    "passes": false,
    "pct_bans_in": 53.8,
-   "pct_nonban": 16.8,
+   "pct_nonban": 16.7,
    "reports": 0
   },
   "ocoast": {
@@ -816,11 +816,11 @@
    "grid_mi": 0,
    "important_mi": 24.3,
    "missing": [
-    "68.9% < 70% (bans in)"
+    "68.8% < 70% (bans in)"
    ],
    "passes": false,
-   "pct_bans_in": 68.9,
-   "pct_nonban": 62.2,
+   "pct_bans_in": 68.8,
+   "pct_nonban": 62.1,
    "reports": 0
   },
   "pawleys": {
@@ -836,11 +836,11 @@
    "grid_mi": 0,
    "important_mi": 28.2,
    "missing": [
-    "35.8% < 70% (bans in)",
+    "35.7% < 70% (bans in)",
     "non-ban 33.1% < 50% floor"
    ],
    "passes": false,
-   "pct_bans_in": 35.8,
+   "pct_bans_in": 35.7,
    "pct_nonban": 33.1,
    "reports": 0
   },
@@ -879,8 +879,8 @@
    "important_mi": 29.1,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 81.2,
-   "pct_nonban": 81.2,
+   "pct_bans_in": 81.1,
+   "pct_nonban": 81.1,
    "reports": 0
   },
   "poipu": {
@@ -1105,8 +1105,8 @@
    "important_mi": 11.7,
    "missing": [],
    "passes": true,
-   "pct_bans_in": 78.7,
-   "pct_nonban": 78.7,
+   "pct_bans_in": 78.6,
+   "pct_nonban": 78.6,
    "reports": 0
   },
   "stpete": {
@@ -1184,12 +1184,12 @@
    "grid_mi": 0,
    "important_mi": 16.3,
    "missing": [
-    "43.6% < 70% (bans in)",
-    "non-ban 29.9% < 50% floor"
+    "43.5% < 70% (bans in)",
+    "non-ban 29.8% < 50% floor"
    ],
    "passes": false,
-   "pct_bans_in": 43.6,
-   "pct_nonban": 29.9,
+   "pct_bans_in": 43.5,
+   "pct_nonban": 29.8,
    "reports": 0
   },
   "tybee": {
