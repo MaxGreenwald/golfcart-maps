@@ -148,12 +148,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Buccaneer Trail",
-    "mi": 0.18,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Amelia Road",
     "mi": 0.06,
     "mph": 25,
@@ -318,12 +312,6 @@
   "reports": [],
   "conflicts": [
    {
-    "name": "Monroe Street",
-    "mi": 7.1,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Washington Street",
     "mi": 4.29,
     "mph": 99,
@@ -336,33 +324,15 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Varner Road",
-    "mi": 2.63,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Cesar Chavez Street",
     "mi": 2.3,
     "mph": 99,
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Ramon Road",
-    "mi": 2.03,
-    "mph": 45,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Washington Street",
-    "mi": 1.56,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Washington Street",
-    "mi": 1.46,
-    "mph": 99,
+    "name": "Varner Road",
+    "mi": 1.43,
+    "mph": 55,
     "kind": "neighbour_disagrees"
    },
    {
@@ -390,6 +360,12 @@
     "kind": "neighbour_disagrees"
    },
    {
+    "name": "Ramon Road",
+    "mi": 0.73,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
     "name": "Da Vall Drive",
     "mi": 0.67,
     "mph": 50,
@@ -405,12 +381,6 @@
     "name": "Dinah Shore Drive",
     "mi": 0.49,
     "mph": 50,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Cesar Chavez Street",
-    "mi": 0.46,
-    "mph": 99,
     "kind": "neighbour_disagrees"
    },
    {
@@ -458,12 +428,6 @@
   ],
   "gap": [
    {
-    "name": "Monroe Street",
-    "mi": 7.1,
-    "mph": 99,
-    "conflict": true
-   },
-   {
     "name": "Washington Street",
     "mi": 4.29,
     "mph": 99,
@@ -476,33 +440,15 @@
     "conflict": true
    },
    {
-    "name": "Varner Road",
-    "mi": 2.63,
-    "mph": 25,
-    "conflict": true
-   },
-   {
     "name": "Cesar Chavez Street",
     "mi": 2.3,
     "mph": 99,
     "conflict": true
    },
    {
-    "name": "Ramon Road",
-    "mi": 2.03,
-    "mph": 45,
-    "conflict": true
-   },
-   {
-    "name": "Washington Street",
-    "mi": 1.56,
-    "mph": 99,
-    "conflict": true
-   },
-   {
-    "name": "Washington Street",
-    "mi": 1.46,
-    "mph": 99,
+    "name": "Varner Road",
+    "mi": 1.43,
+    "mph": 55,
     "conflict": true
    },
    {
@@ -926,18 +872,6 @@
     "conflict": false
    },
    {
-    "name": "Varner Road",
-    "mi": 1.43,
-    "mph": 55,
-    "conflict": false
-   },
-   {
-    "name": "Ramon Road",
-    "mi": 1.43,
-    "mph": 55,
-    "conflict": false
-   },
-   {
     "name": "Avenue 44",
     "mi": 1.42,
     "mph": 25,
@@ -1052,21 +986,9 @@
   "reports": [],
   "conflicts": [
    {
-    "name": "Stewart Road",
-    "mi": 6.54,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Ball Street - Avenue H",
     "mi": 0.94,
     "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Camp Wallace Road",
-    "mi": 0.93,
-    "mph": 99,
     "kind": "neighbour_disagrees"
    },
    {
@@ -1192,26 +1114,8 @@
   ],
   "gap": [
    {
-    "name": "Stewart Road",
-    "mi": 6.54,
-    "mph": 25,
-    "conflict": true
-   },
-   {
     "name": "Seawolf Parkway",
     "mi": 2.56,
-    "mph": 25,
-    "conflict": false
-   },
-   {
-    "name": "Avenue S",
-    "mi": 1.95,
-    "mph": 99,
-    "conflict": false
-   },
-   {
-    "name": "8 Mile Road",
-    "mi": 1.72,
     "mph": 25,
     "conflict": false
    },
@@ -1284,12 +1188,6 @@
    {
     "name": "19th Street",
     "mi": 1.17,
-    "mph": 25,
-    "conflict": false
-   },
-   {
-    "name": "The Strand",
-    "mi": 1.07,
     "mph": 25,
     "conflict": false
    }
@@ -1474,21 +1372,9 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Bluffton Parkway",
-    "mi": 2.29,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Okatie Highway",
     "mi": 2.29,
     "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Spanish Wells Road",
-    "mi": 2.17,
-    "mph": 25,
     "kind": "neighbour_disagrees"
    },
    {
@@ -1543,12 +1429,6 @@
    },
    {
     "name": "Bluffton Parkway",
-    "mi": 2.29,
-    "mph": 99,
-    "conflict": true
-   },
-   {
-    "name": "Bluffton Parkway",
     "mi": 4.97,
     "mph": 99,
     "conflict": false
@@ -1568,12 +1448,6 @@
    {
     "name": "Bluffton Parkway",
     "mi": 2.85,
-    "mph": 45,
-    "conflict": false
-   },
-   {
-    "name": "Bluffton Parkway",
-    "mi": 2.79,
     "mph": 45,
     "conflict": false
    }
@@ -1765,12 +1639,6 @@
   "reports": [],
   "conflicts": [
    {
-    "name": "Lorraine Road",
-    "mi": 2.88,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Bourneside Boulevard",
     "mi": 2.04,
     "mph": 25,
@@ -1801,12 +1669,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Lakewood Ranch Boulevard",
-    "mi": 1.05,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "44th Avenue East",
     "mi": 0.88,
     "mph": 25,
@@ -1815,24 +1677,6 @@
    {
     "name": "Rangeland Parkway",
     "mi": 0.66,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "White Eagle Boulevard",
-    "mi": 0.65,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "North Cattlemen Road",
-    "mi": 0.64,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Creekwood Boulevard",
-    "mi": 0.53,
     "mph": 25,
     "kind": "neighbour_disagrees"
    },
@@ -1858,12 +1702,6 @@
     "name": "Lakewood Ranch Boulevard",
     "mi": 0.43,
     "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Honore Avenue",
-    "mi": 0.43,
-    "mph": 35,
     "kind": "neighbour_disagrees"
    },
    {
@@ -1912,20 +1750,8 @@
   "gap": [
    {
     "name": "Lorraine Road",
-    "mi": 2.88,
-    "mph": 25,
-    "conflict": true
-   },
-   {
-    "name": "Lorraine Road",
     "mi": 3.42,
     "mph": 40,
-    "conflict": false
-   },
-   {
-    "name": "Professional Parkway East",
-    "mi": 2.08,
-    "mph": 25,
     "conflict": false
    }
   ]
@@ -2108,20 +1934,8 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "International Drive",
-    "mi": 0.31,
-    "mph": 35,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Waccamaw Medical Park Drive",
     "mi": 0.3,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "67th Avenue North",
-    "mi": 0.29,
     "mph": 25,
     "kind": "neighbour_disagrees"
    },
@@ -2135,12 +1949,6 @@
     "name": "East Country Club Drive",
     "mi": 0.27,
     "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Seaboard Street",
-    "mi": 0.27,
-    "mph": 30,
     "kind": "neighbour_disagrees"
    },
    {
@@ -2171,6 +1979,24 @@
     "name": "Highway 90",
     "mi": 0.17,
     "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "George Bishop Parkway",
+    "mi": 0.16,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Kings Road",
+    "mi": 0.14,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Hillside Drive South",
+    "mi": 0.11,
+    "mph": 25,
     "kind": "neighbour_disagrees"
    }
   ],
@@ -2571,12 +2397,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Bald Eagle Drive",
-    "mi": 1.13,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Pine Ridge Road",
     "mi": 1.06,
     "mph": 99,
@@ -2718,6 +2538,12 @@
     "name": "Central Avenue",
     "mi": 0.06,
     "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.06,
+    "mph": 99,
     "kind": "neighbour_disagrees"
    },
    {
@@ -2962,12 +2788,6 @@
   "reports": [],
   "conflicts": [
    {
-    "name": "Preservation Trail",
-    "mi": 0.38,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Landrum Lane",
     "mi": 0.13,
     "mph": 25,
@@ -2980,12 +2800,6 @@
   "reports": [],
   "conflicts": [
    {
-    "name": "N US Highway 64",
-    "mi": 0.8,
-    "mph": 55,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "West Kitty Hawk Road",
     "mi": 0.45,
     "mph": 25,
@@ -2995,12 +2809,6 @@
     "name": "US 64",
     "mi": 0.34,
     "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Ananias Dare Street",
-    "mi": 0.3,
-    "mph": 25,
     "kind": "neighbour_disagrees"
    },
    {
@@ -3028,20 +2836,7 @@
     "kind": "neighbour_disagrees"
    }
   ],
-  "gap": [
-   {
-    "name": "William B. Umstead Bridge",
-    "mi": 2.7,
-    "mph": 55,
-    "conflict": false
-   },
-   {
-    "name": "Burnside Road",
-    "mi": 2.47,
-    "mph": 35,
-    "conflict": false
-   }
-  ]
+  "gap": []
  },
  "ocoast": {
   "reports": [],
@@ -3050,12 +2845,6 @@
     "name": "Rancho Viejo Road",
     "mi": 3.02,
     "mph": 45,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Trabuco Road",
-    "mi": 2.0,
-    "mph": 55,
     "kind": "neighbour_disagrees"
    },
    {
@@ -3113,12 +2902,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Ridgeway Avenue",
-    "mi": 1.17,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Moulton Parkway",
     "mi": 1.09,
     "mph": 50,
@@ -3152,12 +2935,6 @@
     "name": "Glenneyre Street",
     "mi": 0.86,
     "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Camino Del Avion",
-    "mi": 0.85,
-    "mph": 45,
     "kind": "neighbour_disagrees"
    },
    {
@@ -3245,12 +3022,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Los Alisos Boulevard",
-    "mi": 0.58,
-    "mph": 50,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Sienna Parkway",
     "mi": 0.58,
     "mph": 35,
@@ -3260,12 +3031,6 @@
     "name": "La Paz Road",
     "mi": 0.57,
     "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Jeronimo Road",
-    "mi": 0.57,
-    "mph": 40,
     "kind": "neighbour_disagrees"
    },
    {
@@ -3285,6 +3050,36 @@
     "mi": 0.52,
     "mph": 45,
     "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Rockfield Boulevard",
+    "mi": 0.52,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Trabuco Road",
+    "mi": 0.52,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Cabot Road",
+    "mi": 0.52,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Aliso Viejo Parkway",
+    "mi": 0.5,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Muirlands Boulevard",
+    "mi": 0.49,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
    }
   ],
   "gap": [
@@ -3292,12 +3087,6 @@
     "name": "Rancho Viejo Road",
     "mi": 3.02,
     "mph": 45,
-    "conflict": true
-   },
-   {
-    "name": "Trabuco Road",
-    "mi": 2.0,
-    "mph": 55,
     "conflict": true
    },
    {
@@ -3355,12 +3144,6 @@
     "conflict": true
    },
    {
-    "name": "Ridgeway Avenue",
-    "mi": 1.17,
-    "mph": 25,
-    "conflict": true
-   },
-   {
     "name": "Moulton Parkway",
     "mi": 1.09,
     "mph": 50,
@@ -3394,12 +3177,6 @@
     "name": "Glenneyre Street",
     "mi": 0.86,
     "mph": 25,
-    "conflict": true
-   },
-   {
-    "name": "Camino Del Avion",
-    "mi": 0.85,
-    "mph": 45,
     "conflict": true
    },
    {
@@ -3487,12 +3264,6 @@
     "conflict": true
    },
    {
-    "name": "Los Alisos Boulevard",
-    "mi": 0.58,
-    "mph": 50,
-    "conflict": true
-   },
-   {
     "name": "Sienna Parkway",
     "mi": 0.58,
     "mph": 35,
@@ -3502,12 +3273,6 @@
     "name": "La Paz Road",
     "mi": 0.57,
     "mph": 99,
-    "conflict": true
-   },
-   {
-    "name": "Jeronimo Road",
-    "mi": 0.57,
-    "mph": 40,
     "conflict": true
    },
    {
@@ -4637,12 +4402,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "North Lagoon Drive",
-    "mi": 0.36,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Laird Street",
     "mi": 0.25,
     "mph": 25,
@@ -4920,12 +4679,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "(unnamed)",
-    "mi": 0.14,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "West Market Street",
     "mi": 0.09,
     "mph": 99,
@@ -4999,18 +4752,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Morena Boulevard",
-    "mi": 1.83,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Morena Boulevard",
-    "mi": 1.83,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "North El Camino Real",
     "mi": 1.67,
     "mph": 30,
@@ -5083,21 +4824,9 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Alicante Road",
-    "mi": 1.21,
-    "mph": 45,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "El Camino Real",
     "mi": 1.21,
     "mph": 50,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Soledad Mountain Road",
-    "mi": 1.2,
-    "mph": 99,
     "kind": "neighbour_disagrees"
    },
    {
@@ -5113,39 +4842,15 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Neptune Avenue",
-    "mi": 1.15,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Saxony Road",
     "mi": 1.14,
     "mph": 40,
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Lone Jack Road",
-    "mi": 1.13,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Lomas Santa Fe Drive",
-    "mi": 1.12,
-    "mph": 35,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "El Cajon Boulevard",
     "mi": 1.07,
     "mph": 35,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Pershing Drive",
-    "mi": 1.05,
-    "mph": 99,
     "kind": "neighbour_disagrees"
    },
    {
@@ -5161,19 +4866,7 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Camino del Rio South",
-    "mi": 1.0,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "East Island Avenue",
-    "mi": 0.99,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Pacific Highway",
     "mi": 0.99,
     "mph": 99,
     "kind": "neighbour_disagrees"
@@ -5182,6 +4875,66 @@
     "name": "Balboa Avenue",
     "mi": 0.99,
     "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Camino del Rio South",
+    "mi": 0.96,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Manchester Avenue",
+    "mi": 0.96,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "College Boulevard",
+    "mi": 0.89,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Genesee Avenue",
+    "mi": 0.88,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Sea World Drive",
+    "mi": 0.88,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Camino Santa Fe",
+    "mi": 0.84,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "25th Street",
+    "mi": 0.84,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "East B Street",
+    "mi": 0.83,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Genesee Avenue",
+    "mi": 0.81,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Parkdale Avenue",
+    "mi": 0.8,
+    "mph": 25,
     "kind": "neighbour_disagrees"
    }
   ],
@@ -5241,18 +4994,6 @@
     "conflict": true
    },
    {
-    "name": "Morena Boulevard",
-    "mi": 1.83,
-    "mph": 99,
-    "conflict": true
-   },
-   {
-    "name": "Morena Boulevard",
-    "mi": 1.83,
-    "mph": 99,
-    "conflict": true
-   },
-   {
     "name": "North El Camino Real",
     "mi": 1.67,
     "mph": 30,
@@ -5325,21 +5066,9 @@
     "conflict": true
    },
    {
-    "name": "Alicante Road",
-    "mi": 1.21,
-    "mph": 45,
-    "conflict": true
-   },
-   {
     "name": "El Camino Real",
     "mi": 1.21,
     "mph": 50,
-    "conflict": true
-   },
-   {
-    "name": "Soledad Mountain Road",
-    "mi": 1.2,
-    "mph": 99,
     "conflict": true
    },
    {
@@ -5355,39 +5084,15 @@
     "conflict": true
    },
    {
-    "name": "Neptune Avenue",
-    "mi": 1.15,
-    "mph": 25,
-    "conflict": true
-   },
-   {
     "name": "Saxony Road",
     "mi": 1.14,
     "mph": 40,
     "conflict": true
    },
    {
-    "name": "Lone Jack Road",
-    "mi": 1.13,
-    "mph": 25,
-    "conflict": true
-   },
-   {
-    "name": "Lomas Santa Fe Drive",
-    "mi": 1.12,
-    "mph": 35,
-    "conflict": true
-   },
-   {
     "name": "El Cajon Boulevard",
     "mi": 1.07,
     "mph": 35,
-    "conflict": true
-   },
-   {
-    "name": "Pershing Drive",
-    "mi": 1.05,
-    "mph": 99,
     "conflict": true
    },
    {
@@ -5403,19 +5108,7 @@
     "conflict": true
    },
    {
-    "name": "Camino del Rio South",
-    "mi": 1.0,
-    "mph": 25,
-    "conflict": true
-   },
-   {
     "name": "East Island Avenue",
-    "mi": 0.99,
-    "mph": 99,
-    "conflict": true
-   },
-   {
-    "name": "Pacific Highway",
     "mi": 0.99,
     "mph": 99,
     "conflict": true
@@ -7514,18 +7207,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "Bradenton Road",
-    "mi": 2.31,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Proctor Road",
-    "mi": 2.0,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "North Tuttle Avenue",
     "mi": 1.58,
     "mph": 99,
@@ -7534,12 +7215,6 @@
    {
     "name": "Webber Street",
     "mi": 1.26,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "10th Street",
-    "mi": 1.06,
     "mph": 25,
     "kind": "neighbour_disagrees"
    },
@@ -7583,12 +7258,6 @@
     "name": "63rd Avenue East",
     "mi": 0.46,
     "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "North Lemon Avenue",
-    "mi": 0.46,
-    "mph": 25,
     "kind": "neighbour_disagrees"
    },
    {
@@ -7646,20 +7315,8 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "South Tuttle Avenue",
-    "mi": 0.28,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Siesta Drive",
     "mi": 0.28,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "Main Street",
-    "mi": 0.25,
     "mph": 25,
     "kind": "neighbour_disagrees"
    },
@@ -7746,6 +7403,42 @@
     "mi": 0.13,
     "mph": 45,
     "kind": "sourced_red"
+   },
+   {
+    "name": "North Tuttle Avenue",
+    "mi": 0.13,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Siesta Drive",
+    "mi": 0.12,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "El Conquistador Parkway",
+    "mi": 0.11,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Orange Avenue",
+    "mi": 0.11,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Tallevast Road",
+    "mi": 0.11,
+    "mph": 40,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "45th Street East",
+    "mi": 0.09,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
    }
   ],
   "gap": []
@@ -7765,12 +7458,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "South Holmes Boulevard",
-    "mi": 0.54,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "Old Moultrie Road",
     "mi": 0.13,
     "mph": 99,
@@ -7783,26 +7470,8 @@
   "reports": [],
   "conflicts": [
    {
-    "name": "North 83rd Avenue",
-    "mi": 3.75,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "North Del Webb Boulevard",
     "mi": 2.49,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "North Del Webb Boulevard",
-    "mi": 2.49,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "West Stardust Boulevard",
-    "mi": 1.65,
     "mph": 25,
     "kind": "neighbour_disagrees"
    },
@@ -7810,18 +7479,6 @@
     "name": "North Litchfield Road",
     "mi": 1.64,
     "mph": 45,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "West Beardsley Road",
-    "mi": 1.54,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "North 103rd Avenue",
-    "mi": 1.51,
-    "mph": 30,
     "kind": "neighbour_disagrees"
    },
    {
@@ -7879,12 +7536,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "West Beardsley Road",
-    "mi": 0.85,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "West Deer Valley Drive",
     "mi": 0.85,
     "mph": 25,
@@ -7893,12 +7544,6 @@
    {
     "name": "North El Mirage Road",
     "mi": 0.84,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "North R H Johnson Boulevard",
-    "mi": 0.82,
     "mph": 99,
     "kind": "neighbour_disagrees"
    },
@@ -7933,12 +7578,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "West Deer Valley Road",
-    "mi": 0.62,
-    "mph": 99,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "North Stardust Boulevard",
     "mi": 0.61,
     "mph": 25,
@@ -7957,6 +7596,12 @@
     "kind": "neighbour_disagrees"
    },
    {
+    "name": "North 107th Avenue",
+    "mi": 0.53,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
     "name": "North 87th Avenue",
     "mi": 0.52,
     "mph": 25,
@@ -7969,12 +7614,6 @@
     "kind": "neighbour_disagrees"
    },
    {
-    "name": "North 107th Avenue",
-    "mi": 0.47,
-    "mph": 35,
-    "kind": "neighbour_disagrees"
-   },
-   {
     "name": "West Union Hills Drive",
     "mi": 0.47,
     "mph": 40,
@@ -7984,12 +7623,6 @@
     "name": "West Peoria Avenue",
     "mi": 0.46,
     "mph": 35,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "West Deer Valley Road",
-    "mi": 0.46,
-    "mph": 99,
     "kind": "neighbour_disagrees"
    },
    {
@@ -8017,34 +7650,70 @@
     "kind": "neighbour_disagrees"
    },
    {
+    "name": "West Union Hills Drive",
+    "mi": 0.35,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
     "name": "North 75th Avenue",
-    "mi": 0.36,
+    "mi": 0.35,
     "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 91st Avenue",
+    "mi": 0.33,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 91st Avenue",
+    "mi": 0.32,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 91st Avenue",
+    "mi": 0.31,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Bell Road",
+    "mi": 0.3,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Thompson Ranch Road",
+    "mi": 0.27,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Stardust Boulevard",
+    "mi": 0.27,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Beardsley Road",
+    "mi": 0.27,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North 98th Avenue",
+    "mi": 0.26,
+    "mph": 25,
     "kind": "neighbour_disagrees"
    }
   ],
   "gap": [
    {
-    "name": "North 83rd Avenue",
-    "mi": 3.75,
-    "mph": 99,
-    "conflict": true
-   },
-   {
     "name": "North Del Webb Boulevard",
     "mi": 2.49,
-    "mph": 25,
-    "conflict": true
-   },
-   {
-    "name": "North Del Webb Boulevard",
-    "mi": 2.49,
-    "mph": 25,
-    "conflict": true
-   },
-   {
-    "name": "West Stardust Boulevard",
-    "mi": 1.65,
     "mph": 25,
     "conflict": true
    },
@@ -8052,18 +7721,6 @@
     "name": "North Litchfield Road",
     "mi": 1.64,
     "mph": 45,
-    "conflict": true
-   },
-   {
-    "name": "West Beardsley Road",
-    "mi": 1.54,
-    "mph": 99,
-    "conflict": true
-   },
-   {
-    "name": "North 103rd Avenue",
-    "mi": 1.51,
-    "mph": 30,
     "conflict": true
    },
    {
@@ -8088,12 +7745,6 @@
     "name": "North 79th Avenue",
     "mi": 1.03,
     "mph": 30,
-    "conflict": true
-   },
-   {
-    "name": "West Lake Pleasant Parkway",
-    "mi": 1.02,
-    "mph": 40,
     "conflict": true
    },
    {
@@ -8449,18 +8100,6 @@
     "mi": 1.03,
     "mph": 30,
     "conflict": false
-   },
-   {
-    "name": "North Cotton Crossing",
-    "mi": 1.02,
-    "mph": 35,
-    "conflict": false
-   },
-   {
-    "name": "North 133rd Avenue",
-    "mi": 1.02,
-    "mph": 25,
-    "conflict": false
    }
   ]
  },
@@ -8470,12 +8109,6 @@
    {
     "name": "14th Avenue Southeast",
     "mi": 1.88,
-    "mph": 25,
-    "kind": "neighbour_disagrees"
-   },
-   {
-    "name": "21st Avenue Southeast",
-    "mi": 1.52,
     "mph": 25,
     "kind": "neighbour_disagrees"
    },
@@ -8532,12 +8165,6 @@
    {
     "name": "14th Avenue Southeast",
     "mi": 1.88,
-    "mph": 25,
-    "conflict": true
-   },
-   {
-    "name": "21st Avenue Southeast",
-    "mi": 1.52,
     "mph": 25,
     "conflict": true
    },

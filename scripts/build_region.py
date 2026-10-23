@@ -218,7 +218,7 @@ for wi, w in enumerate(wl):
         o = OV[w["id"]]; s, src = o["mph"], "verified"; si = src_i(o["url"], o["label"])
     elif lban:
         s, src = 99, "verified"; si = src_i(lban["url"], lban["label"])
-    elif w["id"] in SVS:   # Street View posted sign (batch 2, RG): beats OSM/Mapillary/DOT/speed_names; never lifts a ban
+    elif w["id"] in SVS:   # Street View posted sign (batches 2 and 4, RG): beats OSM/Mapillary/DOT/speed_names; never lifts a ban
         e = SVS[w["id"]]; s, src = e["mph"], "verified"; si = src_i(e["url"], e["label"]); SV_APPLIED.append(w["id"])
     elif spn:
         s, src = spn["mph"], "verified"; si = src_i(spn["url"], spn["label"]); CHG["speed_names"] = CHG.get("speed_names", 0) + 1
