@@ -217,6 +217,20 @@
    "label": "Town of Chincoteague Sec. 8-2-13 golf carts",
    "applied": "research/regions/chincoteague.json cart_only_bans + regions.json rule.golf_cart"
   },
+  "lwr": {
+   "kind": "community (CDD) rules + county code check",
+   "url": "https://mylwr.com/cms-detail/cart-safety",
+   "label": "Lakewood Ranch Town Hall golf cart safety: golf carts not allowed on Greenbrook and Summerfield/Riverwalk streets (DMV-licensed golf cars OK); also checked Manatee County Code Sec. 2-22-9 (designated county roads; River Club only lead, not applied), Sarasota County designations (none in LWR), F.S. 316.212/316.2122",
+   "applied": "research/regions/lwr.json cart_only_bans (Greenbrook, Summerfield, Riverwalk village streets, flag 4); Florida designated-roads rule already applied statewide",
+   "checked": "2026-10-22"
+  },
+  "obx": {
+   "kind": "county golf cart & LSV map + town ordinances",
+   "url": "https://gis.darecountync.gov/golfcarts/",
+   "label": "Dare County GIS golf cart & LSV map (per-town rules); Nags Head Code Sec. 42-92(b) (https://nagsheadnc.gov/FAQ.aspx?QID=118); Duck Ord. 18-04 (https://ducknc.gov/golf-carts-in-duck/); Manteo Code Sec. 46-152 and KDH staff memo (https://www.kdhnc.com/DocumentCenter/View/14549/20221114_BOC_C1OB1Golf_Carts); N.C.G.S. 20-121.1, G.S. 160A-300.6",
+   "applied": "research/regions/obx.json cart_only_bans (KDH, Kitty Hawk, Southern Shores, Nags Head, Colington, unincorporated Manteo: all roads; Duck: NC 12; Manteo: US 64; flag 4) and bans (US 158 cited)",
+   "checked": "2026-10-22"
+  },
   "southbay": {
    "kind": "ordinance road lists (city speed-zone codes + Strand/pier bans)",
    "url": "https://gocodebook.com/library/us/ca/manhattan-beach/title-14-traffic/chapter-14.28-miscellaneous-driving-rules",

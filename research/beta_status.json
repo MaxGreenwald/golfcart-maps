@@ -13,6 +13,7 @@
    "grid_mi": 33.5,
    "important_mi": 69.0,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 71.7,
    "pct_nonban": 67.3,
@@ -31,6 +32,7 @@
    "grid_mi": 0,
    "important_mi": 51.7,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 93.2,
    "pct_nonban": 93.2,
@@ -49,6 +51,7 @@
    "grid_mi": 0,
    "important_mi": 15.3,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 97.8,
    "pct_nonban": 97.8,
@@ -71,6 +74,7 @@
     "non-ban 36.2% < 50% floor",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 36.2,
    "pct_nonban": 36.2,
@@ -93,6 +97,7 @@
     "non-ban 39.4% < 50% floor",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 39.4,
    "pct_nonban": 39.4,
@@ -111,6 +116,7 @@
    "grid_mi": 0,
    "important_mi": 7.2,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 87.1,
    "pct_nonban": 87.1,
@@ -132,6 +138,7 @@
     "20.9% < 70% (bans in)",
     "non-ban 20.9% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 20.9,
    "pct_nonban": 20.9,
@@ -153,6 +160,7 @@
     "21.3% < 70% (bans in)",
     "non-ban 21.2% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 21.3,
    "pct_nonban": 21.2,
@@ -171,6 +179,7 @@
    "grid_mi": 0,
    "important_mi": 52.9,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 79.2,
    "pct_nonban": 79.2,
@@ -192,6 +201,7 @@
     "30.6% < 70% (bans in)",
     "non-ban 30.6% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 30.6,
    "pct_nonban": 30.6,
@@ -213,6 +223,7 @@
     "47.8% < 70% (bans in)",
     "non-ban 47.8% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 47.8,
    "pct_nonban": 47.8,
@@ -231,6 +242,7 @@
    "grid_mi": 0,
    "important_mi": 45.5,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 70.4,
    "pct_nonban": 62.8,
@@ -249,6 +261,7 @@
    "grid_mi": 0,
    "important_mi": 100.2,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 88.7,
    "pct_nonban": 88.7,
@@ -271,6 +284,7 @@
     "non-ban 10.1% < 50% floor",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 21.7,
    "pct_nonban": 10.1,
@@ -289,6 +303,7 @@
    "grid_mi": 0,
    "important_mi": 16.8,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 100.0,
    "pct_nonban": 100.0,
@@ -309,6 +324,7 @@
    "missing": [
     "50.0% < 70% (bans in)"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 50.0,
    "pct_nonban": 50.0,
@@ -330,6 +346,7 @@
     "38.0% < 70% (bans in)",
     "non-ban 37.6% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 38.0,
    "pct_nonban": 37.6,
@@ -351,6 +368,7 @@
     "51.9% < 70% (bans in)",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 51.9,
    "pct_nonban": 51.9,
@@ -371,6 +389,7 @@
    "missing": [
     "63.8% < 70% (bans in)"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 63.8,
    "pct_nonban": 63.8,
@@ -391,6 +410,7 @@
    "missing": [
     "68.6% < 70% (bans in)"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 68.6,
    "pct_nonban": 68.6,
@@ -409,6 +429,7 @@
    "grid_mi": 0,
    "important_mi": 7.9,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 91.6,
    "pct_nonban": 91.6,
@@ -429,7 +450,15 @@
    "missing": [
     "69.9% < 70% (bans in)"
    ],
-   "passes": false,
+   "override": {
+    "applied": true,
+    "approved_by": "Max",
+    "context": "Galveston measured 69.997% of important miles sourced (bans in), floored to 69.9%, just under the 70% bar; Max accepted it as passing.",
+    "date": "2026-10-22 9:40 PM PT",
+    "min_pct_bans_in": 69.9,
+    "quote": "yes. Galveston is fine"
+   },
+   "passes": true,
    "pct_bans_in": 69.9,
    "pct_nonban": 50.7,
    "reports": 0
@@ -451,6 +480,7 @@
     "non-ban 16.6% < 50% floor",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 42.7,
    "pct_nonban": 16.6,
@@ -471,6 +501,7 @@
    "missing": [
     "non-ban 5.7% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 71.7,
    "pct_nonban": 5.7,
@@ -493,6 +524,7 @@
     "non-ban 35.5% < 50% floor",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 42.1,
    "pct_nonban": 35.5,
@@ -514,6 +546,7 @@
     "58.6% < 70% (bans in)",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 58.6,
    "pct_nonban": 58.6,
@@ -532,6 +565,7 @@
    "grid_mi": 0,
    "important_mi": 40.2,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 72.0,
    "pct_nonban": 72.0,
@@ -552,6 +586,7 @@
    "missing": [
     "62.9% < 70% (bans in)"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 62.9,
    "pct_nonban": 62.9,
@@ -573,6 +608,7 @@
     "64.4% < 70% (bans in)",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 64.4,
    "pct_nonban": 64.4,
@@ -594,13 +630,14 @@
     "0.0% < 70% (bans in)",
     "non-ban 0.0% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 0.0,
    "pct_nonban": 0.0,
    "reports": 0
   },
   "lwr": {
-   "access_check": false,
+   "access_check": true,
    "assumed_mi": 39.3,
    "ban_mi": 16.5,
    "ban_sourced_mi": 16.5,
@@ -611,10 +648,9 @@
    "exempt": false,
    "grid_mi": 0,
    "important_mi": 141.9,
-   "missing": [
-    "no local-rules check recorded"
-   ],
-   "passes": false,
+   "missing": [],
+   "override": null,
+   "passes": true,
    "pct_bans_in": 71.6,
    "pct_nonban": 68.3,
    "reports": 0
@@ -636,6 +672,7 @@
     "non-ban 36.5% < 50% floor",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 47.0,
    "pct_nonban": 36.5,
@@ -658,6 +695,7 @@
     "non-ban 42.0% < 50% floor",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 50.8,
    "pct_nonban": 42.0,
@@ -679,6 +717,7 @@
     "21.9% < 70% (bans in)",
     "non-ban 13.6% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 21.9,
    "pct_nonban": 13.6,
@@ -697,6 +736,7 @@
    "grid_mi": 0,
    "important_mi": 41.5,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 82.3,
    "pct_nonban": 74.2,
@@ -717,13 +757,14 @@
    "missing": [
     "60.7% < 70% (bans in)"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 60.7,
    "pct_nonban": 54.1,
    "reports": 0
   },
   "obx": {
-   "access_check": false,
+   "access_check": true,
    "assumed_mi": 17.0,
    "ban_mi": 0,
    "ban_sourced_mi": 0,
@@ -734,10 +775,9 @@
    "exempt": false,
    "grid_mi": 0,
    "important_mi": 72.2,
-   "missing": [
-    "no local-rules check recorded"
-   ],
-   "passes": false,
+   "missing": [],
+   "override": null,
+   "passes": true,
    "pct_bans_in": 70.8,
    "pct_nonban": 70.8,
    "reports": 0
@@ -758,6 +798,7 @@
     "53.8% < 70% (bans in)",
     "non-ban 16.7% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 53.8,
    "pct_nonban": 16.7,
@@ -780,6 +821,7 @@
     "non-ban 31.6% < 50% floor",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 32.8,
    "pct_nonban": 31.6,
@@ -798,6 +840,7 @@
    "grid_mi": 0,
    "important_mi": 30.7,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 97.3,
    "pct_nonban": 97.3,
@@ -818,6 +861,7 @@
    "missing": [
     "68.8% < 70% (bans in)"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 68.8,
    "pct_nonban": 62.1,
@@ -839,6 +883,7 @@
     "35.7% < 70% (bans in)",
     "non-ban 33.1% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 35.7,
    "pct_nonban": 33.1,
@@ -860,6 +905,7 @@
     "69.4% < 70% (bans in)",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 69.4,
    "pct_nonban": 69.4,
@@ -878,6 +924,7 @@
    "grid_mi": 0,
    "important_mi": 29.1,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 81.1,
    "pct_nonban": 81.1,
@@ -899,6 +946,7 @@
     "68.8% < 70% (bans in)",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 68.8,
    "pct_nonban": 68.8,
@@ -917,6 +965,7 @@
    "grid_mi": 0,
    "important_mi": 27.7,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 74.9,
    "pct_nonban": 64.2,
@@ -938,6 +987,7 @@
     "31.3% < 70% (bans in)",
     "non-ban 5.0% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 31.3,
    "pct_nonban": 5.0,
@@ -960,6 +1010,7 @@
     "non-ban 0.0% < 50% floor",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 0.0,
    "pct_nonban": 0.0,
@@ -978,6 +1029,7 @@
    "grid_mi": 0,
    "important_mi": 38.4,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 70.7,
    "pct_nonban": 57.0,
@@ -996,6 +1048,7 @@
    "grid_mi": 0,
    "important_mi": 29.2,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 83.2,
    "pct_nonban": 83.2,
@@ -1014,6 +1067,7 @@
    "grid_mi": 0,
    "important_mi": 1455.9,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 37.3,
    "pct_nonban": 37.3,
@@ -1032,6 +1086,7 @@
    "grid_mi": 0,
    "important_mi": 271.3,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 74.6,
    "pct_nonban": 72.0,
@@ -1050,6 +1105,7 @@
    "grid_mi": 0,
    "important_mi": 417.2,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 79.5,
    "pct_nonban": 79.5,
@@ -1068,6 +1124,7 @@
    "grid_mi": 0,
    "important_mi": 25.5,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 85.9,
    "pct_nonban": 85.8,
@@ -1086,6 +1143,7 @@
    "grid_mi": 0,
    "important_mi": 89.9,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 85.7,
    "pct_nonban": 79.1,
@@ -1104,6 +1162,7 @@
    "grid_mi": 0,
    "important_mi": 11.7,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 78.6,
    "pct_nonban": 78.6,
@@ -1122,6 +1181,7 @@
    "grid_mi": 0,
    "important_mi": 27.3,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 77.9,
    "pct_nonban": 77.9,
@@ -1144,6 +1204,7 @@
     "non-ban 33.9% < 50% floor",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 33.9,
    "pct_nonban": 33.9,
@@ -1166,6 +1227,7 @@
     "non-ban 37.3% < 50% floor",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 59.2,
    "pct_nonban": 37.3,
@@ -1187,6 +1249,7 @@
     "43.5% < 70% (bans in)",
     "non-ban 29.8% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 43.5,
    "pct_nonban": 29.8,
@@ -1205,6 +1268,7 @@
    "grid_mi": 0,
    "important_mi": 3.3,
    "missing": [],
+   "override": null,
    "passes": true,
    "pct_bans_in": 88.8,
    "pct_nonban": 71.2,
@@ -1226,6 +1290,7 @@
     "20.1% < 70% (bans in)",
     "non-ban 7.2% < 50% floor"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 20.1,
    "pct_nonban": 7.2,
@@ -1248,6 +1313,7 @@
     "non-ban 39.9% < 50% floor",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 39.9,
    "pct_nonban": 39.9,
@@ -1269,11 +1335,12 @@
     "60.8% < 70% (bans in)",
     "no local-rules check recorded"
    ],
+   "override": null,
    "passes": false,
    "pct_bans_in": 60.8,
    "pct_nonban": 60.8,
    "reports": 0
   }
  },
- "rule": "v3 (official, Max 2026-10-22): pass = >=70% of important miles (town grids excluded) sourced by v/m/o/d+source with cited bans counted as sourced, AND >=50% of non-ban important miles sourced, AND a local-rules check recorded (ordinance/map or state law when no local ordinance); grids and reports stay on the check list; sd exempt (never beta)"
+ "rule": "v3 (official, Max 2026-10-22): pass = >=70% of important miles (town grids excluded) sourced by v/m/o/d+source with cited bans counted as sourced, AND >=50% of non-ban important miles sourced, AND a local-rules check recorded (ordinance/map or state law when no local ordinance); grids and reports stay on the check list; sd exempt (never beta); per-region overrides approved by Max in research/beta_overrides.json (galveston)"
 }

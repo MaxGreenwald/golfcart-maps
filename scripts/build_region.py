@@ -212,12 +212,17 @@ CHG = {"dot": 0, "dot_block": 0, "dot_open": 0, "desig_only_block": 0}
 names, out, sources, sidx, nidx, nids = [], [], [], {}, {}, {}
 stats = {"tagged": 0, "inferred": 0, "inferred_high": 0, "verified": 0, "mapillary": 0, "cartpath": 0, "designated": 0}
 # Golf-cart-only bans (research/regions/<id>.json "cart_only_bans"): flag s[9] = 4, s[10] = source index of the ordinance.
-# Each entry: url, label, and any of names (regex on name/ref), bbox [S, W, N, E], poly (research/city_limits/<file>.json).
+# Each entry: url, label, and any of names (regex on name/ref), bbox [S, W, N, E], poly (research/city_limits/<file>.json),
+# not_poly (list of city_limits files whose insides are excluded).
 CBAN = CFG.get("cart_only_bans", [])
 for b in CBAN:
     if "poly" in b:
         gj = json.load(open(os.path.join(ROOT, "research/city_limits", b["poly"])))["geojson"]
         b["_ring"] = gj["coordinates"][0] if gj["type"] == "Polygon" else max((p[0] for p in gj["coordinates"]), key=len)
+    b["_not"] = []   # not_poly: carve-outs (e.g. a town inside a county blob that has its own cart rules)
+    for f in b.get("not_poly", []):
+        gj = json.load(open(os.path.join(ROOT, "research/city_limits", f)))["geojson"]
+        b["_not"] += [gj["coordinates"][0]] if gj["type"] == "Polygon" else [p[0] for p in gj["coordinates"]]
 def _in_poly(x, y, ring):
     c = False
     for i in range(len(ring)):
@@ -321,6 +326,7 @@ for wi, w in enumerate(wl):
                 if "ways" in b and w["id"] not in b["ways"]: continue   # optional exact OSM way ids
                 if "bbox" in b and not (b["bbox"][0] <= q_["lat"] <= b["bbox"][2] and b["bbox"][1] <= q_["lon"] <= b["bbox"][3]): continue
                 if "poly" in b and not _in_poly(q_["lon"], q_["lat"], b["_ring"]): continue
+                if any(_in_poly(q_["lon"], q_["lat"], r_) for r_ in b["_not"]): continue
                 sflag, cbi = 4, src_i(b["url"], b["label"]); stats["cart_only_banned"] = stats.get("cart_only_banned", 0) + 1; break
         if spn and src == "verified" and w["id"] not in OV and not lban:   # a long way can span two posted zones: decide per segment
             o2 = speed_name(t, g[sg[len(sg)//2]])
