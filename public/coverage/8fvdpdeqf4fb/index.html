@@ -73,6 +73,7 @@ for(const p of D.points){
  m.bindPopup(pop).addTo(own?gOwn:gDlr);
 }
 gDlr.addTo(map); gOwn.addTo(map);
+map.fitBounds(L.latLngBounds(D.points.filter(p=>p.k==='o').map(p=>[p.la,p.lo])).pad(window.innerWidth<600?0.05:0.6));
 const tog=(id,g)=>document.getElementById(id).onchange=e=>e.target.checked?g.addTo(map):map.removeLayer(g);
 tog('fOwn',gOwn);tog('fDlr',gDlr);tog('fReg',gReg);
 const slug={};for(const r of D.regions)slug[r.n]=r.s;
