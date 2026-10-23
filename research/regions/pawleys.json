@@ -1,0 +1,40 @@
+{
+ "bans": [
+  {
+   "names": "^(Atlantic Avenue|Myrtle Avenue|Springs Avenue|Shell Road|Pavilion Lane|Doyle Avenue|Frazier Street|Hazard Avenue|Hazard Street|Pearce Street|Pritchard Street|Salt Creek Place|Scarborough Avenue|1st Street|2nd Street|3rd Street|North Causeway Road|South Causeway Road)$",
+   "bbox": [
+    33.4,
+    -79.136,
+    33.46,
+    -79.1
+   ],
+   "url": "https://www.townofpawleysisland.com/golf-cart-restrictions/",
+   "label": "Town of Pawleys Island: LSVs prohibited on all town roads; golf carts need SCDMV and town permits (address within 2 mi). One rule per road here, so the island is shown red to be safe"
+  }
+ ],
+ "unverified": [
+  "The town of Pawleys Island allows permitted golf carts but bans LSVs; the map can only show one rule per road there, so island roads are red for both (safer). Golf cart owners with a town permit may still use them."
+ ],
+ "sources": [
+  "Town of Pawleys Island golf cart and LSV rules https://www.townofpawleysisland.com/golf-cart-restrictions/",
+  "Georgetown County Sheriff: golf cart rules https://www.gcsheriff.org/blog/21210525-gcso-know-the-rules-for-golf-carts-and-the-beach/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-22",
+  "result": "local rules recorded",
+  "sources": [
+   {
+    "label": "Town of Pawleys Island golf cart and LSV rules",
+    "url": "https://www.townofpawleysisland.com/golf-cart-restrictions/"
+   },
+   {
+    "label": "Georgetown County Sheriff: golf cart rules",
+    "url": "https://www.gcsheriff.org/blog/21210525-gcso-know-the-rules-for-golf-carts-and-the-beach/"
+   }
+  ],
+  "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban."
+ },
+ "status": "Added (regions-25-batch, 2026-10-22)"
+}

@@ -1,0 +1,78 @@
+{
+ "slug": "beach-haven",
+ "region": "lbi",
+ "name": "Beach Haven",
+ "state": "NJ",
+ "question_title": "Can you drive a golf cart in Beach Haven?",
+ "answer_short": "Street-legal LSVs yes, plain golf carts no. On Long Beach Island, registered LSVs may use streets posted 25 mph or less. Long Beach Boulevard is mostly posted 30 to 40 mph, so cross it rather than drive it.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not on public roads",
+  "speed_line": "n/a",
+  "notes": "Not street-legal in NJ"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Cross Long Beach Blvd at intersections"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts aren't street-legal; only titled, registered and insured LSVs that meet 49 CFR 571.500",
+   "citation": "NJ MVC low-speed vehicles",
+   "source_url": "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "LSVs only on roads posted 25 mph or less; they may cross faster roads at intersections",
+   "citation": "NJ MVC low-speed vehicles",
+   "source_url": "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+  },
+  {
+   "topic": "Surf City",
+   "rule": "Surf City police register and enforce LSV rules on the island",
+   "citation": "Surf City Police LSV page",
+   "source_url": "https://surfcitypdnj.org/lsv/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Long Beach Boulevard (where posted over 25 mph)",
+   "rule": "LSVs cross only",
+   "crossings_ok": true
+  },
+  {
+   "name": "Route 72 causeway",
+   "rule": "No LSVs",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive an LSV on Long Beach Boulevard in Beach Haven?",
+   "a": "Only where it's posted 25 mph or less. Most of the boulevard is posted 30 to 40 mph, so LSVs cross it at intersections."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Beach Haven?",
+   "a": "No. New Jersey only lets titled, registered and insured LSVs on public roads."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "surf-city"
+ ],
+ "map_center": [
+  39.5593,
+  -74.2432
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://surfcitypdnj.org/lsv/",
+  "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+ ]
+}

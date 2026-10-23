@@ -1,0 +1,87 @@
+{
+ "slug": "stone-harbor",
+ "region": "capemay",
+ "name": "Stone Harbor",
+ "state": "NJ",
+ "question_title": "Can you drive a golf cart in Stone Harbor?",
+ "answer_short": "Street-legal LSVs yes, plain golf carts no. In Stone Harbor, registered LSVs may use roads posted 25 mph or less and cross faster roads at intersections.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not on public roads",
+  "speed_line": "n/a",
+  "notes": "Not street-legal in NJ"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Local LSV ordinances apply"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts aren't street-legal; only titled, registered and insured LSVs that meet 49 CFR 571.500",
+   "citation": "NJ MVC low-speed vehicles",
+   "source_url": "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "LSVs only on roads posted 25 mph or less; they may cross faster roads at intersections",
+   "citation": "NJ MVC low-speed vehicles",
+   "source_url": "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+  },
+  {
+   "topic": "Stone Harbor",
+   "rule": "Borough code regulates LSVs",
+   "citation": "Stone Harbor borough code",
+   "source_url": "https://ecode360.com/10814440"
+  },
+  {
+   "topic": "Avalon",
+   "rule": "Borough ordinance on LSV rentals and taxis",
+   "citation": "Avalon Ord. 799-2020",
+   "source_url": "https://avalonboro.net/wp-content/uploads/2020/02/ORD-799-2020-TAXICABS-LOW-SPEED-VEHICLES-WITHOUT-EDITS.pdf"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Garden State Parkway",
+   "rule": "No LSVs",
+   "crossings_ok": false
+  },
+  {
+   "name": "Roads posted over 25 mph (e.g. Ocean Drive, Route 47)",
+   "rule": "LSVs cross only",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive a regular golf cart in Stone Harbor?",
+   "a": "No. New Jersey only lets titled, registered and insured LSVs on public roads."
+  },
+  {
+   "q": "How fast can a road be for an LSV in Stone Harbor?",
+   "a": "25 mph or less, unless the town, county or NJDOT has opened it to LSVs up to 35 mph."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "wildwood",
+  "avalon",
+  "cape-may"
+ ],
+ "map_center": [
+  39.0526,
+  -74.7579
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://avalonboro.net/wp-content/uploads/2020/02/ORD-799-2020-TAXICABS-LOW-SPEED-VEHICLES-WITHOUT-EDITS.pdf",
+  "https://ecode360.com/10814440",
+  "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+ ]
+}

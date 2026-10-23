@@ -208,6 +208,9 @@ EXTRA = {
  "grayton-beach": ("Can I take an LSV up CR 283 from Grayton Beach?","No. CR 283 is red on the Walton County Sheriff's LSV map, so LSVs are prohibited on it."),
  "point-washington": ("Can I drive an LSV on CR 395 in Point Washington?","Not north of the Point Washington fire station: that stretch of CR 395 is red on the Walton County Sheriff's LSV map."),
 }
+import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import towns_r25 as R25   # regions-25-batch (Oct 22 2026): profiles, towns and slug map for the 25 new regions
+P.update(R25.P); T += R25.T; RID.update(R25.RID)
 def nearby(i):
     reg = T[i][0]; same = [j for j in range(len(T)) if T[j][0] == reg and j != i]
     same.sort(key=lambda j: abs(j - i)); return [T[j][1] for j in same[:3]]
@@ -223,6 +226,9 @@ def main():
              "faq": faq, "rental_shops": [], "nearby": nearby(i), "map_center": [lat, lng], "zoom": 15,
              "published": DAY, "last_checked": DAY, "checked_by": "Golf Cart Maps", "sources": p["sources"]}
         d = os.path.join(out, reg); os.makedirs(d, exist_ok=True)
+        fp = os.path.join(d, slug + ".json")   # keep hand-added local_resources (they live only in the JSON)
+        lr = json.load(open(fp)).get("local_resources") if os.path.exists(fp) else None
+        if lr: t = {k2: v2 for k, v in t.items() for k2, v2 in ([(k, v), ("local_resources", lr)] if k == "rental_shops" else [(k, v)])}
         json.dump(t, open(os.path.join(d, slug + ".json"), "w"), indent=1, ensure_ascii=False)
     print(len(T), "towns")
 if __name__ == "__main__": main()

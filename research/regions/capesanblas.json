@@ -1,0 +1,35 @@
+{
+ "bans": [],
+ "cart_only_bans": [
+  {
+   "names": "^US 98$|^SR 30A$|^SR 30E$|^SR 71$",
+   "url": "https://mexicobeachfl.gov/uploads/2025/01/Ordinance-569-Amending-Ordinance-516-Traffic-Code-and-Golf-Carts.pdf",
+   "label": "Mexico Beach Ord. 569 / Gulf County: no golf carts on US 98 or the state roads (cross only)"
+  }
+ ],
+ "unverified": [
+  "Gulf County's own golf cart ordinance wasn't opened; county road designations aren't digitized, so plain golf carts show red outside tagged cart roads."
+ ],
+ "sources": [
+  "Mexico Beach Ord. 569 https://mexicobeachfl.gov/uploads/2025/01/Ordinance-569-Amending-Ordinance-516-Traffic-Code-and-Golf-Carts.pdf",
+  "FLHSMV low-speed vehicles https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-22",
+  "result": "local rules recorded",
+  "sources": [
+   {
+    "label": "Mexico Beach Ord. 569",
+    "url": "https://mexicobeachfl.gov/uploads/2025/01/Ordinance-569-Amending-Ordinance-516-Traffic-Code-and-Golf-Carts.pdf"
+   },
+   {
+    "label": "FLHSMV low-speed vehicles",
+    "url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+   }
+  ],
+  "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban."
+ },
+ "status": "Added (regions-25-batch, 2026-10-22)"
+}

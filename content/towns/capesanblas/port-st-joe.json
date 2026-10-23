@@ -1,0 +1,78 @@
+{
+ "slug": "port-st-joe",
+ "region": "capesanblas",
+ "name": "Port St. Joe",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Port St. Joe?",
+ "answer_short": "Street-legal LSVs yes; plain golf carts only on designated roads, and never on US 98 or the state roads. Mexico Beach's ordinance sets its own cart rules.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated roads only",
+  "speed_line": "n/a",
+  "notes": "Not US 98 or state roads"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "US 98 is posted higher"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "FLHSMV low-speed vehicles",
+   "source_url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+  },
+  {
+   "topic": "Mexico Beach",
+   "rule": "City golf cart rules; no carts on US 98",
+   "citation": "City of Mexico Beach Ord. 569",
+   "source_url": "https://mexicobeachfl.gov/uploads/2025/01/Ordinance-569-Amending-Ordinance-516-Traffic-Code-and-Golf-Carts.pdf"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 98",
+   "rule": "No golf carts",
+   "crossings_ok": true
+  },
+  {
+   "name": "SR 30A, SR 30E, SR 71",
+   "rule": "No golf carts",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive a golf cart on US 98 in Mexico Beach?",
+   "a": "No. Carts may only cross US 98."
+  },
+  {
+   "q": "Can I drive an LSV on Cape San Blas Road?",
+   "a": "Only where it's posted 35 mph or less; much of it is 45 to 55 mph."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "mexico-beach"
+ ],
+ "map_center": [
+  29.812,
+  -85.303
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://mexicobeachfl.gov/uploads/2025/01/Ordinance-569-Amending-Ordinance-516-Traffic-Code-and-Golf-Carts.pdf",
+  "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+ ]
+}

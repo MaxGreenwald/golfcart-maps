@@ -1,0 +1,34 @@
+{
+ "bans": [
+  {
+   "names": "^TX 87$|^State Highway 87$",
+   "url": "https://crystalbeach.com/area-information/information/golf-carts-atvs/",
+   "label": "Golf carts prohibited on highways (SH 87, posted 50 to 60 mph); cross at intersections only"
+  }
+ ],
+ "unverified": [
+  "Galveston County hasn't published a peninsula golf cart ordinance; the state rules apply."
+ ],
+ "sources": [
+  "CrystalBeach.com golf cart rules https://crystalbeach.com/area-information/information/golf-carts-atvs/",
+  "Tex. Transp. Code 551.404 https://texas.public.law/statutes/tex._transp._code_section_551.404",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-22",
+  "result": "state law only",
+  "sources": [
+   {
+    "label": "CrystalBeach.com golf cart rules",
+    "url": "https://crystalbeach.com/area-information/information/golf-carts-atvs/"
+   },
+   {
+    "label": "Tex. Transp. Code 551.404",
+    "url": "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+   }
+  ],
+  "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban."
+ },
+ "status": "Added (regions-25-batch, 2026-10-22)"
+}

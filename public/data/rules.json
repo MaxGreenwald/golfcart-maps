@@ -156,5 +156,60 @@
    "note": "plain golf carts aren't road-legal in Maine. Switch to LSV if yours is a registered LSV",
    "cite": "29-A M.R.S. §501(2-A) (golf carts only on islands without state roads); §2089 LSVs"
   }
+ },
+ "NJ": {
+  "name": "New Jersey",
+  "lsv": {
+   "max_posted": 25,
+   "cross": true,
+   "who": "street-legal LSVs",
+   "note": "NJ LSVs may use roads posted 25 mph or less; a town, county or NJDOT can open roads up to 35 mph or ban LSVs",
+   "cite": "N.J.S.A. 39:4-31.1 / NJ MVC low-speed vehicles (roads posted 25 mph or less; may cross faster roads at intersections)",
+   "url": "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+  },
+  "golf_cart": {
+   "not_street_legal": true,
+   "max_posted": 0,
+   "cross": false,
+   "note": "plain golf carts aren't street-legal in New Jersey; only FMVSS 500 LSVs with NJ title, registration and insurance. Switch to LSV if yours is one",
+   "cite": "NJ MVC low-speed vehicles: an LSV must meet 49 CFR 571.500 and be titled, registered and insured; golf carts don't qualify",
+   "url": "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+  }
+ },
+ "DE": {
+  "name": "Delaware",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "who": "street-legal LSVs",
+   "note": "not on dual highways (Coastal Hwy) outside towns except to cross",
+   "cite": "21 Del. C. §2113A (LSVs on roads posted 35 mph or less; not on dual highways in unincorporated areas except to cross)",
+   "url": "https://delcode.delaware.gov/title21/c021/sc01/index.html"
+  },
+  "golf_cart": {
+   "not_street_legal": true,
+   "max_posted": 0,
+   "cross": false,
+   "note": "Delaware DMV: golf carts are not allowed on Delaware highways. Switch to LSV if yours is a registered LSV",
+   "cite": "Delaware DMV special vehicles: golf carts are not allowed to operate on Delaware highways",
+   "url": "https://dmv.de.gov/VehicleServices/specialvehicles/index.shtml?dc=ve_reg_golf"
+  }
+ },
+ "VA": {
+  "name": "Virginia",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "cite": "Va. Code §46.2-908.3 (LSVs on highways posted 35 mph or less)",
+   "url": "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-908.3/"
+  },
+  "golf_cart": {
+   "max_posted": 25,
+   "designated_only": true,
+   "cross": true,
+   "daylight_only": true,
+   "cite": "Va. Code §46.2-916.3 (golf carts only on highways the locality designates, posted 25 mph or less; cross at intersections posted 35 or less; sunrise to sunset unless equipped)",
+   "url": "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/"
+  }
  }
 }

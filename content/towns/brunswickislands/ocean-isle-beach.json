@@ -1,0 +1,75 @@
+{
+ "slug": "ocean-isle-beach",
+ "region": "brunswickislands",
+ "name": "Ocean Isle Beach",
+ "state": "NC",
+ "question_title": "Can you drive a golf cart in Ocean Isle Beach?",
+ "answer_short": "Street-legal LSVs yes, plain golf carts no. Ocean Isle Beach and Holden Beach only allow carts that are registered, inspected and insured as LSVs. In Ocean Isle Beach, LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Only if registered as an LSV",
+  "speed_line": "n/a",
+  "notes": "Gas carts can't pass NC inspection"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered, inspected, insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Must be registered, tagged and insured LSVs to use public streets",
+   "citation": "Town of Ocean Isle Beach",
+   "source_url": "https://www.oibgov.com/20855/golf-carts-low-speed-electric-vehicles"
+  },
+  {
+   "topic": "Holden Beach",
+   "rule": "Golf carts aren't allowed on roads; registered, inspected and insured LSVs only",
+   "citation": "Town of Holden Beach ordinance summary",
+   "source_url": "https://hbtownhall.com/ordinance-summary"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; may cross faster roads at intersections",
+   "citation": "N.C.G.S. 20-121.1",
+   "source_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-121.1.html"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Roads posted over 35 mph (e.g. NC 904, NC 130)",
+   "rule": "Cross only",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive a regular golf cart in Ocean Isle Beach?",
+   "a": "No. Ocean Isle Beach and Holden Beach only allow carts that are registered, tagged and insured as LSVs."
+  },
+  {
+   "q": "Can gas golf carts be street-legal in Ocean Isle Beach?",
+   "a": "No. The town says gas golf carts won't pass NC inspection, so they can't be registered."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "sunset-beach",
+  "holden-beach"
+ ],
+ "map_center": [
+  33.893,
+  -78.44
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://hbtownhall.com/ordinance-summary",
+  "https://sunsetbeachnc.gov/index.asp?DE=EA023C5C-7CAA-427E-96DC-6A30EF38F028&SEC=C21FDBC1-4AB6-4837-B0E8-75EC6E7A2D70",
+  "https://www.oibgov.com/20855/golf-carts-low-speed-electric-vehicles"
+ ]
+}

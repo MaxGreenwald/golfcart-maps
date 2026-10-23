@@ -57,5 +57,166 @@
    "name": "Explore Charleston official visitor guide",
    "url": "https://www.charlestoncvb.com/"
   }
+ ],
+ "oceancitynj": [
+  {
+   "lead": "Ocean City's police department explains where LSVs can and can't drive.",
+   "name": "Ocean City Police LSV facts sheet",
+   "url": "https://www.ocnj.us/media/Police/LSV%27s.pdf"
+  }
+ ],
+ "lbi": [
+  {
+   "lead": "Surf City's police department covers LSV registration and road rules on the island.",
+   "name": "Surf City Police LSV rules",
+   "url": "https://surfcitypdnj.org/lsv/"
+  }
+ ],
+ "fortmyersbeach": [
+  {
+   "lead": "The town's 2025 ordinance covers beach, bicycle and vehicle safety rules.",
+   "name": "Fort Myers Beach Ordinance 25-03 vehicle safety",
+   "url": "https://www.fortmyersbeachfl.gov/DocumentCenter/View/24451/25-03-Beach-Bicycle-and-Vehicle-Safety"
+  }
+ ],
+ "sanibel": [
+  {
+   "lead": "Sanibel's city code covers where golf carts and LSVs may drive on the island.",
+   "name": "City of Sanibel golf cart ordinance",
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10937/994063/pdf"
+  }
+ ],
+ "capemay": [
+  {
+   "lead": "Stone Harbor's borough code is the official source for local LSV rules.",
+   "name": "Stone Harbor borough code LSV chapter",
+   "url": "https://ecode360.com/10814440"
+  }
+ ],
+ "topsail": [
+  {
+   "lead": "Topsail Beach police list where LSVs may drive and which roads are crossing-only.",
+   "name": "Topsail Beach golf cart and LSV rules",
+   "url": "https://topsailbeachnc.gov/Departments/Police/Golf-Cart-Low-Speed-Vehicles"
+  }
+ ],
+ "carolinabeach": [
+  {
+   "lead": "Carolina Beach's town page lists the golf cart and LSV permit rules.",
+   "name": "Carolina Beach golf cart and LSV rules",
+   "url": "https://www.carolinabeach.gov/324/Golf-Cart-LSV-Rules-Regulations"
+  }
+ ],
+ "emeraldisle": [
+  {
+   "lead": "Emerald Isle's golf cart safety guide lists the roads carts must stay off.",
+   "name": "Emerald Isle golf cart safety guide",
+   "url": "https://www.emeraldisle-nc.org/DocumentCenter/View/511/Golf-Cart-Safety-Presentation-PDF?bidId="
+  }
+ ],
+ "clearwater": [
+  {
+   "lead": "Pinellas County lists the cities that allow golf carts on designated streets.",
+   "name": "Pinellas County golf cart communities",
+   "url": "https://pinellas.gov/golf-cart-communities/"
+  }
+ ],
+ "stpetebeach": [
+  {
+   "lead": "St. Pete Beach explains golf cart registration and the streets carts may use.",
+   "name": "St. Pete Beach golf cart rules",
+   "url": "https://www.spblibrary.com/498/Golf-Carts"
+  }
+ ],
+ "newportbeach": [
+  {
+   "lead": "Balboa Island's community site explains golf cart rules on the island's narrow streets.",
+   "name": "Balboa Island golf cart guide",
+   "url": "https://www.balboaisland.com/golf-carts/"
+  }
+ ],
+ "pensacolabeach": [
+  {
+   "lead": "The Santa Rosa Island Authority posts Pensacola Beach rules, including golf carts.",
+   "name": "Pensacola Beach rules from the island authority",
+   "url": "https://visitpensacolabeach.com/beach-rules/"
+  }
+ ],
+ "brunswickislands": [
+  {
+   "lead": "Ocean Isle Beach explains the registration rules for street-legal carts.",
+   "name": "Ocean Isle Beach low-speed vehicle rules",
+   "url": "https://www.oibgov.com/20855/golf-carts-low-speed-electric-vehicles"
+  }
+ ],
+ "crystalbeach": [
+  {
+   "lead": "The peninsula's community site sums up local golf cart rules.",
+   "name": "Crystal Beach golf cart rules",
+   "url": "https://crystalbeach.com/area-information/information/golf-carts-atvs/"
+  }
+ ],
+ "padreisland": [
+  {
+   "lead": "Corpus Christi's Island Mobility Plan covers walking, biking and golf cart travel on the island.",
+   "name": "Corpus Christi Island Mobility Plan",
+   "url": "https://www.corpuschristitx.gov/media/iluhulk2/2026-02-17-island-mobility-plan-low-res.pdf"
+  }
+ ],
+ "bocagrande": [
+  {
+   "lead": "The Gasparilla Island Conservation and Improvement Association runs the bike path and posts its cart rules.",
+   "name": "Boca Grande bike path rules (GICIA)",
+   "url": "https://thegicia.org/bike-path/"
+  }
+ ],
+ "pawleysisland": [
+  {
+   "lead": "Pawleys Island's town page covers golf cart permits and the LSV ban.",
+   "name": "Pawleys Island golf cart restrictions",
+   "url": "https://www.townofpawleysisland.com/golf-cart-restrictions/"
+  }
+ ],
+ "dauphinisland": [
+  {
+   "lead": "The town FAQ explains what a golf cart needs to drive on Dauphin Island roads.",
+   "name": "Town of Dauphin Island FAQ",
+   "url": "https://www.townofdauphinisland.org/faq"
+  }
+ ],
+ "capesanblas": [
+  {
+   "lead": "Mexico Beach's 2025 ordinance sets local golf cart rules.",
+   "name": "Mexico Beach golf cart ordinance 569",
+   "url": "https://mexicobeachfl.gov/uploads/2025/01/Ordinance-569-Amending-Ordinance-516-Traffic-Code-and-Golf-Carts.pdf"
+  }
+ ],
+ "delawarebeaches": [
+  {
+   "lead": "Delaware DMV explains which special vehicles may use public roads.",
+   "name": "Delaware DMV special vehicle rules",
+   "url": "https://dmv.de.gov/VehicleServices/specialvehicles/index.shtml?dc=ve_reg_golf"
+  }
+ ],
+ "edisto": [
+  {
+   "lead": "Edisto Beach police explain golf cart permits and the roads carts can use.",
+   "name": "Edisto Beach golf cart and LSV rules",
+   "url": "https://www.townofedistobeach.com/police/golf-cart-and-low-speed-vehicle-use"
+  }
+ ],
+ "kelleysisland": [
+  {
+   "lead": "The Kelleys Island police page explains golf cart inspections for plates.",
+   "name": "Kelleys Island Police golf cart inspections",
+   "url": "https://kelleysisland.us/departments-2/kelleys-island-police-dept/"
+  }
+ ],
+ "chincoteague": [
+  {
+   "lead": "Chincoteague's town code sets golf cart registration and the streets carts may use.",
+   "name": "Chincoteague golf cart ordinance",
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10527/1231701/pdf"
+  }
  ]
 }

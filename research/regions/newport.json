@@ -1,0 +1,56 @@
+{
+ "poly": [
+  [
+   -117.935,
+   33.585
+  ],
+  [
+   -117.85,
+   33.585
+  ],
+  [
+   -117.85,
+   33.635
+  ],
+  [
+   -117.935,
+   33.635
+  ],
+  [
+   -117.935,
+   33.585
+  ]
+ ],
+ "bans": [
+  {
+   "names": "^(Pacific Coast Highway|West Coast Highway|East Coast Highway)$|^CA 1$",
+   "url": "https://patch.com/california/newportbeach/golf-carts-not-street-legal-newport-beach-cops-say",
+   "label": "Newport Beach Police: golf carts and LSVs stay off Pacific Coast Highway (posted 40+ mph)"
+  }
+ ],
+ "unverified": [
+  "Newport Beach has no city golf cart ordinance; the CA state rules apply."
+ ],
+ "sources": [
+  "Patch: Newport Beach police on golf carts https://patch.com/california/newportbeach/golf-carts-not-street-legal-newport-beach-cops-say",
+  "CVC 21716 https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-22",
+  "result": "state law only",
+  "sources": [
+   {
+    "label": "Patch: Newport Beach police on golf carts",
+    "url": "https://patch.com/california/newportbeach/golf-carts-not-street-legal-newport-beach-cops-say"
+   },
+   {
+    "label": "CVC 21716",
+    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716"
+   }
+  ],
+  "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban."
+ },
+ "status": "Added (regions-25-batch, 2026-10-22)"
+}

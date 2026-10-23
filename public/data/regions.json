@@ -805,5 +805,548 @@
   ],
   "cover": "Old Orchard Beach and Ocean Park only. Pick another city in the menu above.",
   "slug": "oldorchardbeach"
+ },
+ {
+  "id": "ocnj",
+  "name": "Ocean City, NJ",
+  "short": "Ocean City NJ",
+  "state": "NJ",
+  "center": [
+   39.2776,
+   -74.5746
+  ],
+  "zoom": 14,
+  "bbox": [
+   39.19,
+   -74.74,
+   39.3,
+   -74.55
+  ],
+  "cover": "Ocean City, NJ (the barrier island, the Gardens to Strathmere line) only. Pick another city in the menu above.",
+  "slug": "oceancitynj",
+  "beta": true
+ },
+ {
+  "id": "lbi",
+  "name": "Long Beach Island, NJ",
+  "short": "Long Beach Island",
+  "state": "NJ",
+  "center": [
+   39.6621,
+   -74.1663
+  ],
+  "zoom": 13,
+  "bbox": [
+   39.48,
+   -74.32,
+   39.78,
+   -74.08
+  ],
+  "cover": "Long Beach Island (Barnegat Light to Holgate, plus the Route 72 causeway) only. Pick another city in the menu above.",
+  "slug": "lbi",
+  "beta": true
+ },
+ {
+  "id": "fmb",
+  "name": "Fort Myers Beach, FL",
+  "short": "Fort Myers Beach",
+  "state": "FL",
+  "center": [
+   26.452,
+   -81.948
+  ],
+  "zoom": 14,
+  "bbox": [
+   26.38,
+   -81.97,
+   26.48,
+   -81.85
+  ],
+  "cover": "Fort Myers Beach (Estero Island) only. Pick another city in the menu above.",
+  "slug": "fortmyersbeach"
+ },
+ {
+  "id": "sanibel",
+  "name": "Sanibel & Captiva, FL",
+  "short": "Sanibel",
+  "state": "FL",
+  "center": [
+   26.4434,
+   -82.111
+  ],
+  "zoom": 13,
+  "bbox": [
+   26.41,
+   -82.27,
+   26.56,
+   -82.0
+  ],
+  "cover": "Sanibel and Captiva islands (plus the Sanibel Causeway) only. Pick another city in the menu above.",
+  "slug": "sanibel",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 30,
+    "designated_only": true,
+    "cite": "City of Sanibel Ord. 19-011 and F.S. 316.212: golf carts only on designated roads posted 30 mph or less",
+    "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10937/994063/pdf"
+   }
+  }
+ },
+ {
+  "id": "capemay",
+  "name": "Cape May & the Wildwoods, NJ",
+  "short": "Cape May",
+  "state": "NJ",
+  "center": [
+   38.9351,
+   -74.906
+  ],
+  "zoom": 13,
+  "bbox": [
+   38.92,
+   -74.97,
+   39.13,
+   -74.68
+  ],
+  "cover": "Cape May, the Wildwoods, Stone Harbor and Avalon (plus the mainland roads between them) only. Pick another city in the menu above.",
+  "slug": "capemay",
+  "beta": true
+ },
+ {
+  "id": "topsail",
+  "name": "Topsail Island, NC",
+  "short": "Topsail Island",
+  "state": "NC",
+  "center": [
+   34.4271,
+   -77.5461
+  ],
+  "zoom": 13,
+  "bbox": [
+   34.33,
+   -77.75,
+   34.55,
+   -77.4
+  ],
+  "cover": "Topsail Island (Topsail Beach, Surf City and North Topsail Beach) only. Pick another city in the menu above.",
+  "slug": "topsail",
+  "beta": true
+ },
+ {
+  "id": "carolinabeach",
+  "name": "Carolina Beach & Kure Beach, NC",
+  "short": "Carolina Beach",
+  "state": "NC",
+  "center": [
+   34.0352,
+   -77.8936
+  ],
+  "zoom": 14,
+  "bbox": [
+   33.95,
+   -77.95,
+   34.08,
+   -77.87
+  ],
+  "cover": "Carolina Beach and Kure Beach (Pleasure Island) only. Pick another city in the menu above.",
+  "slug": "carolinabeach",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "cross": true,
+    "note": "town cart permit and insurance; plain golf cart permits end Dec 31 2027 (LSVs continue)",
+    "cite": "Town of Carolina Beach golf cart/LSV rules: carts only on roads posted 35 mph or less; may cross faster roads at intersections",
+    "url": "https://www.carolinabeach.gov/324/Golf-Cart-LSV-Rules-Regulations"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "emeraldisle",
+  "name": "Emerald Isle & Atlantic Beach, NC",
+  "short": "Emerald Isle",
+  "state": "NC",
+  "center": [
+   34.665,
+   -77.028
+  ],
+  "zoom": 13,
+  "bbox": [
+   34.64,
+   -77.16,
+   34.73,
+   -76.68
+  ],
+  "cover": "Bogue Banks: Emerald Isle, Indian Beach, Pine Knoll Shores and Atlantic Beach only. Pick another city in the menu above.",
+  "slug": "emeraldisle",
+  "beta": true
+ },
+ {
+  "id": "clearwater",
+  "name": "Clearwater Beach & Dunedin, FL",
+  "short": "Clearwater Beach",
+  "state": "FL",
+  "center": [
+   27.978,
+   -82.827
+  ],
+  "zoom": 13,
+  "bbox": [
+   27.94,
+   -82.85,
+   28.07,
+   -82.765
+  ],
+  "cover": "Clearwater Beach, downtown Clearwater and Dunedin only. Pick another city in the menu above.",
+  "slug": "clearwater"
+ },
+ {
+  "id": "stpete",
+  "name": "St. Pete Beach & Treasure Island, FL",
+  "short": "St. Pete Beach",
+  "state": "FL",
+  "center": [
+   27.7253,
+   -82.7412
+  ],
+  "zoom": 13,
+  "bbox": [
+   27.68,
+   -82.82,
+   27.82,
+   -82.7
+  ],
+  "cover": "St. Pete Beach, Treasure Island and Madeira Beach only. Pick another city in the menu above.",
+  "slug": "stpetebeach"
+ },
+ {
+  "id": "newport",
+  "name": "Newport Beach & Balboa, CA",
+  "short": "Newport Beach",
+  "state": "CA",
+  "center": [
+   33.607,
+   -117.891
+  ],
+  "zoom": 14,
+  "bbox": [
+   33.585,
+   -117.935,
+   33.635,
+   -117.85
+  ],
+  "cover": "Newport Beach's coast (Balboa Peninsula, Balboa Island, Lido, Newport Heights and Corona del Mar) only. Pick another city in the menu above.",
+  "slug": "newportbeach",
+  "beta": true
+ },
+ {
+  "id": "pensacola",
+  "name": "Pensacola Beach & Navarre Beach, FL",
+  "short": "Pensacola Beach",
+  "state": "FL",
+  "center": [
+   30.333,
+   -87.142
+  ],
+  "zoom": 13,
+  "bbox": [
+   30.31,
+   -87.2,
+   30.41,
+   -86.84
+  ],
+  "cover": "Pensacola Beach and Navarre Beach (Santa Rosa Island) only. Pick another city in the menu above.",
+  "slug": "pensacolabeach"
+ },
+ {
+  "id": "brunswick",
+  "name": "Brunswick Islands, NC",
+  "short": "Brunswick Islands",
+  "state": "NC",
+  "center": [
+   33.893,
+   -78.44
+  ],
+  "zoom": 13,
+  "bbox": [
+   33.85,
+   -78.56,
+   33.94,
+   -78.25
+  ],
+  "cover": "Sunset Beach, Ocean Isle Beach and Holden Beach only. Pick another city in the menu above.",
+  "slug": "brunswickislands",
+  "rule": {
+   "golf_cart": {
+    "not_street_legal": true,
+    "max_posted": 0,
+    "cross": false,
+    "note": "Ocean Isle Beach: only registered, inspected, insured LSVs may use town streets. Switch to LSV if yours is one",
+    "cite": "Town of Ocean Isle Beach: golf carts must be registered, tagged and insured LSVs to use public streets (N.C.G.S. 20-121.1)",
+    "url": "https://www.oibgov.com/20855/golf-carts-low-speed-electric-vehicles"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "crystalbeach",
+  "name": "Bolivar Peninsula, TX",
+  "short": "Crystal Beach",
+  "state": "TX",
+  "center": [
+   29.463,
+   -94.642
+  ],
+  "zoom": 13,
+  "bbox": [
+   29.36,
+   -94.8,
+   29.6,
+   -94.35
+  ],
+  "cover": "Bolivar Peninsula (Port Bolivar, Crystal Beach, Gilchrist and High Island) only. Pick another city in the menu above.",
+  "slug": "crystalbeach"
+ },
+ {
+  "id": "padre",
+  "name": "North Padre & Mustang Island, TX",
+  "short": "North Padre Island",
+  "state": "TX",
+  "center": [
+   27.6,
+   -97.22
+  ],
+  "zoom": 13,
+  "bbox": [
+   27.48,
+   -97.3,
+   27.695,
+   -97.15
+  ],
+  "cover": "North Padre Island and southern Mustang Island (Corpus Christi) only. Pick another city in the menu above.",
+  "slug": "padreisland",
+  "beta": true
+ },
+ {
+  "id": "bocagrande",
+  "name": "Boca Grande, FL",
+  "short": "Boca Grande",
+  "state": "FL",
+  "center": [
+   26.749,
+   -82.262
+  ],
+  "zoom": 14,
+  "bbox": [
+   26.71,
+   -82.29,
+   26.84,
+   -82.24
+  ],
+  "cover": "Boca Grande (Gasparilla Island) only. Pick another city in the menu above.",
+  "slug": "bocagrande"
+ },
+ {
+  "id": "pawleys",
+  "name": "Pawleys Island & Litchfield, SC",
+  "short": "Pawleys Island",
+  "state": "SC",
+  "center": [
+   33.433,
+   -79.121
+  ],
+  "zoom": 13,
+  "bbox": [
+   33.4,
+   -79.18,
+   33.549,
+   -79.0
+  ],
+  "cover": "Pawleys Island, Litchfield Beach and Murrells Inlet only. Pick another city in the menu above.",
+  "slug": "pawleysisland",
+  "beta": true
+ },
+ {
+  "id": "dauphin",
+  "name": "Dauphin Island, AL",
+  "short": "Dauphin Island",
+  "state": "AL",
+  "center": [
+   30.255,
+   -88.11
+  ],
+  "zoom": 13,
+  "bbox": [
+   30.23,
+   -88.35,
+   30.28,
+   -88.07
+  ],
+  "cover": "Dauphin Island only. Pick another city in the menu above.",
+  "slug": "dauphinisland",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 25,
+    "cross": true,
+    "note": "golf carts need a license plate from their home state to use public roads",
+    "cite": "Town of Dauphin Island FAQ: golf carts need a state-issued license plate for public roadways; app keeps the Alabama ≤25 mph cap (UNCONFIRMED for Dauphin)",
+    "url": "https://www.townofdauphinisland.org/faq"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "stgeorge",
+  "name": "St. George Island, FL",
+  "short": "St. George Island",
+  "state": "FL",
+  "center": [
+   29.66,
+   -84.86
+  ],
+  "zoom": 13,
+  "bbox": [
+   29.58,
+   -85.0,
+   29.7,
+   -84.7
+  ],
+  "cover": "St. George Island only. Pick another city in the menu above.",
+  "slug": "stgeorgeisland",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "designated_only": false,
+    "cite": "Franklin County Code ch. 12, art. II: golf carts on St. George Island county roads, except Gulf Beach Dr; Franklin Blvd at crossings only (F.S. 316.212)",
+    "url": "https://library.municode.com/fl/franklin_county/codes/code_of_ordinances?nodeId=COLAOR_CH12MOVETR_ARTIIGOCA_SS12-39--12-60RE"
+   }
+  }
+ },
+ {
+  "id": "capesanblas",
+  "name": "Cape San Blas & Mexico Beach, FL",
+  "short": "Cape San Blas",
+  "state": "FL",
+  "center": [
+   29.948,
+   -85.42
+  ],
+  "zoom": 12,
+  "bbox": [
+   29.66,
+   -85.43,
+   29.96,
+   -85.28
+  ],
+  "cover": "Cape San Blas, Indian Pass, Port St. Joe and Mexico Beach only. Pick another city in the menu above.",
+  "slug": "capesanblas"
+ },
+ {
+  "id": "delbeaches",
+  "name": "Rehoboth, Dewey & Bethany Beach, DE",
+  "short": "Delaware beaches",
+  "state": "DE",
+  "center": [
+   38.721,
+   -75.076
+  ],
+  "zoom": 13,
+  "bbox": [
+   38.45,
+   -75.12,
+   38.74,
+   -75.04
+  ],
+  "cover": "Rehoboth Beach, Dewey Beach, Bethany Beach, South Bethany and Fenwick Island only. Pick another city in the menu above.",
+  "slug": "delawarebeaches",
+  "beta": true
+ },
+ {
+  "id": "edisto",
+  "name": "Edisto Beach, SC",
+  "short": "Edisto Beach",
+  "state": "SC",
+  "center": [
+   32.499,
+   -80.307
+  ],
+  "zoom": 14,
+  "bbox": [
+   32.46,
+   -80.37,
+   32.54,
+   -80.27
+  ],
+  "cover": "Edisto Beach only. Pick another city in the menu above.",
+  "slug": "edisto",
+  "beta": true
+ },
+ {
+  "id": "nsb",
+  "name": "New Smyrna Beach, FL",
+  "short": "New Smyrna Beach",
+  "state": "FL",
+  "center": [
+   29.026,
+   -80.927
+  ],
+  "zoom": 13,
+  "bbox": [
+   28.95,
+   -80.95,
+   29.08,
+   -80.84
+  ],
+  "cover": "New Smyrna Beach (beachside and mainland) only. Pick another city in the menu above.",
+  "slug": "newsmyrnabeach",
+  "beta": true
+ },
+ {
+  "id": "kelleys",
+  "name": "Kelleys Island & Marblehead, OH",
+  "short": "Kelleys Island",
+  "state": "OH",
+  "center": [
+   41.602,
+   -82.708
+  ],
+  "zoom": 13,
+  "bbox": [
+   41.5,
+   -82.8,
+   41.62,
+   -82.66
+  ],
+  "cover": "Kelleys Island, Marblehead and Lakeside only. Pick another city in the menu above.",
+  "slug": "kelleysisland",
+  "beta": true
+ },
+ {
+  "id": "chincoteague",
+  "name": "Chincoteague, VA",
+  "short": "Chincoteague",
+  "state": "VA",
+  "center": [
+   37.933,
+   -75.379
+  ],
+  "zoom": 14,
+  "bbox": [
+   37.88,
+   -75.43,
+   37.97,
+   -75.33
+  ],
+  "cover": "Chincoteague Island only. Pick another city in the menu above.",
+  "slug": "chincoteague",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 25,
+    "designated_only": true,
+    "cite": "Town of Chincoteague Sec. 8-2-13: golf carts only on streets the Town Council designates, posted 25 mph or less; never on Main St or Second St (cross at listed streets); town registration",
+    "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10527/1231701/pdf"
+   }
+  },
+  "beta": true
  }
 ]

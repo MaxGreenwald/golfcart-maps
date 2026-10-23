@@ -78,6 +78,144 @@
    "url": "https://www.sjcfl.us/wp-content/uploads/2024/11/golf-cart-ord2024-7.pdf",
    "label": "St. Johns County Ord. 2018-42 as amended by 2024-7 (Nocatee roads posted <=25); City of Jacksonville Ord. 2017-66 Exh. 1 Nocatee golf cart/LSV circulation map (https://cityclts.coj.net/docs/2017-0066/Substitutes/2017-66%20Exh%201.pdf)",
    "applied": "research/regions/nocatee.json bans + regions.json rule.golf_cart (max 25)"
+  },
+  "ocnj": {
+   "kind": "police LSV rules sheet (named roads)",
+   "url": "https://www.ocnj.us/media/Police/LSV%27s.pdf",
+   "label": "Ocean City Police: LSV need-to-know facts (banned roads list)",
+   "applied": "research/regions/ocnj.json bans"
+  },
+  "lbi": {
+   "kind": "police LSV page",
+   "url": "https://surfcitypdnj.org/lsv/",
+   "label": "Surf City Police LSV page; NJ MVC 25 mph rule",
+   "applied": "NJ LSV rule (roads posted 25 mph or less) in public/data/rules.json"
+  },
+  "fmb": {
+   "kind": "town ordinance",
+   "url": "https://www.fortmyersbeachfl.gov/DocumentCenter/View/24451/25-03-Beach-Bicycle-and-Vehicle-Safety",
+   "label": "Town of Fort Myers Beach Ord. 25-03 (beach, bicycle and vehicle safety)",
+   "applied": "no designated golf cart streets: golf carts follow F.S. 316.212 (designated roads only); LSVs F.S. 316.2122"
+  },
+  "sanibel": {
+   "kind": "city ordinance",
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10937/994063/pdf",
+   "label": "City of Sanibel Ord. 19-011 (golf carts and LSVs)",
+   "applied": "public/data/regions.json rule.golf_cart (designated roads posted 30 or less)"
+  },
+  "capemay": {
+   "kind": "borough ordinances",
+   "url": "https://ecode360.com/10814440",
+   "label": "Stone Harbor code (LSVs); Avalon Ord. 799-2020 (LSV rules)",
+   "applied": "NJ LSV rule (25 mph) + region config; Avalon/Stone Harbor rules checked"
+  },
+  "topsail": {
+   "kind": "town police rules (named roads)",
+   "url": "https://topsailbeachnc.gov/Departments/Police/Golf-Cart-Low-Speed-Vehicles",
+   "label": "Town of Topsail Beach golf cart / LSV rules",
+   "applied": "research/regions/topsail.json bans"
+  },
+  "carolinabeach": {
+   "kind": "town rules",
+   "url": "https://www.carolinabeach.gov/324/Golf-Cart-LSV-Rules-Regulations",
+   "label": "Town of Carolina Beach golf cart / LSV rules and regulations",
+   "applied": "public/data/regions.json rule.golf_cart (35 mph)"
+  },
+  "emeraldisle": {
+   "kind": "town ordinance summary (named roads)",
+   "url": "https://www.emeraldisle-nc.org/DocumentCenter/View/511/Golf-Cart-Safety-Presentation-PDF?bidId=",
+   "label": "Town of Emerald Isle golf cart rules (NC 58 and Coast Guard Rd off limits)",
+   "applied": "research/regions/emeraldisle.json cart_only_bans"
+  },
+  "clearwater": {
+   "kind": "city golf cart map",
+   "url": "https://www.dunedingov.com/files/assets/city/v/1/live-work-play/documents/golf-cart-map.pdf",
+   "label": "City of Dunedin golf cart map (designated streets)",
+   "applied": "golf carts: F.S. 316.212 designated roads only; Dunedin designations not yet digitized"
+  },
+  "stpete": {
+   "kind": "city golf cart rules",
+   "url": "https://www.spblibrary.com/498/Golf-Carts",
+   "label": "City of St. Pete Beach golf cart rules (city streets only, not state/county roads)",
+   "applied": "research/regions/stpete.json cart_only_bans"
+  },
+  "pensacola": {
+   "kind": "island authority rules",
+   "url": "https://visitpensacolabeach.com/beach-rules/",
+   "label": "Santa Rosa Island Authority beach rules (LSVs on Via de Luna, Fort Pickens Rd, Pensacola Beach Blvd; no bridges)",
+   "applied": "research/regions/pensacola.json bans"
+  },
+  "brunswick": {
+   "kind": "town police rules",
+   "url": "https://www.oibgov.com/20855/golf-carts-low-speed-electric-vehicles",
+   "label": "Town of Ocean Isle Beach golf cart / LSEV rules",
+   "applied": "public/data/regions.json rule.golf_cart (LSVs only)"
+  },
+  "padre": {
+   "kind": "city ordinance (area map)",
+   "url": "https://corpuschristi.legistar.com/LegislationDetail.aspx?GUID=ED4B9361-1F41-4640-8B25-2E6A5E99FBAA&ID=4216695&Options=&Search=",
+   "label": "City of Corpus Christi golf cart/NEV ordinance, File 19-1512 (island streets posted 35 or less)",
+   "applied": "research/regions/padre.json bans; TX state rule (35 mph)"
+  },
+  "bocagrande": {
+   "kind": "county ordinance",
+   "url": "https://www.leegov.com/bocc/Ordinances/25-16.pdf",
+   "label": "Lee County Ord. 25-16; GICIA bike path rules (electric carts on the path, 15 mph)",
+   "applied": "golf carts: F.S. 316.212 designated roads only; the bike path is drawn where OSM tags it"
+  },
+  "pawleys": {
+   "kind": "town rules",
+   "url": "https://www.townofpawleysisland.com/golf-cart-restrictions/",
+   "label": "Town of Pawleys Island golf cart and LSV rules",
+   "applied": "research/regions/pawleys.json bans (island roads)"
+  },
+  "dauphin": {
+   "kind": "town FAQ",
+   "url": "https://www.townofdauphinisland.org/faq",
+   "label": "Town of Dauphin Island FAQ (golf carts need a license plate for public roads)",
+   "applied": "public/data/regions.json rule.golf_cart"
+  },
+  "stgeorge": {
+   "kind": "county ordinance (named roads)",
+   "url": "https://library.municode.com/fl/franklin_county/codes/code_of_ordinances?nodeId=COLAOR_CH12MOVETR_ARTIIGOCA_SS12-39--12-60RE",
+   "label": "Franklin County Code ch. 12 art. II golf carts (St. George Island)",
+   "applied": "research/regions/stgeorge.json cart_only_bans + regions.json rule.golf_cart"
+  },
+  "capesanblas": {
+   "kind": "city ordinance",
+   "url": "https://mexicobeachfl.gov/uploads/2025/01/Ordinance-569-Amending-Ordinance-516-Traffic-Code-and-Golf-Carts.pdf",
+   "label": "City of Mexico Beach Ord. 569 (traffic code and golf carts)",
+   "applied": "research/regions/capesanblas.json cart_only_bans"
+  },
+  "delbeaches": {
+   "kind": "town code",
+   "url": "https://fenwickisland.delaware.gov/files/2022/02/Chapter-153.pdf",
+   "label": "Town of Fenwick Island Code ch. 153 (LSVs prohibited); 21 Del. C. 2113A",
+   "applied": "research/regions/delbeaches.json bans"
+  },
+  "edisto": {
+   "kind": "town police rules (named roads)",
+   "url": "https://www.townofedistobeach.com/police/golf-cart-and-low-speed-vehicle-use",
+   "label": "Town of Edisto Beach golf cart and LSV use",
+   "applied": "research/regions/edisto.json cart_only_bans"
+  },
+  "nsb": {
+   "kind": "police guidance (news report, named roads)",
+   "url": "https://www.hometownnewsvolusia.com/news/golf-carts-are-not-for-all-roadways/article_0e592c76-c4c5-11ec-a74c-136b4cb9db2f.html",
+   "label": "New Smyrna Beach Police via Hometown News: no LSVs on A1A/Atlantic Ave or 3rd Ave",
+   "applied": "research/regions/nsb.json bans"
+  },
+  "kelleys": {
+   "kind": "village police rules",
+   "url": "https://kelleysisland.us/departments-2/kelleys-island-police-dept/",
+   "label": "Kelleys Island Police: golf carts titled, inspected and plated for public roads",
+   "applied": "OH state rule (public/data/rules.json)"
+  },
+  "chincoteague": {
+   "kind": "town code (named roads)",
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10527/1231701/pdf",
+   "label": "Town of Chincoteague Sec. 8-2-13 golf carts",
+   "applied": "research/regions/chincoteague.json cart_only_bans + regions.json rule.golf_cart"
   }
  },
  "candidates": {
@@ -107,6 +245,18 @@
    "law": "Florida 316.212 / 316.2122; no Sarasota County cart-designated roads on Siesta Key found",
    "law_url": "https://www.flsenate.gov/Laws/Statutes/2026/0316.212",
    "searched": "web search 'Siesta Key Sarasota County golf cart LSV ordinance'; FLHSMV LSV page https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+  },
+  "newport": {
+   "text": "state law, no local ordinance found",
+   "law": "CVC 21716 (golf carts on highways posted 25 mph or less in a business or residence district) and CVC 21260 (LSVs on roads posted 35 mph or less). Newport Beach has no golf cart transportation plan.",
+   "law_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716",
+   "searched": "Newport Beach Municipal Code (Title 12 Vehicles and Traffic) and web search 'Newport Beach golf cart ordinance'; police guidance in Patch (PCH off limits)"
+  },
+  "crystalbeach": {
+   "text": "state law, no local ordinance found",
+   "law": "Tex. Transp. Code §551.404 (golf carts on roads posted 35 mph or less within 2 mi of the master-planned community/beach or where the county allows) and §551.304 (LSVs on roads posted 35 or less). Galveston County unincorporated peninsula; SH 87 is crossing only.",
+   "law_url": "https://texas.public.law/statutes/tex._transp._code_section_551.404",
+   "searched": "Galveston County code and commissioners court orders; web search 'Bolivar Peninsula golf cart ordinance'; community page crystalbeach.com"
   }
  },
  "_note_v3": "v3 is the OFFICIAL bar (Max, Oct 22 2026, 2:47 PM ET): access check = a local-rules search is recorded: 'regions' (local source) or 'state_law' (no local ordinance found, with what was searched)."
