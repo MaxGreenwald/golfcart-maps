@@ -6,6 +6,7 @@ ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
 PUB = os.path.join(ROOT, "public")
 SITE = "https://golfcartmap.com"
 BRAND = "Golf Cart Maps"
+ALT_NAMES = ["Golf Cart Map", "GolfCartMap"]   # Max Oct 23: people search both "golf cart map" and "golf cart maps"; brand stays Golf Cart Maps
 LEGAL = "Golf Cart Maps LLC"
 CONTACT = "max@golfcartmap.com"
 SALES = "mailto:max@golfcartmap.com?subject=Golf%20Cart%20Maps%20sales%20inquiry"
@@ -35,17 +36,38 @@ def effective_rules():
     return json.loads(subprocess.run(["node", "-e", js], capture_output=True, text=True, check=True).stdout)
 
 def org():
-    return {"@context":"https://schema.org","@type":"Organization","@id":SITE+"/#org","name":BRAND,"legalName":LEGAL,"url":SITE+"/","logo":SITE+"/icon-512.png","email":CONTACT,"contactPoint":{"@type":"ContactPoint","contactType":"sales","email":CONTACT,"areaServed":"US","availableLanguage":"en"}}
+    return {"@context":"https://schema.org","@type":"Organization","@id":SITE+"/#org","name":BRAND,"alternateName":ALT_NAMES,"legalName":LEGAL,"url":SITE+"/","logo":SITE+"/icon-512.png","email":CONTACT,"contactPoint":{"@type":"ContactPoint","contactType":"sales","email":CONTACT,"areaServed":"US","availableLanguage":"en"}}
 
 def website():
-    return {"@context":"https://schema.org","@type":"WebSite","@id":SITE+"/#website","name":BRAND,"url":SITE+"/","publisher":{"@id":SITE+"/#org"}}
+    return {"@context":"https://schema.org","@type":"WebSite","@id":SITE+"/#website","name":BRAND,"alternateName":ALT_NAMES,"url":SITE+"/","publisher":{"@id":SITE+"/#org"}}
+
+def lsv_limits(R=None):
+    """LSV road limit per region, from public/roadrule.js (the map's own rule). Most regions are 35 mph; a few (NJ, Catalina,
+    Gulf Shores) are 25. Pages say "35 mph or less in N of our M regions" from this, never a blanket 35."""
+    R = R or effective_rules(); regs = regions(); other = {}
+    for g in regs:
+        mp = R[g["id"]]["lsv"].get("max_posted")
+        if mp != 35: other.setdefault(mp, []).append(g)
+    return {"n": len(regs), "n35": len(regs) - sum(len(v) for v in other.values()), "other": other}
+
+def lsv_line(L):
+    """'posted 35 mph or less in 59 of our 64 regions (25 mph in Ocean City, NJ, ...)'"""
+    s = "posted 35 mph or less in %d of our %d regions" % (L["n35"], L["n"])
+    if L["other"]:
+        s += " (" + "; ".join("%s mph in %s" % (mp, "; ".join(g["name"] for g in sorted(gs, key=lambda g: g["name"]))) for mp, gs in sorted(L["other"].items(), key=lambda kv: kv[0] or 0)) + ")"
+    return s
+
+SOFTWARE_DESC = ("Golf cart map and LSV map app: shows which roads golf carts and street-legal low speed vehicles (LSVs) may use in each town, "
+                 "with the law behind each rule, and plans routes that stay on them. Works in any web browser.")
 
 def software():  # no offers block
-    return {"@context":"https://schema.org","@type":"SoftwareApplication","name":BRAND,"applicationCategory":"NavigationApplication","operatingSystem":"iOS, Web","url":SITE+"/","publisher":{"@id":SITE+"/#org"}}
+    return {"@context":"https://schema.org","@type":"SoftwareApplication","name":BRAND,"alternateName":ALT_NAMES,"description":SOFTWARE_DESC,
+            "keywords":"golf cart map, golf cart maps, LSV map, LSV map app, low speed vehicle map, street legal golf cart map",
+            "applicationCategory":"NavigationApplication","operatingSystem":"iOS, Web","url":SITE+"/","publisher":{"@id":SITE+"/#org"}}
 
 def mobile_app():  # the iPhone app (CarPlay built in); no ratings until real App Store ratings exist
-    return {"@context":"https://schema.org","@type":"MobileApplication","name":BRAND,"operatingSystem":"iOS","applicationCategory":"NavigationApplication",
-            "description":"Golf cart and LSV legal-road map and routes for iPhone, with Apple CarPlay on your car's dashboard screen.",
+    return {"@context":"https://schema.org","@type":"MobileApplication","name":BRAND,"alternateName":ALT_NAMES,"operatingSystem":"iOS","applicationCategory":"NavigationApplication",
+            "description":"Golf cart map of legal golf cart and LSV roads, with routes, for iPhone, with Apple CarPlay on your car's dashboard screen.",
             "installUrl":TESTFLIGHT,"url":SITE+"/#iphone","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":SITE+"/#org"}}
 
 def faq_schema(faq):

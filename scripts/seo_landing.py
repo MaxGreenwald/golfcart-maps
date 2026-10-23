@@ -9,6 +9,9 @@ FAQ = [
     ("Which towns does Golf Cart Maps cover?", "%(n)d beach and golf towns in %(s)d states, from San Diego to The Villages, 30A and Key West."),
     ("What is the difference between a golf cart and an LSV?", "An LSV is street-legal: VIN, plate, insurance, 20 to 25 mph top speed. Most states allow LSVs on roads posted 35 mph or less. Plain golf carts usually get fewer roads."),
     ("Where do the rules come from?", "State vehicle codes, local ordinances and posted speed limits. Each town page cites the law behind each rule."),
+    ("Is there an LSV map app?", "Yes. Golf Cart Maps is an LSV map app as well as a golf cart map. Pick LSV and it shows the roads a street-legal low speed vehicle may use: roads %(lsv)s, minus roads a town or county bans. It plans routes on them and works in any web browser."),
+    ("Where can I drive my LSV?", "Usually on public roads posted 35 mph or less, if the LSV is registered, plated and insured. A few places set a lower limit, and towns or counties can ban an LSV from specific roads. Pick your town on the map or open its page for the local rule and the law behind it."),
+    ("Is it Golf Cart Map or Golf Cart Maps?", "Either one gets you here. The site is called Golf Cart Maps and lives at golfcartmap.com: one golf cart map of the legal golf cart and LSV roads in %(n)d beach and golf towns."),
     ("Is it legal advice?", "No. Posted signs and local law always win."),
     ("Is there an iPhone app with CarPlay?", "Yes. The iPhone app shows legal cart roads and routes on your phone and on your CarPlay dashboard screen. Download it on the App Store; the web map works in any browser."),
 ]
@@ -34,21 +37,24 @@ def render():
     for r in regs: by.setdefault(r["state"], []).append(r)
     n, ns = len(regs), len(by)
     st, towns = stats()
-    faq = [(q, a % {"n": n, "s": ns} if "%(" in a else a) for q, a in FAQ]
-    title = "Golf Cart Maps: Legal Golf Cart & LSV Roads by Town"
-    desc = f"Cruise anywhere your cart is legal. Every legal golf cart and LSV road in {n} beach and golf towns, with the law behind each rule." + POS.LANDING_DESC_TAIL
+    L = lsv_limits()
+    faq = [(q, a % {"n": n, "s": ns, "lsv": lsv_line(L)} if "%(" in a else a) for q, a in FAQ]
+    title = "Golf Cart Map & LSV Map of Legal Roads by Town | Golf Cart Maps"
+    desc = f"The golf cart map and LSV map app for {n} beach and golf towns: every legal golf cart and LSV road, with the law behind each rule." + POS.LANDING_DESC_TAIL
     cta = lambda pos: f'<a class="cta" href="/map" target="_blank" rel="noopener" data-ev="cta_try_map_click" data-p=\'{{"position":"{pos}"}}\'>Open the map</a>'
     k = lambda x: f"{x:,}"
     grid = "".join(f'<li><a href="/{r["slug"]}" data-ev="region_link_click" data-p=\'{{"region":"{e(r["id"])}"}}\'>{e(r["name"])}<small>{e(STATES.get(r["state"], r["state"]))}</small></a></li>' for r in sorted(regs, key=lambda r: (STATES.get(r["state"], r["state"]), r["name"])))
     tl = " · ".join(f'<a href="/{e(t["region"])}/{e(t["slug"])}">{e(t["name"])} golf cart rules</a>' for t in sorted(towns, key=lambda t: t["name"]))
     body = f"""<section class="hero"><h1>Cruise anywhere your cart is legal.</h1>
-<p>Every legal golf cart and LSV road, on one map. Pick a town, pick a place, and ride roads your city actually allows.</p>
+<p>Every legal golf cart and LSV road, on one golf cart map. Pick a town, pick a place, and ride roads your city actually allows.</p>
 <p>{cta("hero")}</p>
 <p><a class="appstore" href="{TESTFLIGHT}" data-ev="app_store_click" data-p=\'{{"position":"hero"}}\'><img src="/download-on-the-app-store.svg" width="143" height="48" alt="Download on the App Store"></a> <small>iPhone app + CarPlay</small></p>
 <p><label><input type="checkbox" id="remember"> Always open the map when I visit</label></p></section>
 <div class="stats" role="list"><div role="listitem"><b>{k(st["road_mi"])}</b><span>road miles mapped</span></div><div role="listitem"><b>{n}</b><span>regions live</span></div><div role="listitem"><b>{ns}</b><span>states</span></div><div role="listitem"><b>{len(towns)}</b><span>town guides</span></div></div>
-<img src="/og-v4.png" width="1200" height="630" alt="Golf Cart Maps map: legal golf cart and LSV roads in green, roads to avoid in red" style="width:100%;height:auto;border-radius:14px" loading="eager">
+<img src="/og-v4.png" width="1200" height="630" alt="Golf cart map from Golf Cart Maps: legal golf cart and LSV roads in green, roads to avoid in red" style="width:100%;height:auto;border-radius:14px" loading="eager">
 <!-- Trusted by: empty on purpose. Add partner names or logos only with that partner's written permission. -->
+<section id="lsv"><h2>LSV map: roads posted 35 mph or less</h2>
+<p>A street-legal golf cart is usually registered as an LSV (low speed vehicle): it has a VIN, plate and insurance and tops out at 25 mph. Pick LSV on the map and Golf Cart Maps becomes a low speed vehicle map, showing the roads an LSV may use in green: roads {e(lsv_line(L))}, unless a town or county bans LSVs from a road. Plain golf carts get their own, usually shorter, list.</p></section>
 <h2 id="regions">Where can I drive a golf cart?</h2>
 <p>Live in {n} regions, from San Diego to The Villages, 30A, Hilton Head and Hawaii.</p>
 <ul class="grid">{grid}</ul>

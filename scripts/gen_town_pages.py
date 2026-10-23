@@ -251,6 +251,9 @@ def main():
     for i, (reg, slug, name, st, lat, lng) in enumerate(T):
         p = P[RID[reg]]; f = lambda s: s.format(n=name)
         faq = [{"q": f(q), "a": f(a)} for q, a in p["faq"]] + ([{"q": EXTRA[slug][0], "a": EXTRA[slug][1]}] if slug in EXTRA else [])
+        if not any("drive my LSV" in x["q"] for x in faq):   # Max Oct 23: answer "where can I drive my LSV in [town]" from the sourced LSV row
+            lv = p["lsv"]; faq.insert(0, {"q": f"Where can I drive my LSV in {name}?", "a": f(lv["roads"]).rstrip(".") + "." + (" " + f(lv["notes"]).rstrip(".") + "." if lv.get("notes") else "")
+                                         + " A town or county can still ban LSVs from a specific road, and posted signs win."})
         t = {"slug": slug, "region": reg, "name": name, "state": st, "question_title": f(p["q"]), "answer_short": f(p["a"]),
              "golf_cart": p["gc"], "lsv": p["lsv"],
              "rules": [{"topic": a, "rule": b, "citation": c, "source_url": d} for a, b, c, d in p["rules"]],
@@ -262,6 +265,6 @@ def main():
         if os.path.exists(fp) and json.load(open(fp)).get("local_resources"):
             ks = list(t); cut = ks.index("rental_shops") + 1
             t = {**{k: t[k] for k in ks[:cut]}, "local_resources": json.load(open(fp))["local_resources"], **{k: t[k] for k in ks[cut:]}}
-        json.dump(t, open(fp, "w"), indent=1, ensure_ascii=False)
+        open(fp, "w").write(json.dumps(t, indent=1, ensure_ascii=False) + "\n")   # trailing newline, like the committed files
     print(len(T), "towns")
 if __name__ == "__main__": main()

@@ -22,7 +22,7 @@ def faq_for(g, R):
     l, c = R["lsv"], R["golf_cart"]
     out = []
     lsv_a = vrow("", l)[1]
-    out.append((f"Where can I drive an LSV in {n}?", f"{lsv_a} Source: {l.get('cite','state law')}. {BRAND} shows allowed roads in green and roads to avoid in red."))
+    out.append((f"Where can I drive my LSV in {n}?", f"{lsv_a} Source: {l.get('cite','state law')}. A town or county can still ban LSVs from a specific road, and posted signs win. Pick LSV on the {n} LSV map and {BRAND} shows allowed roads in green and roads to avoid in red."))
     out.append((f"Can I drive a golf cart on the street in {n}?", f"{vrow('', c)[1]} Source: {c.get('cite','state law')}."))
     out.append((f"What is the difference between a golf cart and an LSV in {st}?", "A low-speed vehicle (LSV) is a street-legal vehicle with a VIN, plate and insurance that meets federal FMVSS 500 (top speed over 20 and at most 25 mph). A plain golf cart has none of that, so most states limit it to fewer roads."))
     out.append(("Where do the rules come from?", "State vehicle codes and local ordinances, plus posted speed limits from city speed lists, street-level sign imagery (Mapillary) and OpenStreetMap. Unsigned small residential streets are assumed to be 25 mph. Posted signs always win."))
@@ -41,16 +41,16 @@ def resources_html(items):
 
 def region_page(g, R):
     n, st, slug = g["name"], STATES.get(g["state"], g["state"]), g["slug"]
-    title = f"Golf Cart & LSV Rules and Legal Roads in {n} ({month()})"
+    title = f"{n} Golf Cart Map & LSV Map: Rules and Legal Roads ({month()})"
     lsv, cart = vrow("Street-legal LSV", R["lsv"]), vrow("Golf cart", R["golf_cart"])
-    desc = f"Where golf carts and LSVs can legally drive in {n}: LSVs on roads posted {R['lsv'].get('max_posted','?')} mph or less ({R['lsv'].get('cite','state law').split(' (')[0]}). Legal-road map and routes."
+    desc = f"Where golf carts and LSVs can legally drive in {n}: LSVs on roads posted {R['lsv'].get('max_posted','?')} mph or less ({R['lsv'].get('cite','state law').split(' (')[0]}). Golf cart and LSV map with routes."
     if len(desc) > 155: desc = desc[:152].rsplit(" ", 1)[0] + "..."
     mapurl = f"/map?r={g['id']}"
     faq = faq_for(g, R)
     rows = "".join(f"<tr><th scope=row>{e(a)}</th><td>{e(b)}</td><td>{e(c)}{(' <a href=\"'+e(u)+'\" rel=nofollow>source</a>') if u else ''}</td></tr>" for a, b, c, u in (lsv, cart))
     body = f"""<nav aria-label="Breadcrumb" class="muted"><a href="/">Home</a> › {e(st)} › {e(n)}</nav>
 <h1>Where can you drive a golf cart or LSV in {e(n)}?</h1>
-<p>{e(lsv[1])} Plain golf carts: {e(cart[1][0].lower()+cart[1][1:])} {BRAND} (golfcartmap.com) maps every road in {e(n)} and plans routes that stay on legal ones. Rules last checked {e(month())}.</p>
+<p>{e(lsv[1])} Plain golf carts: {e(cart[1][0].lower()+cart[1][1:])} The {e(g['short'] or n)} golf cart map and LSV map on {BRAND} (golfcartmap.com) colors every road and plans routes that stay on legal ones. Rules last checked {e(month())}.</p>
 <p><a class="cta" href="{mapurl}" data-ev="cta_try_map_click" data-p='{{"position":"region","region":"{e(g['id'])}"}}'>Open the {e(g['short'] or n)} map</a></p>
 <h2>The rules in {e(n)}</h2>
 <table><thead><tr><th>Vehicle</th><th>Where it may drive</th><th>Law</th></tr></thead><tbody>{rows}</tbody></table>
