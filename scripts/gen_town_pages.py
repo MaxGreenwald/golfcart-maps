@@ -240,6 +240,9 @@ EXTRA = {
  "grayton-beach": ("Can I take an LSV up CR 283 from Grayton Beach?","No. CR 283 is red on the Walton County Sheriff's LSV map, so LSVs are prohibited on it."),
  "point-washington": ("Can I drive an LSV on CR 395 in Point Washington?","Not north of the Point Washington fire station: that stretch of CR 395 is red on the Walton County Sheriff's LSV map."),
 }
+import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import towns_r25 as R25   # regions-25-batch (Oct 22 2026): profiles, towns and slug map for the 25 new regions
+P.update(R25.P); T += R25.T; RID.update(R25.RID)
 def nearby(i):
     reg = T[i][0]; same = [j for j in range(len(T)) if T[j][0] == reg and j != i]
     same.sort(key=lambda j: abs(j - i)); return [T[j][1] for j in same[:3]]

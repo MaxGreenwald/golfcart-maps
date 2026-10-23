@@ -2916,6 +2916,505 @@
    "status": "unreviewed",
    "cite": [],
    "note": "Not in MBMC ch. 14.56 special speed zones; no posted limit found. Kept red (unknown)."
+  },
+  {
+   "region": "sanibel",
+   "road": "Causeway Road",
+   "at": [
+    26.45258,
+    -82.03694
+   ],
+   "m": 99,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FDOT Maximum Speed Limit (TDA): 12000125 posted 45 mph"
+   ]
+  },
+  {
+   "region": "capemay",
+   "road": "Old North Wildwood Boulevard East",
+   "at": [
+    39.02579,
+    -74.80717
+   ],
+   "m": 142,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "capemay",
+   "road": "Jackson Street",
+   "at": [
+    38.93304,
+    -74.92384
+   ],
+   "m": 17,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "clearwater",
+   "road": "South Ft Harrison Avenue",
+   "at": [
+    27.94733,
+    -82.79996
+   ],
+   "m": 410,
+   "mph": [
+    40,
+    99
+   ],
+   "sides": [
+    20,
+    30
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FDOT Maximum Speed Limit (TDA): 15010000 posted 40 mph",
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 15010000 posted 40 mph"
+   ]
+  },
+  {
+   "region": "clearwater",
+   "road": "Court Street",
+   "at": [
+    27.96079,
+    -82.78817
+   ],
+   "m": 10,
+   "mph": [
+    60
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "unreviewed",
+   "cite": [
+    "Mapillary: 2 posted 60 mph sign(s) detected"
+   ],
+   "note": "regions-25 review 2026-10-22: Mapillary 60 mph reading on a downtown street is probably a state-route shield (SR 60 / Alt 19), not a speed sign. Left red (stricter) until checked against a posted-limit source."
+  },
+  {
+   "region": "clearwater",
+   "road": "South Myrtle Avenue",
+   "at": [
+    27.95778,
+    -82.79584
+   ],
+   "m": 405,
+   "mph": [
+    60
+   ],
+   "sides": [
+    30,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "unreviewed",
+   "cite": [
+    "Mapillary: 3 posted 60 mph sign(s) detected"
+   ],
+   "note": "regions-25 review 2026-10-22: Mapillary 60 mph reading on a downtown street is probably a state-route shield (SR 60 / Alt 19), not a speed sign. Left red (stricter) until checked against a posted-limit source."
+  },
+  {
+   "region": "clearwater",
+   "road": "Court Street",
+   "at": [
+    27.96089,
+    -82.78832
+   ],
+   "m": 123,
+   "mph": [
+    60
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "unreviewed",
+   "cite": [
+    "Mapillary: 2 posted 60 mph sign(s) detected"
+   ],
+   "note": "regions-25 review 2026-10-22: Mapillary 60 mph reading on a downtown street is probably a state-route shield (SR 60 / Alt 19), not a speed sign. Left red (stricter) until checked against a posted-limit source."
+  },
+  {
+   "region": "clearwater",
+   "road": "Chestnut Street",
+   "at": [
+    27.9609,
+    -82.79553
+   ],
+   "m": 59,
+   "mph": [
+    60
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "unreviewed",
+   "cite": [
+    "Mapillary: 2 posted 60 mph sign(s) detected"
+   ],
+   "note": "regions-25 review 2026-10-22: Mapillary 60 mph reading on a downtown street is probably a state-route shield (SR 60 / Alt 19), not a speed sign. Left red (stricter) until checked against a posted-limit source."
+  },
+  {
+   "region": "clearwater",
+   "road": "Bayshore Boulevard",
+   "at": [
+    28.03508,
+    -82.78584
+   ],
+   "m": 717,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 3 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "clearwater",
+   "road": "Skinner Boulevard",
+   "at": [
+    28.01589,
+    -82.78414
+   ],
+   "m": 422,
+   "mph": [
+    40
+   ],
+   "sides": [
+    30,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FDOT Maximum Speed Limit (TDA): 15070001 posted 40 mph",
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "clearwater",
+   "road": "Broadway Boulevard",
+   "at": [
+    28.01772,
+    -82.78983
+   ],
+   "m": 48,
+   "mph": [
+    50
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "unreviewed",
+   "cite": [
+    "Mapillary: 2 posted 50 mph sign(s) detected"
+   ],
+   "note": "regions-25 review 2026-10-22: Mapillary 50 mph reading on a downtown street is probably a state-route shield (SR 60 / Alt 19), not a speed sign. Left red (stricter) until checked against a posted-limit source."
+  },
+  {
+   "region": "stpete",
+   "road": "75th Avenue",
+   "at": [
+    27.74345,
+    -82.74928
+   ],
+   "m": 58,
+   "mph": [
+    60
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "unreviewed",
+   "cite": [
+    "Mapillary: 2 posted 60 mph sign(s) detected"
+   ],
+   "note": "regions-25 review 2026-10-22: Mapillary 60 mph reading on a downtown street is probably a state-route shield (SR 60 / Alt 19), not a speed sign. Left red (stricter) until checked against a posted-limit source."
+  },
+  {
+   "region": "newport",
+   "road": "Marguerite Avenue",
+   "at": [
+    33.59644,
+    -117.87076
+   ],
+   "m": 65,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "newport",
+   "road": "Mesa View Drive",
+   "at": [
+    33.62837,
+    -117.85497
+   ],
+   "m": 132,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "newport",
+   "road": "Ford Road",
+   "at": [
+    33.62715,
+    -117.85551
+   ],
+   "m": 491,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "newport",
+   "road": "Ford Road",
+   "at": [
+    33.62692,
+    -117.85052
+   ],
+   "m": 478,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 45 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "newport",
+   "road": "Eastgate Drive",
+   "at": [
+    33.62097,
+    -117.85196
+   ],
+   "m": 30,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "pawleys",
+   "road": "South Causeway Road",
+   "at": [
+    33.42982,
+    -79.14556
+   ],
+   "m": 121,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "SCDOT Speed Limits: 22070026600E posted 45 mph"
+   ]
+  },
+  {
+   "region": "capesanblas",
+   "road": "Cecil G Costin Senior Boulevard",
+   "at": [
+    29.81708,
+    -85.28614
+   ],
+   "m": 260,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FDOT Maximum Speed Limit (TDA): 51020000 posted 45 mph"
+   ]
+  },
+  {
+   "region": "capesanblas",
+   "road": "SR 30A",
+   "at": [
+    29.74801,
+    -85.30303
+   ],
+   "m": 13,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FDOT Maximum Speed Limit (TDA): 51502000 posted 45 mph"
+   ]
+  },
+  {
+   "region": "delbeaches",
+   "road": "Lighthouse Road",
+   "at": [
+    38.45393,
+    -75.06766
+   ],
+   "m": 231,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 3 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "delbeaches",
+   "road": "Lighthouse Road",
+   "at": [
+    38.47183,
+    -75.11235
+   ],
+   "m": 127,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 4 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "delbeaches",
+   "road": "Rehoboth Avenue Extended",
+   "at": [
+    38.71266,
+    -75.10165
+   ],
+   "m": 168,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "nsb",
+   "road": "Canal Street",
+   "at": [
+    29.02306,
+    -80.92771
+   ],
+   "m": 30,
+   "mph": [
+    40
+   ],
+   "sides": [
+    30,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "nsb",
+   "road": "Dixie Freeway",
+   "at": [
+    29.0236,
+    -80.92633
+   ],
+   "m": 81,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 3 posted 40 mph sign(s) detected"
+   ]
   }
  ]
 }

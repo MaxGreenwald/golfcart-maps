@@ -1,0 +1,76 @@
+{
+ "slug": "new-smyrna-beach",
+ "region": "newsmyrnabeach",
+ "name": "New Smyrna Beach",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in New Smyrna Beach?",
+ "answer_short": "Street-legal LSVs yes, plain golf carts no on city streets. In New Smyrna Beach, LSVs may use roads posted 35 mph or less but not A1A/Atlantic Avenue or 3rd Avenue, which they may cross at intersections.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "No designated streets",
+  "speed_line": "n/a",
+  "notes": "F.S. 316.212"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not A1A/Atlantic Ave or 3rd Ave"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "FLHSMV low-speed vehicles",
+   "source_url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+  },
+  {
+   "topic": "Banned roads",
+   "rule": "No LSVs on A1A/Atlantic Ave or 3rd Ave; cross at intersections",
+   "citation": "Hometown News (NSB police)",
+   "source_url": "https://www.hometownnewsvolusia.com/news/golf-carts-are-not-for-all-roadways/article_0e592c76-c4c5-11ec-a74c-136b4cb9db2f.html"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "A1A / Atlantic Avenue",
+   "rule": "No LSVs; cross at intersections",
+   "crossings_ok": true
+  },
+  {
+   "name": "3rd Avenue",
+   "rule": "No LSVs; cross at intersections",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive an LSV on 3rd Avenue in New Smyrna Beach?",
+   "a": "No. Police say LSVs may only cross 3rd Avenue."
+  },
+  {
+   "q": "Can I drive a regular golf cart in New Smyrna Beach?",
+   "a": "Not on city streets; the city hasn't designated any for golf carts."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  29.026,
+  -80.927
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.flhsmv.gov/pdf/proc/tl/tl-63.pdf",
+  "https://www.hometownnewsvolusia.com/news/golf-carts-are-not-for-all-roadways/article_0e592c76-c4c5-11ec-a74c-136b4cb9db2f.html"
+ ]
+}

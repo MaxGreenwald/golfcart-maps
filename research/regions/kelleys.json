@@ -1,0 +1,28 @@
+{
+ "bans": [],
+ "unverified": [
+  "Lakeside is a gated private community with its own 15 mph rules. Marblehead allows inspected, titled and registered carts on streets posted 35 mph or less (village code page blocks automated reads; confirmed via search listing and village police page)."
+ ],
+ "sources": [
+  "Kelleys Island Police golf cart inspection https://kelleysisland.us/departments-2/kelleys-island-police-dept/",
+  "Village of Marblehead Code: under-speed and low-speed vehicles https://codelibrary.amlegal.com/codes/marblehead/latest/marblehead_oh/0-0-0-112451",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-22",
+  "result": "local rules recorded",
+  "sources": [
+   {
+    "label": "Kelleys Island Police golf cart inspection",
+    "url": "https://kelleysisland.us/departments-2/kelleys-island-police-dept/"
+   },
+   {
+    "label": "Village of Marblehead Code: under-speed and low-speed vehicles",
+    "url": "https://codelibrary.amlegal.com/codes/marblehead/latest/marblehead_oh/0-0-0-112451"
+   }
+  ],
+  "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban."
+ },
+ "status": "Added (regions-25-batch, 2026-10-22)"
+}

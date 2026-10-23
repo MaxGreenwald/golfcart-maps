@@ -1,0 +1,39 @@
+{
+ "bans": [
+  {
+   "names": "^Garden State Parkway$",
+   "url": "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm",
+   "label": "Garden State Parkway: limited-access toll road, posted well above 25 mph (no LSVs)"
+  }
+ ],
+ "unverified": [
+  "The region box includes mainland Cape May Court House roads; those follow the plain NJ 25 mph LSV rule."
+ ],
+ "sources": [
+  "Stone Harbor borough code https://ecode360.com/10814440",
+  "Avalon Ord. 799-2020 https://avalonboro.net/wp-content/uploads/2020/02/ORD-799-2020-TAXICABS-LOW-SPEED-VEHICLES-WITHOUT-EDITS.pdf",
+  "NJ MVC low-speed vehicles https://www.nj.gov/mvc/vehicletopics/lowspeed.htm",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-22",
+  "result": "local rules recorded",
+  "sources": [
+   {
+    "label": "Stone Harbor borough code",
+    "url": "https://ecode360.com/10814440"
+   },
+   {
+    "label": "Avalon Ord. 799-2020",
+    "url": "https://avalonboro.net/wp-content/uploads/2020/02/ORD-799-2020-TAXICABS-LOW-SPEED-VEHICLES-WITHOUT-EDITS.pdf"
+   },
+   {
+    "label": "NJ MVC low-speed vehicles",
+    "url": "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+   }
+  ],
+  "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban."
+ },
+ "status": "Added (regions-25-batch, 2026-10-22)"
+}

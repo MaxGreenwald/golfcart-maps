@@ -229,6 +229,471 @@
    }
   ]
  },
+ "bocagrande": {
+  "reports": [],
+  "conflicts": [],
+  "gap": []
+ },
+ "brunswick": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Causeway Drive",
+    "mi": 0.07,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Ocean Boulevard West",
+    "mi": 5.09,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "capemay": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Bayshore Road",
+    "mi": 6.45,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Avalon Boulevard",
+    "mi": 3.19,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Stone Harbor Boulevard",
+    "mi": 2.15,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Shore Road",
+    "mi": 1.69,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Court House South Dennis Road",
+    "mi": 1.61,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "New Jersey Avenue",
+    "mi": 1.11,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Stone Harbor Boulevard",
+    "mi": 0.69,
+    "mph": 45,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "North Main Street",
+    "mi": 0.52,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Shore Road",
+    "mi": 0.49,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Wildwood Boulevard",
+    "mi": 0.36,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Wildwood Boulevard",
+    "mi": 0.28,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Bayshore Road",
+    "mi": 0.24,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lafayette Street",
+    "mi": 0.24,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Stone Harbor Boulevard",
+    "mi": 0.19,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Wildwood Boulevard",
+    "mi": 0.18,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Shore Road",
+    "mi": 0.18,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Main Street",
+    "mi": 0.11,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lafayette Street",
+    "mi": 0.1,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Wildwood Boulevard",
+    "mi": 0.08,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Shore Road",
+    "mi": 0.07,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Bayshore Road",
+    "mi": 6.45,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Avalon Boulevard",
+    "mi": 3.19,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Stone Harbor Boulevard",
+    "mi": 2.15,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "Shore Road",
+    "mi": 1.69,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Court House South Dennis Road",
+    "mi": 1.61,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Ocean Drive",
+    "mi": 4.63,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "2nd Avenue",
+    "mi": 4.59,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Dune Drive",
+    "mi": 3.81,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Dune Drive",
+    "mi": 3.81,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Goshen Road",
+    "mi": 3.52,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Goshen Swainton Road",
+    "mi": 3.4,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Seashore Road",
+    "mi": 3.33,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Indian Trail Road",
+    "mi": 3.16,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "West Hand Avenue",
+    "mi": 3.01,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Dias Creek Road",
+    "mi": 2.88,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Shunpike Road",
+    "mi": 2.69,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Shunpike Road",
+    "mi": 2.65,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Landis Avenue",
+    "mi": 2.63,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Fulling Mill Road",
+    "mi": 2.46,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Breakwater Road",
+    "mi": 2.42,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Town Bank Road",
+    "mi": 2.4,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Ocean Drive",
+    "mi": 2.27,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Park Boulevard",
+    "mi": 2.18,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Pacific Avenue",
+    "mi": 2.17,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Fishing Creek Road",
+    "mi": 2.12,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Atlantic Avenue",
+    "mi": 2.07,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "South Wildwood Boulevard",
+    "mi": 2.0,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "3rd Avenue",
+    "mi": 1.87,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Ocean Drive",
+    "mi": 1.83,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Ocean Avenue",
+    "mi": 1.75,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Surf Avenue",
+    "mi": 1.71,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bayberry Road",
+    "mi": 1.69,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bayberry Drive",
+    "mi": 1.5,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "capesanblas": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "CR 386",
+    "mi": 1.07,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Cecil G Costin Senior Boulevard",
+    "mi": 0.5,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Cape San Blas Road",
+    "mi": 0.32,
+    "mph": 15,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "US 98",
+    "mi": 0.24,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "SR 30A",
+    "mi": 0.01,
+    "mph": 45,
+    "kind": "sourced_red"
+   }
+  ],
+  "gap": []
+ },
+ "carolinabeach": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "South Lake Park Boulevard",
+    "mi": 0.86,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Fort Fisher Boulevard South",
+    "mi": 0.23,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "River Road",
+    "mi": 3.53,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Dow Road South",
+    "mi": 2.57,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Canal Drive",
+    "mi": 1.85,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Harper Avenue",
+    "mi": 1.31,
+    "mph": 35,
+    "conflict": false
+   }
+  ]
+ },
+ "chincoteague": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Beach Road",
+    "mi": 0.08,
+    "mph": 15,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Ridge Road",
+    "mi": 1.63,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "East Side Road",
+    "mi": 1.26,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Deep Hole Road",
+    "mi": 1.12,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Willow Street",
+    "mi": 0.92,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
  "chs": {
   "reports": [],
   "conflicts": [
@@ -301,6 +766,132 @@
     "conflict": false
    }
   ]
+ },
+ "clearwater": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "South Highland Avenue",
+    "mi": 0.48,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Court Street",
+    "mi": 0.37,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Skinner Boulevard",
+    "mi": 0.37,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Drew Street",
+    "mi": 0.25,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Causeway Boulevard",
+    "mi": 0.23,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Tampa Road",
+    "mi": 0.19,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Ft Harrison Avenue",
+    "mi": 0.19,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Highland Avenue",
+    "mi": 0.17,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Milwaukee Avenue",
+    "mi": 0.16,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Drew Street",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Curlew Road",
+    "mi": 0.13,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Gulf to Bay Boulevard",
+    "mi": 0.12,
+    "mph": 40,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "Gulf to Bay Boulevard",
+    "mi": 0.12,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "North Myrtle Avenue",
+    "mi": 0.12,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Curlew Road",
+    "mi": 0.08,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Ft Harrison Avenue",
+    "mi": 0.07,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Skinner Boulevard",
+    "mi": 0.05,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Court Street",
+    "mi": 0.02,
+    "mph": 60,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "Skinner Boulevard",
+    "mi": 0.02,
+    "mph": 40,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "South Missouri Avenue",
+    "mi": 0.01,
+    "mph": 40,
+    "kind": "sourced_red"
+   }
+  ],
+  "gap": []
  },
  "coachella": {
   "reports": [],
@@ -921,6 +1512,235 @@
    }
   ]
  },
+ "crystalbeach": {
+  "reports": [],
+  "conflicts": [],
+  "gap": []
+ },
+ "dauphin": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Bienville Boulevard",
+    "mi": 0.39,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Gordon Persons Bridge",
+    "mi": 3.37,
+    "mph": 55,
+    "conflict": false
+   }
+  ]
+ },
+ "delbeaches": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Old Mill Road",
+    "mi": 2.22,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lighthouse Road",
+    "mi": 1.47,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Central Avenue",
+    "mi": 1.31,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Old Mill Bridge Road",
+    "mi": 0.9,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lighthouse Road",
+    "mi": 0.54,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Central Avenue",
+    "mi": 0.51,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Holland Glade Road",
+    "mi": 0.38,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "State Road",
+    "mi": 0.32,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Millers Neck Road",
+    "mi": 0.3,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Central Avenue",
+    "mi": 0.27,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lighthouse Road",
+    "mi": 0.23,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Rehoboth Avenue Extended",
+    "mi": 0.13,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "State Road",
+    "mi": 0.12,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Lighthouse Road",
+    "mi": 0.12,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Bayard Avenue",
+    "mi": 0.12,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Rehoboth Avenue Extended",
+    "mi": 0.11,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Rehoboth Avenue Extended",
+    "mi": 0.1,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Old Mill Road",
+    "mi": 2.22,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Lighthouse Road",
+    "mi": 1.47,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "Central Avenue",
+    "mi": 1.31,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Double Bridges Road",
+    "mi": 2.34,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Cedar Neck Road",
+    "mi": 1.96,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Club House Road",
+    "mi": 1.79,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Parker House Road",
+    "mi": 1.69,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Long Neck Road",
+    "mi": 1.63,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Muddy Neck Road",
+    "mi": 1.5,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Coastal Highway",
+    "mi": 1.26,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Country Club Road",
+    "mi": 1.19,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Camp Barnes Road",
+    "mi": 1.12,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Double Bridges Road",
+    "mi": 1.09,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Windmill Drive",
+    "mi": 1.05,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Railway Road",
+    "mi": 0.93,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Kent Avenue",
+    "mi": 0.91,
+    "mph": 35,
+    "conflict": false
+   }
+  ]
+ },
  "destin": {
   "reports": [],
   "conflicts": [
@@ -975,6 +1795,67 @@
     "conflict": false
    }
   ]
+ },
+ "edisto": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Lybrand Street",
+    "mi": 0.21,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Docksite Road",
+    "mi": 0.06,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Cypress Bottom Road",
+    "mi": 2.5,
+    "mph": 50,
+    "conflict": false
+   }
+  ]
+ },
+ "emeraldisle": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "East Fort Macon Road",
+    "mi": 1.06,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Coast Guard Road",
+    "mi": 0.26,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Emerald Drive",
+    "mi": 0.1,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
+ },
+ "fmb": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Estero Boulevard",
+    "mi": 0.31,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
  },
  "galveston": {
   "reports": [],
@@ -1532,6 +2413,37 @@
   ],
   "gap": []
  },
+ "kelleys": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "East Main Street",
+    "mi": 0.47,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "East Harbor Road",
+    "mi": 0.13,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Main Street",
+    "mi": 0.09,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "East Bayshore Road",
+    "mi": 2.38,
+    "mph": 45,
+    "conflict": false
+   }
+  ]
+ },
  "keywest": {
   "reports": [],
   "conflicts": [
@@ -1607,6 +2519,72 @@
     "name": "Simonton Street",
     "mi": 1.08,
     "mph": 20,
+    "conflict": false
+   }
+  ]
+ },
+ "lbi": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Long Beach Boulevard",
+    "mi": 8.5,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Long Beach Boulevard",
+    "mi": 4.45,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Beach Avenue",
+    "mi": 2.17,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bayview Avenue",
+    "mi": 1.5,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Long Beach Boulevard",
+    "mi": 1.49,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "North Bay Avenue",
+    "mi": 1.41,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Central Avenue",
+    "mi": 1.31,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Central Avenue",
+    "mi": 1.25,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "North Long Beach Boulevard",
+    "mi": 1.21,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "South Long Beach Boulevard",
+    "mi": 1.21,
+    "mph": 99,
     "conflict": false
    }
   ]
@@ -2717,6 +3695,487 @@
    }
   ]
  },
+ "newport": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Dover Drive",
+    "mi": 2.03,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Jamboree Road",
+    "mi": 1.59,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Irvine Avenue",
+    "mi": 1.55,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "San Miguel Drive",
+    "mi": 0.84,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "East 17th Street",
+    "mi": 0.68,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ford Road",
+    "mi": 0.61,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Balboa Boulevard",
+    "mi": 0.49,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Jamboree Road",
+    "mi": 0.48,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "San Miguel Drive",
+    "mi": 0.44,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Cliff Drive",
+    "mi": 0.44,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "San Miguel Drive",
+    "mi": 0.34,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Newport Center Drive",
+    "mi": 0.28,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Irvine Avenue",
+    "mi": 0.26,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "San Joaquin Hills Road",
+    "mi": 0.25,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Riverside Avenue",
+    "mi": 0.23,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "San Miguel Drive",
+    "mi": 0.17,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "San Miguel Drive",
+    "mi": 0.16,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Superior Avenue",
+    "mi": 0.15,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Newport Center Drive",
+    "mi": 0.14,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Newport Boulevard",
+    "mi": 0.13,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "MacArthur Boulevard",
+    "mi": 0.13,
+    "mph": 60,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "East 17th Street",
+    "mi": 0.1,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Superior Avenue",
+    "mi": 0.09,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "MacArthur Boulevard",
+    "mi": 0.09,
+    "mph": 60,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "San Joaquin Hills Road",
+    "mi": 0.09,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Newport Boulevard",
+    "mi": 0.08,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ford Road",
+    "mi": 0.07,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Balboa Boulevard",
+    "mi": 0.07,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Dover Drive",
+    "mi": 2.03,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Jamboree Road",
+    "mi": 1.59,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Irvine Avenue",
+    "mi": 1.55,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "San Miguel Drive",
+    "mi": 0.84,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "East 17th Street",
+    "mi": 0.68,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Ford Road",
+    "mi": 0.61,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "West Balboa Boulevard",
+    "mi": 0.49,
+    "mph": 30,
+    "conflict": true
+   },
+   {
+    "name": "Jamboree Road",
+    "mi": 0.48,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Tustin Avenue",
+    "mi": 2.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Santa Ana Avenue",
+    "mi": 1.96,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Santiago Drive",
+    "mi": 1.6,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bayside Drive",
+    "mi": 1.57,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Avocado Avenue",
+    "mi": 1.43,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Newport Hills Drive East",
+    "mi": 1.4,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "East 16th Street",
+    "mi": 1.37,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "San Joaquin Hills Road",
+    "mi": 1.19,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "MacArthur Boulevard",
+    "mi": 1.14,
+    "mph": 60,
+    "conflict": false
+   },
+   {
+    "name": "Clay Street",
+    "mi": 1.05,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "San Joaquin Hills Road",
+    "mi": 1.04,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "San Joaquin Hills Road",
+    "mi": 1.03,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "East Balboa Boulevard",
+    "mi": 1.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Via Lido Soud",
+    "mi": 0.99,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Newport Hills Drive West",
+    "mi": 0.9,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Via Lido Nord",
+    "mi": 0.89,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Ford Road",
+    "mi": 0.87,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "MacArthur Boulevard",
+    "mi": 0.84,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Newport Center Drive East",
+    "mi": 0.82,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Ocean Boulevard",
+    "mi": 0.82,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "San Joaquin Hills Road",
+    "mi": 0.79,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "San Joaquin Hills Road",
+    "mi": 0.78,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "East 19th Street",
+    "mi": 0.76,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Bonita Canyon Drive",
+    "mi": 0.76,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Newport Center Drive East",
+    "mi": 0.73,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "West 16th Street",
+    "mi": 0.73,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Mariners Drive",
+    "mi": 0.72,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Balboa Boulevard",
+    "mi": 0.71,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Marguerite Avenue",
+    "mi": 0.67,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Newport Boulevard",
+    "mi": 0.62,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Jamboree Road",
+    "mi": 0.61,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "West Bay Avenue",
+    "mi": 0.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Center Drive",
+    "mi": 0.59,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Back Bay Drive",
+    "mi": 0.58,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "MacArthur Boulevard",
+    "mi": 0.57,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Westminster Avenue",
+    "mi": 0.53,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Harbor View Drive",
+    "mi": 0.52,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Santa Barbara Drive",
+    "mi": 0.52,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Newport Center Drive West",
+    "mi": 0.5,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "San Joaquin Hills Road",
+    "mi": 0.5,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Crown Drive",
+    "mi": 0.5,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Newport Center Drive West",
+    "mi": 0.49,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Placentia Avenue",
+    "mi": 0.47,
+    "mph": 40,
+    "conflict": false
+   }
+  ]
+ },
  "nocatee": {
   "reports": [],
   "conflicts": [
@@ -2728,6 +4187,127 @@
    }
   ],
   "gap": []
+ },
+ "nsb": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Old Mission Road",
+    "mi": 3.49,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Magnolia Street",
+    "mi": 1.53,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ridgewood Avenue",
+    "mi": 0.41,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Indian River Boulevard",
+    "mi": 0.37,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "West Park Avenue",
+    "mi": 0.33,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Washington Street",
+    "mi": 0.26,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Indian River Boulevard",
+    "mi": 0.18,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Dixie Freeway",
+    "mi": 0.06,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.06,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Canal Street",
+    "mi": 0.05,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Magnolia Street",
+    "mi": 0.05,
+    "mph": 40,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "Dixie Freeway",
+    "mi": 0.05,
+    "mph": 40,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.03,
+    "mph": 50,
+    "kind": "sourced_red"
+   },
+   {
+    "name": "(unnamed)",
+    "mi": 0.0,
+    "mph": 50,
+    "kind": "sourced_red"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Old Mission Road",
+    "mi": 3.49,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Magnolia Street",
+    "mi": 1.53,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "10th Street",
+    "mi": 2.13,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Peninsula Avenue",
+    "mi": 1.71,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Dixie Freeway",
+    "mi": 1.67,
+    "mph": 55,
+    "conflict": false
+   }
+  ]
  },
  "obx": {
   "reports": [],
@@ -2764,6 +4344,37 @@
    }
   ],
   "gap": []
+ },
+ "ocnj": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "East 55th Street",
+    "mi": 0.11,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Asbury Avenue",
+    "mi": 6.27,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Wesley Avenue",
+    "mi": 2.97,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Central Avenue",
+    "mi": 2.23,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
  },
  "ocoast": {
   "reports": [],
@@ -4283,6 +5894,98 @@
   "conflicts": [],
   "gap": []
  },
+ "padre": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "South Padre Island Drive",
+    "mi": 0.08,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Whitecap Boulevard",
+    "mi": 2.8,
+    "mph": 30,
+    "conflict": false
+   }
+  ]
+ },
+ "pawleys": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Kings River Road",
+    "mi": 1.61,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Causeway Road",
+    "mi": 0.9,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Kings River Road",
+    "mi": 0.67,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "US 17 Business",
+    "mi": 0.16,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Causeway Road",
+    "mi": 0.02,
+    "mph": 45,
+    "kind": "sourced_red"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Kings River Road",
+    "mi": 1.61,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "South Waccamaw Drive",
+    "mi": 2.66,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Waverly Road",
+    "mi": 1.88,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Willbrook Boulevard",
+    "mi": 1.72,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Martin Luther King Road",
+    "mi": 1.49,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Blue Stem Drive",
+    "mi": 1.28,
+    "mph": 30,
+    "conflict": false
+   }
+  ]
+ },
  "pcb": {
   "reports": [],
   "conflicts": [
@@ -4349,6 +6052,18 @@
    {
     "name": "Arnold Road",
     "mi": 0.07,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
+ },
+ "pensacola": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "J Earle Bowden Way",
+    "mi": 0.38,
     "mph": 35,
     "kind": "neighbour_disagrees"
    }
@@ -4590,6 +6305,30 @@
     "conflict": false
    }
   ]
+ },
+ "sanibel": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Casa Ybel Road",
+    "mi": 0.69,
+    "mph": 30,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Periwinkle Way",
+    "mi": 0.34,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Periwinkle Way",
+    "mi": 0.22,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
  },
  "sd": {
   "reports": [],
@@ -7585,6 +9324,36 @@
   ],
   "gap": []
  },
+ "stgeorge": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "SR 300",
+    "mi": 0.11,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
+ },
+ "stpete": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Gulf Boulevard",
+    "mi": 1.03,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Pinellas Bayway",
+    "mi": 0.54,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
+ },
  "suncity": {
   "reports": [],
   "conflicts": [
@@ -8309,6 +10078,37 @@
     "name": "30th Street Northeast",
     "mi": 2.35,
     "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "topsail": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Island Drive",
+    "mi": 5.85,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "South Topsail Drive",
+    "mi": 0.12,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Island Drive",
+    "mi": 5.85,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "North New River Drive",
+    "mi": 2.39,
+    "mph": 35,
     "conflict": false
    }
   ]

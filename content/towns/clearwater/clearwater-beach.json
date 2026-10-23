@@ -1,0 +1,74 @@
+{
+ "slug": "clearwater-beach",
+ "region": "clearwater",
+ "name": "Clearwater Beach",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Clearwater Beach?",
+ "answer_short": "Street-legal LSVs yes; plain golf carts only on designated streets. Dunedin has designated golf cart streets on its official map. LSVs may use roads posted 35 mph or less in Clearwater Beach.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated streets only",
+  "speed_line": "n/a",
+  "notes": "Dunedin's golf cart map"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not on causeways posted higher"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "FLHSMV low-speed vehicles",
+   "source_url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+  },
+  {
+   "topic": "Dunedin",
+   "rule": "Golf carts on the city's designated streets",
+   "citation": "City of Dunedin golf cart map",
+   "source_url": "https://www.dunedingov.com/files/assets/city/v/1/live-work-play/documents/golf-cart-map.pdf"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Memorial Causeway and Gulf to Bay Blvd",
+   "rule": "Posted over 35 mph: no LSVs",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive a golf cart in Dunedin?",
+   "a": "Yes, on the streets shown on the city's golf cart map."
+  },
+  {
+   "q": "Can I drive a golf cart on Clearwater Beach?",
+   "a": "Only on roads the city designates for carts. Street-legal LSVs may use roads posted 35 mph or less."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "dunedin"
+ ],
+ "map_center": [
+  27.978,
+  -82.827
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://pinellas.gov/golf-cart-communities/",
+  "https://www.dunedingov.com/files/assets/city/v/1/live-work-play/documents/golf-cart-map.pdf",
+  "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+ ]
+}

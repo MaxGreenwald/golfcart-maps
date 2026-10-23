@@ -1,0 +1,176 @@
+{
+ "poly": [
+  [
+   -74.6559,
+   39.22634
+  ],
+  [
+   -74.65486,
+   39.22852
+  ],
+  [
+   -74.64884,
+   39.22975
+  ],
+  [
+   -74.64759,
+   39.23317
+  ],
+  [
+   -74.64897,
+   39.2378
+  ],
+  [
+   -74.64758,
+   39.24051
+  ],
+  [
+   -74.64367,
+   39.2412
+  ],
+  [
+   -74.63881,
+   39.24444
+  ],
+  [
+   -74.63157,
+   39.24506
+  ],
+  [
+   -74.62847,
+   39.2478
+  ],
+  [
+   -74.6279,
+   39.2495
+  ],
+  [
+   -74.62913,
+   39.25218
+  ],
+  [
+   -74.62723,
+   39.2552
+  ],
+  [
+   -74.62764,
+   39.25912
+  ],
+  [
+   -74.60905,
+   39.28638
+  ],
+  [
+   -74.59932,
+   39.30605
+  ],
+  [
+   -74.59221,
+   39.31024
+  ],
+  [
+   -74.58735,
+   39.31103
+  ],
+  [
+   -74.5832,
+   39.30973
+  ],
+  [
+   -74.5684,
+   39.30021
+  ],
+  [
+   -74.55875,
+   39.29956
+  ],
+  [
+   -74.55307,
+   39.30135
+  ],
+  [
+   -74.55005,
+   39.29978
+  ],
+  [
+   -74.54867,
+   39.29323
+  ],
+  [
+   -74.54919,
+   39.28716
+  ],
+  [
+   -74.55603,
+   39.27681
+  ],
+  [
+   -74.5634,
+   39.27187
+  ],
+  [
+   -74.58059,
+   39.26429
+  ],
+  [
+   -74.5978,
+   39.25192
+  ],
+  [
+   -74.61944,
+   39.23128
+  ],
+  [
+   -74.64097,
+   39.20818
+  ],
+  [
+   -74.64372,
+   39.20714
+  ],
+  [
+   -74.64867,
+   39.21078
+  ],
+  [
+   -74.64893,
+   39.21515
+  ],
+  [
+   -74.65511,
+   39.21616
+  ]
+ ],
+ "bans": [
+  {
+   "names": "^(Bay Avenue|West Avenue)$|^NJ 52$|^Roosevelt Boulevard$|^CR 623$",
+   "url": "https://www.ocnj.us/media/Police/LSV%27s.pdf",
+   "label": "Ocean City Police LSV facts (2021): no LSVs on roads above 25 mph such as Bay Ave, West Ave, Route 52, the 34th St bridge and Ocean Dr south of South Inlet Dr (cross at intersections only)"
+  }
+ ],
+ "unverified": [
+  "Ocean Drive south of South Inlet Drive is in the police list; it's part of Bay Ave/CR 619 here and is covered by the Bay Ave ban."
+ ],
+ "sources": [
+  "Ocean City Police LSV facts https://www.ocnj.us/media/Police/LSV%27s.pdf",
+  "NJ MVC low-speed vehicles https://www.nj.gov/mvc/vehicletopics/lowspeed.htm",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-22",
+  "result": "local rules recorded",
+  "sources": [
+   {
+    "label": "Ocean City Police LSV facts",
+    "url": "https://www.ocnj.us/media/Police/LSV%27s.pdf"
+   },
+   {
+    "label": "NJ MVC low-speed vehicles",
+    "url": "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+   }
+  ],
+  "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban."
+ },
+ "status": "Added (regions-25-batch, 2026-10-22)"
+}

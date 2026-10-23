@@ -1,0 +1,72 @@
+{
+ "slug": "murrells-inlet",
+ "region": "pawleysisland",
+ "name": "Murrells Inlet",
+ "state": "SC",
+ "question_title": "Can you drive a golf cart in Murrells Inlet?",
+ "answer_short": "Golf carts yes; LSVs depend on where you are. The Town of Pawleys Island requires SC DMV and town permits for golf carts and bans LSVs on all town roads. Around Litchfield and Murrells Inlet, SC golf cart law applies and LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Secondary roads posted 35 mph or less; town permit on the island",
+  "speed_line": "35 mph",
+  "notes": "Daylight; within 4 mi (2 mi for the town permit)"
+ },
+ "lsv": {
+  "allowed": "limited",
+  "roads": "Not on Pawleys Island town roads",
+  "speed_line": "35 mph",
+  "notes": "Elsewhere roads posted 35 mph or less"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts (SC law)",
+   "rule": "Permitted, insured golf carts on secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address",
+   "citation": "S.C. golf cart law (SCDPS)",
+   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+  },
+  {
+   "topic": "Pawleys Island",
+   "rule": "Golf carts need SC DMV and town stickers; LSVs prohibited on all town roads",
+   "citation": "Town of Pawleys Island",
+   "source_url": "https://www.townofpawleysisland.com/golf-cart-restrictions/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Pawleys Island town roads",
+   "rule": "No LSVs",
+   "crossings_ok": false
+  },
+  {
+   "name": "US 17 (Ocean Highway)",
+   "rule": "No golf carts or LSVs",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive an LSV on Pawleys Island?",
+   "a": "No. The town prohibits low-speed vehicles on all primary and secondary roads within town limits."
+  },
+  {
+   "q": "Can I drive a golf cart on Pawleys Island?",
+   "a": "Yes, with SC DMV and Town of Pawleys Island stickers, in daylight."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "pawleys-island"
+ ],
+ "map_center": [
+  33.54,
+  -79.045
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.gcsheriff.org/blog/21210525-gcso-know-the-rules-for-golf-carts-and-the-beach/",
+  "https://www.townofpawleysisland.com/golf-cart-restrictions/"
+ ]
+}

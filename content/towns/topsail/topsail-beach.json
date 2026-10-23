@@ -1,0 +1,73 @@
+{
+ "slug": "topsail-beach",
+ "region": "topsail",
+ "name": "Topsail Beach",
+ "state": "NC",
+ "question_title": "Can you drive a golf cart in Topsail Beach?",
+ "answer_short": "Street-legal LSVs yes; golf carts depend on the town. In Topsail Beach, LSVs may use roads posted 35 mph or less. In Topsail Beach, LSVs may only cross North and South Anderson Boulevard.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Town permit rules vary",
+  "speed_line": "25 mph",
+  "notes": "Check the town before you drive"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Topsail Beach: cross Anderson Blvd only"
+ },
+ "rules": [
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; may cross faster roads at intersections",
+   "citation": "N.C.G.S. 20-121.1",
+   "source_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-121.1.html"
+  },
+  {
+   "topic": "Anderson Boulevard",
+   "rule": "LSVs only cross North or South Anderson Blvd, except the 25 mph business district on S. Anderson",
+   "citation": "Town of Topsail Beach",
+   "source_url": "https://topsailbeachnc.gov/Departments/Police/Golf-Cart-Low-Speed-Vehicles"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "North and South Anderson Blvd (Topsail Beach)",
+   "rule": "Cross only (except the 25 mph business district)",
+   "crossings_ok": true
+  },
+  {
+   "name": "NC 210 where posted over 35 mph",
+   "rule": "No LSVs",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive an LSV on Anderson Boulevard?",
+   "a": "In Topsail Beach, only to cross it, except the 25 mph business-district stretch of South Anderson."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Topsail Beach?",
+   "a": "Golf carts are allowed only where the town's ordinance permits them. Check with the town police first."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "surf-city-nc",
+  "north-topsail-beach"
+ ],
+ "map_center": [
+  34.3654,
+  -77.6305
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://topsailbeachnc.gov/Departments/Police/Golf-Cart-Low-Speed-Vehicles",
+  "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-121.1.html"
+ ]
+}

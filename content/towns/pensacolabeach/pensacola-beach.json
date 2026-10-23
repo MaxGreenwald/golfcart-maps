@@ -1,0 +1,92 @@
+{
+ "slug": "pensacola-beach",
+ "region": "pensacolabeach",
+ "name": "Pensacola Beach",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Pensacola Beach?",
+ "answer_short": "Street-legal LSVs yes; plain golf carts only on designated roads. LSVs may use roads posted 35 mph or less in Pensacola Beach; on Pensacola Beach that includes Via de Luna and Fort Pickens Road. Golf carts can't cross the Bob Sikes Bridge or the Navarre Bridge.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated roads only",
+  "speed_line": "n/a",
+  "notes": "No bridges"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "FLHSMV low-speed vehicles",
+   "source_url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+  },
+  {
+   "topic": "Pensacola Beach roads",
+   "rule": "Registered LSVs may use Pensacola Beach roads signed 35 mph or less",
+   "citation": "Pensacola News Journal (Escambia County traffic)",
+   "source_url": "https://www.pnj.com/story/news/2014/07/29/street-legal-insured-golf-carts-ok-pensacola-beach/13321889/"
+  },
+  {
+   "topic": "Bob Sikes Bridge",
+   "rule": "Golf carts aren't allowed on the Bob Sikes Bridge",
+   "citation": "City of Gulf Breeze",
+   "source_url": "https://cityofgulfbreeze.us/golf-carts-and-the-loop/"
+  },
+  {
+   "topic": "Navarre Beach",
+   "rule": "Golf carts on Navarre Beach county roads, not the Navarre Bridge",
+   "citation": "Santa Rosa County golf cart ordinance",
+   "source_url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/12483/400831/pdf"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Bob Sikes Bridge",
+   "rule": "No golf carts",
+   "crossings_ok": false
+  },
+  {
+   "name": "Navarre Bridge",
+   "rule": "No golf carts",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive an LSV on Via de Luna?",
+   "a": "Yes. Via de Luna is posted 35 mph or less, so registered LSVs may use it."
+  },
+  {
+   "q": "Can I take a golf cart over the bridge to Pensacola?",
+   "a": "No. Golf carts aren't allowed on the Bob Sikes Bridge."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "navarre-beach"
+ ],
+ "map_center": [
+  30.333,
+  -87.142
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://cityofgulfbreeze.us/golf-carts-and-the-loop/",
+  "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/12483/400831/pdf",
+  "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
+  "https://www.pnj.com/story/news/2014/07/29/street-legal-insured-golf-carts-ok-pensacola-beach/13321889/"
+ ]
+}
