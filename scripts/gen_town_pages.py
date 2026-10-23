@@ -186,7 +186,7 @@ P["southbay"] = dict(
           ("Pacific Coast Highway (SR-1)","State highway: golf carts may only cross. LSVs only where it's posted 35 mph or less",True)],
   faq=[("Can I drive a golf cart on Pacific Coast Highway in {n}?","No. PCH is a state highway posted over 25 mph, so a plain golf cart may only cross it at intersections. A street-legal LSV may use stretches posted 35 mph or less."),
        ("Can I drive an LSV on the Strand?","No. The Strand in Manhattan Beach and Hermosa Beach is a beach walkway closed to motor vehicles under each city's code, so it isn't drawn on the map.")],
-  sources=[CA+"21260.", CA+"21716.", SHC, MB1428, HB1220, HB1040])
+  sources=[CA+"21260.", CA+"21716.", SHC, MB1428, HB1220, HB1040], day="2026-10-22")
 # (region, slug, name, state, lat, lng, extra faq)
 T = [
  ("30a","miramar-beach","Miramar Beach","FL",30.3790,-86.3700),("30a","sandestin","Sandestin","FL",30.3830,-86.3270),
@@ -253,7 +253,7 @@ def main():
              "rules": [{"topic": a, "rule": b, "citation": c, "source_url": d} for a, b, c, d in p["rules"]],
              "banned_roads": [{"name": a, "rule": b, "crossings_ok": c} for a, b, c in p["banned"]],
              "faq": faq, "rental_shops": [], "nearby": nearby(i), "map_center": [lat, lng], "zoom": 15,
-             "published": DAY, "last_checked": DAY, "checked_by": "Golf Cart Maps", "sources": p["sources"]}
+             "published": p.get("day", DAY), "last_checked": p.get("day", DAY), "checked_by": "Golf Cart Maps", "sources": p["sources"]}
         d = os.path.join(out, reg); os.makedirs(d, exist_ok=True)
         fp = os.path.join(d, slug + ".json")   # keep hand-added local_resources (followed links) on regenerate
         if os.path.exists(fp) and json.load(open(fp)).get("local_resources"):
