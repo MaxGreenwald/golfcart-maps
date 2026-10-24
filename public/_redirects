@@ -65,3 +65,12 @@
 /map/ /map 301
 /map/:slug /map 200
 /map/:slug/ /map 200
+/partner /partner/index.html 200
+/partner/ /partner/index.html 200
+/partner/* /partner/index.html 200
+/p /p/index.html 200
+/p/ /p/index.html 200
+/p/:slug /p/index.html 200
+/p/:slug/ /p/index.html 200
+/p/:slug/go /p/index.html 200
+/p/:slug/go/ /p/index.html 200
