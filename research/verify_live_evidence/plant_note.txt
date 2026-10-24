@@ -1,0 +1,1 @@
+Plant: mkLine forces every GCMRule Avoid segment to draw/popup as OK (c=0). Module cls() unchanged. Local dist only; not deployed.
