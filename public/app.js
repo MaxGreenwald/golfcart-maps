@@ -7,6 +7,16 @@ function trackRoute(ok,mi,reason){const k=(to&&to.ll?to.ll.lat.toFixed(4)+','+to
 const map=L.map('map',{preferCanvas:true,zoomControl:false,attributionControl:true}).setView([32.8565,-117.2555],15);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
 const renderer=L.canvas({tolerance:8});
+// Active route is NOT on the road canvas. refresh() appends road tiles after the
+// route on pan/zoom (including focusStart's flyTo), and that canvas paints in
+// insert order, so green legal strokes were covering the blue line. This pane
+// sits above the overlay (400) and below markers (600). pointer-events none lets
+// road taps through; a risky stretch's interactive stroke opts back in for its tooltip.
+map.createPane('route');
+const routePane=map.getPane('route');
+routePane.style.zIndex=450;
+routePane.style.pointerEvents='none';
+const routeR=L.svg({pane:'route'});
 const $=id=>document.getElementById(id);
 const RISKY_MAX=152.4; // 500 ft
 let REGIONS=[],RULES={},REG=null,MODE=(()=>{const q=new URLSearchParams(location.search).get('veh');if(GCMRule.VEHICLES.includes(q))return q;try{const v=localStorage.getItem('gcm-veh');if(GCMRule.VEHICLES.includes(v))return v}catch(_){}return GCMRule.DEFAULT_VEH})(),RULE={max_posted:35,cross:true},BASE='data/sd/';
@@ -112,10 +122,16 @@ let routing=false;async function route(){$('title').innerHTML='<span class="spin
  await new Promise(r=>setTimeout(r,0));let parts=null;if(a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
  if(!parts){trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
  const r=summarize(parts);trackRoute(true,r.dist/1609.34);routeG=L.layerGroup().addTo(map);
- const all=[];r.legs.forEach(l=>all.push(...l.p));
- L.polyline(all.map(p=>[p[1],p[0]]),{color:'#fff',weight:10,opacity:.9,renderer,interactive:false}).addTo(routeG);
- L.polyline(all.map(p=>[p[1],p[0]]),{color:'#1d6fe0',weight:6,renderer,interactive:false}).addTo(routeG);
- r.stretches.forEach(s=>L.polyline(s.p.map(p=>[p[1],p[0]]),{color:'#ffc400',weight:8,renderer}).addTo(routeG).bindTooltip(`Risky: ${ft(s.len)} on ${s.name}`));
+ const all=[];r.legs.forEach(l=>all.push(...l.p));const ll=all.map(p=>[p[1],p[0]]);
+ // Opaque casing wider than legal roads (weight ~3.2) so the path stays obvious
+ // on a phone, especially over bright green. Blue matches the legend swatch.
+ // Outer dark edge, then white, then the solid stroke. Risky keeps that casing
+ // and repaints the stroke yellow at the same width.
+ const rs={renderer:routeR,opacity:1,lineCap:'round',lineJoin:'round'};
+ L.polyline(ll,{...rs,color:'#0b3a78',weight:22,interactive:false}).addTo(routeG);
+ L.polyline(ll,{...rs,color:'#fff',weight:18,interactive:false}).addTo(routeG);
+ L.polyline(ll,{...rs,color:'#1d6fe0',weight:12,interactive:false}).addTo(routeG);
+ r.stretches.forEach(s=>L.polyline(s.p.map(p=>[p[1],p[0]]),{...rs,color:'#ffc400',weight:12}).addTo(routeG).bindTooltip(`Risky: ${ft(s.len)} on ${s.name}`));
  const min=Math.max(1,Math.round(r.dist/1609.34/22*60));
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
  $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:(RULE.designated_only?'All on cart paths & designated roads 🌴':(r.legs.some(l=>l.u)?`Mostly ≤${RULE.max_posted} mph roads; <b>❓ ${mi(r.legs.filter(l=>l.u).reduce((a,l)=>a+l.s._len,0))} speed unknown — check signs</b>`:`All on roads ≤${RULE.max_posted} mph 🌴`))+ruleNotes()+(da>150||db>150?' · snapped to nearest legal road':'');
