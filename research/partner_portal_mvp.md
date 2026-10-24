@@ -92,6 +92,15 @@ python3 scripts/serve_dist.py   # or any static server on dist/
 python3 -m unittest tests.test_partner_portal tests.test_region_urls tests.test_no_beta -q
 ```
 
+## Place picking (stops & affiliates)
+
+Two ways to set a location (lat/lon stored under the hood; humans never type coordinates):
+
+1. **Search autocomplete** — Photon (Komoot) biased to the shop’s city bbox, with Nominatim/OpenStreetMap fallback. Same pattern as the main map search in `public/app.js`. No API key.
+2. **Drop pin** — small Leaflet map; click or drag a pin and type a **custom name** for unofficial spots (e.g. “meet by the blue umbrellas”).
+
+Optional later: set a Google Places key if you want that provider; preview defaults to Photon/Nominatim so Max can try without keys.
+
 ## Honest status
 
 | Piece | Status |

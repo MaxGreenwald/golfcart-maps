@@ -26,9 +26,23 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 .pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#e3f6f8;color:var(--deep);font-size:12px}
 .pill.off{background:#fee2e2;color:var(--bad)}
 .stops{border:1px dashed var(--line);border-radius:12px;padding:10px;margin-top:8px}
-.stop{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:6px;margin-bottom:6px}
+.stop{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.stop:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+.place-wrap{position:relative;flex:1;min-width:0}
+.place-wrap input[data-k=q]{width:100%}
+.sugg{display:none;position:absolute;left:0;right:0;top:100%;z-index:40;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px #0b3c5020;max-height:220px;overflow:auto;margin-top:4px}
+.sugg div{padding:10px 12px;cursor:pointer;border-bottom:1px solid #eef6f8;font-size:13px}
+.sugg div:hover,.sugg div.active{background:#e3f6f8}
+.sugg small{display:block;opacity:.7;font-weight:600;margin-top:2px}
+.picked{font-size:12px;margin-top:4px;color:var(--deep)}
+.picked.ok{color:var(--ok)}
+.picked.miss{color:#b38600}
+.pinmap{height:220px;border-radius:12px;border:1px solid var(--line);margin-top:8px;z-index:1}
+.mode-row{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
+.mode-row button.on{background:var(--aqua);color:#fff}
 .muted{opacity:.7;font-size:12px}.hidden{display:none}
 #login{max-width:420px;margin:40px auto}
+.af-place .place-wrap{margin-bottom:8px}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
@@ -40,6 +54,8 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
   <button class="btn alt hidden" id="logoutBtn" type="button">Sign out</button>
 </header>
 <main id="app"></main>
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+<script src="/vendor/leaflet/leaflet.js"></script>
 <script src="/partner/admin.js"></script>
 </body>
 </html>
