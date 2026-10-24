@@ -31,8 +31,8 @@ class PartnerPortal(unittest.TestCase):
         red = open(os.path.join(ROOT, "public", "_redirects"), encoding="utf-8").read()
         for line in (
             "/partner /partner/index.html 200",
-            "/p/:slug /p/index.html 200",
-            "/p/:slug/go /p/index.html 200",
+            "/p/:slug /p 200",
+            "/p/:slug/go /p 200",
         ):
             self.assertIn(line, red)
 
@@ -55,14 +55,14 @@ class PartnerPortal(unittest.TestCase):
         self.assertTrue(set(sample) <= abc)
 
     def test_admin_and_brand_pages_exist(self):
-        for rel in ("public/partner/index.html", "public/partner/admin.js", "public/p/index.html", "public/p/brand.js",
+        for rel in ("public/partner/index.html", "public/partner/admin.js", "public/p.html", "public/p.js",
                     "functions/api/partner/[[path]].js", "workers/partner/src/index.js", "lib/partner.js",
                     "research/partner_portal_mvp.md"):
             self.assertTrue(os.path.isfile(os.path.join(ROOT, rel)), rel)
 
     def test_no_beta_in_partner_ui_strings(self):
         beta = re.compile(r"(?i)\bbeta\b")
-        for rel in ("public/partner/index.html", "public/partner/admin.js", "public/p/index.html", "public/p/brand.js"):
+        for rel in ("public/partner/index.html", "public/partner/admin.js", "public/p.html", "public/p.js"):
             src = open(os.path.join(ROOT, rel), encoding="utf-8").read()
             self.assertIsNone(beta.search(src), rel)
 

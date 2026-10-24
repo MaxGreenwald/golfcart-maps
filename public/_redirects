@@ -68,9 +68,9 @@
 /partner /partner/index.html 200
 /partner/ /partner/index.html 200
 /partner/* /partner/index.html 200
-/p /p/index.html 200
-/p/ /p/index.html 200
-/p/:slug /p/index.html 200
-/p/:slug/ /p/index.html 200
-/p/:slug/go /p/index.html 200
-/p/:slug/go/ /p/index.html 200
+/p /p 200
+/p/ /p 200
+/p/:slug /p 200
+/p/:slug/ /p 200
+/p/:slug/go /p 200
+/p/:slug/go/ /p 200

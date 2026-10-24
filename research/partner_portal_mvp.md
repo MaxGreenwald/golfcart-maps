@@ -16,7 +16,7 @@ Brand pages use `/p/<slug>` on purpose: bare `/<slug>` is already the SEO city p
 
 ## Stack
 
-- Cloudflare Pages static UI under `public/partner/` and `public/p/`
+- Cloudflare Pages static UI under `public/partner/` and `public/p.html + public/p.js `
 - Pages Function proxy: `functions/api/partner/[[path]].js`
 - Worker + SQLite Durable Object: `workers/partner/` (same pattern as `gcm-analytics`)
 - Shared helpers: `lib/partner.js` (slug rules, codes)

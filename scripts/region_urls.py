@@ -33,12 +33,12 @@ def want(rs, cur):
         "/partner /partner/index.html 200\n"
         "/partner/ /partner/index.html 200\n"
         "/partner/* /partner/index.html 200\n"
-        "/p /p/index.html 200\n"
-        "/p/ /p/index.html 200\n"
-        "/p/:slug /p/index.html 200\n"
-        "/p/:slug/ /p/index.html 200\n"
-        "/p/:slug/go /p/index.html 200\n"
-        "/p/:slug/go/ /p/index.html 200\n"
+        "/p /p 200\n"
+        "/p/ /p 200\n"
+        "/p/:slug /p 200\n"
+        "/p/:slug/ /p 200\n"
+        "/p/:slug/go /p 200\n"
+        "/p/:slug/go/ /p 200\n"
     )
     sm = cur["sitemap"]
     old = dict(re.findall(r"<loc>" + re.escape(SITE) + r"/([a-z0-9]+)</loc><lastmod>([^<]*)</lastmod>", sm))
