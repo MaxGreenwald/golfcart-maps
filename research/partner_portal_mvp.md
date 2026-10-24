@@ -46,6 +46,16 @@ Vars in `workers/partner/wrangler.toml`: `SUPER_ADMINS`, `DEV_AUTH_EMAIL`, optio
 
 Pages may set `PARTNER_URL` to override the Worker base (default: `gcm-partner` on production host, `gcm-partner-preview` on `*.pages.dev`).
 
+## Live preview (Oct 24 2026)
+
+- Pages: https://partner-portal-mvp.golfcart-maps.pages.dev/partner
+- Brand demo: https://partner-portal-mvp.golfcart-maps.pages.dev/p/lajollacartco
+- Worker: https://gcm-partner-preview.maxgreenwald-assistant.workers.dev
+- PR: https://github.com/MaxGreenwald/golfcart-maps/pull/1
+- Screenshots: `/workspace/partner-portal-shots/`
+
+Seeded demo shop `lajollacartco` (San Diego) with a seals joyride, Sunset Bar affiliate, and access code from the preview DO store (codes rotate if re-seeded).
+
 ## Deploy (preview only — never production without Max)
 
 ```bash
