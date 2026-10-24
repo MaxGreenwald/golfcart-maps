@@ -28,6 +28,18 @@ def regions():
 def want(rs, cur):
     # /<slug> is a prerendered region page (scripts/seo_pages.py); the map lives at /map and /map/<slug>
     red = "".join(f"/{r['slug']}/ /{r['slug']} 301\n" for r in rs) + "/map/ /map 301\n/map/:slug /map 200\n/map/:slug/ /map 200\n"
+    # Partner portal SPA routes (brand pages at /p/<slug> so they never collide with city SEO pages).
+    red += (
+        "/partner /partner/index.html 200\n"
+        "/partner/ /partner/index.html 200\n"
+        "/partner/* /partner/index.html 200\n"
+        "/p /p 200\n"
+        "/p/ /p 200\n"
+        "/p/:slug /p 200\n"
+        "/p/:slug/ /p 200\n"
+        "/p/:slug/go /p 200\n"
+        "/p/:slug/go/ /p 200\n"
+    )
     sm = cur["sitemap"]
     old = dict(re.findall(r"<loc>" + re.escape(SITE) + r"/([a-z0-9]+)</loc><lastmod>([^<]*)</lastmod>", sm))
     today = time.strftime("%Y-%m-%d")

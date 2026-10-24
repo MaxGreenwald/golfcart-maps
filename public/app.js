@@ -299,7 +299,24 @@ $('city').onchange=e=>{setURL(e.target.value,true);window._regHow='picker';loadR
  const pid=idFromPath();let id=(pid&&REGIONS.some(r=>r.id===pid))?pid:(pid===null)?'sd':(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;
  if(!id&&navigator.permissions&&navigator.geolocation){try{const p=await navigator.permissions.query({name:'geolocation'});if(p.state==='granted'){const pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:4000,maximumAge:600000}));const r=regionAt(pos.coords.latitude,pos.coords.longitude);if(r)id=r.id}}catch(_){}}
  const how0=(pid&&id===pid)||(q&&id===q)?'link':(saved&&id===saved)?'restore':id?'auto':'default';
- if(!window._regHow)window._regHow=how0;await loadRegion(id||'sd');if(!REG.hidden)setURL(REG.id,false);const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');if(la&&lo)map.setView([la,lo],+P.get('z')||17)})();
+ if(!window._regHow)window._regHow=how0;await loadRegion(id||'sd');if(!REG.hidden)setURL(REG.id,false);const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');if(la&&lo)map.setView([la,lo],+P.get('z')||17);try{await window.gcmPartnerOverlay?.(P)}catch(_){}})();
+// Partner overlay: when /map?partner=<slug>&code=… unlocks, lock the city chip and draw larger affiliate pins + experience stops.
+window.gcmPartnerOverlay=async function(P){
+  const slug=P.get('partner'),code=(P.get('code')||'').trim(); if(!slug||!code)return;
+  const r=await fetch('/api/partner/public/'+encodeURIComponent(slug)+'/unlock?code='+encodeURIComponent(code));
+  if(!r.ok)return; const j=await r.json(); if(!j.unlocked||!j.shop)return;
+  if(j.shop.region_id&&j.shop.region_id!==REG.id){window._regHow='partner';await loadRegion(j.shop.region_id,true)}
+  const city=$('city'); if(city){city.disabled=true;city.title='Locked to this rental shop\\'s city'}
+  const g=L.layerGroup().addTo(map),bounds=[];
+  (j.affiliates||[]).forEach(a=>{const ic=L.divIcon({className:'',html:'<div style="width:36px;height:36px;border-radius:50%;background:#fff;border:3px solid #f59e0b;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 3px 10px #0004;font-weight:800">★</div>',iconSize:[36,36],iconAnchor:[18,18]});
+    L.marker([a.lat,a.lon],{icon:ic,zIndexOffset:800}).addTo(g).bindPopup('<b>'+String(a.name||'').replace(/[<>&]/g,s=>({ '<':'&lt;','>':'&gt;','&':'&amp;' }[s]))+'</b><br>'+String(a.offer||'')+(a.coupon?'<br>Coupon: <code>'+a.coupon+'</code>':'')); bounds.push([a.lat,a.lon])});
+  ((j.experiences||[])[0]?.stops||[]).forEach((s,i)=>{const ic=L.divIcon({className:'',html:'<div style="width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#14b8c4;border:3px solid #fff;box-shadow:0 2px 8px #0004;display:flex;align-items:center;justify-content:center"><span style="transform:rotate(45deg);color:#fff;font:800 12px Nunito">'+(i+1)+'</span></div>',iconSize:[28,28],iconAnchor:[14,28]});
+    L.marker([s.lat,s.lon],{icon:ic,zIndexOffset:900}).addTo(g).bindPopup('<b>'+(i+1)+'. '+String(s.label||'')+'</b>'); bounds.push([s.lat,s.lon])});
+  if(bounds.length)try{map.fitBounds(bounds,{padding:[40,40],maxZoom:15})}catch(_){}
+  const tip=document.createElement('div'); tip.id='partnerTip'; tip.style.cssText='position:absolute;left:50%;transform:translateX(-50%);top:10px;z-index:500;background:#0b3c50;color:#fff;padding:8px 12px;border-radius:12px;font:700 13px Nunito;box-shadow:0 4px 14px #0005';
+  tip.textContent=(j.shop.name||'Partner')+' · partner offers (★) and experience stops'; document.body.appendChild(tip);
+};
+
 
 // ---- bottom sheet: pointer-driven, translateY snapping ----
 const sheet=$('sheet'),shead=$('shead');let snap='full';

@@ -1,0 +1,39 @@
+# Partner portal Worker: shops, invites, experiences, affiliates, access codes.
+# SQLite Durable Object (same pattern as gcm-analytics; no D1 dashboard step).
+#   preview:    wrangler deploy --env preview   -> gcm-partner-preview
+#   production: wrangler deploy                 -> gcm-partner  (only with Max's OK)
+#
+# Secrets (wrangler secret put NAME [--env preview]):
+#   PARTNER_SESSION_SECRET   HMAC for session cookies
+# Optional for real Google OAuth (omit to use DEV_AUTH_EMAIL mock login):
+#   GOOGLE_CLIENT_ID
+#   GOOGLE_CLIENT_SECRET
+# Vars:
+#   DEV_AUTH_EMAIL           if set and Google secrets missing, /auth/dev accepts this email
+#   SUPER_ADMINS             comma emails (default max@golfcartmap.com,maxgreenwald.assistant@gmail.com)
+#   PUBLIC_ORIGIN            e.g. https://partner-portal-mvp.golfcart-maps.pages.dev (OAuth redirect)
+name = "gcm-partner"
+main = "src/index.js"
+compatibility_date = "2026-10-15"
+workers_dev = true
+
+[vars]
+SUPER_ADMINS = "max@golfcartmap.com,maxgreenwald.assistant@gmail.com"
+DEV_AUTH_EMAIL = "maxgreenwald.assistant@gmail.com"
+
+[[durable_objects.bindings]]
+name = "STORE"
+class_name = "PartnerStore"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["PartnerStore"]
+
+[env.preview]
+name = "gcm-partner-preview"
+[env.preview.vars]
+SUPER_ADMINS = "max@golfcartmap.com,maxgreenwald.assistant@gmail.com"
+DEV_AUTH_EMAIL = "maxgreenwald.assistant@gmail.com"
+[[env.preview.durable_objects.bindings]]
+name = "STORE"
+class_name = "PartnerStore"
