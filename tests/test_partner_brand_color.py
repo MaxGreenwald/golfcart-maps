@@ -321,7 +321,7 @@ class BrandColorPicker(unittest.TestCase):
             )
 
             pg.goto(self.base + "/p/lajollacartco/go?code=7K3M9P2Q", wait_until="domcontentloaded")
-            pg.wait_for_selector(".msg")
+            pg.wait_for_selector(".yay")
             self.assertEqual(
                 pg.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--brand').trim()"),
                 "#ff00aa",
