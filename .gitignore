@@ -6,3 +6,6 @@ cache/
 __pycache__/
 node_modules
 research/gis_speed/raw/
+node_modules/
+.npm-cache/
+.npm-cache/

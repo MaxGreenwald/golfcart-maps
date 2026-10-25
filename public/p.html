@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Partner · Golf Cart Maps</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0b3c50;--deep:#0b6e86;--aqua:#14b8c4;--sand:#f6ead2;--line:#cfe7ea;--brand:var(--aqua)}
+*{box-sizing:border-box}html,body{height:100%;margin:0;font:600 15px Nunito,system-ui,sans-serif;color:var(--ink);background:#f4fafb}
+#wrap{display:flex;flex-direction:column;height:100%}
+#top{background:#fff;border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;z-index:2}
+#top h1{margin:0;font-size:18px;flex:1}#top .blurb{width:100%;font-size:13px;opacity:.85;margin:0}
+#panel{background:#fff;border-bottom:1px solid var(--line);padding:12px 16px;max-height:42vh;overflow:auto}
+#map{flex:1;min-height:240px}
+.btn{border:0;border-radius:12px;padding:10px 14px;font:800 14px Nunito;background:var(--brand);color:#fff;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.alt{background:#e3f6f8;color:var(--deep)}
+.msg{padding:10px 12px;border-radius:10px;background:#e3f6f8;color:var(--deep);font-size:13px;margin:8px 0}
+.msg.err{background:#fee2e2;color:#b91c1c}
+.card{border:1px solid var(--line);border-radius:14px;padding:12px;margin:8px 0;cursor:pointer}
+.card:hover{border-color:var(--brand)}.card.active{border-color:var(--brand);box-shadow:0 0 0 2px #14b8c433}
+.card h3{margin:0 0 4px;font-size:15px}.card p{margin:0;font-size:13px;opacity:.8}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input{padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:600 14px Nunito;min-width:140px}
+.pin-aff{width:36px;height:36px;border-radius:50%;background:#fff;border:3px solid #f59e0b;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 3px 10px #0004;font-weight:800}
+.pin-stop{width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--brand);border:3px solid #fff;box-shadow:0 2px 8px #0004;display:flex;align-items:center;justify-content:center}
+.pin-stop span{transform:rotate(45deg);color:#fff;font:800 12px Nunito}
+.legend{font-size:12px;opacity:.8}.muted{opacity:.7;font-size:12px}
+#nextBar{display:none;background:#0b3c50;color:#fff;padding:10px 16px;align-items:center;gap:10px}
+#nextBar.show{display:flex}#nextBar b{flex:1}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="top">
+    <h1 id="title">Golf Cart Maps</h1>
+    <a class="btn alt" id="fullMap" href="/map/sandiego" target="_blank" rel="noopener">Full city map</a>
+    <p class="blurb" id="blurb"></p>
+  </div>
+  <div id="panel"></div>
+  <div id="nextBar"><b id="nextLabel">Next stop</b><button class="btn alt" id="nextBtn" type="button">Next</button></div>
+  <div id="map"></div>
+</div>
+<script src="/vendor/leaflet/leaflet.js"></script>
+<script src="/p.js"></script>
+</body>
+</html>
