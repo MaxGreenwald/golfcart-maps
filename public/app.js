@@ -20,7 +20,7 @@ const routeR=L.svg({pane:'route'});
 const $=id=>document.getElementById(id);
 const RISKY_MAX=152.4; // 500 ft
 let REGIONS=[],RULES={},REG=null,MODE=(()=>{const q=new URLSearchParams(location.search).get('veh');if(GCMRule.VEHICLES.includes(q))return q;try{const v=localStorage.getItem('gcm-veh');if(GCMRule.VEHICLES.includes(v))return v}catch(_){}return GCMRule.DEFAULT_VEH})(),RULE={max_posted:35,cross:true},BASE='data/sd/';
-let D,risky=false,layer,nodes={},adj={},start=null,end=null,routeG=null,mk=[];
+let D,risky=false,layer,start=null,end=null,routeG=null,mk=[];
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden (posted >=40 or untagged major)
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden. Cart paths ('c') always ok; designated ('d') ok in designated-only cart mode.
 // the rule itself lives in roadrule.js (one module, per vehicle type: MODE 'golf_cart' or 'lsv')
@@ -28,9 +28,9 @@ const desig=s=>GCMRule.desig(s,RULE);
 const cls=s=>GCMRule.cls(s,RULE,window.LENIENT);
 const STY=[{color:'#12a150',weight:3.2},{color:'#4cc38a',weight:2.6,dashArray:'5 4'},{color:'#0b9fb3',weight:3.4},{color:'#e5484d',weight:3,opacity:.75},{color:'#e0a800',weight:3.2,dashArray:'6 6'}];
 // untagged collector/arterial with no speed source: allowed but caution (yellow), routing penalty
-const unk=s=>REG&&REG.id!=='sd'&&REG.id!=='villages'&&s[3]==='i'&&/^(secondary|tertiary|unclassified)/.test(s[1])&&cls(s)!==3,UNKW=1.8;window.unk=unk;
+const unk=s=>REG&&REG.id!=='sd'&&REG.id!=='villages'&&s[3]==='i'&&/^(secondary|tertiary|unclassified)/.test(s[1])&&cls(s)!==3;window.unk=unk;
 const MAJOR=new Set(['path','cycleway','track','footway','motorway','motorway_link','trunk','trunk_link','primary','primary_link','secondary','secondary_link','tertiary','tertiary_link']);
-let buckets={},shown={};const G=0.02;
+let buckets={},shown={};const G=GCMRouter.G;
 function bucketize(from){D.segs.slice(from).forEach((s,j)=>{const i=from+j;const p=s[7][0],k=Math.floor(p[0]/G)+','+Math.floor(p[1]/G);(buckets[k]||(buckets[k]=[])).push(i)})}
 function draw(){layer=L.layerGroup().addTo(map);refresh()}
 function refresh(){const b=map.getBounds().pad(0.2),z=map.getZoom(),minor=z>=14;
@@ -82,33 +82,13 @@ function confLine(s){const v=verOf(s);if(v){const src=VER.src[v[1]]||[];return `
 function mkLine(s){const c0=cls(s),c=s[3]==='c'?2:unk(s)?4:c0;const adv=advOf(s);const pl=L.polyline(s[7].map(p=>[p[1],p[0]]),adv?{color:'#f08c00',weight:4.2,dashArray:'8 6',renderer}:{...STY[c],renderer});
  pl.on('click',e=>{L.DomEvent.stopPropagation(e);if(active){setPt(e.latlng);return}const sp=s[2];window._pll=e.latlng;
   L.popup(popOpts()).setLatLng(e.latlng).setContent(`<b>${D.names[s[0]]||'(unnamed road)'}</b><br>${s[1].replace('_',' ')} · ${sp==null||sp==99?'no limit recorded':sp+' mph'}${s[9]===3?' 🚦 marked cart crossing':s[9]===2?' ✅ cart-allowed (local ordinance)':''}${s[9]===4&&D.sources&&D.sources[s[10]]?`<br>🚫 No golf carts (LSVs OK): <a href="${D.sources[s[10]][0]}" target="_blank" rel="noopener">${D.sources[s[10]][1]}</a>`:''}${s[3]==='c'?' 🛺 cart path':s[3]==='d'?' ✅ designated cart road':s[3]==='t'?' (OSM)':s[3]==='o'?' 🗺️ OpenStreetMap, matches nearby sign':s[3]==='v'?' '+srcKind(s):s[3]==='m'?' 📷 posted sign (Mapillary)':s[3]==='r'?' ⭕ roundabout (no limit of its own; uses its connecting roads)':s[3]==='k'?' ↪️ turn lane (no limit of its own; uses its connecting roads)':s[3]==='n'?' ↔️ same road posted on both sides':s[3]==='q'?' ⚠️ sources disagree':' (assumed)'}${(s[3]==='v'||s[3]==='m')&&D.sources&&D.sources[s[8]]?`<br><a href="${D.sources[s[8]][0]}" target="_blank" rel="noopener">Source: ${D.sources[s[8]][1]}</a>`:''}${s[3]==='n'&&D.sources&&D.sources[s[8]]?`<br>${D.sources[s[8]][1]}`:''}${confLine(s)}${adv?`<br><span class="advw">⚠️ ${advText(adv)}</span>`:''}${REG.rule&&REG.rule.url?`<br><a href="${REG.rule.url}" target="_blank" rel="noopener">Local cap ≤${REG.rule.max_posted} mph: ${REG.rule.cite}</a>`:''}<br><b style="color:${c===3?'#e5484d':unk(s)?'#b38600':'#12a150'}">${unk(s)?'❓ Speed unknown — check signs (allowed with caution; no posted limit found)':c===3?GCMRule.why(s,RULE,OTHER,D.sources&&D.sources[s[8]]):'OK for '+modeName()+(OTHER&&GCMRule.cls(s,OTHER)===3?` <span class="vnote">(not for ${GCMRule.vname(OTHER)}: ${OTHER.not_street_legal?'not street-legal here':OTHER.designated_only&&s[2]<=OTHER.max_posted?'designated roads only':'only roads ≤'+OTHER.max_posted+' mph'})</span>`:'')}</b><br>Segment length: ${(s._len??len(s[7]))<160?ft(s._len??len(s[7])):mi(s._len??len(s[7]))}<div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="popSet('from')">Start here</button><button class="pbtn" onclick="popSet('to')">Go here</button></div><button class="pbtn rpt" onclick="reportRoad()">🚩 Report this road</button>`).openOn(map);window._rseg={road:D.names[s[0]]||'(unnamed road)',hw:s[1],sp:sp==null||sp==99?'none recorded':sp+' mph',src:{t:'OSM tag',v:srcKind(s).replace(/^\S+ /,''),m:'Mapillary sign',c:'cart path',d:'designated cart road',r:'roundabout, limit from connecting roads',k:'turn lane, limit from connecting roads',n:'same road posted on both sides',q:'sources disagree'}[s[3]]||'assumed',status:c===3?'Avoid':unk(s)?'Speed unknown — check signs':'OK for '+modeName(),ll:e.latlng}});return pl}
-function hav(a,b){const R=6371000,r=Math.PI/180,dl=(b[1]-a[1])*r,dn=(b[0]-a[0])*r,x=Math.sin(dl/2)**2+Math.cos(a[1]*r)*Math.cos(b[1]*r)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
-function len(p){let l=0;for(let i=1;i<p.length;i++)l+=hav(p[i-1],p[i]);return l}
-let fast=new Set(),fnode=new Set(),cnode=new Set();
-function buildGraph(from){if(D.meta.xnodes)D.meta.xnodes.forEach(n=>cnode.add(n));D.segs.slice(from).forEach((s,j)=>{const i=from+j;const c=cls(s),a=s[5],b=s[6],p=s[7];s._len??=len(p);nodes[a]=p[0];nodes[b]=p[p.length-1];
-  if((s[3]==='t'||s[3]==='o'||s[3]==='m')&&s[2]>RULE.max_posted){fast.add(a);fast.add(b)}if(c===3)fnode.add(a),fnode.add(b);if(s[3]==='c')cnode.add(a),cnode.add(b);
-  const f=c===3;
-  if(s[4]>=0)(adj[a]||(adj[a]=[])).push([b,s._len*(unk(s)||s[3]==='q'?UNKW:1),i,false,f]);if(s[4]<=0)(adj[b]||(adj[b]=[])).push([a,s._len*(unk(s)||s[3]==='q'?UNKW:1),i,true,f])})}
-// snap to nearest point on an allowed (non-forbidden) edge; returns the closer endpoint node of that edge
-function nearest(ll){const q=[ll.lng,ll.lat],kx=Math.cos(ll.lat*Math.PI/180);let best=null,bd=1e18;
- const T=0.004,bx=Math.floor(q[0]/G),by=Math.floor(q[1]/G);
- const cand=[];for(let x=bx-1;x<=bx+1;x++)for(let y=by-1;y<=by+1;y++)(buckets[x+','+y]||[]).forEach(i=>cand.push(i));
- for(const i of cand){const s=D.segs[i];if(cls(s)===3)continue;const p=s[7];
-  for(let j=1;j<p.length;j++){const ax=(p[j-1][0]-q[0])*kx,ay=p[j-1][1]-q[1],bx_=(p[j][0]-q[0])*kx,by_=p[j][1]-q[1];const dx=bx_-ax,dy=by_-ay,L2=dx*dx+dy*dy;let t=L2?-(ax*dx+ay*dy)/L2:0;t=Math.max(0,Math.min(1,t));const ex=ax+t*dx,ey=ay+t*dy,d=ex*ex+ey*ey;
-   if(d<bd){bd=d;const da=hav(q,p[0]),db=hav(q,p[p.length-1]);best=[da<=db?s[5]:s[6],da<=db?s[6]:s[5]]}}}
- if(!best)return [null,1e9];return [best[0],Math.sqrt(bd)*111320,best[1]]}
-// A* over (node, metres-of-current-forbidden-run). Legal mode: forbidden edges never used.
-// Crossing a forbidden road = passing through a shared node between two allowed edges (CVC 21260(b)(1)).
-function astar(s,t){const key=(n,r)=>n+'|'+Math.round(r);const T=nodes[t];const g=new Map(),prev=new Map();const k0=key(s,0);g.set(k0,0);
- const h=[[hav(nodes[s],T),s,0,k0]],done=new Set();
- const push=x=>{h.push(x);let i=h.length-1;while(i>0){const p=(i-1)>>1;if(h[p][0]<=h[i][0])break;[h[p],h[i]]=[h[i],h[p]];i=p}};
- const pop=()=>{const top=h[0],l=h.pop();if(h.length){h[0]=l;let i=0;for(;;){let a=2*i+1,b=a+1,m=i;if(a<h.length&&h[a][0]<h[m][0])m=a;if(b<h.length&&h[b][0]<h[m][0])m=b;if(m===i)break;[h[m],h[i]]=[h[i],h[m]];i=m}}return top};
- let goal=null;
- while(h.length){const [,u,run,ku]=pop();if(done.has(ku))continue;done.add(ku);if(u===t&&run===0){goal=ku;break}
-  for(const [v,w,si,rev,f] of adj[u]||[]){let nr,cost=w;
-   if(!f&&RULE.cross===false&&fnode.has(v)&&!cnode.has(v)&&v!==t)continue;if(f){if(!risky)continue;nr=run+w;if(nr>RISKY_MAX)continue;cost=w*6+60}else{nr=0;if(fast.has(v))cost+=150}
-   const kv=key(v,nr),ng=g.get(ku)+cost;if(!g.has(kv)||ng<g.get(kv)){g.set(kv,ng);prev.set(kv,[ku,si,rev]);push([ng+hav(nodes[v],T),v,nr,kv])}}}
- if(!goal)return null;const parts=[];let x=goal;while(x!==k0){const [pk,si,rev]=prev.get(x);parts.push([si,rev]);x=pk}parts.reverse();return parts}
+// Snap + A* live in router.js (one graph search for the map and for /p experience lines).
+let roadNet=GCMRouter.create();
+function hav(a,b){return GCMRouter.hav(a,b)}
+function len(p){return GCMRouter.len(p)}
+function buildGraph(from){if(from===0)roadNet.reset();roadNet.build(D,from,{cls:cls,unk:unk,rule:RULE})}
+function nearest(ll){return roadNet.nearest(D,buckets,ll,{cls:cls,G:G})}
+function astar(s,t){return roadNet.astar(s,t,{risky:risky,rule:RULE,riskyMax:RISKY_MAX})}
 function summarize(parts){let dist=0,stretches=[],cur=null,line=[];const legs=[];
  for(const [si,rev] of parts){const s=D.segs[si];let p=s[7];if(rev)p=p.slice().reverse();dist+=s._len;const f=cls(s)===3;
   legs.push({p,f,s,u:!f&&unk(s),a:f?null:advOf(s)});
@@ -256,7 +236,7 @@ window.setVeh=setVeh;
 window.vehSync=async()=>{let v=null;try{v=localStorage.getItem('gcm-veh')}catch(_){}if(!GCMRule.VEHICLES.includes(v)||v===MODE)return false;setVeh(v);await READY;for(let i=0;i<200&&!window.ready;i++)await new Promise(r=>setTimeout(r,50));return true};
 window.addEventListener('storage',e=>{if(e.key==='gcm-veh')window.vehSync()});
 function regionAt(lat,lng){let best=null,bd=80467;for(const r of REGIONS){if(r.hidden)continue;const b=r.bbox;if(lat>=b[0]&&lat<=b[2]&&lng>=b[1]&&lng<=b[3])return r;const d=hav([lng,lat],[r.center[1],r.center[0]]);if(d<bd){bd=d;best=r}}return best}
-function resetData(){if(layer){layer.clearLayers();map.removeLayer(layer)}shown={};buckets={};nodes={};adj={};fast=new Set();fnode=new Set();cnode=new Set();loaded.clear();for(const k in loading)delete loading[k];nameAt=null;POIS=[];D=null;window.ready=false;READY=new Promise(r=>readyRes=r)}
+function resetData(){roadNet.reset();if(layer){layer.clearLayers();map.removeLayer(layer)}shown={};buckets={};loaded.clear();for(const k in loading)delete loading[k];nameAt=null;POIS=[];D=null;window.ready=false;READY=new Promise(r=>readyRes=r)}
 async function loadRegion(id,keepView){const r=REGIONS.find(x=>x.id===id)||REGIONS[0];if(REG&&REG.id===r.id&&D)return;if(!keepView)clearR();resetData();REG=r;BASE='data/'+r.id+'/';window.REG=r;
  try{localStorage.setItem('gcm-region',r.id)}catch(_){}$('city').value=r.id;fitCity();setRule();$('sub').textContent='Loading roads…';
  if(!keepView)map.setView(r.center,r.zoom);

@@ -62,9 +62,35 @@ class PartnerPortal(unittest.TestCase):
 
     def test_no_beta_in_partner_ui_strings(self):
         beta = re.compile(r"(?i)\bbeta\b")
-        for rel in ("public/partner/index.html", "public/partner/admin.js", "public/p.html", "public/p.js"):
+        for rel in ("public/partner/index.html", "public/partner/admin.js", "public/p.html", "public/p.js", "public/router.js"):
             src = open(os.path.join(ROOT, rel), encoding="utf-8").read()
             self.assertIsNone(beta.search(src), rel)
+
+    def test_brand_page_map_overlay_and_start(self):
+        html = open(os.path.join(ROOT, "public/p.html"), encoding="utf-8").read()
+        js = open(os.path.join(ROOT, "public/p.js"), encoding="utf-8").read()
+        router = open(os.path.join(ROOT, "public/router.js"), encoding="utf-8").read()
+        app = open(os.path.join(ROOT, "public/app.js"), encoding="utf-8").read()
+        index = open(os.path.join(ROOT, "public/index.html"), encoding="utf-8").read()
+        sw = open(os.path.join(ROOT, "public/sw.js"), encoding="utf-8").read()
+        self.assertIn("Got a code from the shop?", js)
+        self.assertIn("The city map is free to use.", js)
+        self.assertIn('id="fullMap"', html)
+        self.assertIn('id="mapCard"', html)
+        self.assertIn("Start experience", js)
+        self.assertIn("getCurrentPosition", js)
+        self.assertIn("middle of the map", js)
+        self.assertIn("golf_cart", js)
+        self.assertIn("GCMRouter.openRegion", js)
+        self.assertIn("#0b3a78", js)
+        self.assertIn("#1d6fe0", js)
+        self.assertIn("#12a150", router)
+        self.assertIn("cover: ensure", router)
+        self.assertIn("segments:", router)
+        self.assertNotIn("activeEx.stops.map", js)
+        self.assertIn("GCMRouter.create", app)
+        self.assertLess(index.index('src="router.js"'), index.index('src="app.js"'))
+        self.assertIn("'router.js'", sw)
 
     def test_brand_path_not_colliding_with_cities(self):
         # Partner brand pages are under /p/, never /<cityslug>.
