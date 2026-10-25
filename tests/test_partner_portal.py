@@ -92,6 +92,47 @@ class PartnerPortal(unittest.TestCase):
         self.assertLess(index.index('src="router.js"'), index.index('src="app.js"'))
         self.assertIn("'router.js'", sw)
 
+    def test_brand_primary_color_is_a_picker(self):
+        with open(os.path.join(ROOT, "public/partner/admin.js"), encoding="utf-8") as f:
+            admin = f.read()
+        with open(os.path.join(ROOT, "public/partner/index.html"), encoding="utf-8") as f:
+            html = f.read()
+        self.assertIn('type="color"', admin)
+        self.assertIn('id="brandColorPick"', admin)
+        self.assertIn('id="brandColor"', admin)
+        self.assertIn("hexColor", admin)
+        self.assertIn("Use default", admin)
+        # Hex stays in a hidden field the save handler already posts. Not a text box the owner has to type.
+        self.assertIn('type="hidden" id="brandColor"', admin)
+        self.assertNotIn('placeholder="#14b8c4"', admin)
+        self.assertNotRegex(admin, r'<input id="brandColor"')
+        self.assertIn("color: $('#brandColor').value.trim()", admin)
+        self.assertIn("logo_url: $('#brandLogo').value.trim()", admin)
+        self.assertIn('id="brandName"', admin)
+        self.assertIn('id="brandBlurb"', admin)
+        self.assertIn(".color-pick input[type=color]", html)
+        # Empty color leaves the inline accent unset so /p keeps --brand: var(--aqua).
+        with open(os.path.join(ROOT, "public/p.js"), encoding="utf-8") as f:
+            pjs = f.read()
+        with open(os.path.join(ROOT, "public/p.html"), encoding="utf-8") as f:
+            page = f.read()
+        self.assertIn("root.style.setProperty('--brand', c)", pjs)
+        self.assertIn("applyColor(shop.color)", pjs)
+        self.assertIn("if (!c || /[;{}]|url\\s*\\(/i.test(c)) return", pjs)
+        self.assertIn("--brand:var(--aqua)", page)
+
+    def test_drop_pin_rejects_blank_coords_and_uses_main_tiles(self):
+        with open(os.path.join(ROOT, "public/partner/admin.js"), encoding="utf-8") as f:
+            admin = f.read()
+        # Number("") === 0, which used to center Drop pin in the ocean.
+        self.assertIn("function numCoord", admin)
+        self.assertIn("const s = String(v ?? '').trim()", admin)
+        self.assertIn("if (!s) return NaN", admin)
+        self.assertIn("https://tile.openstreetmap.org/{z}/{x}/{y}.png", admin)
+        self.assertNotIn("{s}.tile.openstreetmap.org", admin)
+        self.assertIn("priorStopLatLng", admin)
+        self.assertIn("PIN_OFFSET", admin)
+
     def test_brand_path_not_colliding_with_cities(self):
         # Partner brand pages are under /p/, never /<cityslug>.
         cities = {r["slug"] for r in U.regions()}

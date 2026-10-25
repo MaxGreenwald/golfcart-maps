@@ -162,7 +162,7 @@ function renderLocked(data, error) {
     <form class="join" id="unlockForm">
       <label class="sr" for="codeIn">Access code</label>
       <input id="codeIn" name="code" placeholder="Access code" enterkeyhint="go" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="64" value="${esc(codeParam)}">
-      <button type="submit">Unlock</button>
+      <button type="submit" id="unlockBtn">Unlock</button>
     </form>
     <p class="fine">Ask your rental shop for a code. Experiences unlock after you pay the add-on at checkout.</p>
     <p class="fine free">The city map is free to use.</p>`;
