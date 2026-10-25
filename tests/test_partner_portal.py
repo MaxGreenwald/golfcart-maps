@@ -91,6 +91,18 @@ class PartnerPortal(unittest.TestCase):
         self.assertIn("if (data.shop.color) document.documentElement.style.setProperty('--brand', data.shop.color)", pjs)
         self.assertIn("if (shop.color) document.documentElement.style.setProperty('--brand', shop.color)", pjs)
 
+    def test_drop_pin_rejects_blank_coords_and_uses_main_tiles(self):
+        with open(os.path.join(ROOT, "public/partner/admin.js"), encoding="utf-8") as f:
+            admin = f.read()
+        # Number("") === 0, which used to center Drop pin in the ocean.
+        self.assertIn("function numCoord", admin)
+        self.assertIn("const s = String(v ?? '').trim()", admin)
+        self.assertIn("if (!s) return NaN", admin)
+        self.assertIn("https://tile.openstreetmap.org/{z}/{x}/{y}.png", admin)
+        self.assertNotIn("{s}.tile.openstreetmap.org", admin)
+        self.assertIn("priorStopLatLng", admin)
+        self.assertIn("PIN_OFFSET", admin)
+
     def test_brand_path_not_colliding_with_cities(self):
         # Partner brand pages are under /p/, never /<cityslug>.
         cities = {r["slug"] for r in U.regions()}

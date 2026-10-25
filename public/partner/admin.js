@@ -122,15 +122,23 @@ async function searchPlaces(q) {
   return res;
 }
 
+/** Blank inputs are unset. Number("") is 0, and Number.isFinite(0) is true — that parked the pin at 0,0 in the ocean. */
+function numCoord(v) {
+  const s = String(v ?? '').trim();
+  if (!s) return NaN;
+  const n = +s;
+  return Number.isFinite(n) ? n : NaN;
+}
+
 function pickedLine(lat, lon, label) {
-  if (Number.isFinite(+lat) && Number.isFinite(+lon)) {
+  if (Number.isFinite(numCoord(lat)) && Number.isFinite(numCoord(lon))) {
     return `<div class="picked ok" data-k="picked">✓ ${esc(label || 'Pinned')} · ${(+lat).toFixed(5)}, ${(+lon).toFixed(5)}</div>`;
   }
   return `<div class="picked miss" data-k="picked">Search a place or drop a pin on the map</div>`;
 }
 
 function stopRowHtml(s = {}, i = 0) {
-  const has = Number.isFinite(+s.lat) && Number.isFinite(+s.lon);
+  const has = Number.isFinite(numCoord(s.lat)) && Number.isFinite(numCoord(s.lon));
   return `<div class="stop" data-i="${i}">
     <div>
       <div class="mode-row">
@@ -344,25 +352,74 @@ function wireSearchInput(input, sugg, onPick) {
   });
 }
 
-function ensurePinMap(el, lat, lon, onMove) {
-  if (!window.L) return null;
+function regionCenter(reg) {
+  const c = reg && reg.center;
+  if (Array.isArray(c) && Number.isFinite(+c[0]) && Number.isFinite(+c[1])) return [+c[0], +c[1]];
+  return [32.8565, -117.2555];
+}
+
+/** Zoom for dropping a stop: close when a point is known, otherwise the city view clamped to 14–16. */
+function placeZoom(reg, close) {
+  if (close) return 16;
+  const z = reg && Number.isFinite(+reg.zoom) ? +reg.zoom : 15;
+  return Math.max(14, Math.min(16, z));
+}
+
+/** Earlier stop in this experience that already has a pin. Affiliate maps are not inside .stop. */
+function priorStopLatLng(el) {
+  const row = el && el.closest ? el.closest('.stop') : null;
+  if (!row) return null;
+  let prev = row.previousElementSibling;
+  while (prev) {
+    if (prev.classList && prev.classList.contains('stop')) {
+      const lat = numCoord($('[data-k=lat]', prev) && $('[data-k=lat]', prev).value);
+      const lon = numCoord($('[data-k=lon]', prev) && $('[data-k=lon]', prev).value);
+      if (Number.isFinite(lat) && Number.isFinite(lon)) return [lat, lon];
+    }
+    prev = prev.previousElementSibling;
+  }
+  return null;
+}
+
+/** ~250m north-east, so a new pin is not stacked on the previous stop. */
+const PIN_OFFSET = 0.0022;
+
+function pinView(el, lat, lon) {
+  const reg = activeRegion();
+  if (Number.isFinite(lat) && Number.isFinite(lon)) return { lat, lon, zoom: 16 };
+  const prior = priorStopLatLng(el);
+  if (prior) return { lat: prior[0] + PIN_OFFSET, lon: prior[1] + PIN_OFFSET, zoom: 16 };
+  const c = regionCenter(reg);
+  return { lat: c[0], lon: c[1], zoom: placeZoom(reg, false) };
+}
+
+function refreshPinMapSize(map) {
+  const fix = () => { if (map && map.invalidateSize) map.invalidateSize(); };
+  if (typeof requestAnimationFrame === 'function') requestAnimationFrame(fix);
+  setTimeout(fix, 60);
+}
+
+function ensurePinMap(el, latRaw, lonRaw, onMove) {
+  if (!window.L || !el) return null;
+  const lat = numCoord(latRaw);
+  const lon = numCoord(lonRaw);
+  const view = pinView(el, lat, lon);
   if (el._gcmMap) {
     const map = el._gcmMap;
-    setTimeout(() => map.invalidateSize(), 50);
-    if (Number.isFinite(+lat) && Number.isFinite(+lon)) {
-      el._gcmMarker.setLatLng([+lat, +lon]);
-      map.setView([+lat, +lon], map.getZoom());
+    refreshPinMapSize(map);
+    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+      el._gcmMarker.setLatLng([lat, lon]);
+      map.setView([lat, lon], map.getZoom() || 16);
     }
     return map;
   }
-  const reg = activeRegion();
-  const start = Number.isFinite(+lat) && Number.isFinite(+lon) ? [+lat, +lon] : (reg.center || [32.85, -117.27]);
-  const map = L.map(el, { zoomControl: true }).setView(start, Number.isFinite(+lat) ? 16 : (reg.zoom || 13));
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  const map = L.map(el, { zoomControl: true }).setView([view.lat, view.lon], view.zoom);
+  // Same tiles as the main map (public/app.js). Subdomain {s}.tile hosts are not required.
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; OpenStreetMap',
+    attribution: '© OpenStreetMap contributors',
   }).addTo(map);
-  const marker = L.marker(start, { draggable: true }).addTo(map);
+  const marker = L.marker([view.lat, view.lon], { draggable: true }).addTo(map);
   const fire = () => {
     const ll = marker.getLatLng();
     onMove(ll.lat, ll.lng);
@@ -371,8 +428,8 @@ function ensurePinMap(el, lat, lon, onMove) {
   map.on('click', e => { marker.setLatLng(e.latlng); fire(); });
   el._gcmMap = map;
   el._gcmMarker = marker;
-  setTimeout(() => map.invalidateSize(), 80);
-  if (Number.isFinite(+lat) && Number.isFinite(+lon)) onMove(+lat, +lon);
+  refreshPinMapSize(map);
+  if (Number.isFinite(lat) && Number.isFinite(lon)) onMove(lat, lon);
   return map;
 }
 
@@ -406,8 +463,8 @@ function wireStop(row) {
     setPicked(row, x.lat, x.lon, x.name);
   });
   custom.addEventListener('input', () => {
-    const lat = +$('[data-k=lat]', row).value;
-    const lon = +$('[data-k=lon]', row).value;
+    const lat = numCoord($('[data-k=lat]', row).value);
+    const lon = numCoord($('[data-k=lon]', row).value);
     if (Number.isFinite(lat) && Number.isFinite(lon)) setPicked(row, lat, lon, custom.value.trim() || 'Custom stop');
     $('[data-k=label]', row).value = custom.value.trim();
   });
@@ -444,7 +501,7 @@ function wireAffiliatePicker() {
     setAf(x.lat, x.lon, x.name);
   });
   $('#afCustom').addEventListener('input', () => {
-    const lat = +$('#afLat').value, lon = +$('#afLon').value;
+    const lat = numCoord($('#afLat').value), lon = numCoord($('#afLon').value);
     if (Number.isFinite(lat) && Number.isFinite(lon)) setAf(lat, lon, $('#afCustom').value.trim() || 'Custom place');
   });
 }

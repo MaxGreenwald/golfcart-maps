@@ -193,6 +193,91 @@ class BrandColorPicker(unittest.TestCase):
         finally:
             pg.close()
 
+    def test_drop_pin_tiles_center_on_city_or_prior_stop(self):
+        """Empty lat/lon must not become 0,0. Tiles come from tile.openstreetmap.org."""
+        pg, _saved = self.open_admin(shop())
+        try:
+            pg.locator("#stopList .stop .modePin").click()
+            pg.wait_for_function(
+                """() => {
+                  const el = document.querySelector('#stopList .stop .pinmap');
+                  const tiles = el ? [...el.querySelectorAll('img.leaflet-tile')] : [];
+                  return tiles.some(i => i.complete && i.naturalWidth > 0 && i.src.includes('tile.openstreetmap.org/'));
+                }""",
+                timeout=20000,
+            )
+            view = pg.evaluate(
+                """() => {
+                  const el = document.querySelector('#stopList .stop .pinmap');
+                  const c = el._gcmMap.getCenter();
+                  const src = el.querySelector('img.leaflet-tile').src;
+                  return {lat: c.lat, lng: c.lng, zoom: el._gcmMap.getZoom(), src};
+                }"""
+            )
+            self.assertIn("https://tile.openstreetmap.org/", view["src"])
+            self.assertNotIn("://a.tile.", view["src"])
+            # San Diego region center, not the Gulf of Guinea.
+            self.assertAlmostEqual(view["lat"], 32.8565, delta=0.02)
+            self.assertAlmostEqual(view["lng"], -117.2555, delta=0.02)
+            self.assertGreaterEqual(view["zoom"], 14)
+            self.assertLessEqual(view["zoom"], 16)
+            self.assertEqual(pg.input_value("#stopList .stop [data-k=lat]"), "")
+            pg.locator("#stopList .stop .pinmap").click(position={"x": 160, "y": 70})
+            self.assertNotEqual(pg.input_value("#stopList .stop [data-k=lat]"), "")
+            placed_lat = float(pg.input_value("#stopList .stop [data-k=lat]"))
+            placed_lon = float(pg.input_value("#stopList .stop [data-k=lon]"))
+            self.assertGreater(abs(placed_lat), 1)
+            self.assertGreater(abs(placed_lon), 1)
+            # Search place is still the other mode.
+            pg.locator("#stopList .stop .modeSearch").click()
+            self.assertTrue(pg.locator("#stopList .stop .place-search").is_visible())
+            self.assertTrue(pg.locator("#stopList .stop .place-pin").is_hidden())
+
+            pg.locator("#addStop").click()
+            second = pg.locator("#stopList .stop").nth(1)
+            second.locator(".modePin").click()
+            pg.wait_for_function(
+                """() => {
+                  const el = document.querySelectorAll('#stopList .stop .pinmap')[1];
+                  const tiles = el ? [...el.querySelectorAll('img.leaflet-tile')] : [];
+                  return tiles.some(i => i.complete && i.naturalWidth > 0);
+                }""",
+                timeout=20000,
+            )
+            nxt = pg.evaluate(
+                """() => {
+                  const el = document.querySelectorAll('#stopList .stop .pinmap')[1];
+                  const c = el._gcmMap.getCenter();
+                  return {lat: c.lat, lng: c.lng, zoom: el._gcmMap.getZoom()};
+                }"""
+            )
+            self.assertAlmostEqual(nxt["lat"], placed_lat + 0.0022, delta=0.0004)
+            self.assertAlmostEqual(nxt["lng"], placed_lon + 0.0022, delta=0.0004)
+            self.assertEqual(nxt["zoom"], 16)
+            # Looking only: the suggested pin is not saved until click or drag.
+            self.assertEqual(second.locator("[data-k=lat]").input_value(), "")
+
+            pg.locator("#afModes .modePin").click()
+            pg.wait_for_function(
+                """() => {
+                  const el = document.querySelector('#afPinMap');
+                  return el && el._gcmMap && [...el.querySelectorAll('img.leaflet-tile')].some(i => i.naturalWidth > 0);
+                }""",
+                timeout=20000,
+            )
+            af = pg.evaluate(
+                """() => {
+                  const c = document.querySelector('#afPinMap')._gcmMap.getCenter();
+                  return {lat: c.lat, lng: c.lng, zoom: document.querySelector('#afPinMap')._gcmMap.getZoom()};
+                }"""
+            )
+            self.assertAlmostEqual(af["lat"], 32.8565, delta=0.02)
+            self.assertAlmostEqual(af["lng"], -117.2555, delta=0.02)
+            self.assertGreaterEqual(af["zoom"], 14)
+            self.assertLessEqual(af["zoom"], 16)
+        finally:
+            pg.close()
+
     def test_brand_and_renter_pages_use_saved_color_or_teal(self):
         state = {"color": "#ff00aa"}
         pg = self.b.new_page()
