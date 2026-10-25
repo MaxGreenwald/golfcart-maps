@@ -18,6 +18,14 @@ label{display:block;margin:10px 0 4px;font-size:13px;font-weight:800}
 input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:600 14px Nunito,system-ui;color:var(--ink);background:#fff}
 textarea{min-height:70px;resize:vertical}
 .row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+.color-pick{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:2px}
+.color-pick input[type=color]{-webkit-appearance:none;appearance:none;width:48px;height:40px;padding:0;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;flex:none}
+.color-pick input[type=color]::-webkit-color-swatch-wrapper{padding:4px}
+.color-pick input[type=color]::-webkit-color-swatch{border:0;border-radius:6px}
+.color-pick input[type=color]::-moz-color-swatch{border:0;border-radius:6px}
+.color-pick .btn{width:auto;flex:none;padding:8px 12px}
+.hex-readout{font:800 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--deep);background:transparent;border:0;padding:0}
+.hex-readout.is-default{font-family:Nunito,system-ui,sans-serif;opacity:.75}
 .btn{border:0;border-radius:12px;padding:10px 14px;font:800 14px Nunito;background:var(--aqua);color:#fff;cursor:pointer}
 .btn.alt{background:#e3f6f8;color:var(--deep)}.btn.warn{background:#fff1ec;color:#c2410c}.btn:disabled{opacity:.5}
 .msg{margin:10px 0;padding:10px 12px;border-radius:10px;background:#e3f6f8;color:var(--deep);font-size:13px}

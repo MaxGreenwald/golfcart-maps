@@ -23,6 +23,37 @@ function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+/** Brand accent when a shop leaves color unset. Matches --aqua / --brand on /p/<slug>. */
+const DEFAULT_BRAND = '#14b8c4';
+
+/** #rgb / #rrggbb → lowercase #rrggbb. Empty or anything else → ''. */
+function hexColor(raw) {
+  const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(raw ?? '').trim());
+  if (!m) return '';
+  let h = m[1].toLowerCase();
+  if (h.length === 3) h = h.replace(/./g, c => c + c);
+  return '#' + h;
+}
+
+function brandColorFields(stored) {
+  const raw = String(stored ?? '').trim();
+  const hex = hexColor(raw);
+  const picker = hex || DEFAULT_BRAND;
+  const hidden = hex || raw;
+  const readout = hex ? hex : (raw ? raw : 'Default teal');
+  const readoutClass = hex || raw ? 'hex-readout' : 'hex-readout is-default';
+  return `<div>
+      <label for="brandColorPick">Primary color (optional)</label>
+      <div class="color-pick">
+        <input type="color" id="brandColorPick" value="${esc(picker)}" aria-label="Primary color" aria-describedby="brandColorHint">
+        <output class="${readoutClass}" id="brandColorHex" for="brandColorPick">${esc(readout)}</output>
+        <button type="button" class="btn alt" id="brandColorClear"${hidden ? '' : ' disabled'}>Use default</button>
+      </div>
+      <input type="hidden" id="brandColor" value="${esc(hidden)}">
+      <p class="muted" id="brandColorHint">Click the swatch to pick a color. Use default for the teal accent on your brand page.</p>
+    </div>`;
+}
+
 function flash(ok, text) {
   state.msg = ok ? text : '';
   state.err = ok ? '' : text;
@@ -216,7 +247,7 @@ function shopView() {
     <label>Short blurb</label><textarea id="brandBlurb">${esc(s.blurb || '')}</textarea>
     <div class="row">
       <div><label>Logo URL (optional)</label><input id="brandLogo" value="${esc(s.logo_url || '')}" placeholder="https://…"></div>
-      <div><label>Primary color (optional)</label><input id="brandColor" value="${esc(s.color || '')}" placeholder="#14b8c4"></div>
+      ${brandColorFields(s.color)}
     </div>
     <p style="margin-top:12px"><button class="btn" id="saveBrand" type="button">Save brand</button></p>
   </div>
@@ -444,6 +475,44 @@ function readStops() {
   })).filter(s => s.label && Number.isFinite(s.lat) && Number.isFinite(s.lon));
 }
 
+function syncBrandColorReadout() {
+  const hidden = $('#brandColor');
+  const pick = $('#brandColorPick');
+  const readout = $('#brandColorHex');
+  const clearBtn = $('#brandColorClear');
+  if (!hidden || !readout) return;
+  const raw = hidden.value.trim();
+  const hex = hexColor(raw);
+  if (hex) {
+    readout.textContent = hex;
+    readout.className = 'hex-readout';
+    if (pick) pick.value = hex;
+  } else if (!raw) {
+    readout.textContent = 'Default teal';
+    readout.className = 'hex-readout is-default';
+    if (pick) pick.value = DEFAULT_BRAND;
+  } else {
+    readout.textContent = raw;
+    readout.className = 'hex-readout';
+    if (pick) pick.value = DEFAULT_BRAND;
+  }
+  if (clearBtn) clearBtn.disabled = !raw;
+}
+
+function wireBrandColor() {
+  const pick = $('#brandColorPick');
+  const hidden = $('#brandColor');
+  const clearBtn = $('#brandColorClear');
+  if (!pick || !hidden) return;
+  const apply = value => {
+    hidden.value = value;
+    syncBrandColorReadout();
+  };
+  pick.addEventListener('input', () => apply(hexColor(pick.value) || pick.value));
+  pick.addEventListener('change', () => apply(hexColor(pick.value) || pick.value));
+  if (clearBtn) clearBtn.addEventListener('click', () => apply(''));
+}
+
 function bindLogin() {
   const btn = $('#devLogin');
   if (!btn) return;
@@ -485,6 +554,8 @@ function bindApp() {
       await refreshSuper();
     } catch (e) { flash(false, e.message); }
   });
+
+  wireBrandColor();
 
   const saveBrand = $('#saveBrand');
   if (saveBrand) saveBrand.onclick = async () => {

@@ -66,6 +66,31 @@ class PartnerPortal(unittest.TestCase):
             src = open(os.path.join(ROOT, rel), encoding="utf-8").read()
             self.assertIsNone(beta.search(src), rel)
 
+    def test_brand_primary_color_is_a_picker(self):
+        with open(os.path.join(ROOT, "public/partner/admin.js"), encoding="utf-8") as f:
+            admin = f.read()
+        with open(os.path.join(ROOT, "public/partner/index.html"), encoding="utf-8") as f:
+            html = f.read()
+        self.assertIn('type="color"', admin)
+        self.assertIn('id="brandColorPick"', admin)
+        self.assertIn('id="brandColor"', admin)
+        self.assertIn("hexColor", admin)
+        self.assertIn("Use default", admin)
+        # Hex stays in a hidden field the save handler already posts. Not a text box the owner has to type.
+        self.assertIn('type="hidden" id="brandColor"', admin)
+        self.assertNotIn('placeholder="#14b8c4"', admin)
+        self.assertNotRegex(admin, r'<input id="brandColor"')
+        self.assertIn("color: $('#brandColor').value.trim()", admin)
+        self.assertIn("logo_url: $('#brandLogo').value.trim()", admin)
+        self.assertIn('id="brandName"', admin)
+        self.assertIn('id="brandBlurb"', admin)
+        self.assertIn(".color-pick input[type=color]", html)
+        # Empty color still means the brand page keeps --brand: var(--aqua).
+        with open(os.path.join(ROOT, "public/p.js"), encoding="utf-8") as f:
+            pjs = f.read()
+        self.assertIn("if (data.shop.color) document.documentElement.style.setProperty('--brand', data.shop.color)", pjs)
+        self.assertIn("if (shop.color) document.documentElement.style.setProperty('--brand', shop.color)", pjs)
+
     def test_brand_path_not_colliding_with_cities(self):
         # Partner brand pages are under /p/, never /<cityslug>.
         cities = {r["slug"] for r in U.regions()}
