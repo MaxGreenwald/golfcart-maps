@@ -322,7 +322,7 @@ window.gcmPartnerOverlay=async function(P){
   const r=await fetch('/api/partner/public/'+encodeURIComponent(slug)+'/unlock?code='+encodeURIComponent(code));
   if(!r.ok)return; const j=await r.json(); if(!j.unlocked||!j.shop)return;
   if(j.shop.region_id&&j.shop.region_id!==REG.id){window._regHow='partner';await loadRegion(j.shop.region_id,true)}
-  const city=$('city'); if(city){city.disabled=true;city.title='Locked to this rental shop\\'s city'}
+  const city=$('city'); if(city){city.disabled=true;city.title="Locked to this rental shop's city"}
   const g=L.layerGroup().addTo(map),bounds=[];
   (j.affiliates||[]).forEach(a=>{const ic=L.divIcon({className:'',html:'<div style="width:36px;height:36px;border-radius:50%;background:#fff;border:3px solid #f59e0b;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 3px 10px #0004;font-weight:800">★</div>',iconSize:[36,36],iconAnchor:[18,18]});
     L.marker([a.lat,a.lon],{icon:ic,zIndexOffset:800}).addTo(g).bindPopup('<b>'+String(a.name||'').replace(/[<>&]/g,s=>({ '<':'&lt;','>':'&gt;','&':'&amp;' }[s]))+'</b><br>'+String(a.offer||'')+(a.coupon?'<br>Coupon: <code>'+a.coupon+'</code>':'')); bounds.push([a.lat,a.lon])});
