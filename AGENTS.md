@@ -1,5 +1,7 @@
 # AGENTS.md: rules for bots working in this repo
 
+When memory or notes disagree with the code or a live system, the code wins; flag the memory fact.
+
 Every standing rule gets an automatic check where one is possible. If a rule keeps getting broken, add a check here instead of a reminder.
 "Human review" means no script can decide it; the named person or bot must look before it ships.
 Where a check lives only on an unmerged branch, the branch is named; it becomes a master check when that branch merges.
@@ -36,7 +38,7 @@ Where a check lives only on an unmerged branch, the branch is named; it becomes 
 | 18 | Nothing goes out in Max's name (email, posts, city emails) without his approval | plan, Ask Max | **Human review** (Max approves each template/send) | none |
 | 19 | Spend: no card; every purchase via a one-time virtual card Max approves; log in ledger | plan amendment 3 | **Human review** (Max) | none |
 | 20 | Don't change sharing on Google files; don't trash Drive files without approval | Max | **Human review** | none |
-| 22 | A production deploy is not done until `scripts/verify_live` prints PASS and that line is pasted into `/workspace/gcm/bot-log.md` (NO_TRACK on prod) | Manager coaching Oct 24 2026 | `scripts/verify_live` (+ `.cursor/skills/verify-golfcartmaps/`); planted-bad-road proof via `scripts/prove_bad_road_fail.py` | after every production deploy; branch verify-live until merged |
+| 22 | A production deploy is not done until `scripts/verify_live` prints PASS and that line is pasted into `/workspace/gcm/bot-log.md` (NO_TRACK on prod) | Manager coaching Oct 24 2026 | `scripts/verify_live` (+ `.cursor/skills/verify-golfcartmaps/`); planted-bad-road proof via `scripts/prove_bad_road_fail.py` | after every production deploy |
 | 21 | App Store review risk (Venmo tip, web-purchase restore on iOS) is checked before each App Store submission | iOS audit Oct 18 | **Human review**; branch ios-appstore-fixes | none |
 
 When you add a check, add a row. When a rule has no check, say so here rather than leaving it implied.
