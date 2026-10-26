@@ -238,10 +238,11 @@
    "applied": "research/regions/southbay.json bans + cart_only_bans + speed_names; regions.json rule.golf_cart (max 25)"
   },
   "fortmyers": {
-   "kind": "city + state",
+   "kind": "police guidance (citywide golf-cart ban)",
    "url": "https://www.gulfcoastnewsnow.com/article/fort-myers-police-noticing-influx-golf-cart-traffic-prohibited-areas/62491531",
-   "label": "City of Fort Myers: no golf carts on public roads/sidewalks (FMPD); LSV follows F.S. 316.2122 pending city confirm",
-   "applied": "golf carts designated_only / red on public roads; LSV state <=35 outside confirmed city LSV bans"
+   "label": "City of Fort Myers: golf carts banned on public roads and sidewalks (FMPD, 2024); LSVs follow F.S. 316.2122. The 2021 downtown-permit-only reading is not applied",
+   "applied": "research/regions/fortmyers.json cart_only_bans (all public roads inside City of Fort Myers limits, flag 4)",
+   "checked": "2026-10-26"
   }
  },
  "candidates": {

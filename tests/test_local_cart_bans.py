@@ -11,7 +11,7 @@ def flagged(r):
     return ix, [(ix["names"][s[0]], s) for s in out if len(s) > 9 and s[9] == 4]
 class LocalCartBans(unittest.TestCase):
     def test_every_flag4_cites_a_source(self):
-        for r in ("annamaria", "rockport", "chs", "staug", "obx", "lwr"):
+        for r in ("annamaria", "rockport", "chs", "staug", "obx", "lwr", "fortmyers"):
             ix, f = flagged(r)
             self.assertTrue(f, r)
             for nm, s in f:
@@ -80,7 +80,36 @@ class LocalCartBans(unittest.TestCase):
             self.assertNotEqual(s[3], "d", nm)   # never over a designated cart road
     def test_flag4_never_marks_a_road_green(self):
         # flag 4 only adds a golf-cart ban; it never replaces a both-vehicle ban (1) or a crossing (3)
-        for r in ("annamaria", "rockport", "chs", "staug", "obx", "lwr"):
+        for r in ("annamaria", "rockport", "chs", "staug", "obx", "lwr", "fortmyers"):
             _, f = flagged(r)
             for nm, s in f: self.assertNotEqual(s[2], None, (r, nm))
+    def test_fort_myers_city_roads(self):
+        # Max ruling 2026-10-25: FMPD 2024 bans golf carts on City of Fort Myers roads.
+        # Same encoding as St. Augustine Beach: city polygon + flag 4. LSVs keep their posted speed.
+        ix, f = flagged("fortmyers")
+        self.assertGreater(len(f), 200)
+        srcs = {ix["sources"][s[10]][0] for _, s in f}
+        self.assertEqual(srcs, {"https://www.gulfcoastnewsnow.com/article/fort-myers-police-noticing-influx-golf-cart-traffic-prohibited-areas/62491531"})
+        gj = json.load(open(os.path.join(ROOT, "research/city_limits/fort_myers.json")))["geojson"]
+        ring = gj["coordinates"][0]
+        def inside(x, y, ring=ring):
+            c = False
+            for i in range(len(ring)):
+                (x1, y1), (x2, y2) = ring[i - 1][:2], ring[i][:2]
+                if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1: c = not c
+            return c
+        for nm, s in f:
+            self.assertNotEqual(s[3], "c", nm)
+            self.assertNotEqual(s[8], s[10], nm)   # ban cite is separate from the speed source
+            lon, lat = s[7][len(s[7]) // 2]
+            self.assertTrue(inside(lon, lat), (nm, lat, lon))
+        self.assertTrue(any(s[2] <= 35 for _, s in f))   # city streets keep their posted speed
+        _, allsegs = segs("fortmyers")
+        # south of the city (San Carlos / the Bintelli store corridor) stays off this ban
+        south = [s for s in allsegs if s[7][len(s[7]) // 2][1] < 26.53 and s[3] != "c"]
+        self.assertTrue(south)
+        self.assertFalse(any(len(s) > 9 and s[9] == 4 for s in south))
+        # a both-vehicle ban already on the road (US 41) is not rewritten as flag 4
+        us41 = [s for s in allsegs if len(s) > 9 and s[9] == 1 and inside(*s[7][len(s[7]) // 2][:2])]
+        self.assertTrue(us41)
 if __name__ == "__main__": unittest.main()

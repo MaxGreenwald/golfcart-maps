@@ -1,13 +1,20 @@
 {
  "unverified": [
-  "City of Fort Myers has no ordinance allowing golf carts on public roads or sidewalks (FMPD guidance, 2024). Plain golf carts stay red on public roads (F.S. 316.212).",
-  "Confirm whether the City of Fort Myers still limits LSVs to a downtown district with a permit before treating all <=35 roads inside city limits as legal."
+  "City of Fort Myers: golf carts are not allowed on public roads or sidewalks (FMPD, 2024), except gated communities, golf courses, and official use. Applied to public roads inside the city limits. Outside the city, plain golf carts stay red on public roads unless designated (F.S. 316.212).",
+  "LSVs follow F.S. 316.2122 (roads posted 35 mph or less) inside and outside the city."
  ],
  "bans": [
   {
    "names": "^US ?41|Tamiami",
    "url": "https://www.flsenate.gov/Laws/Statutes/2026/0316.2122",
    "label": "US 41 / Tamiami: typically 45+ mph, not LSV"
+  }
+ ],
+ "cart_only_bans": [
+  {
+   "poly": "fort_myers.json",
+   "url": "https://www.gulfcoastnewsnow.com/article/fort-myers-police-noticing-influx-golf-cart-traffic-prohibited-areas/62491531",
+   "label": "City of Fort Myers (FMPD, 2024): golf carts are not allowed on public roads or sidewalks inside city limits (except gated communities, golf courses, and official use); LSVs on roads posted 35 mph or less"
   }
  ],
  "sources": [
@@ -17,8 +24,8 @@
   "Lee County golf cart designations exist for Pine Island and Captiva, not this mainland corridor"
  ],
  "enforcement": {
-  "checked": "2026-10-25",
-  "result": "local rules recorded (city golf cart ban; LSV state rule pending city confirm)",
+  "checked": "2026-10-26",
+  "result": "local rules recorded (golf carts banned on City of Fort Myers roads; LSVs follow F.S. 316.2122)",
   "sources": [
    {
     "label": "F.S. 316.2122 LSV",
@@ -33,7 +40,7 @@
     "url": "https://www.gulfcoastnewsnow.com/article/fort-myers-police-noticing-influx-golf-cart-traffic-prohibited-areas/62491531"
    }
   ],
-  "note": "Bintelli Fort Myers store (16850 S Tamiami Trl) sits just outside the Fort Myers Beach (Estero Island) region. This mainland map is for store-neighborhood LSV use. Posted signs never lift a ban."
+  "note": "Bintelli Fort Myers store (16850 S Tamiami Trl) sits just outside the Fort Myers Beach (Estero Island) region and outside the City of Fort Myers limits. Max ruling 2026-10-25: city roads are a golf-cart ban per FMPD 2024; the 2021 downtown-permit-only reading for LSVs is not applied. Posted signs never lift a ban."
  },
- "status": "Preview (bintelli-swfl-maps, 2026-10-25)"
+ "status": "Preview (bintelli-swfl-maps, 2026-10-26)"
 }
