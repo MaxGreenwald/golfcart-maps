@@ -4,7 +4,7 @@
    "names": "^DE 1$|^Coastal Highway$",
    "north_of": 38.705,
    "url": "https://delcode.delaware.gov/title21/c021/sc01/index.html",
-   "label": "21 Del. C. §2113A: LSVs may not drive on dual highways (Coastal Hwy, DE 1) in unincorporated areas, only cross"
+   "label": "21 Del. C. \u00a72113A: LSVs may not drive on dual highways (Coastal Hwy, DE 1) in unincorporated areas, only cross"
   },
   {
    "names": "^DE 1$|^Coastal Highway$",
@@ -15,7 +15,7 @@
     -75.0
    ],
    "url": "https://delcode.delaware.gov/title21/c021/sc01/index.html",
-   "label": "21 Del. C. §2113A: LSVs may not drive on dual highways (Coastal Hwy, DE 1) in unincorporated areas, only cross"
+   "label": "21 Del. C. \u00a72113A: LSVs may not drive on dual highways (Coastal Hwy, DE 1) in unincorporated areas, only cross"
   },
   {
    "names": "^DE 1$|^Coastal Highway$",
@@ -26,7 +26,7 @@
     -75.0
    ],
    "url": "https://delcode.delaware.gov/title21/c021/sc01/index.html",
-   "label": "21 Del. C. §2113A: LSVs may not drive on dual highways (Coastal Hwy, DE 1) in unincorporated areas, only cross"
+   "label": "21 Del. C. \u00a72113A: LSVs may not drive on dual highways (Coastal Hwy, DE 1) in unincorporated areas, only cross"
   },
   {
    "names": "^",
@@ -52,7 +52,7 @@
  ],
  "enforcement": {
   "checked": "2026-10-22",
-  "result": "local rules recorded",
+  "result": "bans_applied",
   "sources": [
    {
     "label": "Fenwick Island Code ch. 153",
@@ -67,7 +67,7 @@
     "url": "https://delcode.delaware.gov/title21/c021/sc01/index.html"
    }
   ],
-  "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban."
+  "note": "Local ordinance sources checked in the regions-25-batch research (Oct 22 2026); bans/rules recorded into this region. Posted signs never lift a ban."
  },
  "status": "Added (regions-25-batch, 2026-10-22)"
 }

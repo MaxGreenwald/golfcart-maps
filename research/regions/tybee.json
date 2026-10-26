@@ -11,5 +11,16 @@
   "https://cityoftybee.org/464/Motorized-Cart-Information",
   "https://www.cityoftybee.org/DocumentCenter/View/409/"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=tybee loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=tybee loads it",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Tybee motorized cart information",
+    "url": "https://cityoftybee.org/464/Motorized-Cart-Information"
+   }
+  ],
+  "note": "US 80 / Butler Ave bans applied."
+ }
 }

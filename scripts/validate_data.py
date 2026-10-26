@@ -15,9 +15,11 @@ baseline can't do this job because a new island hides behind a fixed one (that i
 The builders heal the clear cases themselves (islands.heal), so anything left needs a person: check the cite, then list it.
 
 Exit 1 if any region has more red islands or ring-code errors than research/validation_baseline.json allows
-(i.e. a new regression), or any same-road island that is not in the allowlist. Known, reviewed cases live in the baseline; lower it when data gets fixed. `--update-baseline` rewrites the baseline with today's counts (review the diff!)."""
+(i.e. a new regression), or any same-road island that is not in the allowlist. Known, reviewed cases live in the baseline; lower it when data gets fixed. `--update-baseline` rewrites the baseline with today's counts (review the diff!).
+Also runs scripts/check_enforcement.py (every live region needs a local enforcement record) on full runs."""
 import json, os, sys, glob, math
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import islands as ISL
+import check_enforcement as CE
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 BASE = os.path.join(ROOT, "research", "validation_baseline.json")
 ALLOW = os.path.join(ROOT, "research", "red_island_allowlist.json")
@@ -114,6 +116,8 @@ def main(argv):
                    "red_islands": dict(sorted({**bi, **counts}.items())), "ring_code_errors": dict(sorted({**br, **{k: v for k, v in rcounts.items() if v}}.items()))},
                   open(BASE, "w"), indent=1); print("baseline written", BASE)
         return 0
+    if not only:   # local-enforcement gate: every live region must record its sheriff/police/city source check
+        if CE.main([a for a in argv if a == "--strict"]): bad.append("enforcement")
     print("RESULT", "ALL OK" if not bad else "FAIL " + ",".join(sorted(set(bad))))
     return 1 if bad else 0
 

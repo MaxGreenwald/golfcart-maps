@@ -22,7 +22,25 @@
  ],
  "sources": [
   "https://costacarts.com/are-golf-carts-street-legal-by-state/",
-  "O.C.G.A. 40-6-331 (local designation), 40-6-362 (LSV ≤35)"
+  "O.C.G.A. 40-6-331 (local designation), 40-6-362 (LSV \u226435)"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=ptc loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=ptc loads it",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_pending",
+  "sources": [
+   {
+    "label": "Peachtree City cart ordinance (carts barred from Hwy 74, Hwy 54, Peachtree Pkwy, Crosstown Rd Peachtree Pkwy-Hwy 74)",
+    "url": "https://mcclibraryfunctions-stage.azurewebsites.us/api/ordinanceDownload/11414/1250481/pdf"
+   },
+   {
+    "label": "Peachtree City Paths & Motorized carts",
+    "url": "https://peachtree-city.org/navigateptc"
+   }
+  ],
+  "note": "Hwy 54/74 bans applied. Most of Peachtree Pkwy is already red for carts (posted 35-40 > the 25 cart cap); LSVs follow state law there.",
+  "missing": [
+   "Peachtree Parkway / N Peachtree Parkway: ordinance bars carts except at crossings; we show 0.34 mi (posted 25-30) as OK for golf carts."
+  ]
+ }
 }

@@ -172,5 +172,24 @@
   "state": "research/regions/wildwood/state.geojson",
   "boundary": "research/regions/wildwood/boundary.geojson",
   "url": "https://experience.arcgis.com/experience/8edb876eefd943c58567fa08819cf786"
+ },
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Sumter County golf cart ordinance amendment",
+    "url": "https://www.sumtercountyfl.gov/AgendaModule/AI7446/Golf%20Cart%20Ordinance%20Amendment%20-%20Final%20(00268768).pdf"
+   },
+   {
+    "label": "District Golf Car Rules of the Road",
+    "url": "https://www.districtgov.org/wp-content/uploads/2024/10/Golf-Car-Rules-of-the-Road.pdf"
+   },
+   {
+    "label": "Wildwood golf cart/LSV ordinance (2026)",
+    "url": "https://www.villages-news.com/2026/07/13/wildwood-adopts-new-golf-cart-and-low-speed-vehicle-ordinance/"
+   }
+  ],
+  "note": "Designated-route model (multi-modal paths + designated roads) from the Sumter County, District and Wildwood sources is what the build uses."
  }
 }

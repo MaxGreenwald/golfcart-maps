@@ -1,11 +1,11 @@
 {
  "unverified": [
-  "Untagged local streets are assumed 25 mph (Maine's default in built-up areas, 29-A §2074); a few rural roads at the town's west edge may be posted higher.",
+  "Untagged local streets are assumed 25 mph (Maine's default in built-up areas, 29-A \u00a72074); a few rural roads at the town's west edge may be posted higher.",
   "Smithwheel Road and Portland Avenue (north of Milliken Mills Rd) have no MaineDOT speed regulation on file; they're shown at the 25 mph built-up default. Check the signs."
  ],
  "bans": [],
  "sources": [
-  "29-A M.R.S. §2089 https://www.legislature.maine.gov/legis/statutes/29-A/title29-Asec2089.html",
+  "29-A M.R.S. \u00a72089 https://www.legislature.maine.gov/legis/statutes/29-A/title29-Asec2089.html",
   "MaineDOT Posted Speed Limits (official speed regulations) https://www.arcgis.com/home/item.html?id=45a20b2d367d47bb85d5a70ca81e2cd0",
   "OpenStreetMap"
  ],
@@ -61,5 +61,20 @@
    "mph": 40
   }
  ],
- "_speed_names": "Hand-entered from MaineDOT's official speed regulations where OSM ways span two posted zones (the automatic DOT match needs 60% agreement)."
+ "_speed_names": "Hand-entered from MaineDOT's official speed regulations where OSM ways span two posted zones (the automatic DOT match needs 60% agreement).",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "Old Orchard Beach Code of Ordinances (ch. 54 traffic)",
+    "url": "https://oob-me.elaws.us/code/coor"
+   },
+   {
+    "label": "29-A M.R.S. \u00a72089",
+    "url": "https://www.legislature.maine.gov/legis/statutes/29-A/title29-Asec2089.html"
+   }
+  ],
+  "note": "No town golf cart access-route list or ban list found in the town code."
+ }
 }

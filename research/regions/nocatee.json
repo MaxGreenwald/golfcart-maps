@@ -64,7 +64,7 @@
  ],
  "enforcement": {
   "checked": "2026-10-22",
-  "result": "rules_applied_paths_partial",
+  "result": "bans_pending",
   "sources": [
    {
     "label": "St. Johns County Ord. 2024-7 (golf carts/LSVs on county roads and multi-use paths; enforced by the Sheriff)",
@@ -83,7 +83,10 @@
     "url": "https://www.sjso.org/wp-content/uploads/2019/05/Golf-Cart-Flyers-UPDATE-5a.pdf"
    }
   ],
-  "note": "Golf carts: Nocatee roads posted 25 or less (region rule max_posted 25), signed 10 ft+ cart paths, designated 16 ft+ multi-use trails at 15 mph, not sidewalks. LSVs: state rule, posted 35 or less. US 1, SR A1A, CR 210 / Nocatee Pkwy, I-95 / SR 9B banned; Valley Ridge Blvd 45 mph. The Nocatee cart/trail map is an image we haven't digitized, so trail coverage relies on OSM golf_cart tags. No separate St. Johns Sheriff LSV road map was found."
+  "note": "Golf carts: Nocatee roads posted 25 or less (region rule max_posted 25), signed 10 ft+ cart paths, designated 16 ft+ multi-use trails at 15 mph, not sidewalks. LSVs: state rule, posted 35 or less. US 1, SR A1A, CR 210 / Nocatee Pkwy, I-95 / SR 9B banned; Valley Ridge Blvd 45 mph. The Nocatee cart/trail map is an image we haven't digitized, so trail coverage relies on OSM golf_cart tags. No separate St. Johns Sheriff LSV road map was found.",
+  "missing": [
+   "Nocatee Golf Cart Map signed cart paths / multi-use trails: source is an image not digitized; trail coverage relies on OSM golf_cart tags, so some signed paths may be missing or extra."
+  ]
  },
  "status": "Beta (region-nocatee, 2026-10-22)"
 }

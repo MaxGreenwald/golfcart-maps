@@ -12,5 +12,20 @@
   "https://library.municode.com/fl/marco_island/codes/code_of_ordinances?nodeId=PTIICOOR_CH50TRVE",
   "City of Naples designations not digitized"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=naples loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=naples loads it",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Marco Island Code ch. 50",
+    "url": "https://library.municode.com/fl/marco_island/codes/code_of_ordinances?nodeId=PTIICOOR_CH50TRVE"
+   },
+   {
+    "label": "City of Naples Code ch. 36",
+    "url": "https://library.municode.com/FL/Naples/codes/Code_of_Ordinances?nodeId=PTIICOOR_CH36TRVE"
+   }
+  ],
+  "note": "US 41, SR 84/951, I-75 bans applied. No City of Naples golf cart street map found."
+ }
 }
