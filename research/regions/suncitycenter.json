@@ -12,5 +12,16 @@
  "sources": [
   "F.S. 316.212/316.2122"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Sun City Center golf cart map 2022 (approved SR 674 / US 301 crossings)",
+    "url": "https://www.suncitycenter.org/wp-content/uploads/SCC-Golf-Cart-Map-2022.pdf"
+   }
+  ],
+  "note": "SR 674 / I-75 / US 301 bans applied; crossings per the map."
+ }
 }

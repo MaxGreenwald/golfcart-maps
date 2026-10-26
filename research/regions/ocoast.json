@@ -11,5 +11,19 @@
   "CVC 21260 (LSV \u226435)",
   "Laguna Woods / Village golf cart rules (CVC 21115 local) not digitized"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=ocoast loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=ocoast loads it",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_pending",
+  "sources": [
+   {
+    "label": "Laguna Woods guide to golf cart and LSV use (designated paths/crossings map)",
+    "url": "https://www.cityoflagunawoods.org/wp-content/uploads/2021/05/2021-05-24-Guide-to-Golf-Cart-and-Low-Speed-Vehicle-Use-in-Laguna-Woods.pdf"
+   }
+  ],
+  "note": "Carts limited to designated paths/crossings on El Toro, Moulton, Santa Maria, Ridge Route; mostly flagged already.",
+  "missing": [
+   "Laguna Woods bars carts from the roadway of El Toro, Moulton, Santa Maria and Ridge Route (designated paths/crossings only); we show Ridge Route Dr 0.34 mi, Santa Maria Ave 0.89 mi and El Toro Frontage Rd 0.21 mi as OK for golf carts."
+  ]
+ }
 }

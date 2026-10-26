@@ -65,5 +65,32 @@
    "url": "https://ducknc.gov/golf-carts-in-duck/",
    "label": "Town of Duck Ord. 18-04: golf carts may not operate along Duck Road (NC 12), only cross it at a right angle; side streets OK (registered, 16+)"
   }
- ]
+ ],
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_pending",
+  "sources": [
+   {
+    "label": "Duck: golf carts in Duck",
+    "url": "https://ducknc.gov/wp-content/uploads/Golf-Carts-in-Duck.pdf"
+   },
+   {
+    "label": "Kill Devil Hills golf cart memo",
+    "url": "https://www.kdhnc.com/DocumentCenter/View/14069/2022526_BOCC1OB1Golf_carts"
+   },
+   {
+    "label": "Nags Head golf cart FAQ",
+    "url": "https://nagsheadnc.gov/FAQ.aspx?QID=118"
+   },
+   {
+    "label": "Dare County golf carts & LSVs",
+    "url": "https://www.darenc.gov/about/golf-cart-safety"
+   }
+  ],
+  "note": "US 158 ban applied.",
+  "missing": [
+   "Duck Road (NC 12) in Duck: golf carts barred (LSVs OK); we show 1.27 mi (posted 25) as OK for golf carts.",
+   "Kill Devil Hills: golf carts not allowed on town streets; golf-cart mode shows its streets posted <=25 as OK."
+  ]
+ }
 }

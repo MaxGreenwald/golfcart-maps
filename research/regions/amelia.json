@@ -12,5 +12,16 @@
  "sources": [
   "F.S. 316.212/316.2122"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "Fernandina Beach: Low Speed Vehicles",
+    "url": "https://www.fbfl.us/1057/Low-Speed-Vehicles"
+   }
+  ],
+  "note": "City page restates the state <=35 LSV rule; no street ban list found. SR 200 / A1A Buccaneer ban applied."
+ }
 }

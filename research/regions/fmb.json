@@ -169,7 +169,7 @@
  ],
  "enforcement": {
   "checked": "2026-10-22",
-  "result": "local rules recorded",
+  "result": "bans_applied",
   "sources": [
    {
     "label": "Town of Fort Myers Beach Ord. 25-03",
@@ -180,7 +180,7 @@
     "url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
    }
   ],
-  "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban."
+  "note": "Local ordinance sources checked in the regions-25-batch research (Oct 22 2026); bans/rules recorded into this region. Posted signs never lift a ban."
  },
  "status": "Added (regions-25-batch, 2026-10-22)"
 }
