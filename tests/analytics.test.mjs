@@ -6,6 +6,16 @@ import { sinkFor, onRequestPost } from '../functions/api/e.js';
 
 const base = { v: 1, t: 'sd', pl: 'web', pwa: false, i: '0b9c2a4e-1111-4222-8333-444455556666', s: '1c9c2a4e-1111-4222-8333-444455556666' };
 
+test('internal channel survives sanitize and the /api/e forward, junk does not', () => {
+  const once = sanitize({ ...base, e: 'session', internal: 'simulator', p: { utm_source: 'nextdoor' } });
+  assert.equal(once.props.internal, 'sim');
+  assert.equal(once.props.utm_source, 'nextdoor');
+  const twice = sanitize({ e: once.event, t: once.town, pl: once.platform, pwa: false, i: once.iid, s: once.sid, p: once.props });
+  assert.equal(twice.props.internal, 'sim');
+  assert.equal(sanitize({ ...base, e: 'session', internal: 'Max Greenwald' }).props.internal, undefined);
+  assert.equal(sanitize({ ...base, e: 'session', p: { internal: 'tf' } }).props.internal, 'tf');
+});
+
 test('unknown events are dropped', () => {
   assert.equal(sanitize({ ...base, e: 'pageview' }), null);
   assert.equal(sanitize({ ...base, e: '__proto__' }), null);
