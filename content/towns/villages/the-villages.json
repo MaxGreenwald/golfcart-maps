@@ -3,7 +3,8 @@
  "region": "villages",
  "name": "The Villages",
  "state": "FL",
- "question_title": "Can you drive a golf cart in The Villages?",
+  "question_title": "Can you drive a golf cart in The Villages?",
+ "seo_title": "The Villages golf cart map and LSV map",
  "answer_short": "Yes. In The Villages, golf carts use the multi-modal paths and streets the county or city has designated, but not roads posted 35 mph or more. Street-legal LSVs may use roads posted 35 mph or less. Cross US 27/441, US 301 and SR 44 only at tunnels, bridges or signed crossings.",
  "golf_cart": {
   "allowed": "yes",

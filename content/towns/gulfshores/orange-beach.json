@@ -3,7 +3,8 @@
  "region": "gulfshores",
  "name": "Orange Beach",
  "state": "AL",
- "question_title": "Can you drive a golf cart in Orange Beach?",
+  "question_title": "Can you drive a golf cart in Orange Beach?",
+ "seo_title": "Orange Beach golf cart map and LSV map",
  "answer_short": "Yes, on low-speed streets. In Orange Beach, state-tagged golf carts and LSVs may only use streets posted 25 mph or less, and not the state highways (AL 59, 180, 182 and 161). Posted signs win.",
  "golf_cart": {
   "allowed": "limited",
@@ -21,18 +22,12 @@
   {
    "topic": "Speed cap",
    "rule": "Carts and LSVs not on streets posted over 25 mph",
-   "citation": "Gulf Shores Sec. 21-13 (Apr 13 2026)",
-   "source_url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"
+   "citation": "Orange Beach Ch. 70, Art. VIII",
+   "source_url": "https://library.municode.com/al/orange_beach/codes/code_of_ordinances?nodeId=COOR_CH70TRVE_ARTVIIIGOCA_S70-273DE"
   },
   {
-   "topic": "Designated streets",
-   "rule": "City list of designated cart streets",
-   "citation": "Gulf Shores designated cart streets",
-   "source_url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15531?fileID=45381"
-  },
-  {
-   "topic": "Orange Beach",
-   "rule": "Orange Beach cart ordinance (designated streets, 25 mph cap)",
+   "topic": "Chapter 70 amendment",
+   "rule": "Ordinance No. 2025-1521 amends Chapter 70, Article VIII (Golf Carts). Municode lists it as adopted November 3, 2025; the code history dates the amendment November 4, 2025.",
    "citation": "Orange Beach Ord. 2025-1521",
    "source_url": "https://library.municode.com/al/orange_beach/ordinances/code_of_ordinances?nodeId=2025"
   }
@@ -95,7 +90,7 @@
  ],
  "zoom": 15,
  "published": "2026-10-21",
- "last_checked": "2026-10-21",
+ "last_checked": "2026-10-26",
  "checked_by": "Golf Cart Maps",
  "sources": [
   "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"

@@ -16,7 +16,10 @@ class T(unittest.TestCase):
         self.assertTrue(has_both(h))
         title = re.search(r"<title>(.*?)</title>", h).group(1)
         self.assertTrue(has_both(title), title)
+        h1 = re.search(r"<h1>(.*?)</h1>", h).group(1)
+        self.assertRegex(h1, r"^Golf Cart Maps: golf cart map for \d+ towns$")
         desc = re.search(r'<meta name="description" content="([^"]*)"', h).group(1)
+        self.assertTrue(has_both(desc), desc)
         self.assertRegex(desc, SING); self.assertIn("Free to use", desc)
         self.assertIn("Is it Golf Cart Map or Golf Cart Maps?", h)
 
@@ -32,7 +35,9 @@ class T(unittest.TestCase):
 
     def test_map_page_both(self):
         h = open(os.path.join(PUB, "index.html"), encoding="utf-8").read()
-        self.assertTrue(has_both(re.search(r"<title>(.*?)</title>", h).group(1)))
+        title = re.search(r"<title>(.*?)</title>", h).group(1)
+        self.assertTrue(has_both(title))
+        self.assertIn("LSV Map", title)
 
     # Max Oct 23 11:56 AM PT: LSV targeting next to golf cart map(s), accurate to our LSV rules (not a blanket 35 mph)
     def test_home_lsv(self):

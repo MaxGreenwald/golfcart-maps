@@ -87,6 +87,8 @@ def build(src=os.path.join(ROOT, "public"), out=os.path.join(ROOT, "dist"), nati
         seo_towns.build(out)   # static /<region>/<town> pages from content/towns/ (not precached)
         import seo_compare
         seo_compare.build(out)   # static /compare page (not precached)
+        import seo_hubs
+        seo_hubs.build(out)   # /golf-cart-maps and /lsv (not precached)
     return name
 
 

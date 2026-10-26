@@ -3,7 +3,8 @@
  "region": "naples",
  "name": "Naples",
  "state": "FL",
- "question_title": "Can you drive a golf cart in Naples?",
+  "question_title": "Can you drive a golf cart in Naples?",
+ "seo_title": "Naples golf cart map and LSV map",
  "answer_short": "Only where the city or county has designated it. Florida lets golf carts use only roads a local government has designated and signed. Street-legal LSVs may use roads posted 35 mph or less. US 41, SR 84, SR 951 and I-75 are off limits.",
  "golf_cart": {
   "allowed": "limited",

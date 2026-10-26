@@ -3,7 +3,8 @@
  "region": "hiltonhead",
  "name": "Hilton Head Island",
  "state": "SC",
- "question_title": "Can you drive a golf cart in Hilton Head Island?",
+  "question_title": "Can you drive a golf cart in Hilton Head Island?",
+ "seo_title": "Hilton Head golf cart map and LSV map",
  "answer_short": "Yes, with limits. In Hilton Head Island, a permitted, insured golf cart may use secondary roads posted 35 mph or less, in daylight, within 4 miles of its registration address. Street-legal LSVs may use roads posted 35 mph or less. Carts stay off US 278 and the Cross Island Parkway.",
  "golf_cart": {
   "allowed": "limited",
