@@ -1,0 +1,39 @@
+{
+ "unverified": [
+  "City of Fort Myers has no ordinance allowing golf carts on public roads or sidewalks (FMPD guidance, 2024). Plain golf carts stay red on public roads (F.S. 316.212).",
+  "Confirm whether the City of Fort Myers still limits LSVs to a downtown district with a permit before treating all <=35 roads inside city limits as legal."
+ ],
+ "bans": [
+  {
+   "names": "^US ?41|Tamiami",
+   "url": "https://www.flsenate.gov/Laws/Statutes/2026/0316.2122",
+   "label": "US 41 / Tamiami: typically 45+ mph, not LSV"
+  }
+ ],
+ "sources": [
+  "F.S. 316.212 / 316.2122",
+  "FLHSMV low-speed vehicles https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
+  "Fort Myers Police golf cart enforcement (NBC2/WBBH, 2024-10-02) https://www.gulfcoastnewsnow.com/article/fort-myers-police-noticing-influx-golf-cart-traffic-prohibited-areas/62491531",
+  "Lee County golf cart designations exist for Pine Island and Captiva, not this mainland corridor"
+ ],
+ "enforcement": {
+  "checked": "2026-10-25",
+  "result": "local rules recorded (city golf cart ban; LSV state rule pending city confirm)",
+  "sources": [
+   {
+    "label": "F.S. 316.2122 LSV",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2026/0316.2122"
+   },
+   {
+    "label": "FLHSMV LSV page",
+    "url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+   },
+   {
+    "label": "FMPD golf cart prohibition coverage",
+    "url": "https://www.gulfcoastnewsnow.com/article/fort-myers-police-noticing-influx-golf-cart-traffic-prohibited-areas/62491531"
+   }
+  ],
+  "note": "Bintelli Fort Myers store (16850 S Tamiami Trl) sits just outside the Fort Myers Beach (Estero Island) region. This mainland map is for store-neighborhood LSV use. Posted signs never lift a ban."
+ },
+ "status": "Preview (bintelli-swfl-maps, 2026-10-25)"
+}

@@ -47,7 +47,7 @@
     ],
     "cross": false,
     "daylight_only": false,
-    "cite": "F.S. 316.212/316.2125; Sumter Co. 17-3, Marion Co. Ord. 03-26, Lady Lake 17-3, Fruitland Park ch.34, Wildwood O2026-28; paths 20 mph (CDD). Streets ≤30, major roads via tunnels/path crossings only"
+    "cite": "F.S. 316.212/316.2125; Sumter Co. 17-3, Marion Co. Ord. 03-26, Lady Lake 17-3, Fruitland Park ch.34, Wildwood O2026-28; paths 20 mph (CDD). Streets \u226430, major roads via tunnels/path crossings only"
    }
   },
   "slug": "villages"
@@ -169,7 +169,7 @@
   "cover": "Gulf Shores and Orange Beach only. Pick another city in the menu above.",
   "rule": {
    "max_posted": 25,
-   "cite": "Gulf Shores Sec. 21-13 (Apr 13 2026) & Orange Beach Sec. 70-273 / Ala. Const. Baldwin Co. §1.570: carts/LSVs only on streets posted ≤25",
+   "cite": "Gulf Shores Sec. 21-13 (Apr 13 2026) & Orange Beach Sec. 70-273 / Ala. Const. Baldwin Co. \u00a71.570: carts/LSVs only on streets posted \u226425",
    "url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"
   },
   "slug": "gulfshores",
@@ -236,7 +236,7 @@
   "rule": {
    "golf_cart": {
     "note": "Palm Desert and La Quinta golf cart plans may allow carts on some signed routes above 25 mph; we only show roads posted 25 or less for plain carts",
-    "cite": "CVC 21716; CVC 21115 + Sts. & Hwys. Code §1950 golf cart transportation plans (Palm Desert, La Quinta)"
+    "cite": "CVC 21716; CVC 21115 + Sts. & Hwys. Code \u00a71950 golf cart transportation plans (Palm Desert, La Quinta)"
    }
   }
  },
@@ -409,8 +409,8 @@
  },
  {
   "id": "siesta",
-  "name": "Siesta Key / Sarasota keys, FL",
-  "short": "Siesta Key",
+  "name": "Siesta Key & south Sarasota, FL",
+  "short": "Siesta / Sarasota",
   "state": "FL",
   "center": [
    27.268,
@@ -423,7 +423,7 @@
    27.45,
    -82.5
   ],
-  "cover": "Siesta Key, Lido, St. Armands and Longboat Key area only. Pick another city in the menu above.",
+  "cover": "Siesta Key, Lido, St. Armands, Longboat Key, and nearby south Sarasota mainland (Gulf Gate / Tamiami corridor). Pick another city in the menu above.",
   "slug": "siestakey"
  },
  {
@@ -610,7 +610,7 @@
   "cover": "Oak Island, Southport and Bald Head Island (carts only, no cars) only. Pick another city in the menu above.",
   "rule": {
    "max_posted": 35,
-   "cite": "Bald Head Island has no cars (golf carts and bikes only; ferry access). Southport and Oak Island: NC LSV ≤35 (G.S. 20-121.1), carts by town ordinance",
+   "cite": "Bald Head Island has no cars (golf carts and bikes only; ferry access). Southport and Oak Island: NC LSV \u226435 (G.S. 20-121.1), carts by town ordinance",
    "url": "https://villagebhi.org/",
    "golf_cart": {
     "note": "Bald Head Island: carts on island roads; Southport and Oak Island allow golf carts only by town ordinance, check local rules"
@@ -684,7 +684,7 @@
   "cover": "City of Avalon only (rental carts and permitted autoettes; most of the island outside town is closed to private vehicles). Pick another city in the menu above.",
   "rule": {
    "max_posted": 25,
-   "cite": "Avalon: all vehicles, golf carts included, need a City permit (AMC § 4-4.1702); visitors rent permitted autoettes (§ 4-4.1703(f)), residents get one per dwelling unit (§ 4-4.1703(g)); carts only on streets posted ≤25 mph (CVC 21716)",
+   "cite": "Avalon: all vehicles, golf carts included, need a City permit (AMC \u00a7 4-4.1702); visitors rent permitted autoettes (\u00a7 4-4.1703(f)), residents get one per dwelling unit (\u00a7 4-4.1703(g)); carts only on streets posted \u226425 mph (CVC 21716)",
    "url": "https://ecode360.com/AV4054"
   },
   "slug": "catalina"
@@ -789,7 +789,7 @@
   "slug": "waikoloa",
   "rule": {
    "note": "street-legal electric LSVs (NEVs) only, max 25 mph; plain golf carts aren't street-legal in Hawaii; Hawaii County code also bans golf carts on public roads (except marked crossings)",
-   "cite": "HRS 291C-134; Hawaii County Code ch. 24 art. 6 §24-177 (golf carts on public roads)"
+   "cite": "HRS 291C-134; Hawaii County Code ch. 24 art. 6 \u00a724-177 (golf carts on public roads)"
   }
  },
  {
@@ -888,6 +888,25 @@
   ],
   "cover": "Fort Myers Beach (Estero Island) only. Pick another city in the menu above.",
   "slug": "fortmyersbeach"
+ },
+ {
+  "id": "fortmyers",
+  "name": "Fort Myers & San Carlos, FL",
+  "short": "Fort Myers",
+  "state": "FL",
+  "center": [
+   26.52,
+   -81.87
+  ],
+  "zoom": 13,
+  "bbox": [
+   26.45,
+   -81.97,
+   26.62,
+   -81.78
+  ],
+  "cover": "South Fort Myers, San Carlos, and Iona around S Tamiami Trail. Fort Myers Beach is a separate map. Pick another city in the menu above.",
+  "slug": "fortmyers"
  },
  {
   "id": "sanibel",
@@ -1213,7 +1232,7 @@
     "max_posted": 25,
     "cross": true,
     "note": "golf carts need a license plate from their home state to use public roads",
-    "cite": "Town of Dauphin Island FAQ: golf carts need a state-issued license plate for public roadways; app keeps the Alabama ≤25 mph cap (UNCONFIRMED for Dauphin)",
+    "cite": "Town of Dauphin Island FAQ: golf carts need a state-issued license plate for public roadways; app keeps the Alabama \u226425 mph cap (UNCONFIRMED for Dauphin)",
     "url": "https://www.townofdauphinisland.org/faq"
    }
   },

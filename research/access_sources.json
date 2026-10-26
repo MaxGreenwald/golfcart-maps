@@ -236,6 +236,12 @@
    "url": "https://gocodebook.com/library/us/ca/manhattan-beach/title-14-traffic/chapter-14.28-miscellaneous-driving-rules",
    "label": "Manhattan Beach MC ch. 14.28 and Hermosa Beach MC 12.20.220 (no motor vehicles on the Strand/piers); speed-zone road lists: MBMC 14.56, HBMC 10.40.020, RBMC 3-7.503, TMC 61.10, PVEMC 10.56, ESMC 8-4, RPV 2018 TIA; SHC 1953 (no golf carts on state highways except crossings)",
    "applied": "research/regions/southbay.json bans + cart_only_bans + speed_names; regions.json rule.golf_cart (max 25)"
+  },
+  "fortmyers": {
+   "kind": "city + state",
+   "url": "https://www.gulfcoastnewsnow.com/article/fort-myers-police-noticing-influx-golf-cart-traffic-prohibited-areas/62491531",
+   "label": "City of Fort Myers: no golf carts on public roads/sidewalks (FMPD); LSV follows F.S. 316.2122 pending city confirm",
+   "applied": "golf carts designated_only / red on public roads; LSV state <=35 outside confirmed city LSV bans"
   }
  },
  "candidates": {
@@ -244,7 +250,7 @@
  "state_law": {
   "oob": {
    "text": "state law, no local ordinance found",
-   "law": "Maine 29-A M.R.S. §501(2-A) (golf carts only on islands without state roads) and §2089 (LSVs on roads posted <=35). The 'golf cart access route' bill (LD 878 / HP0627, 2017) cited before was never enacted: today's §2093 is 'Snow and ice'. So plain golf carts stay not street-legal in OOB.",
+   "law": "Maine 29-A M.R.S. \u00a7501(2-A) (golf carts only on islands without state roads) and \u00a72089 (LSVs on roads posted <=35). The 'golf cart access route' bill (LD 878 / HP0627, 2017) cited before was never enacted: today's \u00a72093 is 'Snow and ice'. So plain golf carts stay not street-legal in OOB.",
    "law_url": "https://legislature.maine.gov/statutes/29-A/title29-Asec2089.html",
    "searched": "Old Orchard Beach code of ordinances (https://oob-me.elaws.us/code/coor) and Ch. 54 Traffic; web search 'Old Orchard Beach golf cart LSV ordinance'"
   },
@@ -261,10 +267,10 @@
    "searched": "Honolulu ROH Ch. 15 Traffic (https://codelibrary.amlegal.com/codes/honolulu/latest/honolulu/0-0-0-10522); web search 'Kailua Oahu golf cart LSV ordinance'"
   },
   "siesta": {
-   "text": "state law, no local ordinance found",
-   "law": "Florida 316.212 / 316.2122; no Sarasota County cart-designated roads on Siesta Key found",
+   "text": "state law, no local ordinance found for Siesta Key / south Sarasota streets",
+   "law": "Florida 316.212 / 316.2122; City of Sarasota and Sarasota County have not designated Siesta Key or south Sarasota mainland streets for golf carts (county sidewalk designation near North Port is outside this map)",
    "law_url": "https://www.flsenate.gov/Laws/Statutes/2026/0316.212",
-   "searched": "web search 'Siesta Key Sarasota County golf cart LSV ordinance'; FLHSMV LSV page https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+   "searched": "web search 'Siesta Key Sarasota County golf cart LSV ordinance'; City of Sarasota code; Sarasota County Ord. 2026-009 (US 41 sidewalk near North Port only); FLHSMV LSV page"
   },
   "newport": {
    "text": "state law, no local ordinance found",
@@ -274,7 +280,7 @@
   },
   "crystalbeach": {
    "text": "state law, no local ordinance found",
-   "law": "Tex. Transp. Code §551.404 (golf carts on roads posted 35 mph or less within 2 mi of the master-planned community/beach or where the county allows) and §551.304 (LSVs on roads posted 35 or less). Galveston County unincorporated peninsula; SH 87 is crossing only.",
+   "law": "Tex. Transp. Code \u00a7551.404 (golf carts on roads posted 35 mph or less within 2 mi of the master-planned community/beach or where the county allows) and \u00a7551.304 (LSVs on roads posted 35 or less). Galveston County unincorporated peninsula; SH 87 is crossing only.",
    "law_url": "https://texas.public.law/statutes/tex._transp._code_section_551.404",
    "searched": "Galveston County code and commissioners court orders; web search 'Bolivar Peninsula golf cart ordinance'; community page crystalbeach.com"
   }
