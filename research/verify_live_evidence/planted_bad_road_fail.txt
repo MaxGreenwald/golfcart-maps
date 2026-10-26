@@ -1,0 +1,16 @@
+verify_live target=http://127.0.0.1:8767/ commit=1c61c335af4d started=2026-10-24 07:12 PT
+NO_TRACK via /workspace/gcm-verify-live/scripts/live_notrack.py
+
+=== test_road_labels (map URL) ===
+exit=1 16s
+FAIL Avoid label: La Jolla Boulevard 35mph status='OK for golf carts' color=#f08c00 moduleCls=3 txt='La Jolla Boulevard\nprimary · 35 mph 📷 posted sign (Mapillary)\nSource: La Jolla Blvd (Loring St - Colima St: posted 35 — Mapillary sign photo'
+FAIL wrongly legal: La Jolla Boulevard GCMRule.cls=3 but UI shows legal. status='OK for golf carts' color=#f08c00 txt='La Jolla Boulevard\nprimary · 35 mph 📷 posted sign (Mapillary)\nSource: La Jolla Blvd (Loring St - Colima St: posted 35 — Mapillary sign pho
+PASS OK label: Forward Street 25mph status='OK for golf carts' txt='Forward Street\ntertiary · 25 mph (assumed)\nConfidence: Low: no posted limit found, assumed\nOK for golf carts\nSegment length: 69 ft\nStart her'
+PASS OK label: Forward Street 25mph status='OK for golf carts' txt='Forward Street\ntertiary · 25 mph (assumed)\nConfidence: Low: no posted limit found, assumed\nOK for golf carts\nSegment length: 171 ft\nStart he'
+PASS OK label: Forward Street 25mph status='OK for golf carts' txt='Forward Street\ntertiary · 25 mph (assumed)\nConfidence: Low: no posted limit found, assumed\nOK for golf carts\nSegment length: 63 ft\nStart her'
+PASS OK label: Forward Street 25mph status='OK for golf carts' txt='Forward Street\ntertiary · 25 mph 📷 posted sign (Mapillary)\nSource: Mapillary: 1 posted 25 mph sign(s) detected\nConfidence: Medium: one sourc'
+PASS SD route search returns a legal route 1.67
+RESULT 12 FAIL: ['Avoid label: West Muirlands Drive 30mph', 'wrongly legal: West Muirlands Drive', 'Avoid label: Amalfi Street 35mph', 'wrongly legal: Amalfi Street', 'Avoid label: Amalfi Street 35mph', 'wrongly legal: Amalfi Street', 'Avoid label: Amalfi Street 35mph', 'wrongly legal: Amalfi Street', 'Avoid label: La Jolla Boulevard 35mph', 'wrongly legal: La Jolla Boulevard', 'Avoid label: La Jolla Boulevard 35mph', 'wrongly legal: La Jolla Boulevard']
+FAIL test_road_labels
+
+verify_live FAIL commit=1c61c335af4d time=2026-10-24 07:12 PT passed=0/1 failed=['test_road_labels'] url=http://127.0.0.1:8767/

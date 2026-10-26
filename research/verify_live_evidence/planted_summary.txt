@@ -1,0 +1,1 @@
+verify_live FAIL (planted bad road proof) time=2026-10-24 07:12 PT log=research/verify_live_evidence/planted_bad_road_fail.txt (local dist plant; not production)
