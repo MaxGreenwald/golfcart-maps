@@ -1,5 +1,5 @@
 """Every row of the Oct 22 backlinks list renders as a followed, descriptive Local resources link on its town or region page."""
-import csv, glob, json, os, re, shutil, sys, tempfile, unittest
+import collections, csv, glob, json, os, re, shutil, sys, tempfile, unittest
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, "..")
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 import seo_towns as T, seo_pages as P, seo_common as C
@@ -11,8 +11,15 @@ def all_resources():
 class LocalLinks(unittest.TestCase):
     def test_counts_and_shape(self):
         items = [(p, r) for p, L in all_resources() for r in L]
-        self.assertEqual(len(items), 60 + 23)   # Oct 22 list (49) + South Bay (11) + regions-25-batch region pages (23)
-        urls = [r["url"] for _, r in items]; self.assertEqual(len(urls), len(set(urls)))
+        self.assertEqual(len(items), 60 + 23 + 4)   # Oct 22 list (49) + South Bay (11) + regions-25-batch region pages (23) + Fort Myers (2) and Siesta Key (2)
+        urls = [r["url"] for _, r in items]
+        by_page = collections.defaultdict(list)
+        for p, r in items: by_page[p].append(r["url"])
+        for p, us in by_page.items(): self.assertEqual(len(us), len(set(us)), p)
+        # F.S. 316.2122 is the LSV rule on both the Fort Myers and Siesta Key region pages.
+        shared = "https://www.flsenate.gov/Laws/Statutes/2026/0316.2122"
+        dups = {u for u, n in collections.Counter(urls).items() if n > 1}
+        self.assertEqual(dups, {shared})
         self.assertFalse(DROPPED & set(urls))
         for p, r in items:
             self.assertTrue(r["url"].startswith("https://"), r)

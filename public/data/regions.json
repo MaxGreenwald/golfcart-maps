@@ -424,7 +424,8 @@
    -82.5
   ],
   "cover": "Siesta Key, Lido, St. Armands, Longboat Key, and nearby south Sarasota mainland (Gulf Gate / Tamiami corridor). Pick another city in the menu above.",
-  "slug": "siestakey"
+  "slug": "siestakey",
+  "beta": true
  },
  {
   "id": "destin",
@@ -906,7 +907,8 @@
    -81.78
   ],
   "cover": "South Fort Myers, San Carlos, and Iona around S Tamiami Trail. Fort Myers Beach is a separate map. Pick another city in the menu above.",
-  "slug": "fortmyers"
+  "slug": "fortmyers",
+  "beta": true
  },
  {
   "id": "sanibel",

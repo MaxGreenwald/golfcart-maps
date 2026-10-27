@@ -16,8 +16,12 @@
  ],
  "enforcement": {
   "checked": "2026-10-25",
-  "result": "local rules recorded (state law; no local cart designations in this map)",
+  "result": "bans_pending",
   "sources": [
+   {
+    "label": "Sarasota County BCC minutes: Res. 2014-150 bars LSVs on Midnight Pass Rd, Vista Hermosa Cir to Sanderling Rd",
+    "url": "https://sarasotacounty.granicus.com/MinutesViewer.php?clip_id=2789&view_id=37"
+   },
    {
     "label": "F.S. 316.212",
     "url": "https://www.flsenate.gov/Laws/Statutes/2026/0316.212"
@@ -31,7 +35,10 @@
     "url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
    }
   ],
-  "note": "Bintelli Sarasota store (7006 S Tamiami Trail) is inside this region's bbox. Golf Cart Maps regions research refresh for Bintelli SWFL (Oct 25 2026). Posted signs never lift a ban."
+  "note": "US 41 ban applied; Midnight Pass LSV ban not applied. Bintelli Sarasota store (7006 S Tamiami Trail) is inside this region's bbox. Golf Cart Maps regions research refresh for Bintelli SWFL (Oct 25 2026) updated the US 41 citation and sources. Posted signs never lift a ban.",
+  "missing": [
+   "Midnight Pass Road: Res. 2014-150 bans LSVs from Vista Hermosa Cir to Sanderling Rd (the stretch cut from 40 to 35 mph); we show ~4.3 mi of Midnight Pass Rd (posted 35 and assumed 25) as OK for LSVs. The banned stretch is inside that; endpoints still need a location check."
+  ]
  },
  "status": "Live (regions15); research refresh bintelli-swfl-maps 2026-10-25"
 }

@@ -56,17 +56,20 @@ Pages may set `PARTNER_URL` to override the Worker base (default: `gcm-partner` 
 
 Seeded demo shop `lajollacartco` (San Diego) with a seals joyride, Sunset Bar affiliate, and access code from the preview DO store (codes rotate if re-seeded).
 
-## Deploy (preview only — never production without Max)
+## Deploy (preview only — production goes through the gate)
 
 ```bash
 # 1) Partner worker (preview)
-cd workers/partner
-# once: wrangler secret put PARTNER_SESSION_SECRET --env preview
-npx wrangler@3 deploy --env preview
+scripts/deploy_worker.sh preview partner
+# once, from workers/partner: wrangler secret put PARTNER_SESSION_SECRET --env preview
 
 # 2) Pages preview from repo root
 scripts/deploy_web.sh preview partner-portal-mvp
 # → https://partner-portal-mvp.golfcart-maps.pages.dev/partner
+
+# Production (refuses without Max's chat or card id, and unless HEAD is origin/master):
+# scripts/deploy_worker.sh production partner --max-ok <Max chat or card id>
+# scripts/deploy_web.sh production --max-ok <Max chat or card id>
 ```
 
 Local UI (API still needs the Worker, or will 502):

@@ -1,7 +1,7 @@
 {
  "unverified": [
   "OSM tags few residential speed limits here; untagged local streets are assumed 25 mph and untagged collectors show as 'speed unknown, check signs'.",
-  "No county LSV route list is published; the app applies the state NEV rule (posted ≤35)."
+  "No county LSV route list is published; the app applies the state NEV rule (posted \u226435)."
  ],
  "bans": [],
  "sources": [
@@ -9,5 +9,16 @@
   "FHWA 2022 speed limit study (NHS roads)",
   "OpenStreetMap maxspeed"
  ],
- "status": "Beta (hawaii-oob, 2026-10-17)"
+ "status": "Beta (hawaii-oob, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "HRS 291C-134 (NEVs; no county NEV road list found)",
+    "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol05_Ch0261-0319/HRS0291C/HRS_0291C-0134.HTM"
+   }
+  ],
+  "note": "Searched for a county police / county DOT NEV or golf cart road list; none found. State rule (NEV on roads posted <=35) applies."
+ }
 }

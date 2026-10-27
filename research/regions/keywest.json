@@ -6,5 +6,16 @@
  "sources": [
   "F.S. 316.212/316.2122"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "City of Key West golf cart ordinance file 22-3235",
+    "url": "https://keywest.legistar.com/LegislationDetail.aspx?GUID=E27BC2B5-64DA-455B-AC32-BE9BD7B41BF5&ID=5852873&Options=&Search="
+   }
+  ],
+  "note": "City rules cover equipment/decals; no street ban list found."
+ }
 }

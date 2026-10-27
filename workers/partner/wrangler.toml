@@ -1,7 +1,8 @@
 # Partner portal Worker: shops, invites, experiences, affiliates, access codes.
 # SQLite Durable Object (same pattern as gcm-analytics; no D1 dashboard step).
-#   preview:    wrangler deploy --env preview   -> gcm-partner-preview
-#   production: wrangler deploy                 -> gcm-partner  (only with Max's OK)
+#   preview:    scripts/deploy_worker.sh preview partner
+#   production: scripts/deploy_worker.sh production partner --max-ok <Max chat or card id>
+#               (gcm-partner; the script refuses without the ref)
 #
 # Secrets (wrangler secret put NAME [--env preview]):
 #   PARTNER_SESSION_SECRET   HMAC for session cookies

@@ -11,5 +11,20 @@
   "https://www.azleg.gov/ars/28/00966.htm (NEV/LSV \u226435, may cross)",
   "https://apps.azdot.gov/files/mvd/mvd-forms-lib/96-0124.pdf"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=suncity loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=suncity loads it",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "Sun City HOA: golf carts in Sun City (MCSO guidance)",
+    "url": "https://suncityhoa.org/golf-carts-in-sun-city/"
+   },
+   {
+    "label": "ARS 28-966",
+    "url": "https://www.azleg.gov/ars/28/00966.htm"
+   }
+  ],
+  "note": "MCSO guidance is the state <=35 rule; no road ban list beyond US 60 / Loop 101/303 (applied)."
+ }
 }

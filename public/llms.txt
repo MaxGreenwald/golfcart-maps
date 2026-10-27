@@ -1,14 +1,15 @@
 # Golf Cart Maps
 
-> Golf Cart Maps (golfcartmap.com) is a golf cart map, LSV map and route planner for golf carts and street-legal LSVs (low speed vehicles), free to use. It shows which roads are legal for golf carts and street-legal LSVs in 64 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
+> Golf Cart Maps (golfcartmap.com) is a golf cart map, LSV map and route planner for golf carts and street-legal LSVs (low speed vehicles), free to use. It shows which roads are legal for golf carts and street-legal LSVs in 65 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
 
 URL: https://golfcartmap.com/
 Also written: Golf Cart Map, GolfCartMap (same site).
 
 ## What it does
 - Colors every road: green = allowed for your vehicle, red = too fast or banned (avoid).
-- LSV map (low speed vehicle map): for street-legal golf carts and other LSVs it shows roads posted 35 mph or less in 59 of our 64 regions (25 mph in Avalon (Catalina Island), CA; Cape May & the Wildwoods, NJ; Gulf Shores / Orange Beach, AL; Long Beach Island, NJ; Ocean City, NJ), minus roads a town or county bans for LSVs.
+- LSV map (low speed vehicle map): for street-legal golf carts and other LSVs it shows roads posted 35 mph or less in 60 of our 65 regions (25 mph in Avalon (Catalina Island), CA; Cape May & the Wildwoods, NJ; Gulf Shores / Orange Beach, AL; Long Beach Island, NJ; Ocean City, NJ), minus roads a town or county bans for LSVs. LSV map app: https://golfcartmap.com/lsv.
 - Golf cart map: plain golf carts get their own state and local rules, usually fewer roads.
+- Golf cart maps (plural): https://golfcartmap.com/golf-cart-maps lists every town map.
 - Plans routes on allowed roads; crossing a faster road at an intersection is allowed where state law permits it.
 - Battery range check for a trip, public EV chargers, and a way to report a wrong road.
 - Works in any web browser.
@@ -43,6 +44,7 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 - [Cape San Blas & Mexico Beach, FL](https://golfcartmap.com/capesanblas)
 - [Clearwater Beach & Dunedin, FL](https://golfcartmap.com/clearwater)
 - [Destin / Okaloosa Island, FL](https://golfcartmap.com/destin)
+- [Fort Myers & San Carlos, FL](https://golfcartmap.com/fortmyers)
 - [Fort Myers Beach, FL](https://golfcartmap.com/fortmyersbeach)
 - [Key West, FL](https://golfcartmap.com/keywest)
 - [Lakewood Ranch, FL](https://golfcartmap.com/lakewoodranch)
@@ -52,7 +54,7 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 - [Panama City Beach, FL](https://golfcartmap.com/panamacitybeach)
 - [Pensacola Beach & Navarre Beach, FL](https://golfcartmap.com/pensacolabeach)
 - [Sanibel & Captiva, FL](https://golfcartmap.com/sanibel)
-- [Siesta Key / Sarasota keys, FL](https://golfcartmap.com/siestakey)
+- [Siesta Key & south Sarasota, FL](https://golfcartmap.com/siestakey)
 - [St. Augustine, FL](https://golfcartmap.com/staugustine)
 - [St. George Island, FL](https://golfcartmap.com/stgeorgeisland)
 - [St. Pete Beach & Treasure Island, FL](https://golfcartmap.com/stpetebeach)

@@ -25,7 +25,7 @@
  ],
  "enforcement": {
   "checked": "2026-10-26",
-  "result": "local rules recorded (golf carts banned on City of Fort Myers roads; LSVs follow F.S. 316.2122)",
+    "result": "bans_applied",
   "sources": [
    {
     "label": "F.S. 316.2122 LSV",

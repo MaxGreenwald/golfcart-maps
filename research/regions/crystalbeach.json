@@ -17,7 +17,7 @@
  ],
  "enforcement": {
   "checked": "2026-10-22",
-  "result": "state law only",
+  "result": "none_found",
   "sources": [
    {
     "label": "CrystalBeach.com golf cart rules",
@@ -28,7 +28,7 @@
     "url": "https://texas.public.law/statutes/tex._transp._code_section_551.404"
    }
   ],
-  "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban."
+  "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban. No local sheriff/police/city cart road ban list beyond state law found."
  },
  "status": "Added (regions-25-batch, 2026-10-22)"
 }

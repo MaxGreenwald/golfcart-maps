@@ -435,6 +435,28 @@
    "pct_nonban": 91.6,
    "reports": 0
   },
+  "fortmyers": {
+   "access_check": true,
+   "assumed_mi": 116.5,
+   "ban_mi": 25.8,
+   "ban_sourced_mi": 25.8,
+   "conflicts": 64,
+   "corridor_mi_to_70": 138.5,
+   "corridors_to_70": 64,
+   "county_assumed_mi": 0,
+   "exempt": false,
+   "grid_mi": 0,
+   "important_mi": 326.3,
+   "missing": [
+    "29.9% < 70% (bans in)",
+    "non-ban 24.4% < 50% floor"
+   ],
+   "override": null,
+   "passes": false,
+   "pct_bans_in": 29.9,
+   "pct_nonban": 24.4,
+   "reports": 0
+  },
   "galveston": {
    "access_check": true,
    "assumed_mi": 51.5,
@@ -1075,21 +1097,23 @@
   },
   "siesta": {
    "access_check": true,
-   "assumed_mi": 62.0,
+   "assumed_mi": 81.0,
    "ban_mi": 28.7,
    "ban_sourced_mi": 28.7,
-   "conflicts": 60,
-   "corridor_mi_to_70": 0,
-   "corridors_to_70": 0,
+   "conflicts": 92,
+   "corridor_mi_to_70": 24.1,
+   "corridors_to_70": 8,
    "county_assumed_mi": 0,
    "exempt": false,
    "grid_mi": 0,
    "important_mi": 271.3,
-   "missing": [],
+   "missing": [
+    "62.3% < 70% (bans in)"
+   ],
    "override": null,
-   "passes": true,
-   "pct_bans_in": 74.6,
-   "pct_nonban": 72.0,
+   "passes": false,
+   "pct_bans_in": 62.3,
+   "pct_nonban": 58.4,
    "reports": 0
   },
   "southbay": {

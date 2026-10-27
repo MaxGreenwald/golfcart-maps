@@ -263,7 +263,7 @@
  ],
  "bans": [],
  "unverified": [
-  "Dauphin Island doesn't publish a cart speed cap; the app keeps the Alabama ≤25 mph cap. Bienville Blvd's 35 and 40 mph stretches show red for carts."
+  "Dauphin Island doesn't publish a cart speed cap; the app keeps the Alabama \u226425 mph cap. Bienville Blvd's 35 and 40 mph stretches show red for carts."
  ],
  "sources": [
   "Town of Dauphin Island FAQ https://www.townofdauphinisland.org/faq",
@@ -272,14 +272,14 @@
  ],
  "enforcement": {
   "checked": "2026-10-22",
-  "result": "local rules recorded",
+  "result": "bans_applied",
   "sources": [
    {
     "label": "Town of Dauphin Island FAQ",
     "url": "https://www.townofdauphinisland.org/faq"
    }
   ],
-  "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban."
+  "note": "Local ordinance sources checked in the regions-25-batch research (Oct 22 2026); bans/rules recorded into this region. Posted signs never lift a ban."
  },
  "status": "Added (regions-25-batch, 2026-10-22)"
 }

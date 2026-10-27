@@ -3,7 +3,8 @@
  "region": "gulfshores",
  "name": "Gulf Shores",
  "state": "AL",
- "question_title": "Can you drive a golf cart in Gulf Shores?",
+  "question_title": "Can you drive a golf cart in Gulf Shores?",
+ "seo_title": "Gulf Shores golf cart map and LSV map",
  "answer_short": "Yes, on low-speed streets. In Gulf Shores, state-tagged golf carts and LSVs may only use streets posted 25 mph or less, and not the state highways (AL 59, 180, 182 and 161). Posted signs win.",
  "golf_cart": {
   "allowed": "limited",
@@ -26,9 +27,9 @@
   },
   {
    "topic": "Designated streets",
-   "rule": "City list of designated cart streets",
-   "citation": "Gulf Shores designated cart streets",
-   "source_url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15531?fileID=45381"
+   "rule": "See Ordinance No. 2210 (April 13, 2026) for the designated cart street list. The city copy adds Aventura streets and restates Cotton Bay subdivision streets. The map uses the 25 mph cap above.",
+   "citation": "Gulf Shores Ordinance No. 2210",
+   "source_url": "https://library.municode.com/al/gulf_shores/ordinances/code_of_ordinances?nodeId=1420654"
   },
   {
    "topic": "Orange Beach",
@@ -100,7 +101,7 @@
  ],
  "zoom": 15,
  "published": "2026-10-21",
- "last_checked": "2026-10-21",
+ "last_checked": "2026-10-26",
  "checked_by": "Golf Cart Maps",
  "sources": [
   "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"
