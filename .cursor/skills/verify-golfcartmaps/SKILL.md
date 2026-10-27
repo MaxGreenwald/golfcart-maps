@@ -49,7 +49,7 @@ Worth driving only if the map shell loads (`window.ready===true` within 120s) an
 Prefer the standing command (bundles suites through `scripts/live_notrack.py` so `window.NO_TRACK=1` on every context):
 
 ```bash
-scripts/verify_live                          # full; paste PASS into /workspace/gcm/bot-log.md after a prod deploy
+scripts/verify_live                          # full. production deploy_web.sh appends the line to $GCM_BOT_LOG
 scripts/verify_live --quick                  # skip 64-region town sweep
 scripts/verify_live --only test_road_labels  # labels vs GCMRule.cls
 ```
