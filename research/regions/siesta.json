@@ -1,30 +1,44 @@
 {
  "unverified": [
-  "City-level cart designations not digitized; app applies the state LSV rule (posted \u226435)."
+  "City of Sarasota and Sarasota County have not designated Siesta Key / south Sarasota public streets for golf carts; app applies the state LSV rule (posted <=35) for street-legal LSV carts."
  ],
  "bans": [
   {
    "names": "^US ?41|Tamiami",
-   "url": "https://www.flhouse.gov/Statutes/2025/0316.212/",
-   "label": "US 41: FDOT, 45+ mph"
+   "url": "https://www.flsenate.gov/Laws/Statutes/2026/0316.2122",
+   "label": "US 41 / Tamiami: typically 45+ mph, not LSV"
   }
  ],
  "sources": [
-  "F.S. 316.212/316.2122"
+  "F.S. 316.212 / 316.2122",
+  "FLHSMV low-speed vehicles https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
+  "City of Sarasota: no golf cart street designations found (county sidewalk designation near North Port / Warm Mineral Springs is outside this map)"
  ],
- "status": "Beta (regions15, 2026-10-17)",
  "enforcement": {
-  "checked": "2026-10-21",
+  "checked": "2026-10-25",
   "result": "bans_pending",
   "sources": [
    {
     "label": "Sarasota County BCC minutes: Res. 2014-150 bars LSVs on Midnight Pass Rd, Vista Hermosa Cir to Sanderling Rd",
     "url": "https://sarasotacounty.granicus.com/MinutesViewer.php?clip_id=2789&view_id=37"
+   },
+   {
+    "label": "F.S. 316.212",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2026/0316.212"
+   },
+   {
+    "label": "F.S. 316.2122 LSV",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2026/0316.2122"
+   },
+   {
+    "label": "FLHSMV LSV page",
+    "url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
    }
   ],
-  "note": "US 41 ban applied; Midnight Pass LSV ban not applied.",
+  "note": "US 41 ban applied; Midnight Pass LSV ban not applied. Bintelli Sarasota store (7006 S Tamiami Trail) is inside this region's bbox. Golf Cart Maps regions research refresh for Bintelli SWFL (Oct 25 2026) updated the US 41 citation and sources. Posted signs never lift a ban.",
   "missing": [
    "Midnight Pass Road: Res. 2014-150 bans LSVs from Vista Hermosa Cir to Sanderling Rd (the stretch cut from 40 to 35 mph); we show ~4.3 mi of Midnight Pass Rd (posted 35 and assumed 25) as OK for LSVs. The banned stretch is inside that; endpoints still need a location check."
   ]
- }
+ },
+ "status": "Live (regions15); research refresh bintelli-swfl-maps 2026-10-25"
 }

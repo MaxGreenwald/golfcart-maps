@@ -3415,6 +3415,252 @@
    "cite": [
     "Mapillary: 3 posted 40 mph sign(s) detected"
    ]
+  },
+  {
+   "region": "fortmyers",
+   "road": "Forum Boulevard",
+   "at": [
+    26.61399,
+    -81.79629
+   ],
+   "m": 69,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": [
+    "OSM tag 45; sides assumed/residential 25; review before prod"
+   ]
+  },
+  {
+   "region": "fortmyers",
+   "road": "FSW Parkway",
+   "at": [
+    26.55454,
+    -81.8893
+   ],
+   "m": 229,
+   "mph": [
+    37
+   ],
+   "sides": [
+    20,
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": [
+    "OSM tag 37; campus road; review before prod"
+   ]
+  },
+  {
+   "region": "fortmyers",
+   "road": "FSW Parkway",
+   "at": [
+    26.5531,
+    -81.89094
+   ],
+   "m": 389,
+   "mph": [
+    37
+   ],
+   "sides": [
+    20,
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": [
+    "OSM tag 37; campus road; review before prod"
+   ]
+  },
+  {
+   "region": "fortmyers",
+   "road": "Fiddlesticks Boulevard",
+   "at": [
+    26.54694,
+    -81.80411
+   ],
+   "m": 759,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": [
+    "OSM tag 45; review before prod"
+   ]
+  },
+  {
+   "region": "fortmyers",
+   "road": "Palm Tree Boulevard",
+   "at": [
+    26.56451,
+    -81.96596
+   ],
+   "m": 297,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [
+    "no posted limit; sides inferred; review before prod"
+   ]
+  },
+  {
+   "region": "fortmyers",
+   "road": "Palm Tree Boulevard",
+   "at": [
+    26.56649,
+    -81.96607
+   ],
+   "m": 323,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [
+    "no posted limit; sides inferred; review before prod"
+   ]
+  },
+  {
+   "region": "fortmyers",
+   "road": "Del Prado Boulevard South",
+   "at": [
+    26.59531,
+    -81.94175
+   ],
+   "m": 718,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 45 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "fortmyers",
+   "road": "Victoria Drive",
+   "at": [
+    26.55911,
+    -81.95786
+   ],
+   "m": 12,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": [
+    "OSM tag 40; short stub; review before prod"
+   ]
+  },
+  {
+   "region": "fortmyers",
+   "road": "A and W Bulb Road",
+   "at": [
+    26.52664,
+    -81.9197
+   ],
+   "m": 344,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "fortmyers",
+   "road": "Del Prado Boulevard South",
+   "at": [
+    26.60639,
+    -81.94132
+   ],
+   "m": 176,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 45 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "siesta",
+   "road": "Higel Avenue",
+   "at": [
+    27.29769,
+    -82.55808
+   ],
+   "m": 138,
+   "mph": [
+    40
+   ],
+   "sides": [
+    30
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "Mapillary: 2 posted 40 mph sign(s) detected"
+   ]
+  },
+  {
+   "region": "siesta",
+   "road": "17th Street",
+   "at": [
+    27.35223,
+    -82.5303
+   ],
+   "m": 22,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [
+    "no posted limit; short gap; review before prod"
+   ]
   }
  ]
 }

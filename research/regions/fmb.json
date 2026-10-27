@@ -159,7 +159,8 @@
  ],
  "bans": [],
  "unverified": [
-  "No town designation of golf cart streets was found, so plain golf carts show red on public roads (F.S. 316.212)."
+  "No town designation of golf cart streets was found, so plain golf carts show red on public roads (F.S. 316.212).",
+  "City of Fort Myers (mainland, not this island) prohibits golf carts on public roads and sidewalks."
  ],
  "sources": [
   "Town of Fort Myers Beach Ord. 25-03 https://www.fortmyersbeachfl.gov/DocumentCenter/View/24451/25-03-Beach-Bicycle-and-Vehicle-Safety",
@@ -180,7 +181,7 @@
     "url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
    }
   ],
-  "note": "Local ordinance sources checked in the regions-25-batch research (Oct 22 2026); bans/rules recorded into this region. Posted signs never lift a ban."
+  "note": "Local ordinance sources checked in the regions-25-batch research (Oct 22 2026); bans/rules recorded into this region. Posted signs never lift a ban. Bintelli Fort Myers store is ~1 mi outside Estero Island (mainland); use the Fort Myers & San Carlos map for store-neighborhood coverage."
  },
  "status": "Added (regions-25-batch, 2026-10-22)"
 }
