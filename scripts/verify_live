@@ -12,8 +12,9 @@ Usage:
   scripts/verify_live --only test_road_labels  # one suite
 
 Prints one PASS/FAIL summary line with git commit and America/Los_Angeles time.
-A production deploy is not done until that PASS line is pasted into
-/workspace/gcm/bot-log.md (see AGENTS.md rule 22 and research/verify_live.md).
+scripts/deploy_web.sh production runs this against https://golfcartmap.com and appends
+one line (time PT, commit, Max OK ref, PASS or FAIL) to $GCM_BOT_LOG
+(default /workspace/gcm/bot-log.md). See AGENTS.md rule 22.
 """
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 # verify_live — standing live verification
 
-Manager coaching Oct 24 2026: one command drives golfcartmap.com like a user and prints a single PASS/FAIL. A deploy is not done until the PASS line is in `/workspace/gcm/bot-log.md`.
+Manager coaching Oct 24 2026: one command drives golfcartmap.com like a user and prints a single PASS/FAIL. `scripts/deploy_web.sh production` runs it and appends one line (time PT, commit, Max OK ref, PASS or FAIL) to `$GCM_BOT_LOG` (default `/workspace/gcm/bot-log.md`).
 
 ## Command
 

@@ -66,6 +66,37 @@ def stamp(sw_txt, name):
     return sw_txt.replace(PLACEHOLDER, name, 1)
 
 
+INTERNAL_TOKEN = "__GCM_ANALYTICS_INTERNAL__"
+# Empty string = a normal production build. sim/tf are for simulator CI and an internal TestFlight, never the public app.
+INTERNAL_OK = {"", "sim", "tf", "e2e", "ci", "test", "playwright", "internal", "debug", "notrack"}
+
+
+def analytics_internal_channel(argv=None):
+    a = sys.argv if argv is None else argv
+    ch = os.environ.get("GCM_ANALYTICS_INTERNAL", "")
+    if "--internal" in a:
+        i = a.index("--internal")
+        if i + 1 >= len(a):
+            raise SystemExit("--internal needs a channel (sim, tf, e2e, ...)")
+        ch = a[i + 1]
+    if ch not in INTERNAL_OK:
+        raise SystemExit("GCM_ANALYTICS_INTERNAL must be empty or one of: " + ", ".join(sorted(INTERNAL_OK - {""})))
+    return ch
+
+
+def stamp_analytics_internal(out, channel=None):
+    """Write the internal-analytics channel into dist/track.js. Source public/track.js keeps the token."""
+    if channel is None:
+        channel = analytics_internal_channel()
+    p = os.path.join(out, "track.js")
+    with open(p, encoding="utf-8") as f:
+        txt = f.read()
+    if INTERNAL_TOKEN not in txt:
+        raise SystemExit("public/track.js is missing __GCM_ANALYTICS_INTERNAL__")
+    with open(p, "w", encoding="utf-8") as f:
+        f.write(txt.replace(INTERNAL_TOKEN, channel, 1))
+
+
 def build(src=os.path.join(ROOT, "public"), out=os.path.join(ROOT, "dist"), native=None):
     """Web: dist/index.html = landing page, dist/map.html = the map (served at /map).
     Native (--native or GCM_NATIVE=1, for the Capacitor iOS/Android webDir): dist/index.html stays the map, no landing page."""
@@ -89,6 +120,7 @@ def build(src=os.path.join(ROOT, "public"), out=os.path.join(ROOT, "dist"), nati
         seo_compare.build(out)   # static /compare page (not precached)
         import seo_hubs
         seo_hubs.build(out)   # /golf-cart-maps and /lsv (not precached)
+    stamp_analytics_internal(out)
     return name
 
 

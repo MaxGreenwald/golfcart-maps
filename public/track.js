@@ -10,6 +10,37 @@
   const platform = () => { if (!native()) return 'web'; try { const p = W.Capacitor.getPlatform(); return p === 'android' ? 'android' : 'ios' } catch (_) { return 'ios' } };
   const pwa = () => { try { return !!(matchMedia('(display-mode: standalone)').matches || navigator.standalone) } catch (_) { return false } };
   const optedOut = () => !!(W.NO_TRACK || get('gcm-notrack') || navigator.globalPrivacyControl === true || navigator.doNotTrack === '1');
+  // Build stamp. scripts/build_web.py replaces the token (GCM_ANALYTICS_INTERNAL / --internal).
+  // sim = CarPlay/iOS simulator CI, tf = an internal TestFlight build (not the public TestFlight).
+  const BUILD_INTERNAL = '__GCM_ANALYTICS_INTERNAL__';
+  const INTERNAL = { sim: 1, tf: 1, e2e: 1, ci: 1, test: 1, playwright: 1, internal: 1, debug: 1, notrack: 1, simulator: 'sim', testflight: 'tf', no_track: 'notrack' };
+  function normInternal(v) {
+    if (v == null) return '';
+    v = String(v).trim().toLowerCase();
+    if (!v || v.indexOf('__') !== -1) return '';
+    const m = INTERNAL[v];
+    return m === 1 ? v : (typeof m === 'string' ? m : '');
+  }
+  function utmExcluded(v) {
+    v = (v || '').toString().trim().toLowerCase();
+    if (!v) return false;
+    if (normInternal(v)) return true;
+    if (/^(e2e|ci|test)[-_.]/.test(v)) return true;
+    if (/^(playwright|simulator|notrack|testflight)/.test(v)) return true;
+    return false;
+  }
+  // Installs that must not count as users: explicit flag, this build, Playwright/webdriver, or a test UTM.
+  function channel() {
+    const marked = normInternal(W.GCM_INTERNAL) || normInternal(get('gcm-internal')) || normInternal(BUILD_INTERNAL);
+    if (marked) return marked;
+    try { if (navigator.webdriver === true) return 'e2e'; } catch (_) {}
+    try {
+      const q = new URLSearchParams(location.search);
+      for (const k of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) if (utmExcluded(q.get(k))) return 'e2e';
+    } catch (_) {}
+    return '';
+  }
+  function stamp(o) { const c = channel(); if (c) o.internal = c; return o; }
   const SESSION_MS = 30 * 60000;
   let newInstall = false;
   function installId() { let i = get('gcm-iid'); if (!i) { i = rid(); set('gcm-iid', i); newInstall = true } return i }
@@ -32,6 +63,7 @@
   function send(o) {
     const b = JSON.stringify(o); (W.__gcmSent = W.__gcmSent || []).push(o);
     if (W.GCM_TRACK_SINK) { try { W.GCM_TRACK_SINK(o) } catch (_) {} return }
+    if (o.internal) return;   // simulator, internal TF, webdriver, test UTM: never hit production
     const url = ENDPOINT();
     try { if (navigator.sendBeacon && navigator.sendBeacon(url, new Blob([b], { type: 'text/plain' }))) return } catch (_) {}
     try { fetch(url, { method: 'POST', body: b, keepalive: true, headers: { 'content-type': 'text/plain' } }).catch(() => {}) } catch (_) {}
@@ -42,9 +74,9 @@
       if (optedOut()) return;
       opts = opts || {}; const now = Date.now(), i = installId(), [s, fresh] = session(now);
       const town = opts.town !== undefined ? opts.town : (W.REG && W.REG.id) || null, pl = opts.platform || platform();
-      if (fresh && e !== 'session') send({ v: 1, e: 'session', t: town, pl, pwa: pwa(), i, s, p: Object.assign(source(), { new_install: newInstall }) });
+      if (fresh && e !== 'session') send(stamp({ v: 1, e: 'session', t: town, pl, pwa: pwa(), i, s, p: Object.assign(source(), { new_install: newInstall }) }));
       if (e === 'session') { if (!fresh && !opts.force) return; props = Object.assign(source(), { new_install: newInstall }, props || {}) }
-      send({ v: 1, e, t: town, pl, pwa: pwa(), i, s, p: props || {} });
+      send(stamp({ v: 1, e, t: town, pl, pwa: pwa(), i, s, p: props || {} }));
     } catch (_) {}
   }
   W.GCMTrack = { track, _source: source, _optedOut: optedOut };

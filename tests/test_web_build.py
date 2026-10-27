@@ -1,5 +1,5 @@
 """Service worker cache name + single-source guards. Run: python3 -m unittest discover -s tests"""
-import os, re, subprocess, sys, tempfile, unittest
+import os, re, shutil, subprocess, sys, tempfile, unittest
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
 import build_web as B
 import check_single_source as S
@@ -72,6 +72,26 @@ class CacheName(unittest.TestCase):
         old = lambda rev: B.NAME_RE.search(B.read_rev(rev)("sw.js").decode()).group(1)
         self.assertEqual(old("7ef87cd"), old("656db2c"))  # the manual name did NOT change
         self.assertNotEqual(B.cache_name(B.read_rev("7ef87cd")), B.cache_name(B.read_rev("656db2c")))
+
+
+class InternalStamp(unittest.TestCase):
+    def test_simulator_build_stamps_track_js_only_in_dist(self):
+        d = tempfile.mkdtemp()
+        os.environ["GCM_ANALYTICS_INTERNAL"] = "sim"
+        try:
+            B.build(out=d, native=True)
+            dist = open(os.path.join(d, "track.js"), encoding="utf-8").read()
+            src = open(os.path.join(PUB, "track.js"), encoding="utf-8").read()
+            self.assertIn("const BUILD_INTERNAL = 'sim';", dist)
+            self.assertNotIn(B.INTERNAL_TOKEN, dist)
+            self.assertIn(B.INTERNAL_TOKEN, src)
+        finally:
+            os.environ.pop("GCM_ANALYTICS_INTERNAL", None)
+            shutil.rmtree(d)
+
+    def test_rejects_unknown_channel(self):
+        with self.assertRaises(SystemExit):
+            B.analytics_internal_channel(["build_web.py", "--internal", "testimonial"])
 
 
 class SingleSource(unittest.TestCase):
