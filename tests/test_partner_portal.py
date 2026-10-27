@@ -6,6 +6,7 @@ import region_urls as U
 
 SYSTEM = {
     "map", "p", "partner", "admin", "api", "privacy", "compare", "llms", "robots",
+    "lsv", "golf-cart-maps",
     "sitemap", "sw", "vendor", "data", "assets", "static", "login", "logout",
     "auth", "go", "x", "app", "ios", "android", "download", "checkout", "pay",
 }

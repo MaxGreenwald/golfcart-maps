@@ -99,7 +99,7 @@ def page(title, desc, path, body, ld, extra_head=""):
 <style>{CSS}</style>
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 </head><body>
-<header><a class="home" href="/">🏖️ {BRAND}</a><nav aria-label="Site"><a href="/#regions">Regions</a><a href="/#iphone">iPhone app</a><a href="/privacy">Privacy</a></nav></header>
+<header><a class="home" href="/">🏖️ {BRAND}</a><nav aria-label="Site"><a href="/golf-cart-maps">Golf cart maps</a><a href="/lsv">LSV map</a><a href="/#regions">Regions</a><a href="/#iphone">iPhone app</a><a href="/privacy">Privacy</a></nav></header>
 <main>
 {body}
 </main>

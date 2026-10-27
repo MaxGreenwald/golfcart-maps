@@ -8,7 +8,7 @@ class Landing(unittest.TestCase):
             B.build(out=os.path.join(t, "w"), native=False); B.build(out=os.path.join(t, "n"), native=True)
             w, m = open(os.path.join(t, "w", "index.html")).read(), open(os.path.join(t, "w", "map.html")).read()
             n = open(os.path.join(t, "n", "index.html")).read()
-            self.assertIn("<h1>Cruise anywhere your cart is legal.", w); self.assertNotIn("leaflet", w.lower())
+            self.assertIn("<h1>Golf Cart Maps: golf cart map for ", w); self.assertNotIn("leaflet", w.lower())
             self.assertIn('id="map"', m); self.assertIn('<link rel="canonical" href="https://golfcartmap.com/map">', m)
             self.assertIn('id="map"', n); self.assertFalse(os.path.exists(os.path.join(t, "n", "map.html")))
             src = open(os.path.join(C.PUB, "index.html")).read()

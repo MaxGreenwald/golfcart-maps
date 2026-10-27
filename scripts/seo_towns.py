@@ -41,7 +41,10 @@ def town_page(t, reg, path, noindex=False):
 <p class="muted">Not legal advice; posted signs win.</p>"""
     webpage = {"@context":"https://schema.org","@type":"WebPage","name":t["question_title"],"url":SITE+url,"datePublished":t["published"],"dateModified":t["last_checked"],"isPartOf":{"@id":SITE+"/#website"}}
     ld = [webpage, crumbs([("Home", "/"), (reg["name"], "/" + rslug), (n, url)])] + ([faq_schema(faq)] if faq else [])
-    title = f"{t['question_title']} Rules and legal roads ({month(t['last_checked'])})"
+    # seo_title is optional and only for pages whose question already names the place and the vehicle.
+    # It does not replace the H1 (question_title). Leave it off pages with no map/LSV hook.
+    title = (f"{t['seo_title']} | {BRAND} ({month(t['last_checked'])})" if t.get("seo_title")
+             else f"{t['question_title']} Rules and legal roads ({month(t['last_checked'])})")
     return page(title, t["answer_short"][:152].rsplit(" ", 1)[0] + ("..." if len(t["answer_short"]) > 152 else ""), url, body, ld,
                 '<meta name="robots" content="noindex">' if noindex else "")
 

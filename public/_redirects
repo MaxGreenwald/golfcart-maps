@@ -65,6 +65,8 @@
 /map/ /map 301
 /map/:slug /map 200
 /map/:slug/ /map 200
+/golf-cart-maps/ /golf-cart-maps 301
+/lsv/ /lsv 301
 /partner /partner/index.html 200
 /partner/ /partner/index.html 200
 /partner/* /partner/index.html 200
