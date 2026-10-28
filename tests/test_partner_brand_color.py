@@ -193,41 +193,80 @@ class BrandColorPicker(unittest.TestCase):
         finally:
             pg.close()
 
+    def _pin_state(self, pg, selector):
+        return pg.evaluate(
+            """(sel) => {
+              const el = document.querySelector(sel);
+              if (!el || !el._gcmMap) return null;
+              const c = el._gcmMap.getCenter();
+              const m = el._gcmMarker;
+              const tile = el.querySelector('img.leaflet-tile');
+              return {
+                lat: c.lat,
+                lng: c.lng,
+                zoom: el._gcmMap.getZoom(),
+                marker: m ? {lat: m.getLatLng().lat, lng: m.getLatLng().lng} : null,
+                src: tile ? tile.src : '',
+              };
+            }""",
+            selector,
+        )
+
+    def _wait_pin_tiles(self, pg, selector):
+        pg.wait_for_function(
+            """(sel) => {
+              const el = document.querySelector(sel);
+              const tiles = el ? [...el.querySelectorAll('img.leaflet-tile')] : [];
+              return tiles.some(i => i.complete && i.naturalWidth > 0 && i.src.includes('tile.openstreetmap.org/'));
+            }""",
+            arg=selector,
+            timeout=20000,
+        )
+
     def test_drop_pin_tiles_center_on_city_or_prior_stop(self):
-        """Empty lat/lon must not become 0,0. Tiles come from tile.openstreetmap.org."""
+        """Empty lat/lon must not become 0,0, and must not inherit the previous stop's pin.
+
+        A stop with no saved coordinates shows tiles near the previous stop (or the
+        city) and writes nothing until click or drag. A stop that already has its
+        own coordinates opens on that pin.
+        """
         pg, _saved = self.open_admin(shop())
         try:
             pg.locator("#stopList .stop .modePin").click()
-            pg.wait_for_function(
-                """() => {
-                  const el = document.querySelector('#stopList .stop .pinmap');
-                  const tiles = el ? [...el.querySelectorAll('img.leaflet-tile')] : [];
-                  return tiles.some(i => i.complete && i.naturalWidth > 0 && i.src.includes('tile.openstreetmap.org/'));
-                }""",
-                timeout=20000,
-            )
-            view = pg.evaluate(
-                """() => {
-                  const el = document.querySelector('#stopList .stop .pinmap');
-                  const c = el._gcmMap.getCenter();
-                  const src = el.querySelector('img.leaflet-tile').src;
-                  return {lat: c.lat, lng: c.lng, zoom: el._gcmMap.getZoom(), src};
-                }"""
-            )
+            self._wait_pin_tiles(pg, "#stopList .stop .pinmap")
+            view = self._pin_state(pg, "#stopList .stop .pinmap")
             self.assertIn("https://tile.openstreetmap.org/", view["src"])
             self.assertNotIn("://a.tile.", view["src"])
-            # San Diego region center, not the Gulf of Guinea.
+            # San Diego region center, not the Gulf of Guinea. No marker yet.
             self.assertAlmostEqual(view["lat"], 32.8565, delta=0.02)
             self.assertAlmostEqual(view["lng"], -117.2555, delta=0.02)
             self.assertGreaterEqual(view["zoom"], 14)
             self.assertLessEqual(view["zoom"], 16)
+            self.assertIsNone(view["marker"])
             self.assertEqual(pg.input_value("#stopList .stop [data-k=lat]"), "")
+            self.assertEqual(pg.input_value("#stopList .stop [data-k=lon]"), "")
             pg.locator("#stopList .stop .pinmap").click(position={"x": 160, "y": 70})
             self.assertNotEqual(pg.input_value("#stopList .stop [data-k=lat]"), "")
             placed_lat = float(pg.input_value("#stopList .stop [data-k=lat]"))
             placed_lon = float(pg.input_value("#stopList .stop [data-k=lon]"))
             self.assertGreater(abs(placed_lat), 1)
             self.assertGreater(abs(placed_lon), 1)
+            placed = self._pin_state(pg, "#stopList .stop .pinmap")
+            self.assertIsNotNone(placed["marker"])
+            self.assertAlmostEqual(placed["marker"]["lat"], placed_lat, delta=0.0002)
+            self.assertAlmostEqual(placed["marker"]["lng"], placed_lon, delta=0.0002)
+            # Drag confirms a new point and does not snap back to the city center.
+            handle = pg.locator("#stopList .stop .leaflet-marker-icon")
+            box = handle.bounding_box()
+            self.assertIsNotNone(box)
+            pg.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
+            pg.mouse.down()
+            pg.mouse.move(box["x"] + box["width"] / 2 + 50, box["y"] + box["height"] / 2 + 30)
+            pg.mouse.up()
+            dragged_lat = float(pg.input_value("#stopList .stop [data-k=lat]"))
+            dragged_lon = float(pg.input_value("#stopList .stop [data-k=lon]"))
+            self.assertGreater(abs(dragged_lat - placed_lat) + abs(dragged_lon - placed_lon), 0.0003)
+            placed_lat, placed_lon = dragged_lat, dragged_lon
             # Search place is still the other mode.
             pg.locator("#stopList .stop .modeSearch").click()
             self.assertTrue(pg.locator("#stopList .stop .place-search").is_visible())
@@ -236,45 +275,49 @@ class BrandColorPicker(unittest.TestCase):
             pg.locator("#addStop").click()
             second = pg.locator("#stopList .stop").nth(1)
             second.locator(".modePin").click()
-            pg.wait_for_function(
-                """() => {
-                  const el = document.querySelectorAll('#stopList .stop .pinmap')[1];
-                  const tiles = el ? [...el.querySelectorAll('img.leaflet-tile')] : [];
-                  return tiles.some(i => i.complete && i.naturalWidth > 0);
-                }""",
-                timeout=20000,
-            )
-            nxt = pg.evaluate(
-                """() => {
-                  const el = document.querySelectorAll('#stopList .stop .pinmap')[1];
-                  const c = el._gcmMap.getCenter();
-                  return {lat: c.lat, lng: c.lng, zoom: el._gcmMap.getZoom()};
-                }"""
-            )
-            self.assertAlmostEqual(nxt["lat"], placed_lat + 0.0022, delta=0.0004)
-            self.assertAlmostEqual(nxt["lng"], placed_lon + 0.0022, delta=0.0004)
-            self.assertEqual(nxt["zoom"], 16)
-            # Looking only: the suggested pin is not saved until click or drag.
+            self._wait_pin_tiles(pg, "#stopList .stop:nth-child(2) .pinmap")
+            nxt = self._pin_state(pg, "#stopList .stop:nth-child(2) .pinmap")
+            # Near the previous stop, not on its exact coordinates, and not street-zoomed onto it.
+            self.assertAlmostEqual(nxt["lat"], placed_lat + 0.0022, delta=0.0015)
+            self.assertAlmostEqual(nxt["lng"], placed_lon + 0.0022, delta=0.0015)
+            self.assertGreater(abs(nxt["lat"] - placed_lat) + abs(nxt["lng"] - placed_lon), 0.001)
+            self.assertGreaterEqual(nxt["zoom"], 11)
+            self.assertLessEqual(nxt["zoom"], 14)
+            self.assertIsNone(nxt["marker"])
+            # Opening Drop pin must not copy the last stop into this one.
             self.assertEqual(second.locator("[data-k=lat]").input_value(), "")
+            self.assertEqual(second.locator("[data-k=lon]").input_value(), "")
+            self.assertAlmostEqual(float(pg.locator("#stopList .stop").nth(0).locator("[data-k=lat]").input_value()), placed_lat, delta=0.00001)
+
+            # This stop already has its own pin (as search would). Show that pin, not the previous stop.
+            own_lat, own_lon = 32.7456, -117.1612
+            second.locator("[data-k=lat]").evaluate("(el, v) => { el.value = v; }", str(own_lat))
+            second.locator("[data-k=lon]").evaluate("(el, v) => { el.value = v; }", str(own_lon))
+            second.locator(".modePin").click()
+            own = self._pin_state(pg, "#stopList .stop:nth-child(2) .pinmap")
+            self.assertEqual(own["zoom"], 16)
+            self.assertIsNotNone(own["marker"])
+            self.assertAlmostEqual(own["marker"]["lat"], own_lat, delta=0.0002)
+            self.assertAlmostEqual(own["marker"]["lng"], own_lon, delta=0.0002)
+            self.assertAlmostEqual(own["lat"], own_lat, delta=0.0008)
+            self.assertAlmostEqual(own["lng"], own_lon, delta=0.0008)
+            self.assertGreater(abs(own["marker"]["lat"] - placed_lat) + abs(own["marker"]["lng"] - placed_lon), 0.01)
+            self.assertAlmostEqual(float(second.locator("[data-k=lat]").input_value()), own_lat, delta=0.00001)
+            self.assertAlmostEqual(float(second.locator("[data-k=lon]").input_value()), own_lon, delta=0.00001)
 
             pg.locator("#afModes .modePin").click()
-            pg.wait_for_function(
-                """() => {
-                  const el = document.querySelector('#afPinMap');
-                  return el && el._gcmMap && [...el.querySelectorAll('img.leaflet-tile')].some(i => i.naturalWidth > 0);
-                }""",
-                timeout=20000,
-            )
-            af = pg.evaluate(
-                """() => {
-                  const c = document.querySelector('#afPinMap')._gcmMap.getCenter();
-                  return {lat: c.lat, lng: c.lng, zoom: document.querySelector('#afPinMap')._gcmMap.getZoom()};
-                }"""
-            )
+            self._wait_pin_tiles(pg, "#afPinMap")
+            af = self._pin_state(pg, "#afPinMap")
             self.assertAlmostEqual(af["lat"], 32.8565, delta=0.02)
             self.assertAlmostEqual(af["lng"], -117.2555, delta=0.02)
             self.assertGreaterEqual(af["zoom"], 14)
             self.assertLessEqual(af["zoom"], 16)
+            self.assertIsNone(af["marker"])
+            self.assertEqual(pg.input_value("#afLat"), "")
+            self.assertEqual(pg.input_value("#afLon"), "")
+            pg.locator("#afPinMap").click(position={"x": 140, "y": 80})
+            self.assertNotEqual(pg.input_value("#afLat"), "")
+            self.assertGreater(abs(float(pg.input_value("#afLat"))), 1)
         finally:
             pg.close()
 
