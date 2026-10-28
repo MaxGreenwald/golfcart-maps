@@ -85,3 +85,15 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: failure()
         with: {name: ci-shots, path: ci-shots, if-no-files-found: ignore}
+  # Push events have no pull request body. pull_request payloads do.
+  pr-body:
+    name: PR body has Summary, Evidence, and Merge danger
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check PR body for Summary, Evidence, and Merge danger
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: python scripts/check_pr_body.py
