@@ -33,7 +33,9 @@ PT = ZoneInfo("America/Los_Angeles")
 # (name, script relative to ROOT, uses_map_url)
 # Map-URL suites get URL=<base>/map/; base-URL suites (SW, chips city paths) get URL=<base>/
 SUITES = [
-    ("test_town_pages", "scripts/test_town_pages.py", "map"),
+    # Not scripts/test_town_pages.py: that basename shadows tests/test_town_pages.py
+    # once discover puts scripts/ on sys.path (unit job has no Playwright).
+    ("test_town_pages", "scripts/test_town_map_pages.py", "map"),
     ("test_road_labels", "scripts/test_road_labels.py", "map"),
     ("test_ui", "scripts/test_ui.py", "map"),
     ("test_vehicle", "scripts/test_vehicle.py", "map"),
