@@ -100,7 +100,7 @@ Proof standards:
 |--------|------------|
 | Standing check | `scripts/verify_live` |
 | NO_TRACK wrapper | `python3 scripts/live_notrack.py scripts/test_ui.py` |
-| Town sweep | `URL=…/map/ python3 scripts/test_town_pages.py` |
+| Town sweep | `URL=…/map/ python3 scripts/test_town_map_pages.py` |
 | Labels vs module | `URL=…/map/ python3 scripts/test_road_labels.py` |
 | Planted wrong-legal proof | `python3 scripts/prove_bad_road_fail.py` |
 | Local server | `python3 scripts/serve_dist.py 8765 dist` |

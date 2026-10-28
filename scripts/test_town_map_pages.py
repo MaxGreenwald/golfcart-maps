@@ -1,5 +1,11 @@
 """Open every visible region's map page (/map/<slug>) and confirm it loads the right REG.
-Usage: URL=https://golfcartmap.com/map/ python3 scripts/test_town_pages.py
+
+Not named test_town_pages.py: `python -m unittest discover -s tests` imports by
+basename, and earlier tests put scripts/ at the front of sys.path. That name
+loaded this file instead of tests/test_town_pages.py and failed the unit job
+on `import playwright` (Playwright is only installed in the browser job).
+
+Usage: URL=https://golfcartmap.com/map/ python3 scripts/test_town_map_pages.py
 """
 from playwright.sync_api import sync_playwright
 import json, os, sys

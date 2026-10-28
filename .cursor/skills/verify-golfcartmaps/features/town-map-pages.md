@@ -13,7 +13,7 @@ Open `https://golfcartmap.com/map/sandiego` (or pick a city in the chip). Every 
 ## Driving it with Playwright
 
 ```bash
-URL=https://golfcartmap.com/map/ python3 scripts/live_notrack.py scripts/test_town_pages.py
+URL=https://golfcartmap.com/map/ python3 scripts/live_notrack.py scripts/test_town_map_pages.py
 # or
 scripts/verify_live --only test_town_pages
 ```

@@ -32,7 +32,7 @@ Through `scripts/live_notrack.py` (NO_TRACK):
 
 | Suite | Checks |
 |-------|--------|
-| test_town_pages | Every visible `/map/<slug>` loads the right REG |
+| test_town_pages (`scripts/test_town_map_pages.py`) | Every visible `/map/<slug>` loads the right REG |
 | test_road_labels | Popups match `GCMRule.cls` (Avoid must not show as OK) + one SD route search |
 | test_ui | Route UX, browse popups, swap, Mexico/inland reject |
 | test_vehicle | Golf cart / LSV toggle vs road-rule module |
