@@ -7,12 +7,29 @@ import os, sys
 from playwright.sync_api import sync_playwright
 U = os.environ.get("URL", "http://localhost:8765/").rstrip("/"); OUT = os.environ.get("SHOTS", "")
 LOCAL = "localhost" in U or "127.0.0.1" in U
+# verify_live map suites set URL=.../map; don't prefix /map again
+IS_MAP_URL = U.endswith("/map")
 fails = []
 def ck(n, c, x=""): print(("PASS " if c else "FAIL ") + n, x); c or fails.append(n)
 READY = "window.ready===true&&window.REG"
+def map_path(path):
+    if LOCAL:
+        return path
+    if IS_MAP_URL:
+        if path.startswith("/map/") or path == "/map":
+            return path[4:] or "/"
+        if path.startswith("/?"):
+            return "/" + path  # /?r=x -> /?r=x under .../map
+        return path
+    if path.startswith("/map"):
+        return path
+    if path.startswith("/?"):
+        return "/map" + path
+    if path == "/":
+        return "/map"
+    return "/map" + path
 def go(pg, path):
-    if not LOCAL and not path.startswith("/map"): path = "/map" + path[1:]   # / is the landing page on deployed sites; the map is /map
-    pg.goto(U + path); pg.wait_for_function(READY, timeout=120000); pg.wait_for_timeout(800)
+    pg.goto(U + map_path(path)); pg.wait_for_function(READY, timeout=120000); pg.wait_for_timeout(800)
 with sync_playwright() as p:
     b = p.chromium.launch()
     ctx = b.new_context(**p.devices["iPhone 13"]); pg = ctx.new_page()
@@ -47,7 +64,7 @@ with sync_playwright() as p:
     if not LOCAL:   # region paths need Cloudflare _redirects
         go(pg, "/map/sandiego"); ck("/map/sandiego opens San Diego", pg.evaluate("REG.id") == "sd")
         go(pg, "/map/tybee"); ck("/map/tybee opens Tybee", pg.evaluate("REG.id") == "tybee")
-        r = pg.goto(U + "/map/carlsbad")
+        r = pg.goto(U + map_path("/map/carlsbad"))
         if r and r.ok:
             pg.wait_for_function(READY, timeout=120000); ck("/carlsbad (unknown path) falls back to San Diego", pg.evaluate("REG.id") == "sd", pg.evaluate("REG.id"))
         else: print("INFO /carlsbad not served:", r and r.status)
