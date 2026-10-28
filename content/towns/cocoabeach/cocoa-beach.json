@@ -1,0 +1,76 @@
+{
+ "slug": "cocoa-beach",
+ "region": "cocoabeach",
+ "name": "Cocoa Beach",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Cocoa Beach?",
+ "answer_short": "Street-legal LSVs yes. Golf carts only on streets Cocoa Beach marks on its Golf Cart Network Map, posted 30 mph or less. That map is not drawn here, so plain golf carts show red except tagged cart paths. SR A1A is not a cart street.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Streets on the Golf Cart Network Map",
+  "speed_line": "30 mph",
+  "notes": "Map not digitized"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Only on city streets the commission designates, posted 30 mph or less",
+   "citation": "Cocoa Beach Code Sec. 15-47",
+   "source_url": "https://cocoabeach.granicus.com/MetaViewer.php?clip_id=4213&meta_id=225018&view_id=4"
+  },
+  {
+   "topic": "Network map",
+   "rule": "Resolution 2023-07 adopts the current golf cart network map",
+   "citation": "Cocoa Beach Resolution 2023-07",
+   "source_url": "https://cocoabeach.granicus.com/MetaViewer.php?clip_id=4536&meta_id=240956&view_id=4"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "SR A1A (Atlantic Avenue)",
+   "rule": "No golf carts",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Cocoa Beach?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on A1A in Cocoa Beach?",
+   "a": "No. A1A is a state road. The city designates city streets, and this map does not treat A1A as one of them."
+  },
+  {
+   "q": "Can I drive an LSV on a 35 mph street in Cocoa Beach?",
+   "a": "Yes. The 30 mph cap is for plain golf carts on designated streets. A registered LSV follows the Florida 35 mph rule."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  28.32,
+  -80.6076
+ ],
+ "zoom": 15,
+ "published": "2026-10-28",
+ "last_checked": "2026-10-28",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://cocoabeach.granicus.com/MetaViewer.php?clip_id=4213&meta_id=225018&view_id=4",
+  "https://cocoabeach.granicus.com/MetaViewer.php?clip_id=4536&meta_id=240956&view_id=4",
+  "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+ ]
+}

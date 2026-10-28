@@ -10499,5 +10499,1415 @@
     "conflict": true
    }
   ]
+ },
+ "greenwich": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Stanwich Road",
+    "mi": 5.6,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Street",
+    "mi": 4.15,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Lake Avenue",
+    "mi": 3.44,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "East Putnam Avenue",
+    "mi": 3.35,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "North Street",
+    "mi": 3.29,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Westover Road",
+    "mi": 3.12,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Round Hill Road",
+    "mi": 2.92,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Putnam Avenue",
+    "mi": 2.17,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Glenville Road",
+    "mi": 2.01,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Taconic Road",
+    "mi": 1.98,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Riverside Avenue",
+    "mi": 1.92,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Valley Road",
+    "mi": 1.41,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Lower Cross Road",
+    "mi": 1.39,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Weaver Street",
+    "mi": 1.24,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Lake Avenue",
+    "mi": 1.2,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Roxbury Road",
+    "mi": 1.16,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Indian Field Road",
+    "mi": 1.12,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Valley Road",
+    "mi": 1.08,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Orchard Street",
+    "mi": 1.03,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Hamilton Avenue",
+    "mi": 1.02,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Lake Avenue",
+    "mi": 1.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Clapboard Ridge Road",
+    "mi": 0.95,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Fairfield Road",
+    "mi": 0.8,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "tyrone": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Joel Cowan Parkway",
+    "mi": 2.87,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Joel Cowan Parkway",
+    "mi": 2.43,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Sandy Creek Road",
+    "mi": 2.26,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Castlewood Road",
+    "mi": 1.91,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Collinsworth Road",
+    "mi": 1.39,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Farr Road",
+    "mi": 1.39,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Palmetto Tyrone Road",
+    "mi": 1.3,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Ellison Road",
+    "mi": 1.24,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Senoia Road",
+    "mi": 1.2,
+    "mph": 40,
+    "conflict": false
+   }
+  ]
+ },
+ "fayetteville": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Forrest Avenue",
+    "mi": 5.57,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "New Hope Road",
+    "mi": 4.7,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Fayetteville Road",
+    "mi": 3.93,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Harp Road",
+    "mi": 3.42,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Redwine Road",
+    "mi": 3.14,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "West Fayetteville Road",
+    "mi": 2.86,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "GA 85",
+    "mi": 2.79,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Thomas Road",
+    "mi": 2.73,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "State Route 85",
+    "mi": 2.61,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "East Lanier Avenue",
+    "mi": 2.54,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "East Lanier Avenue",
+    "mi": 2.54,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "State Route 85",
+    "mi": 2.42,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "County Line Road",
+    "mi": 2.28,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "GA 92",
+    "mi": 2.21,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Old Senoia Road",
+    "mi": 2.09,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Corinth Road",
+    "mi": 2.05,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "GA 279",
+    "mi": 1.95,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Jimmie Mayfield Boulevard",
+    "mi": 1.92,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Highway 54 West",
+    "mi": 1.9,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Kenwood Road",
+    "mi": 1.87,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Glynn Street South",
+    "mi": 1.76,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Glynn Street North",
+    "mi": 1.74,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Hood Avenue",
+    "mi": 1.72,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Banks Road",
+    "mi": 1.6,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "McDonough Road",
+    "mi": 1.57,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Seay Road",
+    "mi": 1.31,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "White Road",
+    "mi": 1.25,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "State Route 92",
+    "mi": 1.24,
+    "mph": 99,
+    "conflict": false
+   }
+  ]
+ },
+ "senoia": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "GA 74;GA 85",
+    "mi": 6.0,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Old Highway 85",
+    "mi": 3.95,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "GA 16",
+    "mi": 3.84,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Dolly Nixon Road",
+    "mi": 3.43,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Highway 85 Connector",
+    "mi": 3.27,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "GA 85",
+    "mi": 3.03,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Luther Bailey Road",
+    "mi": 3.02,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Stallings Road",
+    "mi": 2.73,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "State Route 16 East",
+    "mi": 2.41,
+    "mph": 55,
+    "conflict": false
+   }
+  ]
+ },
+ "conyers": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Sigman Road Northwest",
+    "mi": 6.48,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Irwin Bridge Road Northwest",
+    "mi": 5.39,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Dogwood Drive Southeast",
+    "mi": 4.7,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Smyrna Road Southwest",
+    "mi": 4.34,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Rockbridge Road Northwest",
+    "mi": 4.16,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Flat Shoals Road Southeast",
+    "mi": 4.15,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Iris Drive Southwest",
+    "mi": 4.08,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Gees Mill Road Northeast",
+    "mi": 3.22,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Old Salem Road Southeast",
+    "mi": 3.05,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Hi Roc Road Northeast",
+    "mi": 3.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Farmer Road Northwest",
+    "mi": 2.8,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Old Covington Highway Southeast",
+    "mi": 2.78,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Old Covington Road Northeast",
+    "mi": 2.75,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Lester Road Northwest",
+    "mi": 2.53,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Parker Road Southeast",
+    "mi": 2.3,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Bonds Lake Road Northwest",
+    "mi": 1.96,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Old Covington Highway Southwest",
+    "mi": 1.85,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Ebenezer Road Southwest",
+    "mi": 1.76,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Flat Shoals Road Southwest",
+    "mi": 1.72,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Lake Rockaway Road Northwest",
+    "mi": 1.64,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Milstead Avenue Northeast",
+    "mi": 1.54,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Flat Shoals Road Southwest",
+    "mi": 1.54,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Dogwood Drive Southwest",
+    "mi": 1.46,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Lake Capri Road Northwest",
+    "mi": 1.44,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Loganville Highway",
+    "mi": 1.43,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "McDaniel Mill Road Southwest",
+    "mi": 1.38,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Iris Drive Southeast",
+    "mi": 1.35,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Sigman Road Northeast",
+    "mi": 1.3,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Old Klondike Road",
+    "mi": 1.27,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "augusta": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Wrightsboro Road",
+    "mi": 6.71,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Broad Street",
+    "mi": 4.77,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Washington Road",
+    "mi": 4.51,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "15th Street",
+    "mi": 4.25,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Riverwatch Parkway",
+    "mi": 4.24,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Riverwatch Parkway",
+    "mi": 4.24,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Laney Walker Boulevard Extension",
+    "mi": 3.66,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Wheeler Road",
+    "mi": 3.58,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Central Avenue",
+    "mi": 3.09,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Furys Ferry Road",
+    "mi": 2.99,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Furys Ferry Road",
+    "mi": 2.86,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Riverwatch Parkway",
+    "mi": 2.64,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Riverwatch Parkway",
+    "mi": 2.62,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Wrightsboro Road",
+    "mi": 2.61,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Walton Way",
+    "mi": 2.52,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Walton Way",
+    "mi": 2.43,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Skinner Mill Road",
+    "mi": 2.37,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Boy Scout Road",
+    "mi": 2.16,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Broad Street",
+    "mi": 2.16,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Highland Avenue",
+    "mi": 2.15,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Washington Road",
+    "mi": 2.12,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Laney Walker Boulevard",
+    "mi": 1.99,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Lake Forest Drive",
+    "mi": 1.92,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "12th Street",
+    "mi": 1.85,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Walton Way Extension",
+    "mi": 1.82,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Sibley Road",
+    "mi": 1.79,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Marks Church Road",
+    "mi": 1.66,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Belair Road",
+    "mi": 1.66,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Scott Nixon Memorial Drive",
+    "mi": 1.65,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Walton Way",
+    "mi": 1.64,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Alexander Drive",
+    "mi": 1.63,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "North Leg Road",
+    "mi": 1.57,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Kissingbower Road",
+    "mi": 1.55,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Greene Street",
+    "mi": 1.55,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Greene Street",
+    "mi": 1.55,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Pleasant Home Road",
+    "mi": 1.53,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Reynolds Street",
+    "mi": 1.5,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Walden Drive",
+    "mi": 1.48,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Old Evans Road",
+    "mi": 1.47,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Milledge Road",
+    "mi": 1.44,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Martin Luther King Jr. Boulevard",
+    "mi": 1.35,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "James Brown Boulevard",
+    "mi": 1.35,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Wheeler Road",
+    "mi": 1.32,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Wheeler Road",
+    "mi": 1.32,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Heard Avenue",
+    "mi": 1.3,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Augusta West Parkway",
+    "mi": 1.21,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Berckmans Road",
+    "mi": 1.18,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Jackson Road",
+    "mi": 1.16,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Barton Chapel Road",
+    "mi": 1.14,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Robert C. Daniel Junior Parkway",
+    "mi": 1.11,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Columbia Road",
+    "mi": 1.11,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Davis Road",
+    "mi": 1.09,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Bobby Jones Expressway",
+    "mi": 1.07,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Wrightsboro Road",
+    "mi": 1.07,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Damascus Road",
+    "mi": 1.06,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "euharlee": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Euharlee Road Southwest",
+    "mi": 4.66,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Hardin Bridge Road Southwest",
+    "mi": 2.94,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Euharlee Road",
+    "mi": 2.78,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Macedonia Road",
+    "mi": 2.57,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Cliff Nelson Road",
+    "mi": 2.46,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "stmarys": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Colerain Road",
+    "mi": 4.26,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Charlie Smith Senior Highway",
+    "mi": 3.97,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Winding Road",
+    "mi": 3.7,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Charlie Smith Senior Highway",
+    "mi": 3.44,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Kingsland Saint Marys Road",
+    "mi": 3.02,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Kings Bay Road",
+    "mi": 2.95,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Kings Bay Road",
+    "mi": 2.93,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Kingsland Saint Marys Road",
+    "mi": 2.9,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Saint Marys Road",
+    "mi": 2.48,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Marsh Harbour Parkway",
+    "mi": 2.47,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Saint Marys Road",
+    "mi": 2.4,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Saint Marys Road",
+    "mi": 2.36,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Saint Marys Road",
+    "mi": 2.34,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "East King Avenue",
+    "mi": 2.08,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Ready Street",
+    "mi": 1.8,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Laurel Island Parkway",
+    "mi": 1.77,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "North River Causeway",
+    "mi": 1.76,
+    "mph": 40,
+    "conflict": false
+   }
+  ]
+ },
+ "lowerkeys": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Key Deer Boulevard",
+    "mi": 3.26,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Middle Torch Road",
+    "mi": 3.0,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Sugarloaf Boulevard",
+    "mi": 2.66,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Old State Road 4A",
+    "mi": 2.47,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Watson Boulevard",
+    "mi": 2.39,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Sombrero Beach Road",
+    "mi": 2.07,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Blimp Road",
+    "mi": 1.95,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Overseas Highway",
+    "mi": 1.82,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Watson Road",
+    "mi": 1.67,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "State Road 4A",
+    "mi": 1.61,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "East Shore Drive",
+    "mi": 0.98,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "cocoabeach": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "North Atlantic Avenue",
+    "mi": 3.54,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Ocean Beach Boulevard",
+    "mi": 2.16,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South Orlando Avenue",
+    "mi": 2.0,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "South Atlantic Avenue",
+    "mi": 1.98,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "South Brevard Avenue",
+    "mi": 1.46,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Cocoa Beach Causeway",
+    "mi": 1.34,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "South Atlantic Avenue",
+    "mi": 1.21,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "West Cocoa Beach Causeway",
+    "mi": 1.06,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "North Banana River Boulevard",
+    "mi": 1.05,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "venice": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Pinebrook Road",
+    "mi": 6.69,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Center Road",
+    "mi": 4.79,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Knights Trail Road",
+    "mi": 4.58,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Casey Key Road",
+    "mi": 4.28,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Laurel Road East",
+    "mi": 4.13,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Tamiami Trail",
+    "mi": 3.61,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Tamiami Trail",
+    "mi": 3.49,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Shamrock Boulevard",
+    "mi": 3.21,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "East Venice Avenue",
+    "mi": 3.0,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Tamiami Trail",
+    "mi": 2.94,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Tamiami Trail",
+    "mi": 2.92,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Harbor Drive South",
+    "mi": 2.38,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Hatchett Creek Boulevard",
+    "mi": 2.31,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Shamrock Drive",
+    "mi": 2.15,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Laurel Road East",
+    "mi": 2.12,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Edmondson Road",
+    "mi": 2.01,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Albee Farm Road",
+    "mi": 2.01,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Honore Avenue",
+    "mi": 1.91,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Tamiami Trail",
+    "mi": 1.65,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Border Road",
+    "mi": 1.59,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Jacaranda Boulevard",
+    "mi": 1.53,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "US 41 By-Pass",
+    "mi": 1.45,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "US 41 By-Pass",
+    "mi": 1.44,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "East Venice Avenue",
+    "mi": 1.36,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "East Venice Avenue",
+    "mi": 1.36,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Colonia Lane East",
+    "mi": 1.32,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Tamiami Trail",
+    "mi": 1.3,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Albee Farm Road North",
+    "mi": 1.2,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Mission Valley Boulevard",
+    "mi": 1.19,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
  }
 }

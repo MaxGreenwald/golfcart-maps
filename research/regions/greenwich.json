@@ -1,0 +1,56 @@
+{
+ "poly": [
+  [
+   -73.66,
+   41.0
+  ],
+  [
+   -73.57,
+   41.0
+  ],
+  [
+   -73.57,
+   41.12
+  ],
+  [
+   -73.66,
+   41.12
+  ],
+  [
+   -73.66,
+   41.0
+  ]
+ ],
+ "bans": [
+  {
+   "names": "(^|;)I[- ]?95($|;)|^Merritt Parkway$|(^|;)CT 15($|;)",
+   "url": "https://www.cga.ct.gov/current/pub/chap_248.htm#sec_14-289m",
+   "label": "I-95 and the Merritt Parkway (CT 15) are limited-access highways posted well above 25 mph (no LSVs)"
+  }
+ ],
+ "unverified": [
+  "No Greenwich list of LSV-prohibited roads was found, so only the state 25 mph cap and the I-95 / Merritt Parkway ban are applied. Untagged residential streets are assumed 25 mph."
+ ],
+ "sources": [
+  "Conn. Gen. Stat. Sec. 14-289m (LSVs) https://www.cga.ct.gov/current/pub/chap_248.htm#sec_14-289m",
+  "Conn. Gen. Stat. Sec. 14-300g (golf carts) https://www.cga.ct.gov/current/pub/chap_249.htm#sec_14-300g",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-28",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Conn. Gen. Stat. Sec. 14-289m (LSVs)",
+    "url": "https://www.cga.ct.gov/current/pub/chap_248.htm#sec_14-289m"
+   },
+   {
+    "label": "Conn. Gen. Stat. Sec. 14-300g (golf carts)",
+    "url": "https://www.cga.ct.gov/current/pub/chap_249.htm#sec_14-300g"
+   }
+  ],
+  "note": "Golf Cart Maps Greenwich and next-10 research (Oct 28 2026). Posted signs never lift a ban. Designated street lists that are not digitized stay red for plain golf carts."
+ },
+ "status": "Added (regions-11, 2026-10-28)"
+}

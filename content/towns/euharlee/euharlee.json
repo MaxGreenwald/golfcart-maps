@@ -1,0 +1,74 @@
+{
+ "slug": "euharlee",
+ "region": "euharlee",
+ "name": "Euharlee",
+ "state": "GA",
+ "question_title": "Can you drive a golf cart in Euharlee?",
+ "answer_short": "Yes, on city streets in the subdivisions. Golf carts may use public streets posted 25 mph or less. LSVs may use streets posted 35 mph or less. Neither may drive along a state or county highway except to cross.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Public streets posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Not state or county highways"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Streets posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not state or county highways"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Public streets posted 25 mph or less; not on state or county highways except to cross",
+   "citation": "Euharlee Ord. 2025-03",
+   "source_url": "https://euharlee.com/wp-content/uploads/2024/04/Ordinance-2025-03-Golf-Cart-Amended-5-6-2025-1.pdf"
+  },
+  {
+   "topic": "LSVs",
+   "rule": "Low-speed vehicles on streets posted 35 mph or less; not on state or county highways except to cross",
+   "citation": "Euharlee Ord. 2025-03",
+   "source_url": "https://euharlee.com/wp-content/uploads/2024/04/Ordinance-2025-03-Golf-Cart-Amended-5-6-2025-1.pdf"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Euharlee Road (GA 113)",
+   "rule": "Cross only",
+   "crossings_ok": true
+  },
+  {
+   "name": "State and county highways",
+   "rule": "Cross only",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Euharlee?",
+   "a": "Streets posted 35 mph or less. Not state or county highways. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Euharlee Road?",
+   "a": "No. It is the state highway through town. Cross it at an intersection."
+  },
+  {
+   "q": "Can I drive a golf cart at night in Euharlee?",
+   "a": "Only if the cart has working headlights and taillights. Otherwise, sunrise to sunset."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  34.1465,
+  -84.933
+ ],
+ "zoom": 15,
+ "published": "2026-10-28",
+ "last_checked": "2026-10-28",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://euharlee.com/wp-content/uploads/2024/04/Ordinance-2025-03-Golf-Cart-Amended-5-6-2025-1.pdf",
+  "https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-6/section-40-6-362/"
+ ]
+}

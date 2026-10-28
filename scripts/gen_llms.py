@@ -6,7 +6,7 @@ import positioning as POS
 import seo_common as SC
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 P = lambda *a: os.path.join(ROOT, "public", *a)
-STATES = {"CA":"California","FL":"Florida","GA":"Georgia","SC":"South Carolina","TX":"Texas","AL":"Alabama","AZ":"Arizona","OH":"Ohio","NC":"North Carolina","HI":"Hawaii","ME":"Maine","NJ":"New Jersey","DE":"Delaware","VA":"Virginia"}
+STATES = {"CA":"California","FL":"Florida","GA":"Georgia","SC":"South Carolina","TX":"Texas","AL":"Alabama","AZ":"Arizona","OH":"Ohio","NC":"North Carolina","HI":"Hawaii","ME":"Maine","NJ":"New Jersey","DE":"Delaware","VA":"Virginia","CT":"Connecticut"}
 
 def render():
     regs = [r for r in json.load(open(P("data", "regions.json"))) if not r.get("hidden")]

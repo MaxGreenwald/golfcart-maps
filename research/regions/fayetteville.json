@@ -1,0 +1,57 @@
+{
+ "poly": [
+  [
+   -84.499,
+   33.4
+  ],
+  [
+   -84.4,
+   33.4
+  ],
+  [
+   -84.4,
+   33.52
+  ],
+  [
+   -84.499,
+   33.52
+  ],
+  [
+   -84.499,
+   33.4
+  ]
+ ],
+ "bans": [],
+ "cart_only_bans": [
+  {
+   "names": "(^|;)GA (54|85|92|314)($|;)|^Glynn Street|^Stonewall Avenue|^Jimmie Mayfield Boulevard|^Highway 54|^State Route (85|92)|^East Lanier Avenue|^West Lanier Avenue",
+   "url": "https://library.municode.com/ga/fayetteville/codes/code_of_ordinances?nodeId=PTIICOOR_CH82TRVE_ARTIXMOCA_S82-260DE",
+   "label": "City of Fayetteville Sec. 82-262: no motorized carts on major or collector streets (GA 54, GA 85, GA 92, Glynn Street, Lanier Avenue, Stonewall Avenue) except approved crossings"
+  }
+ ],
+ "unverified": [
+  "The city's authorized-street list is not digitized. Plain golf carts show red except tagged cart paths. Major-road names above are banned for carts even if a path tag is missing."
+ ],
+ "sources": [
+  "Fayetteville motorized cart permits https://www.fayetteville-ga.gov/413/Permits-Licenses",
+  "Fayetteville Code Sec. 82-262 https://library.municode.com/ga/fayetteville/codes/code_of_ordinances?nodeId=PTIICOOR_CH82TRVE_ARTIXMOCA_S82-260DE",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-28",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Fayetteville motorized cart permits",
+    "url": "https://www.fayetteville-ga.gov/413/Permits-Licenses"
+   },
+   {
+    "label": "Fayetteville Code Sec. 82-262",
+    "url": "https://library.municode.com/ga/fayetteville/codes/code_of_ordinances?nodeId=PTIICOOR_CH82TRVE_ARTIXMOCA_S82-260DE"
+   }
+  ],
+  "note": "Golf Cart Maps Greenwich and next-10 research (Oct 28 2026). Posted signs never lift a ban. Designated street lists that are not digitized stay red for plain golf carts."
+ },
+ "status": "Added (regions-11, 2026-10-28)"
+}

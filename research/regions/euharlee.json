@@ -1,0 +1,67 @@
+{
+ "poly": [
+  [
+   -84.98,
+   34.12
+  ],
+  [
+   -84.9,
+   34.12
+  ],
+  [
+   -84.9,
+   34.18
+  ],
+  [
+   -84.98,
+   34.18
+  ],
+  [
+   -84.98,
+   34.12
+  ]
+ ],
+ "bans": [],
+ "cart_only_bans": [
+  {
+   "names": "(^|;)((I[- ]?\\d+)|(Interstate \\d+)|(US \\d+[A-Z]?)|(GA \\d+)|(SR \\d+)|(State (Route|Road|Highway) \\d+))($|;| )",
+   "url": "https://euharlee.com/wp-content/uploads/2024/04/Ordinance-2025-03-Golf-Cart-Amended-5-6-2025-1.pdf",
+   "label": "Euharlee Ord. 2025-03: no golf carts on state highways except to cross"
+  },
+  {
+   "names": "^(CR \\d+[A-Z]?|County Road \\d+[A-Z]?)$",
+   "url": "https://euharlee.com/wp-content/uploads/2024/04/Ordinance-2025-03-Golf-Cart-Amended-5-6-2025-1.pdf",
+   "label": "Euharlee Ord. 2025-03: no golf carts on county roads except to cross"
+  },
+  {
+   "names": "^Euharlee Road( Southwest)?$",
+   "url": "https://euharlee.com/wp-content/uploads/2024/04/Ordinance-2025-03-Golf-Cart-Amended-5-6-2025-1.pdf",
+   "label": "Euharlee Road is the state highway through town (GA 113); carts may cross, not drive along it"
+  }
+ ],
+ "unverified": [
+  "County roads that are not tagged CR or County Road in OpenStreetMap are not in the ban regex. State route refs are."
+ ],
+ "sources": [
+  "Euharlee Ordinance 2025-03 https://euharlee.com/wp-content/uploads/2024/04/Ordinance-2025-03-Golf-Cart-Amended-5-6-2025-1.pdf",
+  "O.C.G.A. 40-6-362 https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-6/section-40-6-362/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-28",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Euharlee Ordinance 2025-03",
+    "url": "https://euharlee.com/wp-content/uploads/2024/04/Ordinance-2025-03-Golf-Cart-Amended-5-6-2025-1.pdf"
+   },
+   {
+    "label": "O.C.G.A. 40-6-362",
+    "url": "https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-6/section-40-6-362/"
+   }
+  ],
+  "note": "Golf Cart Maps Greenwich and next-10 research (Oct 28 2026). Posted signs never lift a ban. Designated street lists that are not digitized stay red for plain golf carts."
+ },
+ "status": "Added (regions-11, 2026-10-28)"
+}

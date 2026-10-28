@@ -3661,6 +3661,107 @@
    "cite": [
     "no posted limit; short gap; review before prod"
    ]
+  },
+  {
+   "region": "fayetteville",
+   "road": "Hood Avenue",
+   "at": [
+    33.45706,
+    -84.45605
+   ],
+   "m": 122,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [
+    "Checked Oct 28 2026: OpenStreetMap has no maxspeed on this short stretch, and at least one side is only the 25 mph residential assumption, so it stays red rather than being painted legal."
+   ]
+  },
+  {
+   "region": "senoia",
+   "road": "Padgett Road",
+   "at": [
+    33.32563,
+    -84.51144
+   ],
+   "m": 49,
+   "mph": [
+    40
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": [
+    "Checked Oct 28 2026: OpenStreetMap has no maxspeed on this short stretch, and at least one side is only the 25 mph residential assumption, so it stays red rather than being painted legal."
+   ]
+  },
+  {
+   "region": "conyers",
+   "road": "Miller Chapel Southeast Road",
+   "at": [
+    33.6303,
+    -84.01679
+   ],
+   "m": 721,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [
+    "Checked Oct 28 2026: OpenStreetMap has no maxspeed on this short stretch, and at least one side is only the 25 mph residential assumption, so it stays red rather than being painted legal."
+   ]
+  },
+  {
+   "region": "conyers",
+   "road": "Iris Drive Southwest",
+   "at": [
+    33.66445,
+    -84.03305
+   ],
+   "m": 132,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [
+    "Checked Oct 28 2026: OpenStreetMap has no maxspeed on this short stretch, and at least one side is only the 25 mph residential assumption, so it stays red rather than being painted legal."
+   ]
+  },
+  {
+   "region": "augusta",
+   "road": "Lakemont Drive",
+   "at": [
+    33.49275,
+    -82.00975
+   ],
+   "m": 387,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [
+    "Checked Oct 28 2026: OpenStreetMap has no maxspeed on this short stretch, and at least one side is only the 25 mph residential assumption, so it stays red rather than being painted legal."
+   ]
   }
  ]
 }

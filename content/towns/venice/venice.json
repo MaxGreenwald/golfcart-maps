@@ -1,0 +1,76 @@
+{
+ "slug": "venice",
+ "region": "venice",
+ "name": "Venice",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Venice?",
+ "answer_short": "Street-legal LSVs yes. Plain golf carts only on roads the city designates, and no Venice designation was found, so plain golf carts show red on public roads. LSVs may use roads posted 35 mph or less in Venice.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated, signed roads only",
+  "speed_line": "n/a",
+  "notes": "No city designation found"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  },
+  {
+   "topic": "City code",
+   "rule": "No golf-cart street designation was found in the city code",
+   "citation": "City of Venice code",
+   "source_url": "https://library.municode.com/fl/venice/codes/code_of_ordinances"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Roads posted over 35 mph",
+   "rule": "No LSVs",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Venice?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Venice?",
+   "a": "Only on a street the city has designated and signed. We did not find any, so plan on a registered LSV."
+  },
+  {
+   "q": "Can I drive an LSV on the island streets in Venice?",
+   "a": "Yes, where they are posted 35 mph or less."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  27.099,
+  -82.4543
+ ],
+ "zoom": 15,
+ "published": "2026-10-28",
+ "last_checked": "2026-10-28",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://library.municode.com/fl/venice/codes/code_of_ordinances",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+ ]
+}

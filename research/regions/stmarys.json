@@ -1,0 +1,62 @@
+{
+ "poly": [
+  [
+   -81.63,
+   30.715
+  ],
+  [
+   -81.485,
+   30.715
+  ],
+  [
+   -81.485,
+   30.82
+  ],
+  [
+   -81.63,
+   30.82
+  ],
+  [
+   -81.63,
+   30.715
+  ]
+ ],
+ "bans": [],
+ "cart_only_bans": [
+  {
+   "names": "^Winding Road$",
+   "url": "https://cms3.revize.com/revize/stmarysnew/department/community_development/PTVs.20210419.v1.pdf",
+   "label": "St. Marys PTV ordinance: no PTV on any portion of Winding Road"
+  },
+  {
+   "names": "(^|;)((I[- ]?\\d+)|(Interstate \\d+)|(US \\d+[A-Z]?)|(GA \\d+)|(SR \\d+)|(State (Route|Road|Highway) \\d+))($|;| )",
+   "url": "https://cms3.revize.com/revize/stmarysnew/department/community_development/PTVs.20210419.v1.pdf",
+   "label": "St. Marys PTV ordinance: PTVs may not drive along a state highway except at a designated crossing"
+  }
+ ],
+ "unverified": [
+  "A later news report said Dilworth Street was also banned. That sentence is not in the 2021 ordinance PDF, so Dilworth is not banned here."
+ ],
+ "sources": [
+  "St. Marys PTV ordinance https://cms3.revize.com/revize/stmarysnew/department/community_development/PTVs.20210419.v1.pdf",
+  "O.C.G.A. 40-6-331 https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-3/section-40-6-331/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-28",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "St. Marys PTV ordinance",
+    "url": "https://cms3.revize.com/revize/stmarysnew/department/community_development/PTVs.20210419.v1.pdf"
+   },
+   {
+    "label": "O.C.G.A. 40-6-331",
+    "url": "https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-3/section-40-6-331/"
+   }
+  ],
+  "note": "Golf Cart Maps Greenwich and next-10 research (Oct 28 2026). Posted signs never lift a ban. Designated street lists that are not digitized stay red for plain golf carts."
+ },
+ "status": "Added (regions-11, 2026-10-28)"
+}

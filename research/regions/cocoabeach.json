@@ -1,0 +1,62 @@
+{
+ "poly": [
+  [
+   -80.64,
+   28.28
+  ],
+  [
+   -80.59,
+   28.28
+  ],
+  [
+   -80.59,
+   28.37
+  ],
+  [
+   -80.64,
+   28.37
+  ],
+  [
+   -80.64,
+   28.28
+  ]
+ ],
+ "bans": [],
+ "cart_only_bans": [
+  {
+   "names": "^(SR A1A|FL A1A|State Road A1A|Atlantic Avenue|North Atlantic Avenue|South Atlantic Avenue)$",
+   "url": "https://cocoabeach.granicus.com/MetaViewer.php?clip_id=4213&meta_id=225018&view_id=4",
+   "label": "Cocoa Beach Sec. 15-47: golf carts only on city streets the commission designates. SR A1A is a state road and is not treated as a cart street (cross where the network map allows)."
+  }
+ ],
+ "unverified": [
+  "The green streets on the 2023 network map are not digitized, so plain golf carts show red except tagged cart paths. SR A1A is banned for carts."
+ ],
+ "sources": [
+  "Cocoa Beach Resolution 2023-07 https://cocoabeach.granicus.com/MetaViewer.php?clip_id=4536&meta_id=240956&view_id=4",
+  "Cocoa Beach Ordinance 1660 https://cocoabeach.granicus.com/MetaViewer.php?clip_id=4213&meta_id=225018&view_id=4",
+  "FLHSMV low-speed vehicles https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-28",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Cocoa Beach Resolution 2023-07",
+    "url": "https://cocoabeach.granicus.com/MetaViewer.php?clip_id=4536&meta_id=240956&view_id=4"
+   },
+   {
+    "label": "Cocoa Beach Ordinance 1660",
+    "url": "https://cocoabeach.granicus.com/MetaViewer.php?clip_id=4213&meta_id=225018&view_id=4"
+   },
+   {
+    "label": "FLHSMV low-speed vehicles",
+    "url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+   }
+  ],
+  "note": "Golf Cart Maps Greenwich and next-10 research (Oct 28 2026). Posted signs never lift a ban. Designated street lists that are not digitized stay red for plain golf carts."
+ },
+ "status": "Added (regions-11, 2026-10-28)"
+}

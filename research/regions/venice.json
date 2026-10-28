@@ -1,0 +1,55 @@
+{
+ "poly": [
+  [
+   -82.48,
+   27.05
+  ],
+  [
+   -82.39,
+   27.05
+  ],
+  [
+   -82.39,
+   27.155
+  ],
+  [
+   -82.48,
+   27.155
+  ],
+  [
+   -82.48,
+   27.05
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "No designated golf cart streets were found, so plain golf carts show red on public roads. LSVs follow the posted speed."
+ ],
+ "sources": [
+  "F.S. 316.212 https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "F.S. 316.2122 https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+  "City of Venice code https://library.municode.com/fl/venice/codes/code_of_ordinances",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-28",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "F.S. 316.212",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+   },
+   {
+    "label": "F.S. 316.2122",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+   },
+   {
+    "label": "City of Venice code",
+    "url": "https://library.municode.com/fl/venice/codes/code_of_ordinances"
+   }
+  ],
+  "note": "Golf Cart Maps Greenwich and next-10 research (Oct 28 2026). Posted signs never lift a ban. Designated street lists that are not digitized stay red for plain golf carts."
+ },
+ "status": "Added (regions-11, 2026-10-28)"
+}
