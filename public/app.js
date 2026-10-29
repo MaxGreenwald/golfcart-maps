@@ -18,7 +18,7 @@ routePane.style.zIndex=450;
 routePane.style.pointerEvents='none';
 const routeR=L.svg({pane:'route'});
 const $=id=>document.getElementById(id);
-const RISKY_MAX=152.4; // 500 ft
+const RISKY_MAX=152.4; // 500 ft risky-mode cap. Stretches of SHORT_LEGAL_FT (router.js) are legal.
 let REGIONS=[],RULES={},REG=null,MODE=(()=>{const q=new URLSearchParams(location.search).get('veh');if(GCMRule.VEHICLES.includes(q))return q;try{const v=localStorage.getItem('gcm-veh');if(GCMRule.VEHICLES.includes(v))return v}catch(_){}return GCMRule.DEFAULT_VEH})(),RULE={max_posted:35,cross:true},BASE='data/sd/';
 let D,risky=false,layer,start=null,end=null,routeG=null,mk=[];
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden (posted >=40 or untagged major)
@@ -90,14 +90,16 @@ function buildGraph(from){if(from===0)roadNet.reset();roadNet.build(D,from,{cls:
 function nearest(ll){return roadNet.nearest(D,buckets,ll,{cls:cls,G:G})}
 function astar(s,t){return roadNet.astar(s,t,{risky:risky,rule:RULE,riskyMax:RISKY_MAX})}
 function summarize(parts){let dist=0,stretches=[],cur=null,line=[];const legs=[];
- for(const [si,rev] of parts){const s=D.segs[si];let p=s[7];if(rev)p=p.slice().reverse();dist+=s._len;const f=cls(s)===3;
+ // Short faster-road runs are legal (blue line, no warning). The cutoff is SHORT_LEGAL_FT in router.js.
+ const mask=GCMRouter.riskyMask(D.segs,parts,RULE,cls);
+ for(let i=0;i<parts.length;i++){const [si,rev]=parts[i];const s=D.segs[si];let p=s[7];if(rev)p=p.slice().reverse();dist+=s._len;const f=!!mask[i];
   legs.push({p,f,s,u:!f&&unk(s),a:f?null:advOf(s)});
   if(f){if(!cur){cur={len:0,name:D.names[s[0]]||'unnamed road',sp:s[2],p:[]};stretches.push(cur)}cur.len+=s._len;cur.p.push(...p)}else cur=null}
  // turn-by-turn by street name
  const steps=[];for(const l of legs){const n=D.names[l.s[0]]||'unnamed road';const last=steps[steps.length-1];if(last&&last.n===n&&last.f===l.f&&last.u===l.u&&last.a===l.a)last.d+=l.s._len;else steps.push({n,d:l.s._len,f:l.f,u:l.u,sp:l.s[2],a:l.a})}
  return {dist,stretches,legs,steps}}
 window.popSet=f=>{if(inMX(window._pll))return;map.closePopup();setField(f,{ll:window._pll,label:lbl(window._pll)})};
-const ft=m=>Math.round(m*3.281)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
+const ft=m=>GCMRouter.shownFeet(m)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
 let routing=false;async function route(){$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
  await new Promise(r=>setTimeout(r,0));let parts=null;if(a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
  if(!parts){trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
@@ -116,7 +118,7 @@ let routing=false;async function route(){$('title').innerHTML='<span class="spin
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
  $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:(RULE.designated_only?'All on cart paths & designated roads 🌴':(r.legs.some(l=>l.u)?`Mostly ≤${RULE.max_posted} mph roads; <b>❓ ${mi(r.legs.filter(l=>l.u).reduce((a,l)=>a+l.s._len,0))} speed unknown — check signs</b>`:`All on roads ≤${RULE.max_posted} mph 🌴`))+ruleNotes()+(da>150||db>150?' · snapped to nearest legal road':'');
  r.back=await backDist(a,b,a2,b2,r.dist);renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
- setSnap('half');focusStart();window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:Math.round(s.len*3.281)}))};window._lastDetail=r;return r}
+ setSnap('half');focusStart();window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:GCMRouter.shownFeet(s.len)}))};window._lastDetail=r;return r}
 // return trip: one-way rules can differ, so route B->A; fall back to same distance
 async function backDist(a,b,a2,b2,d){if(a==null||b==null)return d;for(const [x,y] of [[b,a],[b2,a],[b,a2],[b2,a2]]){const p=astar(x,y);if(p)return summarize(p).dist}return d}
 let lastR=null;function renderRange(r){if(r)lastR=r;r=lastR;if(!r)return;const R=GCMRange,s=R.load(),rng=R.rangeFor(s),bat=s.battery==null?100:s.battery;
