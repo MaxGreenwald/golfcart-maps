@@ -1,0 +1,80 @@
+{
+ "slug": "greenwich",
+ "region": "greenwich",
+ "name": "Greenwich",
+ "state": "CT",
+ "question_title": "Can you drive a golf cart in Greenwich?",
+ "answer_short": "Street-legal LSVs yes, plain golf carts no. In Greenwich, a registered LSV may use roads posted 25 mph or less unless the traffic authority has closed that road. Greenwich has not permitted plain golf carts.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not on public roads",
+  "speed_line": "n/a",
+  "notes": "Town traffic authority has not permitted them"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "I-95 and the Merritt Parkway are closed"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts are not street-legal unless the town traffic authority permits them",
+   "citation": "Conn. Gen. Stat. Sec. 14-300g",
+   "source_url": "https://www.cga.ct.gov/current/pub/chap_249.htm#sec_14-300g"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered LSVs on roads posted 25 mph or less, unless the traffic authority has prohibited that road",
+   "citation": "Conn. Gen. Stat. Sec. 14-289m",
+   "source_url": "https://www.cga.ct.gov/current/pub/chap_248.htm#sec_14-289m"
+  },
+  {
+   "topic": "Limited-access roads",
+   "rule": "No LSVs on I-95 or the Merritt Parkway",
+   "citation": "Conn. Gen. Stat. Sec. 14-289m",
+   "source_url": "https://www.cga.ct.gov/current/pub/chap_248.htm#sec_14-289m"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "I-95",
+   "rule": "No LSVs",
+   "crossings_ok": false
+  },
+  {
+   "name": "Merritt Parkway (CT 15)",
+   "rule": "No LSVs",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Greenwich?",
+   "a": "Roads posted 25 mph or less. I-95 and the Merritt Parkway are closed. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Greenwich?",
+   "a": "No. Connecticut only allows golf carts on public streets when that town's traffic authority permits them, and Greenwich has not."
+  },
+  {
+   "q": "Can I drive an LSV on a 25 mph street in Greenwich?",
+   "a": "Yes, if it is registered and the traffic authority has not prohibited that street. Roads posted over 25 mph are closed."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  41.0262,
+  -73.6282
+ ],
+ "zoom": 15,
+ "published": "2026-10-28",
+ "last_checked": "2026-10-28",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.cga.ct.gov/current/pub/chap_248.htm#sec_14-289m",
+  "https://www.cga.ct.gov/current/pub/chap_249.htm#sec_14-300g"
+ ]
+}

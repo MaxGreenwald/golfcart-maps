@@ -211,5 +211,24 @@
    "cite": "Va. Code §46.2-916.3 (golf carts only on highways the locality designates, posted 25 mph or less; cross at intersections posted 35 or less; sunrise to sunset unless equipped)",
    "url": "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/"
   }
+ },
+ "CT": {
+  "name": "Connecticut",
+  "lsv": {
+   "max_posted": 25,
+   "cross": true,
+   "who": "street-legal LSVs",
+   "note": "A town traffic authority or the Office of State Traffic Administration can prohibit LSVs on a road under its control",
+   "cite": "Conn. Gen. Stat. Sec. 14-289m (P.A. 24-20, effective Oct. 1, 2024): LSVs on highways with an established speed limit of 25 mph or less, unless the local traffic authority or OSTA prohibits them",
+   "url": "https://www.cga.ct.gov/current/pub/chap_248.htm#sec_14-289m"
+  },
+  "golf_cart": {
+   "not_street_legal": true,
+   "max_posted": 0,
+   "cross": false,
+   "note": "Plain golf carts are not street-legal unless that town's traffic authority permits them. Switch to LSV if yours is registered.",
+   "cite": "Conn. Gen. Stat. Sec. 14-300g: a traffic authority may permit golf carts in daylight only, on roads posted 25 mph or less, with a horn, flag, and a licensed driver",
+   "url": "https://www.cga.ct.gov/current/pub/chap_249.htm#sec_14-300g"
+  }
  }
 }

@@ -1,0 +1,74 @@
+{
+ "slug": "senoia",
+ "region": "senoia",
+ "name": "Senoia",
+ "state": "GA",
+ "question_title": "Can you drive a golf cart in Senoia?",
+ "answer_short": "Yes, with a city registration. In Senoia, motorized carts may use streets posted 35 mph or less, but not State Route 16 or State Route 85 except at a crossing. LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Streets posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not SR 16 or SR 85"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not the parts of SR 16 and SR 85 posted over 35"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Motorized carts on streets posted 35 mph or less; not on State Highway 16 or 85 except authorized crossings",
+   "citation": "Senoia Code Sec. 66-103",
+   "source_url": "https://library.municode.com/ga/senoia/codes/code_of_ordinances?nodeId=COOR_CH66TRVE"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered LSVs on roads posted 35 mph or less; they may cross faster roads at intersections",
+   "citation": "O.C.G.A. 40-6-362",
+   "source_url": "https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-6/section-40-6-362/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "State Route 16",
+   "rule": "No golf carts; cross only",
+   "crossings_ok": true
+  },
+  {
+   "name": "State Route 85",
+   "rule": "No golf carts; cross only",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Senoia?",
+   "a": "Roads posted 35 mph or less. Not the parts of SR 16 and SR 85 posted over 35. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on State Route 16 in Senoia?",
+   "a": "No. You may cross it where the city has an authorized crossing, not drive along it."
+  },
+  {
+   "q": "Do I need to register a golf cart in Senoia?",
+   "a": "Yes. Senoia requires a city registration decal before a cart uses public streets or paths."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  33.3018,
+  -84.5534
+ ],
+ "zoom": 15,
+ "published": "2026-10-28",
+ "last_checked": "2026-10-28",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://library.municode.com/ga/senoia/codes/code_of_ordinances?nodeId=COOR_CH66TRVE",
+  "https://senoiapd.com/golf-cart-lsmv-registration/"
+ ]
+}

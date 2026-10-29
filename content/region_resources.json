@@ -254,5 +254,82 @@
    "name": "Florida LSV statute (F.S. 316.2122)",
    "url": "https://www.flsenate.gov/Laws/Statutes/2026/0316.2122"
   }
+ ],
+ "greenwich": [
+  {
+   "lead": "Connecticut lets registered LSVs use roads posted 25 mph or less unless a traffic authority closes the road.",
+   "name": "Connecticut LSV law, Sec. 14-289m",
+   "url": "https://www.cga.ct.gov/current/pub/chap_248.htm#sec_14-289m"
+  }
+ ],
+ "tyrone": [
+  {
+   "lead": "Tyrone publishes where golf carts may use paths and share-the-road streets.",
+   "name": "Tyrone multi-use paths and golf carts",
+   "url": "https://tyronega.gov/paths"
+  }
+ ],
+ "fayetteville": [
+  {
+   "lead": "Fayetteville explains motorized cart permits and the streets carts may use.",
+   "name": "Fayetteville motorized cart permits",
+   "url": "https://www.fayetteville-ga.gov/413/Permits-Licenses"
+  }
+ ],
+ "senoia": [
+  {
+   "lead": "Senoia's city code sets where motorized carts may drive.",
+   "name": "Senoia traffic code, golf carts",
+   "url": "https://library.municode.com/ga/senoia/codes/code_of_ordinances?nodeId=COOR_CH66TRVE"
+  }
+ ],
+ "conyers": [
+  {
+   "lead": "Conyers describes its motorized cart district and registration.",
+   "name": "Conyers golf cart district",
+   "url": "https://www.conyersga.com/residents/golf-cart-district"
+  }
+ ],
+ "augusta": [
+  {
+   "lead": "Augusta lists the streets where a permitted PTV may drive.",
+   "name": "Augusta personal transportation vehicle rules",
+   "url": "https://www.augustaga.gov/DocumentCenter/View/11417/PERSONAL-TRANSPORTATION-VEHICLE--APPLICATION-PTV"
+  }
+ ],
+ "euharlee": [
+  {
+   "lead": "Euharlee's 2025 ordinance sets golf cart and LSV street rules.",
+   "name": "Euharlee golf cart ordinance 2025-03",
+   "url": "https://euharlee.com/wp-content/uploads/2024/04/Ordinance-2025-03-Golf-Cart-Amended-5-6-2025-1.pdf"
+  }
+ ],
+ "stmarys": [
+  {
+   "lead": "St. Marys publishes the PTV rules, including the Winding Road ban.",
+   "name": "St. Marys personal transportation vehicle ordinance",
+   "url": "https://cms3.revize.com/revize/stmarysnew/department/community_development/PTVs.20210419.v1.pdf"
+  }
+ ],
+ "lowerkeys": [
+  {
+   "lead": "Marathon's council treated registered LSVs as legal on roads posted 35 mph or less and did not adopt a golf-cart street list.",
+   "name": "Marathon council on golf carts and LSVs",
+   "url": "https://keysweekly.com/42/council-says-golf-carts-are-a-go/"
+  }
+ ],
+ "cocoabeach": [
+  {
+   "lead": "Cocoa Beach Resolution 2023-07 is the current golf cart network map.",
+   "name": "Cocoa Beach golf cart network map",
+   "url": "https://cocoabeach.granicus.com/MetaViewer.php?clip_id=4536&meta_id=240956&view_id=4"
+  }
+ ],
+ "venice": [
+  {
+   "lead": "Venice's city code is the place a golf cart street designation would be adopted.",
+   "name": "City of Venice code of ordinances",
+   "url": "https://library.municode.com/fl/venice/codes/code_of_ordinances"
+  }
  ]
 }

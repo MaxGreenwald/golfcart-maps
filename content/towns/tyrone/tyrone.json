@@ -1,0 +1,69 @@
+{
+ "slug": "tyrone",
+ "region": "tyrone",
+ "name": "Tyrone",
+ "state": "GA",
+ "question_title": "Can you drive a golf cart in Tyrone?",
+ "answer_short": "Street-legal LSVs yes. Golf carts need a Tyrone permit and may use designated streets posted 35 mph or less, plus paved paths. That street list is not drawn on this map yet, so plan on an LSV or a tagged cart path. Highway 74 is not a cart route.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated streets posted 35 mph or less, and paved paths",
+  "speed_line": "35 mph",
+  "notes": "Street list not digitized"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Designated streets posted 35 mph or less, and paved multi-use paths. Highway 74 is not a cart route.",
+   "citation": "Town of Tyrone",
+   "source_url": "https://tyronega.gov/paths"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered LSVs on roads posted 35 mph or less; they may cross faster roads at intersections",
+   "citation": "O.C.G.A. 40-6-362",
+   "source_url": "https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-6/section-40-6-362/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Highway 74",
+   "rule": "No golf carts",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Tyrone?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Highway 74 in Tyrone?",
+   "a": "No. Tyrone does not treat Highway 74 as a cart route."
+  },
+  {
+   "q": "Why are most streets red for a golf cart in Tyrone?",
+   "a": "Tyrone allows carts on designated streets. That list is not digitized, so the map keeps plain golf carts off streets that are not tagged cart paths."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  33.4715,
+  -84.5916
+ ],
+ "zoom": 15,
+ "published": "2026-10-28",
+ "last_checked": "2026-10-28",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-3/section-40-6-331/",
+  "https://tyronega.gov/paths"
+ ]
+}

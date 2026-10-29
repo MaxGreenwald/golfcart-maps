@@ -1,0 +1,55 @@
+{
+ "poly": [
+  [
+   -81.58,
+   24.605
+  ],
+  [
+   -80.95,
+   24.605
+  ],
+  [
+   -80.95,
+   24.78
+  ],
+  [
+   -81.58,
+   24.78
+  ],
+  [
+   -81.58,
+   24.605
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "No designated golf-cart street list was found for Marathon or the unincorporated Lower Keys in this box, so plain golf carts show red except tagged cart paths. US 1 is red wherever it is posted over 35 mph."
+ ],
+ "sources": [
+  "Marathon City Council on LSVs (Keys Weekly, 2011) https://keysweekly.com/42/council-says-golf-carts-are-a-go/",
+  "FLHSMV low-speed vehicles https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
+  "F.S. 316.2122 https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-28",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "Marathon City Council on LSVs (Keys Weekly, 2011)",
+    "url": "https://keysweekly.com/42/council-says-golf-carts-are-a-go/"
+   },
+   {
+    "label": "FLHSMV low-speed vehicles",
+    "url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+   },
+   {
+    "label": "F.S. 316.2122",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+   }
+  ],
+  "note": "Golf Cart Maps Greenwich and next-10 research (Oct 28 2026). Posted signs never lift a ban. Designated street lists that are not digitized stay red for plain golf carts."
+ },
+ "status": "Added (regions-11, 2026-10-28)"
+}

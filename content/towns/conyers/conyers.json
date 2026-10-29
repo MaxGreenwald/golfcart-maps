@@ -1,0 +1,69 @@
+{
+ "slug": "conyers",
+ "region": "conyers",
+ "name": "Conyers",
+ "state": "GA",
+ "question_title": "Can you drive a golf cart in Conyers?",
+ "answer_short": "Street-legal LSVs yes. Golf carts only inside the city's motorized cart district, on designated roads. That district map is not drawn here, so plain golf carts show on tagged cart paths only.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated roads inside the cart district",
+  "speed_line": "n/a",
+  "notes": "District map not digitized"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not on I-20"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Motorized carts only on designated public roads inside the cart district",
+   "citation": "City of Conyers golf cart district",
+   "source_url": "https://www.conyersga.com/residents/golf-cart-district"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered LSVs on roads posted 35 mph or less; they may cross faster roads at intersections",
+   "citation": "O.C.G.A. 40-6-362",
+   "source_url": "https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-6/section-40-6-362/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Interstate 20",
+   "rule": "No carts or LSVs",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Conyers?",
+   "a": "Roads posted 35 mph or less. Not on I-20. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart anywhere in Conyers?",
+   "a": "No. Only on roads inside the motorized cart district. That map is not digitized here, so use an LSV or a tagged cart path until it is."
+  },
+  {
+   "q": "Can I drive an LSV on a 35 mph street in Conyers?",
+   "a": "Yes, where it is posted 35 mph or less. I-20 is closed."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  33.6676,
+  -84.0177
+ ],
+ "zoom": 15,
+ "published": "2026-10-28",
+ "last_checked": "2026-10-28",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-3/section-40-6-331/",
+  "https://www.conyersga.com/residents/golf-cart-district"
+ ]
+}

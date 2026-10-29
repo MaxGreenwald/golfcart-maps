@@ -242,7 +242,9 @@ EXTRA = {
 }
 import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import towns_r25 as R25   # regions-25-batch (Oct 22 2026): profiles, towns and slug map for the 25 new regions
+import towns_r11 as R11   # Greenwich + next 10 (Oct 28 2026)
 P.update(R25.P); T += R25.T; RID.update(R25.RID)
+P.update(R11.P); T += R11.T; RID.update(R11.RID)
 def nearby(i):
     reg = T[i][0]; same = [j for j in range(len(T)) if T[j][0] == reg and j != i]
     same.sort(key=lambda j: abs(j - i)); return [T[j][1] for j in same[:3]]

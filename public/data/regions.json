@@ -47,7 +47,7 @@
     ],
     "cross": false,
     "daylight_only": false,
-    "cite": "F.S. 316.212/316.2125; Sumter Co. 17-3, Marion Co. Ord. 03-26, Lady Lake 17-3, Fruitland Park ch.34, Wildwood O2026-28; paths 20 mph (CDD). Streets \u226430, major roads via tunnels/path crossings only"
+    "cite": "F.S. 316.212/316.2125; Sumter Co. 17-3, Marion Co. Ord. 03-26, Lady Lake 17-3, Fruitland Park ch.34, Wildwood O2026-28; paths 20 mph (CDD). Streets ≤30, major roads via tunnels/path crossings only"
    }
   },
   "slug": "villages"
@@ -169,7 +169,7 @@
   "cover": "Gulf Shores and Orange Beach only. Pick another city in the menu above.",
   "rule": {
    "max_posted": 25,
-   "cite": "Gulf Shores Sec. 21-13 (Apr 13 2026) & Orange Beach Sec. 70-273 / Ala. Const. Baldwin Co. \u00a71.570: carts/LSVs only on streets posted \u226425",
+   "cite": "Gulf Shores Sec. 21-13 (Apr 13 2026) & Orange Beach Sec. 70-273 / Ala. Const. Baldwin Co. §1.570: carts/LSVs only on streets posted ≤25",
    "url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"
   },
   "slug": "gulfshores",
@@ -236,7 +236,7 @@
   "rule": {
    "golf_cart": {
     "note": "Palm Desert and La Quinta golf cart plans may allow carts on some signed routes above 25 mph; we only show roads posted 25 or less for plain carts",
-    "cite": "CVC 21716; CVC 21115 + Sts. & Hwys. Code \u00a71950 golf cart transportation plans (Palm Desert, La Quinta)"
+    "cite": "CVC 21716; CVC 21115 + Sts. & Hwys. Code §1950 golf cart transportation plans (Palm Desert, La Quinta)"
    }
   }
  },
@@ -611,7 +611,7 @@
   "cover": "Oak Island, Southport and Bald Head Island (carts only, no cars) only. Pick another city in the menu above.",
   "rule": {
    "max_posted": 35,
-   "cite": "Bald Head Island has no cars (golf carts and bikes only; ferry access). Southport and Oak Island: NC LSV \u226435 (G.S. 20-121.1), carts by town ordinance",
+   "cite": "Bald Head Island has no cars (golf carts and bikes only; ferry access). Southport and Oak Island: NC LSV ≤35 (G.S. 20-121.1), carts by town ordinance",
    "url": "https://villagebhi.org/",
    "golf_cart": {
     "note": "Bald Head Island: carts on island roads; Southport and Oak Island allow golf carts only by town ordinance, check local rules"
@@ -685,7 +685,7 @@
   "cover": "City of Avalon only (rental carts and permitted autoettes; most of the island outside town is closed to private vehicles). Pick another city in the menu above.",
   "rule": {
    "max_posted": 25,
-   "cite": "Avalon: all vehicles, golf carts included, need a City permit (AMC \u00a7 4-4.1702); visitors rent permitted autoettes (\u00a7 4-4.1703(f)), residents get one per dwelling unit (\u00a7 4-4.1703(g)); carts only on streets posted \u226425 mph (CVC 21716)",
+   "cite": "Avalon: all vehicles, golf carts included, need a City permit (AMC § 4-4.1702); visitors rent permitted autoettes (§ 4-4.1703(f)), residents get one per dwelling unit (§ 4-4.1703(g)); carts only on streets posted ≤25 mph (CVC 21716)",
    "url": "https://ecode360.com/AV4054"
   },
   "slug": "catalina"
@@ -790,7 +790,7 @@
   "slug": "waikoloa",
   "rule": {
    "note": "street-legal electric LSVs (NEVs) only, max 25 mph; plain golf carts aren't street-legal in Hawaii; Hawaii County code also bans golf carts on public roads (except marked crossings)",
-   "cite": "HRS 291C-134; Hawaii County Code ch. 24 art. 6 \u00a724-177 (golf carts on public roads)"
+   "cite": "HRS 291C-134; Hawaii County Code ch. 24 art. 6 §24-177 (golf carts on public roads)"
   }
  },
  {
@@ -1234,7 +1234,7 @@
     "max_posted": 25,
     "cross": true,
     "note": "golf carts need a license plate from their home state to use public roads",
-    "cite": "Town of Dauphin Island FAQ: golf carts need a state-issued license plate for public roadways; app keeps the Alabama \u226425 mph cap (UNCONFIRMED for Dauphin)",
+    "cite": "Town of Dauphin Island FAQ: golf carts need a state-issued license plate for public roadways; app keeps the Alabama ≤25 mph cap (UNCONFIRMED for Dauphin)",
     "url": "https://www.townofdauphinisland.org/faq"
    }
   },
@@ -1392,6 +1392,302 @@
     "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10527/1231701/pdf"
    }
   },
+  "beta": true
+ },
+ {
+  "id": "greenwich",
+  "name": "Greenwich, CT",
+  "short": "Greenwich",
+  "state": "CT",
+  "center": [
+   41.0262,
+   -73.6282
+  ],
+  "zoom": 13,
+  "bbox": [
+   41.0,
+   -73.66,
+   41.12,
+   -73.57
+  ],
+  "cover": "Greenwich, Connecticut only. Pick another city in the menu above.",
+  "slug": "greenwich",
+  "beta": true
+ },
+ {
+  "id": "tyrone",
+  "name": "Tyrone, GA",
+  "short": "Tyrone",
+  "state": "GA",
+  "center": [
+   33.4715,
+   -84.5916
+  ],
+  "zoom": 14,
+  "bbox": [
+   33.461,
+   -84.63,
+   33.515,
+   -84.55
+  ],
+  "cover": "Tyrone, Georgia only (north of Peachtree City). Pick another city in the menu above.",
+  "slug": "tyrone",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "designated_only": true,
+    "cross": true,
+    "note": "Town permit. The designated street list is not digitized, so plain carts show on tagged paths only.",
+    "cite": "Town of Tyrone: golf carts on designated streets posted 35 mph or less, and on paved multi-use paths (Chapter 36, Article III). Highway 74 is not a cart route.",
+    "url": "https://tyronega.gov/paths"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "fayetteville",
+  "name": "Fayetteville, GA",
+  "short": "Fayetteville",
+  "state": "GA",
+  "center": [
+   33.4487,
+   -84.4549
+  ],
+  "zoom": 13,
+  "bbox": [
+   33.4,
+   -84.499,
+   33.52,
+   -84.4
+  ],
+  "cover": "Fayetteville, Georgia only (east of Peachtree City). Pick another city in the menu above.",
+  "slug": "fayetteville",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "designated_only": true,
+    "cross": true,
+    "note": "City permit. Authorized streets are not digitized, so plain carts show on tagged paths only.",
+    "cite": "City of Fayetteville Code Sec. 82-262: motorized carts only on authorized streets and recreation paths, not on major or collector streets except approved crossings",
+    "url": "https://library.municode.com/ga/fayetteville/codes/code_of_ordinances?nodeId=PTIICOOR_CH82TRVE_ARTIXMOCA_S82-260DE"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "senoia",
+  "name": "Senoia, GA",
+  "short": "Senoia",
+  "state": "GA",
+  "center": [
+   33.3018,
+   -84.5534
+  ],
+  "zoom": 14,
+  "bbox": [
+   33.27,
+   -84.62,
+   33.329,
+   -84.5
+  ],
+  "cover": "Senoia, Georgia only (south of Peachtree City). Pick another city in the menu above.",
+  "slug": "senoia",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "cross": true,
+    "cite": "Senoia Code Sec. 66-103: motorized carts on streets posted 35 mph or less; not on State Highway 85 or 16 except authorized crossings",
+    "url": "https://library.municode.com/ga/senoia/codes/code_of_ordinances?nodeId=COOR_CH66TRVE"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "conyers",
+  "name": "Conyers, GA",
+  "short": "Conyers",
+  "state": "GA",
+  "center": [
+   33.6676,
+   -84.0177
+  ],
+  "zoom": 13,
+  "bbox": [
+   33.63,
+   -84.07,
+   33.71,
+   -83.96
+  ],
+  "cover": "Conyers, Georgia only. Pick another city in the menu above.",
+  "slug": "conyers",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "designated_only": true,
+    "cross": true,
+    "note": "The motorized cart district map is not digitized, so plain carts show on tagged paths only.",
+    "cite": "City of Conyers Ord. 962 (2014), Title 10 Chapter 4: motorized carts only on designated public roads inside the cart district",
+    "url": "https://www.conyersga.com/residents/golf-cart-district"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "augusta",
+  "name": "Augusta, GA",
+  "short": "Augusta",
+  "state": "GA",
+  "center": [
+   33.476,
+   -81.975
+  ],
+  "zoom": 13,
+  "bbox": [
+   33.45,
+   -82.1,
+   33.52,
+   -81.94
+  ],
+  "cover": "Augusta's PTV area (downtown and the named west-side streets) only. Pick another city in the menu above.",
+  "slug": "augusta",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "designated_only": true,
+    "cross": true,
+    "daylight_only": true,
+    "note": "Permit required. Downtown streets that are not in the named allow-list stay red.",
+    "cite": "Augusta Code Sec. 3-5-86 (Ord. 7850): PTVs only on listed streets and inside the downtown area, daylight for private carts",
+    "url": "https://www.augustaga.gov/DocumentCenter/View/11417/PERSONAL-TRANSPORTATION-VEHICLE--APPLICATION-PTV"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "euharlee",
+  "name": "Euharlee, GA",
+  "short": "Euharlee",
+  "state": "GA",
+  "center": [
+   34.1465,
+   -84.933
+  ],
+  "zoom": 14,
+  "bbox": [
+   34.12,
+   -84.98,
+   34.18,
+   -84.9
+  ],
+  "cover": "Euharlee, Georgia only. Pick another city in the menu above.",
+  "slug": "euharlee",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 25,
+    "cross": true,
+    "note": "Sunrise to sunset unless the cart has headlights and taillights.",
+    "cite": "Euharlee Ord. 2025-03: golf carts on public streets posted 25 mph or less; not on state or county highways except to cross at a designated intersection",
+    "url": "https://euharlee.com/wp-content/uploads/2024/04/Ordinance-2025-03-Golf-Cart-Amended-5-6-2025-1.pdf"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "stmarys",
+  "name": "St. Marys, GA",
+  "short": "St. Marys",
+  "state": "GA",
+  "center": [
+   30.7305,
+   -81.5465
+  ],
+  "zoom": 13,
+  "bbox": [
+   30.715,
+   -81.63,
+   30.82,
+   -81.485
+  ],
+  "cover": "St. Marys, Georgia only (north of Amelia Island). Pick another city in the menu above.",
+  "slug": "stmarys",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "cross": true,
+    "cite": "St. Marys PTV ordinance Sec. 94-102: PTVs on streets posted 35 mph or less, except Winding Road; state highways only at a marked crossing",
+    "url": "https://cms3.revize.com/revize/stmarysnew/department/community_development/PTVs.20210419.v1.pdf"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "lowerkeys",
+  "name": "Lower Keys / Marathon, FL",
+  "short": "Lower Keys",
+  "state": "FL",
+  "center": [
+   24.7261,
+   -81.0514
+  ],
+  "zoom": 12,
+  "bbox": [
+   24.605,
+   -81.58,
+   24.78,
+   -80.95
+  ],
+  "cover": "The Lower Keys from Big Pine Key through Marathon only (north of Key West). Pick another city in the menu above.",
+  "slug": "lowerkeys",
+  "beta": true
+ },
+ {
+  "id": "cocoabeach",
+  "name": "Cocoa Beach, FL",
+  "short": "Cocoa Beach",
+  "state": "FL",
+  "center": [
+   28.32,
+   -80.6076
+  ],
+  "zoom": 14,
+  "bbox": [
+   28.28,
+   -80.64,
+   28.37,
+   -80.59
+  ],
+  "cover": "Cocoa Beach, Florida only. Pick another city in the menu above.",
+  "slug": "cocoabeach",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 30,
+    "designated_only": true,
+    "cross": true,
+    "note": "The Golf Cart Network Map is not digitized, so plain carts show on tagged paths only. Night driving needs lights.",
+    "cite": "Cocoa Beach Code Sec. 15-47 and Resolution 2023-07: golf carts only on streets the commission designates, posted 30 mph or less",
+    "url": "https://cocoabeach.granicus.com/MetaViewer.php?clip_id=4213&meta_id=225018&view_id=4"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "venice",
+  "name": "Venice, FL",
+  "short": "Venice",
+  "state": "FL",
+  "center": [
+   27.099,
+   -82.4543
+  ],
+  "zoom": 13,
+  "bbox": [
+   27.05,
+   -82.48,
+   27.155,
+   -82.39
+  ],
+  "cover": "Venice, Florida only (south of Siesta Key). Pick another city in the menu above.",
+  "slug": "venice",
   "beta": true
  }
 ]

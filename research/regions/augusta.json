@@ -1,0 +1,97 @@
+{
+ "poly": [
+  [
+   -82.1,
+   33.45
+  ],
+  [
+   -81.94,
+   33.45
+  ],
+  [
+   -81.94,
+   33.52
+  ],
+  [
+   -82.1,
+   33.52
+  ],
+  [
+   -82.1,
+   33.45
+  ]
+ ],
+ "bans": [
+  {
+   "names": "^(I-20|I 20|Interstate 20|I-520|I 520|Interstate 520)$",
+   "url": "https://www.augustaga.gov/DocumentCenter/View/11417/PERSONAL-TRANSPORTATION-VEHICLE--APPLICATION-PTV",
+   "label": "Interstates in Augusta are freeways posted well above 35 mph (no carts or LSVs)"
+  }
+ ],
+ "cart_only_bans": [
+  {
+   "names": "^(John C Calhoun Expressway|Calhoun Expressway|15th Street|St\\.? Sebastian Way|Saint Sebastian Way|13th Street|R\\.? ?A\\.? Dent Boulevard|RA Dent Boulevard|Walton Way|Laney Walker Boulevard|Gordon Highway|East Boundary Street|Reynolds Street|Jones Street)$",
+   "bbox": [
+    33.45,
+    -82.0,
+    33.5,
+    -81.94
+   ],
+   "url": "https://www.augustaga.gov/DocumentCenter/View/11417/PERSONAL-TRANSPORTATION-VEHICLE--APPLICATION-PTV",
+   "label": "Augusta PTV ordinance: these downtown streets are not PTV routes (Reynolds and Jones only between 15th and 13th; the whole downtown stretch is shown red to be safe)"
+  }
+ ],
+ "designated_names": [
+  {
+   "names": [
+    "J Dewey Gray Circle",
+    "J. Dewey Gray Circle",
+    "Dewey Gray Circle",
+    "Wainbrook Drive",
+    "Wainbrook",
+    "Devore Place",
+    "Interstate Parkway",
+    "Heath Drive",
+    "Pine Needle Road"
+   ],
+   "bbox": [
+    33.45,
+    -82.1,
+    33.52,
+    -81.94
+   ],
+   "url": "https://www.augustaga.gov/DocumentCenter/View/11417/PERSONAL-TRANSPORTATION-VEHICLE--APPLICATION-PTV",
+   "label": "Augusta PTV list: J. Dewey Gray Circle, Wainbrook, Devore Place, Interstate Parkway between Wainbrook and Devore, Heath Drive, and Pine Needle Road"
+  }
+ ],
+ "unverified": [
+  "The ordinance allows every street inside the downtown boundary except the named bans. Those extra downtown streets are not digitized, so they stay red. Reynolds and Jones are red for their whole downtown stretch, not only between 15th and 13th."
+ ],
+ "sources": [
+  "Augusta PTV requirements https://www.augustaga.gov/DocumentCenter/View/11417/PERSONAL-TRANSPORTATION-VEHICLE--APPLICATION-PTV",
+  "Augusta Ord. 7850 https://library.municode.com/ga/augusta-richmond_county/ordinances/code_of_ordinances?nodeId=1416145",
+  "O.C.G.A. 40-6-331 https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-3/section-40-6-331/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-28",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Augusta PTV requirements",
+    "url": "https://www.augustaga.gov/DocumentCenter/View/11417/PERSONAL-TRANSPORTATION-VEHICLE--APPLICATION-PTV"
+   },
+   {
+    "label": "Augusta Ord. 7850",
+    "url": "https://library.municode.com/ga/augusta-richmond_county/ordinances/code_of_ordinances?nodeId=1416145"
+   },
+   {
+    "label": "O.C.G.A. 40-6-331",
+    "url": "https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-3/section-40-6-331/"
+   }
+  ],
+  "note": "Golf Cart Maps Greenwich and next-10 research (Oct 28 2026). Posted signs never lift a ban. Designated street lists that are not digitized stay red for plain golf carts."
+ },
+ "status": "Added (regions-11, 2026-10-28)"
+}

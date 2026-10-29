@@ -1,0 +1,56 @@
+{
+ "poly": [
+  [
+   -84.07,
+   33.63
+  ],
+  [
+   -83.96,
+   33.63
+  ],
+  [
+   -83.96,
+   33.71
+  ],
+  [
+   -84.07,
+   33.71
+  ],
+  [
+   -84.07,
+   33.63
+  ]
+ ],
+ "bans": [
+  {
+   "names": "(^|;)I[- ]?20($|;)|^Purple Heart Highway$",
+   "url": "https://www.conyersga.com/residents/golf-cart-district",
+   "label": "Interstate 20 (Purple Heart Highway) through Conyers is a freeway posted well above 35 mph (no carts or LSVs)"
+  }
+ ],
+ "unverified": [
+  "Conyers publishes a district map, not a street list we could digitize. Plain golf carts show red except tagged cart paths."
+ ],
+ "sources": [
+  "City of Conyers golf cart district https://www.conyersga.com/residents/golf-cart-district",
+  "O.C.G.A. 40-6-331 https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-3/section-40-6-331/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-28",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "City of Conyers golf cart district",
+    "url": "https://www.conyersga.com/residents/golf-cart-district"
+   },
+   {
+    "label": "O.C.G.A. 40-6-331",
+    "url": "https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-3/section-40-6-331/"
+   }
+  ],
+  "note": "Golf Cart Maps Greenwich and next-10 research (Oct 28 2026). Posted signs never lift a ban. Designated street lists that are not digitized stay red for plain golf carts."
+ },
+ "status": "Added (regions-11, 2026-10-28)"
+}
