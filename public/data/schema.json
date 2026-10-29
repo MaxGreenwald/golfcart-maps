@@ -1,0 +1,4 @@
+{
+  "schema": 1,
+  "note": "Native app data contract (public/livedata.js SCHEMA). Bump this number when regions.json, rules.json, index.json, or tile segments change shape so an older app cannot read them. That app then keeps its bundled copy. JSON only; the app never downloads JavaScript (App Store 2.5.2)."
+}
