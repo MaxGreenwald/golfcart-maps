@@ -1,9 +1,13 @@
 """Multi-region checks: default SD, ?r= param, saved choice, picker switch, geolocation (granted) region pick, mode toggle, Villages routes."""
 from playwright.sync_api import sync_playwright
 import json, os
+from _check import ck, finish
 URL=os.environ.get("URL","http://localhost:8766/");OUT=os.environ.get("SHOTS","/workspace/gcm-multi/shots")
-fails=[]
-def ck(n,c,x=""):print("PASS" if c else "FAIL",n,x);(None if c else fails.append(n))
+os.makedirs(OUT, exist_ok=True)
+# regionAt in public/app.js: nearest non-hidden region within 50 miles, else the loader uses San Diego.
+# 40.7,-74 is ~30 miles from Greenwich, so it is inside that window. Far-away is central Kansas.
+NYC_LAT, NYC_LNG = 40.7, -74.0
+FAR_LAT, FAR_LNG = 38.5, -98.5
 with sync_playwright() as p:
     b=p.chromium.launch()
     ctx=b.new_context(**p.devices["iPhone 13"]);pg=ctx.new_page();pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000)
@@ -28,7 +32,9 @@ with sync_playwright() as p:
     ctx=b.new_context(viewport={"width":1280,"height":800},geolocation={"latitude":28.95,"longitude":-81.96},permissions=["geolocation"]);pg=ctx.new_page();pg.goto(URL)
     pg.wait_for_function("window.ready===true",timeout=120000);ck("granted geolocation picks villages",pg.evaluate("REG.id")=="villages")
     pg.wait_for_timeout(2500);pg.screenshot(path=f"{OUT}/picker-villages-desktop.png");ctx.close()
-    ctx=b.new_context(viewport={"width":1280,"height":800},geolocation={"latitude":40.7,"longitude":-74.0},permissions=["geolocation"]);pg=ctx.new_page();pg.goto(URL)
+    ctx=b.new_context(viewport={"width":1280,"height":800},geolocation={"latitude":NYC_LAT,"longitude":NYC_LNG},permissions=["geolocation"]);pg=ctx.new_page();pg.goto(URL)
+    pg.wait_for_function("window.ready===true",timeout=120000);ck("NYC area within 50 mi of Greenwich picks greenwich",pg.evaluate("REG.id")=="greenwich");ctx.close()
+    ctx=b.new_context(viewport={"width":1280,"height":800},geolocation={"latitude":FAR_LAT,"longitude":FAR_LNG},permissions=["geolocation"]);pg=ctx.new_page();pg.goto(URL)
     pg.wait_for_function("window.ready===true",timeout=120000);ck("far away -> San Diego default",pg.evaluate("REG.id")=="sd");ctx.close()
     b.close()
-print("RESULT","ALL PASS" if not fails else f"{len(fails)} FAIL: {fails}")
+finish()

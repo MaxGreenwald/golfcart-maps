@@ -1,5 +1,6 @@
 import os,re,time
 from playwright.sync_api import sync_playwright
+from _check import finish
 U=os.environ.get('URL','https://paywall-chargers.golfcart-maps.pages.dev/');S='/workspace/gcm-paywall/shots/'
 EM='paywall-test+%d@example.com'%int(time.time())
 with sync_playwright() as p:
@@ -36,3 +37,4 @@ with sync_playwright() as p:
   r.add_init_script("window.Capacitor={isNativePlatform:()=>true,getPlatform:()=>'ios'}");r.goto(U);r.wait_for_timeout(4000);r.evaluate('setMenu(true)');r.click('#cChg')
   t=r.inner_text('#paySheet');assert '$' not in t and r.locator('#paySub').count()==0;r.screenshot(path=S+'7_ios_sheet.png')
   print('ALL OK',EM)
+  finish()

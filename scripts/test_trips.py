@@ -1,5 +1,6 @@
 from playwright.sync_api import sync_playwright
 import os
+from _check import finish
 URL=os.environ.get("URL","http://localhost:8765/")
 import os
 T={"Max La Jolla pair":([32.8461,-117.2786],[32.8434,-117.2776]),
@@ -13,3 +14,4 @@ with sync_playwright() as p:
     b=p.chromium.launch();pg=b.new_page();pg.goto(os.environ.get("URL",URL));pg.wait_for_function("window.ready===true",timeout=120000)
     for n,(a,c) in T.items(): print(n,"| legal:",pg.evaluate(f"testRoute({a},{c})"),"| risky:",pg.evaluate(f"testRoute({a},{c},true)"))
     b.close()
+finish()

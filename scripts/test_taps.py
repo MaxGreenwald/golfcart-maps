@@ -1,7 +1,7 @@
 import sys
 from playwright.sync_api import sync_playwright
+from _check import ck, finish
 URL=sys.argv[1];eng=sys.argv[2];OUT=sys.argv[3] if len(sys.argv)>3 else None
-fails=[];ck=lambda n,c,x="":(print("PASS" if c else "FAIL",eng,n,x),None if c else fails.append(n))
 def ctr(bb):return bb["x"]+bb["width"]/2,bb["y"]+bb["height"]/2
 with sync_playwright() as p:
     b=getattr(p,eng).launch();c=b.new_context(**p.devices["iPhone 13"],service_workers="block",geolocation={"latitude":32.8460,"longitude":-117.2760},permissions=["geolocation"]);pg=c.new_page();errs=[]
@@ -24,4 +24,4 @@ with sync_playwright() as p:
     if pg.locator(".pbtn.rpt").count():
         pg.evaluate("window.NO_MAILTO=true");pg.locator(".pbtn.rpt").tap();pg.wait_for_timeout(400);ck("report form opens",pg.is_visible("#rpt"));pg.tap("#rpSend");ck("mailto built",pg.evaluate("!!window.lastReport"))
     ck("no page errors",not errs,errs[:2]);b.close()
-print("RESULT",eng,"ALL PASS" if not fails else f"FAIL {fails}")
+finish(eng)

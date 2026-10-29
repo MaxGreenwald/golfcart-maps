@@ -3,14 +3,13 @@ Settings has no City row and the sheet header has no city label. URL/saved-choic
 Run: URL=http://localhost:8765/ python3 scripts/test_city_chip.py   (exit 1 on failure)
 On a deployed URL (pages.dev / golfcartmap.com) it also checks /sandiego, /tybee and an unknown path (/carlsbad -> San Diego).
 SHOTS: if set, a folder for city-chip-main.png (no screenshot otherwise)."""
-import os, sys
+import os
 from playwright.sync_api import sync_playwright
+from _check import ck, fail, finish
 U = os.environ.get("URL", "http://localhost:8765/").rstrip("/"); OUT = os.environ.get("SHOTS", "")
 LOCAL = "localhost" in U or "127.0.0.1" in U
 # verify_live map suites set URL=.../map; don't prefix /map again
 IS_MAP_URL = U.endswith("/map")
-fails = []
-def ck(n, c, x=""): print(("PASS " if c else "FAIL ") + n, x); c or fails.append(n)
 READY = "window.ready===true&&window.REG"
 def map_path(path):
     if LOCAL:
@@ -33,7 +32,7 @@ def go(pg, path):
 with sync_playwright() as p:
     b = p.chromium.launch()
     ctx = b.new_context(**p.devices["iPhone 13"]); pg = ctx.new_page()
-    pg.on("pageerror", lambda e: fails.append("js error " + str(e)))
+    pg.on("pageerror", lambda e: fail("js error " + str(e)))
     go(pg, "/")
     ck("no path, nothing saved: default is San Diego", pg.evaluate("REG.id") == "sd", pg.evaluate("REG.id"))
     ids = pg.evaluate("[...document.querySelectorAll('#chips>*')].map(e=>e.id||e.className).join()")
@@ -69,4 +68,4 @@ with sync_playwright() as p:
             pg.wait_for_function(READY, timeout=120000); ck("/carlsbad (unknown path) falls back to San Diego", pg.evaluate("REG.id") == "sd", pg.evaluate("REG.id"))
         else: print("INFO /carlsbad not served:", r and r.status)
     ctx.close(); b.close()
-print("RESULT", "ALL PASS" if not fails else f"{len(fails)} FAIL: {fails}"); sys.exit(1 if fails else 0)
+finish()

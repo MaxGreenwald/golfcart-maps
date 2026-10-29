@@ -10,16 +10,10 @@ Avoid and must not say "OK for".
 Usage: URL=https://golfcartmap.com/map/ python3 scripts/test_road_labels.py
 """
 from playwright.sync_api import sync_playwright
-import os, sys
+import os
+from _check import ck, fail, finish
 
 URL = os.environ.get("URL", "http://localhost:8765/map/")
-fails = []
-
-
-def ck(n, c, x=""):
-    print(("PASS " if c else "FAIL ") + n, (x[:220] if isinstance(x, str) else x))
-    if not c:
-        fails.append(n)
 
 
 # Return segment fingerprints (name, mph, src, cls, endpoints) — enough to re-find the layer.
@@ -91,7 +85,7 @@ def pop_row(pg, row):
 with sync_playwright() as p:
     b = p.chromium.launch()
     pg = b.new_page(viewport={"width": 1200, "height": 900})
-    pg.on("pageerror", lambda e: fails.append("js " + str(e)[:120]))
+    pg.on("pageerror", lambda e: fail("js " + str(e)[:120]))
     # Force golf cart mode via query (stricter CA cap → more Avoid samples)
     join = "&" if "?" in URL else "?"
     dest = URL if "veh=" in URL else (URL.rstrip("/") + join + "r=sd&veh=golf_cart")
@@ -147,5 +141,4 @@ with sync_playwright() as p:
     ck("SD route search returns a legal route", bool(r), r)
     b.close()
 
-print("RESULT", "ALL PASS" if not fails else f"{len(fails)} FAIL: {fails}")
-sys.exit(1 if fails else 0)
+finish()

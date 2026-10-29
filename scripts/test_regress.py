@@ -1,6 +1,7 @@
 """Routing regression: Max's La Jolla pair + ~30 random residential pairs (0.5-3 km apart)."""
 from playwright.sync_api import sync_playwright
 import os
+from _check import finish
 URL=os.environ.get("URL","http://localhost:8765/")
 import json,random,glob,math,os,sys
 random.seed(int(sys.argv[1]) if len(sys.argv)>1 else 7)
@@ -22,3 +23,4 @@ with sync_playwright() as p:
         r=pg.evaluate(f"testRoute({a},{c})");ok+=bool(r)
         print(n,a,c,r)
     print(f"SUCCESS {ok}/{len(pairs)} = {ok/len(pairs):.0%}");b.close()
+finish()

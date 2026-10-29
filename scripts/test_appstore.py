@@ -6,17 +6,15 @@
 - Offline launch: the app needs nothing from third-party hosts to start (Leaflet is bundled, not loaded from unpkg).
 - The website (no Capacitor) is unchanged: Venmo link, chargers chip and beta badge still show there.
 Usage: URL=http://localhost:8765/ python scripts/test_appstore.py"""
-import os, re, sys
+import os, re
 from playwright.sync_api import sync_playwright
+from _check import ck, finish
 U = os.environ.get('URL', 'http://localhost:8765/').rstrip('/') + '/'
 ORIGIN = '/'.join(U.split('/')[:3]) + '/'   # same-origin assets (URL may be .../map/)
 STUB = """window.__calls=[];window.Capacitor={isNativePlatform:()=>true,getPlatform:()=>'ios',Plugins:{
  Haptics:{impact:o=>{__calls.push(['Haptics.impact',o]);return Promise.resolve()},notification:o=>{__calls.push(['Haptics.notification',o]);return Promise.resolve()}},
  Share:{share:o=>{__calls.push(['Share.share',o]);return Promise.resolve({})}}}};"""
 A, B = [28.9478, -81.9573], [28.9093, -81.9715]   # The Villages: Spanish Springs -> Lake Sumter Landing
-ok = True
-def check(name, cond, extra=''):
-    global ok; ok &= bool(cond); print('PASS' if cond else 'FAIL', name, extra)
 def vis(pg, sel): return pg.evaluate(f"(()=>{{const e=document.querySelector('{sel}');return !!(e&&e.offsetParent!==null&&getComputedStyle(e).display!=='none')}})()")
 with sync_playwright() as p:
     b = p.chromium.launch()
@@ -30,43 +28,43 @@ with sync_playwright() as p:
     c.route('**/*', block)
     pg = c.new_page(); pg.goto(U + '?r=villages')
     pg.wait_for_function('window.ready===true&&window.REG', timeout=60000); pg.wait_for_timeout(800)
-    check('iOS: Leaflet loads with third-party hosts blocked', pg.evaluate('!!window.L&&!!window.map'))
-    check('iOS: no unpkg request', not any('unpkg' in u for u in ext), str([u for u in ext if 'unpkg' in u][:2]))
-    check('iOS: Venmo tip link hidden', not vis(pg, '#tip'))
-    check('iOS: chargers (paywalled) chip hidden', not vis(pg, '#cChg'))
-    check('iOS: beta badge hidden', not vis(pg, '#cityBeta'))
+    ck('iOS: Leaflet loads with third-party hosts blocked', pg.evaluate('!!window.L&&!!window.map'))
+    ck('iOS: no unpkg request', not any('unpkg' in u for u in ext), str([u for u in ext if 'unpkg' in u][:2]))
+    ck('iOS: Venmo tip link hidden', not vis(pg, '#tip'))
+    ck('iOS: chargers (paywalled) chip hidden', not vis(pg, '#cChg'))
+    ck('iOS: beta badge hidden', not vis(pg, '#cityBeta'))
     opts = pg.eval_on_selector_all('#city option', 'o=>o.map(x=>x.text)')
-    check('iOS: no "(beta)" in area picker', not any('beta' in t.lower() for t in opts))
+    ck('iOS: no "(beta)" in area picker', not any('beta' in t.lower() for t in opts))
     pg.evaluate("window.PAY&&PAY.sheet()")
-    check('iOS: paywall sheet never opens', pg.locator('#paySheet').count() == 0)
-    check('iOS: Risky chip hidden', not vis(pg, '#cRisk'))
+    ck('iOS: paywall sheet never opens', pg.locator('#paySheet').count() == 0)
+    ck('iOS: Risky chip hidden', not vis(pg, '#cRisk'))
     pg.evaluate("setRisky(true)")
-    check('iOS: setRisky(true) ignored', pg.evaluate('!document.getElementById("cRisk").classList.contains("on")'))
+    ck('iOS: setRisky(true) ignored', pg.evaluate('!document.getElementById("cRisk").classList.contains("on")'))
     r = pg.evaluate(f'testRoute({A},{B})')
-    check('iOS: route found', r and r.get('mi', 0) > 0, str(r))
+    ck('iOS: route found', r and r.get('mi', 0) > 0, str(r))
     pg.evaluate("setMenu(true)"); pg.wait_for_timeout(300)
     txt = pg.inner_text('body')
-    check('iOS: no visible "beta" text', not re.search(r'\bbeta\b', txt, re.I), str(re.findall(r'.{30}\bbeta\b.{30}', txt, re.I)[:2]))
-    check('iOS: no visible Risky mode text', not re.search(r'risky', txt, re.I), str(re.findall(r'.{30}risky.{30}', txt, re.I)[:2]))
-    check('iOS: What\'s Risky link hidden', not vis(pg, '#whatRisky'))
+    ck('iOS: no visible "beta" text', not re.search(r'\bbeta\b', txt, re.I), str(re.findall(r'.{30}\bbeta\b.{30}', txt, re.I)[:2]))
+    ck('iOS: no visible Risky mode text', not re.search(r'risky', txt, re.I), str(re.findall(r'.{30}risky.{30}', txt, re.I)[:2]))
+    ck('iOS: What\'s Risky link hidden', not vis(pg, '#whatRisky'))
     cp = pg.evaluate(f"GCMCarPlay.plan({{lat:{A[0]},lon:{A[1]}}},{{lat:{B[0]},lon:{B[1]}}},'lsv',true)")
-    check('iOS: CarPlay allowRisky ignored (legal-only plan)', cp and cp.get('ok') and not cp.get('risky'), str({k: cp.get(k) for k in ('ok','risky')} if cp else cp))
-    check('iOS: no visible Venmo/Stripe/$ price', not re.search(r'venmo|stripe|\$\d', txt, re.I))
-    check('iOS: haptic fired on route', any(k.startswith('Haptics.') for k, _ in pg.evaluate('__calls')))
-    check('iOS: Share button visible after route', vis(pg, '#share'))
+    ck('iOS: CarPlay allowRisky ignored (legal-only plan)', cp and cp.get('ok') and not cp.get('risky'), str({k: cp.get(k) for k in ('ok','risky')} if cp else cp))
+    ck('iOS: no visible Venmo/Stripe/$ price', not re.search(r'venmo|stripe|\$\d', txt, re.I))
+    ck('iOS: haptic fired on route', any(k.startswith('Haptics.') for k, _ in pg.evaluate('__calls')))
+    ck('iOS: Share button visible after route', vis(pg, '#share'))
     pg.click('#share'); pg.wait_for_timeout(300)
     sh = [o for k, o in pg.evaluate('__calls') if k == 'Share.share']
-    check('iOS: Share opens native share sheet with town link', sh and sh[0]['url'] == 'https://golfcartmap.com/map/villages' and 'min' in sh[0]['text'], str(sh[:1]))
+    ck('iOS: Share opens native share sheet with town link', sh and sh[0]['url'] == 'https://golfcartmap.com/map/villages' and 'min' in sh[0]['text'], str(sh[:1]))
     c.close()
     # --- website: unchanged ---
     c = b.new_context(viewport={'width': 440, 'height': 956})
     pg = c.new_page(); pg.goto(U + '?r=villages')
     pg.wait_for_function('window.ready===true&&window.REG', timeout=60000); pg.wait_for_timeout(800)
-    check('web: Venmo tip link still present', pg.locator('#tip').count() == 1)
+    ck('web: Venmo tip link still present', pg.locator('#tip').count() == 1)
     pg.evaluate("setMenu(true)"); pg.wait_for_timeout(300)
-    check('web: chargers chip still shown', vis(pg, '#cChg'))
-    check('web: no beta badge (Max, Oct 22)', not vis(pg, '#cityBeta'))
-    check('web: Risky chip still shown', vis(pg, '#cRisk'))
-    check('web: native helpers report web', pg.evaluate('window.GCM_IOS===false&&window.GCM_NATIVE===false'))
+    ck('web: chargers chip still shown', vis(pg, '#cChg'))
+    ck('web: no beta badge (Max, Oct 22)', not vis(pg, '#cityBeta'))
+    ck('web: Risky chip still shown', vis(pg, '#cRisk'))
+    ck('web: native helpers report web', pg.evaluate('window.GCM_IOS===false&&window.GCM_NATIVE===false'))
     c.close(); b.close()
-print('RESULT', 'ALL PASS' if ok else 'FAIL'); sys.exit(0 if ok else 1)
+finish()

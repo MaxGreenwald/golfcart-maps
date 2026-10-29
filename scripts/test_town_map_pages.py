@@ -8,25 +8,19 @@ on `import playwright` (Playwright is only installed in the browser job).
 Usage: URL=https://golfcartmap.com/map/ python3 scripts/test_town_map_pages.py
 """
 from playwright.sync_api import sync_playwright
-import json, os, sys
+import json, os
+from _check import ck, fail, finish
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 BASE = os.environ.get("URL", "http://localhost:8765/map/").rstrip("/") + "/"
 regs = [r for r in json.load(open(os.path.join(ROOT, "public/data/regions.json"))) if not r.get("hidden")]
-fails = []
-
-
-def ck(n, c, x=""):
-    print(("PASS " if c else "FAIL ") + n, x)
-    if not c:
-        fails.append(n)
 
 
 with sync_playwright() as p:
     b = p.chromium.launch()
     ctx = b.new_context(viewport={"width": 390, "height": 844})
     pg = ctx.new_page()
-    pg.on("pageerror", lambda e: fails.append("js " + str(e)[:120]))
+    pg.on("pageerror", lambda e: fail("js " + str(e)[:120]))
     for r in regs:
         slug, rid = r["slug"], r["id"]
         url = BASE + slug
@@ -41,5 +35,4 @@ with sync_playwright() as p:
             ck(f"map/{slug} loads", False, str(e)[:160])
     b.close()
 
-print("RESULT", "ALL PASS" if not fails else f"{len(fails)} FAIL: {fails[:8]}{'...' if len(fails)>8 else ''}")
-sys.exit(1 if fails else 0)
+finish()

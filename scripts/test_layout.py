@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright
 import os as _os; SHOTS_DIR = _os.environ.get("SHOTS_DIR", "/workspace/golfcart-maps/")
 import os
+from _check import finish
 URL=os.environ.get("URL","http://localhost:8765/")
 with sync_playwright() as p:
     b=p.chromium.launch()
@@ -14,3 +15,4 @@ with sync_playwright() as p:
         pg.evaluate("setSnap('full');0");pg.wait_for_timeout(500);print(" full visible",vis(),"sbody scroll",pg.evaluate("[sbody.scrollHeight,sbody.clientHeight]"))
         pg.screenshot(path=SHOTS_DIR+f"screenshot-{name}-route.png")
         pg.evaluate("setSnap('collapsed');0");pg.wait_for_timeout(500);print(" collapsed visible",vis())
+finish()

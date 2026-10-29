@@ -4,8 +4,9 @@ name with "..." (build 8, Oct 17). Desktop/Linux engines don't add it, so we sim
 Asserts for every visible region at 375/390/430 px: no chip text overflows (scrollWidth > clientWidth,
 or a <select> showing its text narrower than the text), chips don't overlap or run off-screen.
 Run: URL=http://localhost:8765/ python3 scripts/test_chip_overflow.py   (exit 1 on failure)"""
-import json, os, sys
+import json, os
 from playwright.sync_api import sync_playwright
+from _check import ck, finish
 U = os.environ.get("URL", "http://localhost:8765/").rstrip("/")
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 REGS = [r["id"] for r in json.load(open(os.path.join(ROOT, "public/data/regions.json"))) if not r.get("hidden")]
@@ -21,7 +22,6 @@ const ch=[...C.children].filter(e=>e.offsetParent),R=ch.map(e=>e.getBoundingClie
 for(let i=0;i<R.length;i++){if(R[i].right>innerWidth-2)bad.push((ch[i].id||ch[i].className)+' off-screen');for(let j=i+1;j<R.length;j++){const a=R[i],b=R[j];if(a.left<b.right-1&&b.left<a.right-1&&a.top<b.bottom-1&&b.top<a.bottom-1)bad.push('overlap '+(ch[i].id||ch[i].className)+' / '+(ch[j].id||ch[j].className))}}
 const lbl=document.querySelector('#cityLbl'),sel=document.querySelector('#city');const shown=lbl?lbl.textContent:(sel.selectedOptions[0]||{}).text;
 return {bad,shown}}"""
-fails = 0
 with sync_playwright() as p:
     b = p.webkit.launch()
     for w, h in ((375, 667), (390, 844), (430, 932)):
@@ -29,9 +29,9 @@ with sync_playwright() as p:
         for rid in REGS:
             pg = c.new_page(); pg.goto(f"{U}/?r={rid}"); pg.wait_for_function("window.ready===true&&window.REG", timeout=90000)
             pg.add_style_tag(content=IOS_SELECT); pg.evaluate("document.fonts.ready.then(()=>1)"); pg.wait_for_timeout(400)
-            r = pg.evaluate(JS); ok = not r["bad"]; fails += not ok
-            print("PASS" if ok else "FAIL", w, rid, repr(r["shown"]), "; ".join(r["bad"]))
+            r = pg.evaluate(JS); ok = not r["bad"]
+            ck(f"{w} {rid}", ok, f"{r['shown']!r} {'; '.join(r['bad'])}")
             pg.close()
         c.close()
     b.close()
-print("RESULT", "ALL PASS" if not fails else f"{fails} FAIL"); sys.exit(1 if fails else 0)
+finish()

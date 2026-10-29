@@ -13,6 +13,8 @@ jobs:
         with: {fetch-depth: 0}   # tests/test_web_build.py replays a real missed cache bump from history
       - name: public/ is the only copy of the web app (no committed ios/android/dist bundles)
         run: python scripts/check_single_source.py
+      - name: "scripts/test_*.py cannot print FAIL and still exit 0"
+        run: python scripts/check_test_exit.py
       - name: No 'verified' claims outside the coastal-SD verified badge
         run: python scripts/check_verified_wording.py
       - name: Analytics schema / PII guard (node --test)
@@ -66,6 +68,8 @@ jobs:
         run: python scripts/test_islands_ui.py
       - name: "test_city_chip (city chip in the top row, A-Z, San Diego default, switching re-centers, back/forward)"
         run: python scripts/test_city_chip.py
+      - name: "test_regions (saved choice, Villages routes, Greenwich within 50 mi, far-away defaults to San Diego)"
+        run: python scripts/test_regions.py
       - name: test_chips
         run: python scripts/test_chips.py
       - name: test_layout
