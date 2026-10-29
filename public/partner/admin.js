@@ -381,20 +381,58 @@ function priorStopLatLng(el) {
   return null;
 }
 
-/** ~250m north-east, so a new pin is not stacked on the previous stop. */
+/** ~250m north-east, so a suggested view is not stacked on the previous stop. */
 const PIN_OFFSET = 0.0022;
+/** Lat/lon pad (~2.5 km) around that suggestion. Street zoom on the last pin hid the neighborhood. */
+const PIN_AREA_PAD = 0.025;
+const PIN_AREA_MAX_ZOOM = 14;
 
 function pinView(el, lat, lon) {
   const reg = activeRegion();
-  if (Number.isFinite(lat) && Number.isFinite(lon)) return { lat, lon, zoom: 16 };
+  // This stop already has a pin: show that pin. Do not borrow the previous stop.
+  if (Number.isFinite(lat) && Number.isFinite(lon)) return { lat, lon, zoom: 16, placed: true, area: false };
   const prior = priorStopLatLng(el);
-  if (prior) return { lat: prior[0] + PIN_OFFSET, lon: prior[1] + PIN_OFFSET, zoom: 16 };
+  if (prior) {
+    return {
+      lat: prior[0] + PIN_OFFSET,
+      lon: prior[1] + PIN_OFFSET,
+      zoom: PIN_AREA_MAX_ZOOM,
+      placed: false,
+      area: true,
+    };
+  }
   const c = regionCenter(reg);
-  return { lat: c[0], lon: c[1], zoom: placeZoom(reg, false) };
+  return { lat: c[0], lon: c[1], zoom: placeZoom(reg, false), placed: false, area: false };
 }
 
-function refreshPinMapSize(map) {
-  const fix = () => { if (map && map.invalidateSize) map.invalidateSize(); };
+function pinAreaBounds(lat, lon) {
+  return [
+    [lat - PIN_AREA_PAD, lon - PIN_AREA_PAD],
+    [lat + PIN_AREA_PAD, lon + PIN_AREA_PAD],
+  ];
+}
+
+/** Frame the map. A stop with no pin gets no marker until click or drag, and is not written into the form. */
+function framePinMap(map, view) {
+  if (!map) return;
+  if (view.placed) map.setView([view.lat, view.lon], view.zoom);
+  else if (view.area) map.fitBounds(pinAreaBounds(view.lat, view.lon), { animate: false, maxZoom: PIN_AREA_MAX_ZOOM });
+  else map.setView([view.lat, view.lon], view.zoom);
+}
+
+function settlePinMap(el, map, view) {
+  const generation = (el._gcmFrameGen = (el._gcmFrameGen || 0) + 1);
+  const sized = () => el.offsetWidth > 0 && el.offsetHeight > 0;
+  if (map.invalidateSize) map.invalidateSize();
+  const hadSize = sized();
+  framePinMap(map, view);
+  const fix = () => {
+    if (!map) return;
+    if (map.invalidateSize) map.invalidateSize();
+    // A click or drag bumps the generation so this does not yank the view back.
+    // Refit only when the first frame ran before the panel had a size.
+    if (el._gcmFrameGen === generation && !hadSize) framePinMap(map, view);
+  };
   if (typeof requestAnimationFrame === 'function') requestAnimationFrame(fix);
   setTimeout(fix, 60);
 }
@@ -404,33 +442,43 @@ function ensurePinMap(el, latRaw, lonRaw, onMove) {
   const lat = numCoord(latRaw);
   const lon = numCoord(lonRaw);
   const view = pinView(el, lat, lon);
-  if (el._gcmMap) {
-    const map = el._gcmMap;
-    refreshPinMapSize(map);
-    if (Number.isFinite(lat) && Number.isFinite(lon)) {
-      el._gcmMarker.setLatLng([lat, lon]);
-      map.setView([lat, lon], map.getZoom() || 16);
+
+  const putMarker = ll => {
+    if (!el._gcmMap) return null;
+    if (!el._gcmMarker) {
+      const marker = L.marker(ll, { draggable: true }).addTo(el._gcmMap);
+      marker.on('dragend', () => {
+        el._gcmFrameGen = (el._gcmFrameGen || 0) + 1;
+        const pos = marker.getLatLng();
+        onMove(pos.lat, pos.lng);
+      });
+      el._gcmMarker = marker;
+    } else {
+      el._gcmMarker.setLatLng(ll);
     }
-    return map;
-  }
-  const map = L.map(el, { zoomControl: true }).setView([view.lat, view.lon], view.zoom);
-  // Same tiles as the main map (public/app.js). Subdomain {s}.tile hosts are not required.
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap contributors',
-  }).addTo(map);
-  const marker = L.marker([view.lat, view.lon], { draggable: true }).addTo(map);
-  const fire = () => {
-    const ll = marker.getLatLng();
-    onMove(ll.lat, ll.lng);
+    return el._gcmMarker;
   };
-  marker.on('dragend', fire);
-  map.on('click', e => { marker.setLatLng(e.latlng); fire(); });
-  el._gcmMap = map;
-  el._gcmMarker = marker;
-  refreshPinMapSize(map);
-  if (Number.isFinite(lat) && Number.isFinite(lon)) onMove(lat, lon);
-  return map;
+
+  if (!el._gcmMap) {
+    const map = L.map(el, { zoomControl: true }).setView([view.lat, view.lon], view.zoom);
+    // Same tiles as the main map (public/app.js). Subdomain {s}.tile hosts are not required.
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors',
+    }).addTo(map);
+    map.on('click', e => {
+      el._gcmFrameGen = (el._gcmFrameGen || 0) + 1;
+      putMarker(e.latlng);
+      onMove(e.latlng.lat, e.latlng.lng);
+    });
+    el._gcmMap = map;
+  }
+
+  // A new stop must not open with a marker (or saved coords) on the previous stop.
+  // Click or drag is what writes lat/lon. A stop that already has its own pin shows that pin.
+  if (view.placed) putMarker([lat, lon]);
+  settlePinMap(el, el._gcmMap, view);
+  return el._gcmMap;
 }
 
 function wireStop(row) {
