@@ -1,0 +1,84 @@
+{
+ "slug": "dewey-beach",
+ "region": "delawarebeaches",
+ "name": "Dewey Beach",
+ "state": "DE",
+ "question_title": "Can you drive a golf cart in Dewey Beach?",
+ "answer_short": "Street-legal LSVs yes, plain golf carts no. Delaware doesn't allow golf carts on its highways. LSVs may use roads posted 35 mph or less, but not Coastal Highway outside towns, and not in Fenwick Island at all.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not on public roads",
+  "speed_line": "n/a",
+  "notes": "Delaware DMV"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not Coastal Hwy outside towns; not in Fenwick Island"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts are not allowed to operate on Delaware highways",
+   "citation": "Delaware DMV",
+   "source_url": "https://dmv.de.gov/VehicleServices/specialvehicles/index.shtml?dc=ve_reg_golf"
+  },
+  {
+   "topic": "LSVs",
+   "rule": "LSVs on roads posted 35 mph or less; not on dual highways outside towns except to cross",
+   "citation": "21 Del. C. 2113A",
+   "source_url": "https://delcode.delaware.gov/title21/c021/sc01/index.html"
+  },
+  {
+   "topic": "Fenwick Island",
+   "rule": "Low-speed vehicles prohibited on town streets",
+   "citation": "Fenwick Island Code ch. 153",
+   "source_url": "https://fenwickisland.delaware.gov/files/2022/02/Chapter-153.pdf"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Coastal Highway (DE 1) outside towns",
+   "rule": "No LSVs; cross only",
+   "crossings_ok": true
+  },
+  {
+   "name": "Fenwick Island streets",
+   "rule": "No LSVs",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Dewey Beach?",
+   "a": "Roads posted 35 mph or less. Not Coastal Hwy outside towns; not in Fenwick Island. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart in Dewey Beach?",
+   "a": "No. Delaware DMV says golf carts aren't allowed on Delaware highways. Only registered LSVs may use roads posted 35 mph or less."
+  },
+  {
+   "q": "Can I drive an LSV in Fenwick Island?",
+   "a": "No. Fenwick Island's town code prohibits low-speed vehicles."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "rehoboth-beach",
+  "bethany-beach"
+ ],
+ "map_center": [
+  38.693,
+  -75.075
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://delcode.delaware.gov/title21/c021/sc01/index.html",
+  "https://dmv.de.gov/VehicleServices/specialvehicles/index.shtml?dc=ve_reg_golf",
+  "https://fenwickisland.delaware.gov/files/2022/02/Chapter-153.pdf"
+ ]
+}

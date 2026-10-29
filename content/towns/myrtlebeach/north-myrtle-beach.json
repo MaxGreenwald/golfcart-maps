@@ -1,0 +1,105 @@
+{
+ "slug": "north-myrtle-beach",
+ "region": "myrtlebeach",
+ "name": "North Myrtle Beach",
+ "state": "SC",
+ "question_title": "Can you drive a golf cart in North Myrtle Beach?",
+ "answer_short": "Yes, with limits. In North Myrtle Beach, a permitted, insured golf cart may use secondary streets posted 35 mph or less, in daylight, within 4 miles of its registered address. Carts are not allowed on Kings Highway, US 501, US 17 or other primary roads, or in bike lanes.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Secondary streets posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Daylight, within 4 mi of registration"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured like a car"
+ },
+ "rules": [
+  {
+   "topic": "Primary roads",
+   "rule": "No golf carts on Kings Highway, US 501 or roads posted over 35 mph",
+   "citation": "City of Myrtle Beach golf cart rules",
+   "source_url": "https://www.cityofmyrtlebeach.com/news_detail_T6_R2337.php"
+  },
+  {
+   "topic": "Golf cart roads",
+   "rule": "Secondary streets posted 35 mph or less, daylight, within 4 miles of the registered address",
+   "citation": "S.C. golf cart law (SCDPS)",
+   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+  },
+  {
+   "topic": "Sidewalks",
+   "rule": "Not on sidewalks, multipurpose lanes or bike lanes; no more riders than seats",
+   "citation": "City of Myrtle Beach golf cart rules",
+   "source_url": "https://www.cityofmyrtlebeach.com/news_detail_T6_R2337.php"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Kings Highway (US 17 Business)",
+   "rule": "Primary road",
+   "crossings_ok": true
+  },
+  {
+   "name": "US 501",
+   "rule": "Primary road",
+   "crossings_ok": true
+  },
+  {
+   "name": "US 17 Bypass",
+   "rule": "Primary road",
+   "crossings_ok": true
+  },
+  {
+   "name": "SC 31 (Carolina Bays Pkwy)",
+   "rule": "Primary road",
+   "crossings_ok": false
+  },
+  {
+   "name": "SC 22, SC 707, SC 544",
+   "rule": "Primary roads",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in North Myrtle Beach?",
+   "a": "Roads posted 35 mph or less. Registered and insured like a car. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Kings Highway?",
+   "a": "No. The City of Myrtle Beach says golf carts are not allowed on Kings Highway, US 501 or any road posted over 35 mph."
+  },
+  {
+   "q": "Can kids drive golf carts in North Myrtle Beach?",
+   "a": "No. Only licensed drivers may drive golf carts on public streets."
+  }
+ ],
+ "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "North Myrtle Beach publishes a golf cart use map and its sunrise-to-sunset rule.",
+   "name": "North Myrtle Beach golf cart laws and use map",
+   "url": "https://www.nmb.us/600/Golf-Cart-Laws"
+  }
+ ],
+ "nearby": [
+  "myrtle-beach",
+  "surfside-beach"
+ ],
+ "map_center": [
+  33.816,
+  -78.68
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.cityofmyrtlebeach.com/news_detail_T6_R2337.php",
+  "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+ ]
+}

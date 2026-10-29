@@ -1,0 +1,57 @@
+{
+ "poly": [
+  [
+   -84.62,
+   33.27
+  ],
+  [
+   -84.5,
+   33.27
+  ],
+  [
+   -84.5,
+   33.329
+  ],
+  [
+   -84.62,
+   33.329
+  ],
+  [
+   -84.62,
+   33.27
+  ]
+ ],
+ "bans": [],
+ "cart_only_bans": [
+  {
+   "names": "(^|;)GA (16|85)($|;)|^Wells Street$|^State Route (16|85)|^Highway 85 Connector",
+   "url": "https://library.municode.com/ga/senoia/codes/code_of_ordinances?nodeId=COOR_CH66TRVE",
+   "label": "Senoia Code Sec. 66-103: no motorized carts on State Highway 16 (Wells Street) or State Highway 85 except authorized crossings"
+  }
+ ],
+ "unverified": [
+  "State Route 16 is tagged Wells Street in OpenStreetMap. Broad Street is a separate 25 mph city street and is not part of this ban."
+ ],
+ "sources": [
+  "Senoia Code Chapter 66 https://library.municode.com/ga/senoia/codes/code_of_ordinances?nodeId=COOR_CH66TRVE",
+  "Senoia Police golf cart registration https://senoiapd.com/golf-cart-lsmv-registration/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-28",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Senoia Code Chapter 66",
+    "url": "https://library.municode.com/ga/senoia/codes/code_of_ordinances?nodeId=COOR_CH66TRVE"
+   },
+   {
+    "label": "Senoia Police golf cart registration",
+    "url": "https://senoiapd.com/golf-cart-lsmv-registration/"
+   }
+  ],
+  "note": "Golf Cart Maps Greenwich and next-10 research (Oct 28 2026). Posted signs never lift a ban. Designated street lists that are not digitized stay red for plain golf carts."
+ },
+ "status": "Added (regions-11, 2026-10-28)"
+}

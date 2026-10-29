@@ -1,0 +1,18 @@
+{
+ "_note": "No build_region config; this region is built by scripts/build_data.py. Holds the local-enforcement record only.",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "Coronado Municipal Code 56.90 (vehicle prohibitions: beaches, parks, medians; no cart street list)",
+    "url": "https://coronado.municipal.codes/CMC/56.90.030"
+   },
+   {
+    "label": "Coronado Municipal Code 56.18.040",
+    "url": "https://coronado.municipal.codes/CMC/56.18.040"
+   }
+  ],
+  "note": "No sheriff/police golf cart or LSV road list for San Diego or Coronado. Coronado's code bans vehicles from beaches/parks/medians only. CVC 21716/21260 applied; SD ground-truth survey covers posted speeds."
+ }
+}

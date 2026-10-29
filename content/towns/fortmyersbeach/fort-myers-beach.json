@@ -1,0 +1,75 @@
+{
+ "slug": "fort-myers-beach",
+ "region": "fortmyersbeach",
+ "name": "Fort Myers Beach",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Fort Myers Beach?",
+ "answer_short": "Street-legal LSVs yes; plain golf carts only where the town designates roads, and none were found. In Fort Myers Beach, registered LSVs may use roads posted 35 mph or less, including Estero Boulevard.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Only designated, signed roads",
+  "speed_line": "n/a",
+  "notes": "No designated streets found"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not on sidewalks or paths"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "FLHSMV low-speed vehicles",
+   "source_url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+  },
+  {
+   "topic": "Sidewalks and paths",
+   "rule": "No motor vehicles on sidewalks or shared paths",
+   "citation": "Town of Fort Myers Beach Ord. 25-03",
+   "source_url": "https://www.fortmyersbeachfl.gov/DocumentCenter/View/24451/25-03-Beach-Bicycle-and-Vehicle-Safety"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Sidewalks and shared paths",
+   "rule": "No motor vehicles",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Fort Myers Beach?",
+   "a": "Roads posted 35 mph or less. Not on sidewalks or paths. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive an LSV on Estero Boulevard in Fort Myers Beach?",
+   "a": "Yes, where it's posted 35 mph or less, which is most of it. Registered LSVs follow the Florida LSV law."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Fort Myers Beach?",
+   "a": "Only on roads the town has designated and signed for golf carts. We didn't find any, so plan on an LSV."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  26.452,
+  -81.948
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
+  "https://www.fortmyersbeachfl.gov/DocumentCenter/View/24451/25-03-Beach-Bicycle-and-Vehicle-Safety"
+ ]
+}

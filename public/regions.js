@@ -4,8 +4,8 @@
 (function(root){
 const label=r=>r.short||r.name||r.id;
 const byName=(a,b)=>label(a).localeCompare(label(b),'en',{sensitivity:'base',numeric:true})||String(a.id).localeCompare(String(b.id));
-// regions: the regions.json list; keepId: a hidden region opened by link (?r=) stays selectable; ios: no "(beta)" tags in the App Store build
-function pickerList(regions,keepId,ios){return (regions||[]).filter(r=>!r.hidden||r.id===keepId).slice().sort(byName).map(r=>({id:r.id,text:label(r)+(r.beta&&!ios?' (beta)':'')}))}
+// regions: the regions.json list; keepId: a hidden region opened by link (?r=) stays selectable; ios: same picker text on every platform
+function pickerList(regions,keepId,ios){return (regions||[]).filter(r=>!r.hidden||r.id===keepId).slice().sort(byName).map(r=>({id:r.id,text:label(r)}))}
 const api={pickerList,label,byName};
 if(typeof module==='object'&&module.exports)module.exports=api;else root.GCMRegions=api;
 })(typeof window!=='undefined'?window:globalThis);

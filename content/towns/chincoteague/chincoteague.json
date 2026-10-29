@@ -1,0 +1,74 @@
+{
+ "slug": "chincoteague",
+ "region": "chincoteague",
+ "name": "Chincoteague",
+ "state": "VA",
+ "question_title": "Can you drive a golf cart in Chincoteague?",
+ "answer_short": "Yes, with limits. In Chincoteague, registered golf carts may use streets the Town Council designates, posted 25 mph or less, but never Main Street or Second Street.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated streets posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Town registration; not Main St or Second St"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Only on designated streets posted 25 mph or less; not Main St or Second St",
+   "citation": "Town of Chincoteague Sec. 8-2-13",
+   "source_url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10527/1231701/pdf"
+  },
+  {
+   "topic": "LSVs",
+   "rule": "LSVs on highways posted 35 mph or less",
+   "citation": "Va. Code 46.2-908.3",
+   "source_url": "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-908.3/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Main Street",
+   "rule": "No golf carts; cross at Sycamore, Fifth or Third St",
+   "crossings_ok": true
+  },
+  {
+   "name": "Second Street",
+   "rule": "No golf carts; cross at Marshall or Endly St",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Chincoteague?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Main Street in Chincoteague?",
+   "a": "No. Golf carts may only cross Main Street at Sycamore, Fifth and Third Streets."
+  },
+  {
+   "q": "Do I need to register a golf cart in Chincoteague?",
+   "a": "Yes. The town requires registration, proof of insurance and a $25 yearly decal."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  37.933,
+  -75.379
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/",
+  "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10527/1231701/pdf"
+ ]
+}

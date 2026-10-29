@@ -39,6 +39,15 @@ def table(rows, cols, empty="_none yet_"):
 def pct(a, b): return f"{100 * a / b:.0f}%" if b else "–"
 
 
+def exclude_line(s):
+    """Second headline line once /stats is the filtered worker. Absent on the old worker."""
+    if "weekly_active_unfiltered" not in s:
+        return []
+    w, r = s.get("weekly_active") or 0, s.get("weekly_active_route_users") or 0
+    wu, ru = s.get("weekly_active_unfiltered") or 0, s.get("weekly_active_route_users_unfiltered") or 0
+    return [f"- Excluded internal/test installs: {wu - w} (route users: {ru - r}). Unfiltered was {wu} / {ru}."]
+
+
 def render(s, env, base, today):
     t, d = s.get("totals") or {}, s.get("daily") or []
     srch = sum(x.get("routes_searched") or 0 for x in d); found = sum(x.get("routes_found") or 0 for x in d)
@@ -51,6 +60,7 @@ def render(s, env, base, today):
     md += [f"Source: `{base}/stats` · window: last {s.get('days')} days (days are UTC) · generated {s.get('generated')}", "",
            "## Headline", "",
            f"- Weekly active installs: **{s.get('weekly_active', 0)}** (route users: {s.get('weekly_active_route_users', 0)})",
+           *exclude_line(s),
            f"- {s.get('days')}-day installs: {t.get('installs') or 0} · sessions: {t.get('sessions') or 0} · events: {t.get('events') or 0}",
            f"- Routes searched: {srch} · found a legal route: {found} ({pct(found, srch)}) · completed: {done} ({pct(done, found)} of found)", "",
            "## Daily", "",
@@ -67,8 +77,21 @@ def render(s, env, base, today):
                                     ("sessions", "sessions"), ("installs", "installs")]),
            "## Referrers", "", table(s.get("referrers"), [("referrer host", "ref"), ("sessions", "sessions")]),
            "## First touch (how installs first arrived)", "", table(s.get("first_touch"), [("first-touch source", "ft_source"), ("installs", "installs")]),
-           "## Events", "", table(s.get("events"), [("event", "event"), ("count", "n"), ("installs", "installs")])]
+           "## Events", "", table(merge_aliases(s.get("events")), [("event", "event"), ("count", "n"), ("installs", "installs")])]
     return "\n".join(md)
+
+
+ALIASES = {"testflight_click": "app_store_click"}  # old badge event name; counted as the same metric
+
+
+def merge_aliases(events):
+    """Fold legacy event names into their current name (counts summed; installs summed as an upper bound)."""
+    out = {}
+    for r in events or []:
+        name = ALIASES.get(r.get("event"), r.get("event"))
+        o = out.setdefault(name, {"event": name, "n": 0, "installs": 0})
+        o["n"] += r.get("n") or 0; o["installs"] += r.get("installs") or 0
+    return sorted(out.values(), key=lambda r: -r["n"])
 
 
 def main():

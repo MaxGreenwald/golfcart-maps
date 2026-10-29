@@ -1,8 +1,8 @@
 """After routing, the map flies to the START at z16, centered in the visible area (not under the sheet/card)."""
 from playwright.sync_api import sync_playwright
 import os
+from _check import ck, finish
 URL=os.environ.get("URL","http://localhost:8765/")
-fails=0
 with sync_playwright() as p:
     b=p.chromium.launch()
     for name,kw in [("mobile",p.devices["iPhone 13"]),("desktop",{"viewport":{"width":1440,"height":900}})]:
@@ -12,6 +12,6 @@ with sync_playwright() as p:
             pg.evaluate(f"testRoute({a},{c}).then(()=>0)");pg.wait_for_timeout(2000)
             r=pg.evaluate(f"(()=>{{const p=map.latLngToContainerPoint({a}),t=document.getElementById('top').getBoundingClientRect(),s=document.getElementById('sheet').getBoundingClientRect();return {{z:map.getZoom(),x:Math.round(p.x),y:Math.round(p.y),topB:Math.round(t.bottom),sheetT:Math.round(s.top),cardR:Math.round(s.right)}}}})()")
             ok=r['z']==16 and r['y']>r['topB'] and (r['y']<r['sheetT'] if name=="mobile" else r['x']>r['cardR'])
-            fails+=not ok;print("PASS" if ok else "FAIL",name,a,r)
+            ck(f"{name} {a}", ok, r)
         pg.screenshot(path=f"/workspace/golfcart-maps/screenshot-focus-{name}.png")
-    print("RESULT","ALL PASS" if not fails else f"{fails} FAIL")
+    finish()

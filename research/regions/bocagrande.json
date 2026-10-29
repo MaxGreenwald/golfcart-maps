@@ -1,0 +1,170 @@
+{
+ "poly": [
+  [
+   -82.27372,
+   26.78901
+  ],
+  [
+   -82.28022,
+   26.79791
+  ],
+  [
+   -82.28071,
+   26.80028
+  ],
+  [
+   -82.28459,
+   26.80503
+  ],
+  [
+   -82.28485,
+   26.8098
+  ],
+  [
+   -82.2819,
+   26.81278
+  ],
+  [
+   -82.27962,
+   26.81307
+  ],
+  [
+   -82.27537,
+   26.81098
+  ],
+  [
+   -82.27166,
+   26.80654
+  ],
+  [
+   -82.27222,
+   26.80188
+  ],
+  [
+   -82.2702,
+   26.79743
+  ],
+  [
+   -82.27058,
+   26.80014
+  ],
+  [
+   -82.26944,
+   26.80021
+  ],
+  [
+   -82.26811,
+   26.79199
+  ],
+  [
+   -82.26606,
+   26.78978
+  ],
+  [
+   -82.26518,
+   26.78572
+  ],
+  [
+   -82.26224,
+   26.78438
+  ],
+  [
+   -82.26136,
+   26.78226
+  ],
+  [
+   -82.26292,
+   26.77985
+  ],
+  [
+   -82.26289,
+   26.77618
+  ],
+  [
+   -82.26201,
+   26.76901
+  ],
+  [
+   -82.25991,
+   26.76619
+  ],
+  [
+   -82.26032,
+   26.75947
+  ],
+  [
+   -82.25948,
+   26.75767
+  ],
+  [
+   -82.25571,
+   26.75474
+  ],
+  [
+   -82.25303,
+   26.74931
+  ],
+  [
+   -82.25458,
+   26.74136
+  ],
+  [
+   -82.25401,
+   26.73883
+  ],
+  [
+   -82.25698,
+   26.73097
+  ],
+  [
+   -82.25669,
+   26.71756
+  ],
+  [
+   -82.2603,
+   26.71484
+  ],
+  [
+   -82.26533,
+   26.71751
+  ],
+  [
+   -82.2662,
+   26.71964
+  ],
+  [
+   -82.26524,
+   26.73106
+  ],
+  [
+   -82.26966,
+   26.77524
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "Electric golf carts may use the Boca Grande bike path (15 mph, 50 in wide max); the path is drawn only where OpenStreetMap tags it for golf carts."
+ ],
+ "sources": [
+  "Lee County Ord. 25-16 https://www.leegov.com/bocc/Ordinances/25-16.pdf",
+  "GICIA bike path rules https://thegicia.org/bike-path/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-22",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Lee County Ord. 25-16",
+    "url": "https://www.leegov.com/bocc/Ordinances/25-16.pdf"
+   },
+   {
+    "label": "GICIA bike path rules",
+    "url": "https://thegicia.org/bike-path/"
+   }
+  ],
+  "note": "Local ordinance sources checked in the regions-25-batch research (Oct 22 2026); bans/rules recorded into this region. Posted signs never lift a ban."
+ },
+ "status": "Added (regions-25-batch, 2026-10-22)"
+}

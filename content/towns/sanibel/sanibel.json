@@ -1,0 +1,71 @@
+{
+ "slug": "sanibel",
+ "region": "sanibel",
+ "name": "Sanibel",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Sanibel?",
+ "answer_short": "Street-legal LSVs yes; plain golf carts only on designated roads. Sanibel limits golf carts to designated city roads posted 30 mph or less. LSVs may use roads posted 35 mph or less in Sanibel, such as Periwinkle Way on Sanibel.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated roads posted 30 mph or less",
+  "speed_line": "30 mph",
+  "notes": "City of Sanibel ordinance"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Periwinkle Way is posted 35"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts only on designated roads posted 30 mph or less",
+   "citation": "City of Sanibel Ord. 19-011",
+   "source_url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10937/994063/pdf"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "FLHSMV low-speed vehicles",
+   "source_url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Shared-use paths",
+   "rule": "No LSVs",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Sanibel?",
+   "a": "Roads posted 35 mph or less. Periwinkle Way is posted 35. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive an LSV on Periwinkle Way on Sanibel?",
+   "a": "Yes. Periwinkle Way is posted 35 mph, the Florida LSV limit."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Sanibel?",
+   "a": "Only on designated roads. Sanibel designates city roads posted 30 mph or less; Captiva is unincorporated Lee County. Check the signs before you go."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "captiva"
+ ],
+ "map_center": [
+  26.4434,
+  -82.111
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10937/994063/pdf",
+  "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+ ]
+}

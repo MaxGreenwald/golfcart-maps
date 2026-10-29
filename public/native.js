@@ -1,7 +1,7 @@
 // Native-app (Capacitor) layer. Loaded before pay.js/app.js so they can read window.GCM_IOS.
 // App Store rules for the iOS build (the website is unchanged):
 //  - 3.1.1: no Stripe paywall / restore and no Venmo tip link inside the iOS app (digital unlocks must use IAP).
-//  - 2.2: no "beta" labels inside the iOS app (Apple rejects apps presented as betas).
+//  - 2.2: no pre-release labels inside the iOS app (Apple rejects apps presented as unfinished).
 // Native features: share sheet (@capacitor/share) and haptics (@capacitor/haptics).
 (function(){
 const C=window.Capacitor,NATIVE=!!(C&&C.isNativePlatform&&C.isNativePlatform()),IOS=NATIVE&&C.getPlatform&&C.getPlatform()==='ios';

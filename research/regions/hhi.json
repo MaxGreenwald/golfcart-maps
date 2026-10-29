@@ -25,5 +25,20 @@
   "https://scdps.sc.gov/DrivinginSC/golf-cart-law",
   "https://www.islandpacket.com/news/local/article301916509.html",
   "https://hiltonheadislandsc.gov/news/news.cfm?NewsID=3193 (US 278 40 mph zone)"
- ]
+ ],
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Town of Hilton Head news: US 278 40 mph zone",
+    "url": "https://hiltonheadislandsc.gov/news/news.cfm?NewsID=3193"
+   },
+   {
+    "label": "SCDPS golf cart law",
+    "url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+   }
+  ],
+  "note": "No separate sheriff/town golf cart road list found; US 278 / Cross Island / Fording Island / SC 46 bans applied."
+ }
 }

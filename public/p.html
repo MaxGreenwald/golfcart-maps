@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Golf cart adventures · Golf Cart Maps</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#7ed8ef">
+<link rel="icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b3c50;--deep:#0b6e86;--aqua:#14b8c4;--sand:#f6ead2;--sun:#ffd23f;--coral:#ff7a59;
+  --brand:var(--aqua);--cta:var(--brand);--on-brand:#073044;--sheet:#fffaf3;--line:#d7eef1;
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+  --dock:min(48vh,440px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  font:700 16px/1.4 Nunito,system-ui,sans-serif;color:var(--ink);background:#fff6ea;
+  overflow-x:hidden;-webkit-tap-highlight-color:transparent;
+}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+.sky{position:relative;height:332px;overflow:hidden;
+  background:linear-gradient(180deg,#67d7ee 0%,#9ae7ef 38%,#ffe7a8 74%,#f6ead2 100%)}
+.sun{position:absolute;top:78px;right:10%;width:84px;height:84px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#fff6c2,#ffd23f 46%,#ffb703);
+  box-shadow:0 0 0 12px rgba(255,210,63,.28),0 0 42px rgba(255,176,40,.55);
+  animation:glow 4.8s ease-in-out infinite}
+@keyframes glow{50%{transform:scale(1.06)}}
+.cloud{position:absolute;height:18px;background:#fff;border-radius:20px;opacity:.92}
+.cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.c1{width:68px;top:92px;left:14%;animation:drift 16s ease-in-out infinite}
+.c1:before{width:26px;height:26px;top:-14px;left:10px}
+.c1:after{width:34px;height:34px;top:-18px;left:28px}
+.c2{width:48px;top:128px;left:46%;animation:drift 20s ease-in-out infinite reverse}
+.c2:before{width:20px;height:20px;top:-10px;left:8px}
+.c2:after{width:26px;height:26px;top:-14px;left:22px}
+@keyframes drift{50%{transform:translateX(18px)}}
+.palm{position:absolute;left:-6px;bottom:48px;width:108px;height:auto;transform-origin:50% 100%;animation:sway 5.5s ease-in-out infinite}
+@keyframes sway{50%{transform:rotate(3deg)}}
+.cart{position:absolute;left:46%;bottom:54px;width:min(210px,54vw);height:auto;animation:bob 2.8s ease-in-out infinite}
+.cart .wheel{transform-box:fill-box;transform-origin:center;animation:spin .8s linear infinite}
+@keyframes bob{50%{transform:translateY(-7px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.waves{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:78px}
+.wave{animation:slide 9s linear infinite}
+.w2{animation-duration:13s;animation-direction:reverse}
+@keyframes slide{to{transform:translateX(-240px)}}
+
+body.is-open{overflow:hidden;height:100%;background:#d7eef2}
+body.is-open .sky{display:none}
+
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
+.confetti i{position:absolute;top:-12px;width:8px;height:14px;border-radius:2px;opacity:0;animation:fall 1.7s ease-in forwards}
+.confetti i:nth-child(odd){border-radius:50%}
+.confetti i:nth-child(1){left:6%;background:#ffd23f;animation-delay:.05s}
+.confetti i:nth-child(2){left:14%;background:#14b8c4;animation-delay:.2s;width:10px}
+.confetti i:nth-child(3){left:22%;background:#ff7a59;animation-delay:.1s}
+.confetti i:nth-child(4){left:31%;background:#0b6e86;animation-delay:.28s}
+.confetti i:nth-child(5){left:40%;background:#ffd23f;animation-delay:.02s}
+.confetti i:nth-child(6){left:48%;background:#5ee0e6;animation-delay:.18s}
+.confetti i:nth-child(7){left:57%;background:#ff7a59;animation-delay:.32s}
+.confetti i:nth-child(8){left:66%;background:#14b8c4;animation-delay:.08s}
+.confetti i:nth-child(9){left:74%;background:#ffd23f;animation-delay:.24s}
+.confetti i:nth-child(10){left:82%;background:#0b6e86;animation-delay:.14s}
+.confetti i:nth-child(11){left:90%;background:#ff7a59;animation-delay:.3s}
+.confetti i:nth-child(12){left:96%;background:#5ee0e6;animation-delay:.04s}
+@keyframes fall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(70vh) rotate(220deg);opacity:0}}
+
+.top{position:absolute;z-index:40;left:0;right:0;top:0;display:flex;justify-content:center;pointer-events:none}
+.top-inner{pointer-events:auto;width:min(560px,100%);display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:calc(10px + var(--sat)) 14px 0}
+.word{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);font:800 14px Nunito;
+  background:rgba(255,255,255,.78);border-radius:999px;padding:4px 12px 4px 4px}
+.word img{width:28px;height:28px;border-radius:50%;display:block}
+a.city,button.city{background:#fff;color:var(--deep);text-decoration:none;font:800 13px Nunito;padding:8px 12px;border-radius:999px;
+  box-shadow:0 4px 14px rgba(11,60,80,.12);border:0}
+
+.sheet{position:relative;z-index:2;width:min(560px,100%);margin:-40px auto 0;background:var(--sheet);
+  border-radius:28px 28px 0 0;padding:22px 18px calc(28px + var(--sab));min-height:62vh;
+  box-shadow:0 -14px 40px rgba(11,60,80,.06)}
+.eyebrow{display:inline-flex;align-items:center;margin:0;background:#fff;color:var(--deep);border-radius:999px;
+  padding:6px 12px;font:800 12px Nunito;box-shadow:0 4px 14px rgba(11,60,80,.06)}
+.hero-row{display:flex;align-items:center;gap:12px;margin-top:12px}
+#logo{width:64px;height:64px;border-radius:20px;object-fit:cover;background:#fff;border:3px solid #fff;box-shadow:0 8px 20px rgba(11,60,80,.15)}
+h1{margin:0;font-weight:900;font-size:clamp(36px,11vw,60px);line-height:.95;letter-spacing:-.03em;overflow-wrap:anywhere}
+body.is-open h1{font-size:26px;line-height:1.05}
+body.is-open .eyebrow,body.is-open .pitch,body.is-open #ticker{display:none}
+body.is-open .hero-row{margin-top:0}
+body.is-open #logo{width:40px;height:40px;border-radius:14px}
+.grab{display:none;width:42px;height:5px;border-radius:99px;background:#c5dbe2;margin:2px auto 8px;flex:none}
+.pitch{margin:10px 0 0;font-size:17px;line-height:1.45;font-weight:700;color:#245868}
+
+.ticker-label{margin:16px 0 8px;font:800 12px Nunito;letter-spacing:.08em;text-transform:uppercase;color:var(--deep)}
+.marquee-window{overflow:hidden;margin:0 -18px;padding:2px 0 6px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee-track{display:flex;gap:8px;width:max-content;animation:ticker 28s linear infinite}
+.marquee-track span{background:#fff;border-radius:999px;padding:8px 12px;font:800 14px Nunito;color:var(--ink);
+  box-shadow:0 4px 12px rgba(11,60,80,.06);white-space:nowrap}
+@keyframes ticker{to{transform:translateX(-50%)}}
+.marquee-window:hover .marquee-track{animation-play-state:paused}
+
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px 14px}
+.stat b{display:block;font-size:32px;line-height:1;font-weight:900;color:var(--deep)}
+.stat span{display:block;margin-top:4px;font-size:13px;font-weight:800;color:#3e6270}
+.ask{margin:16px 0 8px;font:800 16px Nunito}
+.join{display:flex;align-items:center;gap:6px;background:#fff;border:2px solid #b7e4ea;border-radius:999px;padding:5px 5px 5px 16px;
+  box-shadow:0 10px 28px rgba(11,60,80,.08)}
+.join:focus-within{border-color:var(--brand);box-shadow:0 0 0 4px rgba(20,184,196,.2)}
+.join input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:800 16px Nunito;color:var(--ink);text-transform:uppercase}
+.join input::placeholder{text-transform:none;color:#7a97a5;font-weight:700}
+.join button{flex:none;border:0;border-radius:999px;padding:12px 18px;font:800 15px Nunito;background:var(--cta);color:var(--on-brand);cursor:pointer}
+.join.shake{animation:shake .35s ease}
+@keyframes shake{20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-2px)}80%{transform:translateX(2px)}}
+.fine{margin:10px 0 0;font-size:13px;font-weight:700;color:#4d6b78;line-height:1.45}
+.fine.free{margin-top:6px}
+.msg{margin:12px 0;padding:12px 14px;border-radius:14px;background:#e7f7f8;color:var(--deep);font-size:14px}
+.msg.err{background:#fee2e2;color:#b91c1c}
+
+.legend{margin:8px 0 0;font-size:13px;font-weight:700;color:#3e6270}
+.yay{background:linear-gradient(135deg,#fff7d6,#e7fbf8);border:2px solid #ffe08a;border-radius:20px;padding:14px 16px;margin:14px 0 4px;animation:pop .45s ease-out}
+.yay-kicker{margin:0;font:900 22px Nunito;letter-spacing:-.02em}
+.yay p{margin:4px 0 0;font-size:15px;color:#245868}
+@keyframes pop{from{transform:scale(.97);opacity:0}to{transform:none;opacity:1}}
+h2.sec{margin:18px 0 4px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--deep)}
+.subsec{margin:0 0 8px;font-size:13px;font-weight:700;color:#4d6b78}
+button.xcard,button.ocard{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:#fff;
+  border:2px solid transparent;border-radius:22px;box-shadow:0 8px 24px rgba(11,60,80,.08);margin:10px 0;padding:14px 16px}
+button.xcard.active{border-color:var(--brand);box-shadow:0 10px 24px rgba(11,60,80,.12)}
+.xmeta{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.num{font:800 12px Nunito;letter-spacing:.08em;color:var(--deep)}
+.chip{background:var(--sand);color:#6a4b12;border-radius:999px;padding:3px 8px;font:800 12px Nunito}
+.xtitle{display:block;margin-top:6px;font:800 18px Nunito;letter-spacing:-.02em}
+.xdesc{display:block;margin-top:4px;font-size:14px;font-weight:700;color:#3e6270}
+.xgo{display:block;margin-top:8px;font:800 13px Nunito;color:var(--deep)}
+button.ocard{display:flex;gap:10px;align-items:flex-start}
+.star{flex:none;width:36px;height:36px;border-radius:50%;background:#fff7e6;border:2px solid #f59e0b;display:grid;place-items:center;font-size:16px;color:#d97706}
+code{font:800 13px ui-monospace,monospace;background:#f3fbfc;padding:1px 5px;border-radius:6px}
+
+.mapcard{margin:18px 0 8px;background:#d7eef2;border-radius:22px;overflow:hidden;box-shadow:0 10px 28px rgba(11,60,80,.1)}
+#map{height:min(58vh,520px);min-height:300px;background:#d7eef2}
+.leaflet-control-attribution{font-size:10px;background:rgba(255,255,255,.85)}
+.leaflet-div-icon{background:transparent;border:0}
+.leaflet-tile-pane{filter:saturate(.55) brightness(1.06) hue-rotate(-8deg) contrast(.92)}
+.pin-stop{width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#0b6e86;border:3px solid #fff;
+  box-shadow:0 3px 8px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center}
+.pin-stop span{transform:rotate(45deg);color:#fff;font:800 12px Nunito;line-height:1}
+.pin-aff{width:32px;height:32px;border-radius:50%;background:#fff7e6;border:2px solid #f59e0b;display:grid;place-items:center;
+  color:#d97706;font-size:16px;box-shadow:0 3px 8px rgba(0,0,0,.25)}
+.me-dot{width:22px;height:22px;box-sizing:border-box;border-radius:50%;background:#1d6fe0;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.road-canvas{position:absolute;pointer-events:none}
+.dock-scroll{min-height:0}
+.dock-foot{flex:none;padding-top:8px}
+button.start{width:100%;border:0;border-radius:999px;background:#ffd23f;color:#5a4300;font:800 16px Nunito;padding:14px 18px;cursor:pointer;
+  box-shadow:0 6px 16px rgba(90,67,0,.18)}
+button.start:disabled{opacity:.65;cursor:default}
+#startNote{margin:8px 0 0}
+body.is-open .grab{display:block}
+body.is-open .sheet{position:fixed;z-index:30;left:0;right:0;bottom:0;width:100%;max-width:none;margin:0;height:var(--dock);min-height:0;
+  border-radius:22px 22px 0 0;padding:8px 14px calc(8px + var(--sab));display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 -12px 36px rgba(11,60,80,.22)}
+body.is-open #panel{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+body.is-open .dock-scroll{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
+body.is-open .yay{margin:0 0 8px;padding:10px 12px}
+body.is-open .yay-kicker{font-size:18px}
+body.is-open .yay p{font-size:14px}
+body.is-open button.xcard,body.is-open button.ocard{margin:8px 0;padding:10px 12px;border-radius:16px}
+body.is-open .mapcard{position:fixed;inset:0;z-index:1;margin:0;border-radius:0;box-shadow:none}
+body.is-open #map{height:100%;min-height:0}
+body.is-open .leaflet-top{top:calc(52px + var(--sat))}
+body.is-open .leaflet-bottom{bottom:calc(var(--dock) + 4px)}
+body.is-open #nextBar{bottom:calc(var(--dock) + 10px);z-index:35}
+body.is-open.has-next{padding-bottom:0}
+body.is-open.has-next .leaflet-bottom{bottom:calc(var(--dock) + 78px)}
+
+#nextBar{display:none;position:fixed;z-index:35;left:12px;right:12px;bottom:calc(12px + var(--sab));max-width:536px;margin:0 auto;
+  background:#0b3c50;color:#fff;border-radius:18px;padding:10px 10px 10px 16px;align-items:center;gap:10px;
+  box-shadow:0 10px 30px rgba(11,60,80,.28)}
+#nextBar.show{display:flex}
+#nextLabel{flex:1;font-size:14px;line-height:1.25}
+#nextBtn{border:0;background:var(--sun);color:#5a4300;font:800 14px Nunito;border-radius:999px;padding:10px 16px;cursor:pointer}
+body.has-next{padding-bottom:calc(78px + var(--sab))}
+a:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+@media(min-width:760px){
+  body:not(.is-open) .sheet{border-radius:28px;margin-bottom:36px;box-shadow:0 18px 50px rgba(11,60,80,.12)}
+}
+@media(min-width:900px){
+  body.is-open .sheet{top:calc(64px + var(--sat));left:12px;right:auto;bottom:12px;width:380px;height:auto;border-radius:22px}
+  body.is-open .leaflet-bottom{bottom:0}
+  body.is-open.has-next .leaflet-bottom{bottom:78px}
+  body.is-open .leaflet-bottom.leaflet-left{margin-left:404px}
+  body.is-open #nextBar{left:408px;right:16px;bottom:calc(16px + var(--sab));max-width:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .sun,.cloud,.palm,.cart,.cart .wheel,.wave,.yay,.confetti i,.marquee-track{animation:none!important}
+  .confetti{display:none!important}
+  .marquee-track{flex-wrap:wrap;width:auto}
+  .marquee-window{overflow:visible;-webkit-mask-image:none;mask-image:none;margin:0}
+  .marquee-track [data-dup]{display:none}
+}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true">
+  <div class="sun"></div>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <svg class="palm" viewBox="0 0 120 170">
+    <path d="M62 162 C58 120 74 86 56 42" stroke="#7a4b2a" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M56 50 C18 42 6 16 30 8 C32 32 48 42 56 50Z" fill="#12a150"/>
+    <path d="M56 46 C40 16 78 4 96 22 C74 28 62 40 56 46Z" fill="#0b9a45"/>
+    <path d="M54 54 C28 74 12 62 10 42 C32 48 46 54 54 54Z" fill="#1aaa55"/>
+    <path d="M58 48 C84 66 112 50 114 30 C90 36 70 44 58 48Z" fill="#0e7a3c"/>
+  </svg>
+  <svg class="cart" viewBox="0 0 200 110">
+    <path d="M78 28 V12" stroke="#0b3c50" stroke-width="3" stroke-linecap="round"/>
+    <path d="M78 14 h22 l-5 6 5 6 H78z" fill="#ff7a59"/>
+    <path d="M24 70 h96 l16-26 h30 c8 0 14 6 16 14 l8 12 H24z" fill="#fff" stroke="#0b3c50" stroke-width="3" stroke-linejoin="round"/>
+    <path class="stripe" d="M36 70 h74 l12-18 H50z" fill="var(--brand)"/>
+    <path d="M78 52 h28 v-10 h-20z" fill="#0b6e86"/>
+    <path d="M124 46 h24 l-8 20 h-24z" fill="#d7f7fb" stroke="#0b3c50" stroke-width="3" stroke-linejoin="round"/>
+    <g class="wheel"><circle cx="62" cy="84" r="14" fill="#0b3c50"/><circle cx="62" cy="84" r="5" fill="#f6ead2"/></g>
+    <g class="wheel"><circle cx="150" cy="84" r="14" fill="#0b3c50"/><circle cx="150" cy="84" r="5" fill="#f6ead2"/></g>
+  </svg>
+  <svg class="waves" viewBox="0 0 1200 120" preserveAspectRatio="none">
+    <path class="wave w1" fill="#8fd8e4" d="M0 60 Q150 20 300 60 T600 60 T900 60 T1200 60 T1500 60 V120 H0Z"/>
+    <path class="wave w2" fill="#f6ead2" d="M0 78 Q150 48 300 78 T600 78 T900 78 T1200 78 T1500 78 V120 H0Z"/>
+  </svg>
+</div>
+<div class="confetti" id="confetti" hidden aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<header class="top">
+  <div class="top-inner">
+    <a class="word" href="/"><img src="/favicon.svg" alt="" width="28" height="28">Golf Cart Maps</a>
+    <a class="city" id="fullMap" href="/map/sandiego" target="_blank" rel="noopener">Full city map</a>
+  </div>
+</header>
+<section class="mapcard" id="mapCard" hidden>
+  <div id="map" role="region" aria-label="Route map"></div>
+</section>
+<main class="sheet">
+  <div class="grab" aria-hidden="true"></div>
+  <p class="eyebrow" id="eyebrow">Golf cart adventures</p>
+  <div class="hero-row">
+    <img id="logo" alt="" hidden>
+    <h1 id="title">Rolling up…</h1>
+  </div>
+  <p class="pitch" id="blurb">Your cart, the coast, and stops worth pulling over for.</p>
+  <div id="ticker">
+    <p class="ticker-label">The kind of day a cart is for</p>
+    <div class="marquee-window" aria-hidden="true">
+      <div class="marquee-track">
+        <span>🌴 Beach loops</span><span>🌮 Taco runs</span><span>🦭 Seal spotting</span><span>🌅 Golden hour</span>
+        <span>🍦 Ice cream stops</span><span>🌊 Harbor breeze</span><span>⭐ Shop perks</span><span>🐚 Cove hopping</span>
+        <span data-dup>🌴 Beach loops</span><span data-dup>🌮 Taco runs</span><span data-dup>🦭 Seal spotting</span><span data-dup>🌅 Golden hour</span>
+        <span data-dup>🍦 Ice cream stops</span><span data-dup>🌊 Harbor breeze</span><span data-dup>⭐ Shop perks</span><span data-dup>🐚 Cove hopping</span>
+      </div>
+    </div>
+  </div>
+  <div id="panel"><p class="fine">Loading the welcome mat…</p></div>
+</main>
+<div id="nextBar"><b id="nextLabel">Next stop</b><button id="nextBtn" type="button">Next</button></div>
+<script src="/roadrule.js"></script>
+<script src="/router.js"></script>
+<script src="/p.js"></script>
+</body>
+</html>

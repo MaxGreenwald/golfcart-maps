@@ -1,0 +1,73 @@
+{
+ "bans": [
+  {
+   "names": "^DE 1$|^Coastal Highway$",
+   "north_of": 38.705,
+   "url": "https://delcode.delaware.gov/title21/c021/sc01/index.html",
+   "label": "21 Del. C. \u00a72113A: LSVs may not drive on dual highways (Coastal Hwy, DE 1) in unincorporated areas, only cross"
+  },
+  {
+   "names": "^DE 1$|^Coastal Highway$",
+   "bbox": [
+    38.545,
+    -75.2,
+    38.683,
+    -75.0
+   ],
+   "url": "https://delcode.delaware.gov/title21/c021/sc01/index.html",
+   "label": "21 Del. C. \u00a72113A: LSVs may not drive on dual highways (Coastal Hwy, DE 1) in unincorporated areas, only cross"
+  },
+  {
+   "names": "^DE 1$|^Coastal Highway$",
+   "bbox": [
+    38.47,
+    -75.2,
+    38.505,
+    -75.0
+   ],
+   "url": "https://delcode.delaware.gov/title21/c021/sc01/index.html",
+   "label": "21 Del. C. \u00a72113A: LSVs may not drive on dual highways (Coastal Hwy, DE 1) in unincorporated areas, only cross"
+  },
+  {
+   "names": "^",
+   "bbox": [
+    38.452,
+    -75.062,
+    38.47,
+    -75.045
+   ],
+   "url": "https://fenwickisland.delaware.gov/files/2022/02/Chapter-153.pdf",
+   "label": "Town of Fenwick Island Code ch. 153: low-speed vehicles are prohibited on town streets"
+  }
+ ],
+ "unverified": [
+  "Coastal Highway inside Dewey Beach, Bethany Beach and South Bethany is shown by its posted speed; those towns' LSV rules weren't found online."
+ ],
+ "sources": [
+  "Fenwick Island Code ch. 153 https://fenwickisland.delaware.gov/files/2022/02/Chapter-153.pdf",
+  "Delaware DMV: golf carts https://dmv.de.gov/VehicleServices/specialvehicles/index.shtml?dc=ve_reg_golf",
+  "21 Del. C. 2113A https://delcode.delaware.gov/title21/c021/sc01/index.html",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-22",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Fenwick Island Code ch. 153",
+    "url": "https://fenwickisland.delaware.gov/files/2022/02/Chapter-153.pdf"
+   },
+   {
+    "label": "Delaware DMV: golf carts",
+    "url": "https://dmv.de.gov/VehicleServices/specialvehicles/index.shtml?dc=ve_reg_golf"
+   },
+   {
+    "label": "21 Del. C. 2113A",
+    "url": "https://delcode.delaware.gov/title21/c021/sc01/index.html"
+   }
+  ],
+  "note": "Local ordinance sources checked in the regions-25-batch research (Oct 22 2026); bans/rules recorded into this region. Posted signs never lift a ban."
+ },
+ "status": "Added (regions-25-batch, 2026-10-22)"
+}

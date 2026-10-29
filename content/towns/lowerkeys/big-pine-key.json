@@ -1,0 +1,78 @@
+{
+ "slug": "big-pine-key",
+ "region": "lowerkeys",
+ "name": "Big Pine Key",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Big Pine Key?",
+ "answer_short": "Street-legal LSVs yes. Plain golf carts only on roads a city or the county has designated, and no designation was found for Big Pine Key, so plain golf carts show red except tagged cart paths. LSVs may use roads posted 35 mph or less. US 1 is usually posted higher.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated roads only",
+  "speed_line": "n/a",
+  "notes": "No Marathon list found"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "US 1 is often posted higher"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  },
+  {
+   "topic": "Marathon",
+   "rule": "The city discussed LSVs in 2011 and did not adopt a golf-cart street list",
+   "citation": "Keys Weekly",
+   "source_url": "https://keysweekly.com/42/council-says-golf-carts-are-a-go/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 1 where posted over 35 mph",
+   "rule": "No LSVs",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Big Pine Key?",
+   "a": "Roads posted 35 mph or less. US 1 is often posted higher. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Big Pine Key?",
+   "a": "Only on a road the city or county has designated and signed. We did not find that list, so plan on a registered LSV."
+  },
+  {
+   "q": "Can I drive an LSV on US 1 in Big Pine Key?",
+   "a": "Only where it is posted 35 mph or less. Most of US 1 in the Keys is posted higher, so cross it rather than drive along it."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "marathon"
+ ],
+ "map_center": [
+  24.67,
+  -81.36
+ ],
+ "zoom": 15,
+ "published": "2026-10-28",
+ "last_checked": "2026-10-28",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://keysweekly.com/42/council-says-golf-carts-are-a-go/",
+  "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "slug": "crystal-beach",
+ "region": "crystalbeach",
+ "name": "Crystal Beach",
+ "state": "TX",
+ "question_title": "Can you drive a golf cart in Crystal Beach?",
+ "answer_short": "Yes. On the Bolivar Peninsula, golf carts may use roads posted 35 mph or less and cross Highway 87 at intersections, but not drive along it.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not on SH 87; cross only"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts on roads posted 35 mph or less; not on highways, which they may cross",
+   "citation": "CrystalBeach.com",
+   "source_url": "https://crystalbeach.com/area-information/information/golf-carts-atvs/"
+  },
+  {
+   "topic": "State law",
+   "rule": "Golf cart rules for roads posted 35 mph or less",
+   "citation": "Tex. Transp. Code 551.404",
+   "source_url": "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "State Highway 87",
+   "rule": "No golf carts; cross at intersections",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Crystal Beach?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Highway 87?",
+   "a": "No. Golf carts may only cross SH 87 at intersections."
+  },
+  {
+   "q": "Do I need a license to drive a golf cart in Crystal Beach?",
+   "a": "Yes. You need a valid driver's license, and night driving needs lights and reflectors."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  29.463,
+  -94.642
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://crystalbeach.com/area-information/information/golf-carts-atvs/",
+  "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+ ]
+}

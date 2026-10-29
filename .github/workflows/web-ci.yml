@@ -13,6 +13,8 @@ jobs:
         with: {fetch-depth: 0}   # tests/test_web_build.py replays a real missed cache bump from history
       - name: public/ is the only copy of the web app (no committed ios/android/dist bundles)
         run: python scripts/check_single_source.py
+      - name: "scripts/test_*.py cannot print FAIL and still exit 0"
+        run: python scripts/check_test_exit.py
       - name: No 'verified' claims outside the coastal-SD verified badge
         run: python scripts/check_verified_wording.py
       - name: Analytics schema / PII guard (node --test)
@@ -23,6 +25,8 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: "Road rule unit tests (golf cart vs LSV; CA golf carts <=25, CVC 21716)"
         run: node scripts/test_roadrule.js && node scripts/test_range.js
+      - name: "Local enforcement gate (every live region records its sheriff/police/city cart source check)"
+        run: python scripts/check_enforcement.py
       - name: "Validate built region data (red islands / ring codes vs baseline; same-road islands vs research/red_island_allowlist.json)"
         run: python scripts/validate_data.py
   browser:
@@ -30,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
-      URL: http://localhost:8765/
+      URL: http://localhost:8765/map/   # dist/: / is the landing page, the map is /map (scripts/serve_dist.py mimics Pages routing)
       SHOTS: ${{ github.workspace }}/ci-shots/
       SHOTS_DIR: ${{ github.workspace }}/ci-shots/
     steps:
@@ -43,10 +47,11 @@ jobs:
         run: |
           mkdir -p ci-shots
           python scripts/build_web.py
-          (cd dist && python -m http.server 8765 >/dev/null 2>&1 &)
+          (python scripts/serve_dist.py 8765 dist >/dev/null 2>&1 &)
           for i in $(seq 1 20); do curl -sf http://localhost:8765/ >/dev/null && break; sleep 1; done
       - name: test_sw (stamped cache name, old caches dropped, works offline)
         run: python scripts/test_sw.py
+        env: {URL: "http://localhost:8765/"}
       - name: "test_search_keep_text (typed destination text survives GPS ticks; Phoenix->Sun City and SD)"
         run: python -m unittest tests.test_search_keep_text -v
       - name: test_ui
@@ -63,6 +68,8 @@ jobs:
         run: python scripts/test_islands_ui.py
       - name: "test_city_chip (city chip in the top row, A-Z, San Diego default, switching re-centers, back/forward)"
         run: python scripts/test_city_chip.py
+      - name: "test_regions (saved choice, Villages routes, Greenwich within 50 mi, far-away defaults to San Diego)"
+        run: python scripts/test_regions.py
       - name: test_chips
         run: python scripts/test_chips.py
       - name: test_layout
@@ -73,6 +80,26 @@ jobs:
         run: python scripts/test_vehicle.py
       - name: "test_appstore (iOS build - no paywall, tip or beta labels; native share and haptics wired; launches with third-party hosts blocked)"
         run: python scripts/test_appstore.py
+      - name: test_sv_label (Street View check photos labeled as Street View, not local report)
+        run: python scripts/test_sv_label.py
+      - name: test_trusted_osm_ui (trusted OSM 'o' draws like the OSM tag, labelled "OpenStreetMap, matches nearby sign", never verified)
+        run: python scripts/test_trusted_osm_ui.py
+      - name: test_partner_brand_color (color swatch, and drop-pin tiles centered on the city)
+        run: python -m unittest tests.test_partner_brand_color -v
+      - name: test_partner_experience_stops (edit a stop and reorder, then the save sticks)
+        run: python -m unittest tests.test_partner_experience_stops -v
       - uses: actions/upload-artifact@v4
         if: failure()
         with: {name: ci-shots, path: ci-shots, if-no-files-found: ignore}
+  # Push events have no pull request body. pull_request payloads do.
+  pr-body:
+    name: PR body has Summary, Evidence, and Merge danger
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check PR body for Summary, Evidence, and Merge danger
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: python scripts/check_pr_body.py

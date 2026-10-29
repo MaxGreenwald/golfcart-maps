@@ -10,7 +10,27 @@
   }
  ],
  "sources": [
-  "Tex. Transp. Code 551.403 / 551.303"
+  "Tex. Transp. Code 551.403 / 551.303",
+  "https://ecode360.com/41825792 (Rockport Ch. 98 Art. VI: carts on city streets posted <=35 mph, Sec. 98-132(b))"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "cart_only_bans": [
+  {
+   "names": "^(SH|TX|FM|SR|State Highway|Farm[- ]to[- ]Market|Business|Bus\\.?|Loop|Park Road|PR)[ -]?\\d|^(Texas )?State Highway|^FM ?\\d",
+   "poly": "rockport_tx.json",
+   "url": "https://ecode360.com/41825792",
+   "label": "Rockport Code Sec. 98-133(a): golf carts prohibited on the state highway system incl. farm-to-market roads in city limits, regardless of speed"
+  }
+ ],
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Rockport Code ch. 98 art. VI (no carts on state highways / FM roads)",
+    "url": "https://ecode360.com/41825792"
+   }
+  ],
+  "note": "SH 35 ban applied; FM 1069/1781/2165/3036 are all posted 50-60 and already shown red."
+ }
 }

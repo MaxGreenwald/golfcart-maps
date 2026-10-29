@@ -11,5 +11,20 @@
   "O.C.G.A. 40-6-331/40-6-362",
   "Glynn County & Jekyll Island Authority cart rules not digitized"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=goldenisles loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=goldenisles loads it",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Glynn County SSI roads by mph (PTV <=25, LSV <=35)",
+    "url": "https://www.glynncounty.org/DocumentCenter/View/77724/SSI-Roads-MPH"
+   },
+   {
+    "label": "Jekyll Island Authority Ch. F Streets",
+    "url": "https://www.jekyllisland.com/wp-content/uploads/2022/04/Chapter-F-Streets-and-Rights-of-Way-042222.pdf"
+   }
+  ],
+  "note": "County map matches the PTV <=25 / LSV <=35 model; causeway/US 17 bans applied. Jekyll bars plain golf carts (PTVs allowed <=25)."
+ }
 }

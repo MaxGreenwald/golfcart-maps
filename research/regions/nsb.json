@@ -1,0 +1,34 @@
+{
+ "bans": [
+  {
+   "names": "^(North |South )?Atlantic Avenue$|^(CR|SR) A1A$|^3rd Avenue$|^Third Avenue$",
+   "url": "https://www.hometownnewsvolusia.com/news/golf-carts-are-not-for-all-roadways/article_0e592c76-c4c5-11ec-a74c-136b4cb9db2f.html",
+   "label": "New Smyrna Beach Police (Hometown News, 2022): LSVs prohibited on A1A/Atlantic Ave and 3rd Ave; cross at intersections only"
+  }
+ ],
+ "unverified": [
+  "The banned-roads list comes from a 2022 news report quoting NSB police, not the city code itself."
+ ],
+ "sources": [
+  "Hometown News: New Smyrna Beach golf cart rules https://www.hometownnewsvolusia.com/news/golf-carts-are-not-for-all-roadways/article_0e592c76-c4c5-11ec-a74c-136b4cb9db2f.html",
+  "FLHSMV TL-63 golf carts and LSVs https://www.flhsmv.gov/pdf/proc/tl/tl-63.pdf",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-22",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Hometown News: New Smyrna Beach golf cart rules",
+    "url": "https://www.hometownnewsvolusia.com/news/golf-carts-are-not-for-all-roadways/article_0e592c76-c4c5-11ec-a74c-136b4cb9db2f.html"
+   },
+   {
+    "label": "FLHSMV TL-63 golf carts and LSVs",
+    "url": "https://www.flhsmv.gov/pdf/proc/tl/tl-63.pdf"
+   }
+  ],
+  "note": "Local ordinance sources checked in the regions-25-batch research (Oct 22 2026); bans/rules recorded into this region. Posted signs never lift a ban."
+ },
+ "status": "Added (regions-25-batch, 2026-10-22)"
+}

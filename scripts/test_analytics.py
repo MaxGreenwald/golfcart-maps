@@ -6,16 +6,21 @@ platform 'carplay' and reject unknown events; GPC / Do Not Track / local opt-out
 free text in any payload."""
 from playwright.sync_api import sync_playwright
 import json, os, re
+from _check import ck, fail, finish
 URL = os.environ.get("URL", "http://localhost:8765/").rstrip("/") + "/"
-fails = []
-def ck(n, c, x=""): print(("PASS " if c else "FAIL ") + n, x if not c else ""); c or fails.append(n)
-SINK = "window.GCM_TRACK_SINK=()=>{};"
+# webdriver is true under Playwright. Production treats that as e2e and does not send.
+# This run is the real-user path, so force webdriver off. The e2e cases below turn it back on.
+SINK = "window.GCM_TRACK_SINK=()=>{};try{Object.defineProperty(navigator,'webdriver',{configurable:true,get:()=>false})}catch(e){}"
 A, B = (32.9595, -117.2655), (32.9918, -117.2717)          # Del Mar Plaza -> Fletcher Cove
 ev = lambda pg: pg.evaluate("(window.__gcmSent||[]).slice()")
 with sync_playwright() as p:
-    b = p.chromium.launch()
+    launch = {}
+    if os.environ.get("CHROME"):
+        launch["executable_path"] = os.environ["CHROME"]
+        launch["args"] = ["--no-sandbox", "--disable-dev-shm-usage"]
+    b = p.chromium.launch(**launch)
     c = b.new_context(geolocation={"latitude": A[0], "longitude": A[1]}, permissions=["geolocation"], viewport={"width": 1200, "height": 900})
-    pg = c.new_page(); pg.add_init_script(SINK); pg.on("pageerror", lambda e: fails.append("js " + str(e)))
+    pg = c.new_page(); pg.add_init_script(SINK); pg.on("pageerror", lambda e: fail("js " + str(e)))
     pg.goto(URL + "?utm_source=Nextdoor&utm_medium=paid_social&utm_campaign=dm1018", referer="https://www.google.com/search?q=golf+cart+map")
     pg.wait_for_function("window.ready===true", timeout=120000); pg.wait_for_timeout(800)
     e = ev(pg); names = [x["e"] for x in e]
@@ -55,6 +60,7 @@ with sync_playwright() as p:
     allp = json.dumps(ev(pg))
     ck("no coordinates or free text in any payload", not re.search(r"32\.9|117\.2|Camino|google\.com/search|golf\+cart", allp), re.findall(r".{20}(?:32\.9|117\.2|Camino).{20}", allp)[:3])
     ck("referrer host only", any(x["p"].get("ref") == "www.google.com" or x["p"].get("ref") == "google.com" for x in ev(pg) if x["e"] == "session"))
+    ck("a normal browser is not marked internal", ev(pg) and all(not x.get("internal") for x in ev(pg)))
     c.close()
     for label, init in [("GPC", "Object.defineProperty(navigator,'globalPrivacyControl',{get:()=>true});"),
                         ("Do Not Track", "Object.defineProperty(navigator,'doNotTrack',{get:()=>'1'});"),
@@ -63,5 +69,27 @@ with sync_playwright() as p:
         pg.goto(URL); pg.wait_for_function("window.ready===true", timeout=120000); pg.wait_for_timeout(800)
         pg.evaluate(f"testRoute([{A[0]},{A[1]}],[{B[0]},{B[1]}]).then(r=>r&&r.mi)"); pg.evaluate("GCMCarPlay.track('route_started',{})"); pg.wait_for_timeout(300)
         ck(f"{label}: nothing sent", ev(pg) == [], ev(pg)[:2]); c.close()
+    # Excluded traffic must not leave the browser. /stats also drops it if a copy is stored
+    # (tests/analytics_stats.test.mjs). A normal browser still beacons.
+    # Stub only sendBeacon. Replacing fetch would swallow the map's own JSON loads and window.ready would never fire.
+    NET = "window.__beacons=[];navigator.sendBeacon=function(){window.__beacons.push('beacon');return true};"
+    OFF = "try{Object.defineProperty(navigator,'webdriver',{configurable:true,get:()=>false})}catch(e){}"
+    c = b.new_context(); pg = c.new_page(); pg.add_init_script(NET + OFF)
+    pg.goto(URL); pg.wait_for_function("window.ready===true", timeout=120000); pg.wait_for_timeout(800)
+    ck("normal browser still beacons", ev(pg) and all(not x.get("internal") for x in ev(pg)) and pg.evaluate("window.__beacons.length") > 0, pg.evaluate("window.__beacons"))
+    c.close()
+    for label, init, url, want in [
+        ("webdriver", "", URL, "e2e"),
+        ("simulator flag", "window.GCM_INTERNAL='sim';" + OFF, URL, "sim"),
+        ("internal TestFlight flag", "window.GCM_INTERNAL='testflight';" + OFF, URL, "tf"),
+        ("utm e2e", OFF, URL + "?utm_source=e2e&utm_medium=ci", "e2e"),
+        ("stored gcm-internal", OFF + "localStorage.setItem('gcm-internal','debug');", URL, "debug"),
+    ]:
+        c = b.new_context(); pg = c.new_page(); pg.add_init_script(NET + init)
+        pg.goto(url); pg.wait_for_function("window.ready===true", timeout=120000); pg.wait_for_timeout(800)
+        pg.evaluate("GCMCarPlay.track('session')"); pg.wait_for_timeout(200)
+        got = ev(pg)
+        ck(f"{label}: marked {want} and not sent", bool(got) and all(x.get("internal") == want for x in got) and pg.evaluate("window.__beacons") == [], (got[:2], pg.evaluate("window.__beacons")))
+        c.close()
     b.close()
-print("FAILS:", fails) if fails else print("RESULT ALL PASS"); raise SystemExit(1 if fails else 0)
+finish()

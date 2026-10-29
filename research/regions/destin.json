@@ -12,5 +12,19 @@
  "sources": [
   "F.S. 316.212/316.2122"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_pending",
+  "sources": [
+   {
+    "label": "City of Destin golf cart & LSV FAQ (no LSVs on US 98 or SR 293)",
+    "url": "https://cityofdestin.com/FAQ.aspx?TID=14"
+   }
+  ],
+  "note": "US 98 ban applied; SR 293 mostly flagged.",
+  "missing": [
+   "Mid-Bay Bridge Road (SR 293): 0.05 mi at 20 mph shown allowed; city bans LSVs on all of SR 293."
+  ]
+ }
 }

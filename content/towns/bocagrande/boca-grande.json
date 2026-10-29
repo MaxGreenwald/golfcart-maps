@@ -1,0 +1,81 @@
+{
+ "slug": "boca-grande",
+ "region": "bocagrande",
+ "name": "Boca Grande",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Boca Grande?",
+ "answer_short": "Partly. In Boca Grande, electric golf carts may use the island bike path at up to 15 mph. Plain golf carts aren't designated for the island's roads; street-legal LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Island bike path (electric only)",
+  "speed_line": "15 mph on the path",
+  "notes": "50 inches wide max"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Bike path",
+   "rule": "Electric golf carts may use the Boca Grande bike path, 15 mph max, 50 inches wide max",
+   "citation": "GICIA bike path rules",
+   "source_url": "https://thegicia.org/bike-path/"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "FLHSMV low-speed vehicles",
+   "source_url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+  },
+  {
+   "topic": "Lee County",
+   "rule": "County ordinance on the Boca Grande path",
+   "citation": "Lee County Ord. 25-16",
+   "source_url": "https://www.leegov.com/bocc/Ordinances/25-16.pdf"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Gas golf carts on the bike path",
+   "rule": "Not allowed",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Boca Grande?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a gas golf cart on the Boca Grande bike path?",
+   "a": "No. Only electric carts may use the path."
+  },
+  {
+   "q": "How fast can a golf cart go on the bike path?",
+   "a": "15 mph at most."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  26.749,
+  -82.262
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://thegicia.org/bike-path/",
+  "https://www.leegov.com/bocc/Ordinances/25-16.pdf"
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "slug": "dauphin-island",
+ "region": "dauphinisland",
+ "name": "Dauphin Island",
+ "state": "AL",
+ "question_title": "Can you drive a golf cart in Dauphin Island?",
+ "answer_short": "Yes, if it's plated. On Dauphin Island, golf carts need a license plate from their home state to use public roads.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Public roads, plated carts",
+  "speed_line": "25 mph",
+  "notes": "Home-state license plate"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts need a state-issued license plate for public roadways",
+   "citation": "Town of Dauphin Island FAQ",
+   "source_url": "https://www.townofdauphinisland.org/faq"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Dauphin Island Bridge (AL 193)",
+   "rule": "Posted 55 mph: no carts",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Dauphin Island?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Do I need a plate for a golf cart on Dauphin Island?",
+   "a": "Yes. The town says golf carts need a license plate issued by their home state to drive on public roads."
+  },
+  {
+   "q": "Can I drive a golf cart on Bienville Boulevard?",
+   "a": "Where it's posted 25 mph, yes with a plated cart; check the posted limit on faster stretches."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  30.255,
+  -88.11
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.townofdauphinisland.org/faq"
+ ]
+}

@@ -1,0 +1,101 @@
+{
+ "slug": "lady-lake",
+ "region": "villages",
+ "name": "Lady Lake",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Lady Lake?",
+ "answer_short": "Yes. In Lady Lake, golf carts use the multi-modal paths and streets the county or city has designated, but not roads posted 35 mph or more. Street-legal LSVs may use roads posted 35 mph or less. Cross US 27/441, US 301 and SR 44 only at tunnels, bridges or signed crossings.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Multi-modal paths and designated streets under 35 mph",
+  "speed_line": "30 mph",
+  "notes": "Use tunnels, bridges or signed crossings at major roads"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and tagged; multi-modal paths allowed"
+ },
+ "rules": [
+  {
+   "topic": "Golf cart roads",
+   "rule": "Golf carts only on roads a county or city has designated and signed",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2026/316.212"
+  },
+  {
+   "topic": "District rule",
+   "rule": "Golf carts may not use roadways posted 35 mph or more",
+   "citation": "District Golf Car Rules of the Road",
+   "source_url": "https://www.districtgov.org/wp-content/uploads/2024/10/Golf-Car-Rules-of-the-Road.pdf"
+  },
+  {
+   "topic": "Sumter County",
+   "rule": "County golf cart ordinance designates cart routes in the retirement community",
+   "citation": "Sumter County golf cart ordinance",
+   "source_url": "https://www.sumtercountyfl.gov/AgendaModule/AI7446/Golf%20Cart%20Ordinance%20Amendment%20-%20Final%20(00268768).pdf"
+  },
+  {
+   "topic": "LSVs",
+   "rule": "Registered LSVs on roads posted 35 mph or less",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2026/316.2122"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 27/441",
+   "rule": "State highway; cross at tunnels, bridges or signed crossings",
+   "crossings_ok": true
+  },
+  {
+   "name": "US 301",
+   "rule": "State highway",
+   "crossings_ok": true
+  },
+  {
+   "name": "SR 44",
+   "rule": "State highway",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Lady Lake?",
+   "a": "Roads posted 35 mph or less. Registered and tagged; multi-modal paths allowed. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Do I need a license to drive a golf cart in Lady Lake?",
+   "a": "Florida requires golf cart drivers on public roads to be at least 14; LSV drivers need a valid driver's license and the LSV must be registered and insured."
+  },
+  {
+   "q": "Can golf carts use roads posted 35 mph in Lady Lake?",
+   "a": "No. The District's rules prohibit golf carts on roadways posted 35 mph or more; use the multi-modal paths, tunnels and bridges instead."
+  }
+ ],
+ "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "For Lady Lake town services and ordinances, see the Town of Lady Lake's official site.",
+   "name": "Town of Lady Lake official website",
+   "url": "https://www.ladylakefl.gov/"
+  }
+ ],
+ "nearby": [
+  "the-villages",
+  "wildwood"
+ ],
+ "map_center": [
+  28.917,
+  -81.923
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.districtgov.org/wp-content/uploads/2024/10/Golf-Car-Rules-of-the-Road.pdf",
+  "https://www.flsenate.gov/Laws/Statutes/2026/316.212"
+ ]
+}

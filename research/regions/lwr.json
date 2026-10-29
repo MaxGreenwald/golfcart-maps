@@ -1,6 +1,6 @@
 {
  "unverified": [
-  "City-level cart designations not digitized; app applies the state LSV rule (posted \u226435)."
+  "Plain golf carts: Florida designated-roads rule (F.S. 316.212); Manatee Code 2-22-9 designations (River Club) and CDD 2/5 Country Club resolutions not applied: they would allow carts and the road lists could not be read; Sarasota County designates no LWR roads; CDD 1/4 (Summerfield/Riverwalk, Greenbrook) streets closed to carts. LSVs: state rule (posted <=35)."
  ],
  "bans": [
   {
@@ -10,7 +10,42 @@
   }
  ],
  "sources": [
-  "F.S. 316.212/316.2122"
+  "F.S. 316.212/316.2122",
+  "https://mylwr.com/cms-detail/cart-safety (Lakewood Ranch Town Hall / IDA golf cart rules by village)",
+  "https://library.municode.com/fl/manatee_county/codes/code_of_ordinances?nodeId=PTIICOLADECO_CH2-22MOVETR_S2-22-9GOCAOPCERO (Manatee County Code Sec. 2-22-9: golf carts only on designated county roads; Lakewood Ranch villages not designated; River Club listed per search excerpts, full road list not readable here)",
+  "https://sarasotanewsleader.com/golf-carts-to-be-allowed-to-operate-legally-on-certain-pinecraft-streets-but-not-on-any-beneva-road-and-bahia-vista-street-sidewalks/ (Sarasota County designations: Pinecraft only)"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "cart_only_bans": [
+  {
+   "poly": "lwr_greenbrook.json",
+   "url": "https://mylwr.com/cms-detail/cart-safety",
+   "label": "Lakewood Ranch Town Hall (CDD rules): golf carts are not allowed on Greenbrook streets, sidewalks or trails; DMV-licensed golf cars (LSVs) may use the streets"
+  },
+  {
+   "poly": "lwr_summerfield.json",
+   "url": "https://mylwr.com/cms-detail/cart-safety",
+   "label": "Lakewood Ranch Town Hall (CDD rules): golf carts are not allowed on Summerfield/Riverwalk streets, sidewalks or trails; DMV-licensed golf cars (LSVs) may use the streets"
+  },
+  {
+   "poly": "lwr_riverwalk.json",
+   "url": "https://mylwr.com/cms-detail/cart-safety",
+   "label": "Lakewood Ranch Town Hall (CDD rules): golf carts are not allowed on Summerfield/Riverwalk streets, sidewalks or trails; DMV-licensed golf cars (LSVs) may use the streets"
+  }
+ ],
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Manatee County Golf_Cart_Permitted_Road GIS layer",
+    "url": "https://www.mymanatee.org/gispw/rest/services/Cityworks_Work_Orders/WOs_Traffic/MapServer/90"
+   },
+   {
+    "label": "Lakewood Ranch FAQ",
+    "url": "https://lakewoodranch.com/connect/faq/"
+   }
+  ],
+  "note": "I-75 / University Pkwy bans applied. The county's permitted-road layer exists but is not yet compared road by road."
+ }
 }

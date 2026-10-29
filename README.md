@@ -22,7 +22,10 @@ Capacitor copies (`ios/App/App/public`, `android/app/src/main/assets/public`); C
 The one deploy command (needs `CLOUDFLARE_API_TOKEN`):
 
     scripts/deploy_web.sh preview <branch>   # https://<branch>.golfcart-maps.pages.dev
-    scripts/deploy_web.sh production         # https://golfcartmap.com, from master, only with Max's OK
+    scripts/deploy_web.sh production --max-ok <Max chat or card id>
+        # https://golfcartmap.com — refuses unless HEAD equals origin/master
+    scripts/deploy_worker.sh preview partner|analytics
+    scripts/deploy_worker.sh production partner|analytics --max-ok <Max chat or card id>
 
 ## Legal notes (not legal advice)
 - Golf carts: roads posted ≤25 mph (CVC 21716) or city-designated golf cart routes (CVC 21115 golf-course combined use, 21115.1, S&H 1950x).

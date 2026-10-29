@@ -1,0 +1,93 @@
+{
+ "slug": "vanderbilt-beach",
+ "region": "naples",
+ "name": "Vanderbilt Beach",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Vanderbilt Beach?",
+ "answer_short": "Only where the city or county has designated it. Florida lets golf carts use only roads a local government has designated and signed. Street-legal LSVs may use roads posted 35 mph or less. US 41, SR 84, SR 951 and I-75 are off limits.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Only designated and signed roads",
+  "speed_line": "n/a",
+  "notes": "Check local signs"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and tagged"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Only on roads a county or city has designated and signed",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2026/316.212"
+  },
+  {
+   "topic": "LSVs",
+   "rule": "Registered LSVs on roads posted 35 mph or less",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2026/316.2122"
+  },
+  {
+   "topic": "Local code",
+   "rule": "Marco Island traffic code (ch. 50)",
+   "citation": "Marco Island Code ch. 50",
+   "source_url": "https://library.municode.com/fl/marco_island/codes/code_of_ordinances?nodeId=PTIICOOR_CH50TRVE"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 41 (Tamiami Trail)",
+   "rule": "State highway",
+   "crossings_ok": true
+  },
+  {
+   "name": "SR 84 (Davis Blvd)",
+   "rule": "State road",
+   "crossings_ok": true
+  },
+  {
+   "name": "SR 951 (Collier Blvd)",
+   "rule": "State road",
+   "crossings_ok": true
+  },
+  {
+   "name": "I-75",
+   "rule": "Interstate",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Vanderbilt Beach?",
+   "a": "Roads posted 35 mph or less. Registered and tagged. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive an LSV on US 41 in Vanderbilt Beach?",
+   "a": "No. US 41 is a state highway that is not designated for carts, and Florida limits LSVs to roads posted 35 mph or less. The map only lets you cross it."
+  },
+  {
+   "q": "Can a plain golf cart drive on Vanderbilt Beach streets?",
+   "a": "Only on roads the city or county has designated and signed for golf carts (F.S. 316.212)."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "naples",
+  "marco-island"
+ ],
+ "map_center": [
+  26.256,
+  -81.815
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.flsenate.gov/Laws/Statutes/2026/316.212",
+  "https://www.flsenate.gov/Laws/Statutes/2026/316.2122"
+ ]
+}

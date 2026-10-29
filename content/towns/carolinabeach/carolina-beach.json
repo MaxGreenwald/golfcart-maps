@@ -1,0 +1,89 @@
+{
+ "slug": "carolina-beach",
+ "region": "carolinabeach",
+ "name": "Carolina Beach",
+ "state": "NC",
+ "question_title": "Can you drive a golf cart in Carolina Beach?",
+ "answer_short": "It depends on the town. Carolina Beach lets permitted golf carts and LSVs use roads posted 35 mph or less, and its plain golf cart permits end Dec 31, 2027. Kure Beach only allows carts that are tagged and street-legal as LSVs. In Carolina Beach, LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Carolina Beach: roads posted 35 mph or less with a town permit; Kure Beach: LSVs only",
+  "speed_line": "35 mph",
+  "notes": "Carolina Beach permits end Dec 31 2027"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Carts only on roads posted 35 mph or less; may cross faster roads at intersections",
+   "citation": "Town of Carolina Beach",
+   "source_url": "https://www.carolinabeach.gov/324/Golf-Cart-LSV-Rules-Regulations"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; may cross faster roads at intersections",
+   "citation": "N.C.G.S. 20-121.1",
+   "source_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-121.1.html"
+  },
+  {
+   "topic": "Phase-out",
+   "rule": "Plain golf carts lose street permits after 2027; LSVs continue",
+   "citation": "WECT",
+   "source_url": "https://www.wect.com/2023/03/15/golf-carts-disappear-carolina-beach-streets-by-2028/"
+  },
+  {
+   "topic": "Kure Beach",
+   "rule": "Carts must be tagged, licensed and meet the federal LSV standard (49 CFR 571.500) to use town streets",
+   "citation": "Town of Kure Beach golf cart rules",
+   "source_url": "https://www.townofkurebeach.org/golf-cart-rules"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Dow Road and other roads posted over 35 mph",
+   "rule": "Cross only",
+   "crossings_ok": true
+  },
+  {
+   "name": "Kure Beach streets (plain golf carts)",
+   "rule": "Street-legal LSVs only",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Carolina Beach?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I still drive a golf cart in Carolina Beach in 2028?",
+   "a": "Not a plain golf cart. Carolina Beach is phasing out golf cart street permits after Dec 31, 2027; street-legal LSVs can keep driving."
+  },
+  {
+   "q": "Can I drive a golf cart on Lake Park Boulevard?",
+   "a": "In Carolina Beach, where it's posted 35 mph or less, with a town permit. In Kure Beach (where it becomes Fort Fisher Boulevard), only street-legal LSVs."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "kure-beach"
+ ],
+ "map_center": [
+  34.0352,
+  -77.8936
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.carolinabeach.gov/324/Golf-Cart-LSV-Rules-Regulations",
+  "https://www.townofkurebeach.org/golf-cart-rules",
+  "https://www.wect.com/2023/03/15/golf-carts-disappear-carolina-beach-streets-by-2028/"
+ ]
+}

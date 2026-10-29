@@ -14,5 +14,20 @@
   "Tex. Transp. Code 551.403/551.303",
   "Beach driving (the beach is a city street) not modeled"
  ],
- "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=portaransas loads it"
+ "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=portaransas loads it",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Port Aransas golf cart regulations",
+    "url": "https://cityofportaransas.org/golf-cart-information-and-regulations/"
+   },
+   {
+    "label": "Port Aransas 'Golf Cart Laws Strictly Enforced'",
+    "url": "https://cityofportaransas.org/wp-content/uploads/2026/02/Golf-Cart-Laws-Strictly-Enforced.pdf"
+   }
+  ],
+  "note": "SH 361 ban applied."
+ }
 }

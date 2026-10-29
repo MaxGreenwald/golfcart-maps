@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Partner admin · Golf Cart Maps</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg">
+<style>
+:root{--ink:#0b3c50;--deep:#0b6e86;--aqua:#14b8c4;--sand:#f6ead2;--bg:#f4fafb;--line:#cfe7ea;--ok:#0e7a3c;--bad:#b91c1c}
+*{box-sizing:border-box}body{margin:0;font:600 15px Nunito,system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--deep)}header{background:#fff;border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:18px;flex:1}header .who{font-size:13px;opacity:.8}
+main{max-width:920px;margin:0 auto;padding:20px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:0 0 16px;box-shadow:0 2px 10px #0b3c5010}
+.card h2{margin:0 0 10px;font-size:17px;color:var(--deep)}
+label{display:block;margin:10px 0 4px;font-size:13px;font-weight:800}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:600 14px Nunito,system-ui;color:var(--ink);background:#fff}
+textarea{min-height:70px;resize:vertical}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+.color-pick{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:2px}
+.color-pick input[type=color]{-webkit-appearance:none;appearance:none;width:48px;height:40px;padding:0;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;flex:none}
+.color-pick input[type=color]::-webkit-color-swatch-wrapper{padding:4px}
+.color-pick input[type=color]::-webkit-color-swatch{border:0;border-radius:6px}
+.color-pick input[type=color]::-moz-color-swatch{border:0;border-radius:6px}
+.color-pick .btn{width:auto;flex:none;padding:8px 12px}
+.hex-readout{font:800 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--deep);background:transparent;border:0;padding:0}
+.hex-readout.is-default{font-family:Nunito,system-ui,sans-serif;opacity:.75}
+.btn{border:0;border-radius:12px;padding:10px 14px;font:800 14px Nunito;background:var(--aqua);color:#fff;cursor:pointer}
+.btn.alt{background:#e3f6f8;color:var(--deep)}.btn.warn{background:#fff1ec;color:#c2410c}.btn:disabled{opacity:.5}
+.msg{margin:10px 0;padding:10px 12px;border-radius:10px;background:#e3f6f8;color:var(--deep);font-size:13px}
+.msg.err{background:#fee2e2;color:var(--bad)}.msg.ok{background:#dcfce7;color:var(--ok)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#e3f6f8;color:var(--deep);font-size:12px}
+.pill.off{background:#fee2e2;color:var(--bad)}
+.stops{border:1px dashed var(--line);border-radius:12px;padding:10px;margin-top:8px}
+.stop{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.stop:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+.stop > div:first-child{min-width:0}
+.stop-actions{display:flex;flex-direction:column;gap:6px}
+.stop-actions .btn{width:auto;padding:8px 10px;font-size:13px}
+.ex-actions{display:flex;gap:6px;flex-wrap:wrap}
+.ex-actions .btn{width:auto}
+.place-wrap{position:relative;flex:1;min-width:0}
+.place-wrap input[data-k=q]{width:100%}
+.sugg{display:none;position:absolute;left:0;right:0;top:100%;z-index:40;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px #0b3c5020;max-height:220px;overflow:auto;margin-top:4px}
+.sugg div{padding:10px 12px;cursor:pointer;border-bottom:1px solid #eef6f8;font-size:13px}
+.sugg div:hover,.sugg div.active{background:#e3f6f8}
+.sugg small{display:block;opacity:.7;font-weight:600;margin-top:2px}
+.picked{font-size:12px;margin-top:4px;color:var(--deep)}
+.picked.ok{color:var(--ok)}
+.picked.miss{color:#b38600}
+.pinmap{height:220px;border-radius:12px;border:1px solid var(--line);margin-top:8px;z-index:1;background:#d4dadc}
+.pinmap .leaflet-container{font:600 12px Nunito,system-ui,sans-serif}
+.pinmap img.leaflet-tile{max-width:none !important;max-height:none !important;mix-blend-mode:normal !important}
+.mode-row{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
+.mode-row button.on{background:var(--aqua);color:#fff}
+.muted{opacity:.7;font-size:12px}.hidden{display:none}
+#login{max-width:420px;margin:40px auto}
+.af-place .place-wrap{margin-bottom:8px}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+  <h1>Golf Cart Maps · Partner admin</h1>
+  <span class="who" id="who"></span>
+  <button class="btn alt hidden" id="logoutBtn" type="button">Sign out</button>
+</header>
+<main id="app"></main>
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+<script src="/vendor/leaflet/leaflet.js"></script>
+<script src="/partner/admin.js"></script>
+</body>
+</html>

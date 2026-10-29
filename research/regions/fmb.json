@@ -1,0 +1,187 @@
+{
+ "poly": [
+  [
+   -81.90954,
+   26.41038
+  ],
+  [
+   -81.91042,
+   26.40958
+  ],
+  [
+   -81.94739,
+   26.44654
+  ],
+  [
+   -81.95686,
+   26.44984
+  ],
+  [
+   -81.9657,
+   26.45637
+  ],
+  [
+   -81.96966,
+   26.46115
+  ],
+  [
+   -81.9686,
+   26.46522
+  ],
+  [
+   -81.96675,
+   26.46658
+  ],
+  [
+   -81.96448,
+   26.46623
+  ],
+  [
+   -81.96101,
+   26.46169
+  ],
+  [
+   -81.94889,
+   26.45726
+  ],
+  [
+   -81.94002,
+   26.45538
+  ],
+  [
+   -81.93915,
+   26.45323
+  ],
+  [
+   -81.934,
+   26.4501
+  ],
+  [
+   -81.92969,
+   26.4513
+  ],
+  [
+   -81.92534,
+   26.44849
+  ],
+  [
+   -81.92431,
+   26.44605
+  ],
+  [
+   -81.91802,
+   26.44095
+  ],
+  [
+   -81.9129,
+   26.43909
+  ],
+  [
+   -81.9084,
+   26.43533
+  ],
+  [
+   -81.90329,
+   26.43389
+  ],
+  [
+   -81.90068,
+   26.43063
+  ],
+  [
+   -81.90062,
+   26.42766
+  ],
+  [
+   -81.89583,
+   26.42535
+  ],
+  [
+   -81.89331,
+   26.42167
+  ],
+  [
+   -81.89217,
+   26.41968
+  ],
+  [
+   -81.89258,
+   26.41814
+  ],
+  [
+   -81.88978,
+   26.41339
+  ],
+  [
+   -81.88255,
+   26.41188
+  ],
+  [
+   -81.88024,
+   26.40404
+  ],
+  [
+   -81.88151,
+   26.40213
+  ],
+  [
+   -81.88667,
+   26.40115
+  ],
+  [
+   -81.89462,
+   26.40184
+  ],
+  [
+   -81.89667,
+   26.40288
+  ],
+  [
+   -81.90337,
+   26.4085
+  ],
+  [
+   -81.90643,
+   26.4184
+  ],
+  [
+   -81.91501,
+   26.42779
+  ],
+  [
+   -81.92814,
+   26.43754
+  ],
+  [
+   -81.94452,
+   26.44536
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "No town designation of golf cart streets was found, so plain golf carts show red on public roads (F.S. 316.212).",
+  "City of Fort Myers (mainland, not this island) prohibits golf carts on public roads and sidewalks."
+ ],
+ "sources": [
+  "Town of Fort Myers Beach Ord. 25-03 https://www.fortmyersbeachfl.gov/DocumentCenter/View/24451/25-03-Beach-Bicycle-and-Vehicle-Safety",
+  "FLHSMV low-speed vehicles https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-22",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Town of Fort Myers Beach Ord. 25-03",
+    "url": "https://www.fortmyersbeachfl.gov/DocumentCenter/View/24451/25-03-Beach-Bicycle-and-Vehicle-Safety"
+   },
+   {
+    "label": "FLHSMV low-speed vehicles",
+    "url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+   }
+  ],
+  "note": "Local ordinance sources checked in the regions-25-batch research (Oct 22 2026); bans/rules recorded into this region. Posted signs never lift a ban. Bintelli Fort Myers store is ~1 mi outside Estero Island (mainland); use the Fort Myers & San Carlos map for store-neighborhood coverage."
+ },
+ "status": "Added (regions-25-batch, 2026-10-22)"
+}

@@ -1,0 +1,69 @@
+{
+ "slug": "edisto-beach",
+ "region": "edisto",
+ "name": "Edisto Beach",
+ "state": "SC",
+ "question_title": "Can you drive a golf cart in Edisto Beach?",
+ "answer_short": "Yes. In Edisto Beach, permitted golf carts may use every town road except Palmetto Boulevard (SC 174), which they may only cross straight over. LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "All town roads except Palmetto Blvd",
+  "speed_line": "35 mph",
+  "notes": "SC DMV permit; daylight"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Every road in town limits except Palmetto Blvd (SC 174); cross straight over",
+   "citation": "Town of Edisto Beach",
+   "source_url": "https://www.townofedistobeach.com/police/golf-cart-and-low-speed-vehicle-use"
+  },
+  {
+   "topic": "Golf carts (SC law)",
+   "rule": "Permitted, insured golf carts on secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address",
+   "citation": "S.C. golf cart law (SCDPS)",
+   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Palmetto Boulevard (SC 174)",
+   "rule": "No golf carts; cross straight over",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Edisto Beach?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Palmetto Boulevard?",
+   "a": "No. It's a primary highway (SC 174); golf carts may only cross it straight over."
+  },
+  {
+   "q": "Can I drive an LSV on Palmetto Boulevard?",
+   "a": "Where it's posted 35 mph or less, yes."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  32.499,
+  -80.307
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "https://www.townofedistobeach.com/police/golf-cart-and-low-speed-vehicle-use"
+ ]
+}

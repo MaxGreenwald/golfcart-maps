@@ -2,9 +2,8 @@
 routes for golf carts never use a road posted over 25 in CA, HI/ME golf carts cart-paths only. Uses public/roadrule.js via the page."""
 from playwright.sync_api import sync_playwright
 import os
+from _check import ck, finish
 URL=os.environ.get("URL","http://localhost:8765/");OUT=os.environ.get("SHOTS","/tmp/")
-fails=[]
-def ck(n,c,x=""):print(("PASS " if c else "FAIL ")+n,x);c or fails.append(n)
 FIND="""(async()=>{await ensure(33.12,-117.36,33.17,-117.30);const s=D.segs.find(x=>D.names[x[0]]==='Carlsbad Boulevard'&&x[2]===35&&'tvm'.includes(x[3])&&x[7][0][1]>33.13&&x[7][0][1]<33.16);return s?[s[7][0],cls(s)]:null})()"""
 CLS="""(async()=>{await ensure(33.12,-117.36,33.17,-117.30);return cls(D.segs.find(x=>D.names[x[0]]==='Carlsbad Boulevard'&&x[2]===35&&'tvm'.includes(x[3])&&x[7][0][1]>33.13&&x[7][0][1]<33.16))})()"""
 POP="""(async(q)=>{map.setView([q[1],q[0]],17);await new Promise(r=>setTimeout(r,1400));let pl=null;layer.eachLayer(g=>{(g.eachLayer?g:{eachLayer:f=>f(g)}).eachLayer(l=>{const A=l.getLatLngs&&l.getLatLngs(),ll=A&&A[0];if(ll&&Math.abs(ll.lat-q[1])<1e-6&&Math.abs(ll.lng-q[0])<1e-6&&!pl)pl=l})});
@@ -43,4 +42,4 @@ with sync_playwright() as p:
     ck("Maine LSV: roads posted ≤35 OK",pg.evaluate("D.segs.some(s=>s[2]===35&&cls(s)!==3)") and "street-legal LSVs" in pg.inner_text("#rnote"),pg.inner_text("#rnote"))
     pg.evaluate("localStorage.setItem('gcm-veh','golf_cart')");ck("CarPlay picks up a setting saved elsewhere",pg.evaluate("GCMCarPlay.status().then(s=>s.mode)")=="golf_cart")
     ctx.close();b.close()
-print("RESULT","ALL PASS" if not fails else f"{len(fails)} FAIL: {fails}")
+finish()

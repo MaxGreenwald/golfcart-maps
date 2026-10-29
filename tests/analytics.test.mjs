@@ -6,6 +6,16 @@ import { sinkFor, onRequestPost } from '../functions/api/e.js';
 
 const base = { v: 1, t: 'sd', pl: 'web', pwa: false, i: '0b9c2a4e-1111-4222-8333-444455556666', s: '1c9c2a4e-1111-4222-8333-444455556666' };
 
+test('internal channel survives sanitize and the /api/e forward, junk does not', () => {
+  const once = sanitize({ ...base, e: 'session', internal: 'simulator', p: { utm_source: 'nextdoor' } });
+  assert.equal(once.props.internal, 'sim');
+  assert.equal(once.props.utm_source, 'nextdoor');
+  const twice = sanitize({ e: once.event, t: once.town, pl: once.platform, pwa: false, i: once.iid, s: once.sid, p: once.props });
+  assert.equal(twice.props.internal, 'sim');
+  assert.equal(sanitize({ ...base, e: 'session', internal: 'Max Greenwald' }).props.internal, undefined);
+  assert.equal(sanitize({ ...base, e: 'session', p: { internal: 'tf' } }).props.internal, 'tf');
+});
+
 test('unknown events are dropped', () => {
   assert.equal(sanitize({ ...base, e: 'pageview' }), null);
   assert.equal(sanitize({ ...base, e: '__proto__' }), null);
@@ -79,4 +89,20 @@ test('/api/e forwards only the sanitized row and always answers 204', async () =
     for (const b of ['not json', JSON.stringify({ e: 'nope' }), 'x'.repeat(5000)]) { r = await onRequestPost({ request: req(b), env: {} }); assert.equal(r.status, 204) }
     assert.equal(calls.length, 1);
   } finally { globalThis.fetch = realFetch }
+});
+
+test('App Store badge event is accepted (and legacy testflight_click still counts)', () => {
+  for (const e of ['app_store_click', 'testflight_click']) {
+    const r = sanitize({ v: 1, e, pl: 'web', i: 'abcdefgh12', s: 'abcdefgh34', p: { position: 'app_section' } });
+    assert.ok(r, e); assert.equal(r.props.position, 'app_section');
+  }
+});
+
+test('every data-ev used by the site generators is on the allowlist', async () => {
+  const fs = await import('node:fs');
+  const files = ['scripts/seo_landing.py', 'scripts/seo_common.py', 'public/app.js', 'public/carplay.js'];
+  for (const f of files) {
+    if (!fs.existsSync(f)) continue;
+    for (const m of fs.readFileSync(f, 'utf8').matchAll(/data-ev=["'\\]*([a-z_]+)/g)) assert.ok(EVENTS[m[1]], `${f}: ${m[1]} not in EVENTS`);
+  }
 });

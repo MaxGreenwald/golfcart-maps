@@ -1,0 +1,73 @@
+{
+ "slug": "st-george-island",
+ "region": "stgeorgeisland",
+ "name": "St. George Island",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in St. George Island?",
+ "answer_short": "Yes. Franklin County lets golf carts use county roads on St. George Island, except Gulf Beach Drive. Franklin Boulevard may only be crossed.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "County roads, not Gulf Beach Dr",
+  "speed_line": "35 mph",
+  "notes": "Cross Franklin Blvd only"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts on St. George Island county roads except Gulf Beach Dr; Franklin Blvd crossing only",
+   "citation": "Franklin County Code ch. 12",
+   "source_url": "https://library.municode.com/fl/franklin_county/codes/code_of_ordinances?nodeId=COLAOR_CH12MOVETR_ARTIIGOCA_SS12-39--12-60RE"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "FLHSMV low-speed vehicles",
+   "source_url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Gulf Beach Drive",
+   "rule": "No golf carts",
+   "crossings_ok": false
+  },
+  {
+   "name": "Franklin Boulevard",
+   "rule": "No golf carts; cross only",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in St. George Island?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Gulf Beach Drive?",
+   "a": "No. Franklin County keeps golf carts off Gulf Beach Drive."
+  },
+  {
+   "q": "Can I drive a golf cart across Franklin Boulevard?",
+   "a": "Yes, to cross it, but not along it."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  29.66,
+  -84.86
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://library.municode.com/fl/franklin_county/codes/code_of_ordinances?nodeId=COLAOR_CH12MOVETR_ARTIIGOCA_SS12-39--12-60RE"
+ ]
+}

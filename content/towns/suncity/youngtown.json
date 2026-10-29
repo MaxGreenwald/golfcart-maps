@@ -1,0 +1,83 @@
+{
+ "slug": "youngtown",
+ "region": "suncity",
+ "name": "Youngtown",
+ "state": "AZ",
+ "question_title": "Can you drive a golf cart in Youngtown?",
+ "answer_short": "Yes, if it is registered. In Youngtown, the Maricopa County Sheriff's Office recommends golf carts stay on roads posted 35 mph or less. Bell Road, Grand Avenue and 99th Avenue are faster roads it calls unsafe for carts. Street-legal LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less (MCSO guidance)",
+  "speed_line": "35 mph",
+  "notes": "Registered with the state; licensed driver"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "May cross faster roads"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Stay on roads posted 35 mph or less; Bell Rd, Grand Ave and 99th Ave are unsafe for carts",
+   "citation": "Sun City HOA (MCSO guidance)",
+   "source_url": "https://suncityhoa.org/golf-carts-in-sun-city/"
+  },
+  {
+   "topic": "Registration",
+   "rule": "Golf carts on roads must be registered with the state; driver needs a valid license",
+   "citation": "Sun City HOA",
+   "source_url": "https://suncityhoa.org/golf-carts-in-sun-city/"
+  },
+  {
+   "topic": "LSVs",
+   "rule": "LSVs/NEVs on roads posted 35 mph or less",
+   "citation": "A.R.S. 28-966",
+   "source_url": "https://www.azleg.gov/ars/28/00966.htm"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 60 (Grand Avenue)",
+   "rule": "State highway; MCSO calls it unsafe for carts",
+   "crossings_ok": true
+  },
+  {
+   "name": "Loop 101 and Loop 303",
+   "rule": "Freeways",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Youngtown?",
+   "a": "Roads posted 35 mph or less. May cross faster roads. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Bell Road?",
+   "a": "The Maricopa County Sheriff's Office lists Bell Road as a higher-speed road that is unsafe for golf carts; stay on roads posted 35 mph or less."
+  },
+  {
+   "q": "Do golf carts in Youngtown need to be registered?",
+   "a": "Yes. Golf carts on Sun City roads must be registered with the state, and the driver needs a valid driver's license."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "sun-city-west",
+  "sun-city"
+ ],
+ "map_center": [
+  33.594,
+  -112.303
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://suncityhoa.org/golf-carts-in-sun-city/",
+  "https://www.azleg.gov/ars/28/00966.htm"
+ ]
+}

@@ -1,0 +1,190 @@
+#!/usr/bin/env python3
+"""Standing live verification for Golf Cart Maps.
+
+Drives https://golfcartmap.com/ (or URL=) the way a user does, with window.NO_TRACK=1
+so production analytics stay clean. Bundles the existing Playwright scripts plus
+town-page and road-label checks.
+
+Usage:
+  scripts/verify_live                          # against https://golfcartmap.com/
+  URL=http://localhost:8765/ scripts/verify_live
+  scripts/verify_live --quick                  # skip the full town sweep
+  scripts/verify_live --only test_road_labels  # one suite
+
+Prints one PASS/FAIL summary line with git commit and America/Los_Angeles time.
+A suite fails when its process exits non-zero, or when it exits 0 but a RESULT
+line lists failures. scripts/deploy_web.sh production runs this against
+https://golfcartmap.com and appends one line (time PT, commit, Max OK ref, PASS or FAIL)
+to $GCM_BOT_LOG (default /workspace/gcm/bot-log.md). See AGENTS.md rule 22.
+"""
+from __future__ import annotations
+
+import argparse
+import os
+import re
+import subprocess
+import sys
+import time
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+LIVE_NOTRACK = os.path.join(ROOT, "scripts", "live_notrack.py")
+PT = ZoneInfo("America/Los_Angeles")
+
+# (name, script relative to ROOT, uses_map_url)
+# Map-URL suites get URL=<base>/map/; base-URL suites (SW, chips city paths) get URL=<base>/
+SUITES = [
+    # Not scripts/test_town_pages.py: that basename shadows tests/test_town_pages.py
+    # once discover puts scripts/ on sys.path (unit job has no Playwright).
+    ("test_town_pages", "scripts/test_town_map_pages.py", "map"),
+    ("test_road_labels", "scripts/test_road_labels.py", "map"),
+    ("test_ui", "scripts/test_ui.py", "map"),
+    ("test_vehicle", "scripts/test_vehicle.py", "map"),
+    ("test_sw", "scripts/test_sw.py", "base"),
+    ("test_safety_caution", "scripts/test_safety_caution.py", "map"),
+    ("test_delmar_warning", "scripts/test_delmar_warning.py", "map"),
+    ("test_chips", "scripts/test_chips.py", "base"),
+    ("test_layout", "scripts/test_layout.py", "map"),
+    ("test_city_chip", "scripts/test_city_chip.py", "map"),
+    ("test_islands_ui", "scripts/test_islands_ui.py", "map"),
+    ("test_regions", "scripts/test_regions.py", "map"),
+]
+
+
+def result_line_lists_failures(output: str) -> bool:
+    """True when a RESULT line reports failed checks.
+
+    Exit code 0 is not enough. scripts/test_regions.py used to print
+    'RESULT 1 FAIL: ...' and still exit 0, and a production verify_live then
+    logged PASS. 'RESULT ALL PASS' does not contain the word FAIL.
+    """
+    for raw in (output or "").splitlines():
+        line = raw.strip()
+        if line.startswith("RESULT") and re.search(r"\bFAIL\b", line):
+            return True
+    return False
+
+
+def suite_passed(returncode: int, output: str) -> bool:
+    """A suite passes only when it exits 0 and no RESULT line lists failures."""
+    if returncode != 0:
+        return False
+    return not result_line_lists_failures(output)
+
+
+def git_commit() -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "--short=12", "HEAD"], cwd=ROOT, text=True
+        ).strip()
+    except Exception:
+        return "unknown"
+
+
+def normalize_base(url: str) -> str:
+    u = url.rstrip("/") + "/"
+    # Accept either site root or /map/ ; always derive site root
+    if u.endswith("/map/"):
+        return u[: -len("map/")]
+    return u
+
+
+def run_suite(name: str, script: str, kind: str, base: str, shots: str) -> tuple[bool, str]:
+    map_url = base.rstrip("/") + "/map/"
+    url = map_url if kind == "map" else base
+    env = os.environ.copy()
+    env["URL"] = url
+    env["MAP"] = "/map"
+    env["SHOTS"] = shots
+    env["SHOTS_DIR"] = shots if shots.endswith("/") else shots + "/"
+    env["OUT"] = shots if shots.endswith("/") else shots + "/"
+    # regions test defaults to 8766; force our URL
+    t0 = time.time()
+    try:
+        r = subprocess.run(
+            [sys.executable, LIVE_NOTRACK, os.path.join(ROOT, script)],
+            cwd=ROOT,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=int(os.environ.get("VERIFY_LIVE_SUITE_TIMEOUT", "900")),
+        )
+    except subprocess.TimeoutExpired:
+        return False, f"TIMEOUT after {os.environ.get('VERIFY_LIVE_SUITE_TIMEOUT', '900')}s"
+    dt = time.time() - t0
+    out = (r.stdout or "") + ("\n" + r.stderr if r.stderr else "")
+    # Exit code 0 used to hide a RESULT line that listed failures (test_regions).
+    ok = suite_passed(r.returncode, out)
+    note = f"exit={r.returncode}"
+    if r.returncode == 0 and result_line_lists_failures(out):
+        note = "exit=0 but RESULT lists FAIL"
+    tail = "\n".join(out.strip().splitlines()[-8:])
+    return ok, f"{note} {dt:.0f}s\n{tail}"
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument(
+        "--url",
+        default=os.environ.get("URL", "https://golfcartmap.com/"),
+        help="Site root or /map/ URL (default https://golfcartmap.com/)",
+    )
+    ap.add_argument("--quick", action="store_true", help="Skip test_town_pages (64 regions)")
+    ap.add_argument("--only", action="append", default=[], help="Run only these suite names")
+    ap.add_argument(
+        "--shots",
+        default=os.path.join(ROOT, "research/verify_live_evidence"),
+        help="Directory for screenshots / evidence",
+    )
+    args = ap.parse_args()
+    base = normalize_base(args.url)
+    os.makedirs(args.shots, exist_ok=True)
+    commit = git_commit()
+    when = datetime.now(PT).strftime("%Y-%m-%d %H:%M PT")
+
+    suites = SUITES
+    if args.quick:
+        suites = [s for s in suites if s[0] != "test_town_pages"]
+    if args.only:
+        want = set(args.only)
+        suites = [s for s in suites if s[0] in want]
+        missing = want - {s[0] for s in suites}
+        if missing:
+            print("unknown --only:", ", ".join(sorted(missing)), file=sys.stderr)
+            return 2
+
+    print(f"verify_live target={base} commit={commit} started={when}")
+    print(f"NO_TRACK via {LIVE_NOTRACK}")
+    results = []
+    for name, script, kind in suites:
+        print(f"\n=== {name} ({kind} URL) ===", flush=True)
+        ok, detail = run_suite(name, script, kind, base, args.shots)
+        results.append((name, ok, detail))
+        print(detail, flush=True)
+        print(("PASS " if ok else "FAIL ") + name, flush=True)
+
+    failed = [n for n, ok, _ in results if not ok]
+    passed = [n for n, ok, _ in results if ok]
+    end = datetime.now(PT).strftime("%Y-%m-%d %H:%M PT")
+    if failed:
+        line = (
+            f"verify_live FAIL commit={commit} time={end} "
+            f"passed={len(passed)}/{len(results)} failed={failed} url={base}"
+        )
+        print("\n" + line)
+        return 1
+    line = (
+        f"verify_live PASS commit={commit} time={end} "
+        f"suites={len(results)} url={base}"
+    )
+    print("\n" + line)
+    # Machine-readable copy for bot-log paste
+    summary_path = os.path.join(args.shots, "last_summary.txt")
+    with open(summary_path, "w", encoding="utf-8") as f:
+        f.write(line + "\n")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

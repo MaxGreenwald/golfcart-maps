@@ -1,0 +1,77 @@
+{
+ "slug": "balboa-peninsula",
+ "region": "newportbeach",
+ "name": "Balboa Peninsula",
+ "state": "CA",
+ "question_title": "Can you drive a golf cart in Balboa Peninsula?",
+ "answer_short": "Yes, with limits. In Balboa Peninsula, golf carts may use streets posted 25 mph or less and LSVs streets posted 35 mph or less. Both stay off Pacific Coast Highway.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Streets posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Business or residence district"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts on highways posted 25 mph or less in a business or residence district",
+   "citation": "CVC 21716",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716"
+  },
+  {
+   "topic": "LSVs",
+   "rule": "LSVs on roads posted 35 mph or less",
+   "citation": "CVC 21260",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260"
+  },
+  {
+   "topic": "PCH",
+   "rule": "Golf carts aren't allowed on Pacific Coast Highway",
+   "citation": "Patch: Newport Beach police",
+   "source_url": "https://patch.com/california/newportbeach/golf-carts-not-street-legal-newport-beach-cops-say"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Pacific Coast Highway",
+   "rule": "No golf carts or LSVs",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Balboa Peninsula?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Balboa Island?",
+   "a": "Yes. Balboa Island streets are posted 25 mph or less, so golf carts may use them."
+  },
+  {
+   "q": "Can I drive a golf cart on PCH in Newport Beach?",
+   "a": "No. Pacific Coast Highway is posted well above 25 mph and police say carts aren't allowed on it."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "balboa-island"
+ ],
+ "map_center": [
+  33.601,
+  -117.901
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716",
+  "https://patch.com/california/newportbeach/golf-carts-not-street-legal-newport-beach-cops-say"
+ ]
+}

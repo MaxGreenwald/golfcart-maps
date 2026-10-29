@@ -8,6 +8,8 @@ import json, os, sys, math, gzip, time, re
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, "..")
 sys.path.insert(0, HERE)
 import mapillary_signs as M
+import trusted_osm as _TO
+EXPL = []
 from build_data_lib import mph, simplify, classify
 RID = sys.argv[1]
 REG = next(r for r in json.load(open(os.path.join(ROOT, "public/data/regions.json"))) if r["id"] == RID)
@@ -37,6 +39,21 @@ if CFG.get("poly"):   # clip ways to region polygon (midpoint + any vertex insid
             j = i
         return c
     ways = {k: w for k, w in ways.items() if any(_inp(q["lon"], q["lat"]) for q in w["geometry"][:: max(1, len(w["geometry"]) // 4)] + [w["geometry"][-1]])}
+# Private gated towns (research/regions/<id>.json "private_polys": [research/city_limits/<file>.json, ...]): their roads are
+# closed to the public even when OSM has no access tag, so a way whose middle vertex is inside is not drawn at all.
+# "private_keep": regex on name for public roads that run along or through the town's line (e.g. Palos Verdes Drive North).
+for _pf in CFG.get("private_polys", []):
+    _gj = json.load(open(os.path.join(ROOT, "research/city_limits", _pf)))["geojson"]
+    _pr = _gj["coordinates"][0] if _gj["type"] == "Polygon" else max((p[0] for p in _gj["coordinates"]), key=len)
+    def _inpr(x, y, r=_pr):
+        c = False
+        for i in range(len(r)):
+            (x1, y1), (x2, y2) = r[i - 1][:2], r[i][:2]
+            if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1: c = not c
+        return c
+    _drop = [k for k, w in ways.items() if not re.search(CFG.get("private_keep", "^\\b$"), w["tags"].get("name", "")) and _inpr(w["geometry"][len(w["geometry"]) // 2]["lon"], w["geometry"][len(w["geometry"]) // 2]["lat"])]
+    print("private_polys", _pf, "dropped ways", len(_drop), sorted({ways[k]["tags"].get("name", "") for k in _drop} - {""}))
+    for k in _drop: del ways[k]
 cnt = {}
 for w in ways.values():
     for n in w["nodes"]: cnt[n] = cnt.get(n, 0) + 1
@@ -60,7 +77,10 @@ except Exception as e: print("mapillary skipped:", e)
 print("mapillary", mst)
 import re
 BAN = re.compile(CFG["cart_ban_names"]) if CFG.get("cart_ban_names") else None
-OV = {o["way"]: o for o in CFG.get("overrides", [])}   # {"way": osm id, "mph": n, "url":..., "label":...}
+OV = {o["way"]: o for o in CFG.get("overrides", [])}
+import streetview_signs as _SV
+SVS = _SV.for_region(RID); SV_APPLIED = []
+SV_CONFLICT = [{"way": k, "road": e["road"], "check_id": e["check_id"], "sign_mph": e["mph"], "kept_mph": OV[k]["mph"], "kept_source": OV[k]["label"]} for k, e in SVS.items() if k in OV and OV[k]["mph"] != e["mph"]]   # {"way": osm id, "mph": n, "url":..., "label":...}
 XING = CFG.get("crossings", []); XN = set()
 def near(la, lo, R=40):
     return any(math.hypot((la - x["lat"]) * 110540, (lo - x["lon"]) * 111320 * math.cos(math.radians(la))) < R for x in XING)
@@ -162,13 +182,27 @@ for dsg in CFG.get("designated_names", []):
 print("designated (ordinance list) ways", len(DES))
 # Hand-entered posted limits by road name (research/regions/<id>.json "speed_names"), for main roads OSM doesn't tag:
 # {"names": regex on name/ref, "mph": n, "url": source, "label": text, optional "highway": regex, "bbox": [S,W,N,E],
-#  "north_of"/"south_of"/"east_of"/"west_of": the way's midpoint must be past that lat/lon}. First match wins.
+#  "north_of"/"south_of"/"east_of"/"west_of": the way's midpoint must be past that lat/lon,
+#  "bboxes": [[S,W,N,E], ...] (midpoint inside any one), "poly": research/city_limits/<file>.json (midpoint inside)}. First match wins.
+def _ring_of(f):
+    gj = json.load(open(os.path.join(ROOT, "research/city_limits", f)))["geojson"]
+    return gj["coordinates"][0] if gj["type"] == "Polygon" else max((p[0] for p in gj["coordinates"]), key=len)
+def _inr(x, y, ring):
+    c = False
+    for i in range(len(ring)):
+        (x1, y1), (x2, y2) = ring[i - 1][:2], ring[i][:2]
+        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1: c = not c
+    return c
+for o in CFG.get("speed_names", []):
+    if "poly" in o: o["_ring"] = _ring_of(o["poly"])
 def speed_name(t, mid):
     for o in CFG.get("speed_names", []):
         if not any(re.search(o["names"], t.get(k, "")) for k in ("name", "ref")): continue
         if "highway" in o and not re.search(o["highway"], t.get("highway", "")): continue
         la, lo = mid["lat"], mid["lon"]
         if "bbox" in o and not (o["bbox"][0] <= la <= o["bbox"][2] and o["bbox"][1] <= lo <= o["bbox"][3]): continue
+        if "bboxes" in o and not any(b[0] <= la <= b[2] and b[1] <= lo <= b[3] for b in o["bboxes"]): continue
+        if "poly" in o and not _inr(lo, la, o["_ring"]): continue
         if ("north_of" in o and la <= o["north_of"]) or ("south_of" in o and la >= o["south_of"]): continue
         if ("east_of" in o and lo <= o["east_of"]) or ("west_of" in o and lo >= o["west_of"]): continue
         return o
@@ -177,6 +211,24 @@ CONF = []
 CHG = {"dot": 0, "dot_block": 0, "dot_open": 0, "desig_only_block": 0}
 names, out, sources, sidx, nidx, nids = [], [], [], {}, {}, {}
 stats = {"tagged": 0, "inferred": 0, "inferred_high": 0, "verified": 0, "mapillary": 0, "cartpath": 0, "designated": 0}
+# Golf-cart-only bans (research/regions/<id>.json "cart_only_bans"): flag s[9] = 4, s[10] = source index of the ordinance.
+# Each entry: url, label, and any of names (regex on name/ref), bbox [S, W, N, E], poly (research/city_limits/<file>.json),
+# not_poly (list of city_limits files whose insides are excluded).
+CBAN = CFG.get("cart_only_bans", [])
+for b in CBAN:
+    if "poly" in b:
+        gj = json.load(open(os.path.join(ROOT, "research/city_limits", b["poly"])))["geojson"]
+        b["_ring"] = gj["coordinates"][0] if gj["type"] == "Polygon" else max((p[0] for p in gj["coordinates"]), key=len)
+    b["_not"] = []   # not_poly: carve-outs (e.g. a town inside a county blob that has its own cart rules)
+    for f in b.get("not_poly", []):
+        gj = json.load(open(os.path.join(ROOT, "research/city_limits", f)))["geojson"]
+        b["_not"] += [gj["coordinates"][0]] if gj["type"] == "Polygon" else [p[0] for p in gj["coordinates"]]
+def _in_poly(x, y, ring):
+    c = False
+    for i in range(len(ring)):
+        (x1, y1), (x2, y2) = ring[i - 1][:2], ring[i][:2]
+        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1: c = not c
+    return c
 WS, WOUT = {}, {}   # wi -> final (mph, src); wi -> indices into out
 def src_i(url, label):
     if (url, label) not in sidx: sidx[(url, label)] = len(sources); sources.append([url, label])
@@ -188,7 +240,9 @@ for wi, w in enumerate(wl):
     if hw in ROADS:
         mla, mlo = w["geometry"][len(w["geometry"])//2]["lat"], w["geometry"][len(w["geometry"])//2]["lon"]
         for b in CFG.get("bans", []):   # local ordinance / state-highway bans -> blocked for everyone (single rule)
+            if b.get("per_segment"): continue   # decided per segment below (a way that is only partly banned)
             if not any(re.search(b["names"], t.get(k, "")) for k in ("name", "ref")): continue
+            if "ways" in b and w["id"] not in b["ways"]: continue   # optional exact OSM way ids (e.g. a bridge OSM names after the road it carries)
             if "south_of" in b and mla >= b["south_of"]: continue
             if "north_of" in b and mla <= b["north_of"]: continue
             if "west_of" in b and mlo >= b["west_of"]: continue
@@ -199,6 +253,8 @@ for wi, w in enumerate(wl):
         o = OV[w["id"]]; s, src = o["mph"], "verified"; si = src_i(o["url"], o["label"])
     elif lban:
         s, src = 99, "verified"; si = src_i(lban["url"], lban["label"])
+    elif w["id"] in SVS:   # Street View posted sign (batches 2 and 4, RG): beats OSM/Mapillary/DOT/speed_names; never lifts a ban
+        e = SVS[w["id"]]; s, src = e["mph"], "verified"; si = src_i(e["url"], e["label"]); SV_APPLIED.append(w["id"])
     elif spn:
         s, src = spn["mph"], "verified"; si = src_i(spn["url"], spn["label"]); CHG["speed_names"] = CHG.get("speed_names", 0) + 1
     elif wi in DOT and src == "tagged" and DOT[wi]["src"] == "FHWA" and (s > 35) != (DOT[wi]["mph"] > 35):
@@ -253,12 +309,31 @@ for wi, w in enumerate(wl):
         pts = simplify([[round(g[k]["lon"], 5), round(g[k]["lat"], 5)] for k in sg])
         ow = 1 if t.get("oneway") in ("yes", "1") else (-1 if t.get("oneway") == "-1" else 0)
         if t.get("junction") == "roundabout" and ow == 0: ow = 1
-        ss, ssi = s, si
+        ss, ssi, scode = s, si, code
+        if hw in ROADS and not lban and w["id"] not in OV:   # per-segment bans: only the stretch of the way inside the banned range
+            q_ = g[sg[len(sg)//2]]
+            for b in CFG.get("bans", []):
+                if not b.get("per_segment") or not any(re.search(b["names"], t.get(k, "")) for k in ("name", "ref")): continue
+                if ("south_of" in b and q_["lat"] >= b["south_of"]) or ("north_of" in b and q_["lat"] <= b["north_of"]): continue
+                if "bbox" in b and not (b["bbox"][0] <= q_["lat"] <= b["bbox"][2] and b["bbox"][1] <= q_["lon"] <= b["bbox"][3]): continue
+                if "only_codes" in b and scode not in b["only_codes"]: continue   # e.g. ["i"]: only stretches with no posted limit of their own
+                if "max_mph" in b and ss > b["max_mph"]: continue   # e.g. 25: only the pieces that would otherwise read as cart-legal
+                ss, ssi, sflag, scode = 99, src_i(b["url"], b["label"]), 1, "v"; stats["seg_banned"] = stats.get("seg_banned", 0) + 1; break
+        if hw in ROADS and src != "cartpath" and sflag not in (1, 3) and CBAN:   # golf-cart-only local bans (flag 4): LSVs unaffected; a posted sign never lifts it
+            q_ = g[sg[len(sg)//2]]
+            for b in CBAN:
+                if "names" in b and not any(re.search(b["names"], t.get(k, "")) for k in ("name", "ref")): continue
+                if "ways" in b and w["id"] not in b["ways"]: continue   # optional exact OSM way ids
+                if "bbox" in b and not (b["bbox"][0] <= q_["lat"] <= b["bbox"][2] and b["bbox"][1] <= q_["lon"] <= b["bbox"][3]): continue
+                if "poly" in b and not _in_poly(q_["lon"], q_["lat"], b["_ring"]): continue
+                if any(_in_poly(q_["lon"], q_["lat"], r_) for r_ in b["_not"]): continue
+                sflag, cbi = 4, src_i(b["url"], b["label"]); stats["cart_only_banned"] = stats.get("cart_only_banned", 0) + 1; break
         if spn and src == "verified" and w["id"] not in OV and not lban:   # a long way can span two posted zones: decide per segment
             o2 = speed_name(t, g[sg[len(sg)//2]])
             if o2: ss, ssi = o2["mph"], src_i(o2["url"], o2["label"])
         WOUT[wi].append(len(out))
-        out.append([nidx[nm], hw, ss, code, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([ssi, sflag] if sflag else [ssi] if ssi >= 0 else []))
+        if scode == "t" and _TO.explicit(t): EXPL.append(len(out))
+        out.append([nidx[nm], hw, ss, scode, ow, nids.setdefault(nodes[sg[0]], len(nids)), nids.setdefault(nodes[sg[-1]], len(nids)), pts] + ([ssi, 4, cbi] if sflag == 4 else [ssi, sflag] if sflag else [ssi] if ssi >= 0 else []))
 # ---- Roundabouts: OSM rarely tags maxspeed on the ring itself, so an untagged major-class ring (secondary etc.)
 # fell to 99 "inferred_high" and showed red even when every approach is posted <=35. A ring with no limit of its own
 # takes the HIGHEST known limit among its connecting roads (conservative: a ring touching a 40+ road stays red). ----
@@ -294,6 +369,9 @@ import islands as _ISL
 _HEAL = _HEAL0 + _ISL.heal(out, names, sources)
 stats["same_road_gap"] = sum(c["code"] == "n" for c in _HEAL); stats["same_road_disagree"] = sum(c["code"] == "q" for c in _HEAL)
 for c in _HEAL: print("  same-road island healed:", c)
+print("street view signs applied", len(SV_APPLIED), "of", len(SVS), "conflicts kept official", SV_CONFLICT)
+# ---- Trusted OSM (scripts/trusted_osm.py): relabel 't' -> 'o' where the tag matches an adjacent real source. Speed unchanged. ----
+stats["trusted_osm"] = _TO.mark(out, EXPL); print("trusted OSM ('o') segments", stats["trusted_osm"])
 POLY = CFG.get("poly") or [[W, N], [E, N], [E, S], [W, S]]
 meta = {"bbox": [S, W, N, E], "generated": time.strftime("%Y-%m-%d"), "ways": len(wl), "segments": len(out), "stats": stats, "poly": POLY, "region": RID, "unverified": CFG.get("unverified", []), "changes": CHG, "dot_conflicts": CONF, "xnodes": sorted(nids[n] for n in XN if n in nids), "crossings": XING}
 TS = 0.1; tiles = {}

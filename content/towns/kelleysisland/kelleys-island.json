@@ -1,0 +1,65 @@
+{
+ "slug": "kelleys-island",
+ "region": "kelleysisland",
+ "name": "Kelleys Island",
+ "state": "OH",
+ "question_title": "Can you drive a golf cart in Kelleys Island?",
+ "answer_short": "Yes, if it's titled and plated. On Kelleys Island and in Marblehead, golf carts must pass a police inspection for a title and plate before using public roads, and Marblehead limits them to streets posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Public roads, plated carts",
+  "speed_line": "35 mph",
+  "notes": "Police inspection for title and plate"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts are motor vehicles in Ohio; police inspect them for title and plates",
+   "citation": "Kelleys Island Police",
+   "source_url": "https://kelleysisland.us/departments-2/kelleys-island-police-dept/"
+  },
+  {
+   "topic": "Marblehead",
+   "rule": "Inspected, titled and registered carts on streets posted 35 mph or less",
+   "citation": "Village of Marblehead Code",
+   "source_url": "https://codelibrary.amlegal.com/codes/marblehead/latest/marblehead_oh/0-0-0-112451"
+  }
+ ],
+ "banned_roads": [],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Kelleys Island?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can my child drive a golf cart in Kelleys Island?",
+   "a": "No. Golf carts are motor vehicles in Ohio and need a licensed driver."
+  },
+  {
+   "q": "Can I drink on a golf cart on Kelleys Island?",
+   "a": "No. The island isn't a DORA district, so open containers aren't allowed on golf carts."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "marblehead"
+ ],
+ "map_center": [
+  41.602,
+  -82.708
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://codelibrary.amlegal.com/codes/marblehead/latest/marblehead_oh/0-0-0-112451",
+  "https://kelleysisland.us/departments-2/kelleys-island-police-dept/"
+ ]
+}

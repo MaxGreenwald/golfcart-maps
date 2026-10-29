@@ -7,5 +7,20 @@
   "N.C.G.S. 20-121.1",
   "G.S. 160A-300.6"
  ],
- "status": "Beta (regions15, 2026-10-17)"
+ "status": "Beta (regions15, 2026-10-17)",
+ "enforcement": {
+  "checked": "2026-10-21",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "Southport police: golf cart ordinance",
+    "url": "https://www.cityofsouthport.gov/departments/police/golf_cart_ordinance.php"
+   },
+   {
+    "label": "Village of Bald Head Island: getting around",
+    "url": "https://villagebhi.org/visitors/getting-around-the-island/"
+   }
+  ],
+  "note": "Southport: carts on streets <=35 (no list); BHI: electric carts only, 18 mph."
+ }
 }

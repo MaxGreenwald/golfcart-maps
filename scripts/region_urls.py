@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """City URLs come from one place: the "slug" of each region in public/data/regions.json.
-This writes everything derived from it: public/_redirects (Cloudflare rewrites /<slug> to the app),
+This writes everything derived from it: public/_redirects (trailing-slash 301s to the region pages),
 the city entries of public/sitemap.xml, and the SLUG map in public/app.js.
 (Peachtree City and Hilton Head were in the picker without a URL, so their links 404'd on reload.)
 
@@ -26,12 +26,29 @@ def regions():
 
 
 def want(rs, cur):
-    red = "".join(f"/{r['slug']} / 200\n/{r['slug']}/ / 200\n" for r in rs)
+    # /<slug> is a prerendered region page (scripts/seo_pages.py); the map lives at /map and /map/<slug>
+    red = "".join(f"/{r['slug']}/ /{r['slug']} 301\n" for r in rs) + "/map/ /map 301\n/map/:slug /map 200\n/map/:slug/ /map 200\n"
+    # Static SEO hubs. Self-canonical pages (not 301 to home): /golf-cart-maps and /lsv.
+    red += "/golf-cart-maps/ /golf-cart-maps 301\n/lsv/ /lsv 301\n"
+    # Partner portal SPA routes (brand pages at /p/<slug> so they never collide with city SEO pages).
+    red += (
+        "/partner /partner/index.html 200\n"
+        "/partner/ /partner/index.html 200\n"
+        "/partner/* /partner/index.html 200\n"
+        "/p /p 200\n"
+        "/p/ /p 200\n"
+        "/p/:slug /p 200\n"
+        "/p/:slug/ /p 200\n"
+        "/p/:slug/go /p 200\n"
+        "/p/:slug/go/ /p 200\n"
+    )
     sm = cur["sitemap"]
     old = dict(re.findall(r"<loc>" + re.escape(SITE) + r"/([a-z0-9]+)</loc><lastmod>([^<]*)</lastmod>", sm))
     today = time.strftime("%Y-%m-%d")
     head = sm[:sm.index("<urlset")]
-    keep = [u for u in re.findall(r"<url>.*?</url>", sm) if re.search(r"<loc>" + re.escape(SITE) + r"/(privacy)?</loc>", u)]
+    # Home, privacy, compare, and the static SEO hubs. City slugs are [a-z0-9]+ and are rebuilt below.
+    keep = [u for u in re.findall(r"<url>.*?</url>", sm) if re.search(
+        r"<loc>" + re.escape(SITE) + r"/(privacy|compare|golf-cart-maps|lsv)?</loc>", u)]
     city = [f"<url><loc>{SITE}/{r['slug']}</loc><lastmod>{old.get(r['slug'], today)}</lastmod><changefreq>weekly</changefreq></url>" for r in rs]
     sm2 = head + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(keep + city) + "</urlset>\n"
     app = cur["app"]

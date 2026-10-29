@@ -1,0 +1,68 @@
+{
+ "slug": "north-padre-island",
+ "region": "padreisland",
+ "name": "North Padre Island",
+ "state": "TX",
+ "question_title": "Can you drive a golf cart in North Padre Island?",
+ "answer_short": "Yes. Corpus Christi lets golf carts and NEVs use island streets posted 35 mph or less on North Padre Island. They stay off SH 361 and South Padre Island Drive where it's posted higher.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Island streets posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "City ordinance area"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts and NEVs on island streets posted 35 mph or less",
+   "citation": "City of Corpus Christi ordinance (File 19-1512)",
+   "source_url": "https://corpuschristi.legistar.com/LegislationDetail.aspx?GUID=ED4B9361-1F41-4640-8B25-2E6A5E99FBAA&ID=4216695&Options=&Search="
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "SH 361",
+   "rule": "No golf carts",
+   "crossings_ok": true
+  },
+  {
+   "name": "JFK Causeway",
+   "rule": "No golf carts",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in North Padre Island?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Whitecap Boulevard?",
+   "a": "Yes, where it's posted 35 mph or less."
+  },
+  {
+   "q": "Can I drive a golf cart over the JFK Causeway?",
+   "a": "No. It's posted 55 mph."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  27.6,
+  -97.22
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://corpuschristi.legistar.com/LegislationDetail.aspx?GUID=ED4B9361-1F41-4640-8B25-2E6A5E99FBAA&ID=4216695&Options=&Search=",
+  "https://www.corpuschristitx.gov/media/iluhulk2/2026-02-17-island-mobility-plan-low-res.pdf"
+ ]
+}

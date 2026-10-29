@@ -1,0 +1,92 @@
+{
+ "slug": "atlantic-beach",
+ "region": "emeraldisle",
+ "name": "Atlantic Beach",
+ "state": "NC",
+ "question_title": "Can you drive a golf cart in Atlantic Beach?",
+ "answer_short": "Yes, with town rules. Emerald Isle keeps golf carts off NC 58 (Emerald Drive) and Coast Guard Road except to cross. Atlantic Beach allows registered carts on streets posted 35 mph or less, but not Fort Macon Road or the causeway. LSVs may use roads posted 35 mph or less in Atlantic Beach.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Town streets, not NC 58, Coast Guard Rd or Fort Macon Rd",
+  "speed_line": "25 mph",
+  "notes": "Licensed driver 18+; Atlantic Beach registration"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts on all town streets except NC 58 (Emerald Dr) and Coast Guard Rd; cross straight over only",
+   "citation": "Town of Emerald Isle",
+   "source_url": "https://www.emeraldisle-nc.org/DocumentCenter/View/511/Golf-Cart-Safety-Presentation-PDF?bidId="
+  },
+  {
+   "topic": "Atlantic Beach",
+   "rule": "Registered, inspected carts on streets posted 35 mph or less; not NC 58/Fort Macon Rd or the causeway",
+   "citation": "Atlantic Beach Police golf carts",
+   "source_url": "https://atlanticbeach-nc.com/departments/police-department/golfcarts/"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; may cross faster roads at intersections",
+   "citation": "N.C.G.S. 20-121.1",
+   "source_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-121.1.html"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "NC 58 (Emerald Drive)",
+   "rule": "No golf carts; cross straight over",
+   "crossings_ok": true
+  },
+  {
+   "name": "Coast Guard Road",
+   "rule": "No golf carts; cross straight over",
+   "crossings_ok": true
+  },
+  {
+   "name": "Fort Macon Road / Atlantic Beach Causeway",
+   "rule": "No golf carts in Atlantic Beach",
+   "crossings_ok": true
+  },
+  {
+   "name": "Bike path and sidewalks",
+   "rule": "No golf carts",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Atlantic Beach?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Emerald Drive?",
+   "a": "No. Golf carts may only cross NC 58 (Emerald Drive) straight over, never drive along it."
+  },
+  {
+   "q": "Can I use the bike path in a golf cart in Emerald Isle?",
+   "a": "No. The town's rules keep golf carts off the bike path and sidewalks."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "emerald-isle"
+ ],
+ "map_center": [
+  34.6991,
+  -76.74
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://atlanticbeach-nc.com/departments/police-department/golfcarts/",
+  "https://www.emeraldisle-nc.org/DocumentCenter/View/511/Golf-Cart-Safety-Presentation-PDF?bidId="
+ ]
+}

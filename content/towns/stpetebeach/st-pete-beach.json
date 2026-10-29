@@ -1,0 +1,76 @@
+{
+ "slug": "st-pete-beach",
+ "region": "stpetebeach",
+ "name": "St. Pete Beach",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in St. Pete Beach?",
+ "answer_short": "Street-legal LSVs yes; plain golf carts only on designated city streets. St. Pete Beach keeps registered carts off Gulf Boulevard and the Pinellas Bayway (state and county roads). LSVs may use roads posted 35 mph or less in St. Pete Beach.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated city streets only",
+  "speed_line": "n/a",
+  "notes": "City registration"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Gulf Blvd is posted 35"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Registered golf carts on designated city streets only, not state or county roads",
+   "citation": "City of St. Pete Beach",
+   "source_url": "https://www.spblibrary.com/498/Golf-Carts"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "FLHSMV low-speed vehicles",
+   "source_url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Gulf Boulevard",
+   "rule": "No golf carts (state road)",
+   "crossings_ok": true
+  },
+  {
+   "name": "Pinellas Bayway",
+   "rule": "No golf carts",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in St. Pete Beach?",
+   "a": "Roads posted 35 mph or less. Gulf Blvd is posted 35. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Gulf Boulevard?",
+   "a": "No. St. Pete Beach keeps golf carts off state and county roads like Gulf Boulevard. Street-legal LSVs may use it where it's posted 35 mph."
+  },
+  {
+   "q": "Do I need to register a golf cart in St. Pete Beach?",
+   "a": "Yes. St. Pete Beach requires golf carts to be registered with the city."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "treasure-island"
+ ],
+ "map_center": [
+  27.7253,
+  -82.7412
+ ],
+ "zoom": 15,
+ "published": "2026-10-21",
+ "last_checked": "2026-10-21",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.flsenate.gov/Laws/statutes/2025/316.212",
+  "https://www.spblibrary.com/498/Golf-Carts"
+ ]
+}

@@ -1,0 +1,33 @@
+{
+ "bans": [],
+ "cart_only_bans": [
+  {
+   "names": "^Palmetto Boulevard$|^SC 174$",
+   "url": "https://www.townofedistobeach.com/police/golf-cart-and-low-speed-vehicle-use",
+   "label": "Town of Edisto Beach: golf carts may not drive on Palmetto Blvd (SC 174, a primary highway); cross straight over only"
+  }
+ ],
+ "unverified": [],
+ "sources": [
+  "Town of Edisto Beach golf cart and LSV use https://www.townofedistobeach.com/police/golf-cart-and-low-speed-vehicle-use",
+  "SCDPS golf cart law https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-10-22",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Town of Edisto Beach golf cart and LSV use",
+    "url": "https://www.townofedistobeach.com/police/golf-cart-and-low-speed-vehicle-use"
+   },
+   {
+    "label": "SCDPS golf cart law",
+    "url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+   }
+  ],
+  "note": "Local ordinance sources checked in the regions-25-batch research (Oct 22 2026); bans/rules recorded into this region. Posted signs never lift a ban."
+ },
+ "status": "Added (regions-25-batch, 2026-10-22)"
+}

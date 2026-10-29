@@ -1,5 +1,6 @@
 from playwright.sync_api import sync_playwright
 import os
+from _check import finish
 URL=os.environ.get("URL","http://localhost:8765/")
 with sync_playwright() as p:
     b=p.webkit.launch();ctx=b.new_context(**p.devices["iPhone 13"]);pg=ctx.new_page()
@@ -21,3 +22,4 @@ with sync_playwright() as p:
     print(pg.evaluate("testRoute([32.8506,-117.2717],[32.8305,-117.2805])"),"after route",pg.evaluate("getSnap()"),vis())
     pg.evaluate("map.fitBounds([[32.826,-117.29],[32.853,-117.262]]);0");pg.wait_for_timeout(4000)
     pg.screenshot(path="/workspace/golfcart-maps/screenshot.png");b.close()
+finish()
