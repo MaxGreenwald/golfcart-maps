@@ -7,6 +7,7 @@
    - paywall API calls go to absolute https://golfcartmap.com in native (pay.js)
    - privacy link is absolute https://golfcartmap.com/privacy (index.html)
    - carplay.js exists and is loaded; app.js exposes window._lastDetail (used by carplay.js)
+   - livedata.js loads in the native shell and reads region JSON from https://golfcartmap.com (data only)
 3. The app bundles the built web app: capacitor webDir is dist/ (public/ + stamped sw.js from scripts/build_web.py),
    and every workflow runs build_web.py before `cap sync` (checked only where those files exist, i.e. on ios-release).
 4. Divergence budget: public/, functions/, lib/ may differ from origin/master only in the allowlisted files below.
@@ -27,6 +28,9 @@ CHECKS = [
     ("privacy link is absolute", lambda: "https://golfcartmap.com/privacy" in rd("public/index.html")),
     ("carplay.js exists and defines GCMCarPlay", lambda: os.path.exists(os.path.join(ROOT, "public/carplay.js")) and "window.GCMCarPlay" in rd("public/carplay.js")),
     ("carplay.js is loaded after app.js", lambda: re.search(r'src="app\.js"></script>\s*<script src="carplay\.js">', rd("public/index.html"))),
+    ("livedata.js loads after native.js and before app.js", lambda: re.search(r'src="native\.js"></script><script src="livedata\.js"></script>', rd("public/index.html")) and rd("public/index.html").index("livedata.js") < rd("public/index.html").index('src="app.js"')),
+    ("livedata.js reads JSON only from https://golfcartmap.com in the native app", lambda: "https://golfcartmap.com" in rd("public/livedata.js") and "GCM_NATIVE" in rd("public/livedata.js") and "SCHEMA" in rd("public/livedata.js") and "eval(" not in rd("public/livedata.js") and "new Function" not in rd("public/livedata.js")),
+    ("region JSON publishes a schema and allows the native WebView to read it", lambda: re.search(r'"schema"\s*:\s*\d+', rd("public/data/schema.json")) and "/data/*" in rd("public/_headers") and "Access-Control-Allow-Origin: *" in rd("public/_headers")),
     ("app.js exposes window._lastDetail", lambda: "window._lastDetail=" in rd("public/app.js")),
     ("capacitor webDir is dist (built from public/, never a committed copy)", lambda: not rd("capacitor.config.json") or json.loads(rd("capacitor.config.json")).get("webDir") == "dist"),
     ("every workflow builds dist/ before cap sync", lambda: all(

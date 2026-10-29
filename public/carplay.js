@@ -1,6 +1,8 @@
 // CarPlay bridge. The native CarPlay scene (ios/App/App/CarPlay*.swift) calls these through
 // WKWebView.callAsyncJavaScript so CarPlay uses exactly the same rules, data and A* router as
-// the phone/web app. Everything returns plain JSON. No effect on the website unless called.
+// the phone app. In the native shell, livedata.js fills REGIONS from https://golfcartmap.com
+// (bundled files if that fetch fails or the schema does not match), so a town added on the site
+// shows up here without a new app build. Everything returns plain JSON. No effect on the website unless called.
 (function(){
 const R2D=180/Math.PI;
 const brg=(a,b)=>{const r=Math.PI/180,y=Math.sin((b[0]-a[0])*r)*Math.cos(b[1]*r),x=Math.cos(a[1]*r)*Math.sin(b[1]*r)-Math.sin(a[1]*r)*Math.cos(b[1]*r)*Math.cos((b[0]-a[0])*r);return (Math.atan2(y,x)*R2D+360)%360};

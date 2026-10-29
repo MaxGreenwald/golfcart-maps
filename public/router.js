@@ -5,6 +5,10 @@
 (function (root) {
   const G = 0.02;
   const RISKY_MAX = 152.4; // 500 ft, same cap as the map
+  // Faster-road stretches that round to this many feet (or fewer) are legal.
+  // One constant: the map, renter routes, and CarPlay/iOS (via app.js) all use this file.
+  // shownFeet matches the route summary (app.js ft → shownFeet), so "75 ft" on screen is the cutoff.
+  const SHORT_LEGAL_FT = 75;
   const UNKW = 1.8;
   // A miss longer than this is omitted. A short gap may be a dashed stub.
   // Anything longer would be the chord Max saw crossing the La Jolla water.
@@ -20,6 +24,53 @@
     let l = 0;
     for (let i = 1; i < p.length; i++) l += hav(p[i - 1], p[i]);
     return l;
+  }
+  function shownFeet(m) { return Math.round(m * 3.281); }
+
+  // True when a forbidden segment is an explicit ban, not merely a faster road.
+  // The 75 ft waiver does not apply: Fort Myers-style cart bans (flag 4), named /
+  // posted bans (flag 1, including I-95 / Merritt stored as speed 99 code 'v'),
+  // enforcement bars, undesignated roads in a designated-only town, and vehicles
+  // that are not street-legal. Inferred-high majors (speed 99, code 'i') are the
+  // faster-road class and DO get the waiver.
+  function explicitBan(s, rule) {
+    if (!rule || s[3] === 'c') return false;
+    if (rule.not_street_legal) return true;
+    if (s[9] === 1) return true;
+    if (s[9] === 4 && rule.veh === 'golf_cart') return true;
+    if (s[2] === 99 && (s[3] === 'v' || s[3] === 'r' || s[3] === 'k')) return true;
+    if (rule.designated_only) {
+      const speedOver = s[2] == null || s[2] > rule.max_posted;
+      if (!speedOver) return true;
+    }
+    return false;
+  }
+
+  // Which parts of a route are still risky stretches. Adjacent faster-road
+  // segments are summed before SHORT_LEGAL_FT is applied: a 36 ft piece glued
+  // to 90 ft and 116 ft is one 242 ft stretch and stays risky. An explicit ban
+  // breaks that run and is never waived, at any length.
+  function riskyMask(segs, parts, rule, clsFn) {
+    const mask = new Array(parts.length).fill(false);
+    let start = -1, acc = 0, hard = false;
+    const flush = (end) => {
+      if (start < 0) return;
+      if (hard || shownFeet(acc) > SHORT_LEGAL_FT) {
+        for (let k = start; k < end; k++) mask[k] = true;
+      }
+      start = -1; acc = 0; hard = false;
+    };
+    for (let i = 0; i < parts.length; i++) {
+      const s = segs[parts[i][0]];
+      const forbidden = clsFn(s) === 3;
+      const isHard = forbidden && explicitBan(s, rule);
+      if (!forbidden) { flush(i); continue; }
+      if (start >= 0 && isHard !== hard) flush(i);
+      if (start < 0) { start = i; hard = isHard; acc = 0; }
+      acc += s._len != null ? s._len : len(s[7]);
+    }
+    flush(parts.length);
+    return mask;
   }
 
   function create() {
@@ -40,10 +91,12 @@
         if ((s[3] === 't' || s[3] === 'o' || s[3] === 'm') && s[2] > rule.max_posted) { fast.add(a); fast.add(b); }
         if (c === 3) { fnode.add(a); fnode.add(b); }
         if (s[3] === 'c') { cnode.add(a); cnode.add(b); }
-        const f = c === 3;
+        // kind: 0 legal, 1 faster-road (75 ft waiver can apply), 2 explicit ban (never waived)
+        const kind = c !== 3 ? 0 : explicitBan(s, rule) ? 2 : 1;
         const wmul = (unk(s) || s[3] === 'q') ? UNKW : 1;
-        if (s[4] >= 0) (adj[a] || (adj[a] = [])).push([b, s._len * wmul, i, false, f]);
-        if (s[4] <= 0) (adj[b] || (adj[b] = [])).push([a, s._len * wmul, i, true, f]);
+        const geo = s._len;
+        if (s[4] >= 0) (adj[a] || (adj[a] = [])).push([b, s._len * wmul, i, false, kind, geo]);
+        if (s[4] <= 0) (adj[b] || (adj[b] = [])).push([a, s._len * wmul, i, true, kind, geo]);
       });
     }
     // Snap to the nearest allowed segment. Returns [node, meters, otherNode], same as app.js nearest.
@@ -77,16 +130,30 @@
       if (!best) return [null, 1e9];
       return [best[0], Math.sqrt(bd) * 111320, best[1]];
     }
-    // A* over (node, metres of the current forbidden run). Legal mode skips forbidden edges.
+    // A* over (node, risky-run metres, faster-run length). A faster-road run at or
+    // under SHORT_LEGAL_FT is a normal edge, including in Legal-only mode. Crossing
+    // 75 ft restores today's 6×+60 penalty for the whole run (so a longer stretch
+    // does not get a cheap prefix). Explicit bans stay on the old rule.
     function astar(s, t, o) {
       const rule = o.rule, risky = !!o.risky, cap = o.riskyMax || RISKY_MAX;
       if (nodes[s] == null || nodes[t] == null) return null;
-      const key = (n, r) => n + '|' + Math.round(r);
+      // L = legal (run is the 500 ft risky cap). F = faster run still ≤75 ft.
+      // H = that faster run already exceeded 75 ft.
+      // A hold is the faster run suspended at the node where we left it. Coming
+      // back to that same node continues the run, so a U-turn cannot split one
+      // stretch into two short legal pieces.
+      const holdKey = hld => hld
+        ? hld.at + ':' + Math.round(hld.fastGeo * 100) + ':' + (hld.hot ? 1 : 0) + ':' + Math.round(hld.run) + ':' + hld.fastN
+        : '';
+      const keyOf = (n, run, fastCm, hot, nFast, hld) => (hot
+        ? n + '|H|' + Math.round(run)
+        : fastCm ? n + '|F|' + fastCm + '|' + nFast
+        : n + '|L|' + Math.round(run)) + '|' + holdKey(hld);
       const T = nodes[t];
       const g = new Map(), prev = new Map();
-      const k0 = key(s, 0);
+      const k0 = keyOf(s, 0, 0, 0, 0, null);
       g.set(k0, 0);
-      const h = [[hav(nodes[s], T), s, 0, k0]], done = new Set();
+      const h = [[hav(nodes[s], T), s, 0, 0, 0, 0, 0, null, k0]], done = new Set();
       const push = x => {
         h.push(x);
         let i = h.length - 1;
@@ -115,27 +182,59 @@
       };
       let goal = null;
       while (h.length) {
-        const [, u, run, ku] = pop();
+        const [, u, run, fastGeo, fastW, fastN, hot, hold, ku] = pop();
         if (done.has(ku)) continue;
         done.add(ku);
-        if (u === t && run === 0) { goal = ku; break; }
-        for (const [v, w, si, rev, f] of (adj[u] || [])) {
-          let nr, cost = w;
-          if (!f && rule.cross === false && fnode.has(v) && !cnode.has(v) && v !== t) continue;
-          if (f) {
+        // A short faster jog is legal, so the route may finish on it (run stays 0).
+        if (u === t && run === 0 && !hot) { goal = ku; break; }
+        for (const [v, w, si, rev, kind, geo] of (adj[u] || [])) {
+          let nr = 0, nGeo = 0, nW = 0, nN = 0, nHot = 0, nHold = null, cost = w;
+          const resume = kind === 1 && hold && hold.at === u ? hold : null;
+          const onHot = kind === 1 && (hot || (resume && resume.hot));
+          if (onHot) {
+            const baseRun = hot ? run : resume.run;
+            nr = baseRun + w;
+            if (!risky || nr > cap) continue;
+            cost = w * 6 + 60;
+            nGeo = (hot ? fastGeo : resume.fastGeo) + geo;
+            nW = (hot ? fastW : resume.fastW) + w;
+            nN = (hot ? fastN : resume.fastN) + 1;
+            nHot = 1;
+          } else if (kind === 1) {
+            const baseGeo = resume ? resume.fastGeo : fastGeo;
+            const baseW = resume ? resume.fastW : fastW;
+            const baseN = resume ? resume.fastN : fastN;
+            const baseRun = resume ? resume.run : run;
+            nGeo = baseGeo + geo; nW = baseW + w; nN = baseN + 1;
+            if (shownFeet(nGeo) <= SHORT_LEGAL_FT) {
+              cost = w;
+            } else if (!risky) {
+              continue;
+            } else {
+              nr = baseRun + nW;
+              if (nr > cap) continue;
+              // Prefix edges were priced as legal. Charge the unpaid 6×+60 now.
+              cost = 6 * nW + 60 * nN - baseW;
+              nHot = 1;
+            }
+          } else if (kind === 2) {
             if (!risky) continue;
             nr = run + w;
             if (nr > cap) continue;
             cost = w * 6 + 60;
           } else {
-            nr = 0;
+            if (rule.cross === false && fnode.has(v) && !cnode.has(v) && v !== t) continue;
             if (fast.has(v)) cost += 150;
+            if (fastGeo > 0 || hot) nHold = { at: u, run, fastGeo, fastW, fastN, hot: hot ? 1 : 0 };
+            else nHold = hold;
           }
-          const kv = key(v, nr), ng = g.get(ku) + cost;
+          const cm = nHot ? 0 : (nGeo ? Math.round(nGeo * 100) : 0);
+          const kv = keyOf(v, nr, cm, nHot, nHot ? 0 : nN, nHold);
+          const ng = g.get(ku) + cost;
           if (!g.has(kv) || ng < g.get(kv)) {
             g.set(kv, ng);
             prev.set(kv, [ku, si, rev]);
-            push([ng + hav(nodes[v], T), v, nr, kv]);
+            push([ng + hav(nodes[v], T), v, nr, nGeo, nW, nN, nHot ? 1 : 0, nHold, kv]);
           }
         }
       }
@@ -213,7 +312,8 @@
   }
 
   // Load the region's road tiles and route an ordered stop list.
-  // veh is 'golf_cart' or 'lsv' (public/roadrule.js). Risky is off: no 500 ft cuts.
+  // veh is 'golf_cart' or 'lsv' (public/roadrule.js). Risky is off, so no stretch
+  // over SHORT_LEGAL_FT. A faster-road jog at or under that length is legal.
   async function openRegion(region, rules, veh, fetchImpl) {
     const fetchFn = fetchImpl || fetch;
     const base = '/data/' + region.id + '/';
@@ -274,7 +374,7 @@
     return { legs, rule, veh: rule.veh, cover: ensure, segments: () => D.segs, roadStyle };
   }
 
-  const api = { G, RISKY_MAX, UNKW, GAP_MAX_M, hav, len, create, geometry, bucketize, routePair, tilesIn, openRegion };
+  const api = { G, RISKY_MAX, SHORT_LEGAL_FT, UNKW, GAP_MAX_M, hav, len, shownFeet, explicitBan, riskyMask, create, geometry, bucketize, routePair, tilesIn, openRegion };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMRouter = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
