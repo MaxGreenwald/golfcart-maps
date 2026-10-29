@@ -12,14 +12,16 @@ Usage:
   scripts/verify_live --only test_road_labels  # one suite
 
 Prints one PASS/FAIL summary line with git commit and America/Los_Angeles time.
-scripts/deploy_web.sh production runs this against https://golfcartmap.com and appends
-one line (time PT, commit, Max OK ref, PASS or FAIL) to $GCM_BOT_LOG
-(default /workspace/gcm/bot-log.md). See AGENTS.md rule 22.
+A suite fails when its process exits non-zero, or when it exits 0 but a RESULT
+line lists failures. scripts/deploy_web.sh production runs this against
+https://golfcartmap.com and appends one line (time PT, commit, Max OK ref, PASS or FAIL)
+to $GCM_BOT_LOG (default /workspace/gcm/bot-log.md). See AGENTS.md rule 22.
 """
 from __future__ import annotations
 
 import argparse
 import os
+import re
 import subprocess
 import sys
 import time
@@ -48,6 +50,27 @@ SUITES = [
     ("test_islands_ui", "scripts/test_islands_ui.py", "map"),
     ("test_regions", "scripts/test_regions.py", "map"),
 ]
+
+
+def result_line_lists_failures(output: str) -> bool:
+    """True when a RESULT line reports failed checks.
+
+    Exit code 0 is not enough. scripts/test_regions.py used to print
+    'RESULT 1 FAIL: ...' and still exit 0, and a production verify_live then
+    logged PASS. 'RESULT ALL PASS' does not contain the word FAIL.
+    """
+    for raw in (output or "").splitlines():
+        line = raw.strip()
+        if line.startswith("RESULT") and re.search(r"\bFAIL\b", line):
+            return True
+    return False
+
+
+def suite_passed(returncode: int, output: str) -> bool:
+    """A suite passes only when it exits 0 and no RESULT line lists failures."""
+    if returncode != 0:
+        return False
+    return not result_line_lists_failures(output)
 
 
 def git_commit() -> str:
@@ -91,11 +114,13 @@ def run_suite(name: str, script: str, kind: str, base: str, shots: str) -> tuple
         return False, f"TIMEOUT after {os.environ.get('VERIFY_LIVE_SUITE_TIMEOUT', '900')}s"
     dt = time.time() - t0
     out = (r.stdout or "") + ("\n" + r.stderr if r.stderr else "")
-    # Prefer the script's own RESULT/ALL PASS line; else exit code
-    ok = r.returncode == 0
-    # test_layout historically prints without exiting non-zero on soft issues; trust exit code
+    # Exit code 0 used to hide a RESULT line that listed failures (test_regions).
+    ok = suite_passed(r.returncode, out)
+    note = f"exit={r.returncode}"
+    if r.returncode == 0 and result_line_lists_failures(out):
+        note = "exit=0 but RESULT lists FAIL"
     tail = "\n".join(out.strip().splitlines()[-8:])
-    return ok, f"exit={r.returncode} {dt:.0f}s\n{tail}"
+    return ok, f"{note} {dt:.0f}s\n{tail}"
 
 
 def main() -> int:

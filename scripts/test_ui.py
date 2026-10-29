@@ -2,13 +2,11 @@
 from playwright.sync_api import sync_playwright
 import os as _os; SHOTS_DIR = _os.environ.get("SHOTS_DIR", "/workspace/golfcart-maps/")
 import os
+from _check import ck, fail, finish
 URL=os.environ.get("URL","http://localhost:8765/")
-fails=[]
-def ck(name,cond,extra=""):
-    print(("PASS " if cond else "FAIL ")+name,extra); cond or fails.append(name)
 with sync_playwright() as p:
     b=p.chromium.launch();ctx=b.new_context(**p.devices["iPhone 13"],geolocation={"latitude":32.8506,"longitude":-117.2717},permissions=["geolocation"]);pg=ctx.new_page()
-    pg.on("pageerror",lambda e:fails.append("js error "+str(e)))
+    pg.on("pageerror",lambda e:fail("js error "+str(e)))
     pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000);pg.wait_for_timeout(500)
     S=lambda:pg.evaluate("getState()")
     def tap_ll(lat,lng):
@@ -68,6 +66,4 @@ with sync_playwright() as p:
     ck("testRoute rejects Mexico",pg.evaluate("testRoute([32.58,-117.11],[32.52,-117.11])") is None)
     pg.click("#reset");pg.evaluate("setSnap('half');0");pg.click("#q");pg.wait_for_timeout(300)
     pg.screenshot(path=SHOTS_DIR+"screenshot-fields.png")
-    print("RESULT", "ALL PASS" if not fails else f"{len(fails)} FAIL: {fails}")
-
-import sys as _sys; _sys.exit(1 if fails else 0)
+finish()

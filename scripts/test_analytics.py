@@ -6,9 +6,8 @@ platform 'carplay' and reject unknown events; GPC / Do Not Track / local opt-out
 free text in any payload."""
 from playwright.sync_api import sync_playwright
 import json, os, re
+from _check import ck, fail, finish
 URL = os.environ.get("URL", "http://localhost:8765/").rstrip("/") + "/"
-fails = []
-def ck(n, c, x=""): print(("PASS " if c else "FAIL ") + n, x if not c else ""); c or fails.append(n)
 # webdriver is true under Playwright. Production treats that as e2e and does not send.
 # This run is the real-user path, so force webdriver off. The e2e cases below turn it back on.
 SINK = "window.GCM_TRACK_SINK=()=>{};try{Object.defineProperty(navigator,'webdriver',{configurable:true,get:()=>false})}catch(e){}"
@@ -21,7 +20,7 @@ with sync_playwright() as p:
         launch["args"] = ["--no-sandbox", "--disable-dev-shm-usage"]
     b = p.chromium.launch(**launch)
     c = b.new_context(geolocation={"latitude": A[0], "longitude": A[1]}, permissions=["geolocation"], viewport={"width": 1200, "height": 900})
-    pg = c.new_page(); pg.add_init_script(SINK); pg.on("pageerror", lambda e: fails.append("js " + str(e)))
+    pg = c.new_page(); pg.add_init_script(SINK); pg.on("pageerror", lambda e: fail("js " + str(e)))
     pg.goto(URL + "?utm_source=Nextdoor&utm_medium=paid_social&utm_campaign=dm1018", referer="https://www.google.com/search?q=golf+cart+map")
     pg.wait_for_function("window.ready===true", timeout=120000); pg.wait_for_timeout(800)
     e = ev(pg); names = [x["e"] for x in e]
@@ -93,4 +92,4 @@ with sync_playwright() as p:
         ck(f"{label}: marked {want} and not sent", bool(got) and all(x.get("internal") == want for x in got) and pg.evaluate("window.__beacons") == [], (got[:2], pg.evaluate("window.__beacons")))
         c.close()
     b.close()
-print("FAILS:", fails) if fails else print("RESULT ALL PASS"); raise SystemExit(1 if fails else 0)
+finish()

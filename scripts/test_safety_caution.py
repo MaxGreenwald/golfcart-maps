@@ -3,8 +3,8 @@ Jan 2025 photos; San Fernando-Santa Clara stretch) and Lomas Santa Fe Dr at Hwy 
 dashed orange line, a "Check posted signs" popup line and a route-step warning. Unlike the Del Mar advisory they don't expire."""
 from playwright.sync_api import sync_playwright
 import os
-URL = os.environ.get("URL", "http://localhost:8765/"); fails = []
-def ck(n, c, x=""): print(("PASS " if c else "FAIL ") + n, x); c or fails.append(n)
+from _check import ck, fail, finish
+URL = os.environ.get("URL", "http://localhost:8765/")
 POP = """(async(name,lat,lon)=>{await ensure(lat-0.02,lon-0.02,lat+0.02,lon+0.02);let s=null,bd=1;for(const x of D.segs){if(!x||D.names[x[0]]!==name||x[3]!=='v')continue;const d=Math.abs(x[7][0][1]-lat)+Math.abs(x[7][0][0]-lon);if(d<bd){bd=d;s=x}}if(!s||bd>0.003)return 'NO SEG';const q=s[7][0];
  map.setView([q[1],q[0]],18);await new Promise(r=>setTimeout(r,1200));let pl=null;layer.eachLayer(g=>{(g.eachLayer?g:{eachLayer:f=>f(g)}).eachLayer(l=>{const A=l.getLatLngs&&l.getLatLngs(),ll=A&&A[0],lz=A&&A[A.length-1],z=s[7][s[7].length-1];if(ll&&Math.abs(ll.lat-q[1])<1e-6&&Math.abs(ll.lng-q[0])<1e-6&&Math.abs(lz.lat-z[1])<1e-6&&Math.abs(lz.lng-z[0])<1e-6)pl=l})});
  if(!pl)return 'NO LINE';pl.fire('click',{latlng:L.latLng(q[1],q[0])});await new Promise(r=>setTimeout(r,200));return {txt:(document.querySelector('.leaflet-popup-content')||{}).innerText||'',dash:pl.options.dashArray||'',color:pl.options.color,mph:s[2]}})"""
@@ -19,7 +19,7 @@ for today in ("2026-10-18", "2026-11-19"):   # cautions must survive the Del Mar
     with sync_playwright() as p:
         b = p.chromium.launch(); pg = b.new_page(viewport={"width": 1200, "height": 900})
         pg.add_init_script(f"window.NO_TRACK=1;window.GCM_TODAY='{today}'")
-        pg.on("pageerror", lambda e: fails.append("js " + str(e)))
+        pg.on("pageerror", lambda e: fail("js " + str(e)))
         pg.goto(URL); pg.wait_for_function("window.ready===true", timeout=120000); pg.wait_for_timeout(800)
         for name, lat, lon, mph, frag in CASES:
             v = pg.evaluate(POP + f"('{name}',{lat},{lon})")
@@ -37,4 +37,4 @@ for today in ("2026-10-18", "2026-11-19"):   # cautions must survive the Del Mar
         ck(f"{today} route summary flags it", "posted signs may not match our data" in sub, sub)
         ck(f"{today} no Del Mar text on this route", "Nov 19, 2026" not in sub)
         b.close()
-print("FAILS:", fails) if fails else print("ALL PASS"); raise SystemExit(1 if fails else 0)
+finish()
