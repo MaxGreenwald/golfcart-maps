@@ -110,6 +110,7 @@ BROWSER_KEPT = (
     "python scripts/test_sv_label.py",
     "python scripts/test_trusted_osm_ui.py",
     "python -m unittest tests.test_partner_brand_color -v",
+    "python -m unittest tests.test_partner_experience_stops -v",
     "actions/upload-artifact@v4",
 )
 

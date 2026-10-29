@@ -141,6 +141,8 @@ function stopRowHtml(s = {}, i = 0) {
   const has = Number.isFinite(numCoord(s.lat)) && Number.isFinite(numCoord(s.lon));
   return `<div class="stop" data-i="${i}">
     <div>
+      <label>Stop name</label>
+      <input data-k="name" placeholder="Name renters see" value="${esc(s.label || '')}">
       <div class="mode-row">
         <button type="button" class="btn alt modeSearch on">Search place</button>
         <button type="button" class="btn alt modePin">Drop pin</button>
@@ -161,9 +163,14 @@ function stopRowHtml(s = {}, i = 0) {
       <input type="hidden" data-k="lat" value="${esc(s.lat ?? '')}">
       <input type="hidden" data-k="lon" value="${esc(s.lon ?? '')}">
       ${pickedLine(s.lat, s.lon, s.label)}
-      <input data-k="note" placeholder="Note (optional)" value="${esc(s.note || '')}" style="margin-top:6px">
+      <label>Note (optional)</label>
+      <input data-k="note" placeholder="What to do here" value="${esc(s.note || '')}">
     </div>
-    <button class="btn alt remStop" type="button">✕</button>
+    <div class="stop-actions">
+      <button type="button" class="btn alt moveUp">Move up</button>
+      <button type="button" class="btn alt moveDown">Move down</button>
+      <button class="btn alt remStop" type="button" aria-label="Remove stop">✕</button>
+    </div>
   </div>`;
 }
 
@@ -171,6 +178,7 @@ function stopEditor(stops) {
   const rows = (stops && stops.length ? stops : [{}]).map((s, i) => stopRowHtml(s, i)).join('');
   return `<div class="stops" id="stopList">${rows}</div>
     <p class="muted">Places via Photon / OpenStreetMap. Or drop a pin and type your own name for unofficial spots.</p>
+    <p class="muted">Move up and Move down set the order. Save to keep it.</p>
     <p><button class="btn alt" id="addStop" type="button">Add stop</button></p>`;
 }
 
@@ -229,8 +237,11 @@ function shopView() {
   const s = b.shop;
   const exRows = (b.experiences || []).map(e => `<tr>
     <td><b>${esc(e.title)}</b><div class="muted">${esc(e.description || '')}</div>
-      <div class="muted">${(e.stops || []).map((x, i) => `${i + 1}. ${esc(x.label)}`).join(' · ') || 'No stops'}</div></td>
-    <td><button class="btn warn" data-del-ex="${esc(e.id)}" type="button">Delete</button></td>
+      <div class="muted ex-stops">${stopsLine(e.stops)}</div></td>
+    <td><div class="ex-actions">
+      <button class="btn alt" data-edit-ex="${esc(e.id)}" type="button">Edit</button>
+      <button class="btn warn" data-del-ex="${esc(e.id)}" type="button">Delete</button>
+    </div></td>
   </tr>`).join('') || '<tr><td colspan="2" class="muted">No experiences yet.</td></tr>';
   const afRows = (b.affiliates || []).map(a => `<tr>
     <td><b>${esc(a.name)}</b><div class="muted">${esc(a.offer || '')}</div>
@@ -260,11 +271,16 @@ function shopView() {
     <p style="margin-top:12px"><button class="btn" id="saveBrand" type="button">Save brand</button></p>
   </div>
   <div class="card"><h2>Experiences</h2>
-    <p class="muted">Ordered joyride stops. Search a place or drop a pin and name it yourself.</p>
+    <p class="muted">Ordered joyride stops. Search a place or drop a pin and name it yourself. Edit an experience to change a stop or its order.</p>
+    <p class="muted hidden" id="exEditing">Editing this experience. Save changes keeps the stops and their order.</p>
+    <input type="hidden" id="exId" value="">
     <label>Title</label><input id="exTitle" placeholder="La Jolla seals joyride">
     <label>Description</label><textarea id="exDesc" placeholder="A 45-minute coastal loop"></textarea>
     <label>Stops</label>${stopEditor([{}])}
-    <p><button class="btn" id="addEx" type="button">Add experience</button></p>
+    <p>
+      <button class="btn" id="addEx" type="button">Add experience</button>
+      <button class="btn alt hidden" id="cancelEx" type="button">Cancel</button>
+    </p>
     <table><thead><tr><th>Experience</th><th></th></tr></thead><tbody>${exRows}</tbody></table>
   </div>
   <div class="card af-place"><h2>Affiliate offers</h2>
@@ -481,6 +497,50 @@ function ensurePinMap(el, latRaw, lonRaw, onMove) {
   return el._gcmMap;
 }
 
+/** Copy a typed stop name into the hidden label and the search box. Assigning the search value does not fire input, so a rename does not start a place lookup. */
+function mirrorStopName(row, text, source) {
+  const shown = String(text ?? '');
+  const trimmed = shown.trim();
+  const label = $('[data-k=label]', row);
+  const nameEl = $('[data-k=name]', row);
+  const custom = $('[data-k=custom]', row);
+  const q = $('[data-k=q]', row);
+  if (label) label.value = trimmed;
+  if (source !== 'name' && nameEl && document.activeElement !== nameEl) nameEl.value = shown;
+  if (source !== 'custom' && custom && document.activeElement !== custom) custom.value = shown;
+  // Setting the value does not fire input, so the search box can mirror the name without a lookup.
+  if (q && (source === 'pick' || document.activeElement !== q)) q.value = trimmed;
+  return trimmed;
+}
+
+function refreshMoveButtons() {
+  const rows = [...document.querySelectorAll('#stopList .stop')];
+  rows.forEach((row, i) => {
+    const up = $('.moveUp', row);
+    const down = $('.moveDown', row);
+    if (up) up.disabled = i === 0;
+    if (down) down.disabled = i === rows.length - 1;
+    row.dataset.i = String(i);
+  });
+}
+
+function moveStop(row, dir) {
+  const list = row.parentElement;
+  if (!list) return;
+  if (dir < 0) {
+    const prev = row.previousElementSibling;
+    if (!prev) return;
+    list.insertBefore(row, prev);
+  } else {
+    const next = row.nextElementSibling;
+    if (!next) return;
+    list.insertBefore(next, row);
+  }
+  refreshMoveButtons();
+  const mapEl = $('[data-k=pinmap]', row);
+  if (mapEl && mapEl._gcmMap && mapEl._gcmMap.invalidateSize) mapEl._gcmMap.invalidateSize();
+}
+
 function wireStop(row) {
   const searchBox = $('.place-search', row);
   const pinBox = $('.place-pin', row);
@@ -489,6 +549,7 @@ function wireStop(row) {
   const q = $('[data-k=q]', row);
   const sugg = $('[data-k=sugg]', row);
   const custom = $('[data-k=custom]', row);
+  const nameEl = $('[data-k=name]', row);
   const pinmap = $('[data-k=pinmap]', row);
   const show = mode => {
     const pin = mode === 'pin';
@@ -498,25 +559,39 @@ function wireStop(row) {
     btnPin.classList.toggle('on', pin);
     if (pin) {
       ensurePinMap(pinmap, $('[data-k=lat]', row).value, $('[data-k=lon]', row).value, (lat, lon) => {
-        const name = (custom.value || $('[data-k=label]', row).value || 'Custom stop').trim();
+        const typed = (custom.value || (nameEl && nameEl.value) || '').trim();
+        const name = (typed || $('[data-k=label]', row).value || 'Custom stop').trim();
         setPicked(row, lat, lon, name);
-        if (custom.value.trim()) $('[data-k=label]', row).value = custom.value.trim();
+        if (typed) mirrorStopName(row, typed, 'pin');
       });
     }
   };
   btnSearch.onclick = () => show('search');
   btnPin.onclick = () => show('pin');
   wireSearchInput(q, sugg, x => {
-    q.value = x.name;
+    mirrorStopName(row, x.name, 'pick');
     setPicked(row, x.lat, x.lon, x.name);
   });
-  custom.addEventListener('input', () => {
+  if (nameEl) nameEl.addEventListener('input', () => {
+    const text = nameEl.value.trim();
+    mirrorStopName(row, nameEl.value, 'name');
     const lat = numCoord($('[data-k=lat]', row).value);
     const lon = numCoord($('[data-k=lon]', row).value);
-    if (Number.isFinite(lat) && Number.isFinite(lon)) setPicked(row, lat, lon, custom.value.trim() || 'Custom stop');
-    $('[data-k=label]', row).value = custom.value.trim();
+    if (Number.isFinite(lat) && Number.isFinite(lon) && text) setPicked(row, lat, lon, text);
   });
-  $('.remStop', row).onclick = () => row.remove();
+  custom.addEventListener('input', () => {
+    const text = custom.value.trim();
+    const lat = numCoord($('[data-k=lat]', row).value);
+    const lon = numCoord($('[data-k=lon]', row).value);
+    if (Number.isFinite(lat) && Number.isFinite(lon)) setPicked(row, lat, lon, text || 'Custom stop');
+    mirrorStopName(row, custom.value, 'custom');
+  });
+  $('.remStop', row).onclick = () => { row.remove(); refreshMoveButtons(); };
+  const up = $('.moveUp', row);
+  const down = $('.moveDown', row);
+  if (up) up.onclick = () => moveStop(row, -1);
+  if (down) down.onclick = () => moveStop(row, 1);
+  refreshMoveButtons();
 }
 
 function wireAffiliatePicker() {
@@ -571,13 +646,64 @@ function render() {
   bindApp();
 }
 
+function stopsLine(stops) {
+  const parts = (stops || []).map((x, i) => {
+    const note = x.note ? ` (${esc(x.note)})` : '';
+    return `${i + 1}. ${esc(x.label || 'Stop')}${note}`;
+  });
+  return parts.join(' · ') || 'No stops';
+}
+
 function readStops() {
-  return [...document.querySelectorAll('#stopList .stop')].map(row => ({
-    label: $('[data-k=label]', row).value.trim(),
-    lat: +$('[data-k=lat]', row).value,
-    lon: +$('[data-k=lon]', row).value,
-    note: $('[data-k=note]', row).value.trim(),
-  })).filter(s => s.label && Number.isFinite(s.lat) && Number.isFinite(s.lon));
+  return [...document.querySelectorAll('#stopList .stop')].map(row => {
+    const named = ($('[data-k=name]', row) && $('[data-k=name]', row).value.trim()) || '';
+    const hidden = ($('[data-k=label]', row) && $('[data-k=label]', row).value.trim()) || '';
+    return {
+      label: named || hidden,
+      lat: +$('[data-k=lat]', row).value,
+      lon: +$('[data-k=lon]', row).value,
+      note: $('[data-k=note]', row).value.trim(),
+    };
+  }).filter(s => s.label && Number.isFinite(s.lat) && Number.isFinite(s.lon));
+}
+
+function setExperienceMode(editing) {
+  const btn = $('#addEx');
+  const cancel = $('#cancelEx');
+  const note = $('#exEditing');
+  if (btn) btn.textContent = editing ? 'Save changes' : 'Add experience';
+  if (cancel) cancel.classList.toggle('hidden', !editing);
+  if (note) note.classList.toggle('hidden', !editing);
+}
+
+function fillStopList(stops) {
+  const list = $('#stopList');
+  if (!list) return;
+  const rows = (stops && stops.length ? stops : [{}]);
+  list.innerHTML = rows.map((s, i) => stopRowHtml(s, i)).join('');
+  list.querySelectorAll('.stop').forEach(wireStop);
+  refreshMoveButtons();
+}
+
+function loadExperience(ex) {
+  const idEl = $('#exId');
+  if (!idEl || !ex) return;
+  idEl.value = ex.id || '';
+  $('#exTitle').value = ex.title || '';
+  $('#exDesc').value = ex.description || '';
+  fillStopList(ex.stops || []);
+  setExperienceMode(true);
+  const title = $('#exTitle');
+  if (title && title.scrollIntoView) title.scrollIntoView({ block: 'start' });
+}
+
+function resetExperienceForm() {
+  const idEl = $('#exId');
+  if (idEl) idEl.value = '';
+  if ($('#exTitle')) $('#exTitle').value = '';
+  if ($('#exDesc')) $('#exDesc').value = '';
+  fillStopList([{}]);
+  setExperienceMode(false);
 }
 
 function syncBrandColorReadout() {
@@ -695,15 +821,28 @@ function bindApp() {
     try {
       const stops = readStops();
       if (!stops.length) throw new Error('Add at least one stop (search a place or drop a pin)');
-      await api('/shop/experiences', { method: 'POST', body: JSON.stringify({
+      const body = {
         title: $('#exTitle').value.trim(),
         description: $('#exDesc').value,
         stops,
-      }) });
-      flash(true, 'Experience added');
+      };
+      const eid = ($('#exId') && $('#exId').value) || '';
+      if (eid) {
+        await api('/shop/experiences/' + eid, { method: 'PATCH', body: JSON.stringify(body) });
+        flash(true, 'Experience saved');
+      } else {
+        await api('/shop/experiences', { method: 'POST', body: JSON.stringify(body) });
+        flash(true, 'Experience added');
+      }
       await refreshShop();
     } catch (e) { flash(false, e.message); }
   };
+  const cancelEx = $('#cancelEx');
+  if (cancelEx) cancelEx.onclick = () => resetExperienceForm();
+  document.querySelectorAll('[data-edit-ex]').forEach(b => b.onclick = () => {
+    const ex = ((state.shopBundle && state.shopBundle.experiences) || []).find(e => e.id === b.dataset.editEx);
+    if (ex) loadExperience(ex);
+  });
   document.querySelectorAll('[data-del-ex]').forEach(b => b.onclick = async () => {
     if (!confirm('Delete this experience?')) return;
     try { await api('/shop/experiences/' + b.dataset.delEx, { method: 'DELETE' }); await refreshShop(); }

@@ -34,8 +34,13 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 .pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#e3f6f8;color:var(--deep);font-size:12px}
 .pill.off{background:#fee2e2;color:var(--bad)}
 .stops{border:1px dashed var(--line);border-radius:12px;padding:10px;margin-top:8px}
-.stop{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.stop{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
 .stop:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+.stop > div:first-child{min-width:0}
+.stop-actions{display:flex;flex-direction:column;gap:6px}
+.stop-actions .btn{width:auto;padding:8px 10px;font-size:13px}
+.ex-actions{display:flex;gap:6px;flex-wrap:wrap}
+.ex-actions .btn{width:auto}
 .place-wrap{position:relative;flex:1;min-width:0}
 .place-wrap input[data-k=q]{width:100%}
 .sugg{display:none;position:absolute;left:0;right:0;top:100%;z-index:40;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px #0b3c5020;max-height:220px;overflow:auto;margin-top:4px}
