@@ -183,7 +183,38 @@ function stopEditor(stops) {
   return `<div class="stops" id="stopList">${rows}</div>
     <p class="muted">Places via Photon / OpenStreetMap. Or drop a pin and type your own name for unofficial spots.</p>
     <p class="muted">Move up and Move down set the order. Save to keep it.</p>
-    <p><button class="btn alt" id="addStop" type="button">Add stop</button></p>`;
+    <p><button class="btn alt" id="addStop" type="button">Add stop</button>
+      ${placeOptions() ? `<select id="addPlaceStop" aria-label="Add one of your places as a stop"><option value="">+ Add one of your places…</option>${placeOptions()}</select>` : ''}</p>`;
+}
+
+const PLACE_CATS = [['restaurant', 'Restaurant', '🍽️'], ['views', 'Views', '🌅'], ['trivia', 'Trivia', '❓'], ['fun_fact', 'Fun fact', '💡'], ['other', 'Other', '📍']];
+const placeCat = c => PLACE_CATS.find(x => x[0] === c) || PLACE_CATS[4];
+function shopPlaces() { return (state.shopBundle && state.shopBundle.places) || []; }
+function placeOptions() {
+  return shopPlaces().map(p => `<option value="${esc(p.id)}">${placeCat(p.category)[2]} ${esc(p.name)}</option>`).join('');
+}
+function placesCard() {
+  const rows = shopPlaces().map(p => `<tr>
+    <td><b>${placeCat(p.category)[2]} ${esc(p.name)}</b> <span class="pill">${esc(placeCat(p.category)[1])}</span>
+      <div class="muted">${esc(p.note || '')}</div>
+      <div class="muted">${(+p.lat).toFixed(5)}, ${(+p.lon).toFixed(5)}${p.link ? ` · <a href="${esc(p.link)}" target="_blank" rel="noopener">link</a>` : ''}</div></td>
+    <td><div class="ex-actions">
+      <button class="btn alt" data-edit-place="${esc(p.id)}" type="button">Edit</button>
+      <button class="btn warn" data-del-place="${esc(p.id)}" type="button">Delete</button>
+    </div></td>
+  </tr>`).join('') || '<tr><td colspan="2" class="muted">No places yet.</td></tr>';
+  return `<div class="card" id="placesCard"><h2>Places of interest</h2>
+    <p class="muted">Spots to point out: food, views, trivia, fun facts. No discount code. They show on your renter map, and you can add them to an experience as a stop.</p>
+    <p class="muted hidden" id="placeEditing">Editing this place.</p>
+    <input type="hidden" id="placeId" value="">
+    <label for="placeCat">Category</label>
+    <select id="placeCat">${PLACE_CATS.map(c => `<option value="${c[0]}">${c[2]} ${c[1]}</option>`).join('')}</select>
+    <div id="placeRow">${stopRowHtml({}, 0)}</div>
+    <label for="placeLink">Link (optional)</label><input id="placeLink" placeholder="https://…">
+    <p><button class="btn" id="savePlace" type="button">Add place</button>
+      <button class="btn alt hidden" id="cancelPlace" type="button">Cancel</button></p>
+    <table><thead><tr><th>Place</th><th></th></tr></thead><tbody>${rows}</tbody></table>
+  </div>`;
 }
 
 function loginView() {
@@ -294,6 +325,7 @@ function shopView() {
     </p>
     <table><thead><tr><th>Experience</th><th></th></tr></thead><tbody>${exRows}</tbody></table>
   </div>
+  ${placesCard()}
   <div class="card af-place"><h2>Affiliate offers</h2>
     <p class="muted">Restaurants and deals for your renters. Larger ★ pins on the map.</p>
     <p class="muted hidden" id="afEditing">Editing this offer. Search or drop a pin to move it.</p>
@@ -619,6 +651,67 @@ function wireStop(row) {
   refreshMoveButtons();
 }
 
+function wirePlaces() {
+  const row = $('#placeRow .stop');
+  if (!row) return;
+  wireStop(row);
+  $('label', row).textContent = 'Place name';
+  [...row.querySelectorAll('label')].find(l => /Note/.test(l.textContent)).textContent = 'Note renters read (trivia, fun fact, what to look for)';
+  $('[data-k=note]', row).placeholder = 'e.g. This pier was built in 1925';
+  const sel = $('#addPlaceStop');
+  if (sel) sel.onchange = () => {
+    const p = shopPlaces().find(x => x.id === sel.value);
+    sel.value = '';
+    if (!p) return;
+    const list = $('#stopList');
+    // Fill an empty first row, else append.
+    const blank = [...list.querySelectorAll('.stop')].find(r => !$('[data-k=lat]', r).value);
+    const wrap = document.createElement('div');
+    wrap.innerHTML = stopRowHtml({ label: p.name, lat: p.lat, lon: p.lon, note: p.note }, list.children.length);
+    const nr = wrap.firstElementChild;
+    if (blank) list.replaceChild(nr, blank); else list.appendChild(nr);
+    wireStop(nr);
+    refreshMoveButtons();
+  };
+  const fill = p => {
+    $('#placeId').value = p ? p.id : '';
+    $('#placeCat').value = p ? p.category : 'restaurant';
+    $('#placeLink').value = p ? (p.link || '') : '';
+    const wrap = document.createElement('div');
+    wrap.innerHTML = stopRowHtml(p ? { label: p.name, lat: p.lat, lon: p.lon, note: p.note } : {}, 0);
+    $('#placeRow').replaceChildren(wrap.firstElementChild);
+    $('#placeEditing').classList.toggle('hidden', !p);
+    $('#cancelPlace').classList.toggle('hidden', !p);
+    $('#savePlace').textContent = p ? 'Save place' : 'Add place';
+    wirePlaces();
+  };
+  document.querySelectorAll('[data-edit-place]').forEach(b => b.onclick = () => {
+    fill(shopPlaces().find(x => x.id === b.dataset.editPlace));
+    $('#placesCard').scrollIntoView({ block: 'start' });
+  });
+  $('#cancelPlace').onclick = () => fill(null);
+  $('#savePlace').onclick = async () => {
+    try {
+      const r = $('#placeRow .stop');
+      const name = (($('[data-k=name]', r).value || $('[data-k=label]', r).value) || '').trim();
+      const lat = numCoord($('[data-k=lat]', r).value), lon = numCoord($('[data-k=lon]', r).value);
+      if (!name) throw new Error('Name the place');
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) throw new Error('Pick a place (search or drop a pin)');
+      const body = { name, category: $('#placeCat').value, lat, lon, note: $('[data-k=note]', r).value.trim(), link: $('#placeLink').value.trim() };
+      const pid = $('#placeId').value;
+      if (pid) await api('/shop/places/' + pid, { method: 'PATCH', body: JSON.stringify(body) });
+      else await api('/shop/places', { method: 'POST', body: JSON.stringify(body) });
+      flash(true, pid ? 'Place saved' : 'Place added');
+      await refreshShop();
+    } catch (e) { flash(false, e.message); }
+  };
+  document.querySelectorAll('[data-del-place]').forEach(b => b.onclick = async () => {
+    if (!confirm('Delete this place?')) return;
+    try { await api('/shop/places/' + b.dataset.delPlace, { method: 'DELETE' }); await refreshShop(); }
+    catch (e) { flash(false, e.message); }
+  });
+}
+
 function wireAffiliatePicker() {
   const searchBox = $('#afSearch');
   const pinBox = $('#afPin');
@@ -858,6 +951,7 @@ function bindApp() {
   };
 
   wireAffiliatePicker();
+  wirePlaces();
 
   const addEx = $('#addEx');
   if (addEx) addEx.onclick = async () => {
