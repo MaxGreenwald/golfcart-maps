@@ -124,7 +124,8 @@ class Places(unittest.TestCase):
             pg.select_option("#placeCat", "fun_fact")
             pg.locator("#placeRow [data-k=note]").fill("Rebuilt in 1987")
             pg.click("#savePlace")
-            pg.wait_for_selector(".msg.ok")
+            # flash() fires before refreshShop() re-renders; wait for the re-render, not the message.
+            pg.wait_for_function("document.querySelector('#placesCard').innerText.includes('Rebuilt in 1987') && document.querySelector('#placeId').value === ''")
             self.assertEqual((places[0]["category"], places[0]["note"], places[0]["lat"]), ("fun_fact", "Rebuilt in 1987", 32.85))
             # Use a place as an experience stop.
             pg.select_option("#addPlaceStop", "p2")
