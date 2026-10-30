@@ -263,6 +263,12 @@ function shopView() {
   <div class="card"><h2>Brand</h2>
     <label>Display name</label><input id="brandName" value="${esc(s.name)}">
     <label>City / region</label><select id="brandRegion">${regionOptions(s.region_id || 'sd')}</select>
+    <label for="brandVehicle">Your rental vehicles</label>
+    <select id="brandVehicle" aria-describedby="brandVehicleHint">
+      <option value="lsv"${s.vehicle === 'lsv' ? ' selected' : ''}>Street-legal LSV (roads up to 35 mph)</option>
+      <option value="golf_cart"${s.vehicle !== 'lsv' ? ' selected' : ''}>Golf cart (roads up to 25 mph)</option>
+    </select>
+    <p class="muted" id="brandVehicleHint">Sets which roads show green and how routes run on your renter page.</p>
     <label>Short blurb</label><textarea id="brandBlurb">${esc(s.blurb || '')}</textarea>
     <div class="row">
       <div><label>Logo URL (optional)</label><input id="brandLogo" value="${esc(s.logo_url || '')}" placeholder="https://…"></div>
@@ -797,6 +803,7 @@ function bindApp() {
         blurb: $('#brandBlurb').value,
         logo_url: $('#brandLogo').value.trim(),
         color: $('#brandColor').value.trim(),
+        vehicle: $('#brandVehicle').value,
       }) });
       flash(true, 'Brand saved');
       await refreshShop();

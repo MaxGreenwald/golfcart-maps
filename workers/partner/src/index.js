@@ -1,7 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
-import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug } from '../../../lib/partner.js';
+import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, SHOP_VEHICLES, shopVehicle } from '../../../lib/partner.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -99,6 +99,9 @@ export class PartnerStore extends DurableObject {
       );
       CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY, v TEXT NOT NULL);
     `);
+    // Per-shop rental vehicle (road rules on /p/<slug>). Added Oct 29 2026.
+    const cols = this.sql.exec('PRAGMA table_info(shops)').toArray().map(c => c.name);
+    if (!cols.includes('vehicle')) this.sql.exec("ALTER TABLE shops ADD COLUMN vehicle TEXT DEFAULT ''");
   }
   q(s, ...a) { return this.sql.exec(s, ...a).toArray(); }
   one(s, ...a) { return this.q(s, ...a)[0] || null; }
@@ -109,6 +112,7 @@ export class PartnerStore extends DurableObject {
       id: r.id, slug: r.slug, name: r.name, region_id: r.region_id,
       blurb: r.blurb || '', logo_url: r.logo_url || '', color: r.color || '',
       owner_email: r.owner_email || '', disabled: !!r.disabled, created_at: r.created_at,
+      vehicle: shopVehicle(r.vehicle),
     };
   }
   expRow(r) {
@@ -162,9 +166,13 @@ export class PartnerStore extends DurableObject {
         const color = body.color != null ? String(body.color) : sh.color;
         const owner_email = body.owner_email != null ? String(body.owner_email).trim().toLowerCase() : sh.owner_email;
         const disabled = body.disabled != null ? (body.disabled ? 1 : 0) : sh.disabled;
+        if (body.vehicle != null && !SHOP_VEHICLES.includes(body.vehicle)) {
+          return J({ error: 'vehicle must be one of ' + SHOP_VEHICLES.join(', ') }, 400);
+        }
+        const vehicle = body.vehicle != null ? body.vehicle : (sh.vehicle || '');
         this.sql.exec(
-          'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=? WHERE id=?',
-          name, region_id, blurb, logo_url, color, owner_email, disabled, sid,
+          'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=? WHERE id=?',
+          name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, sid,
         );
         return J({ shop: this.shopRow(this.one('SELECT * FROM shops WHERE id=?', sid)) });
       }
