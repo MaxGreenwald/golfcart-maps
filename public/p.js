@@ -52,14 +52,55 @@ function setStartNote(text) {
   if (el) el.textContent = text;
 }
 
+// Max (Oct 29 2026): partner and renter maps can't be cached; they must have the latest map.
+// Every data request skips the HTTP cache. public/sw.js marks a copy it served offline with X-GCM-Offline.
+let roadStamp = '';
+function offlineNotice(on) {
+  let el = document.getElementById('mapStale');
+  if (!on) { if (el) el.hidden = true; return; }
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'mapStale';
+    el.setAttribute('role', 'status');
+    el.style.cssText = 'position:fixed;left:12px;right:12px;top:12px;z-index:9999;padding:10px 14px;border-radius:12px;background:#7a2e00;color:#fff;font:600 14px/1.3 system-ui,sans-serif;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.25)';
+    el.textContent = 'Offline, map may be outdated. Reconnect to load the latest roads.';
+    document.body.appendChild(el);
+  }
+  el.hidden = false;
+}
+async function freshFetch(url) {
+  let r;
+  try { r = await fetch(url, { cache: 'no-store' }); }
+  catch (e) { offlineNotice(true); throw e; }
+  offlineNotice(r.headers.get('X-GCM-Offline') === '1');
+  if (/\/index\.json$/.test(url) && r.ok) {
+    try { const m = (await r.clone().json()).meta || {}; roadStamp = `${m.generated}|${m.segments}|${m.ways}`; } catch (e) { /* keep old stamp */ }
+  }
+  return r;
+}
+// Re-check the road index when the page is opened again (tab focus, phone unlocked). New data: reload roads and redraw.
+async function recheckRoads() {
+  if (!region) return;
+  const before = roadStamp;
+  try { await freshFetch('/data/' + region.id + '/index.json'); } catch (e) { return; }
+  if (before && roadStamp && roadStamp !== before && roadApi) {
+    roadApi = null; roadKey = '';
+    try { await drawUnlocked(); } catch (e) { /* the next draw retries */ }
+  }
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') recheckRoads(); });
+addEventListener('focus', () => recheckRoads());
+addEventListener('pageshow', e => { if (e.persisted) recheckRoads(); });
+window.GCMPartnerFresh = { recheckRoads, stamp: () => roadStamp };
+
 async function loadRegions() {
   if (regions.length) return regions;
-  regions = await fetch('/data/regions.json').then(r => r.json());
+  regions = await freshFetch('/data/regions.json').then(r => r.json());
   return regions;
 }
 async function loadRules() {
   if (rules) return rules;
-  rules = await fetch('/data/rules.json').then(r => r.json());
+  rules = await freshFetch('/data/rules.json').then(r => r.json());
   return rules;
 }
 
@@ -418,7 +459,7 @@ function connectStops(stops) {
     const veh = shopVeh();
     const key = (region && region.id || 'sd') + ':' + veh;
     if (!roadApi || roadKey !== key) {
-      roadApi = await GCMRouter.openRegion(region, rules, veh);
+      roadApi = await GCMRouter.openRegion(region, rules, veh, freshFetch);
       roadKey = key;
     }
     return roadApi.legs(stops);
@@ -667,7 +708,7 @@ async function routeToStop(i, quiet) {
 let freeDest = null, freeRisky = false, freeMark = null, freeOn = false, freeTimer = 0, poiList = null;
 async function loadPois() {
   if (poiList) return poiList;
-  try { poiList = await fetch(`/data/${region.id}/pois.json`).then(r => r.json()); } catch (e) { poiList = []; }
+  try { poiList = await freshFetch(`/data/${region.id}/pois.json`).then(r => r.json()); } catch (e) { poiList = []; }
   return poiList;
 }
 async function searchPlaces(q) {
