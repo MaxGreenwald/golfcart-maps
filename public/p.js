@@ -471,7 +471,153 @@ nextBtn.onclick = () => {
   if (!guided || !stops || !stops.length) return;
   stopIdx = (stopIdx + 1) % stops.length;
   updateNext({ pan: true });
+  if (navWatch != null || navRoute) routeToStop(stopIdx);
 };
+
+
+// ---- Turn-by-turn (public/nav.js). Live GPS moves the banner; off route reroutes on legal roads.
+const ARROWS = { straight: '↑', 'slight right': '↗', right: '↱', 'sharp right': '↘', 'slight left': '↖', left: '↰', 'sharp left': '↙', arrive: '⚑' };
+let navRoute = null, navState = null, navStop = -1, navWatch = null, navSpoken = '', navRerouting = false, navArrived = false;
+let navMuted = (() => { try { return localStorage.getItem('gcm_nav_mute') === '1'; } catch (e) { return false; } })();
+function navEl() {
+  let el = document.getElementById('navBanner');
+  if (el) return el;
+  el = document.createElement('section');
+  el.id = 'navBanner';
+  el.setAttribute('aria-live', 'polite');
+  el.innerHTML = `<div class="nav-row"><span class="nav-arrow" id="navArrow" aria-hidden="true">↑</span>
+    <div class="nav-main"><b id="navText">Starting…</b><span id="navSub"></span></div>
+    <button type="button" id="navMute" class="nav-btn" aria-pressed="false"></button></div>
+    <div class="nav-acts"><button type="button" id="navListBtn" class="nav-link" aria-expanded="false">All steps</button>
+    <button type="button" id="navGo" class="nav-go" hidden></button></div>
+    <ol id="navSteps" hidden></ol>`;
+  document.body.appendChild(el);
+  el.querySelector('#navMute').onclick = () => {
+    navMuted = !navMuted;
+    try { localStorage.setItem('gcm_nav_mute', navMuted ? '1' : '0'); } catch (e) {}
+    if (navMuted && window.speechSynthesis) speechSynthesis.cancel();
+    paintMute();
+  };
+  el.querySelector('#navListBtn').onclick = () => {
+    const ol = el.querySelector('#navSteps'), b = el.querySelector('#navListBtn');
+    ol.hidden = !ol.hidden;
+    b.setAttribute('aria-expanded', ol.hidden ? 'false' : 'true');
+    b.textContent = ol.hidden ? 'All steps' : 'Hide steps';
+  };
+  paintMute();
+  return el;
+}
+function paintMute() {
+  const b = document.getElementById('navMute');
+  if (!b) return;
+  b.textContent = navMuted ? '🔇' : '🔊';
+  b.setAttribute('aria-pressed', navMuted ? 'true' : 'false');
+  b.setAttribute('aria-label', navMuted ? 'Unmute voice directions' : 'Mute voice directions');
+}
+function say(text) {
+  if (navMuted || !text || text === navSpoken) return;
+  navSpoken = text;
+  window.__navSaid = (window.__navSaid || []).concat(text);
+  try {
+    if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+  } catch (e) {}
+}
+// Read-only hook for browser tests (route points + steps).
+window.GCMNavDebug = () => navRoute && { pts: navRoute.pts, steps: navRoute.steps, stop: navStop };
+function stopNav() {
+  if (navWatch != null && navigator.geolocation) navigator.geolocation.clearWatch(navWatch);
+  navWatch = null; navRoute = null; navState = null; navStop = -1; navArrived = false;
+  const el = document.getElementById('navBanner');
+  if (el) el.classList.remove('show');
+  document.body.classList.remove('has-nav');
+}
+function beginNav(leg, i) {
+  const stops = activeEx && activeEx.stops;
+  const stop = stops && stops[i];
+  if (!stop || !leg || !leg.points || leg.points.length < 2) { stopNav(); return; }
+  const runs = leg.runs && leg.runs.length ? leg.runs : [{ name: '', points: leg.points }];
+  navRoute = GCMNav.buildSteps(runs, stop.label || `stop ${i + 1}`);
+  navStop = i; navState = null; navArrived = false; navSpoken = '';
+  const el = navEl();
+  el.classList.add('show');
+  document.body.classList.add('has-nav');
+  el.querySelector('#navGo').hidden = true;
+  el.querySelector('#navSteps').innerHTML = navRoute.steps.map(st =>
+    `<li><span class="nav-arrow sm" aria-hidden="true">${ARROWS[st.mod] || '↑'}</span><span>${esc(st.text)}</span><span class="muted">${st.kind === 'arrive' ? '' : GCMNav.fmtDist(st.len).replace('Now', '<50 ft')}</span></li>`).join('');
+  const first = navRoute.steps[0], second = navRoute.steps[1];
+  paintNav(ARROWS[first.mod], first.text, second ? `Then ${second.text.charAt(0).toLowerCase() + second.text.slice(1)} in ${GCMNav.fmtDist(second.at)}` : '');
+  say(first.text);
+  if (meLL) onNavFix({ lat: meLL.lat, lon: meLL.lon });
+  if (navWatch == null && navigator.geolocation && navigator.geolocation.watchPosition) {
+    navWatch = navigator.geolocation.watchPosition(
+      p => onNavFix({ lat: p.coords.latitude, lon: p.coords.longitude }),
+      () => {}, { enableHighAccuracy: true, maximumAge: 2000, timeout: 15000 });
+  }
+}
+function paintNav(arrow, text, sub) {
+  const el = navEl();
+  el.querySelector('#navArrow').textContent = arrow || '↑';
+  el.querySelector('#navText').textContent = text;
+  el.querySelector('#navSub').textContent = sub || '';
+}
+async function onNavFix(ll) {
+  if (!finite(ll.lat, ll.lon)) return;
+  meLL = ll;
+  placeMe();
+  if (!navRoute || navArrived || navRerouting) return;
+  const st = GCMNav.status(navRoute, [ll.lat, ll.lon], navState);
+  navState = st;
+  const stops = activeEx.stops;
+  if (st.arrived) {
+    navArrived = true;
+    const here = stops[navStop];
+    const nxt = stops.findIndex((s, k) => k > navStop && finite(s.lat, s.lon));
+    paintNav('⚑', `You’ve arrived at ${here.label || 'the stop'}`, nxt >= 0 ? `Next: stop ${nxt + 1}, ${stops[nxt].label || ''}` : 'That was the last stop. Nice ride!');
+    const go = navEl().querySelector('#navGo');
+    if (nxt >= 0) {
+      go.hidden = false;
+      go.textContent = `Go to stop ${nxt + 1}`;
+      go.onclick = () => routeToStop(nxt);
+    } else go.hidden = true;
+    say(`You’ve arrived at ${here.label || 'the stop'}.` + (nxt >= 0 ? ` Next stop: ${stops[nxt].label || ''}.` : ''));
+    return;
+  }
+  if (st.offRoute) {
+    navRerouting = true;
+    paintNav('↻', 'Rerouting on legal roads…', '');
+    say('Rerouting');
+    try { await routeToStop(navStop, true); } finally { navRerouting = false; }
+    return;
+  }
+  const after = navRoute.steps[st.idx + 1];
+  paintNav(ARROWS[st.next.mod], st.text,
+    (after ? `Then ${after.text.charAt(0).toLowerCase() + after.text.slice(1)} · ` : '') + `${GCMNav.fmtDist(st.remaining).replace('Now', 'under 50 ft')} to go`);
+  // Speak once per maneuver when it is near (≈400 ft), and again at the turn.
+  if (st.toNext < 120) say(st.toNext < 25 ? st.next.text : st.text);
+}
+// Route from the current position to stop i on legal roads, draw it, and guide.
+async function routeToStop(i, quiet) {
+  const stops = activeEx && activeEx.stops;
+  const stop = stops && stops[i];
+  if (!stop || !finite(stop.lat, stop.lon)) return;
+  stopIdx = i;
+  updateNext();
+  const from = meLL || (map && { lat: map.getCenter().lat, lon: map.getCenter().lng });
+  let legs = null;
+  try { legs = await connectStops([from, stop]); } catch (e) { legs = null; }
+  const leg = legs && legs[0];
+  if (liveLayer) liveLayer.clearLayers();
+  if (leg && leg.points && leg.points.length >= 2) {
+    addRouteLine(leg.points, liveLayer, leg.dashed);
+    if (!quiet) frameLatLngs(leg.points);
+    beginNav(leg, i);
+  } else {
+    paintNav('⚠', 'No legal golf cart road from here', `Follow the pin to stop ${i + 1}.`);
+    navRoute = null;
+  }
+}
 
 function locateMe() {
   if (!navigator.geolocation || !navigator.geolocation.getCurrentPosition) return Promise.resolve(null);
@@ -495,6 +641,7 @@ function locateMe() {
   });
 }
 function clearLiveRoute() {
+  stopNav();
   if (liveLayer) liveLayer.clearLayers();
   setStartNote('');
 }
@@ -554,6 +701,8 @@ async function startExperience() {
   if (drawn) frameLatLngs(leg.points);
   else panIntoView(L.latLng(+first.lat, +first.lon), 15);
   updateNext();
+  if (drawn) beginNav(leg, ((activeEx && activeEx.stops) || []).indexOf(first));
+  focusEx(true);
   scheduleRoads();
   if (btn) {
     btn.disabled = false;
@@ -569,6 +718,12 @@ function markActive(id) {
     const go = el.querySelector('.xgo');
     if (go) go.textContent = on ? 'Stops on the map' : 'Show stops';
   });
+}
+// Focus: once a renter picks a ride, the other rides fold away until "All experiences".
+function focusEx(on) {
+  document.body.classList.toggle('focus-ex', !!on && !!activeEx);
+  const b = document.getElementById('allEx');
+  if (b) b.hidden = !(on && activeEx);
 }
 function selectEx(id) {
   const ex = (unlocked && unlocked.experiences) || [];
@@ -601,6 +756,7 @@ async function unlockedView() {
         <p class="yay-kicker">You’re in</p>
         <p>Code <b>${esc(code)}</b> unlocked ${esc(shop.name)}. Pick a ride, then start from where you are.</p>
       </div>
+      <button class="allex" id="allEx" type="button" hidden>‹ All experiences</button>
       <h2 class="sec">Experiences</h2>
       <p class="subsec">Tap one. Its stops light up on the map.</p>
       ${ex.map((e, i) => `<button class="xcard" type="button" data-ex="${esc(e.id)}" aria-pressed="false">
@@ -609,19 +765,21 @@ async function unlockedView() {
         ${e.description ? `<span class="xdesc">${esc(e.description)}</span>` : ''}
         <span class="xgo">Show stops</span>
       </button>`).join('') || '<p class="fine">No rides pinned yet. Ask the shop — partner offers may still be on the map.</p>'}
-      <h2 class="sec">Partner offers</h2>
+      <div class="offers"><h2 class="sec">Partner offers</h2>
       ${af.map(a => `<button class="ocard" type="button" data-af="${esc(a.id)}">
         <span class="star" aria-hidden="true">★</span>
         <span><span class="xtitle">${esc(a.name)}</span><span class="xdesc">${esc(a.offer || 'Partner offer')}${a.coupon ? ` · coupon <code>${esc(a.coupon)}</code>` : ''}</span></span>
-      </button>`).join('') || '<p class="fine">No partner offers yet.</p>'}
+      </button>`).join('') || '<p class="fine">No partner offers yet.</p>'}</div>
       <p class="legend">Green roads are legal for a golf cart. Red roads are off limits. The blue line is your route.</p>
       <p class="legend">Numbered pins are stops. Amber ★ pins are partner offers.</p>
       <p class="legend" id="routeNote" aria-live="polite"></p>
     </div>
     ${ex.length ? `<div class="dock-foot"><button class="start" id="startEx" type="button">Start experience</button><p class="fine" id="startNote" aria-live="polite"></p></div>` : ''}`;
   panel.querySelectorAll('.xcard').forEach(el => {
-    el.onclick = () => selectEx(el.dataset.ex);
+    el.onclick = () => { selectEx(el.dataset.ex); focusEx(true); };
   });
+  const allBtn = document.getElementById('allEx');
+  if (allBtn) allBtn.onclick = () => focusEx(false);
   panel.querySelectorAll('.ocard').forEach(el => {
     el.onclick = () => {
       const hit = affMarks.find(a => a.id === el.dataset.af);

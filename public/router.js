@@ -267,6 +267,17 @@
     return ll;
   }
 
+  // One run per route part with its OSM street name (D.names[s[0]]), for turn-by-turn.
+  function namedRuns(D, parts) {
+    const names = D.names || [];
+    return parts.map(([si, rev]) => {
+      const s = D.segs[si];
+      let p = s[7];
+      if (rev) p = p.slice().reverse();
+      return { name: names[s[0]] || '', hw: s[1], points: p.map(pt => [pt[1], pt[0]]) };
+    });
+  }
+
   function bucketize(buckets, segs, from) {
     segs.slice(from).forEach((s, j) => {
       const i = from + j, p = s[7][0];
@@ -287,7 +298,7 @@
         parts = null;
       }
     }
-    if (parts && parts.length) return { points: geometry(D, parts), dashed: false };
+    if (parts && parts.length) return { points: geometry(D, parts), dashed: false, runs: namedRuns(D, parts) };
     const d = hav([a.lon, a.lat], [b.lon, b.lat]);
     if (d <= GAP_MAX_M) return { points: [[+a.lat, +a.lon], [+b.lat, +b.lon]], dashed: true };
     return { points: null, dashed: false };
@@ -325,7 +336,7 @@
     const indexRes = await fetchFn(base + 'index.json');
     if (!indexRes.ok) throw new Error('road index');
     const index = await indexRes.json();
-    const D = { meta: index.meta, segs: [] };
+    const D = { meta: index.meta, names: index.names || [], segs: [] };
     const buckets = {};
     const net = create();
     const loaded = new Set();
@@ -374,7 +385,7 @@
     return { legs, rule, veh: rule.veh, cover: ensure, segments: () => D.segs, roadStyle };
   }
 
-  const api = { G, RISKY_MAX, SHORT_LEGAL_FT, UNKW, GAP_MAX_M, hav, len, shownFeet, explicitBan, riskyMask, create, geometry, bucketize, routePair, tilesIn, openRegion };
+  const api = { G, RISKY_MAX, SHORT_LEGAL_FT, UNKW, GAP_MAX_M, hav, len, shownFeet, explicitBan, riskyMask, create, geometry, namedRuns, bucketize, routePair, tilesIn, openRegion };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMRouter = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
