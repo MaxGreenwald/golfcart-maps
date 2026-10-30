@@ -30,6 +30,9 @@ let roadApi = null, roadKey = '', roadChain = Promise.resolve();
 let roadCanvas = null, roadCtx = null, routeR = null, roadTimer = 0, roadPaintToken = 0;
 let meLL = null, meMarker = null, guided = false;
 const affMarks = [];
+const placeMarks = [];
+const PLACE_UI = { restaurant: ['🍽️', 'Restaurant'], views: ['🌅', 'Views'], trivia: ['❓', 'Trivia'], fun_fact: ['💡', 'Fun fact'], other: ['📍', 'Other'] };
+const placeUi = c => PLACE_UI[c] || PLACE_UI.other;
 
 function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -106,7 +109,7 @@ function applyRegion(id) {
   if (!region) return;
   const citySlug = region.slug || 'sandiego';
   const code = unlocked ? (unlocked.code || codeParam) : '';
-  fullMap.href = `/map/${citySlug}?r=${encodeURIComponent(region.id)}&partner=${encodeURIComponent(slug)}${code ? '&code=' + encodeURIComponent(code) : ''}`;
+  fullMap.href = `/map/${citySlug}?r=${encodeURIComponent(region.id)}&partner=${encodeURIComponent(slug)}${code ? '&code=' + encodeURIComponent(code) : ''}${unlocked ? '&veh=' + shopVeh() : ''}`;
   eyebrowEl.textContent = `☀️ ${region.short || region.name} · hop in`;
 }
 function applyShop(shop, open) {
@@ -355,6 +358,18 @@ function affIcon() {
     iconAnchor: [16, 16],
   });
 }
+function placeIcon(cat) {
+  return L.divIcon({
+    className: '',
+    html: `<div class="pin-place" data-cat="${esc(cat)}">${placeUi(cat)[0]}</div>`,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+  });
+}
+function placePopup(p) {
+  const [ico, lab] = placeUi(p.category);
+  return `<b>${ico} ${esc(p.name)}</b><br><span class="muted">${esc(lab)}</span>${p.note ? `<br>${esc(p.note)}` : ''}${/^https:\/\//i.test(p.link || '') ? `<br><a href="${esc(p.link)}" target="_blank" rel="noopener">More</a>` : ''}`;
+}
 function meIcon() {
   return L.divIcon({
     className: '',
@@ -388,12 +403,22 @@ function addRouteLine(points, layer, dashed) {
   L.polyline(points, { ...base, color: '#1d6fe0', weight: 12 }).addTo(layer);
 }
 
+// The shop's rental vehicle picks the road rules. Unset means golf cart (stricter).
+function shopVeh() { const s = unlocked && unlocked.shop; return s && s.vehicle === 'lsv' ? 'lsv' : 'golf_cart'; }
+function vehWord() { return shopVeh() === 'lsv' ? 'street-legal LSV' : 'golf cart'; }
+function vehLegend() {
+  return shopVeh() === 'lsv'
+    ? 'Street-legal LSV rules: roads up to 35 mph.'
+    : 'Golf cart rules: roads up to 25 mph.';
+}
+
 function connectStops(stops) {
   return withRoads(async () => {
     await loadRules();
-    const key = (region && region.id || 'sd') + ':golf_cart';
+    const veh = shopVeh();
+    const key = (region && region.id || 'sd') + ':' + veh;
     if (!roadApi || roadKey !== key) {
-      roadApi = await GCMRouter.openRegion(region, rules, 'golf_cart');
+      roadApi = await GCMRouter.openRegion(region, rules, veh);
       roadKey = key;
     }
     return roadApi.legs(stops);
@@ -403,9 +428,9 @@ function describeRoute(legs, nStops) {
   if (nStops < 2) return nStops ? 'One stop. Hit Start experience to route there from you.' : '';
   if (!legs) return 'Roads didn’t load. The stops are still pinned.';
   const skipped = legs.filter(l => !l.points).length;
-  if (skipped) return 'Follows legal golf cart roads. A hop off that network is left open.';
+  if (skipped) return `Follows legal ${vehWord()} roads. A hop off that network is left open.`;
   if (legs.some(l => l.dashed) && !legs.some(l => l.points && !l.dashed)) return 'A short hop off the mapped roads.';
-  return 'The line follows legal golf cart roads.';
+  return `The line follows legal ${vehWord()} roads.`;
 }
 
 async function drawUnlocked() {
@@ -415,7 +440,7 @@ async function drawUnlocked() {
   const goodStops = stops.filter(s => finite(s.lat, s.lon));
   let legs = null;
   if (goodStops.length > 1) {
-    setRouteNote('Tracing golf cart roads…');
+    setRouteNote(`Tracing ${vehWord()} roads…`);
     try { legs = await connectStops(goodStops); }
     catch (e) { legs = null; }
   }
@@ -423,6 +448,7 @@ async function drawUnlocked() {
   routeLayer.clearLayers();
   pins.clearLayers();
   affMarks.length = 0;
+  placeMarks.length = 0;
   const bounds = [];
   (legs || []).forEach(leg => {
     if (!leg.points || leg.points.length < 2) return;
@@ -435,6 +461,13 @@ async function drawUnlocked() {
     m.bindPopup(`<b>${esc(a.name)}</b><br>${esc(a.offer || '')}${a.coupon ? `<br>Coupon: <code>${esc(a.coupon)}</code>` : ''}<br><span class="muted">Partner offer</span>`);
     affMarks.push({ id: a.id, marker: m });
     bounds.push([+a.lat, +a.lon]);
+  });
+  (unlocked.places || []).forEach(p => {
+    if (!finite(p.lat, p.lon)) return;
+    const m = L.marker([+p.lat, +p.lon], { icon: placeIcon(p.category), zIndexOffset: 500, title: p.name }).addTo(pins);
+    m.bindPopup(placePopup(p));
+    placeMarks.push({ id: p.id, marker: m });
+    bounds.push([+p.lat, +p.lon]);
   });
   if (activeEx) {
     (activeEx.stops || []).forEach((s, i) => {
@@ -806,13 +839,13 @@ async function startExperience() {
   const drawn = !!(leg && leg.points && leg.points.length >= 2);
   if (drawn) addRouteLine(leg.points, liveLayer, leg.dashed);
   if (usedCenter && !drawn) {
-    setStartNote('Location is off, and there’s no legal golf cart road from the middle of the map to the first stop. Turn on location, or follow the pins.');
+    setStartNote(`Location is off, and there’s no legal ${vehWord()} road from the middle of the map to the first stop. Turn on location, or follow the pins.`);
   } else if (usedCenter) {
     setStartNote(leg.dashed
       ? 'Location is off. Turn it on to start from you. This short hop starts from the middle of the map.'
       : 'Location is off. Turn it on to start from you. This route starts from the middle of the map.');
   } else if (!drawn) {
-    setStartNote('No legal golf cart road from here to the first stop. The pins still mark each stop.');
+    setStartNote(`No legal ${vehWord()} road from here to the first stop. The pins still mark each stop.`);
   } else if (leg.dashed) {
     setStartNote('A short hop from you to the first stop.');
   } else {
@@ -901,9 +934,15 @@ async function unlockedView() {
       ${af.map(a => `<button class="ocard" type="button" data-af="${esc(a.id)}">
         <span class="star" aria-hidden="true">★</span>
         <span><span class="xtitle">${esc(a.name)}</span><span class="xdesc">${esc(a.offer || 'Partner offer')}${a.coupon ? ` · coupon <code>${esc(a.coupon)}</code>` : ''}</span></span>
-      </button>`).join('') || '<p class="fine">No partner offers yet.</p>'}</div>
-      <p class="legend">Green roads are legal for a golf cart. Red roads are off limits. The blue line is your route.</p>
-      <p class="legend">Numbered pins are stops. Amber ★ pins are partner offers.</p>
+      </button>`).join('') || '<p class="fine">No partner offers yet.</p>'}
+      ${(unlocked.places || []).length ? `<h2 class="sec">Places to see</h2>
+      ${(unlocked.places || []).map(p => `<button class="ocard pcard" type="button" data-place="${esc(p.id)}">
+        <span class="star" aria-hidden="true">${placeUi(p.category)[0]}</span>
+        <span><span class="xtitle">${esc(p.name)}</span><span class="xdesc">${esc(placeUi(p.category)[1])}${p.note ? ` · ${esc(p.note)}` : ''}</span></span>
+      </button>`).join('')}` : ''}</div>
+      <p class="legend">Green roads are legal for a ${esc(vehWord())}. Red roads are off limits. The blue line is your route.</p>
+      <p class="legend muted" id="vehLegend">${esc(vehLegend())}</p>
+      <p class="legend">Numbered pins are stops. Amber ★ pins are partner offers.${(unlocked.places || []).length ? ' Icon pins (🍽️ 🌅 ❓ 💡 📍) are places to see. Tap one to read about it.' : ''}</p>
       <p class="legend" id="routeNote" aria-live="polite"></p>
     </div>
     ${ex.length ? `<div class="dock-foot"><button class="start" id="startEx" type="button">Start experience</button><p class="fine" id="startNote" aria-live="polite"></p></div>` : ''}`;
@@ -915,7 +954,7 @@ async function unlockedView() {
   if (allBtn) allBtn.onclick = () => focusEx(false);
   panel.querySelectorAll('.ocard').forEach(el => {
     el.onclick = () => {
-      const hit = affMarks.find(a => a.id === el.dataset.af);
+      const hit = el.dataset.place ? placeMarks.find(a => a.id === el.dataset.place) : affMarks.find(a => a.id === el.dataset.af);
       if (hit && map) {
         panIntoView(hit.marker.getLatLng(), Math.max(map.getZoom(), 15));
         hit.marker.openPopup();

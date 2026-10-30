@@ -21,6 +21,12 @@ jobs:
         run: node --test tests/analytics.test.mjs
       - name: Live town loader (native app prefers golfcartmap.com JSON; bundled fallback)
         run: node --test tests/livedata.test.mjs
+      - name: Partner owner-endpoint authz (super-admin any shop; owners only their own)
+        run: node --test tests/partner_access.test.mjs
+      - name: Partner places validation (category enum, no coupon, https link)
+        run: node --test tests/partner_places.test.mjs
+      - name: Shop rental vehicle (API values, worker stores and exposes it)
+        run: node --test tests/partner_vehicle.test.mjs
       - name: Turn-by-turn maneuvers (turn side, distance, off route, arrival)
         run: node --test tests/nav.test.mjs
       - uses: actions/setup-python@v5
@@ -94,6 +100,12 @@ jobs:
         run: python -m unittest tests.test_partner_brand_color -v
       - name: test_partner_experience_stops (edit a stop and reorder, then the save sticks)
         run: python -m unittest tests.test_partner_experience_stops -v
+      - name: test_partner_super_edit (super-admin opens any shop's owner editor, banner, scoped calls, back)
+        run: python -m unittest tests.test_partner_super_edit -v
+      - name: test_partner_places (owner place CRUD, place as stop, renter icons + notes)
+        run: python -m unittest tests.test_partner_places -v
+      - name: test_partner_vehicle (admin saves vehicle; LSV shop draws 35 mph Grand Ave green, golf cart shop red)
+        run: python -m unittest tests.test_partner_vehicle -v
       - name: test_turn_by_turn (renter banner follows GPS, step list, mute, reroute, arrival; picked ride folds the others away)
         run: python -m unittest tests.test_turn_by_turn -v
       - uses: actions/upload-artifact@v4
