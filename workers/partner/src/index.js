@@ -1,7 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
-import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry } from '../../../lib/partner.js';
+import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace } from '../../../lib/partner.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -92,6 +92,11 @@ export class PartnerStore extends DurableObject {
         lat REAL NOT NULL, lon REAL NOT NULL, offer TEXT DEFAULT '',
         coupon TEXT DEFAULT '', created_at INTEGER NOT NULL
       );
+      CREATE TABLE IF NOT EXISTS places(
+        id TEXT PRIMARY KEY, shop_id TEXT NOT NULL, name TEXT NOT NULL, category TEXT NOT NULL,
+        lat REAL NOT NULL, lon REAL NOT NULL, note TEXT DEFAULT '', link TEXT DEFAULT '',
+        created_at INTEGER NOT NULL
+      );
       CREATE TABLE IF NOT EXISTS codes(
         code TEXT PRIMARY KEY, shop_id TEXT NOT NULL, experience_id TEXT,
         multi_use INTEGER NOT NULL DEFAULT 1, max_uses INTEGER NOT NULL DEFAULT 0,
@@ -117,6 +122,11 @@ export class PartnerStore extends DurableObject {
     try { stops = JSON.parse(r.stops_json || '[]'); } catch { stops = []; }
     return { id: r.id, shop_id: r.shop_id, title: r.title, description: r.description || '', stops, created_at: r.created_at, updated_at: r.updated_at };
   }
+  placeRow(r) {
+    if (!r) return null;
+    return { id: r.id, shop_id: r.shop_id, name: r.name, category: r.category, lat: r.lat, lon: r.lon, note: r.note || '', link: r.link || '', created_at: r.created_at };
+  }
+  places(sid) { return this.q('SELECT * FROM places WHERE shop_id=? ORDER BY created_at', sid).map(r => this.placeRow(r)); }
   affRow(r) {
     if (!r) return null;
     return { id: r.id, shop_id: r.shop_id, name: r.name, lat: r.lat, lon: r.lon, offer: r.offer || '', coupon: r.coupon || '', created_at: r.created_at };
@@ -209,6 +219,7 @@ export class PartnerStore extends DurableObject {
           shop: this.shopRow(sh),
           experiences: this.q('SELECT * FROM experiences WHERE shop_id=? ORDER BY created_at DESC', sid).map(r => this.expRow(r)),
           affiliates: this.q('SELECT * FROM affiliates WHERE shop_id=? ORDER BY created_at DESC', sid).map(r => this.affRow(r)),
+          places: this.places(sid),
           codes: this.q('SELECT code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at FROM codes WHERE shop_id=? ORDER BY created_at DESC', sid),
         });
       }
@@ -237,9 +248,10 @@ export class PartnerStore extends DurableObject {
         this.sql.exec('UPDATE experiences SET title=?, description=?, stops_json=?, updated_at=? WHERE id=?', title, description, stops, now(), eid);
         return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)) });
       }
-      if (path.match(/^\/(experiences|affiliates)\/[^/]+\/owner$/) && method === 'GET') {
+      if (path.match(/^\/(experiences|affiliates|places)\/[^/]+\/owner$/) && method === 'GET') {
         const [, tbl, rid] = path.split('/');
-        const r = this.one(`SELECT shop_id FROM ${tbl === 'experiences' ? 'experiences' : 'affiliates'} WHERE id=?`, rid);
+        const table = { experiences: 'experiences', affiliates: 'affiliates', places: 'places' }[tbl];
+        const r = this.one(`SELECT shop_id FROM ${table} WHERE id=?`, rid);
         return J({ shop_id: r ? r.shop_id : null });
       }
       if (path.match(/^\/experiences\/[^/]+$/) && method === 'DELETE') {
@@ -282,6 +294,31 @@ export class PartnerStore extends DurableObject {
         this.sql.exec('DELETE FROM affiliates WHERE id=?', path.split('/')[2]);
         return J({ ok: true });
       }
+      // Places of interest (no offer / coupon)
+      if (path.match(/^\/shops\/[^/]+\/places$/) && method === 'POST') {
+        const sid = path.split('/')[2];
+        if (!this.one('SELECT id FROM shops WHERE id=?', sid)) return J({ error: 'not found' }, 404);
+        const c = cleanPlace(body);
+        if (c.error) return J({ error: c.error }, 400);
+        const p = c.place, pid = id();
+        this.sql.exec('INSERT INTO places(id,shop_id,name,category,lat,lon,note,link,created_at) VALUES(?,?,?,?,?,?,?,?,?)',
+          pid, sid, p.name, p.category, p.lat, p.lon, p.note, p.link, now());
+        return J({ place: this.placeRow(this.one('SELECT * FROM places WHERE id=?', pid)) }, 201);
+      }
+      if (path.match(/^\/places\/[^/]+$/) && method === 'PATCH') {
+        const pid = path.split('/')[2];
+        const cur = this.one('SELECT * FROM places WHERE id=?', pid);
+        if (!cur) return J({ error: 'not found' }, 404);
+        const c = cleanPlace(body, true);
+        if (c.error) return J({ error: c.error }, 400);
+        const p = { ...this.placeRow(cur), ...c.place };
+        this.sql.exec('UPDATE places SET name=?, category=?, lat=?, lon=?, note=?, link=? WHERE id=?', p.name, p.category, p.lat, p.lon, p.note, p.link, pid);
+        return J({ place: this.placeRow(this.one('SELECT * FROM places WHERE id=?', pid)) });
+      }
+      if (path.match(/^\/places\/[^/]+$/) && method === 'DELETE') {
+        this.sql.exec('DELETE FROM places WHERE id=?', path.split('/')[2]);
+        return J({ ok: true });
+      }
       // Codes
       if (path.match(/^\/shops\/[^/]+\/codes$/) && method === 'POST') {
         const sid = path.split('/')[2];
@@ -322,7 +359,7 @@ export class PartnerStore extends DurableObject {
             ...(c.experience_id ? [c.experience_id, sh.id] : [sh.id]),
           ).map(r => this.expRow(r));
           const affiliates = this.q('SELECT * FROM affiliates WHERE shop_id=? ORDER BY created_at DESC', sh.id).map(r => this.affRow(r));
-          return J({ unlocked: true, shop, experiences, affiliates, code });
+          return J({ unlocked: true, shop, experiences, affiliates, places: this.places(sh.id), code });
         }
         // Teaser (no paid content)
         return J({
@@ -566,7 +603,7 @@ export default {
       delete body.shop_id;
       return send('/shops/' + a.shopId, 'PATCH', body);
     }
-    for (const kind of ['experiences', 'affiliates', 'codes']) {
+    for (const kind of ['experiences', 'affiliates', 'places', 'codes']) {
       if (u.pathname === '/shop/' + kind && req.method === 'POST') {
         const body = await readBody();
         const a = await access(body);
@@ -574,7 +611,7 @@ export default {
         return send('/shops/' + a.shopId + '/' + kind, 'POST', body);
       }
     }
-    const rm = u.pathname.match(/^\/shop\/(experiences|affiliates)\/([^/]+)$/);
+    const rm = u.pathname.match(/^\/shop\/(experiences|affiliates|places)\/([^/]+)$/);
     if (rm && (req.method === 'PATCH' || req.method === 'DELETE')) {
       const body = req.method === 'PATCH' ? await readBody() : undefined;
       const a = await access(body, rm[1] + '/' + rm[2]);
