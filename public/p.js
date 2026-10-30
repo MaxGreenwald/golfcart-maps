@@ -30,6 +30,9 @@ let roadApi = null, roadKey = '', roadChain = Promise.resolve();
 let roadCanvas = null, roadCtx = null, routeR = null, roadTimer = 0, roadPaintToken = 0;
 let meLL = null, meMarker = null, guided = false;
 const affMarks = [];
+const placeMarks = [];
+const PLACE_UI = { restaurant: ['🍽️', 'Restaurant'], views: ['🌅', 'Views'], trivia: ['❓', 'Trivia'], fun_fact: ['💡', 'Fun fact'], other: ['📍', 'Other'] };
+const placeUi = c => PLACE_UI[c] || PLACE_UI.other;
 
 function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -351,6 +354,18 @@ function affIcon() {
     iconAnchor: [16, 16],
   });
 }
+function placeIcon(cat) {
+  return L.divIcon({
+    className: '',
+    html: `<div class="pin-place" data-cat="${esc(cat)}">${placeUi(cat)[0]}</div>`,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+  });
+}
+function placePopup(p) {
+  const [ico, lab] = placeUi(p.category);
+  return `<b>${ico} ${esc(p.name)}</b><br><span class="muted">${esc(lab)}</span>${p.note ? `<br>${esc(p.note)}` : ''}${/^https:\/\//i.test(p.link || '') ? `<br><a href="${esc(p.link)}" target="_blank" rel="noopener">More</a>` : ''}`;
+}
 function meIcon() {
   return L.divIcon({
     className: '',
@@ -429,6 +444,7 @@ async function drawUnlocked() {
   routeLayer.clearLayers();
   pins.clearLayers();
   affMarks.length = 0;
+  placeMarks.length = 0;
   const bounds = [];
   (legs || []).forEach(leg => {
     if (!leg.points || leg.points.length < 2) return;
@@ -441,6 +457,13 @@ async function drawUnlocked() {
     m.bindPopup(`<b>${esc(a.name)}</b><br>${esc(a.offer || '')}${a.coupon ? `<br>Coupon: <code>${esc(a.coupon)}</code>` : ''}<br><span class="muted">Partner offer</span>`);
     affMarks.push({ id: a.id, marker: m });
     bounds.push([+a.lat, +a.lon]);
+  });
+  (unlocked.places || []).forEach(p => {
+    if (!finite(p.lat, p.lon)) return;
+    const m = L.marker([+p.lat, +p.lon], { icon: placeIcon(p.category), zIndexOffset: 500, title: p.name }).addTo(pins);
+    m.bindPopup(placePopup(p));
+    placeMarks.push({ id: p.id, marker: m });
+    bounds.push([+p.lat, +p.lon]);
   });
   if (activeEx) {
     (activeEx.stops || []).forEach((s, i) => {
@@ -624,9 +647,14 @@ async function unlockedView() {
         <span class="star" aria-hidden="true">★</span>
         <span><span class="xtitle">${esc(a.name)}</span><span class="xdesc">${esc(a.offer || 'Partner offer')}${a.coupon ? ` · coupon <code>${esc(a.coupon)}</code>` : ''}</span></span>
       </button>`).join('') || '<p class="fine">No partner offers yet.</p>'}
+      ${(unlocked.places || []).length ? `<h2 class="sec">Places to see</h2>
+      ${(unlocked.places || []).map(p => `<button class="ocard pcard" type="button" data-place="${esc(p.id)}">
+        <span class="star" aria-hidden="true">${placeUi(p.category)[0]}</span>
+        <span><span class="xtitle">${esc(p.name)}</span><span class="xdesc">${esc(placeUi(p.category)[1])}${p.note ? ` · ${esc(p.note)}` : ''}</span></span>
+      </button>`).join('')}` : ''}
       <p class="legend">Green roads are legal for a ${esc(vehWord())}. Red roads are off limits. The blue line is your route.</p>
       <p class="legend muted" id="vehLegend">${esc(vehLegend())}</p>
-      <p class="legend">Numbered pins are stops. Amber ★ pins are partner offers.</p>
+      <p class="legend">Numbered pins are stops. Amber ★ pins are partner offers.${(unlocked.places || []).length ? ' Icon pins (🍽️ 🌅 ❓ 💡 📍) are places to see. Tap one to read about it.' : ''}</p>
       <p class="legend" id="routeNote" aria-live="polite"></p>
     </div>
     ${ex.length ? `<div class="dock-foot"><button class="start" id="startEx" type="button">Start experience</button><p class="fine" id="startNote" aria-live="polite"></p></div>` : ''}`;
@@ -635,7 +663,7 @@ async function unlockedView() {
   });
   panel.querySelectorAll('.ocard').forEach(el => {
     el.onclick = () => {
-      const hit = affMarks.find(a => a.id === el.dataset.af);
+      const hit = el.dataset.place ? placeMarks.find(a => a.id === el.dataset.place) : affMarks.find(a => a.id === el.dataset.af);
       if (hit && map) {
         panIntoView(hit.marker.getLatLng(), Math.max(map.getZoom(), 15));
         hit.marker.openPopup();
