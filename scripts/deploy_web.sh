@@ -27,11 +27,15 @@ cd "$(dirname "$0")/.."
 usage() {
   echo "usage: scripts/deploy_web.sh preview <branch-name other than master>" >&2
   echo "       scripts/deploy_web.sh production --max-ok <Max chat or card id>" >&2
+  echo "       scripts/deploy_web.sh production --new-region-ok t390s2042 --live-commit <sha live now>" >&2
+  echo "         (only when the diff vs live just adds new regions; see AGENTS.md rule 5)" >&2
 }
 
 mode=""
 branch=""
 max_ok=""
+new_region_ok=""
+live_commit=""
 while [ $# -gt 0 ]; do
   case "$1" in
     production|preview)
@@ -46,6 +50,11 @@ while [ $# -gt 0 ]; do
         max_ok=$2
         shift 2
       fi
+      ;;
+    --new-region-ok|--live-commit)
+      v=""; [ $# -ge 2 ] && v=$2
+      if [ "$1" = --new-region-ok ]; then new_region_ok=$v; else live_commit=$v; fi
+      shift $(( $# < 2 ? 1 : 2 ))
       ;;
     *)
       if [ "$mode" = preview ] && [ -z "$branch" ]; then
@@ -63,7 +72,7 @@ done
 case "$mode" in
   production)
     # Before build, unit tests, or wrangler. Same gate the worker deploy uses.
-    bash scripts/prod_gate.sh --max-ok "$max_ok" --paths public functions lib \
+    bash scripts/prod_gate.sh --max-ok "$max_ok" --new-region-ok "$new_region_ok" --live-commit "$live_commit" --paths public functions lib \
       --dirty-msg "uncommitted changes in public/ functions/ lib/; commit first"
     branch=master
     ;;
@@ -96,6 +105,6 @@ if [ "$mode" = production ]; then
   rc=$?
   set -e
   if [ "$rc" -eq 0 ]; then status=PASS; else status=FAIL; fi
-  bash scripts/prod_gate.sh --append-log --max-ok "$max_ok" --status "$status"
+  bash scripts/prod_gate.sh --append-log --max-ok "${max_ok:-new-region-ok:$new_region_ok}" --status "$status"
   exit "$rc"
 fi
