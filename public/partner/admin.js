@@ -1,7 +1,11 @@
 /* Partner admin SPA — super admin + shop admin. Talks to /api/partner/*.
    Place pickers: Photon (Komoot) + Nominatim fallback (same as the main map),
    plus manual pin-drop with a custom label. Lat/lon stored under the hood. */
-const api = (path, opt = {}) => fetch('/api/partner' + path, {
+// A super-admin editing a shop as its owner: every /shop call names that shop.
+const scoped = path => (state && state.actingShop && /^\/shop(\/|$|\?)/.test(path))
+  ? path + (path.includes('?') ? '&' : '?') + 'shop_id=' + encodeURIComponent(state.actingShop.id)
+  : path;
+const api = (path, opt = {}) => fetch('/api/partner' + scoped(path), {
   credentials: 'include',
   headers: { 'content-type': 'application/json', ...(opt.headers || {}) },
   ...opt,
@@ -206,6 +210,7 @@ function superView() {
     <td>${esc(s.owner_email || '—')}</td>
     <td><span class="pill ${s.disabled ? 'off' : ''}">${s.disabled ? 'disabled' : 'active'}</span></td>
     <td>
+      <button class="btn" data-open-shop="${esc(s.id)}" data-shop-name="${esc(s.name)}" type="button">Edit shop</button>
       <button class="btn alt" data-invite="${esc(s.id)}" type="button">Invite</button>
       <button class="btn warn" data-toggle="${esc(s.id)}" data-off="${s.disabled ? 0 : 1}" type="button">${s.disabled ? 'Enable' : 'Disable'}</button>
       <a class="btn alt" href="/p/${esc(s.slug)}" target="_blank" rel="noopener">Brand page</a>
@@ -235,6 +240,8 @@ function shopView() {
   const b = state.shopBundle;
   if (!b || !b.shop) return `<div class="card"><p class="msg err">No shop linked to this account yet. Accept an invite from Max.</p></div>`;
   const s = b.shop;
+  const actingBanner = state.actingShop ? `<div class="card super-banner" id="superBanner" role="status"><b>Editing ${esc(s.name)} as super-admin.</b>
+    Changes go live on the shop's page. <button class="btn alt" id="backToShops" type="button">Back to all shops</button></div>` : '';
   const exRows = (b.experiences || []).map(e => `<tr>
     <td><b>${esc(e.title)}</b><div class="muted">${esc(e.description || '')}</div>
       <div class="muted ex-stops">${stopsLine(e.stops)}</div></td>
@@ -246,14 +253,18 @@ function shopView() {
   const afRows = (b.affiliates || []).map(a => `<tr>
     <td><b>${esc(a.name)}</b><div class="muted">${esc(a.offer || '')}</div>
       <div class="muted">${Number.isFinite(a.lat) ? a.lat.toFixed(5) + ', ' + a.lon.toFixed(5) : ''}${a.coupon ? ` · coupon <code>${esc(a.coupon)}</code>` : ''}</div></td>
-    <td><button class="btn warn" data-del-af="${esc(a.id)}" type="button">Delete</button></td>
+    <td><div class="ex-actions">
+      <button class="btn alt" data-edit-af="${esc(a.id)}" type="button">Edit</button>
+      <button class="btn warn" data-del-af="${esc(a.id)}" type="button">Delete</button>
+    </div></td>
   </tr>`).join('') || '<tr><td colspan="2" class="muted">No affiliate offers yet.</td></tr>';
   const codeRows = (b.codes || []).map(c => `<tr>
     <td><code>${esc(c.code)}</code></td>
-    <td class="muted">uses ${c.uses}${c.max_uses ? '/' + c.max_uses : ''} · ${c.multi_use ? 'multi' : 'single'}</td>
+    <td class="muted">uses ${c.uses}${c.max_uses ? '/' + c.max_uses : ''} · ${c.multi_use ? 'multi' : 'single'}
+      <div class="code-exp">${c.expires_at ? (c.expires_at * 1000 < Date.now() ? 'Expired ' : 'Expires ') + esc(new Date(c.expires_at * 1000).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })) : 'Never expires'}</div></td>
     <td><a href="/p/${esc(s.slug)}/go?code=${esc(c.code)}" target="_blank" rel="noopener">Open renter link</a></td>
   </tr>`).join('') || '<tr><td colspan="3" class="muted">No codes yet.</td></tr>';
-  return `
+  return `${actingBanner}
   <div class="card"><h2>${esc(s.name)}</h2>
     <p>Brand page: <a href="/p/${esc(s.slug)}" target="_blank">/p/${esc(s.slug)}</a>
       · City: <span class="pill">${esc(s.region_id)}</span></p>
@@ -285,6 +296,8 @@ function shopView() {
   </div>
   <div class="card af-place"><h2>Affiliate offers</h2>
     <p class="muted">Restaurants and deals for your renters. Larger ★ pins on the map.</p>
+    <p class="muted hidden" id="afEditing">Editing this offer. Search or drop a pin to move it.</p>
+    <input type="hidden" id="afId" value="">
     <label>Offer text</label><input id="afOffer" placeholder="25% off a beer">
     <div class="mode-row" id="afModes">
       <button type="button" class="btn alt modeSearch on" data-af-mode="search">Search place</button>
@@ -307,12 +320,24 @@ function shopView() {
     <input type="hidden" id="afLat" value="">
     <input type="hidden" id="afLon" value="">
     <div class="picked miss" id="afPicked">Search a place or drop a pin on the map</div>
-    <label style="margin-top:10px"><input type="checkbox" id="afCoupon" checked> Generate coupon code</label>
-    <p><button class="btn" id="addAf" type="button">Add affiliate</button></p>
+    <div id="afEditFields" class="hidden">
+      <label for="afNameEdit">Place name</label><input id="afNameEdit">
+      <label for="afCouponText">Coupon code</label><input id="afCouponText" placeholder="Leave empty for no coupon">
+    </div>
+    <label style="margin-top:10px" id="afCouponRow"><input type="checkbox" id="afCoupon" checked> Generate coupon code</label>
+    <p><button class="btn" id="addAf" type="button">Add affiliate</button>
+      <button class="btn alt hidden" id="cancelAf" type="button">Cancel</button></p>
     <table><thead><tr><th>Affiliate</th><th></th></tr></thead><tbody>${afRows}</tbody></table>
   </div>
   <div class="card"><h2>Renter access codes</h2>
-    <p class="muted">Give this link after they pay the extra $5–10 in your own checkout. Multi-use, 30-day expiry by default.</p>
+    <p class="muted">Give this link after they pay the extra $5–10 in your own checkout. Multi-use.</p>
+    <label for="codeDays">Code lasts</label>
+    <div class="mode-row" id="codeChips">
+      ${[1, 3, 7, 14, 30].map(d => `<button type="button" class="btn alt${d === 30 ? ' on' : ''}" data-days="${d}">${d} day${d > 1 ? 's' : ''}</button>`).join('')}
+      <button type="button" class="btn alt" data-days="never">No expiry</button>
+    </div>
+    <div class="row"><div><input id="codeDays" type="number" min="1" max="30" step="1" value="30" aria-describedby="codeDaysHint">
+      <div class="muted" id="codeDaysHint">1 to 30 days, or No expiry.</div></div></div>
     <p><button class="btn" id="genCode" type="button">Generate access code</button></p>
     <table><thead><tr><th>Code</th><th>Usage</th><th>Link</th></tr></thead><tbody>${codeRows}</tbody></table>
   </div>`;
@@ -602,6 +627,7 @@ function wireAffiliatePicker() {
     $('#afLat').value = lat;
     $('#afLon').value = lon;
     $('#afName').value = name || '';
+    if ($('#afId') && $('#afId').value && name) $('#afNameEdit').value = name;
     const p = $('#afPicked');
     p.className = 'picked ok';
     p.textContent = `✓ ${name || 'Pinned'} · ${(+lat).toFixed(5)}, ${(+lon).toFixed(5)}`;
@@ -764,10 +790,27 @@ function bindApp() {
       const name = $('#shopName').value.trim();
       const slug = $('#shopSlug').value.trim();
       const region_id = $('#shopRegion').value;
-      await api('/admin/shops', { method: 'POST', body: JSON.stringify({ name, slug, region_id }) });
+      const made = await api('/admin/shops', { method: 'POST', body: JSON.stringify({ name, slug, region_id }) });
+      if (made && made.shop) {
+        // Straight into the owner editor so the super-admin can set the shop up.
+        state.actingShop = { id: made.shop.id, name: made.shop.name };
+        state.msg = 'Shop created. Add experiences, brand and codes below.'; state.err = '';
+        await refreshShop();
+        return;
+      }
       flash(true, 'Shop created');
       await refreshSuper();
     } catch (e) { flash(false, e.message); }
+  };
+  document.querySelectorAll('[data-open-shop]').forEach(b => b.onclick = async () => {
+    state.actingShop = { id: b.dataset.openShop, name: b.dataset.shopName };
+    state.msg = ''; state.err = '';
+    try { await refreshShop(); } catch (e) { state.actingShop = null; flash(false, e.message); }
+  });
+  const back = $('#backToShops');
+  if (back) back.onclick = async () => {
+    state.actingShop = null; state.msg = ''; state.err = '';
+    await refreshSuper();
   };
   document.querySelectorAll('[data-invite]').forEach(b => b.onclick = async () => {
     const email = prompt('Owner email (Gmail)');
@@ -851,9 +894,18 @@ function bindApp() {
   const addAf = $('#addAf');
   if (addAf) addAf.onclick = async () => {
     try {
-      const name = $('#afName').value.trim();
+      const afId = $('#afId').value;
+      const name = (afId ? $('#afNameEdit').value : $('#afName').value).trim();
       const lat = +$('#afLat').value, lon = +$('#afLon').value;
       if (!name || !Number.isFinite(lat) || !Number.isFinite(lon)) throw new Error('Pick a place (search or drop a pin) before adding');
+      if (afId) {
+        await api('/shop/affiliates/' + afId, { method: 'PATCH', body: JSON.stringify({
+          name, offer: $('#afOffer').value.trim(), lat, lon, coupon: $('#afCouponText').value.trim(),
+        }) });
+        flash(true, 'Affiliate saved');
+        await refreshShop();
+        return;
+      }
       await api('/shop/affiliates', { method: 'POST', body: JSON.stringify({
         name,
         offer: $('#afOffer').value.trim(),
@@ -865,15 +917,47 @@ function bindApp() {
       await refreshShop();
     } catch (e) { flash(false, e.message); }
   };
+  document.querySelectorAll('[data-edit-af]').forEach(b => b.onclick = () => {
+    const a = ((state.shopBundle && state.shopBundle.affiliates) || []).find(x => x.id === b.dataset.editAf);
+    if (!a) return;
+    $('#afId').value = a.id;
+    $('#afOffer').value = a.offer || '';
+    $('#afName').value = a.name; $('#afLat').value = a.lat; $('#afLon').value = a.lon;
+    $('#afNameEdit').value = a.name;
+    $('#afCouponText').value = a.coupon || '';
+    const p = $('#afPicked');
+    p.className = 'picked ok';
+    p.textContent = `✓ ${a.name} · ${(+a.lat).toFixed(5)}, ${(+a.lon).toFixed(5)}`;
+    $('#afEditFields').classList.remove('hidden');
+    $('#afEditing').classList.remove('hidden');
+    $('#afCouponRow').classList.add('hidden');
+    $('#cancelAf').classList.remove('hidden');
+    $('#addAf').textContent = 'Save offer';
+    $('#afOffer').scrollIntoView({ block: 'center' });
+  });
+  const cancelAf = $('#cancelAf');
+  if (cancelAf) cancelAf.onclick = () => render();
   document.querySelectorAll('[data-del-af]').forEach(b => b.onclick = async () => {
     if (!confirm('Delete this affiliate?')) return;
     try { await api('/shop/affiliates/' + b.dataset.delAf, { method: 'DELETE' }); await refreshShop(); }
     catch (e) { flash(false, e.message); }
   });
+  const chips = document.querySelectorAll('#codeChips [data-days]');
+  const daysIn = $('#codeDays');
+  chips.forEach(c => c.onclick = () => {
+    chips.forEach(x => x.classList.toggle('on', x === c));
+    const never = c.dataset.days === 'never';
+    daysIn.disabled = never;
+    if (!never) daysIn.value = c.dataset.days;
+  });
+  if (daysIn) daysIn.oninput = () => chips.forEach(x => x.classList.toggle('on', x.dataset.days === daysIn.value));
   const genCode = $('#genCode');
   if (genCode) genCode.onclick = async () => {
     try {
-      const j = await api('/shop/codes', { method: 'POST', body: JSON.stringify({ multi_use: true, expires_days: 30 }) });
+      const never = !!$('#codeChips [data-days=never].on');
+      const days = never ? null : Number($('#codeDays').value);
+      if (!never && !(Number.isInteger(days) && days >= 1 && days <= 30)) throw new Error('Pick 1 to 30 days, or No expiry');
+      const j = await api('/shop/codes', { method: 'POST', body: JSON.stringify({ multi_use: true, expires_days: days }) });
       flash(true, 'Code ' + j.code.code + ' — renter link copied when possible');
       const link = location.origin + '/p/' + state.shopBundle.shop.slug + '/go?code=' + j.code.code;
       try { await navigator.clipboard.writeText(link); } catch (_) {}
@@ -885,6 +969,7 @@ function bindApp() {
 async function refreshSuper() {
   const j = await api('/admin/shops');
   state.shops = j.shops || [];
+  state.actingShop = null;
   state.view = 'super';
   render();
 }

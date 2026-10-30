@@ -1,7 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
-import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug } from '../../../lib/partner.js';
+import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry } from '../../../lib/partner.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -237,6 +237,11 @@ export class PartnerStore extends DurableObject {
         this.sql.exec('UPDATE experiences SET title=?, description=?, stops_json=?, updated_at=? WHERE id=?', title, description, stops, now(), eid);
         return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)) });
       }
+      if (path.match(/^\/(experiences|affiliates)\/[^/]+\/owner$/) && method === 'GET') {
+        const [, tbl, rid] = path.split('/');
+        const r = this.one(`SELECT shop_id FROM ${tbl === 'experiences' ? 'experiences' : 'affiliates'} WHERE id=?`, rid);
+        return J({ shop_id: r ? r.shop_id : null });
+      }
       if (path.match(/^\/experiences\/[^/]+$/) && method === 'DELETE') {
         const eid = path.split('/')[2];
         this.sql.exec('DELETE FROM experiences WHERE id=?', eid);
@@ -285,7 +290,9 @@ export class PartnerStore extends DurableObject {
         if (this.one('SELECT code FROM codes WHERE code=?', code)) code = randomCode(5);
         const multi = body.multi_use === false ? 0 : 1;
         const max_uses = +body.max_uses || 0;
-        const expires_at = body.expires_days ? now() + (+body.expires_days) * 86400 : (body.expires_at || null);
+        const exp = codeExpiry(body, now());
+        if (exp.error) return J({ error: exp.error }, 400);
+        const expires_at = exp.expires_at;
         this.sql.exec(
           'INSERT INTO codes(code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at) VALUES(?,?,?,?,?,0,?,?)',
           code, sid, body.experience_id || null, multi, max_uses, expires_at, now(),
@@ -517,79 +524,62 @@ export default {
       return r.shop;
     }
 
-    if (u.pathname === '/shop' && req.method === 'GET') {
-      if (!sess) return J({ error: 'unauthorized' }, 401);
-      let shop = await shopFor(sess);
-      if (!shop && isSuper && u.searchParams.get('shop_id')) {
-        const b = await (await doFetch('/shops/' + u.searchParams.get('shop_id') + '/bundle')).json();
-        return J(b);
+    // Owner endpoints. A super-admin may act on any shop by passing ?shop_id= (or body.shop_id);
+    // an owner only on their own shop, and only on experiences/affiliates that belong to it.
+    async function access(body, resource) {
+      if (!sess) return { status: 401, error: 'unauthorized' };
+      const own = isSuper ? null : await shopFor(sess);
+      let resourceShopId;
+      if (resource) {
+        const r = await (await doFetch('/' + resource + '/owner')).json();
+        resourceShopId = r.shop_id || null;
       }
-      if (!shop) return J({ error: 'no shop' }, 404);
-      return doFetch('/shops/' + shop.id + '/bundle');
+      const a = shopAccess({
+        isSuper, ownShopId: own && own.id, resourceShopId,
+        requestedShopId: u.searchParams.get('shop_id') || (body && body.shop_id) || '',
+      });
+      if (a.shopId && isSuper && req.method !== 'GET') {
+        // Audit trail (Workers logs): which super-admin edited which shop.
+        console.log(JSON.stringify({ audit: 'super_edit', email: sess.email, shop_id: a.shopId, method: req.method, path: u.pathname }));
+      }
+      return a;
+    }
+    const deny = a => J({ error: a.error }, a.status);
+    const readBody = async () => { try { return await req.json(); } catch { return {}; } };
+    const send = (path, method, body) => doFetch(path, { method, headers: { 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) });
+
+    if (u.pathname === '/shop' && req.method === 'GET') {
+      const a = await access(null);
+      if (!a.shopId) return deny(a);
+      return doFetch('/shops/' + a.shopId + '/bundle');
     }
     if (u.pathname === '/shop' && req.method === 'PATCH') {
-      if (!sess) return J({ error: 'unauthorized' }, 401);
-      let shop = await shopFor(sess);
-      const body = await req.json();
-      if (!shop && isSuper && body.shop_id) shop = { id: body.shop_id };
-      if (!shop) return J({ error: 'no shop' }, 404);
+      const body = await readBody();
+      const a = await access(body);
+      if (!a.shopId) return deny(a);
       // Shop admins may not disable or reassign owner
       if (!isSuper) {
         delete body.disabled;
         delete body.owner_email;
         delete body.slug;
       }
-      return doFetch('/shops/' + shop.id, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+      delete body.shop_id;
+      return send('/shops/' + a.shopId, 'PATCH', body);
     }
-
-    async function ensureShopAccess(shopId) {
-      if (!sess) return { error: J({ error: 'unauthorized' }, 401) };
-      if (isSuper) return { shopId };
-      const shop = await shopFor(sess);
-      if (!shop || shop.id !== shopId) return { error: J({ error: 'forbidden' }, 403) };
-      return { shopId };
+    for (const kind of ['experiences', 'affiliates', 'codes']) {
+      if (u.pathname === '/shop/' + kind && req.method === 'POST') {
+        const body = await readBody();
+        const a = await access(body);
+        if (!a.shopId) return deny(a);
+        return send('/shops/' + a.shopId + '/' + kind, 'POST', body);
+      }
     }
-
-    if (u.pathname.match(/^\/shop\/experiences$/) && req.method === 'POST') {
-      if (!sess) return J({ error: 'unauthorized' }, 401);
-      const body = await req.json();
-      let shop = await shopFor(sess);
-      if (!shop && isSuper && body.shop_id) shop = { id: body.shop_id };
-      if (!shop) return J({ error: 'no shop' }, 404);
-      return doFetch('/shops/' + shop.id + '/experiences', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
-    }
-    if (u.pathname.match(/^\/shop\/experiences\/[^/]+$/) && (req.method === 'PATCH' || req.method === 'DELETE')) {
-      if (!sess) return J({ error: 'unauthorized' }, 401);
-      const eid = u.pathname.split('/').pop();
-      // Ownership check via bundle would be nicer; MVP trusts shop owner session + super.
-      const shop = await shopFor(sess);
-      if (!shop && !isSuper) return J({ error: 'forbidden' }, 403);
-      return doFetch('/experiences/' + eid, { method: req.method, headers: { 'content-type': 'application/json' }, body: req.method === 'PATCH' ? await req.text() : undefined });
-    }
-
-    if (u.pathname === '/shop/affiliates' && req.method === 'POST') {
-      if (!sess) return J({ error: 'unauthorized' }, 401);
-      const body = await req.json();
-      let shop = await shopFor(sess);
-      if (!shop && isSuper && body.shop_id) shop = { id: body.shop_id };
-      if (!shop) return J({ error: 'no shop' }, 404);
-      return doFetch('/shops/' + shop.id + '/affiliates', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
-    }
-    if (u.pathname.match(/^\/shop\/affiliates\/[^/]+$/) && (req.method === 'PATCH' || req.method === 'DELETE')) {
-      if (!sess) return J({ error: 'unauthorized' }, 401);
-      const shop = await shopFor(sess);
-      if (!shop && !isSuper) return J({ error: 'forbidden' }, 403);
-      const aid = u.pathname.split('/').pop();
-      return doFetch('/affiliates/' + aid, { method: req.method, headers: { 'content-type': 'application/json' }, body: req.method === 'PATCH' ? await req.text() : undefined });
-    }
-
-    if (u.pathname === '/shop/codes' && req.method === 'POST') {
-      if (!sess) return J({ error: 'unauthorized' }, 401);
-      const body = await req.json();
-      let shop = await shopFor(sess);
-      if (!shop && isSuper && body.shop_id) shop = { id: body.shop_id };
-      if (!shop) return J({ error: 'no shop' }, 404);
-      return doFetch('/shops/' + shop.id + '/codes', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    const rm = u.pathname.match(/^\/shop\/(experiences|affiliates)\/([^/]+)$/);
+    if (rm && (req.method === 'PATCH' || req.method === 'DELETE')) {
+      const body = req.method === 'PATCH' ? await readBody() : undefined;
+      const a = await access(body, rm[1] + '/' + rm[2]);
+      if (!a.shopId) return deny(a);
+      return send('/' + rm[1] + '/' + rm[2], req.method, body);
     }
 
     // Public (no auth)
