@@ -50,7 +50,7 @@ class LatestMapSource(unittest.TestCase):
         self.assertIn("cache: 'no-store'", p)
         self.assertIn("Offline, map may be outdated.", p)
         self.assertIn("visibilitychange", p)
-        self.assertIn("openRegion(region, rules, 'golf_cart', freshFetch)", p)
+        self.assertIn("openRegion(region, rules, veh, freshFetch)", p)
         self.assertNotRegex(p, r"(?<!fresh)fetch\('/data/", "every /data/ fetch in p.js goes through freshFetch")
         self.assertIn("fetch('/data/regions.json', { cache: 'no-store' })", read(PUB, "partner", "admin.js"))
 

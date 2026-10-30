@@ -267,6 +267,18 @@
     return ll;
   }
 
+  // One run per route part with its OSM street name (D.names[s[0]]), for turn-by-turn.
+  function namedRuns(D, parts, o) {
+    const names = D.names || [];
+    const mask = o && o.rule && o.cls ? riskyMask(D.segs, parts, o.rule, o.cls) : [];
+    return parts.map(([si, rev], k) => {
+      const s = D.segs[si];
+      let p = s[7];
+      if (rev) p = p.slice().reverse();
+      return { name: names[s[0]] || '', hw: s[1], risky: !!mask[k], points: p.map(pt => [pt[1], pt[0]]) };
+    });
+  }
+
   function bucketize(buckets, segs, from) {
     segs.slice(from).forEach((s, j) => {
       const i = from + j, p = s[7][0];
@@ -287,7 +299,7 @@
         parts = null;
       }
     }
-    if (parts && parts.length) return { points: geometry(D, parts), dashed: false };
+    if (parts && parts.length) return { points: geometry(D, parts), dashed: false, runs: namedRuns(D, parts, o) };
     const d = hav([a.lon, a.lat], [b.lon, b.lat]);
     if (d <= GAP_MAX_M) return { points: [[+a.lat, +a.lon], [+b.lat, +b.lon]], dashed: true };
     return { points: null, dashed: false };
@@ -325,7 +337,7 @@
     const indexRes = await fetchFn(base + 'index.json');
     if (!indexRes.ok) throw new Error('road index');
     const index = await indexRes.json();
-    const D = { meta: index.meta, segs: [] };
+    const D = { meta: index.meta, names: index.names || [], segs: [] };
     const buckets = {};
     const net = create();
     const loaded = new Set();
@@ -358,6 +370,27 @@
       for (let i = 1; i < stops.length; i++) out.push(routePair(net, D, buckets, stops[i - 1], stops[i], o));
       return out;
     }
+    // One trip from a to b (renter "Navigate somewhere else"). risky: true allows the
+    // map's ⚠️ Risky stretches (same RISKY_MAX cap); default is Legal only.
+    async function trip(a, b, opts) {
+      const pad = 0.04;
+      await ensure(Math.min(a.lat, b.lat) - pad, Math.min(a.lon, b.lon) - pad, Math.max(a.lat, b.lat) + pad, Math.max(a.lon, b.lon) + pad);
+      return routePair(net, D, buckets, a, b, { ...o, risky: !!(opts && opts.risky) });
+    }
+    // Street-name matches among loaded tiles, for the renter search box.
+    function streets(q, limit) {
+      const n = String(q || '').toLowerCase().trim();
+      if (!n) return [];
+      const seen = new Set(), out = [];
+      for (const s of D.segs) {
+        const nm = D.names[s[0]];
+        if (!nm || seen.has(nm) || !nm.toLowerCase().includes(n)) continue;
+        seen.add(nm);
+        out.push({ name: nm, sub: 'street', lat: s[7][0][1], lon: s[7][0][0], score: nm.toLowerCase().startsWith(n) ? 0.5 : 1.5 });
+        if (out.length >= (limit || 5)) break;
+      }
+      return out;
+    }
     // Same palette as app.js STY / mkLine, so the renter map reads like the city map.
     function roadStyle(s) {
       const c0 = cls(s);
@@ -371,10 +404,10 @@
       ];
       return STY[c] || STY[0];
     }
-    return { legs, rule, veh: rule.veh, cover: ensure, segments: () => D.segs, roadStyle };
+    return { legs, trip, streets, rule, veh: rule.veh, cover: ensure, segments: () => D.segs, roadStyle };
   }
 
-  const api = { G, RISKY_MAX, SHORT_LEGAL_FT, UNKW, GAP_MAX_M, hav, len, shownFeet, explicitBan, riskyMask, create, geometry, bucketize, routePair, tilesIn, openRegion };
+  const api = { G, RISKY_MAX, SHORT_LEGAL_FT, UNKW, GAP_MAX_M, hav, len, shownFeet, explicitBan, riskyMask, create, geometry, namedRuns, bucketize, routePair, tilesIn, openRegion };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMRouter = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

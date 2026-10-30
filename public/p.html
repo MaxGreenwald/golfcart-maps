@@ -152,6 +152,7 @@ code{font:800 13px ui-monospace,monospace;background:#f3fbfc;padding:1px 5px;bor
 .pin-stop{width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#0b6e86;border:3px solid #fff;
   box-shadow:0 3px 8px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center}
 .pin-stop span{transform:rotate(45deg);color:#fff;font:800 12px Nunito;line-height:1}
+.pin-place{width:32px;height:32px;border-radius:50%;background:#fff;border:2px solid #2563eb;display:grid;place-items:center;font-size:17px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 .pin-aff{width:32px;height:32px;border-radius:50%;background:#fff7e6;border:2px solid #f59e0b;display:grid;place-items:center;
   color:#d97706;font-size:16px;box-shadow:0 3px 8px rgba(0,0,0,.25)}
 .me-dot{width:22px;height:22px;box-sizing:border-box;border-radius:50%;background:#1d6fe0;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35)}
@@ -205,6 +206,39 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offs
   .marquee-window{overflow:visible;-webkit-mask-image:none;mask-image:none;margin:0}
   .marquee-track [data-dup]{display:none}
 }
+
+/* Turn-by-turn banner: top of the map, map-native card. */
+#navBanner{display:none;position:fixed;z-index:40;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));max-width:536px;margin:0 auto;background:#0b3a78;color:#fff;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.28);padding:10px 12px;font-family:Nunito,system-ui,sans-serif}
+#navBanner.show{display:block}
+#navBanner .nav-row{display:flex;align-items:center;gap:10px}
+#navBanner .nav-arrow{flex:none;width:46px;height:46px;border-radius:12px;background:#1d6fe0;display:grid;place-items:center;font:900 30px/1 system-ui}
+#navBanner .nav-arrow.sm{width:26px;height:26px;font-size:16px;border-radius:8px}
+#navBanner .nav-main{flex:1;min-width:0;display:flex;flex-direction:column}
+#navText{font-size:18px;line-height:1.2}
+#navSub{font-size:13px;opacity:.85;margin-top:2px}
+#navBanner .nav-btn{border:0;background:rgba(255,255,255,.15);color:#fff;border-radius:999px;width:40px;height:40px;font-size:18px;cursor:pointer}
+#navBanner .nav-acts{display:flex;gap:8px;margin-top:6px}
+#navBanner .nav-link{border:0;background:none;color:#cfe2ff;font:800 13px Nunito;cursor:pointer;padding:4px 0}
+#navBanner .nav-go{margin-left:auto;border:0;background:var(--sun,#ffc83d);color:#5a4300;font:800 14px Nunito;border-radius:999px;padding:8px 14px;cursor:pointer}
+#navSteps{list-style:none;margin:8px 0 0;padding:0;max-height:40vh;overflow:auto;border-top:1px solid rgba(255,255,255,.2)}
+#navSteps li{display:flex;align-items:center;gap:8px;padding:7px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,.1)}
+#navSteps li span:nth-child(2){flex:1}
+#navSteps .muted{opacity:.75;font-size:12px}
+@media (min-width:900px){#navBanner{left:408px;right:16px;max-width:520px;margin:0}}
+/* Navigate somewhere else */
+.city[hidden],#goPane[hidden]{display:none!important}
+.goopen{display:block;width:100%;border:2px solid var(--brand,#0b9fb3);background:#fff;color:var(--deep,#0b3a4a);font:800 15px Nunito;border-radius:14px;padding:12px;margin:4px 0 12px;cursor:pointer}
+.goq{width:100%;box-sizing:border-box;font:700 16px Nunito;padding:12px 14px;border:2px solid #cfe3ea;border-radius:12px}
+.gosugg .sugg{display:flex;flex-direction:column;align-items:flex-start;width:100%;border:0;border-bottom:1px solid #eee;background:#fff;padding:9px 6px;text-align:left;cursor:pointer;font:14px Nunito}
+.gosugg .sugg span{font-size:12px;opacity:.7}
+.gomode{display:flex;gap:8px;margin:8px 0}
+.gomode button{flex:1;border:2px solid #cfe3ea;background:#fff;border-radius:999px;padding:9px;font:800 13px Nunito;cursor:pointer}
+.gomode button[aria-pressed=true]{background:#1d6fe0;color:#fff;border-color:#1d6fe0}
+body.free-nav .dock-scroll>:not(#goPane),body.free-nav .dock-foot,body.free-nav #goTop{display:none!important}
+body.free-nav #nextBar{display:none}
+/* Focus on one ride: other rides and offers fold away. */
+.allex{border:0;background:none;color:#1d6fe0;font:800 14px Nunito;cursor:pointer;padding:6px 0;margin:0 0 4px}
+body.focus-ex .xcard:not(.active),body.focus-ex .subsec,body.focus-ex .offers{display:none}
 </style>
 </head>
 <body>
@@ -239,6 +273,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offs
   <div class="top-inner">
     <a class="word" href="/"><img src="/favicon.svg" alt="" width="28" height="28">Golf Cart Maps</a>
     <a class="city" id="fullMap" href="/map/sandiego" target="_blank" rel="noopener">Full city map</a>
+    <button class="city go-open" id="goTop" type="button" hidden>🧭 Navigate somewhere else</button>
   </div>
 </header>
 <section class="mapcard" id="mapCard" hidden>
@@ -268,6 +303,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offs
 <div id="nextBar"><b id="nextLabel">Next stop</b><button id="nextBtn" type="button">Next</button></div>
 <script src="/roadrule.js"></script>
 <script src="/router.js"></script>
+<script src="/nav.js"></script>
 <script src="/p.js"></script>
 </body>
 </html>
