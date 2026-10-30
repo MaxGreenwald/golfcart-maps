@@ -62,7 +62,7 @@ function flash(ok, text) {
 
 async function loadMe() {
   me = await api('/auth/me');
-  regions = await fetch('/data/regions.json').then(r => r.json());
+  regions = await fetch('/data/regions.json', { cache: 'no-store' }).then(r => r.json());
 }
 
 function regionById(id) {
