@@ -109,7 +109,7 @@ function applyRegion(id) {
   if (!region) return;
   const citySlug = region.slug || 'sandiego';
   const code = unlocked ? (unlocked.code || codeParam) : '';
-  fullMap.href = `/map/${citySlug}?r=${encodeURIComponent(region.id)}&partner=${encodeURIComponent(slug)}${code ? '&code=' + encodeURIComponent(code) : ''}`;
+  fullMap.href = `/map/${citySlug}?r=${encodeURIComponent(region.id)}&partner=${encodeURIComponent(slug)}${code ? '&code=' + encodeURIComponent(code) : ''}${unlocked ? '&veh=' + shopVeh() : ''}`;
   eyebrowEl.textContent = `☀️ ${region.short || region.name} · hop in`;
 }
 function applyShop(shop, open) {
@@ -399,12 +399,22 @@ function addRouteLine(points, layer, dashed) {
   L.polyline(points, { ...base, color: '#1d6fe0', weight: 12 }).addTo(layer);
 }
 
+// The shop's rental vehicle picks the road rules. Unset means golf cart (stricter).
+function shopVeh() { const s = unlocked && unlocked.shop; return s && s.vehicle === 'lsv' ? 'lsv' : 'golf_cart'; }
+function vehWord() { return shopVeh() === 'lsv' ? 'street-legal LSV' : 'golf cart'; }
+function vehLegend() {
+  return shopVeh() === 'lsv'
+    ? 'Street-legal LSV rules: roads up to 35 mph.'
+    : 'Golf cart rules: roads up to 25 mph.';
+}
+
 function connectStops(stops) {
   return withRoads(async () => {
     await loadRules();
-    const key = (region && region.id || 'sd') + ':golf_cart';
+    const veh = shopVeh();
+    const key = (region && region.id || 'sd') + ':' + veh;
     if (!roadApi || roadKey !== key) {
-      roadApi = await GCMRouter.openRegion(region, rules, 'golf_cart');
+      roadApi = await GCMRouter.openRegion(region, rules, veh);
       roadKey = key;
     }
     return roadApi.legs(stops);
@@ -414,9 +424,9 @@ function describeRoute(legs, nStops) {
   if (nStops < 2) return nStops ? 'One stop. Hit Start experience to route there from you.' : '';
   if (!legs) return 'Roads didn’t load. The stops are still pinned.';
   const skipped = legs.filter(l => !l.points).length;
-  if (skipped) return 'Follows legal golf cart roads. A hop off that network is left open.';
+  if (skipped) return `Follows legal ${vehWord()} roads. A hop off that network is left open.`;
   if (legs.some(l => l.dashed) && !legs.some(l => l.points && !l.dashed)) return 'A short hop off the mapped roads.';
-  return 'The line follows legal golf cart roads.';
+  return `The line follows legal ${vehWord()} roads.`;
 }
 
 async function drawUnlocked() {
@@ -426,7 +436,7 @@ async function drawUnlocked() {
   const goodStops = stops.filter(s => finite(s.lat, s.lon));
   let legs = null;
   if (goodStops.length > 1) {
-    setRouteNote('Tracing golf cart roads…');
+    setRouteNote(`Tracing ${vehWord()} roads…`);
     try { legs = await connectStops(goodStops); }
     catch (e) { legs = null; }
   }
@@ -560,13 +570,13 @@ async function startExperience() {
   const drawn = !!(leg && leg.points && leg.points.length >= 2);
   if (drawn) addRouteLine(leg.points, liveLayer, leg.dashed);
   if (usedCenter && !drawn) {
-    setStartNote('Location is off, and there’s no legal golf cart road from the middle of the map to the first stop. Turn on location, or follow the pins.');
+    setStartNote(`Location is off, and there’s no legal ${vehWord()} road from the middle of the map to the first stop. Turn on location, or follow the pins.`);
   } else if (usedCenter) {
     setStartNote(leg.dashed
       ? 'Location is off. Turn it on to start from you. This short hop starts from the middle of the map.'
       : 'Location is off. Turn it on to start from you. This route starts from the middle of the map.');
   } else if (!drawn) {
-    setStartNote('No legal golf cart road from here to the first stop. The pins still mark each stop.');
+    setStartNote(`No legal ${vehWord()} road from here to the first stop. The pins still mark each stop.`);
   } else if (leg.dashed) {
     setStartNote('A short hop from you to the first stop.');
   } else {
@@ -642,7 +652,8 @@ async function unlockedView() {
         <span class="star" aria-hidden="true">${placeUi(p.category)[0]}</span>
         <span><span class="xtitle">${esc(p.name)}</span><span class="xdesc">${esc(placeUi(p.category)[1])}${p.note ? ` · ${esc(p.note)}` : ''}</span></span>
       </button>`).join('')}` : ''}
-      <p class="legend">Green roads are legal for a golf cart. Red roads are off limits. The blue line is your route.</p>
+      <p class="legend">Green roads are legal for a ${esc(vehWord())}. Red roads are off limits. The blue line is your route.</p>
+      <p class="legend muted" id="vehLegend">${esc(vehLegend())}</p>
       <p class="legend">Numbered pins are stops. Amber ★ pins are partner offers.${(unlocked.places || []).length ? ' Icon pins (🍽️ 🌅 ❓ 💡 📍) are places to see. Tap one to read about it.' : ''}</p>
       <p class="legend" id="routeNote" aria-live="polite"></p>
     </div>

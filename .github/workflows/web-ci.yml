@@ -25,6 +25,8 @@ jobs:
         run: node --test tests/partner_access.test.mjs
       - name: Partner places validation (category enum, no coupon, https link)
         run: node --test tests/partner_places.test.mjs
+      - name: Shop rental vehicle (API values, worker stores and exposes it)
+        run: node --test tests/partner_vehicle.test.mjs
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - name: Unit tests (roundabout rule, validators, SW cache name, single source)
@@ -100,6 +102,8 @@ jobs:
         run: python -m unittest tests.test_partner_super_edit -v
       - name: test_partner_places (owner place CRUD, place as stop, renter icons + notes)
         run: python -m unittest tests.test_partner_places -v
+      - name: test_partner_vehicle (admin saves vehicle; LSV shop draws 35 mph Grand Ave green, golf cart shop red)
+        run: python -m unittest tests.test_partner_vehicle -v
       - uses: actions/upload-artifact@v4
         if: failure()
         with: {name: ci-shots, path: ci-shots, if-no-files-found: ignore}
