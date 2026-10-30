@@ -151,6 +151,48 @@ class TurnByTurn(unittest.TestCase):
         self.assertTrue(pg.evaluate("(window.__navSaid||[]).length") > 0)
         ctx.close()
 
+    def test_navigate_somewhere_else(self):
+        for w, h, tag in ((390, 844, "mobile"), (1280, 800, "desktop")):
+            ctx, pg = self.page(w, h)
+            pg.route("https://photon.komoot.io/**", lambda r: r.abort())
+            self.assertFalse(pg.is_visible("#fullMap"), tag)
+            self.assertTrue(pg.is_visible("#goTop") or pg.is_visible(".goopen"), tag)
+            pg.click(".goopen")
+            self.assertTrue(pg.is_visible("#goQ"), tag)
+            self.assertFalse(pg.is_visible(".xcard"), tag)
+            self.assertFalse(pg.is_visible("#startEx"), tag)
+            # Search a street from the loaded SD road data, pick it, get a legal route + banner.
+            pg.wait_for_timeout(1500)
+            pg.fill("#goQ", "Crystal Pier")
+            pg.wait_for_selector("#goSugg .sugg", timeout=15000)
+            pg.click("#goSugg .sugg >> nth=0")
+            pg.wait_for_selector("#navBanner.show", timeout=30000)
+            self.assertRegex(pg.inner_text("#goNote"), r"mi (on legal golf cart roads|· ⚠️)")
+            route = pg.evaluate("GCMNavDebug()")
+            self.assertEqual(route["stop"], -1)
+            self.assertTrue(route["steps"][-1]["text"].startswith("Arrive at "), route["steps"][-1])
+            pg.screenshot(path=os.path.join(SHOTS, f"tbt-free-{tag}.png"))
+            # Risky toggle reroutes; Legal only is the default.
+            self.assertEqual(pg.get_attribute("#goMode [data-mode=legal]", "aria-pressed"), "true")
+            pg.click("#goMode [data-mode=risky]")
+            self.assertEqual(pg.get_attribute("#goMode [data-mode=risky]", "aria-pressed"), "true")
+            pg.wait_for_timeout(1500)
+            # Drop a pin by tapping the map routes there instead.
+            pg.click("#goMode [data-mode=legal]")
+            box = pg.locator("#map").bounding_box()
+            pg.mouse.click(box["x"] + box["width"] * 0.75, box["y"] + box["height"] * 0.4)
+            pg.wait_for_function("() => /Dropped pin/.test(document.getElementById('goQ').value)", timeout=10000)
+            # Arrive.
+            pg.wait_for_function("() => { const r = GCMNavDebug(); return r && r.steps.slice(-1)[0].text === 'Arrive at Dropped pin' }", timeout=30000)
+            end = pg.evaluate("GCMNavDebug().pts.slice(-1)[0]")
+            ctx.set_geolocation({"latitude": end[0], "longitude": end[1]})
+            pg.wait_for_function("() => /arrived at Dropped pin/.test(document.getElementById('navText').textContent)", timeout=10000)
+            # Back to experiences.
+            pg.click("#goBack")
+            self.assertTrue(pg.is_visible(".xcard[data-ex='e1']"), tag)
+            self.assertFalse(pg.is_visible("#navBanner"), tag)
+            ctx.close()
+
 
 if __name__ == "__main__":
     unittest.main()

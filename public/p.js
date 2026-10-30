@@ -110,6 +110,9 @@ function applyRegion(id) {
   eyebrowEl.textContent = `☀️ ${region.short || region.name} · hop in`;
 }
 function applyShop(shop, open) {
+  fullMap.hidden = !!open;
+  const hb = document.getElementById('goTop');
+  if (hb) hb.hidden = !open;
   titleEl.textContent = shop.name || 'Golf Cart Maps';
   blurbEl.textContent = pitchFor(shop, open);
   document.title = `${shop.name || 'Partner'} · Golf Cart Maps`;
@@ -262,6 +265,7 @@ function ensureMap() {
     routeLayer = L.layerGroup().addTo(map);
     liveLayer = L.layerGroup().addTo(map);
     map.on('moveend', scheduleRoads);
+    map.on('click', e => { if (freeOn) pickDest({ name: 'Dropped pin', lat: e.latlng.lat, lon: e.latlng.lng }); });
   }
   map.invalidateSize();
 }
@@ -533,13 +537,13 @@ function stopNav() {
   if (el) el.classList.remove('show');
   document.body.classList.remove('has-nav');
 }
-function beginNav(leg, i) {
+function beginNav(leg, i, target) {
   const stops = activeEx && activeEx.stops;
-  const stop = stops && stops[i];
+  const stop = target || (stops && stops[i]);
   if (!stop || !leg || !leg.points || leg.points.length < 2) { stopNav(); return; }
   const runs = leg.runs && leg.runs.length ? leg.runs : [{ name: '', points: leg.points }];
   navRoute = GCMNav.buildSteps(runs, stop.label || `stop ${i + 1}`);
-  navStop = i; navState = null; navArrived = false; navSpoken = '';
+  navStop = target ? -1 : i; navState = null; navArrived = false; navSpoken = '';
   const el = navEl();
   el.classList.add('show');
   document.body.classList.add('has-nav');
@@ -569,7 +573,14 @@ async function onNavFix(ll) {
   if (!navRoute || navArrived || navRerouting) return;
   const st = GCMNav.status(navRoute, [ll.lat, ll.lon], navState);
   navState = st;
-  const stops = activeEx.stops;
+  const stops = (activeEx && activeEx.stops) || [];
+  if (st.arrived && navStop < 0) {
+    navArrived = true;
+    paintNav('⚑', `You’ve arrived at ${freeDest.label}`, 'Back to experiences any time.');
+    navEl().querySelector('#navGo').hidden = true;
+    say(`You’ve arrived at ${freeDest.label}.`);
+    return;
+  }
   if (st.arrived) {
     navArrived = true;
     const here = stops[navStop];
@@ -588,7 +599,7 @@ async function onNavFix(ll) {
     navRerouting = true;
     paintNav('↻', 'Rerouting on legal roads…', '');
     say('Rerouting');
-    try { await routeToStop(navStop, true); } finally { navRerouting = false; }
+    try { if (navStop < 0) await routeFree(freeDest, true); else await routeToStop(navStop, true); } finally { navRerouting = false; }
     return;
   }
   const after = navRoute.steps[st.idx + 1];
@@ -617,6 +628,117 @@ async function routeToStop(i, quiet) {
     paintNav('⚠', 'No legal golf cart road from here', `Follow the pin to stop ${i + 1}.`);
     navRoute = null;
   }
+}
+
+// ---- Navigate somewhere else: normal search / drop pin / Legal only vs Risky, inside the renter page.
+let freeDest = null, freeRisky = false, freeMark = null, freeOn = false, freeTimer = 0, poiList = null;
+async function loadPois() {
+  if (poiList) return poiList;
+  try { poiList = await fetch(`/data/${region.id}/pois.json`).then(r => r.json()); } catch (e) { poiList = []; }
+  return poiList;
+}
+async function searchPlaces(q) {
+  const n = q.toLowerCase().trim();
+  if (n.length < 2) return [];
+  const out = [];
+  (await loadPois()).forEach(p => {
+    const pn = String(p[0]).toLowerCase();
+    if (pn.includes(n)) out.push({ name: p[0], sub: String(p[1] || 'place').replace('_', ' '), lat: p[3], lon: p[2], score: pn.startsWith(n) ? 0 : 1 });
+  });
+  if (roadApi) out.push(...roadApi.streets(n, 4));
+  out.sort((a, b) => a.score - b.score);
+  if (out.length < 3 && region && region.bbox) {
+    try {
+      const b = region.bbox, c = map.getCenter();
+      const ac = new AbortController(), to = setTimeout(() => ac.abort(), 2500);
+      const j = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=5&lat=${c.lat}&lon=${c.lng}&bbox=${b[1]},${b[0]},${b[3]},${b[2]}`, { signal: ac.signal }).then(r => r.json());
+      clearTimeout(to);
+      j.features.forEach(f => { const p = f.properties; const nm = p.name || [p.housenumber, p.street].filter(Boolean).join(' ');
+        if (nm) out.push({ name: nm, sub: [p.city || p.district, p.osm_value].filter(Boolean).join(' · '), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0] }); });
+    } catch (e) {}
+  }
+  return out.slice(0, 6);
+}
+function freeMode(on) {
+  freeOn = !!on;
+  document.body.classList.toggle('free-nav', freeOn);
+  const pane = document.getElementById('goPane');
+  if (pane) pane.hidden = !freeOn;
+  if (freeOn) {
+    guided = false;
+    startToken++;
+    stopNav();
+    drawToken++;
+    [liveLayer, routeLayer, pins].forEach(l => l && l.clearLayers());
+    updateNext();
+    const inp = document.getElementById('goQ');
+    if (inp) inp.focus({ preventScroll: true });
+    if (!meLL) locateMe().then(l => { if (l) { meLL = l; placeMe(); } });
+  } else {
+    stopNav();
+    freeDest = null;
+    if (freeMark && map) { map.removeLayer(freeMark); freeMark = null; }
+    if (liveLayer) liveLayer.clearLayers();
+    drawUnlocked();
+  }
+}
+function setGoNote(t) { const el = document.getElementById('goNote'); if (el) el.textContent = t; }
+async function pickDest(d) {
+  freeDest = { label: d.name || 'Dropped pin', lat: +d.lat, lon: +d.lon };
+  const sg = document.getElementById('goSugg'); if (sg) sg.innerHTML = '';
+  const inp = document.getElementById('goQ'); if (inp) inp.value = freeDest.label;
+  if (freeMark) map.removeLayer(freeMark);
+  freeMark = L.marker([freeDest.lat, freeDest.lon], { icon: stopIcon('★'), zIndexOffset: 800 }).addTo(map);
+  await routeFree(freeDest);
+}
+async function routeFree(dest, quiet) {
+  if (!dest) return;
+  if (!meLL) { const l = await locateMe(); if (l) { meLL = l; placeMe(); } }
+  const from = meLL || { lat: map.getCenter().lat, lon: map.getCenter().lng };
+  setGoNote('Finding a cart-friendly route…');
+  let leg = null;
+  try {
+    await connectStops([]);
+    leg = await withRoads(() => roadApi.trip(from, dest, { risky: freeRisky }));
+  } catch (e) { leg = null; }
+  if (!freeOn) return;
+  if (liveLayer) liveLayer.clearLayers();
+  if (!leg || !leg.points || leg.points.length < 2) {
+    stopNav();
+    setGoNote(freeRisky ? 'No way through, even with risky stretches.' : 'No legal route there. Try ⚠️ Risky to see short-stretch options.');
+    return;
+  }
+  addRouteLine(leg.points, liveLayer, leg.dashed);
+  const risky = (leg.runs || []).filter(r => r.risky);
+  risky.forEach(r => L.polyline(r.points, { renderer: routeR, pane: 'route', color: '#e5484d', weight: 6, dashArray: '8 8', interactive: false }).addTo(liveLayer));
+  const mi = (navRouteLen(leg.points) / 1609.34).toFixed(1);
+  setGoNote(risky.length ? `${mi} mi · ⚠️ ${risky.length} risky stretch${risky.length > 1 ? 'es' : ''} (red dashes). Use caution.` : `${mi} mi on legal golf cart roads.`);
+  if (!quiet) frameLatLngs(leg.points.concat([[from.lat, from.lon]]));
+  beginNav(leg, -1, dest);
+}
+function navRouteLen(pts) { let m = 0; for (let i = 1; i < pts.length; i++) m += GCMNav.hav(pts[i - 1], pts[i]); return m; }
+function wireFree() {
+  const inp = document.getElementById('goQ'), sg = document.getElementById('goSugg');
+  if (!inp) return;
+  inp.oninput = () => {
+    clearTimeout(freeTimer);
+    freeTimer = setTimeout(async () => {
+      const q = inp.value;
+      const list = await searchPlaces(q);
+      if (inp.value !== q) return;
+      sg.innerHTML = list.map((x, k) => `<button type="button" class="sugg" data-k="${k}"><b>${esc(x.name)}</b><span>${esc(x.sub || '')}</span></button>`).join('');
+      sg.querySelectorAll('.sugg').forEach(b => { b.onclick = () => pickDest(list[+b.dataset.k]); });
+    }, 200);
+  };
+  document.querySelectorAll('#goMode button').forEach(b => {
+    b.onclick = () => {
+      freeRisky = b.dataset.mode === 'risky';
+      document.querySelectorAll('#goMode button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+      if (freeDest) routeFree(freeDest);
+    };
+  });
+  document.getElementById('goBack').onclick = () => freeMode(false);
+  document.querySelectorAll('.go-open').forEach(b => { b.onclick = () => freeMode(true); });
 }
 
 function locateMe() {
@@ -756,6 +878,16 @@ async function unlockedView() {
         <p class="yay-kicker">You’re in</p>
         <p>Code <b>${esc(code)}</b> unlocked ${esc(shop.name)}. Pick a ride, then start from where you are.</p>
       </div>
+      <div id="goPane" hidden>
+        <button class="allex" id="goBack" type="button">‹ Back to experiences</button>
+        <h2 class="sec">Navigate somewhere else</h2>
+        <input id="goQ" class="goq" type="search" placeholder="Search a place or street" autocomplete="off" aria-label="Where to?">
+        <div id="goSugg" class="gosugg"></div>
+        <p class="fine">Or tap the map to drop a pin.</p>
+        <div class="gomode" id="goMode" role="group" aria-label="Route mode"><button type="button" data-mode="legal" aria-pressed="true">✅ Legal only</button><button type="button" data-mode="risky" aria-pressed="false">⚠️ Risky</button></div>
+        <p class="legend" id="goNote" aria-live="polite"></p>
+      </div>
+      <button class="go-open goopen" type="button">🧭 Navigate somewhere else</button>
       <button class="allex" id="allEx" type="button" hidden>‹ All experiences</button>
       <h2 class="sec">Experiences</h2>
       <p class="subsec">Tap one. Its stops light up on the map.</p>
@@ -778,6 +910,7 @@ async function unlockedView() {
   panel.querySelectorAll('.xcard').forEach(el => {
     el.onclick = () => { selectEx(el.dataset.ex); focusEx(true); };
   });
+  wireFree();
   const allBtn = document.getElementById('allEx');
   if (allBtn) allBtn.onclick = () => focusEx(false);
   panel.querySelectorAll('.ocard').forEach(el => {

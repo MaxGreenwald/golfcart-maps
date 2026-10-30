@@ -224,6 +224,17 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offs
 #navSteps li span:nth-child(2){flex:1}
 #navSteps .muted{opacity:.75;font-size:12px}
 @media (min-width:900px){#navBanner{left:408px;right:16px;max-width:520px;margin:0}}
+/* Navigate somewhere else */
+.city[hidden],#goPane[hidden]{display:none!important}
+.goopen{display:block;width:100%;border:2px solid var(--brand,#0b9fb3);background:#fff;color:var(--deep,#0b3a4a);font:800 15px Nunito;border-radius:14px;padding:12px;margin:4px 0 12px;cursor:pointer}
+.goq{width:100%;box-sizing:border-box;font:700 16px Nunito;padding:12px 14px;border:2px solid #cfe3ea;border-radius:12px}
+.gosugg .sugg{display:flex;flex-direction:column;align-items:flex-start;width:100%;border:0;border-bottom:1px solid #eee;background:#fff;padding:9px 6px;text-align:left;cursor:pointer;font:14px Nunito}
+.gosugg .sugg span{font-size:12px;opacity:.7}
+.gomode{display:flex;gap:8px;margin:8px 0}
+.gomode button{flex:1;border:2px solid #cfe3ea;background:#fff;border-radius:999px;padding:9px;font:800 13px Nunito;cursor:pointer}
+.gomode button[aria-pressed=true]{background:#1d6fe0;color:#fff;border-color:#1d6fe0}
+body.free-nav .dock-scroll>:not(#goPane),body.free-nav .dock-foot,body.free-nav #goTop{display:none!important}
+body.free-nav #nextBar{display:none}
 /* Focus on one ride: other rides and offers fold away. */
 .allex{border:0;background:none;color:#1d6fe0;font:800 14px Nunito;cursor:pointer;padding:6px 0;margin:0 0 4px}
 body.focus-ex .xcard:not(.active),body.focus-ex .subsec,body.focus-ex .offers{display:none}
@@ -261,6 +272,7 @@ body.focus-ex .xcard:not(.active),body.focus-ex .subsec,body.focus-ex .offers{di
   <div class="top-inner">
     <a class="word" href="/"><img src="/favicon.svg" alt="" width="28" height="28">Golf Cart Maps</a>
     <a class="city" id="fullMap" href="/map/sandiego" target="_blank" rel="noopener">Full city map</a>
+    <button class="city go-open" id="goTop" type="button" hidden>🧭 Navigate somewhere else</button>
   </div>
 </header>
 <section class="mapcard" id="mapCard" hidden>
