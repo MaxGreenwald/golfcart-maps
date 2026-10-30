@@ -1150,14 +1150,6 @@
    "url": "https://www.mapillary.com/app/?lat=32.849426&lng=-117.241070&z=19&focus=map&mapFeatureId=202398765057532"
   },
   {
-   "road": "Turquoise Street",
-   "way": 729773618,
-   "osm_mph": 99,
-   "mapillary_mph": 25,
-   "change": "newly allowed",
-   "url": "https://www.mapillary.com/app/?lat=32.808070&lng=-117.261566&z=19&focus=map&mapFeatureId=1164170821746146"
-  },
-  {
    "road": "Scholars Drive South",
    "way": 783441133,
    "osm_mph": 25,

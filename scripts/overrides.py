@@ -236,3 +236,47 @@ def build(ways):
         if e: out[i] = (e["mph"], e["mph"] < 40, e["url"], e["label"]); n += 1
     report.append(("sweep", "accuracy sweep", f"{n} ways"))
     return out, report
+
+# ---- Pacific Beach unknown-speed gaps (Oct 29 2026; research/pb_speeds/README.md) ----
+# OSM has no maxspeed on these PB pieces, so the build drew them 99 (red in every mode). Each entry cites a posted-sign source
+# (Mapillary detections facing traffic, research/pb_speeds/signs_by_road.json) or a city speed resolution, cross-checked with the
+# City of San Diego / SANDAG road layer SPEED (research/pb_speeds/sandag.json; a class speed, never used alone).
+# GAP rules only fill ways that have no maxspeed tag and no other override, so they never replace an OSM tag or a curated source.
+_PBG = len(INTEL)
+_R3 = "https://docs.sandiego.gov/council_reso_ordinance/rao2026/R-316675.pdf"
+_PB_GAPS = [  # (road, segment text, mph, source url, name regex, bbox S,W,N,E)
+    ("Turquoise St", "Mission Blvd - Pacifica Dr: posted 25 \u2014 R-316675 Table 3 (La Jolla Bl - Cass St, 25); Mapillary 25 signs at 3 spots incl. Cass St; SANDAG 20-25",
+     25, MLY % ("32.809560", "-117.255490", "667828525767446"), r"^Turquoise Street$", (32.805, -117.265, 32.812, -117.248)),
+    ("Foothill Blvd", "Beryl St - Loring St: posted 25 \u2014 Mapillary 25 sign; SANDAG 20; local report (Max, Oct 29 2026)",
+     25, MLY % ("32.810240", "-117.249320", "501492799481148"), r"^Foothill Boulevard$", (32.805, -117.252, 32.815, -117.244)),
+    ("Beryl St", "Foothill Blvd - Soledad Mtn Rd: posted 25 \u2014 Mapillary 25 signs at 3 spots; SANDAG 20",
+     25, MLY % ("32.806760", "-117.240810", "1379246190173347"), r"^Beryl Street$", (32.805, -117.245, 32.810, -117.230)),
+    ("Mission Blvd", "Loring St - Turquoise St: posted 30 \u2014 Mapillary 30 sign north of Loring (30 corridor south of it); SANDAG 25",
+     30, MLY % ("32.805570", "-117.258230", "625302710421552"), r"^Mission Boulevard$", (32.8045, -117.2600, 32.8095, -117.2570)),
+    ("Mission Bay Dr", "Garnet Ave - Balboa Ave ramps: posted 35 \u2014 Mapillary 35 signs at 4 spots just south; SANDAG 30",
+     35, MLY % ("32.805970", "-117.218920", "620502043951090"), r"^Mission Bay Drive$", (32.8065, -117.2205, 32.8100, -117.2185)),
+    ("Balboa Ave", "Grand Ave - Garnet Ave: posted 35 \u2014 Mapillary 35 signs at 5 spots; R-316675 Table 1 (Grand Av - Garnet Av); SANDAG 25",
+     35, MLY % ("32.802090", "-117.227670", "289684412827493"), r"^Balboa Avenue$", (32.799, -117.2345, 32.8035, -117.2260)),
+    ("Soledad Mountain Rd", "Beryl St area (north of Garnet hill): posted 35 \u2014 Mapillary 35 signs at 5 spots (32.810-32.827); SANDAG 35",
+     35, MLY % ("32.810110", "-117.230940", "594793080225895"), r"^Soledad Mountain Road$", (32.8080, -117.2320, 32.8115, -117.2278)),
+    ("Soledad Mountain Rd", "Garnet Ave - hill: posted 40 \u2014 Mapillary 40 sign; SANDAG says 35 (class speed); kept at the sign, needs a Street View check",
+     40, MLY % ("32.805570", "-117.223900", "322255992662393"), r"^Soledad Mountain Road$", (32.8045, -117.2278, 32.8082, -117.2235)),
+    ("Garnet Ave", "at Soledad Mtn Rd (east of Balboa Ave): posted 40 \u2014 Mapillary 40 sign; R-316675 Table 1 (Balboa (W) Av - Moraga Av, -5 from 45)",
+     40, MLY % ("32.805000", "-117.223970", "1829036611190471"), r"^Garnet Avenue$", (32.8040, -117.2250, 32.8055, -117.2235)),
+]
+GAP_RULES = {}
+for road, seg, mph_, url, rre, bb in _PB_GAPS:
+    k = len(INTEL)
+    INTEL.append({"road": road, "city": "San Diego (Pacific Beach)", "from_to_segment_if_known": seg, "speed_mph": mph_, "lsv_ok": mph_ <= 35, "source_url": url, "confidence": "high"})
+    GAP_RULES[k] = (rre, bb)
+_build_sweep = build
+def build(ways):
+    out, report = _build_sweep(ways)
+    for k, (rre, bb) in GAP_RULES.items():
+        e, r, n = INTEL[k], re.compile(rre), 0
+        for i, (t, g, nk) in enumerate(ways):
+            if i in out or "maxspeed" in t or not r.search(t.get("name", "")): continue
+            if not inb(g[len(g) // 2], bb): continue
+            out[i] = (e["speed_mph"], e["lsv_ok"], e["source_url"], f'{e["road"]} ({e["from_to_segment_if_known"]})'); n += 1
+        report.append((k, e["road"], f"gap: {n} ways -> {e['speed_mph']} mph"))
+    return out, report

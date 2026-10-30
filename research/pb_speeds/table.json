@@ -1,0 +1,1232 @@
+[
+ {
+  "name": "",
+  "hw": "primary_link",
+  "way": 758645064,
+  "m": 76,
+  "lat": 32.79991,
+  "lon": -117.23299,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "primary_link",
+  "way": 203055889,
+  "m": 73,
+  "lat": 32.80184,
+  "lon": -117.21544,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "primary_link",
+  "way": 1091023163,
+  "m": 20,
+  "lat": 32.8019,
+  "lon": -117.2153,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "primary_link",
+  "way": 1503149684,
+  "m": 4,
+  "lat": 32.8019,
+  "lon": -117.2153,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "primary_link",
+  "way": 1503149685,
+  "m": 10,
+  "lat": 32.80193,
+  "lon": -117.2154,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "primary_link",
+  "way": 1187623846,
+  "m": 9,
+  "lat": 32.80196,
+  "lon": -117.21523,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "primary_link",
+  "way": 1341480940,
+  "m": 42,
+  "lat": 32.80204,
+  "lon": -117.21583,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "primary_link",
+  "way": 1503149681,
+  "m": 13,
+  "lat": 32.80207,
+  "lon": -117.21596,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "primary_link",
+  "way": 755759545,
+  "m": 29,
+  "lat": 32.80211,
+  "lon": -117.21584,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "secondary_link",
+  "way": 632417925,
+  "m": 91,
+  "lat": 32.80595,
+  "lon": -117.22417,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "motorway_link",
+  "way": 1021860124,
+  "m": 48,
+  "lat": 32.80659,
+  "lon": -117.21746,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "motorway_link",
+  "way": 1013766438,
+  "m": 76,
+  "lat": 32.80664,
+  "lon": -117.21513,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "secondary_link",
+  "way": 1027286701,
+  "m": 13,
+  "lat": 32.80673,
+  "lon": -117.22467,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "primary_link",
+  "way": 42852368,
+  "m": 77,
+  "lat": 32.80686,
+  "lon": -117.21916,
+  "segs": 3,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "motorway_link",
+  "way": 158997075,
+  "m": 109,
+  "lat": 32.80729,
+  "lon": -117.2175,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "motorway_link",
+  "way": 1021860123,
+  "m": 77,
+  "lat": 32.80739,
+  "lon": -117.21671,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "primary_link",
+  "way": 1124070612,
+  "m": 32,
+  "lat": 32.80756,
+  "lon": -117.21903,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "primary_link",
+  "way": 1124070610,
+  "m": 8,
+  "lat": 32.80763,
+  "lon": -117.219,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "secondary_link",
+  "way": 436403547,
+  "m": 12,
+  "lat": 32.80803,
+  "lon": -117.22679,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "secondary_link",
+  "way": 1027286704,
+  "m": 11,
+  "lat": 32.80819,
+  "lon": -117.2284,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "motorway_link",
+  "way": 436408594,
+  "m": 31,
+  "lat": 32.80952,
+  "lon": -117.21973,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "motorway_link",
+  "way": 436408595,
+  "m": 149,
+  "lat": 32.8098,
+  "lon": -117.21979,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "motorway_link",
+  "way": 158997090,
+  "m": 183,
+  "lat": 32.81116,
+  "lon": -117.21996,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "motorway_link",
+  "way": 158997094,
+  "m": 224,
+  "lat": 32.81166,
+  "lon": -117.22023,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "motorway_link",
+  "way": 158997085,
+  "m": 183,
+  "lat": 32.8128,
+  "lon": -117.22021,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "motorway_link",
+  "way": 1007359830,
+  "m": 150,
+  "lat": 32.81376,
+  "lon": -117.22069,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "",
+  "hw": "motorway_link",
+  "way": 158997093,
+  "m": 250,
+  "lat": 32.81569,
+  "lon": -117.22271,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "Balboa Avenue",
+  "hw": "primary",
+  "way": 436316457,
+  "m": 57,
+  "lat": 32.7993,
+  "lon": -117.23385,
+  "segs": 1,
+  "sandag": 25,
+  "signs400m": [
+   35,
+   35,
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Balboa Avenue",
+  "hw": "primary",
+  "way": 38087565,
+  "m": 73,
+  "lat": 32.79967,
+  "lon": -117.23342,
+  "segs": 1,
+  "sandag": 25,
+  "signs400m": [
+   35,
+   35,
+   35,
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Balboa Avenue",
+  "hw": "primary",
+  "way": 757296336,
+  "m": 181,
+  "lat": 32.80055,
+  "lon": -117.2313,
+  "segs": 1,
+  "sandag": 25,
+  "signs400m": [
+   35,
+   35,
+   35,
+   35,
+   35,
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Balboa Avenue",
+  "hw": "primary",
+  "way": 436317653,
+  "m": 124,
+  "lat": 32.80107,
+  "lon": -117.23013,
+  "segs": 1,
+  "sandag": 25,
+  "signs400m": [
+   35,
+   35,
+   35,
+   35,
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Balboa Avenue",
+  "hw": "primary",
+  "way": 436317652,
+  "m": 58,
+  "lat": 32.80131,
+  "lon": -117.22958,
+  "segs": 1,
+  "sandag": 25,
+  "signs400m": [
+   35,
+   35,
+   35,
+   35,
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Balboa Avenue",
+  "hw": "primary",
+  "way": 113101944,
+  "m": 315,
+  "lat": 32.80197,
+  "lon": -117.22804,
+  "segs": 1,
+  "sandag": 25,
+  "signs400m": [
+   35,
+   35,
+   35,
+   35,
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Balboa Avenue",
+  "hw": "primary",
+  "way": 641733653,
+  "m": 45,
+  "lat": 32.80306,
+  "lon": -117.22636,
+  "segs": 1,
+  "sandag": 25,
+  "signs400m": [
+   35,
+   35,
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Balboa Avenue",
+  "hw": "primary",
+  "way": 128826130,
+  "m": 14,
+  "lat": 32.80633,
+  "lon": -117.21765,
+  "segs": 1,
+  "sandag": null,
+  "signs400m": []
+ },
+ {
+  "name": "Beryl Street",
+  "hw": "secondary",
+  "way": 663256247,
+  "m": 185,
+  "lat": 32.80671,
+  "lon": -117.24099,
+  "segs": 1,
+  "sandag": 20,
+  "signs400m": [
+   25,
+   25,
+   25,
+   25
+  ]
+ },
+ {
+  "name": "Beryl Street",
+  "hw": "secondary",
+  "way": 663256246,
+  "m": 263,
+  "lat": 32.80712,
+  "lon": -117.23918,
+  "segs": 2,
+  "sandag": 20,
+  "signs400m": [
+   25,
+   25
+  ]
+ },
+ {
+  "name": "Beryl Street",
+  "hw": "secondary",
+  "way": 663255386,
+  "m": 90,
+  "lat": 32.80753,
+  "lon": -117.23734,
+  "segs": 1,
+  "sandag": 20,
+  "signs400m": [
+   25,
+   25
+  ]
+ },
+ {
+  "name": "Beryl Street",
+  "hw": "secondary",
+  "way": 663255394,
+  "m": 330,
+  "lat": 32.80826,
+  "lon": -117.23392,
+  "segs": 1,
+  "sandag": 20,
+  "signs400m": [
+   25
+  ]
+ },
+ {
+  "name": "Foothill Boulevard",
+  "hw": "secondary",
+  "way": 1389772161,
+  "m": 45,
+  "lat": 32.80781,
+  "lon": -117.24586,
+  "segs": 1,
+  "sandag": 20,
+  "signs400m": []
+ },
+ {
+  "name": "Foothill Boulevard",
+  "hw": "secondary",
+  "way": 1389772155,
+  "m": 49,
+  "lat": 32.8081,
+  "lon": -117.2462,
+  "segs": 1,
+  "sandag": 20,
+  "signs400m": [
+   25
+  ]
+ },
+ {
+  "name": "Foothill Boulevard",
+  "hw": "secondary",
+  "way": 323749283,
+  "m": 479,
+  "lat": 32.80854,
+  "lon": -117.24665,
+  "segs": 5,
+  "sandag": 20,
+  "signs400m": [
+   25
+  ]
+ },
+ {
+  "name": "Garnet Avenue",
+  "hw": "primary",
+  "way": 436317660,
+  "m": 61,
+  "lat": 32.80472,
+  "lon": -117.22412,
+  "segs": 2,
+  "sandag": 25,
+  "signs400m": [
+   25,
+   25,
+   25,
+   35,
+   40
+  ]
+ },
+ {
+  "name": "Mission Bay Drive",
+  "hw": "primary",
+  "way": 436408591,
+  "m": 36,
+  "lat": 32.8069,
+  "lon": -117.21924,
+  "segs": 1,
+  "sandag": 30,
+  "signs400m": [
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Mission Bay Drive",
+  "hw": "primary",
+  "way": 42852365,
+  "m": 9,
+  "lat": 32.80698,
+  "lon": -117.21926,
+  "segs": 1,
+  "sandag": 30,
+  "signs400m": [
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Mission Bay Drive",
+  "hw": "primary",
+  "way": 1463047252,
+  "m": 42,
+  "lat": 32.80735,
+  "lon": -117.21935,
+  "segs": 1,
+  "sandag": 30,
+  "signs400m": [
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Mission Bay Drive",
+  "hw": "primary",
+  "way": 1124070613,
+  "m": 7,
+  "lat": 32.80741,
+  "lon": -117.21936,
+  "segs": 1,
+  "sandag": 30,
+  "signs400m": [
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Mission Bay Drive",
+  "hw": "primary",
+  "way": 1347092756,
+  "m": 11,
+  "lat": 32.80751,
+  "lon": -117.21937,
+  "segs": 1,
+  "sandag": 30,
+  "signs400m": [
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Mission Bay Drive",
+  "hw": "primary",
+  "way": 436408592,
+  "m": 8,
+  "lat": 32.80758,
+  "lon": -117.21938,
+  "segs": 1,
+  "sandag": 30,
+  "signs400m": [
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Mission Bay Drive",
+  "hw": "primary",
+  "way": 39161419,
+  "m": 30,
+  "lat": 32.80785,
+  "lon": -117.21942,
+  "segs": 1,
+  "sandag": 30,
+  "signs400m": [
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Mission Bay Drive",
+  "hw": "primary",
+  "way": 436408583,
+  "m": 37,
+  "lat": 32.80818,
+  "lon": -117.21947,
+  "segs": 1,
+  "sandag": 30,
+  "signs400m": [
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Mission Bay Drive",
+  "hw": "primary",
+  "way": 1341481972,
+  "m": 7,
+  "lat": 32.80824,
+  "lon": -117.21948,
+  "segs": 1,
+  "sandag": 30,
+  "signs400m": [
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Mission Bay Drive",
+  "hw": "primary",
+  "way": 1428430873,
+  "m": 146,
+  "lat": 32.8083,
+  "lon": -117.21956,
+  "segs": 1,
+  "sandag": 30,
+  "signs400m": [
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Mission Bay Drive",
+  "hw": "primary",
+  "way": 39161418,
+  "m": 69,
+  "lat": 32.80886,
+  "lon": -117.21952,
+  "segs": 1,
+  "sandag": 30,
+  "signs400m": [
+   35,
+   35
+  ]
+ },
+ {
+  "name": "Mission Bay Drive",
+  "hw": "primary",
+  "way": 436408588,
+  "m": 75,
+  "lat": 32.80953,
+  "lon": -117.21961,
+  "segs": 1,
+  "sandag": 30,
+  "signs400m": [
+   35
+  ]
+ },
+ {
+  "name": "Mission Boulevard",
+  "hw": "secondary",
+  "way": 35340211,
+  "m": 287,
+  "lat": 32.80553,
+  "lon": -117.25823,
+  "segs": 6,
+  "sandag": 25,
+  "signs400m": [
+   30,
+   30,
+   30,
+   30
+  ]
+ },
+ {
+  "name": "Mission Boulevard",
+  "hw": "secondary",
+  "way": 436608631,
+  "m": 28,
+  "lat": 32.80806,
+  "lon": -117.25898,
+  "segs": 1,
+  "sandag": 25,
+  "signs400m": [
+   30
+  ]
+ },
+ {
+  "name": "Mission Boulevard",
+  "hw": "secondary",
+  "way": 436608633,
+  "m": 37,
+  "lat": 32.80823,
+  "lon": -117.25904,
+  "segs": 2,
+  "sandag": 25,
+  "signs400m": [
+   30
+  ]
+ },
+ {
+  "name": "Mission Boulevard",
+  "hw": "secondary",
+  "way": 436608632,
+  "m": 32,
+  "lat": 32.80865,
+  "lon": -117.25922,
+  "segs": 1,
+  "sandag": 25,
+  "signs400m": [
+   30
+  ]
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 140819393,
+  "m": 315,
+  "lat": 32.81085,
+  "lon": -117.21516,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436407868,
+  "m": 64,
+  "lat": 32.81225,
+  "lon": -117.21628,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436407864,
+  "m": 111,
+  "lat": 32.81311,
+  "lon": -117.2169,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436407867,
+  "m": 27,
+  "lat": 32.81332,
+  "lon": -117.21705,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436407865,
+  "m": 10,
+  "lat": 32.8134,
+  "lon": -117.21711,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436407866,
+  "m": 17,
+  "lat": 32.81352,
+  "lon": -117.21722,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436407871,
+  "m": 39,
+  "lat": 32.81381,
+  "lon": -117.21745,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436407869,
+  "m": 53,
+  "lat": 32.81395,
+  "lon": -117.2176,
+  "segs": 3,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436407872,
+  "m": 746,
+  "lat": 32.81452,
+  "lon": -117.21818,
+  "segs": 10,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436461715,
+  "m": 35,
+  "lat": 32.81922,
+  "lon": -117.22365,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436461719,
+  "m": 161,
+  "lat": 32.82027,
+  "lon": -117.22484,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436403510,
+  "m": 43,
+  "lat": 32.82056,
+  "lon": -117.22515,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436454009,
+  "m": 52,
+  "lat": 32.82091,
+  "lon": -117.22552,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Morena Boulevard",
+  "hw": "secondary",
+  "way": 436454008,
+  "m": 31,
+  "lat": 32.82111,
+  "lon": -117.22575,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": []
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 477067340,
+  "m": 14,
+  "lat": 32.80488,
+  "lon": -117.22383,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 1347092892,
+  "m": 9,
+  "lat": 32.80499,
+  "lon": -117.2239,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 436403528,
+  "m": 14,
+  "lat": 32.80503,
+  "lon": -117.22379,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 436408062,
+  "m": 70,
+  "lat": 32.80507,
+  "lon": -117.22393,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 775872882,
+  "m": 53,
+  "lat": 32.80549,
+  "lon": -117.22395,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 436408061,
+  "m": 16,
+  "lat": 32.80568,
+  "lon": -117.22415,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 436403542,
+  "m": 87,
+  "lat": 32.80582,
+  "lon": -117.22419,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 1027286692,
+  "m": 92,
+  "lat": 32.80631,
+  "lon": -117.22423,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 1027286702,
+  "m": 24,
+  "lat": 32.80655,
+  "lon": -117.22453,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 1027286698,
+  "m": 45,
+  "lat": 32.80673,
+  "lon": -117.22467,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 1027286703,
+  "m": 22,
+  "lat": 32.80679,
+  "lon": -117.22455,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 1027286700,
+  "m": 26,
+  "lat": 32.80699,
+  "lon": -117.2247,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 1027286699,
+  "m": 14,
+  "lat": 32.80709,
+  "lon": -117.2248,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 436403518,
+  "m": 8,
+  "lat": 32.80714,
+  "lon": -117.22486,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 1027286693,
+  "m": 316,
+  "lat": 32.80733,
+  "lon": -117.22508,
+  "segs": 3,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 436403545,
+  "m": 159,
+  "lat": 32.80759,
+  "lon": -117.22572,
+  "segs": 2,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 436403536,
+  "m": 42,
+  "lat": 32.80783,
+  "lon": -117.22638,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 436403532,
+  "m": 49,
+  "lat": 32.80792,
+  "lon": -117.22682,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   40
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 1027286706,
+  "m": 43,
+  "lat": 32.80829,
+  "lon": -117.22837,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   35
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 1009593274,
+  "m": 298,
+  "lat": 32.80845,
+  "lon": -117.22922,
+  "segs": 2,
+  "sandag": 35,
+  "signs400m": [
+   35
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 1027286705,
+  "m": 73,
+  "lat": 32.80852,
+  "lon": -117.2291,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   35
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 436403540,
+  "m": 111,
+  "lat": 32.80875,
+  "lon": -117.22952,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   35
+  ]
+ },
+ {
+  "name": "Soledad Mountain Road",
+  "hw": "secondary",
+  "way": 436403516,
+  "m": 216,
+  "lat": 32.80911,
+  "lon": -117.23017,
+  "segs": 1,
+  "sandag": 35,
+  "signs400m": [
+   35
+  ]
+ },
+ {
+  "name": "Turquoise Street",
+  "hw": "secondary",
+  "way": 31822057,
+  "m": 529,
+  "lat": 32.80954,
+  "lon": -117.25497,
+  "segs": 6,
+  "sandag": null,
+  "signs400m": [
+   25,
+   25
+  ]
+ }
+]
