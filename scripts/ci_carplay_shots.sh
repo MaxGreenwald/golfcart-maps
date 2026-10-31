@@ -18,7 +18,9 @@ xcrun simctl privacy "$DEV" grant location-always com.matchimus.golfcartmaps || 
 (xcrun simctl launch --console-pty "$DEV" com.matchimus.golfcartmaps -GCMCarPlayDemo YES -GCMCarPlayDemoTo "${DEMO_TO:-32.7950,-117.2560,Crystal Pier}" -GCMCarPlayDemoDrive ${DEMO_DRIVE:-0} > shots-ci/app-console.txt 2>&1 &)
 sleep 25
 xcrun simctl io "$DEV" screenshot shots-ci/phone.png
-osascript -e 'tell application "Simulator" to activate' -e 'delay 1' -e 'tell application "System Events" to tell process "Simulator" to click menu item "CarPlay" of menu 1 of menu item "External Displays" of menu 1 of menu bar item "I/O" of menu bar 1' 2> shots-ci/osascript.txt
+# With CarPlayExtraOptions the item is named "CarPlay..." so match by prefix, and log the names.
+osascript -e 'tell application "Simulator" to activate' -e 'delay 1' -e 'tell application "System Events" to tell process "Simulator" to get name of every menu item of menu 1 of menu item "External Displays" of menu 1 of menu bar item "I/O" of menu bar 1' > shots-ci/ext-menu.txt 2>&1
+osascript -e 'tell application "System Events" to tell process "Simulator" to click (first menu item of menu 1 of menu item "External Displays" of menu 1 of menu bar item "I/O" of menu bar 1 whose name starts with "CarPlay")' 2> shots-ci/osascript.txt
 sleep 4
 if [ -n "$CARPLAY_SIZE" ]; then
   W=${CARPLAY_SIZE%%x*}; R=${CARPLAY_SIZE#*x}; H=${R%%@*}; S=${R#*@}
