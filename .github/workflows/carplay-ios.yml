@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: {node-version: 20}
+        with: {node-version: 22}
       - run: python3 scripts/build_web.py && npm ci && npx cap sync ios
       # 1) Compile check exactly like a CI build with no Apple signing at all
       - name: Unsigned simulator build
