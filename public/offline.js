@@ -23,7 +23,6 @@
     if (!ID_RE.test(id)) throw new Error('bad region id');
     const b = '/data/' + id + '/';
     const out = ['/data/schema.json', '/data/regions.json', '/data/rules.json', b + 'index.json', b + 'pois.json', b + 'chargers.json'];
-    /* sd-verified-badge:start */if (id === 'sd') out.push(b + 'verified.json');/* sd-verified-badge:end */
     for (const k of (index.meta.tiles || [])) out.push(b + 'tiles/' + k + '.json');
     return out;
   }
@@ -57,7 +56,7 @@
           bytes += body.byteLength;
           const h = new Headers({ 'content-type': r.headers.get('content-type') || 'application/json' });
           await c.put(abs(u), new Response(body, { status: 200, headers: h }));
-        } else if (!/(pois|chargers)\.json$/.test(u) && !(id === 'sd' && /\/sd\/[a-z]+\.json$/.test(u) && !/index\.json$/.test(u)) && !(o.optional || []).includes(u)) {
+        } else if (!/(pois|chargers)\.json$/.test(u) && !(o.optional || []).includes(u)) {
           throw new Error('Could not download ' + u);
         }
         done++; prog();
