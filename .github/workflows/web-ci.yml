@@ -33,6 +33,8 @@ jobs:
         run: node --test tests/navfollow.test.mjs
       - name: Local-first search (bias, distance rerank, far label)
         run: node --test tests/geosearch.test.mjs
+      - name: Saved places (Home, Favorite beach, favorites)
+        run: node --test tests/places.test.mjs
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - name: Unit tests (roundabout rule, validators, SW cache name, single source)
@@ -68,6 +70,8 @@ jobs:
         env: {URL: "http://localhost:8765/"}
       - name: "test_search_keep_text (typed destination text survives GPS ticks; Phoenix->Sun City and SD)"
         run: python -m unittest tests.test_search_keep_text -v
+      - name: Local-first search + saved places (browser)
+        run: python -m unittest tests.test_local_search_ui -v
       - name: test_ui
         run: python scripts/test_ui.py
       - name: test_verified ('verified' only on two-source coastal SD segments; other regions never)

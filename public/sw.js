@@ -1,6 +1,6 @@
 const C='gcm-__CONTENT_HASH__'; // stamped at build time by scripts/build_web.py (never edit by hand)
 const LIVE=!C.includes('__'); // unstamped (public/ served raw): pass straight to the network, cache nothing, so it can never go stale
-const PRE=['map','track.js','app.js','roadrule.js','router.js','nav.js','navfollow.js','range.js','regions.js','pay.js','carplay.js','native.js','livedata.js','geosearch.js','geosearch.js','vendor/leaflet/leaflet.js','vendor/leaflet/leaflet.css','data/regions.json','data/rules.json','data/sd/chargers.json','data/villages/chargers.json'];
+const PRE=['map','track.js','app.js','roadrule.js','router.js','nav.js','navfollow.js','range.js','regions.js','pay.js','carplay.js','native.js','livedata.js','geosearch.js','places.js','geosearch.js','places.js','vendor/leaflet/leaflet.js','vendor/leaflet/leaflet.css','data/regions.json','data/rules.json','data/sd/chargers.json','data/villages/chargers.json'];
 // The app shell is cached under 'map' only (/ is the landing page and is never cached as the app). Was './' before the landing page.
 //: Cloudflare 308-redirects /index.html to /, and a redirected response can't answer a navigation (offline open failed with ERR_FAILED).
 const clean=r=>r.redirected?r.blob().then(b=>new Response(b,{status:r.status,statusText:r.statusText,headers:r.headers})):r;

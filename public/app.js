@@ -164,7 +164,7 @@ window.getState=st;
 // a tap places a point: focused field first, else the first empty field. Returns false if nothing to fill.
 const inPoly=(x,y,P)=>{let c=false;for(let i=0,j=P.length-1;i<P.length;j=i++){const [x1,y1]=P[i],[x2,y2]=P[j];if((y1>y)!==(y2>y)&&x<(x2-x1)*(y-y1)/(y2-y1)+x1)c=!c}return c};
 const inMX=ll=>(REG&&REG.id==='sd'&&ll.lat<32.5343+(ll.lng+117.1235)*0.0367-0.0002)||!!(D&&D.meta.poly&&!inPoly(ll.lng,ll.lat,D.meta.poly));window.inMX=inMX;
-function setPt(ll,label){if(inMX(ll)){$('help').textContent='⚠️ That spot is outside the map — '+(REG&&REG.cover||'pick another area in the city menu above.');return true}const f=active||(!from?'from':!to?'to':null);if(!f)return false;setField(f,{ll,label:label||lbl(ll)});return true}
+function setPt(ll,label){if(saveSlot&&!label){finishSave({name:lbl(ll),lat:ll.lat,lon:ll.lng});return true}if(inMX(ll)){$('help').textContent='⚠️ That spot is outside the map — '+(REG&&REG.cover||'pick another area in the city menu above.');return true}const f=active||(!from?'from':!to?'to':null);if(!f)return false;setField(f,{ll,label:label||lbl(ll)});return true}
 function clearField(f){if(f==='from')from=null;else to=null;active=f;sync();window.state=st()}
 function clearR(){from=to=null;active=null;if(routeG)map.removeLayer(routeG);routeG=null;liveNavSet(null);$('steps').innerHTML='';$('range').style.display='none';map.closePopup();sync();window.state=st()}
 window.resetRoute=clearR;
@@ -221,13 +221,50 @@ function showSugg(list,far){list=list.filter(x=>!inMX(L.latLng(x.lat,x.lon)));fa
  const miTxt=x=>x.mi==null?'':(x.mi<0.1?' · here':' · '+(x.mi<10?x.mi.toFixed(1):Math.round(x.mi))+' mi');
  const add=x=>{const d=document.createElement('div');d.innerHTML=`<b>${x.name}</b><br><small style="color:#6b8592">${(x.sub||'')+miTxt(x)}</small>`;d.onclick=()=>pick(x);sg.appendChild(d)};
  list.forEach(add);if(far.length){const h=document.createElement('div');h.className='sfar';h.textContent='Farther away (over '+GCMGeo.NEAR_MI+' mi)';h.style.cssText='font-size:12px;color:#6b8592;background:#f4f8f9;padding:6px 14px;cursor:default';sg.appendChild(h);far.forEach(add)}}
-function pick(x){$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();const ll=L.latLng(x.lat,x.lon);map.setView(ll,16);active=curField;setPt(ll,x.name)}
+function pick(x){if(saveSlot){finishSave(x);return}$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();const ll=L.latLng(x.lat,x.lon);map.setView(ll,16);active=curField;setPt(ll,x.name)}
 const spin=v=>$('qspin').style.display=v?'inline-block':'none';
-const onq=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<2){$('sugg').style.display='none';spin(false);return}
+const onq=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<2){spin(false);if(!v)showSaved();else $('sugg').style.display='none';return}
  const bp=biasPt();const lr=GCMGeo.rank(D?localMatches(v):[],bp);const loc=lr.near;showSugg(loc.slice(0,7));const my=++qseq;
  if(v.length<3){spin(false);return}spin(true);
  tmr=setTimeout(async()=>{const r=await remote(v,bp);if(my!==qseq)return;spin(false);if(!r)return;
   const all=GCMGeo.rank(GCMGeo.dedupe([...loc,...r],norm),bp);const near=all.near.slice(0,7);showSugg(near,near.length?[]:[...lr.far,...all.far].slice(0,5))},250)};
+// ---- saved places (Max t414u): Home, Favorite beach, custom favorites; on this device only ----
+const PL=GCMPlaces.make({getItem:k=>{try{return localStorage.getItem(k)}catch(_){return null}},setItem:(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}}});
+let saveSlot=null;  // when set, the next search pick or map tap saves into this slot instead of routing
+function sRow(html,fn,cls){const d=document.createElement('div');d.className=cls||'srow';d.innerHTML=html;d.onmousedown=e=>e.preventDefault();if(fn)d.onclick=fn;$('sugg').appendChild(d);return d}
+function showSaved(){const sg=$('sugg');sg.innerHTML='';
+ for(const p of PL.list()){if(p.saved){const d=sRow(`<b>${p.icon} ${esc(PL.label(p))}</b> <button class="pedit" aria-label="Edit ${esc(PL.label(p))}">Edit</button><br><small style="color:#6b8592">${esc(p.name)}</small>`,()=>goSaved(p),'srow saved');d.querySelector('.pedit').onclick=e=>{e.stopPropagation();editSaved(p)}}
+  else sRow(`<b>${p.icon} Set ${esc(p.title)}</b><br><small style="color:#6b8592">Search, tap the map, or use your location</small>`,()=>startSave(p.id))}
+ if(PL.saved().filter(p=>p.id.startsWith('fav')).length<GCMPlaces.MAX_CUSTOM)sRow('<b>⭐ Add a favorite</b>',()=>startSave('new'));
+ sg.style.display='block'}
+function startSave(id){saveSlot=id;const sg=$('sugg');sg.innerHTML='';const t=id==='new'?'a favorite':(GCMPlaces.SLOTS.find(s=>s.id===id)||{}).title;
+ sRow(`<small style="color:#6b8592">Saving ${esc(t)}: search for it above, tap the map, or</small>`,null,'srow hint');
+ sRow('<b>📍 Use my current location</b>',()=>{if(myLL)finishSave({name:'My location',lat:myLL.lat,lon:myLL.lng});else{locate();$('help').textContent='Finding you… tap again once the blue dot shows.'}});
+ if(to&&!to.me&&to.ll)sRow(`<b>📌 Use the destination pin</b><br><small style="color:#6b8592">${esc(to.label||'')}</small>`,()=>finishSave({name:to.label,lat:to.ll.lat,lon:to.ll.lng}));
+ sRow('<span style="color:#6b8592">Cancel</span>',()=>{saveSlot=null;showSaved()});sg.style.display='block'}
+function finishSave(x){const id=saveSlot;saveSlot=null;let name=x.name;if(id==='new'){const n=prompt('Name this favorite',x.name||'');if(n===null)return;name=n||x.name}
+ const got=PL.save(id,{name,lat:x.lat,lon:x.lon});$('help').textContent=got?'✅ Saved '+PL.label(PL.get(got))+' on this device':'Couldn’t save that place';renderSaved();$('sugg').style.display='none'}
+function editSaved(p){const sg=$('sugg');sg.innerHTML='';
+ sRow(`<b>${p.icon} ${esc(PL.label(p))}</b><br><small style="color:#6b8592">${esc(p.name)}</small>`,null,'srow hint');
+ sRow('<b>✏️ Rename</b>',()=>{const n=prompt('Name',p.id.startsWith('fav')?p.name:p.name);if(n!==null){PL.rename(p.id,n);renderSaved()}showSaved()});
+ sRow('<b>📍 Change location</b>',()=>startSave(p.id));
+ sRow('<b>🗑️ Clear</b>',()=>{if(confirm('Clear '+PL.label(p)+'?')){PL.remove(p.id);renderSaved()}showSaved()});
+ sRow('<span style="color:#6b8592">Back</span>',showSaved);sg.style.display='block'}
+// One tap: route from me (or the current start) to the saved place. To Home = the way back.
+function goSaved(p){$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();
+ const ll=L.latLng(p.lat,p.lon);if(inMX(ll)){$('help').textContent='⚠️ '+PL.label(p)+' is outside this map area';return}
+ if(!from||(from.ll&&from.ll.distanceTo(ll)<20)){if(myLL)from={me:true};else{from=null;locate()}}
+ setField('to',{ll,label:p.icon+' '+PL.label(p)})}
+function renderSaved(){const box=$('chips');if(!box)return;box.querySelectorAll('.chip.sp').forEach(c=>c.remove());const ref=$('useme');
+ for(const p of PL.saved()){const b=document.createElement('button');b.className='chip sp';b.dataset.slot=p.id;b.textContent=p.icon+' '+(p.id==='beach'?'Beach':PL.label(p));b.onclick=()=>goSaved(p);box.insertBefore(b,ref)}
+ const sv=document.createElement('button');sv.className='chip sp';sv.id='savePin';sv.textContent='☆ Save place';sv.style.display=to&&!to.me&&to.ll&&!String(to.label||'').match(/^(🏠|🏖️|⭐) /)?'':'none';
+ sv.onclick=()=>{const sg=$('sugg');sg.innerHTML='';const x={name:to.label,lat:to.ll.lat,lon:to.ll.lng};
+  sRow(`<small style="color:#6b8592">Save ${esc(to.label||'this pin')} as</small>`,null,'srow hint');
+  for(const s of GCMPlaces.SLOTS)sRow(`<b>${s.icon} ${s.title}</b>`,()=>{saveSlot=s.id;finishSave(x)});
+  sRow('<b>⭐ New favorite</b>',()=>{saveSlot='new';finishSave(x)});sRow('<span style="color:#6b8592">Cancel</span>',()=>{sg.style.display='none'});sg.style.display='block'};
+ box.insertBefore(sv,ref)}
+{const _s=sync;sync=function(){const r=_s.apply(this,arguments);try{renderSaved()}catch(_){}return r}}
+for(const id of ['q','qf'])$(id).addEventListener('focus',()=>{if(!$(id).value.trim()||$(id).value===$(id).defaultValue)setTimeout(()=>{if(document.activeElement===$(id)&&!$(id).value.trim())showSaved()},0)});
 $('q').oninput=onq;$('qf').oninput=onq;for(const id of ['q','qf'])$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){const f=$('sugg').firstChild;if(f)f.click()}});
 window.testRoute=async(a,b,rk=false)=>{risky=rk;from={ll:L.latLng(a),label:'A'};to={ll:L.latLng(b),label:'B'};active=null;sync();if(inMX(from.ll)||inMX(to.ll))return null;const r=await route();return r?window.lastRoute:null};
 let readyRes,READY=new Promise(r=>readyRes=r);
