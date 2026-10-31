@@ -82,6 +82,9 @@ VIEW = "(() => { const m = window.__gcmMap; const c = m.getCenter(); return [c.l
 
 @unittest.skipIf(sync_playwright is None, "playwright not installed (runs in the browser CI job)")
 class LiveNav(unittest.TestCase):
+    CLUTTER = {"map": ["#top", "#chips", "#city", "#cNorm", "#cRisk", "#loc"],
+               "renter": [".sheet", "header.top", "#goQ"]}
+
     @classmethod
     def setUpClass(cls):
         cls.srv = _S(("127.0.0.1", 0), functools.partial(_Quiet, directory=PUB))
@@ -116,6 +119,9 @@ class LiveNav(unittest.TestCase):
         pg.click("#navStart")
         self.assertTrue(pg.is_visible("#navEnd"), tag)
         self.assertFalse(pg.is_visible("#navStart"), tag)
+        # Max t417u: no town picker, chips, Reset or search while driving.
+        for sel in self.CLUTTER[tag]:
+            self.assertFalse(pg.is_visible(sel), (tag, sel, "visible during navigation"))
         self.drive_along(pg, ctx, pts, tag)
         i = len(pts) // 3
         a = pts[i]
@@ -260,6 +266,7 @@ class LiveNav(unittest.TestCase):
         pg.wait_for_timeout(300)
         self.assertEqual(pg.evaluate("window.gcmFollowState().mapBearing"), 0, "End goes back to north-up")
         self.assertFalse(pg.is_visible("#navNorth"))
+        self.assertTrue(pg.is_visible(".sheet") and pg.is_visible("#goQ"), "renter controls back after End")
         ctx.close()
 
     def test_city_map_preview_start_follow_reroute(self):
@@ -285,6 +292,10 @@ class LiveNav(unittest.TestCase):
         off = self.drive_checks(pg, ctx, cdp, pts, "map")
         pg.wait_for_function("() => window._liveNav && Math.abs(window._liveNav.pts[0][0] - %f) < 0.002" % off["latitude"], timeout=30000)
         self.assertTrue(pg.is_visible("#mapNav"))
+        pg.click("#navEnd")
+        pg.wait_for_timeout(300)
+        for sel in ["#top", "#chips", "#cNorm", "#cRisk", "#loc"]:
+            self.assertTrue(pg.is_visible(sel), (sel, "back after End"))
         ctx.close()
 
 

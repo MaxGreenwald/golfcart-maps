@@ -111,7 +111,7 @@
 #navCtl #navStart{background:#12a150;color:#fff}#navCtl #navEnd{background:#e5484d;color:#fff}#navCtl #navRecenter{background:#fff;color:#0b3a78}
 #navCtl [hidden]{display:none}
 .gcm-rot{position:absolute;left:0;top:0;width:100%;height:100%;transition:transform ${C.ROTATE_MS}ms ease-out;will-change:transform}
-#navNorth{position:fixed;z-index:1200;right:12px;top:calc(96px + env(safe-area-inset-top,0px));width:40px;height:40px;border-radius:50%;border:0;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.28);padding:0;cursor:pointer}
+#navNorth{position:fixed;z-index:1200;right:12px;bottom:calc(150px + env(safe-area-inset-bottom,0px));width:40px;height:40px;border-radius:50%;border:0;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.28);padding:0;cursor:pointer}
 #navNorth[hidden]{display:none}#navNorth i{display:block;width:100%;height:100%;transition:transform ${C.ROTATE_MS}ms ease-out;font:900 11px Nunito,system-ui,sans-serif;color:#e5484d;position:relative}
 #navNorth i:before{content:'';position:absolute;left:50%;top:7px;margin-left:-5px;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:12px solid #e5484d}
 #navNorth i:after{content:'N';position:absolute;left:0;right:0;bottom:6px;text-align:center;color:#0b3a78}`;
@@ -204,6 +204,11 @@
       $b('navEnd').hidden = !navigating;
       $b('navRecenter').hidden = !navigating || following;
       north.hidden = !navigating;
+      // Max t417u: while driving, pages hide search, town picker, chips and other clutter via this class.
+      if (document.body.classList.contains('gcm-navigating') !== navigating) {
+        document.body.classList.toggle('gcm-navigating', navigating);
+        if (map && map.invalidateSize) map.invalidateSize({ pan: false });
+      }
       if (!(navigating && following) && mapBearing != null) { mapBearing = null; paintHeading(true); }
     }
     const headingUp = () => navigating && following && !!rot;
