@@ -247,7 +247,7 @@ function loadLeaflet() {
   return leafletP;
 }
 function wideMap() {
-  return matchMedia('(min-width: 900px)').matches;
+  return matchMedia('(min-width:900px),(min-width:600px) and (min-height:600px)').matches;
 }
 function framePad() {
   const wide = wideMap();
@@ -297,8 +297,8 @@ function ensureMap() {
       getRoute: () => navRoute,
       reroute: navReroute,
       say: t => say(t),
-      onStart: () => { navSpoken = ''; say(document.getElementById('navText') ? document.getElementById('navText').textContent : ''); },
-      onEnd: () => { if (window.speechSynthesis) speechSynthesis.cancel(); },
+      onStart: () => { navSpoken = ''; navPlan.reset(); say(document.getElementById('navText') ? document.getElementById('navText').textContent : ''); },
+      onEnd: () => { navVoice.stop(); },
     });
     map.createPane('roads');
     const roadsPane = map.getPane('roads');
@@ -317,6 +317,10 @@ function ensureMap() {
     routeLayer = L.layerGroup().addTo(map);
     liveLayer = L.layerGroup().addTo(map);
     map.on('moveend', scheduleRoads);
+    // Fold/unfold (iPhone Duo), rotation, split view: resize the map, keep route and live position.
+    const refit = () => requestAnimationFrame(() => { try { map.invalidateSize({ pan: false }); } catch (_) {} });
+    addEventListener('resize', refit); addEventListener('orientationchange', refit);
+    if (window.visualViewport) visualViewport.addEventListener('resize', refit);
     map.on('click', e => { if (freeOn) pickDest({ name: 'Dropped pin', lat: e.latlng.lat, lon: e.latlng.lng }); });
   }
   map.invalidateSize();
@@ -346,19 +350,22 @@ async function paintRoads() {
 }
 function drawRoadCanvas() {
   if (!roadCanvas || !map || !roadApi || !roadApi.segments) return;
-  const size = map.getSize();
+  // Heading-up turns the map (public/navfollow.js); then draw a margin (map.__gcmPad) so corners have roads.
+  const pad = map.__gcmPad || L.point(0, 0);
+  const size = map.getSize().add(pad.multiplyBy(2));
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   roadCanvas.width = Math.max(1, Math.round(size.x * dpr));
   roadCanvas.height = Math.max(1, Math.round(size.y * dpr));
   roadCanvas.style.width = size.x + 'px';
   roadCanvas.style.height = size.y + 'px';
-  L.DomUtil.setPosition(roadCanvas, map.containerPointToLayerPoint([0, 0]));
+  L.DomUtil.setPosition(roadCanvas, map.containerPointToLayerPoint([-pad.x, -pad.y]));
   const ctx = roadCtx;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, size.x, size.y);
+  ctx.setTransform(dpr, 0, 0, dpr, pad.x * dpr, pad.y * dpr);
+  ctx.clearRect(-pad.x, -pad.y, size.x, size.y);
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  const view = map.getBounds().pad(0.08);
+  const sz0 = map.getSize();
+  const view = L.latLngBounds(map.containerPointToLatLng([-pad.x, -pad.y]), map.containerPointToLatLng([sz0.x + pad.x, sz0.y + pad.y])).pad(0.08);
   const south = view.getSouth(), north = view.getNorth(), west = view.getWest(), east = view.getEast();
   const segs = roadApi.segments();
   for (let n = 0; n < segs.length; n++) {
@@ -583,7 +590,7 @@ function navEl() {
   el.querySelector('#navMute').onclick = () => {
     navMuted = !navMuted;
     try { localStorage.setItem('gcm_nav_mute', navMuted ? '1' : '0'); } catch (e) {}
-    if (navMuted && window.speechSynthesis) speechSynthesis.cancel();
+    if (navMuted) navVoice.stop();
     paintMute();
   };
   el.querySelector('#navListBtn').onclick = () => {
@@ -607,13 +614,10 @@ function say(text) {
   if (follow && !follow.state().navigating) return;
   if (navMuted || !text || text === navSpoken) return;
   navSpoken = text;
-  window.__navSaid = (window.__navSaid || []).concat(text);
-  try {
-    if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
-    speechSynthesis.cancel();
-    speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-  } catch (e) {}
+  navVoice.say(text);
 }
+// One spoken sentence at a time, one per turn (Max t419u).
+const navVoice = GCMFollow.voice(GCMFollow.webEngine()), navPlan = GCMFollow.promptPlan();
 // Read-only hook for browser tests (route points + steps).
 window.GCMNavDebug = () => navRoute && { pts: navRoute.pts, steps: navRoute.steps, stop: navStop };
 function stopNav() {
@@ -630,7 +634,7 @@ function beginNav(leg, i, target) {
   if (!stop || !leg || !leg.points || leg.points.length < 2) { stopNav(); return; }
   const runs = leg.runs && leg.runs.length ? leg.runs : [{ name: '', points: leg.points }];
   navRoute = GCMNav.buildSteps(runs, stop.label || `stop ${i + 1}`);
-  navStop = target ? -1 : i; navState = null; navArrived = false; navSpoken = '';
+  navStop = target ? -1 : i; navState = null; navArrived = false; navSpoken = ''; navPlan.reset();
   const el = navEl();
   el.classList.add('show');
   document.body.classList.add('has-nav');
@@ -697,8 +701,10 @@ async function onNavFix(ll) {
   const after = navRoute.steps[st.idx + 1];
   paintNav(ARROWS[st.next.mod], st.text,
     (after ? `Then ${after.text.charAt(0).toLowerCase() + after.text.slice(1)} · ` : '') + `${GCMNav.fmtDist(st.remaining).replace('Now', 'under 50 ft')} to go`);
-  // Speak once per maneuver when it is near (≈400 ft), and again at the turn.
-  if (st.toNext < 120) say(st.toNext < 25 ? st.next.text : st.text);
+  if (follow) follow.eta(st.remaining, ll.coords && ll.coords.speed);
+  // One prompt per maneuver, timed by speed so it ends before the turn (GCMFollow.promptPlan).
+  const prompt = navPlan.update(st, ll.coords && ll.coords.speed);
+  if (prompt) say(prompt);
 }
 // Off route for a while during navigation: new legal route from here to the same stop or place.
 async function navReroute() {
@@ -735,6 +741,7 @@ async function loadPois() {
   try { poiList = await freshFetch(`/data/${region.id}/pois.json`).then(r => r.json()); } catch (e) { poiList = []; }
   return poiList;
 }
+let searchAc = null;
 async function searchPlaces(q) {
   const n = q.toLowerCase().trim();
   if (n.length < 2) return [];
@@ -744,18 +751,21 @@ async function searchPlaces(q) {
     if (pn.includes(n)) out.push({ name: p[0], sub: String(p[1] || 'place').replace('_', ' '), lat: p[3], lon: p[2], score: pn.startsWith(n) ? 0 : 1 });
   });
   if (roadApi) out.push(...roadApi.streets(n, 4));
-  out.sort((a, b) => a.score - b.score);
-  if (out.length < 3 && region && region.bbox) {
+  // Local first (t413u): bias to my location, else map center; rank by distance; far ones go below a label.
+  const c = map && map.getCenter();
+  const bp = GCMGeo.biasPoint(meLL, null, c && { lat: c.lat, lon: c.lng });
+  let r = GCMGeo.rank(out, bp);
+  if (r.near.length < 3 && n.length >= 3) {
+    if (searchAc) searchAc.abort();
+    const ac = searchAc = new AbortController(), to = setTimeout(() => ac.abort(), 3000);
     try {
-      const b = region.bbox, c = map.getCenter();
-      const ac = new AbortController(), to = setTimeout(() => ac.abort(), 2500);
-      const j = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=5&lat=${c.lat}&lon=${c.lng}&bbox=${b[1]},${b[0]},${b[3]},${b[2]}`, { signal: ac.signal }).then(r => r.json());
-      clearTimeout(to);
-      j.features.forEach(f => { const p = f.properties; const nm = p.name || [p.housenumber, p.street].filter(Boolean).join(' ');
-        if (nm) out.push({ name: nm, sub: [p.city || p.district, p.osm_value].filter(Boolean).join(' · '), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0] }); });
+      const rem = await GCMGeo.remote(q, bp, (u, sig) => fetch(u, { signal: sig }).then(x => x.json()), ac.signal);
+      r = GCMGeo.rank(GCMGeo.dedupe([...out, ...rem], s => String(s).toLowerCase()), bp);
     } catch (e) {}
+    clearTimeout(to);
   }
-  return out.slice(0, 6);
+  const near = r.near.slice(0, 6);
+  return near.length ? near : r.far.slice(0, 5).map((x, i) => ({ ...x, farLabel: i === 0 }));
 }
 function freeMode(on) {
   freeOn = !!on;
@@ -824,7 +834,7 @@ function wireFree() {
       const q = inp.value;
       const list = await searchPlaces(q);
       if (inp.value !== q) return;
-      sg.innerHTML = list.map((x, k) => `<button type="button" class="sugg" data-k="${k}"><b>${esc(x.name)}</b><span>${esc(x.sub || '')}</span></button>`).join('');
+      sg.innerHTML = list.map((x, k) => (x.farLabel ? `<div class="sugg-far">Farther away (over ${GCMGeo.NEAR_MI} mi)</div>` : '') + `<button type="button" class="sugg" data-k="${k}"><b>${esc(x.name)}</b><span>${esc(x.sub || '')}</span></button>`).join('');
       sg.querySelectorAll('.sugg').forEach(b => { b.onclick = () => pickDest(list[+b.dataset.k]); });
     }, 200);
   };

@@ -192,12 +192,12 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offs
 @media(min-width:760px){
   body:not(.is-open) .sheet{border-radius:28px;margin-bottom:36px;box-shadow:0 18px 50px rgba(11,60,80,.12)}
 }
-@media(min-width:900px){
-  body.is-open .sheet{top:calc(64px + var(--sat));left:12px;right:auto;bottom:12px;width:380px;height:auto;border-radius:22px}
+@media (min-width:900px),(min-width:600px) and (min-height:600px){
+  body.is-open .sheet{top:calc(64px + var(--sat));left:calc(12px + env(safe-area-inset-left,0px));right:auto;bottom:12px;width:min(380px,calc(50vw - 24px));height:auto;border-radius:22px}
   body.is-open .leaflet-bottom{bottom:0}
   body.is-open.has-next .leaflet-bottom{bottom:78px}
   body.is-open .leaflet-bottom.leaflet-left{margin-left:404px}
-  body.is-open #nextBar{left:408px;right:16px;bottom:calc(16px + var(--sab));max-width:none}
+  body.is-open #nextBar{left:calc(min(380px,50vw - 24px) + 28px);right:16px;bottom:calc(16px + var(--sab));max-width:none}
 }
 @media(prefers-reduced-motion:reduce){
   .sun,.cloud,.palm,.cart,.cart .wheel,.wave,.yay,.confetti i,.marquee-track{animation:none!important}
@@ -224,7 +224,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offs
 #navSteps li{display:flex;align-items:center;gap:8px;padding:7px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,.1)}
 #navSteps li span:nth-child(2){flex:1}
 #navSteps .muted{opacity:.75;font-size:12px}
-@media (min-width:900px){#navBanner{left:408px;right:16px;max-width:520px;margin:0}}
+@media (min-width:900px),(min-width:600px) and (min-height:600px){#navBanner{left:calc(min(380px,50vw - 24px) + 28px);right:16px;max-width:520px;margin:0}}
 /* Navigate somewhere else */
 .city[hidden],#goPane[hidden]{display:none!important}
 .goopen{display:block;width:100%;border:2px solid var(--brand,#0b9fb3);background:#fff;color:var(--deep,#0b3a4a);font:800 15px Nunito;border-radius:14px;padding:12px;margin:4px 0 12px;cursor:pointer}
@@ -239,6 +239,10 @@ body.free-nav #nextBar{display:none}
 /* Focus on one ride: other rides and offers fold away. */
 .allex{border:0;background:none;color:#1d6fe0;font:800 14px Nunito;cursor:pointer;padding:6px 0;margin:0 0 4px}
 body.focus-ex .xcard:not(.active),body.focus-ex .subsec,body.focus-ex .offers{display:none}
+
+/* Navigating (Max t417u): hide the sheet, header and next bar; the map fills the screen */
+body.gcm-navigating .sheet,body.gcm-navigating header.top,body.gcm-navigating #nextBar,body.gcm-navigating #confetti{display:none!important}
+body.gcm-navigating .leaflet-bottom{bottom:calc(84px + var(--sab,0px))}
 </style>
 </head>
 <body>
@@ -305,6 +309,7 @@ body.focus-ex .xcard:not(.active),body.focus-ex .subsec,body.focus-ex .offers{di
 <script src="/router.js"></script>
 <script src="/nav.js"></script>
 <script src="/navfollow.js"></script>
+<script src="/geosearch.js"></script>
 <script src="/p.js"></script>
 </body>
 </html>

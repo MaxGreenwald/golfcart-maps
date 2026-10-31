@@ -164,7 +164,7 @@ window.getState=st;
 // a tap places a point: focused field first, else the first empty field. Returns false if nothing to fill.
 const inPoly=(x,y,P)=>{let c=false;for(let i=0,j=P.length-1;i<P.length;j=i++){const [x1,y1]=P[i],[x2,y2]=P[j];if((y1>y)!==(y2>y)&&x<(x2-x1)*(y-y1)/(y2-y1)+x1)c=!c}return c};
 const inMX=ll=>(REG&&REG.id==='sd'&&ll.lat<32.5343+(ll.lng+117.1235)*0.0367-0.0002)||!!(D&&D.meta.poly&&!inPoly(ll.lng,ll.lat,D.meta.poly));window.inMX=inMX;
-function setPt(ll,label){if(inMX(ll)){$('help').textContent='⚠️ That spot is outside the map — '+(REG&&REG.cover||'pick another area in the city menu above.');return true}const f=active||(!from?'from':!to?'to':null);if(!f)return false;setField(f,{ll,label:label||lbl(ll)});return true}
+function setPt(ll,label){if(saveSlot&&!label){finishSave({name:lbl(ll),lat:ll.lat,lon:ll.lng});return true}if(inMX(ll)){$('help').textContent='⚠️ That spot is outside the map — '+(REG&&REG.cover||'pick another area in the city menu above.');return true}const f=active||(!from?'from':!to?'to':null);if(!f)return false;setField(f,{ll,label:label||lbl(ll)});return true}
 function clearField(f){if(f==='from')from=null;else to=null;active=f;sync();window.state=st()}
 function clearR(){from=to=null;active=null;if(routeG)map.removeLayer(routeG);routeG=null;liveNavSet(null);$('steps').innerHTML='';$('range').style.display='none';map.closePopup();sync();window.state=st()}
 window.resetRoute=clearR;
@@ -207,22 +207,66 @@ function localMatches(q){const n=norm(q);if(!n)return[];const out=[];
  for(const p of POIS){const pn=norm(p[0]);if(pn.includes(n))out.push({name:p[0],sub:(p[1]||'place').replace('_',' ')+(p[4]?' · '+p[4]:''),lat:p[3],lon:p[2],score:pn.startsWith(n)?0:1})}
  if(!nameAt||nameAt.size<D.segs.length/50)streetIndex();
  D.names.forEach((nm,i)=>{if(!nm)return;const pn=norm(nm);if(pn.startsWith(n)||pn.includes(' '+n)){const c=nameAt.get(i);if(c)out.push({name:nm,sub:'street',lat:c[1],lon:c[0],score:pn.startsWith(n)?0.5:1.5})}});
- return out.sort((a,b)=>a.score-b.score).slice(0,5)}
-async function remote(q){const key=(REG?REG.id:'')+'|'+norm(q);if(qcache.has(key))return qcache.get(key);const b=D.meta.bbox,c=map.getCenter();let res=[];
- try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),2500);
-  const r=await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=6&lat=${c.lat}&lon=${c.lng}&bbox=${b[1]},${b[0]},${b[3]},${b[2]}`,{signal:ac.signal});clearTimeout(to);
-  const j=await r.json();res=j.features.map(f=>{const p=f.properties;return{name:p.name||[p.housenumber,p.street].filter(Boolean).join(' '),sub:[p.housenumber&&p.name?p.street:null,p.city||p.district,p.osm_value].filter(Boolean).join(' · '),lat:f.geometry.coordinates[1],lon:f.geometry.coordinates[0]}}).filter(x=>x.name)}
- catch(e){try{const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=5&bounded=1&viewbox=${b[1]},${b[2]},${b[3]},${b[0]}&q=${encodeURIComponent(q)}`);const j=await r.json();res=j.map(x=>({name:x.display_name.split(',')[0],sub:x.display_name.split(',').slice(1,3).join(','),lat:+x.lat,lon:+x.lon}))}catch(_){}}
+ return out.sort((a,b)=>a.score-b.score).slice(0,40)}
+// Local first (t413u): bias = my location, else start point, else map center; rerank by distance.
+const llo=ll=>ll?{lat:ll.lat,lon:ll.lng}:null;
+function biasPt(){const c=map.getCenter();return GCMGeo.biasPoint(llo(myLL),llo(P(from)),{lat:c.lat,lon:c.lng})}
+let qac=null;
+async function remote(q,bp){const key=bp.lat.toFixed(2)+','+bp.lon.toFixed(2)+'|'+norm(q);if(qcache.has(key))return qcache.get(key);
+ if(qac)qac.abort();const ac=qac=new AbortController();const to=setTimeout(()=>ac.abort(),3000);
+ const fj=async(u,sig)=>{const r=await fetch(u,{signal:sig});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
+ let res=[];try{res=await GCMGeo.remote(q,bp,fj,ac.signal)}catch(_){clearTimeout(to);return null}clearTimeout(to);
  qcache.set(key,res);return res}
-function showSugg(list){list=list.filter(x=>!inMX(L.latLng(x.lat,x.lon)));const sg=$('sugg');sg.innerHTML='';sg.style.display=list.length?'block':'none';
- list.forEach(x=>{const d=document.createElement('div');d.innerHTML=`<b>${x.name}</b><br><small style="color:#6b8592">${x.sub||''}</small>`;d.onclick=()=>pick(x);sg.appendChild(d)})}
-function pick(x){$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();const ll=L.latLng(x.lat,x.lon);map.setView(ll,16);active=curField;setPt(ll,x.name)}
+function showSugg(list,far){list=list.filter(x=>!inMX(L.latLng(x.lat,x.lon)));far=(far||[]).filter(x=>!inMX(L.latLng(x.lat,x.lon)));const sg=$('sugg');sg.innerHTML='';sg.style.display=list.length||far.length?'block':'none';
+ const miTxt=x=>x.mi==null?'':(x.mi<0.1?' · here':' · '+(x.mi<10?x.mi.toFixed(1):Math.round(x.mi))+' mi');
+ const add=x=>{const d=document.createElement('div');d.innerHTML=`<b>${x.name}</b><br><small style="color:#6b8592">${(x.sub||'')+miTxt(x)}</small>`;d.onclick=()=>pick(x);sg.appendChild(d)};
+ list.forEach(add);if(far.length){const h=document.createElement('div');h.className='sfar';h.textContent='Farther away (over '+GCMGeo.NEAR_MI+' mi)';h.style.cssText='font-size:12px;color:#6b8592;background:#f4f8f9;padding:6px 14px;cursor:default';sg.appendChild(h);far.forEach(add)}}
+function pick(x){if(saveSlot){finishSave(x);return}$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();const ll=L.latLng(x.lat,x.lon);map.setView(ll,16);active=curField;setPt(ll,x.name)}
 const spin=v=>$('qspin').style.display=v?'inline-block':'none';
-const onq=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<2){$('sugg').style.display='none';spin(false);return}
- const loc=D?localMatches(v):[];showSugg(loc);
- if(v.length<3)return;spin(true);const my=++qseq;
- tmr=setTimeout(async()=>{const r=await remote(v);if(my!==qseq)return;spin(false);
-  const seen=new Set(loc.map(x=>norm(x.name)));showSugg([...loc,...r.filter(x=>{const k=norm(x.name);if(seen.has(k))return false;seen.add(k);return true})].slice(0,7))},250)};
+const onq=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<2){spin(false);if(!v)showSaved();else $('sugg').style.display='none';return}
+ const bp=biasPt();const lr=GCMGeo.rank(D?localMatches(v):[],bp);const loc=lr.near;showSugg(loc.slice(0,7));const my=++qseq;
+ if(v.length<3){spin(false);return}spin(true);
+ tmr=setTimeout(async()=>{const r=await remote(v,bp);if(my!==qseq)return;spin(false);if(!r)return;
+  const all=GCMGeo.rank(GCMGeo.dedupe([...loc,...r],norm),bp);const near=all.near.slice(0,7);showSugg(near,near.length?[]:[...lr.far,...all.far].slice(0,5))},250)};
+// ---- saved places (Max t414u): Home, Favorite beach, custom favorites; on this device only ----
+const PL=GCMPlaces.make({getItem:k=>{try{return localStorage.getItem(k)}catch(_){return null}},setItem:(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}}});
+let saveSlot=null,listField='to';  // listField: the field (from/to) whose focus opened the saved list  // when set, the next search pick or map tap saves into this slot instead of routing
+function sRow(html,fn,cls){const d=document.createElement('div');d.className=cls||'srow';d.innerHTML=html;d.onmousedown=e=>e.preventDefault();if(fn)d.onclick=fn;$('sugg').appendChild(d);return d}
+function showSaved(){listField=curField==='from'?'from':'to';const sg=$('sugg');sg.innerHTML='';
+ for(const p of PL.list()){if(p.saved){const d=sRow(`<b>${p.icon} ${esc(PL.label(p))}</b> <button class="pedit" aria-label="Edit ${esc(PL.label(p))}">Edit</button><br><small style="color:#6b8592">${esc(p.name)}</small>`,()=>goSaved(p,listField),'srow saved');d.querySelector('.pedit').onclick=e=>{e.stopPropagation();editSaved(p)}}
+  else sRow(`<b>${p.icon} Set ${esc(p.title)}</b><br><small style="color:#6b8592">Search, tap the map, or use your location</small>`,()=>startSave(p.id))}
+ if(PL.saved().filter(p=>p.id.startsWith('fav')).length<GCMPlaces.MAX_CUSTOM)sRow('<b>⭐ Add a favorite</b>',()=>startSave('new'));
+ sg.style.display='block'}
+function startSave(id){saveSlot=id;const sg=$('sugg');sg.innerHTML='';const t=id==='new'?'a favorite':(GCMPlaces.SLOTS.find(s=>s.id===id)||{}).title;
+ sRow(`<small style="color:#6b8592">Saving ${esc(t)}: search for it above, tap the map, or</small>`,null,'srow hint');
+ sRow('<b>📍 Use my current location</b>',()=>{if(myLL)finishSave({name:'My location',lat:myLL.lat,lon:myLL.lng});else{locate();$('help').textContent='Finding you… tap again once the blue dot shows.'}});
+ if(to&&!to.me&&to.ll)sRow(`<b>📌 Use the destination pin</b><br><small style="color:#6b8592">${esc(to.label||'')}</small>`,()=>finishSave({name:to.label,lat:to.ll.lat,lon:to.ll.lng}));
+ sRow('<span style="color:#6b8592">Cancel</span>',()=>{saveSlot=null;showSaved()});sg.style.display='block'}
+function finishSave(x){const id=saveSlot;saveSlot=null;let name=x.name;if(id==='new'){const n=prompt('Name this favorite',x.name||'');if(n===null)return;name=n||x.name}
+ const got=PL.save(id,{name,lat:x.lat,lon:x.lon});$('help').textContent=got?'✅ Saved '+PL.label(PL.get(got))+' on this device':'Couldn’t save that place';renderSaved();$('sugg').style.display='none'}
+function editSaved(p){const sg=$('sugg');sg.innerHTML='';
+ sRow(`<b>${p.icon} ${esc(PL.label(p))}</b><br><small style="color:#6b8592">${esc(p.name)}</small>`,null,'srow hint');
+ sRow('<b>✏️ Rename</b>',()=>{const n=prompt('Name',p.id.startsWith('fav')?p.name:p.name);if(n!==null){PL.rename(p.id,n);renderSaved()}showSaved()});
+ sRow('<b>📍 Change location</b>',()=>startSave(p.id));
+ sRow('<b>🗑️ Clear</b>',()=>{if(confirm('Clear '+PL.label(p)+'?')){PL.remove(p.id);renderSaved()}showSaved()});
+ sRow('<span style="color:#6b8592">Back</span>',showSaved);sg.style.display='block'}
+// One tap: route from me (or the current start) to the saved place. To Home = the way back.
+function goSaved(p,field){const f=field||'to';$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();
+ const ll=L.latLng(p.lat,p.lon);if(inMX(ll)){$('help').textContent='⚠️ '+PL.label(p)+' is outside this map area';return}
+ const pt={ll,label:p.icon+' '+PL.label(p)};
+ if(f==='from'){setField('from',pt);return}  // opened from Start: fill Start, leave the destination alone
+ if(!from||(from.ll&&from.ll.distanceTo(ll)<20)){if(myLL)from={me:true};else{from=null;locate()}}
+ setField('to',pt)}
+function renderSaved(){const box=$('chips');if(!box)return;box.querySelectorAll('.chip.sp').forEach(c=>c.remove());const ref=$('useme');
+ for(const p of PL.saved()){const b=document.createElement('button');b.className='chip sp';b.dataset.slot=p.id;b.textContent=p.icon+' '+(p.id==='beach'?'Beach':PL.label(p));b.onmousedown=e=>e.preventDefault();b.onclick=()=>goSaved(p,document.activeElement===$('qf')?'from':'to');box.insertBefore(b,ref)}
+ const sv=document.createElement('button');sv.className='chip sp';sv.id='savePin';sv.textContent='☆ Save place';sv.style.display=to&&!to.me&&to.ll&&!String(to.label||'').match(/^(🏠|🏖️|⭐) /)?'':'none';
+ sv.onclick=()=>{const sg=$('sugg');sg.innerHTML='';const x={name:to.label,lat:to.ll.lat,lon:to.ll.lng};
+  sRow(`<small style="color:#6b8592">Save ${esc(to.label||'this pin')} as</small>`,null,'srow hint');
+  for(const s of GCMPlaces.SLOTS)sRow(`<b>${s.icon} ${s.title}</b>`,()=>{saveSlot=s.id;finishSave(x)});
+  sRow('<b>⭐ New favorite</b>',()=>{saveSlot='new';finishSave(x)});sRow('<span style="color:#6b8592">Cancel</span>',()=>{sg.style.display='none'});sg.style.display='block'};
+ box.insertBefore(sv,ref)}
+{const _s=sync;sync=function(){const r=_s.apply(this,arguments);try{renderSaved()}catch(_){}return r}}
+for(const id of ['q','qf'])$(id).addEventListener('focus',()=>{if(!$(id).value.trim()||$(id).value===$(id).defaultValue)setTimeout(()=>{if(document.activeElement===$(id)&&!$(id).value.trim())showSaved()},0)});
 $('q').oninput=onq;$('qf').oninput=onq;for(const id of ['q','qf'])$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){const f=$('sugg').firstChild;if(f)f.click()}});
 window.testRoute=async(a,b,rk=false)=>{risky=rk;from={ll:L.latLng(a),label:'A'};to={ll:L.latLng(b),label:'B'};active=null;sync();if(inMX(from.ll)||inMX(to.ll))return null;const r=await route();return r?window.lastRoute:null};
 let readyRes,READY=new Promise(r=>readyRes=r);
@@ -283,7 +327,7 @@ const CON={J1772:'J1772 (Level 2)',NEMA515:'120V outlet (5-15)',NEMA520:'120V ou
 function chgPop(c){return `<div class="cpop"><b>${esc(c.name)}</b><br>${esc(c.addr)}<br>🔌 ${c.con.map(x=>esc(CON[x]||x)).join(', ')}${c.l2?` · ${c.l2} L2 port${c.l2>1?'s':''}`:''}${c.l1?` · ${c.l1} L1`:''}<br>🕒 ${esc(c.hours||'Hours not listed')}${c.network&&c.network!=='Non-Networked'?`<br>${esc(c.network)}`:''}${c.price?`<br>💲 ${esc(c.price)}`:''}<div class="cn">Most golf carts and LSVs need a J1772 adapter or a regular 120V outlet. Call ahead; listing from DOE AFDC${c.confirmed?`, confirmed ${esc(c.confirmed)}`:''}.</div></div>`}
 async function showChg(on){if(on&&window.PAY&&!PAY.unlocked()){PAY.sheet();return}chgOn=on;$('cChg').classList.toggle('on',on);if(chgL){map.removeLayer(chgL);chgL=null}if(!on)return;const list=await chargers();if(!chgOn)return;
  chgL=L.layerGroup(list.map(c=>tapMarker(L.marker([c.lat,c.lon],{icon:L.divIcon({className:'tapm',html:'<div class="chg">🔌</div>',iconSize:[44,44],iconAnchor:[22,22]})}).bindPopup(chgPop(c),{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)})))).addTo(map)}
-window.showChg=showChg;function popOpts(){const T=document.getElementById('top'),S=document.getElementById('sheet'),H=innerHeight,W=innerWidth;const tb=T?T.getBoundingClientRect().bottom:0;let left=10,bot=10;if(S){const r=S.getBoundingClientRect();if(W>=900)left=Math.max(10,r.right+10);else bot=Math.max(10,H-r.top+10)}return{autoPan:true,autoPanPaddingTopLeft:L.point(left,W>=900?10:tb+12),autoPanPaddingBottomRight:L.point(10,bot),maxWidth:Math.min(300,W-40)}}window.popOpts=popOpts;function fitCity(){const s=$('city');if(!s||s.selectedIndex<0)return;const r=(typeof REGIONS!=='undefined'&&REGIONS||[]).find(x=>x.id===s.value);$('cityLbl').textContent=r?r.short:s.options[s.selectedIndex].text}window.fitCity=fitCity;addEventListener('resize',fitCity);document.fonts&&document.fonts.ready.then(fitCity);function setMenu(o){if(!o)return;try{setSnap('full')}catch(_){}setTimeout(()=>$('setPanel').scrollIntoView({block:'nearest'}),50)}window.setMenu=setMenu;$('whatRisky').onclick=e=>{e.preventDefault();setMenu(false);riskyWarn()};$('cChg').onclick=()=>showChg(!chgOn);
+window.showChg=showChg;function popOpts(){const T=document.getElementById('top'),S=document.getElementById('sheet'),H=innerHeight,W=innerWidth;const tb=T?T.getBoundingClientRect().bottom:0;let left=10,bot=10;const WD=matchMedia(window.WIDE_MQ||'(min-width:900px)').matches;if(S){const r=S.getBoundingClientRect();if(WD)left=Math.max(10,r.right+10);else bot=Math.max(10,H-r.top+10)}return{autoPan:true,autoPanPaddingTopLeft:L.point(left,WD?10:tb+12),autoPanPaddingBottomRight:L.point(10,bot),maxWidth:Math.min(300,W-40)}}window.popOpts=popOpts;function fitCity(){const s=$('city');if(!s||s.selectedIndex<0)return;const r=(typeof REGIONS!=='undefined'&&REGIONS||[]).find(x=>x.id===s.value);$('cityLbl').textContent=r?r.short:s.options[s.selectedIndex].text}window.fitCity=fitCity;addEventListener('resize',fitCity);document.fonts&&document.fonts.ready.then(fitCity);function setMenu(o){if(!o)return;try{setSnap('full')}catch(_){}setTimeout(()=>$('setPanel').scrollIntoView({block:'nearest'}),50)}window.setMenu=setMenu;$('whatRisky').onclick=e=>{e.preventDefault();setMenu(false);riskyWarn()};$('cChg').onclick=()=>showChg(!chgOn);
 function nearestChg(ll){if(!CHG||!ll)return null;let b=null,bd=1e18;for(const c of CHG){const d=map.distance(ll,[c.lat,c.lon]);if(d<bd){bd=d;b=c}}return b&&{c:b,mi:bd/1609.34}}
 // ---- clean per-city URLs: /naples etc. ----
 const SLUG={'sd':'sandiego','villages':'villages','ptc':'peachtreecity','hhi':'hiltonhead','myrtle':'myrtlebeach','chs':'charleston','30a':'30a','gulfshores':'gulfshores','portaransas':'portaransas','suncity':'suncity','coachella':'coachella','naples':'naples','goldenisles':'stsimons','tybee':'tybee','galveston':'galveston','ocoast':'occoast','annamaria':'annamaria','putinbay':'putinbay','southpadre':'southpadre','siesta':'siestakey','destin':'destin','pcb':'panamacitybeach','staug':'staugustine','amelia':'ameliaisland','nocatee':'nocatee','keywest':'keywest','suncitycenter':'suncitycenter','lwr':'lakewoodranch','bhi':'southport','obx':'outerbanks','southbay':'southbay','avalon':'catalina','rockport':'rockport','wailea':'wailea','kaanapali':'kaanapali','poipu':'poipu','waikoloa':'waikoloa','kailua':'kailua','oob':'oldorchardbeach','ocnj':'oceancitynj','lbi':'lbi','fmb':'fortmyersbeach','fortmyers':'fortmyers','sanibel':'sanibel','capemay':'capemay','topsail':'topsail','carolinabeach':'carolinabeach','emeraldisle':'emeraldisle','clearwater':'clearwater','stpete':'stpetebeach','newport':'newportbeach','pensacola':'pensacolabeach','brunswick':'brunswickislands','crystalbeach':'crystalbeach','padre':'padreisland','bocagrande':'bocagrande','pawleys':'pawleysisland','dauphin':'dauphinisland','stgeorge':'stgeorgeisland','capesanblas':'capesanblas','delbeaches':'delawarebeaches','edisto':'edisto','nsb':'newsmyrnabeach','kelleys':'kelleysisland','chincoteague':'chincoteague','greenwich':'greenwich','tyrone':'tyrone','fayetteville':'fayetteville','senoia':'senoia','conyers':'conyers','augusta':'augusta','euharlee':'euharlee','stmarys':'stmarys','lowerkeys':'lowerkeys','cocoabeach':'cocoabeach','venice':'venice'};const slugOf=id=>SLUG[id]||id;
@@ -320,7 +364,7 @@ window.gcmPartnerOverlay=async function(P){
 // ---- bottom sheet: pointer-driven, translateY snapping ----
 const sheet=$('sheet'),shead=$('shead');let snap='full';
 function vh(){return window.innerHeight}
-const DESK=()=>matchMedia('(min-width:900px)').matches;
+const WIDE_MQ='(min-width:900px),(min-width:600px) and (min-height:600px)';window.WIDE_MQ=WIDE_MQ;const DESK=()=>matchMedia(WIDE_MQ).matches;
 function sizeSheet(){sheet.style.height=DESK()?'':Math.round(vh()*0.85)+'px'}
 function snaps(){const H=sheet.offsetHeight,c=Math.max(0,H-shead.offsetHeight-6);if(DESK())return{full:0,half:0,collapsed:c};return{full:0,half:Math.max(0,H-vh()*0.35),collapsed:c}}
 let curY=0;
@@ -349,29 +393,33 @@ shead.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
 $('chev').addEventListener('click',e=>{e.stopPropagation();setSnap(snap==='collapsed'?'half':'collapsed')});
 L.DomEvent.disableClickPropagation(sheet);L.DomEvent.disableScrollPropagation(sheet);
 map.on('click',()=>{if(!routeG&&!from&&snap!=='collapsed')setSnap('collapsed')});
-addEventListener('resize',()=>{sizeSheet();setSnap(snap)});
+// Fold/unfold (iPhone Duo), rotation, split view: keep the map sized to its box without moving the route or follow state.
+function onFit(){sizeSheet();setSnap(snap);requestAnimationFrame(()=>{try{map.invalidateSize({pan:false})}catch(_){}})}window.onFit=onFit;
+addEventListener('resize',onFit);addEventListener('orientationchange',onFit);window.visualViewport&&visualViewport.addEventListener('resize',onFit);try{matchMedia(WIDE_MQ).addEventListener('change',onFit)}catch(_){}
 sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));
 
 // ---- Live navigation (public/navfollow.js + public/nav.js): preview a route, then Start follows you,
 // shows the next turn, and reroutes from where you are after ~5 s off the route. End stops it.
 let liveNav=null,liveSteps=null,liveSaid='';
 const navOn=()=>!!(follow&&follow.state().navigating);
-function navSay(t){if(!t||t===liveSaid||!navOn())return;liveSaid=t;window.__navSaid=(window.__navSaid||[]).concat(t);try{if(window.speechSynthesis&&window.SpeechSynthesisUtterance){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t))}}catch(_){}}
+// One spoken sentence at a time, one per turn (Max t419u): GCMFollow.voice + promptPlan.
+const navVoice=GCMFollow.voice(GCMFollow.webEngine()),navPlan=GCMFollow.promptPlan();
+function navSay(t){if(!t||t===liveSaid||!navOn())return;liveSaid=t;navVoice.say(t)}
 function navBar(){let el=$('mapNav');if(el)return el;el=document.createElement('div');el.id='mapNav';el.setAttribute('aria-live','polite');el.innerHTML='<b id="mapNavT"></b><span id="mapNavS"></span>';document.body.appendChild(el);return el}
-function liveNavSet(r){liveSteps=null;window._liveNav=null;
+function liveNavSet(r){liveSteps=null;navPlan.reset();window._liveNav=null;
  if(r){const runs=r.legs.map(l=>({name:D.names[l.s[0]]||'',points:l.p.map(p=>[p[1],p[0]])}));liveSteps=GCMNav.buildSteps(runs,($('q').value||'').trim()||'your destination');window._liveNav=liveSteps}
  if(follow)follow.preview(!!liveSteps);if(!liveSteps&&$('mapNav'))$('mapNav').classList.remove('show');
  if(liveSteps&&navOn()&&myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
 function liveNavFix(c){if(follow)follow.fix(c);if(!navOn()||!liveSteps)return;const st=GCMNav.status(liveSteps,[c.latitude,c.longitude]);const el=navBar();el.classList.add('show');
  if(window._navRerouting)return;
- $('mapNavT').textContent=st.arrived?liveSteps.steps[liveSteps.steps.length-1].text:st.text;$('mapNavS').textContent=st.arrived?'':GCMNav.fmtDist(st.remaining).replace('Now','under 50 ft')+' to go';
- if(st.arrived)navSay($('mapNavT').textContent);else if(st.toNext<120)navSay(st.toNext<25?st.next.text:st.text)}
+ $('mapNavT').textContent=st.arrived?liveSteps.steps[liveSteps.steps.length-1].text:st.text;$('mapNavS').textContent=st.arrived?'':GCMNav.fmtDist(st.remaining).replace('Now','under 50 ft')+' to go';if(follow)follow.eta(st.arrived?0:st.remaining,c.speed);
+ if(st.arrived)navSay($('mapNavT').textContent);else{const t=navPlan.update(st,c.speed);if(t)navSay(t)}}
 async function liveReroute(){window._navRerouting=true;const el=navBar();el.classList.add('show');$('mapNavT').textContent='↻ Rerouting on legal roads…';$('mapNavS').textContent='';
  try{if(!(from&&from.me)){from={me:true}}sync();await route()}finally{window._navRerouting=false}if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
 const follow=GCMFollow.controller({map,getRoute:()=>liveSteps,reroute:liveReroute,say:navSay,
  canStart:()=>!!liveSteps,
- onStart:()=>{liveSaid='';if(!watching)locate();setSnap('collapsed');navBar().classList.add('show');$('mapNavT').textContent=liveSteps.steps[0].text;$('mapNavS').textContent='';navSay(liveSteps.steps[0].text);if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})},
- onEnd:()=>{if($('mapNav'))$('mapNav').classList.remove('show');try{speechSynthesis.cancel()}catch(_){}setSnap('half')}});
+ onStart:()=>{liveSaid='';navPlan.reset();if(!watching)locate();setSnap('collapsed');navBar().classList.add('show');$('mapNavT').textContent=liveSteps.steps[0].text;$('mapNavS').textContent='';navSay(liveSteps.steps[0].text);if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})},
+ onEnd:()=>{if($('mapNav'))$('mapNav').classList.remove('show');navVoice.stop();setSnap('half')}});
 window.gcmFollow=follow;
 // Tap a step to zoom to where it starts; this pauses follow until Recenter.
 $('steps').addEventListener('click',e=>{const d=e.target.closest('.st[data-ll]');if(!d)return;const [a,b]=d.dataset.ll.split(',').map(Number);follow.pause();map.setView([a,b],18)});
