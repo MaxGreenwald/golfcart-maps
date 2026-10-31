@@ -280,3 +280,21 @@ def build(ways):
             out[i] = (e["speed_mph"], e["lsv_ok"], e["source_url"], f'{e["road"]} ({e["from_to_segment_if_known"]})'); n += 1
         report.append((k, e["road"], f"gap: {n} ways -> {e['speed_mph']} mph"))
     return out, report
+
+# ---- Max's manual checks (final layer: wins over every rule above, including OSM tags) ----
+# Nautilus St, La Jolla: Max manually confirmed posted 40 (chat t405u, Oct 31 2026). Replaces rule 11's 25 (2017 list).
+# Covers the whole La Jolla length: La Jolla Blvd (west, -117.2807) to the east end past La Jolla Mesa Dr / Muirlands (-117.2493).
+_MAX = len(INTEL)
+INTEL.append({"road": "Nautilus St", "city": "San Diego (La Jolla)", "from_to_segment_if_known": "La Jolla Blvd - east end (La Jolla Mesa Dr / Muirlands): posted 40, Max manual check, Oct 31 2026 (t405u)",
+              "speed_mph": 40, "lsv_ok": False, "source_url": "Max manual check, Oct 31 2026 (t405u)", "confidence": "high"})
+MAX_RULES = {_MAX: (r"^Nautilus Street$", (32.828, -117.285, 32.837, -117.245))}
+_build_gaps = build
+def build(ways):
+    out, report = _build_gaps(ways)
+    for k, (rre, bb) in MAX_RULES.items():
+        e, r, n = INTEL[k], re.compile(rre), 0
+        for i, (t, g, nk) in enumerate(ways):
+            if not r.search(t.get("name", "")) or not inb(g[len(g) // 2], bb): continue
+            out[i] = (e["speed_mph"], e["lsv_ok"], e["source_url"], f'{e["road"]} ({e["from_to_segment_if_known"]})'); n += 1
+        report.append((k, e["road"], f"max: {n} ways -> {e['speed_mph']} mph"))
+    return out, report
