@@ -350,3 +350,11 @@ L.DomEvent.disableClickPropagation(sheet);L.DomEvent.disableScrollPropagation(sh
 map.on('click',()=>{if(!routeG&&!from&&snap!=='collapsed')setSnap('collapsed')});
 addEventListener('resize',()=>{sizeSheet();setSnap(snap)});
 sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));
+// ---- Download a city for offline (public/offline.js). Online the map still fetches live data first. ----
+(function(){const O=window.GCMOffline,b=$('cOff'),n=$('offNote');if(!O||!b){if(b)b.style.display='none';return}let busy=false;
+ async function paint(){if(busy||!window.REG)return;const r=window.REG,m=O.list()[r.id];
+  if(m){b.textContent='✅ '+r.name+' downloaded';n.textContent=`Saved ${O.fmtDate(m.at)} (${O.fmtBytes(m.bytes)}). Updates itself when you are online. Tap to remove.`}
+  else{const sz=await O.sizeOf(r.id);b.textContent='⬇️ Download '+r.name+' for offline'+(sz?` (${O.fmtBytes(sz)})`:'');n.textContent='Roads, routing and directions keep working with no signal. Street map images need a connection.'}}
+ b.onclick=async()=>{const r=window.REG;if(!r||busy)return;if(O.isDownloaded(r.id)){if(confirm(`Remove the offline copy of ${r.name}?`)){await O.remove(r.id);paint()}return}
+  busy=true;b.disabled=true;try{await O.download(r.id,{onProgress:(d,t,by)=>{b.textContent=`⬇️ Downloading ${Math.round(100*d/t)}% (${O.fmtBytes(by)})`}});}catch(e){n.textContent='Download failed. Check your connection and try again.'}busy=false;b.disabled=false;paint()};
+ window.addEventListener('gcm-offline-refreshed',paint);let last='';setInterval(()=>{const id=window.REG&&window.REG.id;if(id&&id!==last){last=id;paint()}},1000);window.paintOffline=paint})();

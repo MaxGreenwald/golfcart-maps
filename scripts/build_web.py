@@ -97,6 +97,25 @@ def stamp_analytics_internal(out, channel=None):
         f.write(txt.replace(INTERNAL_TOKEN, channel, 1))
 
 
+def write_offline_sizes(out):
+    """dist/data/offline-sizes.json: bytes per city for the 'Download for offline' button (public/offline.js)."""
+    import json
+    d = os.path.join(out, "data")
+    try:
+        regs = json.load(open(os.path.join(d, "regions.json")))
+    except (OSError, ValueError):
+        return {}
+    common = sum(os.path.getsize(os.path.join(d, f)) for f in ("schema.json", "regions.json", "rules.json") if os.path.isfile(os.path.join(d, f)))
+    sizes = {}
+    for r in regs:
+        rd = os.path.join(d, r["id"])
+        if os.path.isdir(rd):
+            sizes[r["id"]] = common + sum(os.path.getsize(os.path.join(a, f)) for a, _, fs in os.walk(rd) for f in fs if f.endswith(".json"))
+    with open(os.path.join(d, "offline-sizes.json"), "w") as f:
+        json.dump(sizes, f, separators=(",", ":"), sort_keys=True)
+    return sizes
+
+
 def build(src=os.path.join(ROOT, "public"), out=os.path.join(ROOT, "dist"), native=None):
     """Web: dist/index.html = landing page, dist/map.html = the map (served at /map).
     Native (--native or GCM_NATIVE=1, for the Capacitor iOS/Android webDir): dist/index.html stays the map, no landing page."""
@@ -105,6 +124,7 @@ def build(src=os.path.join(ROOT, "public"), out=os.path.join(ROOT, "dist"), nati
     if os.path.exists(out):
         shutil.rmtree(out)
     shutil.copytree(src, out)
+    write_offline_sizes(out)
     swp = os.path.join(out, "sw.js")
     txt = open(swp, encoding="utf-8").read()
     open(swp, "w", encoding="utf-8").write(stamp(txt, name))

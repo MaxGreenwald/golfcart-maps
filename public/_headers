@@ -18,6 +18,8 @@
   Cache-Control: public, max-age=0, must-revalidate
 /regions.js
   Cache-Control: public, max-age=0, must-revalidate
+/offline.js
+  Cache-Control: public, max-age=0, must-revalidate
 
 # Native WebView (capacitor://localhost) reads this JSON. Same-origin website fetches ignore CORS.
 # App Store 2.5.2: these are data files. The app does not download scripts from here.

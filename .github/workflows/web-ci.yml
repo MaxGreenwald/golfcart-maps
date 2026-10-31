@@ -29,6 +29,8 @@ jobs:
         run: node --test tests/partner_vehicle.test.mjs
       - name: Turn-by-turn maneuvers (turn side, distance, off route, arrival)
         run: node --test tests/nav.test.mjs
+      - name: Offline city download (node --test)
+        run: node --test tests/offline.test.mjs
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - name: Unit tests (roundabout rule, validators, SW cache name, single source)
@@ -61,6 +63,9 @@ jobs:
           for i in $(seq 1 20); do curl -sf http://localhost:8765/ >/dev/null && break; sleep 1; done
       - name: test_sw (stamped cache name, old caches dropped, works offline)
         run: python scripts/test_sw.py
+        env: {URL: "http://localhost:8765/"}
+      - name: Offline city (download, then routes and roads with network off)
+        run: python scripts/test_offline.py
         env: {URL: "http://localhost:8765/"}
       - name: "test_search_keep_text (typed destination text survives GPS ticks; Phoenix->Sun City and SD)"
         run: python -m unittest tests.test_search_keep_text -v
