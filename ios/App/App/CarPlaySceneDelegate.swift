@@ -87,11 +87,21 @@ final class CarPlayMapViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         map.frame = view.bounds
-        map.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         map.delegate = self
         map.showsUserLocation = true
         map.pointOfInterestFilter = .excludingAll
         view.addSubview(map)
+    }
+    // CarPlay shrinks the safe area when the maneuver panel or nav bar is showing. Size the map so its center
+    // (where follow mode puts the location dot) sits in the uncovered part, a bit below the middle, while the
+    // map still fills the whole screen.
+    override func viewSafeAreaInsetsDidChange() { super.viewSafeAreaInsetsDidChange(); layoutMap() }
+    override func viewDidLayoutSubviews() { super.viewDidLayoutSubviews(); layoutMap() }
+    func layoutMap() {
+        let b = view.bounds, safe = b.inset(by: view.safeAreaInsets)
+        guard safe.width > 0, safe.height > 0 else { map.frame = b; return }
+        let f = CarPlayStartView.mapFrame(bounds: b, safe: safe)
+        if map.frame != f { map.frame = f }
     }
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         guard let pl = overlay as? MKPolyline else { return MKOverlayRenderer(overlay: overlay) }
@@ -134,6 +144,9 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         mapVC.onRegionChange = { [weak self] _ in self?.scheduleOverlay() }
         mapTemplate.mapDelegate = self
         mapTemplate.automaticallyHidesNavigationBar = false
+        // Neutral system-style guidance card (it picked up a bright red), white text, dark trip estimates.
+        mapTemplate.guidanceBackgroundColor = UIColor(white: 0.13, alpha: 1)
+        mapTemplate.tripEstimateStyle = .dark
         refreshButtons()
         interfaceController.setRootTemplate(mapTemplate, animated: false, completion: { _, _ in })
         loc.delegate = self
@@ -407,7 +420,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let c = CPManeuver()
         let speed = plan?.speed ?? 9.8
         // longest first; CarPlay picks the variant that fits the guidance card
-        c.instructionVariants = [m.text, m.short, m.road.isEmpty ? m.short : m.road]
+        c.instructionVariants = [m.short, m.road.isEmpty ? m.short : m.road]  // short first keeps the card compact
         c.dashboardInstructionVariants = [m.short]
         c.notificationInstructionVariants = [m.text]
         let cfg = UIImage.SymbolConfiguration(pointSize: 40, weight: .bold)
@@ -417,7 +430,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         c.initialTravelEstimates = estimates(m.toMeters, m.toMeters / speed)
         // No junctionImage: CarPlay draws it in place of the instruction text, and our road graph has no lane or
         // junction artwork worth showing at simple intersections. Junction geometry goes in junctionExitAngle below.
-        if m.risky { c.attributedInstructionVariants = [NSAttributedString(string: "⚠️ " + m.text)] }
+        if m.risky { c.attributedInstructionVariants = [NSAttributedString(string: "⚠️ " + m.short)] }
         c.userInfo = ["road": m.road, "mph": m.mph ?? 0]
         if #available(iOS 17.4, *) {
             c.maneuverType = m.cpType

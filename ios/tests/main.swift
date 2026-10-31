@@ -15,4 +15,11 @@ let ft = CarPlayStartView.pick(lastFix: nil, savedCenter: nil, phoneTown: nil, t
 ck("first town, never US default", ft.source == "first-town" && ft.meters <= 5000)
 ck("nothing known gives nil (caller keeps waiting for a fix)", CarPlayStartView.pick(lastFix: nil, savedCenter: nil, phoneTown: nil, towns: []) == nil)
 ck("San Diego is the first town", towns.first?.id == sd.id)
+// Guidance card covering the left 40% of an 800x480 screen: dot must land in the right part, below middle.
+let b = CGRect(x: 0, y: 0, width: 800, height: 480), safe = CGRect(x: 320, y: 40, width: 480, height: 440)
+let f = CarPlayStartView.mapFrame(bounds: b, safe: safe)
+ck("map still covers the whole screen", f.contains(b))
+ck("dot (map center) is inside the uncovered area", safe.contains(CGPoint(x: f.midX, y: f.midY)) && f.midX == 560)
+ck("dot sits slightly below the middle", f.midY > safe.midY && f.midY < safe.maxY)
+ck("no panel: map is the screen", CarPlayStartView.mapFrame(bounds: b, safe: CGRect(x: 0, y: 0, width: 800, height: 480)).midX == 400)
 exit(fails == 0 ? 0 : 1)

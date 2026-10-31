@@ -27,4 +27,12 @@ enum CarPlayStartView {
             return Town(id: id, lat: c[0], lon: c[1])
         }
     }
+
+    /// Map frame that fills `bounds` but whose center (where follow mode draws the dot) is inside `safe`,
+    /// 10% of the safe height below its middle, so the guidance card never covers the dot.
+    static func mapFrame(bounds b: CGRect, safe: CGRect) -> CGRect {
+        let cx = safe.midX, cy = min(safe.maxY, safe.midY + safe.height * 0.1)
+        let hw = max(cx - b.minX, b.maxX - cx), hh = max(cy - b.minY, b.maxY - cy)
+        return CGRect(x: cx - hw, y: cy - hh, width: hw * 2, height: hh * 2)
+    }
 }
