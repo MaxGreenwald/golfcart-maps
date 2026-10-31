@@ -937,6 +937,32 @@ function selectEx(id) {
   drawUnlocked();
 }
 
+// Download this shop's town for offline (public/offline.js). Online, everything still loads live first;
+// the saved copy is only used with no signal, and then the page says the map may be outdated.
+function wireOffline() {
+  const O = window.GCMOffline, b = document.getElementById('offBtn'), n = document.getElementById('offNote');
+  if (!O || !b || !region) return;
+  b.hidden = false;
+  const extra = () => [location.pathname + location.search, '/p.js', '/offline.js', '/roadrule.js', '/router.js', '/nav.js',
+    '/vendor/leaflet/leaflet.js', '/vendor/leaflet/leaflet.css',
+    `/api/partner/public/${encodeURIComponent(slug)}` + (codeParam ? `/unlock?code=${encodeURIComponent(codeParam)}` : '')];
+  let busy = false;
+  const paint = async () => {
+    const m = O.list()[region.id];
+    if (m) { b.textContent = `✅ ${region.name} saved for offline`; n.textContent = `Saved ${O.fmtDate(m.at)} (${O.fmtBytes(m.bytes)}). Updates itself when you are online. Tap to remove.`; }
+    else { const sz = await O.sizeOf(region.id); b.textContent = `⬇️ Download map for offline${sz ? ` (${O.fmtBytes(sz)})` : ''}`; n.textContent = 'Keeps roads, stops and directions working with no signal.'; }
+  };
+  b.onclick = async () => {
+    if (busy) return;
+    if (O.isDownloaded(region.id)) { if (confirm(`Remove the offline copy of ${region.name}?`)) { await O.remove(region.id); paint(); } return; }
+    busy = true; b.disabled = true;
+    try { await O.download(region.id, { extra: extra(), optional: extra(), onProgress: (d, t, by) => { b.textContent = `⬇️ Downloading ${Math.round(100 * d / t)}% (${O.fmtBytes(by)})`; } }); }
+    catch (e) { n.textContent = 'Download failed. Check your connection and try again.'; }
+    busy = false; b.disabled = false; paint();
+  };
+  addEventListener('gcm-offline-refreshed', paint);
+  paint();
+}
 async function unlockedView() {
   const shop = unlocked.shop;
   applyShop(shop, true);
@@ -952,6 +978,7 @@ async function unlockedView() {
         <p class="yay-kicker">You’re in</p>
         <p>Code <b>${esc(code)}</b> unlocked ${esc(shop.name)}. Pick a ride, then start from where you are.</p>
       </div>
+      <div class="offrow"><button class="allex" id="offBtn" type="button" hidden>⬇️ Download map for offline</button><p class="fine" id="offNote" aria-live="polite"></p></div>
       <div id="goPane" hidden>
         <button class="allex" id="goBack" type="button">‹ Back to experiences</button>
         <h2 class="sec">Navigate somewhere else</h2>
@@ -987,6 +1014,7 @@ async function unlockedView() {
       <p class="legend" id="routeNote" aria-live="polite"></p>
     </div>
     ${ex.length ? `<div class="dock-foot"><button class="start" id="startEx" type="button">Start experience</button><p class="fine" id="startNote" aria-live="polite"></p></div>` : ''}`;
+  wireOffline();
   panel.querySelectorAll('.xcard').forEach(el => {
     el.onclick = () => { selectEx(el.dataset.ex); focusEx(true); };
   });

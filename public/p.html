@@ -239,6 +239,7 @@ body.free-nav #nextBar{display:none}
 /* Focus on one ride: other rides and offers fold away. */
 .allex{border:0;background:none;color:#1d6fe0;font:800 14px Nunito;cursor:pointer;padding:6px 0;margin:0 0 4px}
 body.focus-ex .xcard:not(.active),body.focus-ex .subsec,body.focus-ex .offers{display:none}
+html.gcm-offline .leaflet-container{background:#eef2ea}
 </style>
 </head>
 <body>
@@ -301,6 +302,7 @@ body.focus-ex .xcard:not(.active),body.focus-ex .subsec,body.focus-ex .offers{di
   <div id="panel"><p class="fine">Loading the welcome mat…</p></div>
 </main>
 <div id="nextBar"><b id="nextLabel">Next stop</b><button id="nextBtn" type="button">Next</button></div>
+<script src="/offline.js"></script>
 <script src="/roadrule.js"></script>
 <script src="/router.js"></script>
 <script src="/nav.js"></script>
