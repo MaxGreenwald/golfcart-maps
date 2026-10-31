@@ -247,7 +247,7 @@ function loadLeaflet() {
   return leafletP;
 }
 function wideMap() {
-  return matchMedia('(min-width: 900px)').matches;
+  return matchMedia('(min-width:900px),(min-width:600px) and (min-height:600px)').matches;
 }
 function framePad() {
   const wide = wideMap();
@@ -317,6 +317,10 @@ function ensureMap() {
     routeLayer = L.layerGroup().addTo(map);
     liveLayer = L.layerGroup().addTo(map);
     map.on('moveend', scheduleRoads);
+    // Fold/unfold (iPhone Duo), rotation, split view: resize the map, keep route and live position.
+    const refit = () => requestAnimationFrame(() => { try { map.invalidateSize({ pan: false }); } catch (_) {} });
+    addEventListener('resize', refit); addEventListener('orientationchange', refit);
+    if (window.visualViewport) visualViewport.addEventListener('resize', refit);
     map.on('click', e => { if (freeOn) pickDest({ name: 'Dropped pin', lat: e.latlng.lat, lon: e.latlng.lng }); });
   }
   map.invalidateSize();
