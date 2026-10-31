@@ -28,11 +28,29 @@ enum CarPlayStartView {
         }
     }
 
-    /// Map frame that fills `bounds` but whose center (where follow mode draws the dot) is inside `safe`,
-    /// 10% of the safe height below its middle, so the guidance card never covers the dot.
-    static func mapFrame(bounds b: CGRect, safe: CGRect) -> CGRect {
-        let cx = safe.midX, cy = min(safe.maxY, safe.midY + safe.height * 0.1)
-        let hw = max(cx - b.minX, b.maxX - cx), hh = max(cy - b.minY, b.maxY - cy)
-        return CGRect(x: cx - hw, y: cy - hh, width: hw * 2, height: hh * 2)
+    /// Where follow mode should draw the location dot. CarPlay's safe area only excludes the nav bar and
+    /// sidebar, NOT the maneuver card, which sits on the leading side during guidance. So while guiding we
+    /// drop the leading `cardShare` of the safe width (unless CarPlay already shrank the safe area past the
+    /// card) and put the dot in the lower middle of what is left, so the road ahead shows above it.
+    static let cardShare = 0.5
+    static func dotPoint(bounds b: CGRect, safe: CGRect, guiding: Bool) -> CGPoint {
+        guard guiding else { return CGPoint(x: safe.midX, y: min(safe.maxY, safe.midY + safe.height * 0.1)) }
+        var free = safe
+        let alreadyExcluded = (safe.minX - b.minX) > b.width * 0.35
+        if !alreadyExcluded {
+            let cut = safe.width * cardShare
+            free = CGRect(x: safe.minX + cut, y: safe.minY, width: safe.width - cut, height: safe.height)
+        }
+        return CGPoint(x: free.midX, y: free.minY + free.height * 0.72)
+    }
+
+    /// Map frame that fills `bounds` and is centered on `dot` (MapKit follow mode draws the dot at the map
+    /// view's center), so the dot lands where we want while the map still covers the whole screen.
+    static func mapFrame(bounds b: CGRect, dot: CGPoint) -> CGRect {
+        let hw = max(dot.x - b.minX, b.maxX - dot.x), hh = max(dot.y - b.minY, b.maxY - dot.y)
+        return CGRect(x: dot.x - hw, y: dot.y - hh, width: hw * 2, height: hh * 2)
+    }
+    static func mapFrame(bounds b: CGRect, safe: CGRect, guiding: Bool = false) -> CGRect {
+        mapFrame(bounds: b, dot: dotPoint(bounds: b, safe: safe, guiding: guiding))
     }
 }

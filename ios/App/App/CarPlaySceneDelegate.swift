@@ -84,6 +84,7 @@ final class AvoidLine: MKPolyline {}
 final class CarPlayMapViewController: UIViewController, MKMapViewDelegate {
     let map = MKMapView()
     var onRegionChange: ((MKCoordinateRegion) -> Void)?
+    var guiding = false { didSet { if guiding != oldValue { layoutMap() } } }
     override func viewDidLoad() {
         super.viewDidLoad()
         map.frame = view.bounds
@@ -100,8 +101,13 @@ final class CarPlayMapViewController: UIViewController, MKMapViewDelegate {
     func layoutMap() {
         let b = view.bounds, safe = b.inset(by: view.safeAreaInsets)
         guard safe.width > 0, safe.height > 0 else { map.frame = b; return }
-        let f = CarPlayStartView.mapFrame(bounds: b, safe: safe)
-        if map.frame != f { map.frame = f }
+        let f = CarPlayStartView.mapFrame(bounds: b, safe: safe, guiding: guiding)
+        if map.frame != f {
+            map.frame = f
+            #if DEBUG
+            NSLog("GCMCarPlay layout bounds=%@ safe=%@ guiding=%d map=%@ dot=%@", NSCoder.string(for: b), NSCoder.string(for: safe), guiding ? 1 : 0, NSCoder.string(for: f), NSCoder.string(for: CGPoint(x: f.midX, y: f.midY)))
+            #endif
+        }
     }
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         guard let pl = overlay as? MKPolyline else { return MKOverlayRenderer(overlay: overlay) }
@@ -404,6 +410,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         mapTemplate.hideTripPreviews()
         let s = mapTemplate.startNavigationSession(for: trip)
         session = s
+        mapVC.guiding = true
         GCMBridge.shared.track("route_started", ["mi": p.miles])
         step = p.maneuvers.count > 1 ? 1 : 0
         pushManeuvers(s, p)
@@ -412,6 +419,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         mapTemplate.trailingNavigationBarButtons = [end]
         if let c = loc.location?.coordinate {
             mapVC.map.setRegion(MKCoordinateRegion(center: c, latitudinalMeters: 600, longitudinalMeters: 600), animated: true)
+            following = true
             mapVC.map.setUserTrackingMode(.followWithHeading, animated: true)
         }
     }
@@ -455,6 +463,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         if arrived, session != nil { GCMBridge.shared.track("route_completed", ["mi": plan?.miles ?? 0]) }
         if arrived { session?.finishTrip() } else { session?.cancelTrip() }
         session = nil; plan = nil
+        mapVC.guiding = false
         mapVC.map.removeOverlays(mapVC.map.overlays.filter { $0 is RouteLine })
         refreshButtons()
         startFollowing(animated: true)

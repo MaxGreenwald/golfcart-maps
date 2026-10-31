@@ -6,6 +6,9 @@ mkdir -p shots-ci
 APP=$(ls -d build/Build/Products/Debug-iphonesimulator/App.app | head -1)
 otool -L "$APP/App.debug.dylib" "$APP/App" > shots-ci/linked-libs.txt 2>&1
 grep -q libswiftWebKit shots-ci/linked-libs.txt && echo "WARNING: links libswiftWebKit" >> shots-ci/linked-libs.txt
+# CARPLAY_SIZE=WxH@S turns on the Simulator's CarPlay size dialog (Apple: CarPlayExtraOptions).
+[ -n "$CARPLAY_SIZE" ] && defaults write com.apple.iphonesimulator CarPlayExtraOptions -bool YES
+echo "size=${CARPLAY_SIZE:-default}" > shots-ci/size.txt
 brew install cliclick >/dev/null 2>&1 || true
 DEV=$(xcrun simctl list devices available -j | python3 -c "import json,sys;d=json.load(sys.stdin)['devices'];print([x['udid'] for k,v in d.items() if 'iOS' in k for x in v if x['name'].startswith('iPhone 16')][0])")
 xcrun simctl boot "$DEV"; open -a Simulator; xcrun simctl bootstatus "$DEV" -b
@@ -16,7 +19,19 @@ xcrun simctl privacy "$DEV" grant location-always com.matchimus.golfcartmaps || 
 sleep 25
 xcrun simctl io "$DEV" screenshot shots-ci/phone.png
 osascript -e 'tell application "Simulator" to activate' -e 'delay 1' -e 'tell application "System Events" to tell process "Simulator" to click menu item "CarPlay" of menu 1 of menu item "External Displays" of menu 1 of menu bar item "I/O" of menu bar 1' 2> shots-ci/osascript.txt
-sleep 12
+sleep 4
+if [ -n "$CARPLAY_SIZE" ]; then
+  W=${CARPLAY_SIZE%%x*}; R=${CARPLAY_SIZE#*x}; H=${R%%@*}; S=${R#*@}
+  # Dump the dialog so a layout change is easy to see, then fill width/height/scale and confirm.
+  osascript -e 'tell application "System Events" to tell process "Simulator" to get entire contents of front window' > shots-ci/size-dialog.txt 2>&1
+  screencapture -x shots-ci/size-dialog.png
+  osascript -e "tell application \"System Events\" to tell process \"Simulator\"" \
+    -e "set w to front window" -e "set tf to every text field of w" \
+    -e "if (count of tf) >= 2 then" -e "set value of item 1 of tf to \"$W\"" -e "set value of item 2 of tf to \"$H\"" -e "end if" \
+    -e "try" -e "set pb to every pop up button of w" -e "if (count of pb) >= 1 then" -e "click item 1 of pb" -e "delay 1" -e "click menu item (\"@$S\" as text) of menu 1 of item 1 of pb" -e "end if" -e "end try" \
+    -e "try" -e "click button \"OK\" of w" -e "on error" -e "try" -e "click button \"Start\" of w" -e "on error" -e "key code 36" -e "end try" -e "end try" -e "end tell" >> shots-ci/size-dialog.txt 2>&1
+fi
+sleep 10
 WIN='tell application "System Events" to tell process "Simulator" to set w to (first window whose name contains "CarPlay")'
 osascript -e "$WIN" -e 'tell application "System Events" to tell process "Simulator" to set position of w to {0, 40}' >> shots-ci/osascript.txt 2>&1
 osascript -e "$WIN" -e 'tell application "System Events" to tell process "Simulator" to get {position, size} of w' > shots-ci/carplay-window.txt 2>&1
