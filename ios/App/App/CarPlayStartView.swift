@@ -54,3 +54,34 @@ enum CarPlayStartView {
         mapFrame(bounds: b, dot: dotPoint(bounds: b, safe: safe, guiding: guiding))
     }
 }
+
+/// Off-route rule shared with the phone (public/navfollow.js offTracker): farther than 30 m from the route
+/// for 5 s straight triggers one reroute, then at most one reroute per 10 s.
+struct CarPlayOffRoute {
+    static let offM = 30.0, offS = 5.0, cooldownS = 10.0
+    private var since: Double? = nil, last = -Double.infinity
+    mutating func update(offMeters: Double, now: Double) -> Bool {
+        guard offMeters > Self.offM else { since = nil; return false }
+        if since == nil { since = now }
+        if now - since! >= Self.offS && now - last >= Self.cooldownS { last = now; since = nil; return true }
+        return false
+    }
+    mutating func reset() { since = nil }
+
+    /// Meters from p to the nearest point on the polyline (local flat projection, fine at street scale).
+    static func distance(from p: (Double, Double), toLine line: [(Double, Double)]) -> Double {
+        guard let first = line.first else { return .infinity }
+        let k = cos(p.0 * .pi / 180) * 111_320.0, ky = 110_540.0
+        func xy(_ q: (Double, Double)) -> (Double, Double) { ((q.1 - p.1) * k, (q.0 - p.0) * ky) }
+        if line.count == 1 { let a = xy(first); return (a.0 * a.0 + a.1 * a.1).squareRoot() }
+        var best = Double.infinity
+        for i in 1..<line.count {
+            let a = xy(line[i - 1]), b = xy(line[i])
+            let dx = b.0 - a.0, dy = b.1 - a.1, L = dx * dx + dy * dy
+            let t = L == 0 ? 0 : max(0, min(1, -(a.0 * dx + a.1 * dy) / L))
+            let x = a.0 + t * dx, y = a.1 + t * dy
+            best = min(best, (x * x + y * y).squareRoot())
+        }
+        return best
+    }
+}

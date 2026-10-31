@@ -33,4 +33,16 @@ for (w, h, side) in [(800.0, 480.0, 90.0), (748.0, 456.0, 90.0), (1280.0, 480.0,
     ck("\(Int(w))x\(Int(h)): guiding dot on screen, lower part", sf.contains(dot) && dot.y > sf.midY)
     ck("\(Int(w))x\(Int(h)): map centered on dot and covers screen", mf.midX == dot.x && mf.midY == dot.y && mf.contains(bb))
 }
+// Off-route rule matches the phone (navfollow.js: 30 m, 5 s, 10 s cooldown).
+var tr = CarPlayOffRoute()
+ck("on route never fires", !(0..<20).contains { tr.update(offMeters: 10, now: Double($0)) })
+var fired: [Int] = []
+for t in 0..<30 { if tr.update(offMeters: 80, now: 100 + Double(t)) { fired.append(t) } }
+ck("off 5 s fires, then 10 s cooldown", fired == [5, 15, 25])
+var tr2 = CarPlayOffRoute()
+ck("one noisy fix does not fire", !tr2.update(offMeters: 80, now: 0) && !tr2.update(offMeters: 5, now: 6) && !tr2.update(offMeters: 80, now: 7))
+let line = [(32.8400, -117.2600), (32.8400, -117.2500)]
+ck("distance to route ~0 on it", CarPlayOffRoute.distance(from: (32.8400, -117.2550), toLine: line) < 1)
+let dd = CarPlayOffRoute.distance(from: (32.8405, -117.2550), toLine: line)
+ck("distance to route ~55 m off (got \(Int(dd)))", abs(dd - 55) < 3)
 exit(fails == 0 ? 0 : 1)

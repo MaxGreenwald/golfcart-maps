@@ -47,6 +47,13 @@ sleep 35
 screencapture -x shots-ci/carplay-guidance.png
 # demo drive: one shot every 4 s while the car steps through the maneuvers
 if [ "${DEMO_DRIVE:-0}" != "0" ]; then for i in $(seq -w 1 22); do sleep 4; screencapture -x shots-ci/carplay-drive-$i.png; xcrun simctl io "$DEV" screenshot --display=external shots-ci/cp-ext-$i.png 2>>shots-ci/ext-err.txt || true; done; fi
-xcrun simctl spawn "$DEV" log show --last 6m --predicate 'process == "App"' --style compact > shots-ci/app-log.txt 2>&1
+# Off-route check: drive the simulated GPS away from the planned route; the app should log
+# "GCMCarPlay reroute" after ~5 s off route and redraw the line and card.
+if [ -n "${OFFROUTE_TRACK:-}" ]; then
+  xcrun simctl location "$DEV" start --speed=${OFFROUTE_SPEED:-8} --interval=1 $OFFROUTE_TRACK 2>>shots-ci/ext-err.txt
+  for i in $(seq -w 1 16); do sleep 5; screencapture -x shots-ci/carplay-off-$i.png; done
+  xcrun simctl location "$DEV" clear || true
+fi
+xcrun simctl spawn "$DEV" log show --last 10m --predicate 'process == "App"' --style compact > shots-ci/app-log.txt 2>&1
 cp ~/Library/Logs/DiagnosticReports/App*.ips shots-ci/ 2>/dev/null
 ls -la shots-ci

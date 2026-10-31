@@ -28,6 +28,10 @@
 	<string>Golf Cart Maps uses your location to show where you are and route you on cart-legal streets. Your location stays on your device.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Golf Cart Maps uses your location to show where you are and route you on cart-legal streets. Your location stays on your device.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
