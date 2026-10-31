@@ -20,7 +20,10 @@ try:
 except ImportError:
     sync_playwright = None
 
-from test_turn_by_turn import UNLOCK, START, PUB
+try:
+    from test_turn_by_turn import UNLOCK, START, PUB
+except ImportError:
+    from tests.test_turn_by_turn import UNLOCK, START, PUB
 
 SHOTS = os.environ.get("SHOTS_DIR") or tempfile.mkdtemp(prefix="livenav-")
 
