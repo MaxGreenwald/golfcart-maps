@@ -96,13 +96,13 @@ function summarize(parts){let dist=0,stretches=[],cur=null,line=[];const legs=[]
   legs.push({p,f,s,u:!f&&unk(s),a:f?null:advOf(s)});
   if(f){if(!cur){cur={len:0,name:D.names[s[0]]||'unnamed road',sp:s[2],p:[]};stretches.push(cur)}cur.len+=s._len;cur.p.push(...p)}else cur=null}
  // turn-by-turn by street name
- const steps=[];for(const l of legs){const n=D.names[l.s[0]]||'unnamed road';const last=steps[steps.length-1];if(last&&last.n===n&&last.f===l.f&&last.u===l.u&&last.a===l.a)last.d+=l.s._len;else steps.push({n,d:l.s._len,f:l.f,u:l.u,sp:l.s[2],a:l.a})}
+ const steps=[];for(const l of legs){const n=D.names[l.s[0]]||'unnamed road';const last=steps[steps.length-1];if(last&&last.n===n&&last.f===l.f&&last.u===l.u&&last.a===l.a)last.d+=l.s._len;else steps.push({n,d:l.s._len,f:l.f,u:l.u,sp:l.s[2],a:l.a,ll:[l.p[0][1],l.p[0][0]]})}
  return {dist,stretches,legs,steps}}
 window.popSet=f=>{if(inMX(window._pll))return;map.closePopup();setField(f,{ll:window._pll,label:lbl(window._pll)})};
 const ft=m=>GCMRouter.shownFeet(m)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
 let routing=false;async function route(){$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
  await new Promise(r=>setTimeout(r,0));let parts=null;if(a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
- if(!parts){trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
+ if(!parts){liveNavSet(null);trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
  const r=summarize(parts);trackRoute(true,r.dist/1609.34);routeG=L.layerGroup().addTo(map);
  const all=[];r.legs.forEach(l=>all.push(...l.p));const ll=all.map(p=>[p[1],p[0]]);
  // Opaque casing wider than legal roads (weight ~3.2) so the path stays obvious
@@ -117,8 +117,8 @@ let routing=false;async function route(){$('title').innerHTML='<span class="spin
  const min=Math.max(1,Math.round(r.dist/1609.34/22*60));
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
  $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:(RULE.designated_only?'All on cart paths & designated roads 🌴':(r.legs.some(l=>l.u)?`Mostly ≤${RULE.max_posted} mph roads; <b>❓ ${mi(r.legs.filter(l=>l.u).reduce((a,l)=>a+l.s._len,0))} speed unknown — check signs</b>`:`All on roads ≤${RULE.max_posted} mph 🌴`))+ruleNotes()+(da>150||db>150?' · snapped to nearest legal road':'');
- r.back=await backDist(a,b,a2,b2,r.dist);renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
- setSnap('half');focusStart();window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:GCMRouter.shownFeet(s.len)}))};window._lastDetail=r;return r}
+ r.back=await backDist(a,b,a2,b2,r.dist);renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st" role="button" tabindex="0" data-ll="${s.ll.join(',')}"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
+ liveNavSet(r);if(!navOn())focusStart();if(!navOn())setSnap('half');window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:GCMRouter.shownFeet(s.len)}))};window._lastDetail=r;return r}
 // return trip: one-way rules can differ, so route B->A; fall back to same distance
 async function backDist(a,b,a2,b2,d){if(a==null||b==null)return d;for(const [x,y] of [[b,a],[b2,a],[b,a2],[b2,a2]]){const p=astar(x,y);if(p)return summarize(p).dist}return d}
 let lastR=null;function renderRange(r){if(r)lastR=r;r=lastR;if(!r)return;const R=GCMRange,s=R.load(),rng=R.rangeFor(s),bat=s.battery==null?100:s.battery;
@@ -155,7 +155,7 @@ function sync(){start=P(from);end=P(to);mk.forEach(m=>map.removeLayer(m));mk=[];
  $('fF').classList.toggle('act',active==='from');$('useme').style.display=(active||((from||to)&&!(from&&to)&&!(from&&from.me)&&!(to&&to.me)))?'':'none';$('fT').classList.toggle('act',active==='to');
  $('reset').style.display=$('acts').style.display=(from||to)?'':'none';
  $('help').textContent=active==='from'?'Tip: tap the map to drop your start pin':active==='to'||(from&&!to)?'Tip: tap the map to drop a pin for your destination':(from&&to)?'Tip: tap any road for its speed & length':'Tip: tap the map twice (start, then destination), or tap a road for its speed & length';
- if(routeG&&!(start&&end)){map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('range').style.display='none'}
+ if(routeG&&!(start&&end)){map.removeLayer(routeG);routeG=null;liveNavSet(null);$('steps').innerHTML='';$('range').style.display='none'}
  if(!(from||to)){$('title').innerHTML='🏖️ Golf Cart Maps';$('sub').innerHTML='Tap a road to see its speed limit and length, or plan a route above.'}
  else if(!(start&&end)){$('title').innerHTML=from?'📍 Start set':'🏖️ Destination set';$('sub').textContent=from?'Now pick where you’re headed.':'Now pick a start, or hit 📍 to start from you.'}}
 function setField(f,pt){if(f==='from')from=pt;else to=pt;active=null;sync();if(start&&end)route();window.state=st()}
@@ -166,7 +166,7 @@ const inPoly=(x,y,P)=>{let c=false;for(let i=0,j=P.length-1;i<P.length;j=i++){co
 const inMX=ll=>(REG&&REG.id==='sd'&&ll.lat<32.5343+(ll.lng+117.1235)*0.0367-0.0002)||!!(D&&D.meta.poly&&!inPoly(ll.lng,ll.lat,D.meta.poly));window.inMX=inMX;
 function setPt(ll,label){if(inMX(ll)){$('help').textContent='⚠️ That spot is outside the map — '+(REG&&REG.cover||'pick another area in the city menu above.');return true}const f=active||(!from?'from':!to?'to':null);if(!f)return false;setField(f,{ll,label:label||lbl(ll)});return true}
 function clearField(f){if(f==='from')from=null;else to=null;active=f;sync();window.state=st()}
-function clearR(){from=to=null;active=null;if(routeG)map.removeLayer(routeG);routeG=null;$('steps').innerHTML='';$('range').style.display='none';map.closePopup();sync();window.state=st()}
+function clearR(){from=to=null;active=null;if(routeG)map.removeLayer(routeG);routeG=null;liveNavSet(null);$('steps').innerHTML='';$('range').style.display='none';map.closePopup();sync();window.state=st()}
 window.resetRoute=clearR;
 map.on('click',e=>{if(!setPt(e.latlng))map.closePopup()});
 // long-press (mobile) / right-click: report here
@@ -189,8 +189,9 @@ let me,meAcc,myLL=null,watching=false;
 function locate(){if(!navigator.geolocation){$('sub').textContent='Location not supported on this device.';return}
  $('showloc').textContent='📍 Finding you…';let first=true;
  const ok=p=>{myLL=L.latLng(p.coords.latitude,p.coords.longitude);const acc=p.coords.accuracy;
-  if(!me){meAcc=L.circle(myLL,{radius:acc,color:'#1d6fe0',weight:1,fillColor:'#1d6fe0',fillOpacity:.12,interactive:false,renderer}).addTo(map);me=meMarker(myLL)}
-  else{me.setLatLng(myLL);meAcc.setLatLng(myLL).setRadius(acc)}
+  if(!meAcc)meAcc=L.circle(myLL,{radius:acc,color:'#1d6fe0',weight:1,fillColor:'#1d6fe0',fillOpacity:.12,interactive:false,renderer}).addTo(map);else meAcc.setLatLng(myLL).setRadius(acc);
+  if(!me)me=meMarker(myLL);else me.setLatLng(myLL)
+  liveNavFix(p.coords);if(navOn()){first=false;if(!(from&&from.me)&&!(to&&to.me))return;sync();return}
   try{if(routeG&&end&&_rtKey&&myLL.distanceTo(end)>150)_wasFar=_rtKey;if(routeG&&end&&_rtKey&&_wasFar===_rtKey&&_doneKey!==_rtKey&&myLL.distanceTo(end)<40){_doneKey=_rtKey;track('route_completed',window.lastRoute&&window.lastRoute.mi!=null?{mi:Math.round(window.lastRoute.mi*2)/2}:{})}}catch(_){}
   if(first){first=false;const rg=regionAt(myLL.lat,myLL.lng);if(rg&&REG&&rg.id!==REG.id){setURL(rg.id,false);window._regHow='auto';loadRegion(rg.id,true)}map.setView(myLL,16);$('showloc').style.display='none';if(to&&to.me){sync();if(start&&end)route()}else setField('from',{me:true})}else if((from&&from.me)||(to&&to.me)){sync()}};
  const err=e=>{$('showloc').textContent='📍 Show my location';$('sub').textContent=e.code===1?'Location is blocked. Turn it on in Settings › Safari › Location.':'Couldn’t find you: '+e.message};
@@ -272,7 +273,7 @@ function tapMarker(m){m.on('add',()=>{const el=m.getElement();if(!el||el._tap)re
  L.DomEvent.on(el,'click',e=>{L.DomEvent.stop(e);if(Date.now()-(m._tapAt||0)>600)m.openPopup()})});
  m.off('click',m._openPopup,m);return m}
 window.tapMarker=tapMarker;
-const meIcon=L.divIcon({className:'tapm',html:'<div class="me-dot"></div>',iconSize:[44,44],iconAnchor:[22,22]});
+const meIcon=L.divIcon({className:'tapm',html:GCMFollow.DOT,iconSize:[44,44],iconAnchor:[22,22]});
 function meMarker(ll){return addM(tapMarker(L.marker(ll,{icon:meIcon,zIndexOffset:1000,keyboard:false}).bindPopup(()=>'<div class="cpop"><b>📍 You are here</b><div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="map.closePopup();setField(\'from\',{me:true})">Start here</button><button class="pbtn" onclick="map.closePopup();setField(\'to\',{me:true})">Go here</button></div><button class="pbtn rpt" onclick="window._rseg={road:\'(near my location)\',ll:myLL};reportRoad()">🚩 Report a problem here</button></div>',{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)})))}
 const addM=m=>m.addTo(map);
 // ---- public EV chargers (DOE AFDC, Level 1/2 only), loaded lazily per region ----
@@ -350,3 +351,27 @@ L.DomEvent.disableClickPropagation(sheet);L.DomEvent.disableScrollPropagation(sh
 map.on('click',()=>{if(!routeG&&!from&&snap!=='collapsed')setSnap('collapsed')});
 addEventListener('resize',()=>{sizeSheet();setSnap(snap)});
 sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(()=>requestAnimationFrame(()=>sheet.style.transition=''));
+
+// ---- Live navigation (public/navfollow.js + public/nav.js): preview a route, then Start follows you,
+// shows the next turn, and reroutes from where you are after ~5 s off the route. End stops it.
+let liveNav=null,liveSteps=null,liveSaid='';
+const navOn=()=>!!(follow&&follow.state().navigating);
+function navSay(t){if(!t||t===liveSaid||!navOn())return;liveSaid=t;window.__navSaid=(window.__navSaid||[]).concat(t);try{if(window.speechSynthesis&&window.SpeechSynthesisUtterance){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t))}}catch(_){}}
+function navBar(){let el=$('mapNav');if(el)return el;el=document.createElement('div');el.id='mapNav';el.setAttribute('aria-live','polite');el.innerHTML='<b id="mapNavT"></b><span id="mapNavS"></span>';document.body.appendChild(el);return el}
+function liveNavSet(r){liveSteps=null;window._liveNav=null;
+ if(r){const runs=r.legs.map(l=>({name:D.names[l.s[0]]||'',points:l.p.map(p=>[p[1],p[0]])}));liveSteps=GCMNav.buildSteps(runs,($('q').value||'').trim()||'your destination');window._liveNav=liveSteps}
+ if(follow)follow.preview(!!liveSteps);if(!liveSteps&&$('mapNav'))$('mapNav').classList.remove('show');
+ if(liveSteps&&navOn()&&myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
+function liveNavFix(c){if(follow)follow.fix(c);if(!navOn()||!liveSteps)return;const st=GCMNav.status(liveSteps,[c.latitude,c.longitude]);const el=navBar();el.classList.add('show');
+ if(window._navRerouting)return;
+ $('mapNavT').textContent=st.arrived?liveSteps.steps[liveSteps.steps.length-1].text:st.text;$('mapNavS').textContent=st.arrived?'':GCMNav.fmtDist(st.remaining).replace('Now','under 50 ft')+' to go';
+ if(st.arrived)navSay($('mapNavT').textContent);else if(st.toNext<120)navSay(st.toNext<25?st.next.text:st.text)}
+async function liveReroute(){window._navRerouting=true;const el=navBar();el.classList.add('show');$('mapNavT').textContent='↻ Rerouting on legal roads…';$('mapNavS').textContent='';
+ try{if(!(from&&from.me)){from={me:true}}sync();await route()}finally{window._navRerouting=false}if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
+const follow=GCMFollow.controller({map,getRoute:()=>liveSteps,reroute:liveReroute,say:navSay,
+ canStart:()=>!!liveSteps,
+ onStart:()=>{liveSaid='';if(!watching)locate();setSnap('collapsed');navBar().classList.add('show');$('mapNavT').textContent=liveSteps.steps[0].text;$('mapNavS').textContent='';navSay(liveSteps.steps[0].text);if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})},
+ onEnd:()=>{if($('mapNav'))$('mapNav').classList.remove('show');try{speechSynthesis.cancel()}catch(_){}setSnap('half')}});
+window.gcmFollow=follow;
+// Tap a step to zoom to where it starts; this pauses follow until Recenter.
+$('steps').addEventListener('click',e=>{const d=e.target.closest('.st[data-ll]');if(!d)return;const [a,b]=d.dataset.ll.split(',').map(Number);follow.pause();map.setView([a,b],18)});

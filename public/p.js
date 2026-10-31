@@ -292,6 +292,14 @@ function ensureMap() {
       attribution: '© OpenStreetMap contributors',
     }).addTo(map);
     L.control.zoom({ position: 'topright' }).addTo(map);
+    follow = GCMFollow.controller({
+      map,
+      getRoute: () => navRoute,
+      reroute: navReroute,
+      say: t => say(t),
+      onStart: () => { navSpoken = ''; say(document.getElementById('navText') ? document.getElementById('navText').textContent : ''); },
+      onEnd: () => { if (window.speechSynthesis) speechSynthesis.cancel(); },
+    });
     map.createPane('roads');
     const roadsPane = map.getPane('roads');
     roadsPane.style.zIndex = '410';
@@ -414,7 +422,7 @@ function placePopup(p) {
 function meIcon() {
   return L.divIcon({
     className: '',
-    html: '<div class="me-dot"></div>',
+    html: GCMFollow.DOT,
     iconSize: [22, 22],
     iconAnchor: [11, 11],
   });
@@ -429,6 +437,7 @@ function placeMe() {
   }
   if (!map || !meLL) return;
   meMarker = L.marker([meLL.lat, meLL.lon], { icon: meIcon(), zIndexOffset: 1000, interactive: false, keyboard: false }).addTo(map);
+  if (follow) follow.paintHeading();
 }
 
 // Bold casing matches the city map route: dark edge, white, then #1d6fe0.
@@ -556,6 +565,7 @@ nextBtn.onclick = () => {
 // ---- Turn-by-turn (public/nav.js). Live GPS moves the banner; off route reroutes on legal roads.
 const ARROWS = { straight: '↑', 'slight right': '↗', right: '↱', 'sharp right': '↘', 'slight left': '↖', left: '↰', 'sharp left': '↙', arrive: '⚑' };
 let navRoute = null, navState = null, navStop = -1, navWatch = null, navSpoken = '', navRerouting = false, navArrived = false;
+let follow = null;
 let navMuted = (() => { try { return localStorage.getItem('gcm_nav_mute') === '1'; } catch (e) { return false; } })();
 function navEl() {
   let el = document.getElementById('navBanner');
@@ -593,6 +603,8 @@ function paintMute() {
   b.setAttribute('aria-label', navMuted ? 'Unmute voice directions' : 'Mute voice directions');
 }
 function say(text) {
+  // Preview is silent; voice starts with Start.
+  if (follow && !follow.state().navigating) return;
   if (navMuted || !text || text === navSpoken) return;
   navSpoken = text;
   window.__navSaid = (window.__navSaid || []).concat(text);
@@ -610,6 +622,7 @@ function stopNav() {
   const el = document.getElementById('navBanner');
   if (el) el.classList.remove('show');
   document.body.classList.remove('has-nav');
+  if (follow) follow.preview(false);
 }
 function beginNav(leg, i, target) {
   const stops = activeEx && activeEx.stops;
@@ -623,14 +636,24 @@ function beginNav(leg, i, target) {
   document.body.classList.add('has-nav');
   el.querySelector('#navGo').hidden = true;
   el.querySelector('#navSteps').innerHTML = navRoute.steps.map(st =>
-    `<li><span class="nav-arrow sm" aria-hidden="true">${ARROWS[st.mod] || '↑'}</span><span>${esc(st.text)}</span><span class="muted">${st.kind === 'arrive' ? '' : GCMNav.fmtDist(st.len).replace('Now', '<50 ft')}</span></li>`).join('');
+    `<li data-i="${navRoute.steps.indexOf(st)}" tabindex="0"><span class="nav-arrow sm" aria-hidden="true">${ARROWS[st.mod] || '↑'}</span><span>${esc(st.text)}</span><span class="muted">${st.kind === 'arrive' ? '' : GCMNav.fmtDist(st.len).replace('Now', '<50 ft')}</span></li>`).join('');
   const first = navRoute.steps[0], second = navRoute.steps[1];
   paintNav(ARROWS[first.mod], first.text, second ? `Then ${second.text.charAt(0).toLowerCase() + second.text.slice(1)} in ${GCMNav.fmtDist(second.at)}` : '');
+  // Tap a step to look at that maneuver. This pauses follow until Recenter.
+  el.querySelectorAll('#navSteps li').forEach(li => {
+    li.onclick = () => {
+      const st = navRoute && navRoute.steps[+li.dataset.i];
+      if (!st || !map) return;
+      if (follow) follow.pause();
+      map.setView(L.latLng(st.ll[0], st.ll[1]), 18, { animate: !reduceMotion() });
+    };
+  });
+  if (follow) follow.preview(true);
   say(first.text);
   if (meLL) onNavFix({ lat: meLL.lat, lon: meLL.lon });
   if (navWatch == null && navigator.geolocation && navigator.geolocation.watchPosition) {
     navWatch = navigator.geolocation.watchPosition(
-      p => onNavFix({ lat: p.coords.latitude, lon: p.coords.longitude }),
+      p => onNavFix({ lat: p.coords.latitude, lon: p.coords.longitude, coords: p.coords }),
       () => {}, { enableHighAccuracy: true, maximumAge: 2000, timeout: 15000 });
   }
 }
@@ -642,8 +665,9 @@ function paintNav(arrow, text, sub) {
 }
 async function onNavFix(ll) {
   if (!finite(ll.lat, ll.lon)) return;
-  meLL = ll;
+  meLL = { lat: ll.lat, lon: ll.lon };
   placeMe();
+  if (follow) follow.fix(ll.coords || { latitude: ll.lat, longitude: ll.lon });
   if (!navRoute || navArrived || navRerouting) return;
   const st = GCMNav.status(navRoute, [ll.lat, ll.lon], navState);
   navState = st;
@@ -669,18 +693,18 @@ async function onNavFix(ll) {
     say(`You’ve arrived at ${here.label || 'the stop'}.` + (nxt >= 0 ? ` Next stop: ${stops[nxt].label || ''}.` : ''));
     return;
   }
-  if (st.offRoute) {
-    navRerouting = true;
-    paintNav('↻', 'Rerouting on legal roads…', '');
-    say('Rerouting');
-    try { if (navStop < 0) await routeFree(freeDest, true); else await routeToStop(navStop, true); } finally { navRerouting = false; }
-    return;
-  }
+  // Off route: GCMFollow waits ~5 s past 30 m, then calls navReroute (debounced).
   const after = navRoute.steps[st.idx + 1];
   paintNav(ARROWS[st.next.mod], st.text,
     (after ? `Then ${after.text.charAt(0).toLowerCase() + after.text.slice(1)} · ` : '') + `${GCMNav.fmtDist(st.remaining).replace('Now', 'under 50 ft')} to go`);
   // Speak once per maneuver when it is near (≈400 ft), and again at the turn.
   if (st.toNext < 120) say(st.toNext < 25 ? st.next.text : st.text);
+}
+// Off route for a while during navigation: new legal route from here to the same stop or place.
+async function navReroute() {
+  navRerouting = true;
+  paintNav('↻', 'Rerouting on legal roads…', '');
+  try { if (navStop < 0) await routeFree(freeDest, true); else await routeToStop(navStop, true); } finally { navRerouting = false; }
 }
 // Route from the current position to stop i on legal roads, draw it, and guide.
 async function routeToStop(i, quiet) {
@@ -897,7 +921,7 @@ async function startExperience() {
   if (drawn) frameLatLngs(leg.points);
   else panIntoView(L.latLng(+first.lat, +first.lon), 15);
   updateNext();
-  if (drawn) beginNav(leg, ((activeEx && activeEx.stops) || []).indexOf(first));
+  if (drawn) { beginNav(leg, ((activeEx && activeEx.stops) || []).indexOf(first)); if (follow) follow.start(); }
   focusEx(true);
   scheduleRoads();
   if (btn) {
