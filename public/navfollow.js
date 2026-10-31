@@ -167,6 +167,11 @@
   const CSS = `.me-wrap{position:relative;width:22px;height:22px}.me-wrap .me-dot{position:absolute;inset:0;margin:auto}
 .me-cone{display:none;position:absolute;left:50%;top:50%;width:0;height:0;margin-left:-11px;margin-top:-30px;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:22px solid rgba(29,111,224,.85);transform-origin:11px 30px;transform:rotate(var(--hd,0deg));filter:drop-shadow(0 0 1px #fff)}
 .me-wrap.has-hd .me-cone{display:block}
+.me-cart{display:none;position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;transform:rotate(var(--hd,0deg));transform-origin:50% 50%;will-change:transform;pointer-events:none}
+.me-cart svg{display:block;width:100%;height:100%}
+.me-cart:before{content:'';position:absolute;left:-10px;top:-10px;right:-10px;bottom:-10px;border-radius:50%;background:radial-gradient(circle,rgba(29,111,224,.22) 45%,rgba(29,111,224,0) 70%)}
+body.gcm-navigating .me-cart{display:block}
+body.gcm-navigating .me-wrap .me-dot,body.gcm-navigating .me-wrap .me-cone{display:none}
 #navCtl{position:fixed;z-index:1200;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;gap:10px;pointer-events:none}
 #navCtl button{pointer-events:auto;border:0;border-radius:999px;font:900 17px Nunito,system-ui,sans-serif;padding:14px 26px;box-shadow:0 6px 18px rgba(0,0,0,.28);cursor:pointer}
 #navCtl #navStart{background:#12a150;color:#fff}#navCtl #navEnd{background:#e5484d;color:#fff}#navCtl #navRecenter{background:#fff;color:#0b3a78}
@@ -186,7 +191,10 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     if (typeof document === 'undefined' || document.getElementById('navFollowCss')) return;
     const s = document.createElement('style'); s.id = 'navFollowCss'; s.textContent = CSS; document.head.appendChild(s);
   }
-  const DOT = '<div class="me-wrap"><div class="me-cone"></div><div class="me-dot"></div></div>';
+  // Max t424u: while navigating the dot becomes a 48 px top-down golf cart (brand teal/white), turned by the
+  // same --hd the arrow uses, so it costs nothing extra per frame. Outside navigation the normal dot shows.
+  const CART = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><defs><linearGradient id="gcmCartB" x1="0" x2="1"><stop offset="0" stop-color="#0b8fa3"/><stop offset=".45" stop-color="#5ee0e6"/><stop offset="1" stop-color="#0a7d90"/></linearGradient><linearGradient id="gcmCartR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d9eef2"/></linearGradient></defs><ellipse cx="24" cy="27" rx="15" ry="18" fill="rgba(0,0,0,.28)"/><g fill="#1d2a33"><rect x="10" y="9" width="5" height="9" rx="2"/><rect x="33" y="9" width="5" height="9" rx="2"/><rect x="9" y="31" width="6" height="10" rx="2"/><rect x="33" y="31" width="6" height="10" rx="2"/></g><path d="M17 5h14q4 0 5 4l2 30q0 5-5 5H15q-5 0-5-5l2-30q1-4 5-4z" fill="url(#gcmCartB)" stroke="#fff" stroke-width="2"/><path d="M17 8h14l1 4H16z" fill="#fff" opacity=".9"/><path d="M15.5 14h17l1 6h-19z" fill="#123b4a" opacity=".85"/><rect x="13" y="21" width="22" height="19" rx="4" fill="url(#gcmCartR)" stroke="#0b6e86" stroke-width="1.2"/><path d="M16 24h16" stroke="#9fd6df" stroke-width="1.5" stroke-linecap="round"/><circle cx="18" cy="7" r="1.3" fill="#ffd23f"/><circle cx="30" cy="7" r="1.3" fill="#ffd23f"/></svg>';
+  const DOT = '<div class="me-wrap"><div class="me-cone"></div><div class="me-dot"></div><div class="me-cart" aria-hidden="true">' + CART + '</div></div>';
 
   // Rotate a Leaflet map with CSS. The map pane goes inside a wrapper div that turns around the dot's
   // screen spot, so panning (which Leaflet does on the pane) and rotation never fight. While turned, tiles

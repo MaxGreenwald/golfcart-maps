@@ -159,12 +159,21 @@ class LiveNav(unittest.TestCase):
         hd = float(pg.evaluate("getComputedStyle(document.querySelector('.me-wrap')).getPropertyValue('--hd').trim()").replace("deg", ""))
         self.assertLess(abs(((hd - st["mapBearing"]) % 360 + 540) % 360 - 180), 1.5, (tag, hd, st))
         self.assertTrue(pg.is_visible("#navNorth"), tag)
+        # Max t424u: a 48 px golf cart puck instead of the small dot, pointing up in heading-up.
+        cb = pg.locator(".me-cart").bounding_box()
+        self.assertTrue(cb and cb["width"] >= 40 and cb["height"] >= 40, (tag, cb))
+        self.assertFalse(pg.is_visible(".me-wrap .me-dot"), tag)
         # Panning pauses follow and goes back to north-up; Recenter brings it back.
         drag(pg, cdp, 200, 320, 0, -120)
         self.assertTrue(pg.is_visible("#navRecenter"), tag)
         pg.wait_for_timeout(300)
         self.assertEqual(pg.evaluate("window.gcmFollowState().mapBearing"), 0, tag)
         self.assertEqual(pg.evaluate("document.querySelector('.gcm-rot').style.transform"), "", tag)
+        # North-up now: the cart turns with the heading (its angle on screen equals --hd).
+        ang = pg.evaluate("""(() => { const m = new DOMMatrix(getComputedStyle(document.querySelector('.me-cart')).transform);
+          const hd = parseFloat(getComputedStyle(document.querySelector('.me-wrap')).getPropertyValue('--hd'));
+          return [(Math.atan2(m.b, m.a) * 180 / Math.PI + 360) % 360, (hd + 360) % 360]; })()""")
+        self.assertLess(abs(((ang[0] - ang[1]) % 360 + 540) % 360 - 180), 1.5, (tag, ang))
         pg.screenshot(path=os.path.join(SHOTS, f"livenav-{tag}-recenter.png"))
         pg.click("#navRecenter")
         self.assertFalse(pg.is_visible("#navRecenter"), tag)
@@ -274,6 +283,8 @@ class LiveNav(unittest.TestCase):
         pg.wait_for_timeout(300)
         self.assertEqual(pg.evaluate("window.gcmFollowState().mapBearing"), 0, "End goes back to north-up")
         self.assertFalse(pg.is_visible("#navNorth"))
+        self.assertFalse(pg.is_visible(".me-cart"), "normal dot outside navigation")
+        self.assertTrue(pg.is_visible(".me-wrap .me-dot"))
         self.assertTrue(pg.is_visible(".sheet") and pg.is_visible("#goQ"), "renter controls back after End")
         ctx.close()
 
