@@ -1,0 +1,93 @@
+name: ios-xcode27-archive
+# Proof build only: Capacitor 8.5 + Xcode 27.1 on the xcode-27 runner. Signed archive, entitlements check,
+# NO export and NO TestFlight upload. The normal Xcode 26 TestFlight build stays in ios-testflight.yml.
+on:
+  workflow_dispatch:
+  push:
+    branches: [ios-xcode27]
+jobs:
+  archive:
+    runs-on: xcode-27
+    timeout-minutes: 60
+    env:
+      TEAM_ID: 8AUV2FF925
+      BUILD_NUMBER: ${{ github.run_number }}
+    # Signing: IOS_DIST_P12 (+_PASSWORD) is an Apple Distribution cert; IOS_APPSTORE_PROFILE an App Store profile
+    # for com.matchimus.golfcartmaps WITHOUT CarPlay. After Apple grants CarPlay, enable it on the App ID,
+    # regenerate the profile, update the secret, and run with carplay=true.
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: Sync web app with origin/master (CI copy only; never pushed)
+        run: |
+          git config user.name ci; git config user.email ci@users.noreply.github.com
+          git fetch --no-tags origin master
+          if ! git merge --no-edit origin/master; then
+            git merge --abort || true
+            echo "::error::ios-release conflicts with master. Merge origin/master into ios-release by hand (keep the native overrides) and push."; exit 1
+          fi
+          echo "Building web app at $(git rev-parse --short HEAD) = ios-release $(git rev-parse --short HEAD^1) + master $(git rev-parse --short origin/master)"
+      - name: Guard native overrides + master sync
+        run: python3 scripts/check_native_overrides.py --ref origin/master
+      - name: Select Xcode 27.1 (iOS 27.1 SDK; full-screen resizing on iPhone Duo)
+        run: |
+          ls -d /Applications/Xcode*.app
+          sudo xcode-select -s /Applications/Xcode_27.1.app && xcodebuild -version && xcodebuild -showsdks | grep -i iphoneos
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: python3 scripts/build_web.py && npm ci && npx cap sync ios
+      - name: API key
+        env: {ASC_KEY_P8: "${{ secrets.ASC_KEY_P8 }}"}
+        run: |
+          mkdir -p ~/private_keys
+          echo "$ASC_KEY_P8" | base64 --decode > ~/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8
+          echo "KEY_PATH=$HOME/private_keys/AuthKey_${{ secrets.ASC_KEY_ID }}.p8" >> $GITHUB_ENV
+      - name: Install distribution cert + App Store profile
+        env:
+          P12: ${{ secrets.IOS_DIST_P12 }}
+          P12_PW: ${{ secrets.IOS_DIST_P12_PASSWORD }}
+          PROFILE: ${{ secrets.IOS_APPSTORE_PROFILE }}
+        run: |
+          KC=$RUNNER_TEMP/ci.keychain-db; KCPW=$(uuidgen)
+          echo "$P12" | base64 --decode > $RUNNER_TEMP/dist.p12
+          security create-keychain -p "$KCPW" $KC
+          security set-keychain-settings -lut 21600 $KC
+          security unlock-keychain -p "$KCPW" $KC
+          security import $RUNNER_TEMP/dist.p12 -P "$P12_PW" -A -t cert -f pkcs12 -k $KC
+          security set-key-partition-list -S apple-tool:,apple: -k "$KCPW" $KC >/dev/null
+          security list-keychain -d user -s $KC $(security list-keychains -d user | tr -d '"')
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "$PROFILE" | base64 --decode > $RUNNER_TEMP/p.mobileprovision
+          UUID=$(security cms -D -i $RUNNER_TEMP/p.mobileprovision | plutil -extract UUID raw -)
+          cp $RUNNER_TEMP/p.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
+          echo "PROFILE_UUID=$UUID" >> $GITHUB_ENV
+          security find-identity -v -p codesigning $KC
+      - name: Sign App target at archive time (keeps App.entitlements, e.g. CarPlay)
+        # An unsigned archive (CODE_SIGNING_ALLOWED=NO) carries no entitlements, and exportArchive re-signs
+        # with only what the binary already has, so com.apple.developer.carplay-maps never reached TestFlight.
+        run: |
+          sed -i '' 's#CODE_SIGN_STYLE = Automatic;#CODE_SIGN_STYLE = Manual; CODE_SIGN_IDENTITY = "Apple Distribution"; PROVISIONING_PROFILE = '"$PROFILE_UUID"';#' ios/App/App.xcodeproj/project.pbxproj
+          grep -nE 'CODE_SIGN_STYLE|PROVISIONING_PROFILE|CODE_SIGN_ENTITLEMENTS' ios/App/App.xcodeproj/project.pbxproj
+      - name: Archive
+        run: |
+          set -o pipefail
+          xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath build/App.xcarchive \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$KEY_PATH" -authenticationKeyID "${{ secrets.ASC_KEY_ID }}" -authenticationKeyIssuerID "${{ secrets.ASC_ISSUER_ID }}" \
+            DEVELOPMENT_TEAM=$TEAM_ID MARKETING_VERSION=1.0 CURRENT_PROJECT_VERSION=$BUILD_NUMBER \
+            archive | tail -n 120
+      - name: Verify signed entitlements in the archive
+        run: |
+          APP=build/App.xcarchive/Products/Applications/App.app
+          codesign -d --entitlements - --xml "$APP" > build/ent.plist 2>/dev/null || codesign -d --entitlements :- "$APP" > build/ent.plist
+          cat build/ent.plist; echo
+          grep -q beta-reports-active build/ent.plist || { echo "::error::archive not signed for App Store distribution"; exit 1; }
+          grep -q com.apple.developer.carplay-maps build/ent.plist || { echo "::error::signed app lacks com.apple.developer.carplay-maps"; exit 1; }
+          /usr/libexec/PlistBuddy -c 'Print :DTSDKName' "$APP/Info.plist"
+          /usr/libexec/PlistBuddy -c 'Print :MinimumOSVersion' "$APP/Info.plist"
+          /usr/libexec/PlistBuddy -c 'Print :UIApplicationSceneManifest:UISceneConfigurations:UIWindowSceneSessionRoleApplication:0:UISceneDelegateClassName' "$APP/Info.plist"
+          /usr/libexec/PlistBuddy -c 'Print :UIApplicationSceneManifest:UISceneConfigurations:CPTemplateApplicationSceneSessionRoleApplication:0:UISceneDelegateClassName' "$APP/Info.plist"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: xcode27-logs, path: "~/Library/Logs/DiagnosticReports", if-no-files-found: ignore}
