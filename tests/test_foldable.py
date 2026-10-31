@@ -63,14 +63,17 @@ class Foldable(unittest.TestCase):
         c.add_init_script(HOOK)
         return c
 
-    def fits(self, pg, tag, wide):
+    def fits(self, pg, tag, wide, nav=False):
         pg.wait_for_timeout(700)
         g = pg.evaluate(GEOM)
         self.assertLessEqual(g["sw"], g["iw"], (tag, "horizontal overflow", g))
         self.assertEqual(g["mapSize"], [g["iw"], g["ih"]], (tag, "map not resized", g))
         sh = g["sheet"]
         self.assertLessEqual(sh[0] + sh[2], g["iw"] + 1, (tag, g))
-        if wide:  # side panel: leaves at least 40% of the width for the map
+        if nav:  # navigation hides the sheet on every screen size; only End stays (t421u)
+            self.assertEqual(sh[2], 0, (tag, "sheet should be hidden while navigating", g))
+            self.assertTrue(pg.is_visible("#navEnd"), (tag, "End button missing"))
+        elif wide:  # side panel: leaves at least 40% of the width for the map
             self.assertLess(sh[2], g["iw"] * 0.6, (tag, "no side panel", g))
         else:
             self.assertGreaterEqual(sh[2], g["iw"] - 1, (tag, "bottom sheet expected", g))
@@ -114,7 +117,7 @@ class Foldable(unittest.TestCase):
         pg.screenshot(path=os.path.join(SHOTS, "fold-nav-1-folded.png"))
         for k, (vp, name, wide) in enumerate([(UNFOLDED, "unfolded", True), (FOLDED, "refolded", False)]):
             pg.set_viewport_size(vp)
-            self.fits(pg, name, wide)
+            self.fits(pg, name, wide, nav=True)
             self.assertEqual(len(pg.evaluate("window._liveNav.pts")), n0, (name, "route lost or rerouted"))
             self.assertEqual(pg.evaluate("window.__navReroutes || 0"), 0, name)
             self.follow_ok(pg, ctx, pts, len(pts) * (k + 2) // 4, name)
