@@ -247,6 +247,8 @@ body.focus-ex .xcard:not(.active),body.focus-ex .subsec,body.focus-ex .offers{di
 /* Navigating (Max t417u): hide the sheet, header and next bar; the map fills the screen */
 body.gcm-navigating .sheet,body.gcm-navigating header.top,body.gcm-navigating #nextBar,body.gcm-navigating #confetti{display:none!important}
 body.gcm-navigating .leaflet-bottom{bottom:calc(84px + var(--sab,0px))}
+html.gcm-offline .leaflet-container{background:#eef2ea}
+
 </style>
 </head>
 <body>
@@ -309,6 +311,7 @@ body.gcm-navigating .leaflet-bottom{bottom:calc(84px + var(--sab,0px))}
   <div id="panel"><p class="fine">Loading the welcome mat…</p></div>
 </main>
 <div id="nextBar"><b id="nextLabel">Next stop</b><button id="nextBtn" type="button">Next</button></div>
+<script src="/offline.js"></script>
 <script src="/roadrule.js"></script>
 <script src="/router.js"></script>
 <script src="/nav.js"></script>
