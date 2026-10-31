@@ -23,7 +23,7 @@
 #logo{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#5ee0e6,#0b9fb3);display:grid;place-items:center;font-size:19px;flex:none}
 #sugg{margin-top:6px;background:#fff;border-radius:16px;box-shadow:var(--sh);overflow:hidden;display:none}
 #sugg .pedit{float:right;border:0;background:#eef5f7;border-radius:10px;padding:3px 10px;font-size:12px;color:#235}#sugg div{padding:11px 14px;border-bottom:1px solid #eef5f7;font-size:14px}#sugg div:last-child{border:0}
-#chips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}@media(max-width:480px){#chips{gap:5px}#chips .chip{padding:6px 8px;font-size:12px}#chips .chip.city{padding:4px 5px 4px 7px}#chips .palm{display:none}#chips #cityLbl{font-size:12px}#chips .chip.city .caret{margin-left:1px}}
+#chips{display:flex;gap:6px;margin-top:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}#chips::-webkit-scrollbar{display:none}#chips>*{flex:none}@media(max-width:480px){#chips{gap:5px}#chips .chip{padding:6px 8px;font-size:12px}#chips .chip.city{padding:4px 5px 4px 7px}#chips .palm{display:none}#chips #cityLbl{font-size:12px}#chips .chip.city .caret{margin-left:1px}}
 .chip{background:#fffffff0;border-radius:18px;padding:6px 12px;font:700 13px Nunito;box-shadow:0 2px 8px rgba(11,60,80,.15);border:0;color:var(--ink)}
 .chip.on{background:#ffd23f;color:#5a4300}
 .vnote{font-weight:600;color:#b4232a}

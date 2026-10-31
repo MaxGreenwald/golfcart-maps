@@ -79,5 +79,24 @@ class LocalSearch(unittest.TestCase):
         self.assertIn("Favorite beach", pg.input_value("#q"))
         if SHOTS: pg.wait_for_timeout(1500); pg.screenshot(path=os.path.join(SHOTS, "saved-beach-route.png"))
 
+    def test_start_field_gets_saved_place(self):
+        """Max t422u: focused Choose start, picked Home, it landed in the destination."""
+        pg = self.page()
+        pg.evaluate("localStorage.setItem('gcm-places',JSON.stringify({home:{name:'Crystal Pier',lat:32.7963,lon:-117.2571},beach:{name:'Tourmaline Surf Park',lat:32.8052,lon:-117.2620}}))")
+        pg.goto(f"http://127.0.0.1:{self.srv.server_address[1]}/?r=sd"); pg.wait_for_function("window.ready", timeout=30000)
+        pg.evaluate("from=null;to=null;sync()")
+        pg.fill("#qf", ""); pg.click("#qf"); pg.wait_for_timeout(200)
+        pg.click("#sugg .saved:has-text('Home')"); pg.wait_for_timeout(300)
+        self.assertIn("Home", pg.input_value("#qf"))
+        self.assertEqual(pg.input_value("#q"), "")
+        self.assertFalse(pg.evaluate("!!(window.state&&window.state.to)"))
+        # chip tapped while Start is focused also fills Start
+        pg.fill("#qf", ""); pg.click("#qf"); pg.click(".chip.sp[data-slot=beach]"); pg.wait_for_timeout(300)
+        self.assertIn("Favorite beach", pg.input_value("#qf")); self.assertEqual(pg.input_value("#q"), "")
+        # chips stay on one row
+        tops = pg.eval_on_selector_all("#chips>*", "cs=>[...new Set(cs.filter(c=>c.offsetParent).map(c=>c.offsetTop))]")
+        self.assertEqual(len(tops), 1, tops)
+        if SHOTS: pg.screenshot(path=os.path.join(SHOTS, "start-gets-home.png"))
+
 if __name__ == "__main__":
     unittest.main()

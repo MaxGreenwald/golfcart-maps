@@ -230,10 +230,10 @@ const onq=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<2){spi
   const all=GCMGeo.rank(GCMGeo.dedupe([...loc,...r],norm),bp);const near=all.near.slice(0,7);showSugg(near,near.length?[]:[...lr.far,...all.far].slice(0,5))},250)};
 // ---- saved places (Max t414u): Home, Favorite beach, custom favorites; on this device only ----
 const PL=GCMPlaces.make({getItem:k=>{try{return localStorage.getItem(k)}catch(_){return null}},setItem:(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}}});
-let saveSlot=null;  // when set, the next search pick or map tap saves into this slot instead of routing
+let saveSlot=null,listField='to';  // listField: the field (from/to) whose focus opened the saved list  // when set, the next search pick or map tap saves into this slot instead of routing
 function sRow(html,fn,cls){const d=document.createElement('div');d.className=cls||'srow';d.innerHTML=html;d.onmousedown=e=>e.preventDefault();if(fn)d.onclick=fn;$('sugg').appendChild(d);return d}
-function showSaved(){const sg=$('sugg');sg.innerHTML='';
- for(const p of PL.list()){if(p.saved){const d=sRow(`<b>${p.icon} ${esc(PL.label(p))}</b> <button class="pedit" aria-label="Edit ${esc(PL.label(p))}">Edit</button><br><small style="color:#6b8592">${esc(p.name)}</small>`,()=>goSaved(p),'srow saved');d.querySelector('.pedit').onclick=e=>{e.stopPropagation();editSaved(p)}}
+function showSaved(){listField=curField==='from'?'from':'to';const sg=$('sugg');sg.innerHTML='';
+ for(const p of PL.list()){if(p.saved){const d=sRow(`<b>${p.icon} ${esc(PL.label(p))}</b> <button class="pedit" aria-label="Edit ${esc(PL.label(p))}">Edit</button><br><small style="color:#6b8592">${esc(p.name)}</small>`,()=>goSaved(p,listField),'srow saved');d.querySelector('.pedit').onclick=e=>{e.stopPropagation();editSaved(p)}}
   else sRow(`<b>${p.icon} Set ${esc(p.title)}</b><br><small style="color:#6b8592">Search, tap the map, or use your location</small>`,()=>startSave(p.id))}
  if(PL.saved().filter(p=>p.id.startsWith('fav')).length<GCMPlaces.MAX_CUSTOM)sRow('<b>⭐ Add a favorite</b>',()=>startSave('new'));
  sg.style.display='block'}
@@ -251,12 +251,14 @@ function editSaved(p){const sg=$('sugg');sg.innerHTML='';
  sRow('<b>🗑️ Clear</b>',()=>{if(confirm('Clear '+PL.label(p)+'?')){PL.remove(p.id);renderSaved()}showSaved()});
  sRow('<span style="color:#6b8592">Back</span>',showSaved);sg.style.display='block'}
 // One tap: route from me (or the current start) to the saved place. To Home = the way back.
-function goSaved(p){$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();
+function goSaved(p,field){const f=field||'to';$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();
  const ll=L.latLng(p.lat,p.lon);if(inMX(ll)){$('help').textContent='⚠️ '+PL.label(p)+' is outside this map area';return}
+ const pt={ll,label:p.icon+' '+PL.label(p)};
+ if(f==='from'){setField('from',pt);return}  // opened from Start: fill Start, leave the destination alone
  if(!from||(from.ll&&from.ll.distanceTo(ll)<20)){if(myLL)from={me:true};else{from=null;locate()}}
- setField('to',{ll,label:p.icon+' '+PL.label(p)})}
+ setField('to',pt)}
 function renderSaved(){const box=$('chips');if(!box)return;box.querySelectorAll('.chip.sp').forEach(c=>c.remove());const ref=$('useme');
- for(const p of PL.saved()){const b=document.createElement('button');b.className='chip sp';b.dataset.slot=p.id;b.textContent=p.icon+' '+(p.id==='beach'?'Beach':PL.label(p));b.onclick=()=>goSaved(p);box.insertBefore(b,ref)}
+ for(const p of PL.saved()){const b=document.createElement('button');b.className='chip sp';b.dataset.slot=p.id;b.textContent=p.icon+' '+(p.id==='beach'?'Beach':PL.label(p));b.onmousedown=e=>e.preventDefault();b.onclick=()=>goSaved(p,document.activeElement===$('qf')?'from':'to');box.insertBefore(b,ref)}
  const sv=document.createElement('button');sv.className='chip sp';sv.id='savePin';sv.textContent='☆ Save place';sv.style.display=to&&!to.me&&to.ll&&!String(to.label||'').match(/^(🏠|🏖️|⭐) /)?'':'none';
  sv.onclick=()=>{const sg=$('sugg');sg.innerHTML='';const x={name:to.label,lat:to.ll.lat,lon:to.ll.lng};
   sRow(`<small style="color:#6b8592">Save ${esc(to.label||'this pin')} as</small>`,null,'srow hint');
