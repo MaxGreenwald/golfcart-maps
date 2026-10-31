@@ -21,9 +21,11 @@
 
 # Native WebView (capacitor://localhost) reads this JSON. Same-origin website fetches ignore CORS.
 # App Store 2.5.2: these are data files. The app does not download scripts from here.
+# Revalidate every time (cheap 304 via ETag) so /p/<slug>, /partner and /map never show day-old roads (Max, Oct 29 2026).
+# /map offline use still works: the service worker keeps its own copy.
 /data/*
   Access-Control-Allow-Origin: *
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: public, max-age=0, must-revalidate
 
 /site.webmanifest
   Content-Type: application/manifest+json

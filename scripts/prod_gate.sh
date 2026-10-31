@@ -7,6 +7,9 @@
 #
 # Refuses (exit 1) when any of these is true:
 #   - --max-ok is missing, empty, or not a single token
+#     (exception: --new-region-ok <ref> --live-commit <sha> instead of --max-ok passes only when
+#      scripts/check_new_region_only.py finds the diff from the live commit to HEAD just adds
+#      new regions. Max, Oct 30 2026, chat ref t390s2042. Anything else still needs --max-ok.)
 #   - the branch is not master
 #   - the given paths have uncommitted changes
 #   - HEAD is not exactly refs/remotes/origin/master (unpushed or local-only commits)
@@ -49,7 +52,7 @@ check_ref() {
 }
 
 prod_gate() {
-  local max_ok="" dirty_msg="uncommitted changes; commit first"
+  local max_ok="" dirty_msg="uncommitted changes; commit first" new_region_ok="" live_commit=""
   local -a paths=()
   while [ $# -gt 0 ]; do
     case "$1" in
@@ -59,6 +62,14 @@ prod_gate() {
         fi
         max_ok=$2
         shift 2
+        ;;
+      --new-region-ok)
+        new_region_ok=${2:-}
+        shift $(( $# < 2 ? 1 : 2 ))
+        ;;
+      --live-commit)
+        live_commit=${2:-}
+        shift $(( $# < 2 ? 1 : 2 ))
         ;;
       --dirty-msg)
         if [ $# -lt 2 ]; then
@@ -82,7 +93,15 @@ prod_gate() {
     esac
   done
 
-  check_ref "$max_ok"
+  if [ -z "$max_ok" ] && [ -n "$new_region_ok" ]; then
+    check_ref "$new_region_ok"
+    case "$live_commit" in
+      ""|-*|*[!0-9a-f]*) refuse "--new-region-ok needs --live-commit <hex sha of what is live now>; otherwise use --max-ok" ;;
+    esac
+    NEW_REGION_LIVE=$live_commit
+  else
+    check_ref "$max_ok"
+  fi
 
   local cur
   cur=$(gitc rev-parse --abbrev-ref HEAD)
@@ -111,6 +130,12 @@ prod_gate() {
   origin=$(gitc rev-parse refs/remotes/origin/master)
   if [ "$head" != "$origin" ]; then
     refuse "HEAD $head is not origin/master $origin (no unpushed or local-only commits)"
+  fi
+
+  if [ -n "${NEW_REGION_LIVE:-}" ]; then
+    if ! python3 "$ROOT/scripts/check_new_region_only.py" "$NEW_REGION_LIVE"; then
+      refuse "--new-region-ok only covers a diff that just adds new regions; this deploy needs --max-ok"
+    fi
   fi
 }
 

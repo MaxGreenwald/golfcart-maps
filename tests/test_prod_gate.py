@@ -8,6 +8,7 @@ scripts in this checkout. WRANGLER is a stub, and npx/wrangler on PATH are stubs
 if either runs, the test fails. GCM_BOT_LOG points at a temp file, never
 /workspace/gcm/bot-log.md.
 """
+import json
 import os
 import shutil
 import subprocess
@@ -15,7 +16,7 @@ import tempfile
 import unittest
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
-SCRIPTS = ("deploy_web.sh", "deploy_worker.sh", "prod_gate.sh")
+SCRIPTS = ("deploy_web.sh", "deploy_worker.sh", "prod_gate.sh", "check_new_region_only.py")
 
 
 class ProdGate(unittest.TestCase):
@@ -194,6 +195,94 @@ class ProdGate(unittest.TestCase):
             worker = f.read()
         self.assertLess(worker.index(call), worker.index("$W deploy"))
         self.assertEqual(worker.count(call), 1)
+
+
+class NewRegionOk(ProdGate):
+    """Max, Oct 30 2026 (t390s2042): a diff that only adds new regions may ship with
+    --new-region-ok instead of --max-ok. Anything else still needs --max-ok."""
+
+    def region_repo(self, name, change):
+        d = self.make_repo(name)
+        git = ["git", "-C", d]
+        data = os.path.join(d, "public", "data")
+        os.makedirs(os.path.join(data, "sd"))
+        with open(os.path.join(data, "regions.json"), "w", encoding="utf-8") as f:
+            json.dump([{"id": "sd", "name": "San Diego"}], f)
+        with open(os.path.join(data, "sd", "index.json"), "w", encoding="utf-8") as f:
+            f.write("{}\n")
+        subprocess.check_call(git + ["add", "-A"])
+        subprocess.check_call(git + ["commit", "-m", "live"], stdout=subprocess.DEVNULL)
+        live = subprocess.check_output(git + ["rev-parse", "HEAD"], text=True).strip()
+        change(d, data)
+        subprocess.check_call(git + ["add", "-A"])
+        subprocess.check_call(git + ["commit", "-m", "next"], stdout=subprocess.DEVNULL)
+        subprocess.check_call(git + ["update-ref", "refs/remotes/origin/master", "HEAD"])
+        return d, live
+
+    @staticmethod
+    def add_town(d, data):
+        with open(os.path.join(data, "regions.json"), "w", encoding="utf-8") as f:
+            json.dump([{"id": "sd", "name": "San Diego"}, {"id": "newtown", "name": "New Town"}], f)
+        os.makedirs(os.path.join(data, "newtown", "tiles"))
+        for rel in ("index.json", "tiles/0_0.json"):
+            with open(os.path.join(data, "newtown", rel), "w", encoding="utf-8") as f:
+                f.write("{}\n")
+
+    def gate(self, d, live):
+        return self.run_script(
+            os.path.join(d, "scripts/deploy_web.sh"),
+            ["production", "--new-region-ok", "t390s2042", "--live-commit", live],
+            d,
+        )
+
+    def test_new_region_only_diff_passes_the_gate(self):
+        d, live = self.region_repo("nr-ok", self.add_town)
+        proc = self.run_script(
+            os.path.join(d, "scripts/prod_gate.sh"),
+            ["--new-region-ok", "t390s2042", "--live-commit", live, "--paths", "public"],
+            d,
+        )
+        print("NEW-REGION-OK exit=%s" % proc.returncode, flush=True)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("new-region check PASS", proc.stdout)
+
+    def test_existing_region_or_code_change_needs_max_ok(self):
+        def edit_existing(d, data):
+            self.add_town(d, data)
+            with open(os.path.join(data, "sd", "index.json"), "w", encoding="utf-8") as f:
+                f.write('{"x": 1}\n')
+
+        def edit_existing_entry(d, data):
+            with open(os.path.join(data, "regions.json"), "w", encoding="utf-8") as f:
+                json.dump([{"id": "sd", "name": "SD"}, {"id": "newtown"}], f)
+            os.makedirs(os.path.join(data, "newtown"))
+            with open(os.path.join(data, "newtown", "index.json"), "w", encoding="utf-8") as f:
+                f.write("{}\n")
+
+        def edit_code(d, data):
+            self.add_town(d, data)
+            with open(os.path.join(d, "public", "app.js"), "w", encoding="utf-8") as f:
+                f.write("x = 1\n")
+
+        def add_file_to_existing(d, data):
+            self.add_town(d, data)
+            with open(os.path.join(data, "sd", "extra.json"), "w", encoding="utf-8") as f:
+                f.write("{}\n")
+
+        for label, change in (("existing-region-file", edit_existing),
+                              ("existing-region-entry", edit_existing_entry),
+                              ("code", edit_code),
+                              ("add-into-existing-region", add_file_to_existing)):
+            d, live = self.region_repo("nr-" + label, change)
+            proc = self.gate(d, live)
+            self.assert_refused_before_wrangler(proc, "this deploy needs --max-ok", "NEW-REGION-FAIL " + label)
+
+    def test_new_region_ok_without_live_commit_is_refused(self):
+        d, _ = self.region_repo("nr-nolive", self.add_town)
+        proc = self.run_script(
+            os.path.join(d, "scripts/deploy_web.sh"), ["production", "--new-region-ok", "t390s2042"], d
+        )
+        self.assert_refused_before_wrangler(proc, "--live-commit", "NEW-REGION no live commit")
 
 
 if __name__ == "__main__":

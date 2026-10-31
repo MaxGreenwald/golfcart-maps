@@ -1,7 +1,11 @@
 /* Partner admin SPA — super admin + shop admin. Talks to /api/partner/*.
    Place pickers: Photon (Komoot) + Nominatim fallback (same as the main map),
    plus manual pin-drop with a custom label. Lat/lon stored under the hood. */
-const api = (path, opt = {}) => fetch('/api/partner' + path, {
+// A super-admin editing a shop as its owner: every /shop call names that shop.
+const scoped = path => (state && state.actingShop && /^\/shop(\/|$|\?)/.test(path))
+  ? path + (path.includes('?') ? '&' : '?') + 'shop_id=' + encodeURIComponent(state.actingShop.id)
+  : path;
+const api = (path, opt = {}) => fetch('/api/partner' + scoped(path), {
   credentials: 'include',
   headers: { 'content-type': 'application/json', ...(opt.headers || {}) },
   ...opt,
@@ -62,7 +66,7 @@ function flash(ok, text) {
 
 async function loadMe() {
   me = await api('/auth/me');
-  regions = await fetch('/data/regions.json').then(r => r.json());
+  regions = await fetch('/data/regions.json', { cache: 'no-store' }).then(r => r.json());
 }
 
 function regionById(id) {
@@ -179,7 +183,38 @@ function stopEditor(stops) {
   return `<div class="stops" id="stopList">${rows}</div>
     <p class="muted">Places via Photon / OpenStreetMap. Or drop a pin and type your own name for unofficial spots.</p>
     <p class="muted">Move up and Move down set the order. Save to keep it.</p>
-    <p><button class="btn alt" id="addStop" type="button">Add stop</button></p>`;
+    <p><button class="btn alt" id="addStop" type="button">Add stop</button>
+      ${placeOptions() ? `<select id="addPlaceStop" aria-label="Add one of your places as a stop"><option value="">+ Add one of your places…</option>${placeOptions()}</select>` : ''}</p>`;
+}
+
+const PLACE_CATS = [['restaurant', 'Restaurant', '🍽️'], ['views', 'Views', '🌅'], ['trivia', 'Trivia', '❓'], ['fun_fact', 'Fun fact', '💡'], ['other', 'Other', '📍']];
+const placeCat = c => PLACE_CATS.find(x => x[0] === c) || PLACE_CATS[4];
+function shopPlaces() { return (state.shopBundle && state.shopBundle.places) || []; }
+function placeOptions() {
+  return shopPlaces().map(p => `<option value="${esc(p.id)}">${placeCat(p.category)[2]} ${esc(p.name)}</option>`).join('');
+}
+function placesCard() {
+  const rows = shopPlaces().map(p => `<tr>
+    <td><b>${placeCat(p.category)[2]} ${esc(p.name)}</b> <span class="pill">${esc(placeCat(p.category)[1])}</span>
+      <div class="muted">${esc(p.note || '')}</div>
+      <div class="muted">${(+p.lat).toFixed(5)}, ${(+p.lon).toFixed(5)}${p.link ? ` · <a href="${esc(p.link)}" target="_blank" rel="noopener">link</a>` : ''}</div></td>
+    <td><div class="ex-actions">
+      <button class="btn alt" data-edit-place="${esc(p.id)}" type="button">Edit</button>
+      <button class="btn warn" data-del-place="${esc(p.id)}" type="button">Delete</button>
+    </div></td>
+  </tr>`).join('') || '<tr><td colspan="2" class="muted">No places yet.</td></tr>';
+  return `<div class="card" id="placesCard"><h2>Places of interest</h2>
+    <p class="muted">Spots to point out: food, views, trivia, fun facts. No discount code. They show on your renter map, and you can add them to an experience as a stop.</p>
+    <p class="muted hidden" id="placeEditing">Editing this place.</p>
+    <input type="hidden" id="placeId" value="">
+    <label for="placeCat">Category</label>
+    <select id="placeCat">${PLACE_CATS.map(c => `<option value="${c[0]}">${c[2]} ${c[1]}</option>`).join('')}</select>
+    <div id="placeRow">${stopRowHtml({}, 0)}</div>
+    <label for="placeLink">Link (optional)</label><input id="placeLink" placeholder="https://…">
+    <p><button class="btn" id="savePlace" type="button">Add place</button>
+      <button class="btn alt hidden" id="cancelPlace" type="button">Cancel</button></p>
+    <table><thead><tr><th>Place</th><th></th></tr></thead><tbody>${rows}</tbody></table>
+  </div>`;
 }
 
 function loginView() {
@@ -206,6 +241,7 @@ function superView() {
     <td>${esc(s.owner_email || '—')}</td>
     <td><span class="pill ${s.disabled ? 'off' : ''}">${s.disabled ? 'disabled' : 'active'}</span></td>
     <td>
+      <button class="btn" data-open-shop="${esc(s.id)}" data-shop-name="${esc(s.name)}" type="button">Edit shop</button>
       <button class="btn alt" data-invite="${esc(s.id)}" type="button">Invite</button>
       <button class="btn warn" data-toggle="${esc(s.id)}" data-off="${s.disabled ? 0 : 1}" type="button">${s.disabled ? 'Enable' : 'Disable'}</button>
       <a class="btn alt" href="/p/${esc(s.slug)}" target="_blank" rel="noopener">Brand page</a>
@@ -235,6 +271,8 @@ function shopView() {
   const b = state.shopBundle;
   if (!b || !b.shop) return `<div class="card"><p class="msg err">No shop linked to this account yet. Accept an invite from Max.</p></div>`;
   const s = b.shop;
+  const actingBanner = state.actingShop ? `<div class="card super-banner" id="superBanner" role="status"><b>Editing ${esc(s.name)} as super-admin.</b>
+    Changes go live on the shop's page. <button class="btn alt" id="backToShops" type="button">Back to all shops</button></div>` : '';
   const exRows = (b.experiences || []).map(e => `<tr>
     <td><b>${esc(e.title)}</b><div class="muted">${esc(e.description || '')}</div>
       <div class="muted ex-stops">${stopsLine(e.stops)}</div></td>
@@ -246,14 +284,18 @@ function shopView() {
   const afRows = (b.affiliates || []).map(a => `<tr>
     <td><b>${esc(a.name)}</b><div class="muted">${esc(a.offer || '')}</div>
       <div class="muted">${Number.isFinite(a.lat) ? a.lat.toFixed(5) + ', ' + a.lon.toFixed(5) : ''}${a.coupon ? ` · coupon <code>${esc(a.coupon)}</code>` : ''}</div></td>
-    <td><button class="btn warn" data-del-af="${esc(a.id)}" type="button">Delete</button></td>
+    <td><div class="ex-actions">
+      <button class="btn alt" data-edit-af="${esc(a.id)}" type="button">Edit</button>
+      <button class="btn warn" data-del-af="${esc(a.id)}" type="button">Delete</button>
+    </div></td>
   </tr>`).join('') || '<tr><td colspan="2" class="muted">No affiliate offers yet.</td></tr>';
   const codeRows = (b.codes || []).map(c => `<tr>
     <td><code>${esc(c.code)}</code></td>
-    <td class="muted">uses ${c.uses}${c.max_uses ? '/' + c.max_uses : ''} · ${c.multi_use ? 'multi' : 'single'}</td>
+    <td class="muted">uses ${c.uses}${c.max_uses ? '/' + c.max_uses : ''} · ${c.multi_use ? 'multi' : 'single'}
+      <div class="code-exp">${c.expires_at ? (c.expires_at * 1000 < Date.now() ? 'Expired ' : 'Expires ') + esc(new Date(c.expires_at * 1000).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })) : 'Never expires'}</div></td>
     <td><a href="/p/${esc(s.slug)}/go?code=${esc(c.code)}" target="_blank" rel="noopener">Open renter link</a></td>
   </tr>`).join('') || '<tr><td colspan="3" class="muted">No codes yet.</td></tr>';
-  return `
+  return `${actingBanner}
   <div class="card"><h2>${esc(s.name)}</h2>
     <p>Brand page: <a href="/p/${esc(s.slug)}" target="_blank">/p/${esc(s.slug)}</a>
       · City: <span class="pill">${esc(s.region_id)}</span></p>
@@ -263,6 +305,12 @@ function shopView() {
   <div class="card"><h2>Brand</h2>
     <label>Display name</label><input id="brandName" value="${esc(s.name)}">
     <label>City / region</label><select id="brandRegion">${regionOptions(s.region_id || 'sd')}</select>
+    <label for="brandVehicle">Your rental vehicles</label>
+    <select id="brandVehicle" aria-describedby="brandVehicleHint">
+      <option value="lsv"${s.vehicle === 'lsv' ? ' selected' : ''}>Street-legal LSV (roads up to 35 mph)</option>
+      <option value="golf_cart"${s.vehicle !== 'lsv' ? ' selected' : ''}>Golf cart (roads up to 25 mph)</option>
+    </select>
+    <p class="muted" id="brandVehicleHint">Sets which roads show green and how routes run on your renter page.</p>
     <label>Short blurb</label><textarea id="brandBlurb">${esc(s.blurb || '')}</textarea>
     <div class="row">
       <div><label>Logo URL (optional)</label><input id="brandLogo" value="${esc(s.logo_url || '')}" placeholder="https://…"></div>
@@ -283,8 +331,11 @@ function shopView() {
     </p>
     <table><thead><tr><th>Experience</th><th></th></tr></thead><tbody>${exRows}</tbody></table>
   </div>
+  ${placesCard()}
   <div class="card af-place"><h2>Affiliate offers</h2>
     <p class="muted">Restaurants and deals for your renters. Larger ★ pins on the map.</p>
+    <p class="muted hidden" id="afEditing">Editing this offer. Search or drop a pin to move it.</p>
+    <input type="hidden" id="afId" value="">
     <label>Offer text</label><input id="afOffer" placeholder="25% off a beer">
     <div class="mode-row" id="afModes">
       <button type="button" class="btn alt modeSearch on" data-af-mode="search">Search place</button>
@@ -307,12 +358,24 @@ function shopView() {
     <input type="hidden" id="afLat" value="">
     <input type="hidden" id="afLon" value="">
     <div class="picked miss" id="afPicked">Search a place or drop a pin on the map</div>
-    <label style="margin-top:10px"><input type="checkbox" id="afCoupon" checked> Generate coupon code</label>
-    <p><button class="btn" id="addAf" type="button">Add affiliate</button></p>
+    <div id="afEditFields" class="hidden">
+      <label for="afNameEdit">Place name</label><input id="afNameEdit">
+      <label for="afCouponText">Coupon code</label><input id="afCouponText" placeholder="Leave empty for no coupon">
+    </div>
+    <label style="margin-top:10px" id="afCouponRow"><input type="checkbox" id="afCoupon" checked> Generate coupon code</label>
+    <p><button class="btn" id="addAf" type="button">Add affiliate</button>
+      <button class="btn alt hidden" id="cancelAf" type="button">Cancel</button></p>
     <table><thead><tr><th>Affiliate</th><th></th></tr></thead><tbody>${afRows}</tbody></table>
   </div>
   <div class="card"><h2>Renter access codes</h2>
-    <p class="muted">Give this link after they pay the extra $5–10 in your own checkout. Multi-use, 30-day expiry by default.</p>
+    <p class="muted">Give this link after they pay the extra $5–10 in your own checkout. Multi-use.</p>
+    <label for="codeDays">Code lasts</label>
+    <div class="mode-row" id="codeChips">
+      ${[1, 3, 7, 14, 30].map(d => `<button type="button" class="btn alt${d === 30 ? ' on' : ''}" data-days="${d}">${d} day${d > 1 ? 's' : ''}</button>`).join('')}
+      <button type="button" class="btn alt" data-days="never">No expiry</button>
+    </div>
+    <div class="row"><div><input id="codeDays" type="number" min="1" max="30" step="1" value="30" aria-describedby="codeDaysHint">
+      <div class="muted" id="codeDaysHint">1 to 30 days, or No expiry.</div></div></div>
     <p><button class="btn" id="genCode" type="button">Generate access code</button></p>
     <table><thead><tr><th>Code</th><th>Usage</th><th>Link</th></tr></thead><tbody>${codeRows}</tbody></table>
   </div>`;
@@ -594,6 +657,67 @@ function wireStop(row) {
   refreshMoveButtons();
 }
 
+function wirePlaces() {
+  const row = $('#placeRow .stop');
+  if (!row) return;
+  wireStop(row);
+  $('label', row).textContent = 'Place name';
+  [...row.querySelectorAll('label')].find(l => /Note/.test(l.textContent)).textContent = 'Note renters read (trivia, fun fact, what to look for)';
+  $('[data-k=note]', row).placeholder = 'e.g. This pier was built in 1925';
+  const sel = $('#addPlaceStop');
+  if (sel) sel.onchange = () => {
+    const p = shopPlaces().find(x => x.id === sel.value);
+    sel.value = '';
+    if (!p) return;
+    const list = $('#stopList');
+    // Fill an empty first row, else append.
+    const blank = [...list.querySelectorAll('.stop')].find(r => !$('[data-k=lat]', r).value);
+    const wrap = document.createElement('div');
+    wrap.innerHTML = stopRowHtml({ label: p.name, lat: p.lat, lon: p.lon, note: p.note }, list.children.length);
+    const nr = wrap.firstElementChild;
+    if (blank) list.replaceChild(nr, blank); else list.appendChild(nr);
+    wireStop(nr);
+    refreshMoveButtons();
+  };
+  const fill = p => {
+    $('#placeId').value = p ? p.id : '';
+    $('#placeCat').value = p ? p.category : 'restaurant';
+    $('#placeLink').value = p ? (p.link || '') : '';
+    const wrap = document.createElement('div');
+    wrap.innerHTML = stopRowHtml(p ? { label: p.name, lat: p.lat, lon: p.lon, note: p.note } : {}, 0);
+    $('#placeRow').replaceChildren(wrap.firstElementChild);
+    $('#placeEditing').classList.toggle('hidden', !p);
+    $('#cancelPlace').classList.toggle('hidden', !p);
+    $('#savePlace').textContent = p ? 'Save place' : 'Add place';
+    wirePlaces();
+  };
+  document.querySelectorAll('[data-edit-place]').forEach(b => b.onclick = () => {
+    fill(shopPlaces().find(x => x.id === b.dataset.editPlace));
+    $('#placesCard').scrollIntoView({ block: 'start' });
+  });
+  $('#cancelPlace').onclick = () => fill(null);
+  $('#savePlace').onclick = async () => {
+    try {
+      const r = $('#placeRow .stop');
+      const name = (($('[data-k=name]', r).value || $('[data-k=label]', r).value) || '').trim();
+      const lat = numCoord($('[data-k=lat]', r).value), lon = numCoord($('[data-k=lon]', r).value);
+      if (!name) throw new Error('Name the place');
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) throw new Error('Pick a place (search or drop a pin)');
+      const body = { name, category: $('#placeCat').value, lat, lon, note: $('[data-k=note]', r).value.trim(), link: $('#placeLink').value.trim() };
+      const pid = $('#placeId').value;
+      if (pid) await api('/shop/places/' + pid, { method: 'PATCH', body: JSON.stringify(body) });
+      else await api('/shop/places', { method: 'POST', body: JSON.stringify(body) });
+      flash(true, pid ? 'Place saved' : 'Place added');
+      await refreshShop();
+    } catch (e) { flash(false, e.message); }
+  };
+  document.querySelectorAll('[data-del-place]').forEach(b => b.onclick = async () => {
+    if (!confirm('Delete this place?')) return;
+    try { await api('/shop/places/' + b.dataset.delPlace, { method: 'DELETE' }); await refreshShop(); }
+    catch (e) { flash(false, e.message); }
+  });
+}
+
 function wireAffiliatePicker() {
   const searchBox = $('#afSearch');
   const pinBox = $('#afPin');
@@ -602,6 +726,7 @@ function wireAffiliatePicker() {
     $('#afLat').value = lat;
     $('#afLon').value = lon;
     $('#afName').value = name || '';
+    if ($('#afId') && $('#afId').value && name) $('#afNameEdit').value = name;
     const p = $('#afPicked');
     p.className = 'picked ok';
     p.textContent = `✓ ${name || 'Pinned'} · ${(+lat).toFixed(5)}, ${(+lon).toFixed(5)}`;
@@ -764,10 +889,27 @@ function bindApp() {
       const name = $('#shopName').value.trim();
       const slug = $('#shopSlug').value.trim();
       const region_id = $('#shopRegion').value;
-      await api('/admin/shops', { method: 'POST', body: JSON.stringify({ name, slug, region_id }) });
+      const made = await api('/admin/shops', { method: 'POST', body: JSON.stringify({ name, slug, region_id }) });
+      if (made && made.shop) {
+        // Straight into the owner editor so the super-admin can set the shop up.
+        state.actingShop = { id: made.shop.id, name: made.shop.name };
+        state.msg = 'Shop created. Add experiences, brand and codes below.'; state.err = '';
+        await refreshShop();
+        return;
+      }
       flash(true, 'Shop created');
       await refreshSuper();
     } catch (e) { flash(false, e.message); }
+  };
+  document.querySelectorAll('[data-open-shop]').forEach(b => b.onclick = async () => {
+    state.actingShop = { id: b.dataset.openShop, name: b.dataset.shopName };
+    state.msg = ''; state.err = '';
+    try { await refreshShop(); } catch (e) { state.actingShop = null; flash(false, e.message); }
+  });
+  const back = $('#backToShops');
+  if (back) back.onclick = async () => {
+    state.actingShop = null; state.msg = ''; state.err = '';
+    await refreshSuper();
   };
   document.querySelectorAll('[data-invite]').forEach(b => b.onclick = async () => {
     const email = prompt('Owner email (Gmail)');
@@ -797,6 +939,7 @@ function bindApp() {
         blurb: $('#brandBlurb').value,
         logo_url: $('#brandLogo').value.trim(),
         color: $('#brandColor').value.trim(),
+        vehicle: $('#brandVehicle').value,
       }) });
       flash(true, 'Brand saved');
       await refreshShop();
@@ -815,6 +958,7 @@ function bindApp() {
   };
 
   wireAffiliatePicker();
+  wirePlaces();
 
   const addEx = $('#addEx');
   if (addEx) addEx.onclick = async () => {
@@ -851,9 +995,18 @@ function bindApp() {
   const addAf = $('#addAf');
   if (addAf) addAf.onclick = async () => {
     try {
-      const name = $('#afName').value.trim();
+      const afId = $('#afId').value;
+      const name = (afId ? $('#afNameEdit').value : $('#afName').value).trim();
       const lat = +$('#afLat').value, lon = +$('#afLon').value;
       if (!name || !Number.isFinite(lat) || !Number.isFinite(lon)) throw new Error('Pick a place (search or drop a pin) before adding');
+      if (afId) {
+        await api('/shop/affiliates/' + afId, { method: 'PATCH', body: JSON.stringify({
+          name, offer: $('#afOffer').value.trim(), lat, lon, coupon: $('#afCouponText').value.trim(),
+        }) });
+        flash(true, 'Affiliate saved');
+        await refreshShop();
+        return;
+      }
       await api('/shop/affiliates', { method: 'POST', body: JSON.stringify({
         name,
         offer: $('#afOffer').value.trim(),
@@ -865,15 +1018,47 @@ function bindApp() {
       await refreshShop();
     } catch (e) { flash(false, e.message); }
   };
+  document.querySelectorAll('[data-edit-af]').forEach(b => b.onclick = () => {
+    const a = ((state.shopBundle && state.shopBundle.affiliates) || []).find(x => x.id === b.dataset.editAf);
+    if (!a) return;
+    $('#afId').value = a.id;
+    $('#afOffer').value = a.offer || '';
+    $('#afName').value = a.name; $('#afLat').value = a.lat; $('#afLon').value = a.lon;
+    $('#afNameEdit').value = a.name;
+    $('#afCouponText').value = a.coupon || '';
+    const p = $('#afPicked');
+    p.className = 'picked ok';
+    p.textContent = `✓ ${a.name} · ${(+a.lat).toFixed(5)}, ${(+a.lon).toFixed(5)}`;
+    $('#afEditFields').classList.remove('hidden');
+    $('#afEditing').classList.remove('hidden');
+    $('#afCouponRow').classList.add('hidden');
+    $('#cancelAf').classList.remove('hidden');
+    $('#addAf').textContent = 'Save offer';
+    $('#afOffer').scrollIntoView({ block: 'center' });
+  });
+  const cancelAf = $('#cancelAf');
+  if (cancelAf) cancelAf.onclick = () => render();
   document.querySelectorAll('[data-del-af]').forEach(b => b.onclick = async () => {
     if (!confirm('Delete this affiliate?')) return;
     try { await api('/shop/affiliates/' + b.dataset.delAf, { method: 'DELETE' }); await refreshShop(); }
     catch (e) { flash(false, e.message); }
   });
+  const chips = document.querySelectorAll('#codeChips [data-days]');
+  const daysIn = $('#codeDays');
+  chips.forEach(c => c.onclick = () => {
+    chips.forEach(x => x.classList.toggle('on', x === c));
+    const never = c.dataset.days === 'never';
+    daysIn.disabled = never;
+    if (!never) daysIn.value = c.dataset.days;
+  });
+  if (daysIn) daysIn.oninput = () => chips.forEach(x => x.classList.toggle('on', x.dataset.days === daysIn.value));
   const genCode = $('#genCode');
   if (genCode) genCode.onclick = async () => {
     try {
-      const j = await api('/shop/codes', { method: 'POST', body: JSON.stringify({ multi_use: true, expires_days: 30 }) });
+      const never = !!$('#codeChips [data-days=never].on');
+      const days = never ? null : Number($('#codeDays').value);
+      if (!never && !(Number.isInteger(days) && days >= 1 && days <= 30)) throw new Error('Pick 1 to 30 days, or No expiry');
+      const j = await api('/shop/codes', { method: 'POST', body: JSON.stringify({ multi_use: true, expires_days: days }) });
       flash(true, 'Code ' + j.code.code + ' — renter link copied when possible');
       const link = location.origin + '/p/' + state.shopBundle.shop.slug + '/go?code=' + j.code.code;
       try { await navigator.clipboard.writeText(link); } catch (_) {}
@@ -885,6 +1070,7 @@ function bindApp() {
 async function refreshSuper() {
   const j = await api('/admin/shops');
   state.shops = j.shops || [];
+  state.actingShop = null;
   state.view = 'super';
   render();
 }
