@@ -84,30 +84,67 @@
       $b('navEnd').hidden = !navigating;
       $b('navRecenter').hidden = !navigating || following;
     }
-    function paintHeading() {
-      document.querySelectorAll('.me-wrap').forEach(el => {
-        el.classList.toggle('has-hd', heading != null);
-        if (heading != null) el.style.setProperty('--hd', heading.toFixed(0) + 'deg');
+    // Paint the heading at most once per frame, only when it moved >= 3 deg or toggled on/off.
+    // deviceorientation fires ~60/s on iPhone; painting every event (querySelectorAll + style write)
+    // kept the main thread busy and made typing lag (Oct 31 2026).
+    let painted, paintQueued = 0;
+    function paintHeading(force) {
+      if (force === true) painted = undefined;
+      if (paintQueued) return;
+      const raf = root.requestAnimationFrame || (f => setTimeout(f, 16));
+      paintQueued = raf(() => {
+        paintQueued = 0;
+        const h = heading == null ? null : Math.round(heading);
+        if (painted !== undefined && (h == null) === (painted == null) && (h == null || Math.abs(((h - painted + 540) % 360) - 180) < 3)) return;
+        painted = h;
+        root.__navHeadingPaints = (root.__navHeadingPaints || 0) + 1;
+        document.querySelectorAll('.me-wrap').forEach(el => {
+          el.classList.toggle('has-hd', h != null);
+          if (h != null) el.style.setProperty('--hd', h + 'deg');
+        });
       });
     }
+    // Keep the dot a bit below center. Cheap: skip when it is already within a few px of the target.
     function center(ll) {
       if (!map || !ll) return;
       const z = Math.max(map.getZoom(), C.FOLLOW_ZOOM), sz = map.getSize();
       const off = L.point(0, sz.y * (C.FOLLOW_Y - 0.5));
       const c = map.unproject(map.project(L.latLng(ll[0], ll[1]), z).subtract(off), z);
-      moving++;
-      try { map.setView(c, z, { animate: false }); } finally { moving--; }
+      root.__navCenters = (root.__navCenters || 0) + 1;
+      if (z !== map.getZoom()) { map.setView(c, z, { animate: false }); return; }
+      const d = map.project(c, z).subtract(map.project(map.getCenter(), z));
+      if (Math.abs(d.x) < 2 && Math.abs(d.y) < 2) return;
+      // Big jumps (first fix, GPS catch-up) snap; small steps glide.
+      if (Math.abs(d.x) > sz.x / 4 || Math.abs(d.y) > sz.y / 4) { map.setView(c, z, { animate: false }); return; }
+      map.panTo(c, { animate: true, duration: 0.25, easeLinearity: 1, noMoveStart: true });
     }
-    // A real drag or pinch pauses follow; our own setView does not.
-    function userMoved() { if (moving || !navigating || !following) return; following = false; paintBtns(); }
-    if (map) { map.on('dragstart', userMoved); map.on('zoomstart', userMoved); }
+    // Only a real finger/mouse drag or pinch on the map pauses follow. Leaflet move/zoom events also
+    // fire for our own and the app's programmatic moves (fitBounds before Start, reroute framing,
+    // animated zoom), which paused follow right after Start in the field (Max t409u).
+    let touching = false;
+    function userMoved() { if (!touching || !navigating || !following) return; following = false; paintBtns(); }
+    if (map) {
+      const el = map.getContainer();
+      const down = () => { touching = true; }, up = () => { setTimeout(() => { touching = false; }, 0); };
+      ['pointerdown', 'touchstart', 'mousedown'].forEach(t => el.addEventListener(t, down, { passive: true }));
+      ['pointerup', 'pointercancel', 'touchend', 'touchcancel', 'mouseup'].forEach(t => root.addEventListener(t, up, { passive: true }));
+      el.addEventListener('wheel', () => { touching = true; userMoved(); touching = false; }, { passive: true });
+      map.on('dragstart', userMoved); map.on('zoomstart', userMoved); map.on('movestart', userMoved);
+    }
     function onOrient(e) { const c = compassFrom(e); if (c != null) { compass = c; if (!last || !Number.isFinite(last.heading) || !last.speed) { heading = c; paintHeading(); } } }
+    // Compass only while navigating: listeners come off at End (they used to stay on forever).
+    let compassOn = false;
     function listenCompass() {
       const D = root.DeviceOrientationEvent;
-      if (!D) return;
-      const on = () => { root.addEventListener('deviceorientationabsolute', onOrient); root.addEventListener('deviceorientation', onOrient); };
+      if (!D || compassOn) return;
+      const on = () => { if (!navigating || compassOn) return; compassOn = true; root.__navCompassOn = true; root.addEventListener('deviceorientationabsolute', onOrient); root.addEventListener('deviceorientation', onOrient); };
       if (typeof D.requestPermission === 'function') D.requestPermission().then(r => { if (r === 'granted') on(); }).catch(() => {});
       else on();
+    }
+    function stopCompass() {
+      if (!compassOn) return;
+      compassOn = false; root.__navCompassOn = false; compass = null;
+      root.removeEventListener('deviceorientationabsolute', onOrient); root.removeEventListener('deviceorientation', onOrient);
     }
     function check(now) {
       const r = opts.getRoute && opts.getRoute();
@@ -143,19 +180,20 @@
         listenCompass();
         paintBtns();
         if (opts.onStart) opts.onStart();
+        if (map && map.stop) map.stop();
         if (last) center([last.latitude, last.longitude]);
         check(Date.now());
       },
       end() {
         if (!navigating) return;
-        navigating = false; following = false; clearTimeout(timer); track.reset();
+        navigating = false; following = false; clearTimeout(timer); track.reset(); stopCompass();
         paintBtns();
         if (opts.onEnd) opts.onEnd();
       },
       recenter() { following = true; paintBtns(); if (last) center([last.latitude, last.longitude]); },
       pause() { if (navigating && following) { following = false; paintBtns(); } },
-      paintHeading,
-      state: () => ({ navigating, following, previewing, heading, rerouting }),
+      paintHeading: () => paintHeading(true),
+      state: () => ({ navigating, following, previewing, heading, rerouting, compassOn }),
     };
     $b('navStart').onclick = () => api.start();
     $b('navEnd').onclick = () => api.end();

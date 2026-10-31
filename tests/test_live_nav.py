@@ -116,6 +116,7 @@ class LiveNav(unittest.TestCase):
         pg.click("#navStart")
         self.assertTrue(pg.is_visible("#navEnd"), tag)
         self.assertFalse(pg.is_visible("#navStart"), tag)
+        self.drive_along(pg, ctx, pts, tag)
         i = len(pts) // 3
         a = pts[i]
         b = next((q for q in pts[i:] if hav(a, q) > 40), pts[-1])
@@ -124,6 +125,7 @@ class LiveNav(unittest.TestCase):
         # Headless Chromium mock has no course, so a second fix ahead gives the bearing.
         ctx.set_geolocation({"latitude": b[0], "longitude": b[1], "accuracy": 5})
         pg.wait_for_function("() => document.querySelector('.me-wrap.has-hd')", timeout=8000)
+        pg.wait_for_timeout(1200)  # let this fix land (the arrow class may already be on from drive_along)
         c = pg.evaluate(VIEW)
         self.assertGreaterEqual(c[2], 17, tag)
         dot = pg.evaluate("(() => { const r = document.querySelector('.me-wrap').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2] })()")
@@ -147,6 +149,54 @@ class LiveNav(unittest.TestCase):
         self.assertIn("Rerouting", pg.evaluate("window.__navSaid || []"), tag)
         pg.screenshot(path=os.path.join(SHOTS, f"livenav-{tag}-reroute.png"))
         return off
+
+    def dot_xy(self, pg):
+        return pg.evaluate("(() => { const r = document.querySelector('.me-wrap').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2] })()")
+
+    def drive_along(self, pg, ctx, pts, tag):
+        # Max t409u: the dot drove off screen. Drive 30+ fixes along the route; the dot must stay in the
+        # central area every time, and follow must never pause on its own.
+        mb = pg.locator("#map").bounding_box()
+        n = min(36, len(pts))
+        step = max(1, len(pts) // n)
+        seen = 0
+        # An app-driven animated move (route framing, popup autopan) must not count as a user pan.
+        pg.evaluate("(() => { const m = window.__gcmMap; m.flyTo(m.getCenter(), m.getZoom() - 2, { duration: 0.6 }); })()")
+        for q in pts[: step * n : step][:n]:
+            ctx.set_geolocation({"latitude": q[0], "longitude": q[1], "accuracy": 5})
+            pg.wait_for_timeout(450)
+            x, y = self.dot_xy(pg)
+            self.assertFalse(pg.is_visible("#navRecenter"), (tag, "follow paused by itself", seen))
+            self.assertTrue(mb["x"] + mb["width"] * 0.25 < x < mb["x"] + mb["width"] * 0.75, (tag, seen, x, y, mb))
+            self.assertTrue(mb["y"] + mb["height"] * 0.3 < y < mb["y"] + mb["height"] * 0.9, (tag, seen, x, y, mb))
+            seen += 1
+        self.assertGreaterEqual(seen, min(30, len(pts)), tag)
+
+    def test_compass_off_when_not_navigating_and_typing_is_cheap(self):
+        # Oct 31 2026 lag: the compass listener stayed on after End and repainted the dot ~60x/s.
+        ctx = self.ctx()
+        pg = ctx.new_page()
+        pg.route(re.compile(r"https://[a-c]?\.?tile|basemaps|openstreetmap|photon|nominatim"), lambda r: r.abort())
+        pg.goto(self.base + "/map/pacific-beach")
+        pg.wait_for_function("window.ready===true", timeout=120000)
+        r = pg.evaluate("""async () => {
+          DeviceOrientationEvent.requestPermission = () => Promise.resolve('granted');
+          const F = GCMFollow.controller({ map: null }); F.start(); await new Promise(r => setTimeout(r, 50));
+          const on = F.state().compassOn; F.end();
+          window.__navHeadingPaints = 0;
+          for (let i = 0; i < 120; i++) dispatchEvent(Object.assign(new Event('deviceorientation'), { webkitCompassHeading: i * 3 }));
+          await new Promise(r => setTimeout(r, 100));
+          const lt = []; new PerformanceObserver(l => l.getEntries().forEach(e => lt.push(e.duration))).observe({ type: 'longtask' });
+          const q = document.getElementById('q'); q.focus();
+          for (const ch of 'la jolla shores drive') { q.value += ch; q.dispatchEvent(new Event('input')); await new Promise(r => setTimeout(r, 30)); }
+          await new Promise(r => setTimeout(r, 300));
+          return { on, offAfterEnd: !F.state().compassOn, paints: window.__navHeadingPaints, maxLong: Math.max(0, ...lt) };
+        }""")
+        self.assertTrue(r["on"], r)
+        self.assertTrue(r["offAfterEnd"], r)
+        self.assertEqual(r["paints"], 0, r)
+        self.assertLess(r["maxLong"], 50, r)
+        ctx.close()
 
     def test_renter_preview_start_follow_reroute(self):
         ctx = self.ctx()
