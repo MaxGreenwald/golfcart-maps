@@ -133,12 +133,27 @@ class LiveNav(unittest.TestCase):
         self.assertLess(abs(dot[0] - (mb["x"] + mb["width"] / 2)), 30, (tag, dot, mb))
         self.assertGreater(dot[1], mb["y"] + mb["height"] * 0.5, (tag, dot, mb))
         pg.screenshot(path=os.path.join(SHOTS, f"livenav-{tag}-follow.png"))
-        # Panning pauses follow; Recenter brings it back.
+        # Heading-up (Max t412u): the map turned so the road ahead points up; the arrow points straight up.
+        st = pg.evaluate("window.gcmFollowState()")
+        self.assertTrue(st["headingUp"], (tag, st))
+        rb = pg.evaluate("(([a, b]) => GCMFollow.routeBearing(window.gcmFollowRoute(), [a, b]))(%s)" % json.dumps(list(b)))
+        if rb is not None:
+            d = abs(((st["mapBearing"] - rb) % 360 + 540) % 360 - 180)
+            self.assertLess(d, 10, (tag, st, rb))
+        self.assertIn("rotate(", pg.evaluate("document.querySelector('.gcm-rot').style.transform"), tag)
+        self.assertEqual(pg.evaluate("getComputedStyle(document.querySelector('.me-wrap')).getPropertyValue('--hd').trim()"), "0deg", tag)
+        self.assertTrue(pg.is_visible("#navNorth"), tag)
+        # Panning pauses follow and goes back to north-up; Recenter brings it back.
         drag(pg, cdp, 200, 320, 0, -120)
         self.assertTrue(pg.is_visible("#navRecenter"), tag)
+        pg.wait_for_timeout(300)
+        self.assertEqual(pg.evaluate("window.gcmFollowState().mapBearing"), 0, tag)
+        self.assertEqual(pg.evaluate("document.querySelector('.gcm-rot').style.transform"), "", tag)
         pg.screenshot(path=os.path.join(SHOTS, f"livenav-{tag}-recenter.png"))
         pg.click("#navRecenter")
         self.assertFalse(pg.is_visible("#navRecenter"), tag)
+        pg.wait_for_timeout(300)
+        self.assertTrue(pg.evaluate("window.gcmFollowState().headingUp"), tag + ": recenter resumes heading-up")
         # Off route ~170 m and staying there: reroute after ~5 s, from here.
         off = {"latitude": b[0] + 0.0015, "longitude": b[1] + 0.0015, "accuracy": 5}
         ctx.set_geolocation(off)
@@ -240,6 +255,9 @@ class LiveNav(unittest.TestCase):
         self.assertTrue(pg.is_visible("#navEnd"), "still navigating after reroute")
         pg.click("#navEnd")
         self.assertTrue(pg.is_visible("#navStart"))
+        pg.wait_for_timeout(300)
+        self.assertEqual(pg.evaluate("window.gcmFollowState().mapBearing"), 0, "End goes back to north-up")
+        self.assertFalse(pg.is_visible("#navNorth"))
         ctx.close()
 
     def test_city_map_preview_start_follow_reroute(self):

@@ -50,3 +50,29 @@ test('compass from DeviceOrientation', () => {
   assert.equal(F.compassFrom({ absolute: false, alpha: 90 }), null);
   assert.equal(F.compassFrom(null), null);
 });
+
+// Heading-up (Max t412u): the map bearing follows the road ahead, ignores tiny changes, and eases the short way.
+const N = require('../public/nav.js');
+test('route bearing: east-going road is ~90, then the north leg after the corner is ~0', () => {
+  const route = { pts: [[32.8, -117.21], [32.8, -117.2], [32.81, -117.2]] };
+  const b1 = F.routeBearing(route, [32.8, -117.205], 25, N.project);
+  assert.ok(Math.abs(b1 - 90) < 1, b1);
+  const b2 = F.routeBearing(route, [32.805, -117.2], 25, N.project);
+  assert.ok(b2 < 1 || b2 > 359, b2);
+  assert.equal(F.routeBearing(route, [32.9, -117.0], 25, N.project), null, 'off route: no route bearing');
+  assert.equal(F.routeBearing(null, [32.8, -117.2]), null);
+});
+
+test('course heading ignores the compass', () => {
+  assert.equal(F.courseHeading({ latitude: 32.8, longitude: -117.2, heading: 45, speed: 5 }, null), 45);
+  assert.equal(F.courseHeading({ latitude: 32.8, longitude: -117.2, heading: null, speed: 0 }, null), null);
+});
+
+test('next bearing: deadband, short way round, unwrapped', () => {
+  assert.equal(F.nextBearing(null, 90), 90);
+  assert.equal(F.nextBearing(90, 93), 90, 'under the deadband');
+  assert.equal(F.nextBearing(90, 180), 180);
+  assert.equal(F.nextBearing(350, 10), 370, '350 -> 10 turns +20, not -340');
+  assert.equal(F.nextBearing(10, 350), -10);
+  assert.equal(F.nextBearing(90, NaN), 90);
+});

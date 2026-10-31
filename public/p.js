@@ -346,19 +346,22 @@ async function paintRoads() {
 }
 function drawRoadCanvas() {
   if (!roadCanvas || !map || !roadApi || !roadApi.segments) return;
-  const size = map.getSize();
+  // Heading-up turns the map (public/navfollow.js); then draw a margin (map.__gcmPad) so corners have roads.
+  const pad = map.__gcmPad || L.point(0, 0);
+  const size = map.getSize().add(pad.multiplyBy(2));
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   roadCanvas.width = Math.max(1, Math.round(size.x * dpr));
   roadCanvas.height = Math.max(1, Math.round(size.y * dpr));
   roadCanvas.style.width = size.x + 'px';
   roadCanvas.style.height = size.y + 'px';
-  L.DomUtil.setPosition(roadCanvas, map.containerPointToLayerPoint([0, 0]));
+  L.DomUtil.setPosition(roadCanvas, map.containerPointToLayerPoint([-pad.x, -pad.y]));
   const ctx = roadCtx;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, size.x, size.y);
+  ctx.setTransform(dpr, 0, 0, dpr, pad.x * dpr, pad.y * dpr);
+  ctx.clearRect(-pad.x, -pad.y, size.x, size.y);
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  const view = map.getBounds().pad(0.08);
+  const sz0 = map.getSize();
+  const view = L.latLngBounds(map.containerPointToLatLng([-pad.x, -pad.y]), map.containerPointToLatLng([sz0.x + pad.x, sz0.y + pad.y])).pad(0.08);
   const south = view.getSouth(), north = view.getNorth(), west = view.getWest(), east = view.getEast();
   const segs = roadApi.segments();
   for (let n = 0; n < segs.length; n++) {
