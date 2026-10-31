@@ -207,22 +207,27 @@ function localMatches(q){const n=norm(q);if(!n)return[];const out=[];
  for(const p of POIS){const pn=norm(p[0]);if(pn.includes(n))out.push({name:p[0],sub:(p[1]||'place').replace('_',' ')+(p[4]?' · '+p[4]:''),lat:p[3],lon:p[2],score:pn.startsWith(n)?0:1})}
  if(!nameAt||nameAt.size<D.segs.length/50)streetIndex();
  D.names.forEach((nm,i)=>{if(!nm)return;const pn=norm(nm);if(pn.startsWith(n)||pn.includes(' '+n)){const c=nameAt.get(i);if(c)out.push({name:nm,sub:'street',lat:c[1],lon:c[0],score:pn.startsWith(n)?0.5:1.5})}});
- return out.sort((a,b)=>a.score-b.score).slice(0,5)}
-async function remote(q){const key=(REG?REG.id:'')+'|'+norm(q);if(qcache.has(key))return qcache.get(key);const b=D.meta.bbox,c=map.getCenter();let res=[];
- try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),2500);
-  const r=await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=6&lat=${c.lat}&lon=${c.lng}&bbox=${b[1]},${b[0]},${b[3]},${b[2]}`,{signal:ac.signal});clearTimeout(to);
-  const j=await r.json();res=j.features.map(f=>{const p=f.properties;return{name:p.name||[p.housenumber,p.street].filter(Boolean).join(' '),sub:[p.housenumber&&p.name?p.street:null,p.city||p.district,p.osm_value].filter(Boolean).join(' · '),lat:f.geometry.coordinates[1],lon:f.geometry.coordinates[0]}}).filter(x=>x.name)}
- catch(e){try{const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=5&bounded=1&viewbox=${b[1]},${b[2]},${b[3]},${b[0]}&q=${encodeURIComponent(q)}`);const j=await r.json();res=j.map(x=>({name:x.display_name.split(',')[0],sub:x.display_name.split(',').slice(1,3).join(','),lat:+x.lat,lon:+x.lon}))}catch(_){}}
+ return out.sort((a,b)=>a.score-b.score).slice(0,40)}
+// Local first (t413u): bias = my location, else start point, else map center; rerank by distance.
+const llo=ll=>ll?{lat:ll.lat,lon:ll.lng}:null;
+function biasPt(){const c=map.getCenter();return GCMGeo.biasPoint(llo(myLL),llo(P(from)),{lat:c.lat,lon:c.lng})}
+let qac=null;
+async function remote(q,bp){const key=bp.lat.toFixed(2)+','+bp.lon.toFixed(2)+'|'+norm(q);if(qcache.has(key))return qcache.get(key);
+ if(qac)qac.abort();const ac=qac=new AbortController();const to=setTimeout(()=>ac.abort(),3000);
+ const fj=async(u,sig)=>{const r=await fetch(u,{signal:sig});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
+ let res=[];try{res=await GCMGeo.remote(q,bp,fj,ac.signal)}catch(_){clearTimeout(to);return null}clearTimeout(to);
  qcache.set(key,res);return res}
-function showSugg(list){list=list.filter(x=>!inMX(L.latLng(x.lat,x.lon)));const sg=$('sugg');sg.innerHTML='';sg.style.display=list.length?'block':'none';
- list.forEach(x=>{const d=document.createElement('div');d.innerHTML=`<b>${x.name}</b><br><small style="color:#6b8592">${x.sub||''}</small>`;d.onclick=()=>pick(x);sg.appendChild(d)})}
+function showSugg(list,far){list=list.filter(x=>!inMX(L.latLng(x.lat,x.lon)));far=(far||[]).filter(x=>!inMX(L.latLng(x.lat,x.lon)));const sg=$('sugg');sg.innerHTML='';sg.style.display=list.length||far.length?'block':'none';
+ const miTxt=x=>x.mi==null?'':(x.mi<0.1?' · here':' · '+(x.mi<10?x.mi.toFixed(1):Math.round(x.mi))+' mi');
+ const add=x=>{const d=document.createElement('div');d.innerHTML=`<b>${x.name}</b><br><small style="color:#6b8592">${(x.sub||'')+miTxt(x)}</small>`;d.onclick=()=>pick(x);sg.appendChild(d)};
+ list.forEach(add);if(far.length){const h=document.createElement('div');h.className='sfar';h.textContent='Farther away (over '+GCMGeo.NEAR_MI+' mi)';h.style.cssText='font-size:12px;color:#6b8592;background:#f4f8f9;padding:6px 14px;cursor:default';sg.appendChild(h);far.forEach(add)}}
 function pick(x){$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();const ll=L.latLng(x.lat,x.lon);map.setView(ll,16);active=curField;setPt(ll,x.name)}
 const spin=v=>$('qspin').style.display=v?'inline-block':'none';
 const onq=e=>{clearTimeout(tmr);const v=e.target.value.trim();if(v.length<2){$('sugg').style.display='none';spin(false);return}
- const loc=D?localMatches(v):[];showSugg(loc);
- if(v.length<3)return;spin(true);const my=++qseq;
- tmr=setTimeout(async()=>{const r=await remote(v);if(my!==qseq)return;spin(false);
-  const seen=new Set(loc.map(x=>norm(x.name)));showSugg([...loc,...r.filter(x=>{const k=norm(x.name);if(seen.has(k))return false;seen.add(k);return true})].slice(0,7))},250)};
+ const bp=biasPt();const lr=GCMGeo.rank(D?localMatches(v):[],bp);const loc=lr.near;showSugg(loc.slice(0,7));const my=++qseq;
+ if(v.length<3){spin(false);return}spin(true);
+ tmr=setTimeout(async()=>{const r=await remote(v,bp);if(my!==qseq)return;spin(false);if(!r)return;
+  const all=GCMGeo.rank(GCMGeo.dedupe([...loc,...r],norm),bp);const near=all.near.slice(0,7);showSugg(near,near.length?[]:[...lr.far,...all.far].slice(0,5))},250)};
 $('q').oninput=onq;$('qf').oninput=onq;for(const id of ['q','qf'])$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){const f=$('sugg').firstChild;if(f)f.click()}});
 window.testRoute=async(a,b,rk=false)=>{risky=rk;from={ll:L.latLng(a),label:'A'};to={ll:L.latLng(b),label:'B'};active=null;sync();if(inMX(from.ll)||inMX(to.ll))return null;const r=await route();return r?window.lastRoute:null};
 let readyRes,READY=new Promise(r=>readyRes=r);

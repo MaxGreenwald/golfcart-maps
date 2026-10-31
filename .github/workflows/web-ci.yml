@@ -31,6 +31,8 @@ jobs:
         run: node --test tests/nav.test.mjs
       - name: Live navigation (off-route timer, reroute debounce, heading)
         run: node --test tests/navfollow.test.mjs
+      - name: Local-first search (bias, distance rerank, far label)
+        run: node --test tests/geosearch.test.mjs
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - name: Unit tests (roundabout rule, validators, SW cache name, single source)
