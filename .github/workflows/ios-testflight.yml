@@ -31,6 +31,8 @@ jobs:
         run: python3 scripts/check_native_overrides.py --ref origin/master
       - name: public/ is the only copy of the web app
         run: python3 scripts/check_single_source.py
+      - name: CarPlay start-view logic test (Swift, Foundation only)
+        run: swiftc ios/App/App/CarPlayStartView.swift ios/tests/carplay_start_view_test.swift -o /tmp/cpsv && /tmp/cpsv
   testflight:
     needs: sync-guard
     if: github.ref == 'refs/heads/ios-release'

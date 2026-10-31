@@ -120,6 +120,9 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     var lastTrip: CPTrip?
     var overlayTimer: Timer?
     var showLegal = true
+    var following = false      // map follows the location dot until the driver pans
+    var gotFix = false
+    var panLast = CGPoint.zero
     var mode: String { "lsv" }
 
     // Scene lifecycle
@@ -134,8 +137,10 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         refreshButtons()
         interfaceController.setRootTemplate(mapTemplate, animated: false, completion: { _, _ in })
         loc.delegate = self
-        loc.requestWhenInUseAuthorization()
+        loc.desiredAccuracy = kCLLocationAccuracyBest
+        if loc.authorizationStatus == .notDetermined { loc.requestWhenInUseAuthorization() }
         loc.startUpdatingLocation()
+        showStartView()
         #if DEBUG
         NSLog("GCMCarPlay scene connected")
         #endif
@@ -158,10 +163,66 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         #endif
         GCMBridge.shared.call("status()") { [weak self] any in
             guard let self = self, let d = any as? [String: Any] else { return }
-            if self.loc.location == nil, let c = d["center"] as? [Double], c.count == 2 {
-                self.mapVC.map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: c[0], longitude: c[1]), latitudinalMeters: 2500, longitudinalMeters: 2500), animated: false)
+            // The phone's last town only matters while there is still no GPS fix and nothing better was shown.
+            if !self.gotFix, self.loc.location == nil, UserDefaults.standard.array(forKey: Self.savedKey) == nil,
+               let c = d["center"] as? [Double], c.count == 2 {
+                self.setStart(CarPlayStartView.pick(lastFix: nil, savedCenter: nil, phoneTown: (c[0], c[1]), towns: []))
             }
         }
+    }
+
+    // Initial view: never the zoomed-out US default. See CarPlayStartView for the order.
+    static let savedKey = "gcm-cp-last-center"
+    func bundledTowns() -> [CarPlayStartView.Town] {
+        guard let u = Bundle.main.url(forResource: "regions", withExtension: "json", subdirectory: "public/data"),
+              let d = try? Data(contentsOf: u) else { return [] }
+        return CarPlayStartView.towns(from: d)
+    }
+    func showStartView() {
+        let fix = loc.location.map { ($0.coordinate.latitude, $0.coordinate.longitude) }
+        let saved = (UserDefaults.standard.array(forKey: Self.savedKey) as? [Double]).flatMap { $0.count == 2 ? ($0[0], $0[1]) : nil }
+        setStart(CarPlayStartView.pick(lastFix: fix, savedCenter: saved, phoneTown: nil, towns: bundledTowns()))
+        if fix != nil { startFollowing(animated: false) }
+    }
+    func setStart(_ p: CarPlayStartView.Pick?) {
+        guard let p = p else { return }
+        mapVC.map.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: p.lat, longitude: p.lon), latitudinalMeters: p.meters, longitudinalMeters: p.meters), animated: false)
+    }
+    /// Center on the driver at about 1 km across and follow the dot.
+    func startFollowing(animated: Bool) {
+        guard let c = loc.location?.coordinate else { return }
+        following = true
+        mapVC.map.setRegion(MKCoordinateRegion(center: c, latitudinalMeters: CarPlayStartView.drivingMeters, longitudinalMeters: CarPlayStartView.drivingMeters), animated: animated)
+        mapVC.map.setUserTrackingMode(session == nil ? .follow : .followWithHeading, animated: animated)
+    }
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+        case .authorizedWhenInUse, .authorizedAlways: manager.startUpdatingLocation()
+        default: break
+        }
+    }
+    // Panning on the CarPlay screen stops follow mode; the location button turns it back on.
+    func mapTemplateDidShowPanningInterface(_ mapTemplate: CPMapTemplate) { stopFollowing() }
+    func mapTemplate(_ mapTemplate: CPMapTemplate, panWith direction: CPMapTemplate.PanDirection) {
+        stopFollowing()
+        var r = mapVC.map.region
+        let dy = r.span.latitudeDelta / 3, dx = r.span.longitudeDelta / 3
+        if direction.contains(.up) { r.center.latitude += dy }
+        if direction.contains(.down) { r.center.latitude -= dy }
+        if direction.contains(.left) { r.center.longitude -= dx }
+        if direction.contains(.right) { r.center.longitude += dx }
+        mapVC.map.setRegion(r, animated: true)
+    }
+    func mapTemplateDidBeginPanGesture(_ mapTemplate: CPMapTemplate) { stopFollowing(); panLast = .zero }
+    func mapTemplate(_ mapTemplate: CPMapTemplate, didUpdatePanGestureWithTranslation translation: CGPoint, velocity: CGPoint) {
+        // translation is cumulative since the gesture began; apply only the new part.
+        let dx = translation.x - panLast.x, dy = translation.y - panLast.y; panLast = translation
+        let m = mapVC.map, mid = CGPoint(x: m.bounds.midX - dx, y: m.bounds.midY - dy)
+        m.setCenter(m.convert(mid, toCoordinateFrom: m), animated: false)
+    }
+    func stopFollowing() {
+        following = false
+        mapVC.map.setUserTrackingMode(.none, animated: false)
     }
 
     func templateApplicationScene(_ scene: CPTemplateApplicationScene, didDisconnectInterfaceController interfaceController: CPInterfaceController, from window: CPWindow) {
@@ -177,8 +238,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         mapTemplate.leadingNavigationBarButtons = [searchBtn, savedBtn]
         mapTemplate.trailingNavigationBarButtons = []
         let recenter = CPMapButton { [weak self] _ in
-            guard let self = self, let c = self.loc.location?.coordinate else { return }
-            self.mapVC.map.setRegion(MKCoordinateRegion(center: c, latitudinalMeters: 1500, longitudinalMeters: 1500), animated: true)
+            self?.startFollowing(animated: true)
         }
         recenter.image = UIImage(systemName: "location.fill")
         let layers = CPMapButton { [weak self] _ in
@@ -198,6 +258,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         r.span.latitudeDelta = min(1, max(0.002, r.span.latitudeDelta * f))
         r.span.longitudeDelta = min(1, max(0.002, r.span.longitudeDelta * f))
         mapVC.map.setRegion(r, animated: true)
+        // setRegion drops MKMapView tracking; keep following at the new zoom.
+        if following { mapVC.map.setUserTrackingMode(session == nil ? .follow : .followWithHeading, animated: true) }
     }
 
     // Legal-road overlay (green = OK for current mode, red = avoid), same classification as the phone map
@@ -381,12 +443,17 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         if arrived { session?.finishTrip() } else { session?.cancelTrip() }
         session = nil; plan = nil
         mapVC.map.removeOverlays(mapVC.map.overlays.filter { $0 is RouteLine })
-        mapVC.map.setUserTrackingMode(.none, animated: false)
         refreshButtons()
+        startFollowing(animated: true)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let here = locations.last else { return }
+        if !gotFix, here.horizontalAccuracy >= 0, here.horizontalAccuracy < 1000 {
+            gotFix = true
+            startFollowing(animated: true)
+        }
+        UserDefaults.standard.set([here.coordinate.latitude, here.coordinate.longitude], forKey: Self.savedKey)
         progress(here)
     }
     func progress(_ here: CLLocation) {
