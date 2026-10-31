@@ -103,6 +103,67 @@
     return prev + d;
   }
 
+  // ---- Spoken guidance (Max t419u): one sentence at a time, never cut off, one prompt per turn.
+  // engine: { speak(text, done), cancel() }. A sentence always finishes; a newer prompt replaces an older
+  // one still waiting (e.g. a reroute), but only between sentences. stop() is for End and mute.
+  function voice(engine) {
+    let current = null, pending = null;
+    function play(t) {
+      current = t;
+      root.__navSaid = (root.__navSaid || []).concat(t);
+      let fin = false;
+      const done = () => { if (fin) return; fin = true; current = null; if (pending != null) { const n = pending; pending = null; play(n); } };
+      try { engine.speak(t, done); } catch (_) { done(); }
+    }
+    return {
+      say(t) {
+        if (!t || t === current || t === pending) return;
+        if (current == null) play(t); else pending = t;
+      },
+      stop() { pending = null; current = null; try { engine.cancel(); } catch (_) {} },
+      speaking: () => current != null,
+      pending: () => pending,
+    };
+  }
+  // Browser / WKWebView speech. If onend never fires (an iOS quirk), a length-based timer frees the queue.
+  function webEngine() {
+    let gen = 0;
+    return {
+      speak(t, done) {
+        const S = root.speechSynthesis, U = root.SpeechSynthesisUtterance;
+        if (!S || !U) { setTimeout(done, 0); return; }
+        const my = ++gen, u = new U(t), fin = () => { if (my === gen) done(); };
+        u.onend = fin; u.onerror = fin;
+        setTimeout(fin, 1500 + t.length * 90);
+        S.speak(u);
+      },
+      cancel() { gen++; if (root.speechSynthesis) root.speechSynthesis.cancel(); },
+    };
+  }
+  // When to speak a maneuver: once, about LEAD_S seconds before it at the current speed (golf carts
+  // 15-25 mph), so the sentence ends before the turn. If that moment was missed (late fix, short leg),
+  // a short "Turn left onto X" at the turn instead. Never the same maneuver twice.
+  const P = { LEAD_S: 12, MIN_LEAD_M: 35, MAX_LEAD_M: 180, NOW_M: 20, DEFAULT_MS: 8 };
+  function promptPlan(o) {
+    o = Object.assign({}, P, o || {});
+    let said = new Set();
+    return {
+      // st: GCMNav.status(...); speed m/s (may be null). Returns the sentence to say now, or null.
+      update(st, speed) {
+        if (!st || st.arrived || !st.next) return null;
+        const key = st.idx + ':' + Math.round(st.next.at);
+        if (said.has(key)) return null;
+        const v = Number.isFinite(speed) && speed > C.MIN_SPEED_MS ? speed : o.DEFAULT_MS;
+        const lead = Math.min(o.MAX_LEAD_M, Math.max(o.MIN_LEAD_M, v * o.LEAD_S));
+        if (st.toNext <= o.NOW_M) { said.add(key); return st.next.text; }
+        if (st.toNext <= lead) { said.add(key); return st.text; }
+        return null;
+      },
+      reset() { said = new Set(); },
+      opts: o,
+    };
+  }
+
   const CSS = `.me-wrap{position:relative;width:22px;height:22px}.me-wrap .me-dot{position:absolute;inset:0;margin:auto}
 .me-cone{display:none;position:absolute;left:50%;top:50%;width:0;height:0;margin-left:-11px;margin-top:-30px;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:22px solid rgba(29,111,224,.85);transform-origin:11px 30px;transform:rotate(var(--hd,0deg));filter:drop-shadow(0 0 1px #fff)}
 .me-wrap.has-hd .me-cone{display:block}
@@ -349,7 +410,7 @@
     paintBtns();
     return api;
   }
-  const api = { C, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, DOT };
+  const api = { C, P, voice, webEngine, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, DOT };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMFollow = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
