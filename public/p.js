@@ -735,6 +735,7 @@ async function loadPois() {
   try { poiList = await freshFetch(`/data/${region.id}/pois.json`).then(r => r.json()); } catch (e) { poiList = []; }
   return poiList;
 }
+let searchAc = null;
 async function searchPlaces(q) {
   const n = q.toLowerCase().trim();
   if (n.length < 2) return [];
@@ -744,18 +745,21 @@ async function searchPlaces(q) {
     if (pn.includes(n)) out.push({ name: p[0], sub: String(p[1] || 'place').replace('_', ' '), lat: p[3], lon: p[2], score: pn.startsWith(n) ? 0 : 1 });
   });
   if (roadApi) out.push(...roadApi.streets(n, 4));
-  out.sort((a, b) => a.score - b.score);
-  if (out.length < 3 && region && region.bbox) {
+  // Local first (t413u): bias to my location, else map center; rank by distance; far ones go below a label.
+  const c = map && map.getCenter();
+  const bp = GCMGeo.biasPoint(meLL, null, c && { lat: c.lat, lon: c.lng });
+  let r = GCMGeo.rank(out, bp);
+  if (r.near.length < 3 && n.length >= 3) {
+    if (searchAc) searchAc.abort();
+    const ac = searchAc = new AbortController(), to = setTimeout(() => ac.abort(), 3000);
     try {
-      const b = region.bbox, c = map.getCenter();
-      const ac = new AbortController(), to = setTimeout(() => ac.abort(), 2500);
-      const j = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=5&lat=${c.lat}&lon=${c.lng}&bbox=${b[1]},${b[0]},${b[3]},${b[2]}`, { signal: ac.signal }).then(r => r.json());
-      clearTimeout(to);
-      j.features.forEach(f => { const p = f.properties; const nm = p.name || [p.housenumber, p.street].filter(Boolean).join(' ');
-        if (nm) out.push({ name: nm, sub: [p.city || p.district, p.osm_value].filter(Boolean).join(' · '), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0] }); });
+      const rem = await GCMGeo.remote(q, bp, (u, sig) => fetch(u, { signal: sig }).then(x => x.json()), ac.signal);
+      r = GCMGeo.rank(GCMGeo.dedupe([...out, ...rem], s => String(s).toLowerCase()), bp);
     } catch (e) {}
+    clearTimeout(to);
   }
-  return out.slice(0, 6);
+  const near = r.near.slice(0, 6);
+  return near.length ? near : r.far.slice(0, 5).map((x, i) => ({ ...x, farLabel: i === 0 }));
 }
 function freeMode(on) {
   freeOn = !!on;
@@ -824,7 +828,7 @@ function wireFree() {
       const q = inp.value;
       const list = await searchPlaces(q);
       if (inp.value !== q) return;
-      sg.innerHTML = list.map((x, k) => `<button type="button" class="sugg" data-k="${k}"><b>${esc(x.name)}</b><span>${esc(x.sub || '')}</span></button>`).join('');
+      sg.innerHTML = list.map((x, k) => (x.farLabel ? `<div class="sugg-far">Farther away (over ${GCMGeo.NEAR_MI} mi)</div>` : '') + `<button type="button" class="sugg" data-k="${k}"><b>${esc(x.name)}</b><span>${esc(x.sub || '')}</span></button>`).join('');
       sg.querySelectorAll('.sugg').forEach(b => { b.onclick = () => pickDest(list[+b.dataset.k]); });
     }, 200);
   };
