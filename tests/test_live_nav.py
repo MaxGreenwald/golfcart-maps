@@ -141,7 +141,9 @@ class LiveNav(unittest.TestCase):
             d = abs(((st["mapBearing"] - rb) % 360 + 540) % 360 - 180)
             self.assertLess(d, 10, (tag, st, rb))
         self.assertIn("rotate(", pg.evaluate("document.querySelector('.gcm-rot').style.transform"), tag)
-        self.assertEqual(pg.evaluate("getComputedStyle(document.querySelector('.me-wrap')).getPropertyValue('--hd').trim()"), "0deg", tag)
+        # The arrow's on-screen angle (its --hd minus the map turn) is straight up.
+        hd = float(pg.evaluate("getComputedStyle(document.querySelector('.me-wrap')).getPropertyValue('--hd').trim()").replace("deg", ""))
+        self.assertLess(abs(((hd - st["mapBearing"]) % 360 + 540) % 360 - 180), 1.5, (tag, hd, st))
         self.assertTrue(pg.is_visible("#navNorth"), tag)
         # Panning pauses follow and goes back to north-up; Recenter brings it back.
         drag(pg, cdp, 200, 320, 0, -120)

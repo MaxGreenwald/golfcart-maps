@@ -232,8 +232,8 @@
         const mb = headingUp() && mapBearing != null ? mapBearing : null;
         if (rot && (rot.get() || 0) !== (mb || 0)) rot.set(mb, C.FOLLOW_Y);
         north.firstChild.style.transform = mb ? 'rotate(' + (-mb) + 'deg)' : '';
-        // Heading-up: the arrow points straight up on screen (the map turned instead).
-        const h = heading == null ? null : (mb != null ? 0 : Math.round(heading));
+        // Heading-up: the dot lives inside the turned map, so giving the arrow the map bearing points it straight up on screen.
+        const h = heading == null && mb == null ? null : (mb != null ? Math.round(((mb % 360) + 360) % 360) : Math.round(heading));
         if (painted !== undefined && (h == null) === (painted == null) && (h == null || Math.abs(((h - painted + 540) % 360) - 180) < 3)) return;
         painted = h;
         root.__navHeadingPaints = (root.__navHeadingPaints || 0) + 1;
