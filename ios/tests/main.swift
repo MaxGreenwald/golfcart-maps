@@ -1,5 +1,6 @@
 import Foundation
-// Run: swiftc ios/App/App/CarPlayStartView.swift ios/tests/carplay_start_view_test.swift -o /tmp/cpsv && /tmp/cpsv
+// CarPlay start-view logic test (top-level code needs the file to be named main.swift)
+// Run: swiftc ios/App/App/CarPlayStartView.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
 var fails = 0
 func ck(_ name: String, _ ok: Bool) { print((ok ? "PASS " : "FAIL ") + name); if !ok { fails += 1 } }
 let json = try! Data(contentsOf: URL(fileURLWithPath: "public/data/regions.json"))
