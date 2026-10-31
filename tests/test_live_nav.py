@@ -82,6 +82,9 @@ VIEW = "(() => { const m = window.__gcmMap; const c = m.getCenter(); return [c.l
 
 @unittest.skipIf(sync_playwright is None, "playwright not installed (runs in the browser CI job)")
 class LiveNav(unittest.TestCase):
+    CLUTTER = {"map": ["#top", "#chips", "#city", "#cNorm", "#cRisk", "#loc", "#sheet", "#range"],
+               "renter": [".sheet", "header.top", "#goQ"]}
+
     @classmethod
     def setUpClass(cls):
         cls.srv = _S(("127.0.0.1", 0), functools.partial(_Quiet, directory=PUB))
@@ -116,6 +119,9 @@ class LiveNav(unittest.TestCase):
         pg.click("#navStart")
         self.assertTrue(pg.is_visible("#navEnd"), tag)
         self.assertFalse(pg.is_visible("#navStart"), tag)
+        # Max t417u: no town picker, chips, Reset or search while driving.
+        for sel in self.CLUTTER[tag]:
+            self.assertFalse(pg.is_visible(sel), (tag, sel, "visible during navigation"))
         self.drive_along(pg, ctx, pts, tag)
         i = len(pts) // 3
         a = pts[i]
@@ -133,12 +139,37 @@ class LiveNav(unittest.TestCase):
         self.assertLess(abs(dot[0] - (mb["x"] + mb["width"] / 2)), 30, (tag, dot, mb))
         self.assertGreater(dot[1], mb["y"] + mb["height"] * 0.5, (tag, dot, mb))
         pg.screenshot(path=os.path.join(SHOTS, f"livenav-{tag}-follow.png"))
-        # Panning pauses follow; Recenter brings it back.
+        # Max t421u: slim bottom bar with ETA + End, and the dot is never under the turn card or the bar.
+        self.assertTrue(pg.is_visible("#navEta"), tag)
+        self.assertIn("min", pg.inner_text("#navEta"), tag)
+        bar = pg.locator("#navCtl").bounding_box()
+        card = pg.locator("#mapNav" if tag == "map" else "#navBanner").bounding_box()
+        dy = self.dot_xy(pg)[1]
+        self.assertLess(bar["height"], 110, (tag, bar))
+        self.assertTrue(card["y"] + card["height"] + 20 < dy < bar["y"] - 20, (tag, card, dy, bar))
+        # Heading-up (Max t412u): the map turned so the road ahead points up; the arrow points straight up.
+        st = pg.evaluate("window.gcmFollowState()")
+        self.assertTrue(st["headingUp"], (tag, st))
+        rb = pg.evaluate("(([a, b]) => GCMFollow.routeBearing(window.gcmFollowRoute(), [a, b]))(%s)" % json.dumps(list(b)))
+        if rb is not None:
+            d = abs(((st["mapBearing"] - rb) % 360 + 540) % 360 - 180)
+            self.assertLess(d, 10, (tag, st, rb))
+        self.assertIn("rotate(", pg.evaluate("document.querySelector('.gcm-rot').style.transform"), tag)
+        # The arrow's on-screen angle (its --hd minus the map turn) is straight up.
+        hd = float(pg.evaluate("getComputedStyle(document.querySelector('.me-wrap')).getPropertyValue('--hd').trim()").replace("deg", ""))
+        self.assertLess(abs(((hd - st["mapBearing"]) % 360 + 540) % 360 - 180), 1.5, (tag, hd, st))
+        self.assertTrue(pg.is_visible("#navNorth"), tag)
+        # Panning pauses follow and goes back to north-up; Recenter brings it back.
         drag(pg, cdp, 200, 320, 0, -120)
         self.assertTrue(pg.is_visible("#navRecenter"), tag)
+        pg.wait_for_timeout(300)
+        self.assertEqual(pg.evaluate("window.gcmFollowState().mapBearing"), 0, tag)
+        self.assertEqual(pg.evaluate("document.querySelector('.gcm-rot').style.transform"), "", tag)
         pg.screenshot(path=os.path.join(SHOTS, f"livenav-{tag}-recenter.png"))
         pg.click("#navRecenter")
         self.assertFalse(pg.is_visible("#navRecenter"), tag)
+        pg.wait_for_timeout(300)
+        self.assertTrue(pg.evaluate("window.gcmFollowState().headingUp"), tag + ": recenter resumes heading-up")
         # Off route ~170 m and staying there: reroute after ~5 s, from here.
         off = {"latitude": b[0] + 0.0015, "longitude": b[1] + 0.0015, "accuracy": 5}
         ctx.set_geolocation(off)
@@ -240,6 +271,10 @@ class LiveNav(unittest.TestCase):
         self.assertTrue(pg.is_visible("#navEnd"), "still navigating after reroute")
         pg.click("#navEnd")
         self.assertTrue(pg.is_visible("#navStart"))
+        pg.wait_for_timeout(300)
+        self.assertEqual(pg.evaluate("window.gcmFollowState().mapBearing"), 0, "End goes back to north-up")
+        self.assertFalse(pg.is_visible("#navNorth"))
+        self.assertTrue(pg.is_visible(".sheet") and pg.is_visible("#goQ"), "renter controls back after End")
         ctx.close()
 
     def test_city_map_preview_start_follow_reroute(self):
@@ -265,6 +300,10 @@ class LiveNav(unittest.TestCase):
         off = self.drive_checks(pg, ctx, cdp, pts, "map")
         pg.wait_for_function("() => window._liveNav && Math.abs(window._liveNav.pts[0][0] - %f) < 0.002" % off["latitude"], timeout=30000)
         self.assertTrue(pg.is_visible("#mapNav"))
+        pg.click("#navEnd")
+        pg.wait_for_timeout(300)
+        for sel in ["#top", "#chips", "#cNorm", "#cRisk", "#loc", "#sheet"]:
+            self.assertTrue(pg.is_visible(sel), (sel, "back after End"))
         ctx.close()
 
 

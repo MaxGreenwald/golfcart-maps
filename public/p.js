@@ -297,8 +297,8 @@ function ensureMap() {
       getRoute: () => navRoute,
       reroute: navReroute,
       say: t => say(t),
-      onStart: () => { navSpoken = ''; say(document.getElementById('navText') ? document.getElementById('navText').textContent : ''); },
-      onEnd: () => { if (window.speechSynthesis) speechSynthesis.cancel(); },
+      onStart: () => { navSpoken = ''; navPlan.reset(); say(document.getElementById('navText') ? document.getElementById('navText').textContent : ''); },
+      onEnd: () => { navVoice.stop(); },
     });
     map.createPane('roads');
     const roadsPane = map.getPane('roads');
@@ -350,19 +350,22 @@ async function paintRoads() {
 }
 function drawRoadCanvas() {
   if (!roadCanvas || !map || !roadApi || !roadApi.segments) return;
-  const size = map.getSize();
+  // Heading-up turns the map (public/navfollow.js); then draw a margin (map.__gcmPad) so corners have roads.
+  const pad = map.__gcmPad || L.point(0, 0);
+  const size = map.getSize().add(pad.multiplyBy(2));
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   roadCanvas.width = Math.max(1, Math.round(size.x * dpr));
   roadCanvas.height = Math.max(1, Math.round(size.y * dpr));
   roadCanvas.style.width = size.x + 'px';
   roadCanvas.style.height = size.y + 'px';
-  L.DomUtil.setPosition(roadCanvas, map.containerPointToLayerPoint([0, 0]));
+  L.DomUtil.setPosition(roadCanvas, map.containerPointToLayerPoint([-pad.x, -pad.y]));
   const ctx = roadCtx;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, size.x, size.y);
+  ctx.setTransform(dpr, 0, 0, dpr, pad.x * dpr, pad.y * dpr);
+  ctx.clearRect(-pad.x, -pad.y, size.x, size.y);
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  const view = map.getBounds().pad(0.08);
+  const sz0 = map.getSize();
+  const view = L.latLngBounds(map.containerPointToLatLng([-pad.x, -pad.y]), map.containerPointToLatLng([sz0.x + pad.x, sz0.y + pad.y])).pad(0.08);
   const south = view.getSouth(), north = view.getNorth(), west = view.getWest(), east = view.getEast();
   const segs = roadApi.segments();
   for (let n = 0; n < segs.length; n++) {
@@ -587,7 +590,7 @@ function navEl() {
   el.querySelector('#navMute').onclick = () => {
     navMuted = !navMuted;
     try { localStorage.setItem('gcm_nav_mute', navMuted ? '1' : '0'); } catch (e) {}
-    if (navMuted && window.speechSynthesis) speechSynthesis.cancel();
+    if (navMuted) navVoice.stop();
     paintMute();
   };
   el.querySelector('#navListBtn').onclick = () => {
@@ -611,13 +614,10 @@ function say(text) {
   if (follow && !follow.state().navigating) return;
   if (navMuted || !text || text === navSpoken) return;
   navSpoken = text;
-  window.__navSaid = (window.__navSaid || []).concat(text);
-  try {
-    if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
-    speechSynthesis.cancel();
-    speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-  } catch (e) {}
+  navVoice.say(text);
 }
+// One spoken sentence at a time, one per turn (Max t419u).
+const navVoice = GCMFollow.voice(GCMFollow.webEngine()), navPlan = GCMFollow.promptPlan();
 // Read-only hook for browser tests (route points + steps).
 window.GCMNavDebug = () => navRoute && { pts: navRoute.pts, steps: navRoute.steps, stop: navStop };
 function stopNav() {
@@ -634,7 +634,7 @@ function beginNav(leg, i, target) {
   if (!stop || !leg || !leg.points || leg.points.length < 2) { stopNav(); return; }
   const runs = leg.runs && leg.runs.length ? leg.runs : [{ name: '', points: leg.points }];
   navRoute = GCMNav.buildSteps(runs, stop.label || `stop ${i + 1}`);
-  navStop = target ? -1 : i; navState = null; navArrived = false; navSpoken = '';
+  navStop = target ? -1 : i; navState = null; navArrived = false; navSpoken = ''; navPlan.reset();
   const el = navEl();
   el.classList.add('show');
   document.body.classList.add('has-nav');
@@ -701,8 +701,10 @@ async function onNavFix(ll) {
   const after = navRoute.steps[st.idx + 1];
   paintNav(ARROWS[st.next.mod], st.text,
     (after ? `Then ${after.text.charAt(0).toLowerCase() + after.text.slice(1)} · ` : '') + `${GCMNav.fmtDist(st.remaining).replace('Now', 'under 50 ft')} to go`);
-  // Speak once per maneuver when it is near (≈400 ft), and again at the turn.
-  if (st.toNext < 120) say(st.toNext < 25 ? st.next.text : st.text);
+  if (follow) follow.eta(st.remaining, ll.coords && ll.coords.speed);
+  // One prompt per maneuver, timed by speed so it ends before the turn (GCMFollow.promptPlan).
+  const prompt = navPlan.update(st, ll.coords && ll.coords.speed);
+  if (prompt) say(prompt);
 }
 // Off route for a while during navigation: new legal route from here to the same stop or place.
 async function navReroute() {

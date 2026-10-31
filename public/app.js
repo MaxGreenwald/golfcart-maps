@@ -402,22 +402,24 @@ sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(
 // shows the next turn, and reroutes from where you are after ~5 s off the route. End stops it.
 let liveNav=null,liveSteps=null,liveSaid='';
 const navOn=()=>!!(follow&&follow.state().navigating);
-function navSay(t){if(!t||t===liveSaid||!navOn())return;liveSaid=t;window.__navSaid=(window.__navSaid||[]).concat(t);try{if(window.speechSynthesis&&window.SpeechSynthesisUtterance){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t))}}catch(_){}}
+// One spoken sentence at a time, one per turn (Max t419u): GCMFollow.voice + promptPlan.
+const navVoice=GCMFollow.voice(GCMFollow.webEngine()),navPlan=GCMFollow.promptPlan();
+function navSay(t){if(!t||t===liveSaid||!navOn())return;liveSaid=t;navVoice.say(t)}
 function navBar(){let el=$('mapNav');if(el)return el;el=document.createElement('div');el.id='mapNav';el.setAttribute('aria-live','polite');el.innerHTML='<b id="mapNavT"></b><span id="mapNavS"></span>';document.body.appendChild(el);return el}
-function liveNavSet(r){liveSteps=null;window._liveNav=null;
+function liveNavSet(r){liveSteps=null;navPlan.reset();window._liveNav=null;
  if(r){const runs=r.legs.map(l=>({name:D.names[l.s[0]]||'',points:l.p.map(p=>[p[1],p[0]])}));liveSteps=GCMNav.buildSteps(runs,($('q').value||'').trim()||'your destination');window._liveNav=liveSteps}
  if(follow)follow.preview(!!liveSteps);if(!liveSteps&&$('mapNav'))$('mapNav').classList.remove('show');
  if(liveSteps&&navOn()&&myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
 function liveNavFix(c){if(follow)follow.fix(c);if(!navOn()||!liveSteps)return;const st=GCMNav.status(liveSteps,[c.latitude,c.longitude]);const el=navBar();el.classList.add('show');
  if(window._navRerouting)return;
- $('mapNavT').textContent=st.arrived?liveSteps.steps[liveSteps.steps.length-1].text:st.text;$('mapNavS').textContent=st.arrived?'':GCMNav.fmtDist(st.remaining).replace('Now','under 50 ft')+' to go';
- if(st.arrived)navSay($('mapNavT').textContent);else if(st.toNext<120)navSay(st.toNext<25?st.next.text:st.text)}
+ $('mapNavT').textContent=st.arrived?liveSteps.steps[liveSteps.steps.length-1].text:st.text;$('mapNavS').textContent=st.arrived?'':GCMNav.fmtDist(st.remaining).replace('Now','under 50 ft')+' to go';if(follow)follow.eta(st.arrived?0:st.remaining,c.speed);
+ if(st.arrived)navSay($('mapNavT').textContent);else{const t=navPlan.update(st,c.speed);if(t)navSay(t)}}
 async function liveReroute(){window._navRerouting=true;const el=navBar();el.classList.add('show');$('mapNavT').textContent='↻ Rerouting on legal roads…';$('mapNavS').textContent='';
  try{if(!(from&&from.me)){from={me:true}}sync();await route()}finally{window._navRerouting=false}if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
 const follow=GCMFollow.controller({map,getRoute:()=>liveSteps,reroute:liveReroute,say:navSay,
  canStart:()=>!!liveSteps,
- onStart:()=>{liveSaid='';if(!watching)locate();setSnap('collapsed');navBar().classList.add('show');$('mapNavT').textContent=liveSteps.steps[0].text;$('mapNavS').textContent='';navSay(liveSteps.steps[0].text);if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})},
- onEnd:()=>{if($('mapNav'))$('mapNav').classList.remove('show');try{speechSynthesis.cancel()}catch(_){}setSnap('half')}});
+ onStart:()=>{liveSaid='';navPlan.reset();if(!watching)locate();setSnap('collapsed');navBar().classList.add('show');$('mapNavT').textContent=liveSteps.steps[0].text;$('mapNavS').textContent='';navSay(liveSteps.steps[0].text);if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})},
+ onEnd:()=>{if($('mapNav'))$('mapNav').classList.remove('show');navVoice.stop();setSnap('half')}});
 window.gcmFollow=follow;
 // Tap a step to zoom to where it starts; this pauses follow until Recenter.
 $('steps').addEventListener('click',e=>{const d=e.target.closest('.st[data-ll]');if(!d)return;const [a,b]=d.dataset.ll.split(',').map(Number);follow.pause();map.setView([a,b],18)});

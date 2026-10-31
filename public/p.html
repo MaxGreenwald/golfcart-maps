@@ -239,6 +239,10 @@ body.free-nav #nextBar{display:none}
 /* Focus on one ride: other rides and offers fold away. */
 .allex{border:0;background:none;color:#1d6fe0;font:800 14px Nunito;cursor:pointer;padding:6px 0;margin:0 0 4px}
 body.focus-ex .xcard:not(.active),body.focus-ex .subsec,body.focus-ex .offers{display:none}
+
+/* Navigating (Max t417u): hide the sheet, header and next bar; the map fills the screen */
+body.gcm-navigating .sheet,body.gcm-navigating header.top,body.gcm-navigating #nextBar,body.gcm-navigating #confetti{display:none!important}
+body.gcm-navigating .leaflet-bottom{bottom:calc(84px + var(--sab,0px))}
 </style>
 </head>
 <body>
