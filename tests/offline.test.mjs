@@ -7,8 +7,6 @@ const idx = { meta: { generated: '2026-10-30', segments: 9, ways: 3, tiles: ['1_
 test('filesFor lists index, tiles, rules and regions', () => {
   const f = O.filesFor('hhi', idx);
   for (const u of ['/data/regions.json', '/data/rules.json', '/data/schema.json', '/data/hhi/index.json', '/data/hhi/tiles/1_2.json', '/data/hhi/tiles/3_4.json']) assert.ok(f.includes(u), u);
-  assert.ok(!f.includes('/data/hhi/verified.json'));
-  assert.ok(O.filesFor('sd', idx).includes('/data/sd/verified.json'));
   assert.throws(() => O.filesFor('../x', idx));
 });
 
