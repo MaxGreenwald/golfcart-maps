@@ -85,3 +85,47 @@ struct CarPlayOffRoute {
         return best
     }
 }
+
+/// Heading-up rule shared with the phone (PR #33): route bearing about 25 m ahead of where you are on the
+/// route; GPS course when off route; never the compass; ignore changes under 5 degrees.
+enum CarPlayHeading {
+    static let aheadM = 25.0, minChange = 5.0
+
+    /// Bearing (degrees) from the point on the line nearest p to the point `aheadM` further along it.
+    static func routeBearing(from p: (Double, Double), line: [(Double, Double)], aheadM: Double = aheadM) -> Double? {
+        guard line.count >= 2 else { return nil }
+        let k = cos(p.0 * .pi / 180) * 111_320.0, ky = 110_540.0
+        func xy(_ q: (Double, Double)) -> (Double, Double) { ((q.1 - p.1) * k, (q.0 - p.0) * ky) }
+        var best = Double.infinity, seg = 0, pt = (0.0, 0.0)
+        for i in 1..<line.count {
+            let a = xy(line[i - 1]), b = xy(line[i]), dx = b.0 - a.0, dy = b.1 - a.1, L = dx * dx + dy * dy
+            let t = L == 0 ? 0 : max(0, min(1, -(a.0 * dx + a.1 * dy) / L))
+            let x = a.0 + t * dx, y = a.1 + t * dy, d = x * x + y * y
+            if d < best { best = d; seg = i; pt = (x, y) }
+        }
+        var left = aheadM, cur = pt, i = seg
+        while i < line.count {
+            let b = xy(line[i]), dx = b.0 - cur.0, dy = b.1 - cur.1, L = (dx * dx + dy * dy).squareRoot()
+            if L >= left || i == line.count - 1 {
+                let f = L == 0 ? 0 : min(1, left / L)
+                let tx = cur.0 + dx * f, ty = cur.1 + dy * f
+                let ex = tx - pt.0, ey = ty - pt.1
+                if ex == 0 && ey == 0 { return nil }
+                return (atan2(ex, ey) * 180 / .pi + 360).truncatingRemainder(dividingBy: 360)
+            }
+            left -= L; cur = b; i += 1
+        }
+        return nil
+    }
+
+    /// New camera heading, or nil to keep the current one.
+    static func pick(current: Double?, routeBearing: Double?, offRouteM: Double, course: Double?, speed: Double?) -> Double? {
+        let onRoute = offRouteM <= CarPlayOffRoute.offM
+        let moving = (speed ?? 0) >= 1
+        let want: Double? = onRoute ? routeBearing : ((course ?? -1) >= 0 && moving ? course : nil)
+        guard let w = want else { return nil }
+        guard let c = current else { return w }
+        let d = abs((w - c + 540).truncatingRemainder(dividingBy: 360) - 180)
+        return d < minChange ? nil : w
+    }
+}

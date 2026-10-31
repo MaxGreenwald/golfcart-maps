@@ -45,4 +45,15 @@ let line = [(32.8400, -117.2600), (32.8400, -117.2500)]
 ck("distance to route ~0 on it", CarPlayOffRoute.distance(from: (32.8400, -117.2550), toLine: line) < 1)
 let dd = CarPlayOffRoute.distance(from: (32.8405, -117.2550), toLine: line)
 ck("distance to route ~55 m off (got \(Int(dd)))", abs(dd - 55) < 3)
+// Heading-up matches the phone (PR #33).
+let east = [(32.84, -117.26), (32.84, -117.25)], northThenEast = [(32.84, -117.26), (32.8402, -117.26), (32.8402, -117.25)]
+let rb = CarPlayHeading.routeBearing(from: (32.84, -117.255), line: east)!
+ck("route bearing east ~90 (got \(Int(rb)))", abs(rb - 90) < 1)
+let rb2 = CarPlayHeading.routeBearing(from: (32.84, -117.26), line: northThenEast)!
+ck("looks 25 m ahead around a corner (got \(Int(rb2)))", rb2 > 0 && rb2 < 90)
+ck("on route uses route bearing", CarPlayHeading.pick(current: nil, routeBearing: 90, offRouteM: 5, course: 180, speed: 5) == 90)
+ck("off route uses GPS course", CarPlayHeading.pick(current: 90, routeBearing: 90, offRouteM: 80, course: 180, speed: 5) == 180)
+ck("off route and stopped keeps heading (never compass)", CarPlayHeading.pick(current: 90, routeBearing: 90, offRouteM: 80, course: 180, speed: 0) == nil)
+ck("ignores under 5 degrees", CarPlayHeading.pick(current: 90, routeBearing: 93, offRouteM: 5, course: nil, speed: 5) == nil)
+ck("wraps 358 -> 2 as 4 degrees", CarPlayHeading.pick(current: 358, routeBearing: 2, offRouteM: 5, course: nil, speed: 5) == nil)
 exit(fails == 0 ? 0 : 1)
