@@ -36,7 +36,7 @@ with sync_playwright() as p:
     go(pg, "/")
     ck("no path, nothing saved: default is San Diego", pg.evaluate("REG.id") == "sd", pg.evaluate("REG.id"))
     ids = pg.evaluate("[...document.querySelectorAll('#chips>*')].map(e=>e.id||e.className).join()")
-    ck("city chip is first in the top chip row", ids == "chip city,cNorm,cRisk,useme,reset", ids)
+    ck("city chip is first in the top chip row", ids == "chip city,cNorm,cRisk,savePin,useme,reset", ids)
     ck("picker select lives in the city chip", pg.evaluate("!!document.querySelector('#chips .chip.city select#city')"))
     ck("Settings has no City row", pg.evaluate("!document.querySelector('#setPanel #city,#setPanel .crow')"))
     ck("no city label in the sheet header", pg.evaluate("!document.querySelector('#cityNow,#shead #cityLbl')"))
