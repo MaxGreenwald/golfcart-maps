@@ -171,6 +171,12 @@
 #navCtl button{pointer-events:auto;border:0;border-radius:999px;font:900 17px Nunito,system-ui,sans-serif;padding:14px 26px;box-shadow:0 6px 18px rgba(0,0,0,.28);cursor:pointer}
 #navCtl #navStart{background:#12a150;color:#fff}#navCtl #navEnd{background:#e5484d;color:#fff}#navCtl #navRecenter{background:#fff;color:#0b3a78}
 #navCtl [hidden]{display:none}
+#navEta{display:none}
+body.gcm-navigating #navCtl{left:0;right:0;bottom:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:#fff;box-shadow:0 -6px 20px rgba(0,0,0,.18);border-radius:18px 18px 0 0;justify-content:flex-end;align-items:center;pointer-events:auto}
+body.gcm-navigating #navEta{display:block;flex:1;font:900 18px Nunito,system-ui,sans-serif;color:#0b3a78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.gcm-navigating #navEta small{display:block;font:700 13px Nunito,system-ui,sans-serif;color:#5b6b7a}
+body.gcm-navigating #navCtl button{padding:12px 20px;box-shadow:none}
+body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
 .gcm-rot{position:absolute;left:0;top:0;width:100%;height:100%;transition:transform ${C.ROTATE_MS}ms ease-out;will-change:transform}
 #navNorth{position:fixed;z-index:1200;right:12px;bottom:calc(150px + env(safe-area-inset-bottom,0px));width:40px;height:40px;border-radius:50%;border:0;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.28);padding:0;cursor:pointer}
 #navNorth[hidden]{display:none}#navNorth i{display:block;width:100%;height:100%;transition:transform ${C.ROTATE_MS}ms ease-out;font:900 11px Nunito,system-ui,sans-serif;color:#e5484d;position:relative}
@@ -253,7 +259,7 @@
     const rot = rotator(map);
     const ctl = document.createElement('div');
     ctl.id = 'navCtl';
-    ctl.innerHTML = '<button type="button" id="navStart" hidden>▶ Start</button><button type="button" id="navRecenter" hidden>◎ Recenter</button><button type="button" id="navEnd" hidden>■ End</button>';
+    ctl.innerHTML = '<div id="navEta" aria-live="off"></div><button type="button" id="navStart" hidden>▶ Start</button><button type="button" id="navRecenter" hidden>◎ Recenter</button><button type="button" id="navEnd" hidden>■ End</button>';
     document.body.appendChild(ctl);
     const north = document.createElement('button');
     north.type = 'button'; north.id = 'navNorth'; north.hidden = true; north.title = 'North up';
@@ -268,6 +274,7 @@
       // Max t417u: while driving, pages hide search, town picker, chips and other clutter via this class.
       if (document.body.classList.contains('gcm-navigating') !== navigating) {
         document.body.classList.toggle('gcm-navigating', navigating);
+        fyAt = 0;
         if (map && map.invalidateSize) map.invalidateSize({ pan: false });
       }
       if (!(navigating && following) && mapBearing != null) { mapBearing = null; paintHeading(true); }
@@ -296,7 +303,7 @@
       paintQueued = raf(() => {
         paintQueued = 0;
         const mb = headingUp() && mapBearing != null ? mapBearing : null;
-        if (rot && (rot.get() || 0) !== (mb || 0)) rot.set(mb, C.FOLLOW_Y);
+        if (rot && (rot.get() || 0) !== (mb || 0)) rot.set(mb, followY());
         north.firstChild.style.transform = mb ? 'rotate(' + (-mb) + 'deg)' : '';
         // Heading-up: the dot lives inside the turned map, so giving the arrow the map bearing points it straight up on screen.
         const h = heading == null && mb == null ? null : (mb != null ? Math.round(((mb % 360) + 360) % 360) : Math.round(heading));
@@ -309,11 +316,30 @@
         });
       });
     }
+    // Where the dot sits: lower-middle of the map area NOT covered by the turn card (top) or the
+    // nav bar (bottom), as a fraction of the map height (Max t421u: the sheet hid the dot).
+    let fyAt = 0, fy = C.FOLLOW_Y;
+    function followY() {
+      if (!map || typeof document === 'undefined') return C.FOLLOW_Y;
+      const now = Date.now();
+      if (now - fyAt < 1000) return fy;
+      fyAt = now;
+      const mb = map.getContainer().getBoundingClientRect(), h = mb.height || 1;
+      let top = mb.top, bot = mb.bottom;
+      (opts.topEls || ['#mapNav', '#navBanner']).forEach(sel => {
+        const el = document.querySelector(sel);
+        if (el && el.offsetParent !== null) { const r = el.getBoundingClientRect(); if (r.height && r.top < mb.top + h / 2) top = Math.max(top, r.bottom); }
+      });
+      if (navigating) { const r = ctl.getBoundingClientRect(); if (r.height && r.top > mb.top + h / 2) bot = Math.min(bot, r.top); }
+      if (bot - top < h * 0.3) { fy = C.FOLLOW_Y; return fy; }
+      fy = (top - mb.top + (bot - top) * 0.7) / h;
+      return fy;
+    }
     // Keep the dot a bit below center. Cheap: skip when it is already within a few px of the target.
     function center(ll) {
       if (!map || !ll) return;
       const z = Math.max(map.getZoom(), C.FOLLOW_ZOOM), sz = map.getSize();
-      const off = L.point(0, sz.y * (C.FOLLOW_Y - 0.5));
+      const off = L.point(0, sz.y * (followY() - 0.5));
       const c = map.unproject(map.project(L.latLng(ll[0], ll[1]), z).subtract(off), z);
       root.__navCenters = (root.__navCenters || 0) + 1;
       if (z !== map.getZoom()) { map.setView(c, z, { animate: false }); return; }
@@ -400,6 +426,16 @@
       recenter() { following = true; paintBtns(); if (last) center([last.latitude, last.longitude]); aimBearing(); },
       pause() { if (navigating && following) { following = false; paintBtns(); } },
       paintHeading: () => paintHeading(true),
+      // Bottom nav bar line: time and distance left (remaining metres; speed m/s, cart default ~18 mph).
+      eta(remainingM, speed) {
+        const el = $b('navEta');
+        if (!el || !Number.isFinite(remainingM)) return;
+        const v = Number.isFinite(speed) && speed > 2 ? speed : 8;
+        const min = Math.max(1, Math.round(remainingM / v / 60)), mi = remainingM / 1609.34;
+        const t = new Date(Date.now() + remainingM / v * 1000);
+        const html = min + ' min<small>' + (mi < 10 ? mi.toFixed(1) : Math.round(mi)) + ' mi · arrive ' + t.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + '</small>';
+        if (el.innerHTML !== html) el.innerHTML = html;
+      },
       state: () => ({ navigating, following, previewing, heading, rerouting, compassOn, mapBearing: rot ? rot.get() : 0, headingUp: headingUp() && mapBearing != null }),
     };
     root.gcmFollowState = api.state; root.gcmFollowRoute = () => opts.getRoute && opts.getRoute(); // test hooks (read-only)

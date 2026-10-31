@@ -697,6 +697,7 @@ async function onNavFix(ll) {
   const after = navRoute.steps[st.idx + 1];
   paintNav(ARROWS[st.next.mod], st.text,
     (after ? `Then ${after.text.charAt(0).toLowerCase() + after.text.slice(1)} · ` : '') + `${GCMNav.fmtDist(st.remaining).replace('Now', 'under 50 ft')} to go`);
+  if (follow) follow.eta(st.remaining, ll.coords && ll.coords.speed);
   // One prompt per maneuver, timed by speed so it ends before the turn (GCMFollow.promptPlan).
   const prompt = navPlan.update(st, ll.coords && ll.coords.speed);
   if (prompt) say(prompt);

@@ -82,7 +82,7 @@ VIEW = "(() => { const m = window.__gcmMap; const c = m.getCenter(); return [c.l
 
 @unittest.skipIf(sync_playwright is None, "playwright not installed (runs in the browser CI job)")
 class LiveNav(unittest.TestCase):
-    CLUTTER = {"map": ["#top", "#chips", "#city", "#cNorm", "#cRisk", "#loc"],
+    CLUTTER = {"map": ["#top", "#chips", "#city", "#cNorm", "#cRisk", "#loc", "#sheet", "#range"],
                "renter": [".sheet", "header.top", "#goQ"]}
 
     @classmethod
@@ -139,6 +139,14 @@ class LiveNav(unittest.TestCase):
         self.assertLess(abs(dot[0] - (mb["x"] + mb["width"] / 2)), 30, (tag, dot, mb))
         self.assertGreater(dot[1], mb["y"] + mb["height"] * 0.5, (tag, dot, mb))
         pg.screenshot(path=os.path.join(SHOTS, f"livenav-{tag}-follow.png"))
+        # Max t421u: slim bottom bar with ETA + End, and the dot is never under the turn card or the bar.
+        self.assertTrue(pg.is_visible("#navEta"), tag)
+        self.assertIn("min", pg.inner_text("#navEta"), tag)
+        bar = pg.locator("#navCtl").bounding_box()
+        card = pg.locator("#mapNav" if tag == "map" else "#navBanner").bounding_box()
+        dy = self.dot_xy(pg)[1]
+        self.assertLess(bar["height"], 110, (tag, bar))
+        self.assertTrue(card["y"] + card["height"] + 20 < dy < bar["y"] - 20, (tag, card, dy, bar))
         # Heading-up (Max t412u): the map turned so the road ahead points up; the arrow points straight up.
         st = pg.evaluate("window.gcmFollowState()")
         self.assertTrue(st["headingUp"], (tag, st))
@@ -294,7 +302,7 @@ class LiveNav(unittest.TestCase):
         self.assertTrue(pg.is_visible("#mapNav"))
         pg.click("#navEnd")
         pg.wait_for_timeout(300)
-        for sel in ["#top", "#chips", "#cNorm", "#cRisk", "#loc"]:
+        for sel in ["#top", "#chips", "#cNorm", "#cRisk", "#loc", "#sheet"]:
             self.assertTrue(pg.is_visible(sel), (sel, "back after End"))
         ctx.close()
 

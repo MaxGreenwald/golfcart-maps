@@ -366,7 +366,7 @@ function liveNavSet(r){liveSteps=null;navPlan.reset();window._liveNav=null;
  if(liveSteps&&navOn()&&myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
 function liveNavFix(c){if(follow)follow.fix(c);if(!navOn()||!liveSteps)return;const st=GCMNav.status(liveSteps,[c.latitude,c.longitude]);const el=navBar();el.classList.add('show');
  if(window._navRerouting)return;
- $('mapNavT').textContent=st.arrived?liveSteps.steps[liveSteps.steps.length-1].text:st.text;$('mapNavS').textContent=st.arrived?'':GCMNav.fmtDist(st.remaining).replace('Now','under 50 ft')+' to go';
+ $('mapNavT').textContent=st.arrived?liveSteps.steps[liveSteps.steps.length-1].text:st.text;$('mapNavS').textContent=st.arrived?'':GCMNav.fmtDist(st.remaining).replace('Now','under 50 ft')+' to go';if(follow)follow.eta(st.arrived?0:st.remaining,c.speed);
  if(st.arrived)navSay($('mapNavT').textContent);else{const t=navPlan.update(st,c.speed);if(t)navSay(t)}}
 async function liveReroute(){window._navRerouting=true;const el=navBar();el.classList.add('show');$('mapNavT').textContent='↻ Rerouting on legal roads…';$('mapNavS').textContent='';
  try{if(!(from&&from.me)){from={me:true}}sync();await route()}finally{window._navRerouting=false}if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
