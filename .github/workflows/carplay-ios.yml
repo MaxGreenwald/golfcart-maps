@@ -2,11 +2,15 @@ name: carplay-ios
 on:
   workflow_dispatch:
   push:
-    branches: [carplay, ios-analytics, carplay-cpmaneuver]
+    branches: [carplay, ios-analytics, carplay-cpmaneuver, "carplay-sim-*"]
 jobs:
   ios-sim:
     runs-on: macos-15
     timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        size: ["800x480@2", "1920x720@3", "748x456@2"]   # Apple's recommended CarPlay test sizes (standard, widescreen, minimum)
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,7 +31,7 @@ jobs:
             -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= build | tail -n 40
       - name: Run in simulator + screenshots (phone + CarPlay external display)
         continue-on-error: true
-        env: {CARPLAY_TAPS: "200,250 97,212", DEMO_FROM: "33.1590,-117.3440", DEMO_TO: "33.1680,-117.3565,Carlsbad North Beach", DEMO_DRIVE: "12"}
+        env: {CARPLAY_SIZE: "${{ matrix.size }}", CARPLAY_TAPS: "200,250 97,212", DEMO_FROM: "33.1590,-117.3440", DEMO_TO: "33.1680,-117.3565,Carlsbad North Beach", DEMO_DRIVE: "0", OFFROUTE_TRACK: "33.1590,-117.3440 33.1592,-117.3400 33.1595,-117.3360"}
         run: bash scripts/ci_carplay_shots.sh
       # 3) Analytics hooks: if the CarPlay scene connected in the simulator run, its DEBUG log must show the hooks fired.
       - name: CarPlay analytics hooks fired (session on connect, route_started on Go)
@@ -37,6 +41,11 @@ jobs:
           grep -E "GCMTrack (session|route_started|route_completed)" "$L" | tee shots-ci/analytics-hooks.txt
           grep -q "GCMTrack session ok" "$L" || { echo "::error::no 'GCMTrack session ok' after CarPlay connected"; exit 1; }
           grep -q "GCMTrack route_started ok" "$L" || echo "::warning::demo trip did not start guidance; route_started not seen"
+      - name: Off-route reroute happened (log)
+        run: |
+          L=shots-ci/app-log.txt; touch "$L"
+          grep -E "GCMCarPlay (layout|reroute|rerouted)" "$L" | tee shots-ci/reroute-log.txt || true
+          grep -q "GCMCarPlay rerouted" "$L" || echo "::warning::no CarPlay reroute seen in this run"
       - uses: actions/upload-artifact@v4
         if: always()
-        with: {name: carplay-shots, path: shots-ci/, if-no-files-found: warn}
+        with: {name: "carplay-shots-${{ strategy.job-index }}", path: shots-ci/, if-no-files-found: warn}

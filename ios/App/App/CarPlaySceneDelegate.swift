@@ -84,6 +84,7 @@ final class AvoidLine: MKPolyline {}
 final class CarPlayMapViewController: UIViewController, MKMapViewDelegate {
     let map = MKMapView()
     var onRegionChange: ((MKCoordinateRegion) -> Void)?
+    var guiding = false { didSet { if guiding != oldValue { layoutMap() } } }
     override func viewDidLoad() {
         super.viewDidLoad()
         map.frame = view.bounds
@@ -100,8 +101,13 @@ final class CarPlayMapViewController: UIViewController, MKMapViewDelegate {
     func layoutMap() {
         let b = view.bounds, safe = b.inset(by: view.safeAreaInsets)
         guard safe.width > 0, safe.height > 0 else { map.frame = b; return }
-        let f = CarPlayStartView.mapFrame(bounds: b, safe: safe)
-        if map.frame != f { map.frame = f }
+        let f = CarPlayStartView.mapFrame(bounds: b, safe: safe, guiding: guiding)
+        if map.frame != f {
+            map.frame = f
+            #if DEBUG
+            NSLog("GCMCarPlay layout bounds=%@ safe=%@ guiding=%d map=%@ dot=%@", NSCoder.string(for: b), NSCoder.string(for: safe), guiding ? 1 : 0, NSCoder.string(for: f), NSCoder.string(for: CGPoint(x: f.midX, y: f.midY)))
+            #endif
+        }
     }
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         guard let pl = overlay as? MKPolyline else { return MKOverlayRenderer(overlay: overlay) }
@@ -133,6 +139,10 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     var following = false      // map follows the location dot until the driver pans
     var gotFix = false
     var panLast = CGPoint.zero
+    var offRoute = CarPlayOffRoute()
+    var rerouting = false
+    var dest: (CLLocationCoordinate2D, String)?
+    var camHeading: Double?
     var mode: String { "lsv" }
 
     // Scene lifecycle
@@ -150,7 +160,12 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         refreshButtons()
         interfaceController.setRootTemplate(mapTemplate, animated: false, completion: { _, _ in })
         loc.delegate = self
-        loc.desiredAccuracy = kCLLocationAccuracyBest
+        loc.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        loc.activityType = .automotiveNavigation
+        loc.pausesLocationUpdatesAutomatically = false
+        // CarPlay runs with the phone locked, i.e. in the background. Without this (and UIBackgroundModes
+        // location) updates stop: gray dot, card never advances, no reroute.
+        loc.allowsBackgroundLocationUpdates = true
         if loc.authorizationStatus == .notDetermined { loc.requestWhenInUseAuthorization() }
         loc.startUpdatingLocation()
         showStartView()
@@ -206,7 +221,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         guard let c = loc.location?.coordinate else { return }
         following = true
         mapVC.map.setRegion(MKCoordinateRegion(center: c, latitudinalMeters: CarPlayStartView.drivingMeters, longitudinalMeters: CarPlayStartView.drivingMeters), animated: animated)
-        mapVC.map.setUserTrackingMode(session == nil ? .follow : .followWithHeading, animated: animated)
+        mapVC.map.setUserTrackingMode(.follow, animated: animated)
     }
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
@@ -272,7 +287,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         r.span.longitudeDelta = min(1, max(0.002, r.span.longitudeDelta * f))
         mapVC.map.setRegion(r, animated: true)
         // setRegion drops MKMapView tracking; keep following at the new zoom.
-        if following { mapVC.map.setUserTrackingMode(session == nil ? .follow : .followWithHeading, animated: true) }
+        if following { mapVC.map.setUserTrackingMode(.follow, animated: true) }
     }
 
     // Legal-road overlay (green = OK for current mode, red = avoid), same classification as the phone map
@@ -357,6 +372,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         if (interface?.templates.count ?? 0) > 1 { interface?.popToRootTemplate(animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } }) }
         guard let from = loc.location?.coordinate ?? Optional(mapVC.map.centerCoordinate) else { return }
         let to = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        dest = (to, name)
         GCMBridge.shared.call("plan(f,t,m,false)", ["f": ["lat": from.latitude, "lon": from.longitude], "t": ["lat": lat, "lon": lon], "m": mode]) { [weak self] any in
             guard let self = self else { return }
             guard let p = GCMPlan(any) else {
@@ -404,6 +420,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         mapTemplate.hideTripPreviews()
         let s = mapTemplate.startNavigationSession(for: trip)
         session = s
+        mapVC.guiding = true
         GCMBridge.shared.track("route_started", ["mi": p.miles])
         step = p.maneuvers.count > 1 ? 1 : 0
         pushManeuvers(s, p)
@@ -412,7 +429,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         mapTemplate.trailingNavigationBarButtons = [end]
         if let c = loc.location?.coordinate {
             mapVC.map.setRegion(MKCoordinateRegion(center: c, latitudinalMeters: 600, longitudinalMeters: 600), animated: true)
-            mapVC.map.setUserTrackingMode(.followWithHeading, animated: true)
+            following = true; camHeading = nil
+            mapVC.map.setUserTrackingMode(.follow, animated: true)
         }
     }
     // CPManeuver from one step of the legal-road route (public/carplay.js maneuvers()).
@@ -451,10 +469,49 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             s.currentRoadNameVariants = road.isEmpty ? [] : [road]
         }
     }
+    /// Heading-up like the phone: rotate the camera to the route bearing ~25 m ahead (GPS course off route).
+    func headingUp(_ here: CLLocation, off: Double, line: [(Double, Double)]) {
+        guard following else { return }
+        let me = (here.coordinate.latitude, here.coordinate.longitude)
+        guard let h = CarPlayHeading.pick(current: camHeading, routeBearing: CarPlayHeading.routeBearing(from: me, line: line), offRouteM: off,
+                                          course: here.course, speed: here.speed) else { return }
+        camHeading = h
+        let cam = mapVC.map.camera.copy() as! MKMapCamera
+        cam.heading = h; cam.centerCoordinate = here.coordinate
+        mapVC.map.setCamera(cam, animated: true)
+        mapVC.map.setUserTrackingMode(.follow, animated: false)
+    }
+    /// Same as the phone: replan from here to the same destination, then swap the line, card and estimates.
+    func reroute(from here: CLLocation) {
+        guard let s = session, let to = dest?.0 else { return }
+        rerouting = true
+        NSLog("GCMCarPlay reroute from %.5f,%.5f", here.coordinate.latitude, here.coordinate.longitude)
+        if #available(iOS 15.4, *) { s.pauseTrip(for: .rerouting, description: "Rerouting on legal roads", turnCardColor: nil) } else { s.pauseTrip(for: .rerouting, description: "Rerouting on legal roads") }
+        GCMBridge.shared.call("plan(f,t,m,false)", ["f": ["lat": here.coordinate.latitude, "lon": here.coordinate.longitude], "t": ["lat": to.latitude, "lon": to.longitude], "m": mode]) { [weak self] any in
+            guard let self = self else { return }
+            defer { self.rerouting = false; self.offRoute.reset() }
+            guard let s = self.session, let p = GCMPlan(any) else {
+                NSLog("GCMCarPlay reroute failed")
+                if let s = self.session, let p = self.plan { self.pushManeuvers(s, p) }   // resume the old guidance
+                return
+            }
+            self.plan = p
+            self.step = p.maneuvers.count > 1 ? 1 : 0
+            let m = self.mapVC.map
+            m.removeOverlays(m.overlays.filter { $0 is RouteLine })
+            var c = p.line
+            m.addOverlay(RouteLine(coordinates: &c, count: c.count), level: .aboveLabels)
+            self.pushManeuvers(s, p)
+            self.mapTemplate.update(self.estimates(p.meters, p.minutes * 60), for: s.trip, with: .default)
+            NSLog("GCMCarPlay rerouted: %d maneuvers, %.0f m", p.maneuvers.count, p.meters)
+            if let here = self.loc.location { self.progress(here) }
+        }
+    }
     func endTrip(arrived: Bool) {
         if arrived, session != nil { GCMBridge.shared.track("route_completed", ["mi": plan?.miles ?? 0]) }
         if arrived { session?.finishTrip() } else { session?.cancelTrip() }
-        session = nil; plan = nil
+        session = nil; plan = nil; offRoute.reset(); rerouting = false
+        mapVC.guiding = false
         mapVC.map.removeOverlays(mapVC.map.overlays.filter { $0 is RouteLine })
         refreshButtons()
         startFollowing(animated: true)
@@ -471,9 +528,21 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
     func progress(_ here: CLLocation) {
         guard let s = session, let p = plan, step < p.maneuvers.count else { return }
+        let pts = p.line.map { ($0.latitude, $0.longitude) }, me = (here.coordinate.latitude, here.coordinate.longitude)
+        let off = CarPlayOffRoute.distance(from: me, toLine: pts)
+        headingUp(here, off: off, line: pts)
+        if !rerouting, here.horizontalAccuracy >= 0, here.horizontalAccuracy < 50 {
+            if offRoute.update(offMeters: off, now: here.timestamp.timeIntervalSince1970) { reroute(from: here); return }
+        }
         let next = p.maneuvers[step]
         let d = here.distance(from: CLLocation(latitude: next.coord.latitude, longitude: next.coord.longitude))
-        if d < 25 {
+        // Passed it without coming within 25 m (GPS jitter or a cut corner): we're already closer to the one after.
+        var passed = false
+        if step + 1 < p.maneuvers.count {
+            let after = CLLocation(latitude: p.maneuvers[step + 1].coord.latitude, longitude: p.maneuvers[step + 1].coord.longitude)
+            passed = d < 60 && here.distance(from: after) < after.distance(from: CLLocation(latitude: next.coord.latitude, longitude: next.coord.longitude))
+        }
+        if d < 25 || passed {
             if next.type == "arrive" { endTrip(arrived: true); return }
             step += 1
             pushManeuvers(s, p)
