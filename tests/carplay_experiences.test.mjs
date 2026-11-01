@@ -26,10 +26,10 @@ function load(store, fetchImpl) {
 const ok = j => ({ ok: true, json: async () => j });
 const access = (at = Date.now()) => ({ gcm_partner_access: JSON.stringify({ slug: 'beachmode', code: 'TEST123', at, ...UNLOCK }) });
 
-test('no access: short message to open the shop link, no network', async () => {
+test('no access: points to the rental code (gear or phone Settings), no network', async () => {
   const { cp, calls } = load({}, () => ok(UNLOCK));
   const r = await cp.experiences();
-  assert.equal(r.ok, false); assert.match(r.reason, /shop link on your phone/); assert.equal(calls.length, 0);
+  assert.equal(r.ok, false); assert.match(r.reason, /rental code.*gear.*Settings/); assert.equal(calls.length, 0);
 });
 test('expired access (over 14 days) is ignored', async () => {
   const { cp } = load(access(Date.now() - 15 * 864e5), () => ok(UNLOCK));

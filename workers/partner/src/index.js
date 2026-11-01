@@ -374,6 +374,21 @@ export class PartnerStore extends DurableObject {
         this.sql.exec('DELETE FROM handoffs WHERE expires_at<?', now() - 86400);
         return J({ token, expires_at });
       }
+      // Rental code typed in the app (Max t449u): no shop link, so find the shop from the code.
+      // One code use, same checks and answer as /public/<slug>/unlock.
+      if (path === '/public-code/unlock' && method === 'GET') {
+        const code = String(u.searchParams.get('code') || '').replace(/\s+/g, '').toUpperCase();
+        if (!code) return J({ error: 'code required' }, 400);
+        const c = this.one('SELECT * FROM codes WHERE code=?', code);
+        const sh = c && this.one('SELECT * FROM shops WHERE id=? AND disabled=0', c.shop_id);
+        if (!c || !sh) return J({ error: 'Invalid access code' }, 403);
+        const shop = this.shopRow(sh);
+        if (c.expires_at && c.expires_at < now()) return J({ error: 'Code expired', shop }, 403);
+        if (!c.multi_use && c.uses > 0) return J({ error: 'Code already used', shop }, 403);
+        if (c.max_uses > 0 && c.uses >= c.max_uses) return J({ error: 'Code use limit reached', shop }, 403);
+        this.sql.exec('UPDATE codes SET uses=uses+1 WHERE code=?', code);
+        return J({ ...this.unlockAnswer(sh, shop, c, true), slug: sh.slug });
+      }
       // Public brand + unlock
       if (path.startsWith('/public/') && method === 'GET') {
         const parts = path.slice('/public/'.length).split('/');
@@ -662,6 +677,7 @@ export default {
     }
 
     // Public (no auth)
+    if (u.pathname === '/public-code/unlock') return doFetch(u.pathname + u.search, { method: 'GET' });
     if (u.pathname.startsWith('/public/')) {
       if (req.method === 'POST' && /^\/public\/[^/]+\/handoff$/.test(u.pathname)) {
         return doFetch(u.pathname, { method: 'POST', headers: { 'content-type': 'application/json' }, body: await req.text() });

@@ -46,7 +46,7 @@ export async function onRequest(context) {
   const out = new Headers(res.headers);
   out.set('cache-control', 'no-store');
   // Public shop pages are read from the iOS app too (capacitor://localhost), so allow any origin, no cookies.
-  if (path.startsWith('/public/')) {
+  if (path.startsWith('/public/') || path === '/public-code/unlock') {
     out.set('access-control-allow-origin', '*');
     out.delete('access-control-allow-credentials');
   }

@@ -1105,6 +1105,10 @@ async function boot() {
       try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates })); } catch (e) {}
       await unlockedView();
       addAppButton();
+    } else if (savedAccess()) {
+      // Unlocked earlier (rental code in Settings, or a code link): show it again without another code use.
+      unlocked = savedAccess();
+      await unlockedView();
     } else {
       const r = await fetch(`${API}/public/${encodeURIComponent(slug)}`);
       const j = await r.json();
@@ -1154,6 +1158,11 @@ function addAppButton() {
       b.disabled = false;
     }
   });
+}
+
+function savedAccess() {
+  const a = window.GCMRental && window.GCMRental.load(localStorage);
+  return a && a.slug === slug && a.shop ? { unlocked: true, ...a } : null;
 }
 
 boot();

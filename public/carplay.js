@@ -41,9 +41,15 @@ const XP_KEY='gcm_partner_access',XP_DAYS=14;
 // The saved unlock answer is used as is: calling unlock again would count another code use.
 const xpDist=(a,b,c,d)=>{const r=Math.PI/180,x=(d-b)*r*Math.cos((a+c)/2*r),y=(c-a)*r;return Math.round(Math.sqrt(x*x+y*y)*6371000)};
 async function xpLoad(){let a=null;try{a=JSON.parse(localStorage.getItem(XP_KEY)||'null')}catch(_){}
- if(!a||!a.slug||!Array.isArray(a.experiences)||!(Date.now()-(+a.at||0)<XP_DAYS*864e5))return {ok:false,reason:'Open your rental shop link on your phone to unlock experiences.'};
+ if(!a||!a.slug||!Array.isArray(a.experiences)||!(Date.now()-(+a.at||0)<XP_DAYS*864e5))return {ok:false,reason:'No rental code yet. Tap the gear to enter one, or enter it in Settings in the phone app.'};
  return {ok:true,slug:a.slug,j:a}}
 window.GCMCarPlay={
+ // Rental code typed in CarPlay (Max t449u): one code use, saved like the phone's Settings row.
+ async enterCode(code){if(!window.GCMRental)return {ok:false,reason:'Enter your code in the phone app.'};const r=await GCMRental.enter(code,{fetch:fetch.bind(window),storage:localStorage,win:window});
+  return r.ok?{ok:true,shop:(r.access.shop&&r.access.shop.name)||r.access.slug,experiences:r.access.experiences.length}:r},
+ // Active rental shop for the CarPlay settings screen, or {ok:false}.
+ rental(){const a=window.GCMRental&&GCMRental.load(localStorage);return a?{ok:true,shop:(a.shop&&a.shop.name)||a.slug,code:a.code}:{ok:false}},
+ removeRental(){if(window.GCMRental)GCMRental.remove(localStorage);return {ok:true}},
  version:2,
  track:cpTrack,
  // Experiences for the renter access on this phone, or {ok:false,reason}. vehicle: the shop's rules (golf_cart unless 'lsv').
