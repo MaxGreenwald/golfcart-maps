@@ -32,7 +32,7 @@ jobs:
       - name: public/ is the only copy of the web app
         run: python3 scripts/check_single_source.py
       - name: CarPlay start-view logic test (Swift, Foundation only)
-        run: swiftc ios/App/App/CarPlayStartView.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
+        run: swiftc ios/App/App/CarPlayStartView.swift ios/App/App/AppLinkRouter.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
   testflight:
     needs: sync-guard
     if: github.ref == 'refs/heads/ios-release'

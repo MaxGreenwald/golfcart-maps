@@ -1,6 +1,6 @@
 import Foundation
 // CarPlay start-view logic test (top-level code needs the file to be named main.swift)
-// Run: swiftc ios/App/App/CarPlayStartView.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
+// Run: swiftc ios/App/App/CarPlayStartView.swift ios/App/App/AppLinkRouter.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
 var fails = 0
 func ck(_ name: String, _ ok: Bool) { print((ok ? "PASS " : "FAIL ") + name); if !ok { fails += 1 } }
 let json = try! Data(contentsOf: URL(fileURLWithPath: "public/data/regions.json"))
@@ -56,4 +56,15 @@ ck("off route uses GPS course", CarPlayHeading.pick(current: 90, routeBearing: 9
 ck("off route and stopped keeps heading (never compass)", CarPlayHeading.pick(current: 90, routeBearing: 90, offRouteM: 80, course: 180, speed: 0) == nil)
 ck("ignores under 5 degrees", CarPlayHeading.pick(current: 90, routeBearing: 93, offRouteM: 5, course: nil, speed: 5) == nil)
 ck("wraps 358 -> 2 as 4 degrees", CarPlayHeading.pick(current: 358, routeBearing: 2, offRouteM: 5, course: nil, speed: 5) == nil)
+// App links (Max t448u): shop links map to bundled pages.
+func link(_ s: String) -> String? { AppLinkRouter.localPath(for: URL(string: s)!) }
+ck("shop page", link("https://golfcartmap.com/p/BeachMode") == "/p.html?slug=beachmode")
+ck("code link keeps the code", link("https://golfcartmap.com/p/beachmode/go?code=AB12") == "/p.html?slug=beachmode&code=AB12")
+ck("www works", link("https://www.golfcartmap.com/p/beachmode/go?code=AB12") == "/p.html?slug=beachmode&code=AB12")
+ck("handoff via custom scheme", link("golfcartmaps://p/beachmode/go?handoff=f00d") == "/p.html?slug=beachmode&handoff=f00d")
+ck("map partner link goes to the native map", link("https://golfcartmap.com/map?partner=beachmode&code=AB12") == "/index.html?partner=beachmode&code=AB12")
+ck("plain map is not handled", link("https://golfcartmap.com/map") == nil)
+ck("other hosts are not handled", link("https://evil.example/p/beachmode") == nil)
+ck("bad slug rejected", link("https://golfcartmap.com/p/..%2Fx") == nil)
+ck("unrelated query dropped", link("https://golfcartmap.com/p/beachmode?utm=x") == "/p.html?slug=beachmode")
 exit(fails == 0 ? 0 : 1)
