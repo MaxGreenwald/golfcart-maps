@@ -9,6 +9,7 @@ struct GCMManeuver {
     // meters = length of the road after this maneuver; toMeters = distance driven to reach it.
     // turn = signed turn angle in degrees (+ right, - left); used for the junction diagram and junctionExitAngle.
     let type: String, text: String, short: String, road: String, meters: Double, toMeters: Double, turn: Double, mph: Int?, risky: Bool, coord: CLLocationCoordinate2D
+    let outBrg: Double?   // bearing of the road after this maneuver (turn advance, t451u)
     init?(_ d: [String: Any]) {
         guard let t = d["type"] as? String, let lat = d["lat"] as? Double, let lon = d["lon"] as? Double else { return nil }
         type = t; text = d["text"] as? String ?? ""; road = d["road"] as? String ?? ""
@@ -16,6 +17,7 @@ struct GCMManeuver {
         meters = (d["meters"] as? NSNumber)?.doubleValue ?? 0; risky = d["risky"] as? Bool ?? false
         toMeters = (d["toMeters"] as? NSNumber)?.doubleValue ?? 0
         turn = (d["turn"] as? NSNumber)?.doubleValue ?? 0
+        outBrg = (d["outBrg"] as? NSNumber)?.doubleValue
         mph = (d["mph"] as? NSNumber)?.intValue
         coord = CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
@@ -227,6 +229,10 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     var rerouting = false
     var dest: (CLLocationCoordinate2D, String)?
     var camHeading: Double?
+    var course = CarPlayCourse()       // last good travel course, for reroutes (t451u)
+    var wrongWay = CarPlayWrongWay()
+    var rerouteTimeout: Timer?
+    var destAddress: String?
     var mode: String { "lsv" }
 
     // Scene lifecycle
@@ -246,6 +252,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         loc.delegate = self
         loc.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         loc.activityType = .automotiveNavigation
+        loc.distanceFilter = kCLDistanceFilterNone   // every fix, so turns are judged on fresh positions (t451u)
         loc.pausesLocationUpdatesAutomatically = false
         // CarPlay runs with the phone locked, i.e. in the background. Without this (and UIBackgroundModes
         // location) updates stop: gray dot, card never advances, no reroute.
@@ -347,7 +354,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     // Buttons
     func refreshButtons() {
         let searchBtn = CPBarButton(title: "Search") { [weak self] _ in self?.openSearch() }
-        let savedBtn = CPBarButton(title: "Recent") { [weak self] _ in self?.openRecents() }
+        let savedBtn = CPBarButton(title: "Places") { [weak self] _ in self?.openRecents() }
         mapTemplate.leadingNavigationBarButtons = [searchBtn, savedBtn]
         mapTemplate.trailingNavigationBarButtons = [CPBarButton(title: "Experiences") { [weak self] _ in self?.openExperiences() }]
         let recenter = CPMapButton { [weak self] _ in
@@ -405,27 +412,55 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         t.delegate = self
         interface?.pushTemplate(t, animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } })
     }
-    func searchTemplate(_ searchTemplate: CPSearchTemplate, updatedSearchText searchText: String, completionHandler: @escaping ([CPListItem]) -> Void) {
-        guard searchText.count >= 2 else { completionHandler([]); return }
-        let c = loc.location?.coordinate ?? mapVC.map.centerCoordinate
-        GCMBridge.shared.call("search(q,lat,lon)", ["q": searchText, "lat": c.latitude, "lon": c.longitude]) { any in
-            var items = (any as? [[String: Any]] ?? []).compactMap { d -> CPListItem? in
-                guard let n = d["name"] as? String, let lat = d["lat"] as? Double, let lon = d["lon"] as? Double else { return nil }
-                let it = CPListItem(text: n, detailText: d["sub"] as? String)
-                it.userInfo = ["name": n, "lat": lat, "lon": lon]
-                return it
+    // t451u: Apple owns the keyboard and the row size, so: short rows (title <= 28, subtitle <= 32 chars), best match
+    // first, and Home / Favorite beach / recents listed before typing so most trips need no keyboard at all.
+    func searchItem(_ name: String, _ sub: String?, _ lat: Double, _ lon: Double, address: String? = nil) -> CPListItem {
+        let it = CPListItem(text: CarPlaySearchText.clip(name, CarPlaySearchText.titleMax), detailText: CarPlaySearchText.clip(sub, CarPlaySearchText.subMax))
+        var info: [String: Any] = ["name": name, "lat": lat, "lon": lon]
+        if let a = address ?? sub { info["address"] = a }
+        it.userInfo = info
+        return it
+    }
+    func quickPicks(_ done: @escaping ([CPListItem]) -> Void) {
+        GCMBridge.shared.call("places()") { [weak self] any in
+            guard let self = self else { return }
+            let saved = (any as? [[String: Any]] ?? []).compactMap { d -> CPListItem? in
+                guard let n = d["name"] as? String, let lat = (d["lat"] as? NSNumber)?.doubleValue, let lon = (d["lon"] as? NSNumber)?.doubleValue else { return nil }
+                return self.searchItem(n, d["sub"] as? String, lat, lon)
             }
-            if !items.isEmpty { completionHandler(items); return }
+            let names = Set(saved.compactMap { ($0.userInfo as? [String: Any])?["name"] as? String })
+            let rec = self.recents.filter { !names.contains($0["name"] as? String ?? "") }.prefix(8).compactMap { d -> CPListItem? in
+                guard let n = d["name"] as? String, let lat = d["lat"] as? Double, let lon = d["lon"] as? Double else { return nil }
+                return self.searchItem(n, "Recent", lat, lon, address: d["address"] as? String)
+            }
+            done(Array((saved + rec).prefix(CarPlaySearchText.maxResults)))
+        }
+    }
+    func searchTemplate(_ searchTemplate: CPSearchTemplate, updatedSearchText searchText: String, completionHandler: @escaping ([CPListItem]) -> Void) {
+        guard searchText.count >= 2 else { quickPicks(completionHandler); return }
+        let c = loc.location?.coordinate ?? mapVC.map.centerCoordinate
+        let here = CLLocation(latitude: c.latitude, longitude: c.longitude)
+        GCMBridge.shared.call("search(q,lat,lon)", ["q": searchText, "lat": c.latitude, "lon": c.longitude]) { [weak self] any in
+            guard let self = self else { return }
+            let raw = (any as? [[String: Any]] ?? []).compactMap { d -> (String, String?, Double, Double)? in
+                guard let n = d["name"] as? String, let lat = d["lat"] as? Double, let lon = d["lon"] as? Double else { return nil }
+                return (n, d["sub"] as? String, lat, lon)
+            }
+            if !raw.isEmpty {
+                let order = CarPlaySearchText.rank(raw.map { ($0.0, here.distance(from: CLLocation(latitude: $0.2, longitude: $0.3))) }, query: searchText)
+                completionHandler(order.prefix(CarPlaySearchText.maxResults).map { let r = raw[$0]; return self.searchItem(r.0, r.1, r.2, r.3) })
+                return
+            }
             let req = MKLocalSearch.Request()
             req.naturalLanguageQuery = searchText
             req.region = MKCoordinateRegion(center: c, latitudinalMeters: 20000, longitudinalMeters: 20000)
             MKLocalSearch(request: req).start { resp, _ in
-                items = (resp?.mapItems ?? []).prefix(8).map { mi in
-                    let it = CPListItem(text: mi.name ?? "Place", detailText: mi.placemark.title)
-                    it.userInfo = ["name": mi.name ?? "Place", "lat": mi.placemark.coordinate.latitude, "lon": mi.placemark.coordinate.longitude]
-                    return it
-                }
-                completionHandler(items)
+                let mis = resp?.mapItems ?? []
+                let order = CarPlaySearchText.rank(mis.map { ($0.name ?? "", $0.placemark.location.map { here.distance(from: $0) }) }, query: searchText)
+                completionHandler(order.prefix(8).map { i in
+                    let mi = mis[i]
+                    return self.searchItem(mi.name ?? "Place", CarPlaySearchText.shortAddress(mi.placemark.title), mi.placemark.coordinate.latitude, mi.placemark.coordinate.longitude, address: mi.placemark.title)
+                })
             }
         }
     }
@@ -439,15 +474,19 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         get { UserDefaults.standard.array(forKey: "gcm-cp-recents") as? [[String: Any]] ?? [] }
         set { UserDefaults.standard.set(Array(newValue.prefix(12)), forKey: "gcm-cp-recents") }
     }
+    /// Home, Favorite beach and favorites from the phone (Settings > Saved places), then recents: one tap, no keyboard (t451u).
     func openRecents() {
-        let items: [CPListItem] = recents.map { d in
-            let it = CPListItem(text: d["name"] as? String ?? "Place", detailText: nil)
-            it.handler = { [weak self] _, done in self?.choose(d); done() }
-            return it
+        quickPicks { [weak self] picks in
+            guard let self = self else { return }
+            let items: [CPListItem] = picks.map { it in
+                it.handler = { [weak self] item, done in if let d = (item as? CPListItem)?.userInfo as? [String: Any] { self?.choose(d) }; done() }
+                return it
+            }
+            let t = CPListTemplate(title: "Places", sections: [CPListSection(items: items)])
+            t.emptyViewTitleVariants = ["No saved or recent places"]
+            t.emptyViewSubtitleVariants = ["Save Home or a favorite beach in the phone app"]
+            self.push(t)
         }
-        let t = CPListTemplate(title: "Recent", sections: [CPListSection(items: items)])
-        t.emptyViewTitleVariants = ["No recent destinations"]
-        interface?.pushTemplate(t, animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } })
     }
 
     // Trip preview
@@ -457,7 +496,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         if (interface?.templates.count ?? 0) > 1 { interface?.popToRootTemplate(animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } }) }
         guard let from = loc.location?.coordinate ?? Optional(mapVC.map.centerCoordinate) else { return }
         let to = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-        dest = (to, name)
+        dest = (to, name); destAddress = d["address"] as? String
         GCMBridge.shared.call("plan(f,t,m,false)", ["f": ["lat": from.latitude, "lon": from.longitude], "t": ["lat": lat, "lon": lon], "m": mode]) { [weak self] any in
             guard let self = self else { return }
             guard let p = GCMPlan(any) else {
@@ -526,9 +565,11 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let c = CPManeuver()
         let speed = plan?.speed ?? 9.8
         // longest first; CarPlay picks the variant that fits the guidance card
-        c.instructionVariants = [m.short, m.road.isEmpty ? m.short : m.road]  // short first keeps the card compact
-        c.dashboardInstructionVariants = [m.short]
-        c.notificationInstructionVariants = [m.text]
+        let arrive = CarPlayArrive.text(name: dest?.1, address: destAddress)
+        let short = m.type == "arrive" ? arrive : m.short, text = m.type == "arrive" ? arrive : m.text
+        c.instructionVariants = m.type == "arrive" ? [arrive, "Arrive"] : [m.short, m.road.isEmpty ? m.short : m.road]  // short first keeps the card compact
+        c.dashboardInstructionVariants = [short]
+        c.notificationInstructionVariants = [text]
         let cfg = UIImage.SymbolConfiguration(pointSize: 40, weight: .bold)
         c.symbolImage = UIImage(systemName: m.symbol, withConfiguration: cfg)?.withRenderingMode(.alwaysTemplate)
         c.dashboardSymbolImage = c.symbolImage
@@ -536,7 +577,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         c.initialTravelEstimates = estimates(m.toMeters, m.toMeters / speed)
         // No junctionImage: CarPlay draws it in place of the instruction text, and our road graph has no lane or
         // junction artwork worth showing at simple intersections. Junction geometry goes in junctionExitAngle below.
-        if m.risky { c.attributedInstructionVariants = [NSAttributedString(string: "⚠️ " + m.short)] }
+        if m.risky { c.attributedInstructionVariants = [NSAttributedString(string: "⚠️ " + short)] }
         c.userInfo = ["road": m.road, "mph": m.mph ?? 0]
         if #available(iOS 17.4, *) {
             c.maneuverType = m.cpType
@@ -590,10 +631,23 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         NSLog("GCMCarPlay reroute from %.5f,%.5f", here.coordinate.latitude, here.coordinate.longitude)
         if #available(iOS 15.4, *) { s.pauseTrip(for: .rerouting, description: "Rerouting on legal roads", turnCardColor: nil) } else { s.pauseTrip(for: .rerouting, description: "Rerouting on legal roads") }
         // Driving (>= 1.5 m/s with a valid course): replan forward on this road, no U-turn first (Max t433u).
-        let h: Any = (here.speed >= 1.5 && here.course >= 0) ? here.course : NSNull()
+        // t451u: build 41 used here.course only if >= 0 at >= 1.5 m/s right now, so slowing down (or iOS reporting -1)
+        // dropped the heading and the plan said turn around. Use the last good course from the past 10 s instead.
+        let hd = course.forReroute(now: here.timestamp.timeIntervalSince1970)
+        let h: Any = hd ?? NSNull()
+        NSLog("GCMCarPlay reroute heading %@ (gps course %.0f, speed %.1f)", hd.map { String(format: "%.0f", $0) } ?? "none", here.course, here.speed)
+        // If the web view never answers (e.g. iOS suspended it), resume the old guidance so the next check can retry.
+        rerouteTimeout?.invalidate()
+        rerouteTimeout = Timer.scheduledTimer(withTimeInterval: 12, repeats: false) { [weak self] _ in
+            guard let self = self, self.rerouting else { return }
+            NSLog("GCMCarPlay reroute timed out")
+            self.rerouting = false; self.offRoute.reset()
+            if let s = self.session, let p = self.plan { self.pushManeuvers(s, p) }
+        }
         GCMBridge.shared.call("plan(f,t,m,false,h)", ["f": ["lat": here.coordinate.latitude, "lon": here.coordinate.longitude], "t": ["lat": to.latitude, "lon": to.longitude], "m": mode, "h": h]) { [weak self] any in
-            guard let self = self else { return }
-            defer { self.rerouting = false; self.offRoute.reset() }
+            guard let self = self, self.rerouting else { return }
+            self.rerouteTimeout?.invalidate()
+            defer { self.rerouting = false; self.offRoute.reset(); self.wrongWay.reset() }
             guard let s = self.session, let p = GCMPlan(any) else {
                 NSLog("GCMCarPlay reroute failed")
                 if let s = self.session, let p = self.plan { self.pushManeuvers(s, p) }   // resume the old guidance
@@ -614,7 +668,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     func endTrip(arrived: Bool) {
         if arrived, session != nil { GCMBridge.shared.track("route_completed", ["mi": plan?.miles ?? 0]) }
         if arrived { session?.finishTrip() } else { session?.cancelTrip() }
-        session = nil; plan = nil; offRoute.reset(); rerouting = false
+        session = nil; plan = nil; offRoute.reset(); wrongWay.reset(); rerouting = false; rerouteTimeout?.invalidate()
         mapVC.guiding = false
         mapVC.map.removeOverlays(mapVC.map.overlays.filter { $0 is RouteLine })
         mapVC.map.removeAnnotations(mapVC.map.annotations.filter { $0 is DestPin })
@@ -623,34 +677,84 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         if arrived { celebrate(); tourArrived() } else { endTour() }
     }
 
-    // MARK: Arrival celebration (t446u): ~3 s of cartoon unicorns over our own map view, non-interactive,
-    // only after arrival. Falls back to a short alert if the map view is not on screen.
+    // MARK: Arrival celebration (t446u, longer and bigger in t451u): ~15 s of unicorns on varied wavy paths, confetti
+    // and a rainbow over our own map view, non-interactive, only after arrival. The banner sits centered in the safe
+    // area (below the nav bar buttons, which cut it off in build 41). Reduce Motion: banner only, 4 s, no flying.
+    // Falls back to a short alert if the map view is not on screen.
     func celebrate() {
         let host = mapVC.view!
         guard host.window != nil, let art = UIImage(named: "Unicorn") else {
             presentAlert(["Have a wonderful life, you legend! 🦄", "You made it! 🦄"], [CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in self?.dismiss() }])
             return
         }
+        let reduced = UIAccessibility.isReduceMotionEnabled, total = reduced ? CarPlayCelebrate.reducedSeconds : CarPlayCelebrate.seconds
         let layer = UIView(frame: host.bounds); layer.isUserInteractionEnabled = false
         layer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        let label = UILabel(); label.text = "Have a wonderful life, you legend! 🦄"
-        label.font = .systemFont(ofSize: 22, weight: .heavy); label.textColor = .white; label.textAlignment = .center
-        label.adjustsFontSizeToFitWidth = true; label.minimumScaleFactor = 0.5
-        label.backgroundColor = UIColor(red: 0.42, green: 0.25, blue: 0.75, alpha: 0.85); label.layer.cornerRadius = 14; label.clipsToBounds = true
         let b = host.bounds, safe = b.inset(by: host.safeAreaInsets)
-        label.frame = CGRect(x: safe.minX + 12, y: safe.minY + 10, width: safe.width - 24, height: 44)
-        layer.addSubview(label); host.addSubview(layer)
-        for i in 0..<3 {
-            let h = min(90, safe.height / 3.2), w = h * 1.2
-            let v = UIImageView(image: art); v.frame = CGRect(x: -w - CGFloat(i) * 70, y: safe.minY + 64 + CGFloat(i) * (h * 0.55), width: w, height: h)
-            layer.addSubview(v)
-            UIView.animate(withDuration: 2.6, delay: Double(i) * 0.15, options: [.curveEaseInOut]) { v.frame.origin.x = b.maxX + 20 }
-            UIView.animate(withDuration: 0.3, delay: 0, options: [.autoreverse, .repeat, .allowUserInteraction]) { v.transform = CGAffineTransform(translationX: 0, y: -8) }
+        host.addSubview(layer)
+        if !reduced {
+            // Rainbow arc behind everything
+            let arc = CAShapeLayer(), r = min(safe.width, safe.height * 1.6) * 0.48
+            arc.path = UIBezierPath(arcCenter: CGPoint(x: safe.midX, y: safe.maxY + r * 0.15), radius: r, startAngle: .pi, endAngle: 0, clockwise: true).cgPath
+            arc.fillColor = nil; arc.lineWidth = 0
+            let colors: [UIColor] = [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemBlue, .systemPurple]
+            for (i, col) in colors.enumerated() {
+                let band = CAShapeLayer()
+                band.path = UIBezierPath(arcCenter: CGPoint(x: safe.midX, y: safe.maxY + r * 0.15), radius: r - CGFloat(i) * 9, startAngle: .pi, endAngle: 0, clockwise: true).cgPath
+                band.fillColor = nil; band.strokeColor = col.withAlphaComponent(0.55).cgColor; band.lineWidth = 9; band.strokeEnd = 0
+                layer.layer.addSublayer(band)
+                let grow = CABasicAnimation(keyPath: "strokeEnd"); grow.fromValue = 0; grow.toValue = 1; grow.duration = 1.4; grow.beginTime = CACurrentMediaTime() + 0.2 + Double(i) * 0.08
+                grow.fillMode = .forwards; grow.isRemovedOnCompletion = false
+                band.add(grow, forKey: "grow")
+            }
+            // Confetti
+            let em = CAEmitterLayer(); em.emitterPosition = CGPoint(x: safe.midX, y: safe.minY - 6); em.emitterShape = .line
+            em.emitterSize = CGSize(width: safe.width, height: 1); em.frame = b
+            em.emitterCells = colors.map { col in
+                let c = CAEmitterCell(); c.birthRate = 6; c.lifetime = 7; c.velocity = 90; c.velocityRange = 40; c.emissionLongitude = .pi
+                c.emissionRange = .pi / 5; c.spin = 3; c.spinRange = 4; c.scale = 0.6; c.scaleRange = 0.3; c.yAcceleration = 40
+                c.color = col.cgColor; c.contents = UIGraphicsImageRenderer(size: CGSize(width: 10, height: 6)).image { ctx in UIColor.white.setFill(); ctx.fill(CGRect(x: 0, y: 0, width: 10, height: 6)) }.cgImage
+                return c
+            }
+            layer.layer.addSublayer(em)
+            DispatchQueue.main.asyncAfter(deadline: .now() + total - 3) { em.birthRate = 0 }
+            // Unicorns: 8 of them on different lanes, sizes, speeds and directions, each bobbing on its own wave.
+            for (i, ln) in CarPlayCelebrate.lanes(count: 8, safe: safe).enumerated() {
+                let v = UIImageView(image: art), w = ln.size * 1.2
+                v.frame = CGRect(x: ln.rtl ? b.maxX + 10 : -w - 10, y: ln.y, width: w, height: ln.size)
+                if ln.rtl { v.transform = CGAffineTransform(scaleX: -1, y: 1) }
+                layer.addSubview(v)
+                let path = UIBezierPath(), x0 = ln.rtl ? b.maxX + w : -w, x1 = ln.rtl ? -w : b.maxX + w, yc = ln.y + ln.size / 2
+                path.move(to: CGPoint(x: x0, y: yc))
+                let hops = 4
+                for k in 1...hops {
+                    let xe = x0 + (x1 - x0) * CGFloat(k) / CGFloat(hops), xm = x0 + (x1 - x0) * (CGFloat(k) - 0.5) / CGFloat(hops)
+                    path.addQuadCurve(to: CGPoint(x: xe, y: yc), controlPoint: CGPoint(x: xm, y: yc - ln.amp * (k % 2 == 0 ? -1 : 1) * 2))
+                }
+                let fly = CAKeyframeAnimation(keyPath: "position"); fly.path = path.cgPath; fly.duration = ln.dur
+                fly.repeatCount = Float(max(1, (total - 1.5 - ln.delay) / ln.dur).rounded(.down))
+                fly.beginTime = CACurrentMediaTime() + ln.delay; fly.fillMode = .backwards
+                v.layer.add(fly, forKey: "fly")
+                let spin = CABasicAnimation(keyPath: "transform.rotation.z"); spin.fromValue = -0.12; spin.toValue = 0.12
+                spin.duration = 0.35 + Double(i % 3) * 0.1; spin.autoreverses = true; spin.repeatCount = .infinity
+                v.layer.add(spin, forKey: "wiggle")
+            }
+        }
+        let label = UILabel(); label.text = "Have a wonderful life, you legend! 🦄"
+        label.font = .systemFont(ofSize: 24, weight: .heavy); label.textColor = .white; label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true; label.minimumScaleFactor = 0.5
+        label.backgroundColor = UIColor(red: 0.42, green: 0.25, blue: 0.75, alpha: 0.9); label.layer.cornerRadius = 16; label.clipsToBounds = true
+        label.frame = CarPlayCelebrate.bannerFrame(bounds: b, safe: safe)
+        layer.addSubview(label)
+        if !reduced {
+            label.transform = CGAffineTransform(scaleX: 0.3, y: 0.3)
+            UIView.animate(withDuration: 0.6, delay: 0.1, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.8, options: []) { label.transform = .identity }
+            UIView.animate(withDuration: 0.9, delay: 0.8, options: [.autoreverse, .repeat, .allowUserInteraction]) { label.transform = CGAffineTransform(scaleX: 1.05, y: 1.05) }
         }
         #if DEBUG
-        NSLog("GCMCarPlay celebrate")
+        NSLog("GCMCarPlay celebrate %.0fs banner=%@ safe=%@", total, NSCoder.string(for: label.frame), NSCoder.string(for: safe))
         #endif
-        UIView.animate(withDuration: 0.4, delay: 3.0, options: []) { layer.alpha = 0 } completion: { _ in layer.removeFromSuperview() }
+        UIView.animate(withDuration: 0.6, delay: total - 0.6, options: []) { layer.alpha = 0 } completion: { _ in layer.removeFromSuperview() }
     }
 
     func presentAlert(_ titles: [String], _ actions: [CPAlertAction]) {
@@ -757,6 +861,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             startFollowing(animated: true)
         }
         UserDefaults.standard.set([here.coordinate.latitude, here.coordinate.longitude], forKey: Self.savedKey)
+        course.update(lat: here.coordinate.latitude, lon: here.coordinate.longitude, course: here.course, speed: here.speed,
+                      accuracy: here.horizontalAccuracy, now: here.timestamp.timeIntervalSince1970)
         // North-up / browsing: chevron follows GPS course (guidance also updates it in headingUp).
         if here.course >= 0 { mapVC.puck?.point(heading: here.course, mapHeading: mapVC.map.camera.heading) }
         progress(here)
@@ -769,16 +875,18 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         trimRoute(here, pts: pts, off: off)
         if !rerouting, here.horizontalAccuracy >= 0, here.horizontalAccuracy < 50 {
             if offRoute.update(offMeters: off, now: here.timestamp.timeIntervalSince1970) { reroute(from: here); return }
+            // Wrong way on the route line itself (t451u): course against the route for 5 s.
+            let now = here.timestamp.timeIntervalSince1970
+            if wrongWay.update(course: course.forReroute(now: now), speed: here.speed, routeBearing: CarPlayHeading.routeBearing(from: me, line: pts),
+                               onRoute: off <= CarPlayOffRoute.offM, now: now) { reroute(from: here); return }
         }
         let next = p.maneuvers[step]
         let d = here.distance(from: CLLocation(latitude: next.coord.latitude, longitude: next.coord.longitude))
-        // Passed it without coming within 25 m (GPS jitter or a cut corner): we're already closer to the one after.
-        var passed = false
-        if step + 1 < p.maneuvers.count {
-            let after = CLLocation(latitude: p.maneuvers[step + 1].coord.latitude, longitude: p.maneuvers[step + 1].coord.longitude)
-            passed = d < 60 && here.distance(from: after) < after.distance(from: CLLocation(latitude: next.coord.latitude, longitude: next.coord.longitude))
-        }
-        if d < 25 || passed {
+        // t451u: advance only once the driver is past the turn on the new road, heading along it (or 20 m down it).
+        // Build 41 advanced within 25 m, i.e. before the turn.
+        let c = here.course >= 0 ? here.course : course.forReroute(now: here.timestamp.timeIntervalSince1970)
+        if CarPlayAdvance.done(lat: me.0, lon: me.1, course: c, speed: here.speed, turnLat: next.coord.latitude, turnLon: next.coord.longitude,
+                               outBrg: next.outBrg, arrive: next.type == "arrive") {
             if next.type == "arrive" { endTrip(arrived: true); return }
             step += 1
             pushManeuvers(s, p)

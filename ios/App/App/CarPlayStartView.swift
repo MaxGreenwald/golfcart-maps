@@ -184,3 +184,137 @@ struct CarPlayTour {
         return parts.joined(separator: " · ")
     }
 }
+
+/// Course a reroute should honor (Max t451u). Build 41 read CLLocation.course only at the instant the 5 s
+/// off-route timer fired and dropped it under 1.5 m/s or when iOS reported -1, so a driver who slowed while
+/// realizing the mistake got a plan in any direction (usually "turn around"). Same rule as the phone
+/// (navfollow.js travelCourse): the last good course from the past 10 s, from GPS or from our own movement.
+struct CarPlayCourse {
+    static let movingMS = 1.5, freshS = 10.0, stepM = 8.0, stoppedMS = 0.3
+    private(set) var course: Double? = nil
+    private var at = -Double.infinity
+    private var anchor: (lat: Double, lon: Double, t: Double)? = nil
+    private var speed = -1.0
+    mutating func update(lat: Double, lon: Double, course c: Double, speed v: Double, accuracy: Double, now: Double) {
+        speed = v
+        if c >= 0, v >= Self.movingMS { course = c; at = now; anchor = (lat, lon, now); return }
+        guard accuracy >= 0, accuracy <= 30 else { return }
+        guard let a = anchor, now - a.t <= Self.freshS else { anchor = (lat, lon, now); return }
+        let d = CarPlayGeo.meters(a.lat, a.lon, lat, lon)
+        if d >= max(Self.stepM, accuracy) { course = CarPlayGeo.bearing(a.lat, a.lon, lat, lon); at = now; anchor = (lat, lon, now) }
+    }
+    /// nil when there is no course from the past 10 s, or GPS says we are stopped (then any direction is fine).
+    func forReroute(now: Double) -> Double? {
+        guard let c = course, now - at <= Self.freshS else { return nil }
+        if speed >= 0, speed < Self.stoppedMS { return nil }
+        return c
+    }
+}
+
+enum CarPlayGeo {
+    static func meters(_ a: Double, _ b: Double, _ c: Double, _ d: Double) -> Double {
+        let k = cos((a + c) / 2 * .pi / 180) * 111_320.0
+        let x = (d - b) * k, y = (c - a) * 110_540.0
+        return (x * x + y * y).squareRoot()
+    }
+    static func bearing(_ a: Double, _ b: Double, _ c: Double, _ d: Double) -> Double {
+        let x = (d - b) * cos((a + c) / 2 * .pi / 180), y = c - a
+        return (atan2(x, y) * 180 / .pi + 360).truncatingRemainder(dividingBy: 360)
+    }
+    static func diff(_ a: Double, _ b: Double) -> Double { abs((a - b + 540).truncatingRemainder(dividingBy: 360) - 180) }
+}
+
+/// Driving against the route while still on its line never counted as off route in build 41 (the line is under
+/// you), so no reroute. Course more than 120 degrees from the route bearing, moving, for 5 s straight -> reroute.
+struct CarPlayWrongWay {
+    static let minDiff = 120.0, holdS = 5.0
+    private var since: Double? = nil
+    mutating func update(course: Double?, speed: Double, routeBearing: Double?, onRoute: Bool, now: Double) -> Bool {
+        guard onRoute, let c = course, let r = routeBearing, speed >= CarPlayCourse.movingMS, CarPlayGeo.diff(c, r) > Self.minDiff else { since = nil; return false }
+        if since == nil { since = now }
+        if now - since! >= Self.holdS { since = nil; return true }
+        return false
+    }
+    mutating func reset() { since = nil }
+}
+
+/// When to move the card past a maneuver (Max t451u: "it assumed I turned before I did"). Build 41 advanced
+/// within 25 m of the turn point, i.e. before the turn. Now: past the turn point on the outgoing road, and
+/// either heading along it (within 35 degrees) or 20 m down it. Arrival keeps the 25 m radius.
+enum CarPlayAdvance {
+    static let pastM = 5.0, sureM = 20.0, crossM = 20.0, headingDeg = 35.0, arriveM = 25.0, nearM = 120.0
+    /// along/cross: meters from the turn point along outBrg and to its side.
+    static func frame(lat: Double, lon: Double, turnLat: Double, turnLon: Double, outBrg: Double) -> (along: Double, cross: Double) {
+        let k = cos(turnLat * .pi / 180) * 111_320.0
+        let x = (lon - turnLon) * k, y = (lat - turnLat) * 110_540.0, r = outBrg * .pi / 180
+        return (x * sin(r) + y * cos(r), x * cos(r) - y * sin(r))
+    }
+    static func done(lat: Double, lon: Double, course: Double?, speed: Double, turnLat: Double, turnLon: Double, outBrg: Double?, arrive: Bool) -> Bool {
+        if arrive { return CarPlayGeo.meters(lat, lon, turnLat, turnLon) < arriveM }
+        guard let ob = outBrg else { return CarPlayGeo.meters(lat, lon, turnLat, turnLon) < arriveM }
+        let f = frame(lat: lat, lon: lon, turnLat: turnLat, turnLon: turnLon, outBrg: ob)
+        guard abs(f.cross) <= crossM, f.along >= pastM else { return false }
+        if f.along >= sureM { return true }
+        guard let c = course, speed >= 1 else { return false }
+        return CarPlayGeo.diff(c, ob) <= headingDeg
+    }
+}
+
+/// "Arrive at Destiny Coast" (Max t451u): the place name, else its address, else "destination".
+enum CarPlayArrive {
+    static func text(name: String?, address: String?) -> String {
+        let n = (name ?? "").trimmingCharacters(in: .whitespaces), a = (address ?? "").trimmingCharacters(in: .whitespaces)
+        let bad: Set<String> = ["", "Place", "Stop", "Dropped pin"]
+        return "Arrive at " + (!bad.contains(n) ? n : !a.isEmpty ? a : "destination")
+    }
+}
+
+/// Arrival celebration layout (Max t451u): ~15 s, banner centered in the CarPlay safe area (below the nav bar
+/// buttons), never wider than the safe area.
+enum CarPlayCelebrate {
+    static let seconds = 15.0, reducedSeconds = 4.0
+    static func bannerFrame(bounds: CGRect, safe: CGRect) -> CGRect {
+        let s = safe.width > 0 && safe.height > 0 ? safe : bounds
+        let w = min(s.width - 32, 520), h: CGFloat = s.height < 300 ? 52 : 64
+        return CGRect(x: s.midX - w / 2, y: s.midY - h / 2, width: w, height: h).integral
+    }
+    /// Lanes for the unicorns: rows spread over the safe area, each a different speed, height and wave.
+    static func lanes(count: Int, safe: CGRect) -> [(y: CGFloat, size: CGFloat, delay: Double, dur: Double, amp: CGFloat, rtl: Bool)] {
+        (0..<count).map { i in
+            let row = CGFloat(i % 4), size = min(96, safe.height / 4.2) * (i % 3 == 0 ? 1 : i % 3 == 1 ? 0.8 : 0.65)
+            let y = safe.minY + 8 + row * (safe.height - size - 16) / 3
+            return (y, size, Double(i) * 0.9, 3.2 + Double(i % 3) * 0.9, 10 + CGFloat(i % 4) * 6, i % 2 == 1)
+        }
+    }
+}
+
+/// CarPlay search list (Max t451u): Apple owns the keyboard and how many rows fit, so we keep rows short and
+/// put the best matches first. Titles <= 28 chars, subtitles <= 32, at most 12 results.
+enum CarPlaySearchText {
+    static let titleMax = 28, subMax = 32, maxResults = 12
+    static func clip(_ s: String?, _ n: Int) -> String? {
+        guard let s = s?.trimmingCharacters(in: .whitespacesAndNewlines), !s.isEmpty else { return nil }
+        return s.count <= n ? s : String(s.prefix(n - 1)).trimmingCharacters(in: .whitespaces) + "…"
+    }
+    /// Drops the country and ZIP from an Apple Maps address: "123 Main St, San Diego, CA 92109, United States" -> "123 Main St, San Diego".
+    static func shortAddress(_ s: String?) -> String? {
+        guard let s = s else { return nil }
+        let parts = s.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+        return clip(parts.prefix(2).joined(separator: ", "), subMax)
+    }
+    /// Prefix matches first, then word-start matches, then the rest; nearer first within each group.
+    static func rank(_ names: [(name: String, meters: Double?)], query: String) -> [Int] {
+        let q = query.lowercased().trimmingCharacters(in: .whitespaces)
+        func score(_ n: String) -> Int {
+            let l = n.lowercased()
+            if l.hasPrefix(q) { return 0 }
+            if l.contains(" " + q) { return 1 }
+            return 2
+        }
+        return names.indices.sorted { a, b in
+            let sa = score(names[a].name), sb = score(names[b].name)
+            if sa != sb { return sa < sb }
+            return (names[a].meters ?? .infinity) < (names[b].meters ?? .infinity)
+        }
+    }
+}
