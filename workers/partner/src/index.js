@@ -1,7 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
-import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle } from '../../../lib/partner.js';
+import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart } from '../../../lib/partner.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -107,6 +107,9 @@ export class PartnerStore extends DurableObject {
     // Per-shop rental vehicle (road rules on /p/<slug>). Added Oct 29 2026.
     const cols = this.sql.exec('PRAGMA table_info(shops)').toArray().map(c => c.name);
     if (!cols.includes('vehicle')) this.sql.exec("ALTER TABLE shops ADD COLUMN vehicle TEXT DEFAULT ''");
+    // Per-experience nearest-stop start (on by default; existing rows read 1). Added Oct 31 2026.
+    const exCols = this.sql.exec('PRAGMA table_info(experiences)').toArray().map(c => c.name);
+    if (!exCols.includes('nearest_start')) this.sql.exec('ALTER TABLE experiences ADD COLUMN nearest_start INTEGER NOT NULL DEFAULT 1');
   }
   q(s, ...a) { return this.sql.exec(s, ...a).toArray(); }
   one(s, ...a) { return this.q(s, ...a)[0] || null; }
@@ -124,7 +127,7 @@ export class PartnerStore extends DurableObject {
     if (!r) return null;
     let stops = [];
     try { stops = JSON.parse(r.stops_json || '[]'); } catch { stops = []; }
-    return { id: r.id, shop_id: r.shop_id, title: r.title, description: r.description || '', stops, created_at: r.created_at, updated_at: r.updated_at };
+    return { id: r.id, shop_id: r.shop_id, title: r.title, description: r.description || '', stops, nearest_start: nearestStart(r.nearest_start), created_at: r.created_at, updated_at: r.updated_at };
   }
   placeRow(r) {
     if (!r) return null;
@@ -241,8 +244,8 @@ export class PartnerStore extends DurableObject {
         const eid = id();
         const t = now();
         this.sql.exec(
-          'INSERT INTO experiences(id,shop_id,title,description,stops_json,created_at,updated_at) VALUES(?,?,?,?,?,?,?)',
-          eid, sid, title, String(body.description || ''), JSON.stringify(stops), t, t,
+          'INSERT INTO experiences(id,shop_id,title,description,stops_json,nearest_start,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?)',
+          eid, sid, title, String(body.description || ''), JSON.stringify(stops), nearestStart(body.nearest_start) ? 1 : 0, t, t,
         );
         return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)) }, 201);
       }
@@ -253,7 +256,8 @@ export class PartnerStore extends DurableObject {
         const title = body.title != null ? String(body.title).trim() : ex.title;
         const description = body.description != null ? String(body.description) : ex.description;
         const stops = body.stops != null ? JSON.stringify(body.stops) : ex.stops_json;
-        this.sql.exec('UPDATE experiences SET title=?, description=?, stops_json=?, updated_at=? WHERE id=?', title, description, stops, now(), eid);
+        const ns = body.nearest_start != null ? (nearestStart(body.nearest_start) ? 1 : 0) : (nearestStart(ex.nearest_start) ? 1 : 0);
+        this.sql.exec('UPDATE experiences SET title=?, description=?, stops_json=?, nearest_start=?, updated_at=? WHERE id=?', title, description, stops, ns, now(), eid);
         return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)) });
       }
       if (path.match(/^\/(experiences|affiliates|places)\/[^/]+\/owner$/) && method === 'GET') {
