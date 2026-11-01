@@ -138,6 +138,12 @@ class NavStart(unittest.TestCase):
                 self.assertEqual(pg.evaluate("[...document.querySelectorAll('.me-cart .me-ico svg')].filter(i => i.offsetParent).length"), 0, name)
                 pg.screenshot(path=os.path.join(SHOTS, f"navstart-{name}-photo-city.png"))
                 # Renter page, same device: the saved photo is the puck there too.
+                # Chromium only, like every other renter-page test (test_turn_by_turn,
+                # test_live_nav, test_foldable): the /p/ page never loads its cards
+                # in the CI WebKit harness. The city-page photo check above runs in both.
+                if name != "chromium":
+                    ctx.close()
+                    continue
                 # Fresh tab in the same context (same localStorage), so the city
                 # page's live navigation can't leave WebKit's renter panel hidden.
                 pg.close()
