@@ -1,6 +1,6 @@
 import Foundation
 // CarPlay start-view logic test (top-level code needs the file to be named main.swift)
-// Run: swiftc ios/App/App/CarPlayStartView.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
+// Run: swiftc ios/App/App/CarPlayStartView.swift ios/App/App/CarPlayRentalCode.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
 var fails = 0
 func ck(_ name: String, _ ok: Bool) { print((ok ? "PASS " : "FAIL ") + name); if !ok { fails += 1 } }
 let json = try! Data(contentsOf: URL(fileURLWithPath: "public/data/regions.json"))
@@ -74,4 +74,9 @@ ck("tour next stop in order", tour.advance()?.name == "B" && tour.isLast)
 ck("tour ends after the last stop", tour.advance() == nil)
 ck("stop detail short", CarPlayTour.detail(category: "fun_fact", meters: 650, coupon: "BAR10", speed: 9) == "Fun Fact · 0.4 mi")
 ck("coupon only when parked", CarPlayTour.detail(category: "", meters: nil, coupon: "BAR10", speed: 0) == "Code BAR10")
+// Rental code in CarPlay (Max t449u).
+ck("code normalized", CarPlayRentalCode.normalize(" ab12-cd3 ") == "AB12CD3")
+ck("short or junk is not a code", CarPlayRentalCode.normalize("ab") == nil && CarPlayRentalCode.normalize("<x>!") == nil)
+ck("typing a code offers one Unlock row", CarPlayRentalCode.rows(for: "ab12cd3").map { $0.code } == ["AB12CD3"])
+ck("before a code: hint row points to the phone", CarPlayRentalCode.rows(for: "a").first?.code == nil && CarPlayRentalCode.rows(for: "a").first?.detail == CarPlayRentalCode.phoneHint)
 exit(fails == 0 ? 0 : 1)
