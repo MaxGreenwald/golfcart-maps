@@ -20,7 +20,7 @@ const routeR=L.svg({pane:'route'});
 const $=id=>document.getElementById(id);
 const RISKY_MAX=152.4; // 500 ft risky-mode cap. Stretches of SHORT_LEGAL_FT (router.js) are legal.
 let REGIONS=[],RULES={},REG=null,MODE=(()=>{const q=new URLSearchParams(location.search).get('veh');if(GCMRule.VEHICLES.includes(q))return q;try{const v=localStorage.getItem('gcm-veh');if(GCMRule.VEHICLES.includes(v))return v}catch(_){}return GCMRule.DEFAULT_VEH})(),RULE={max_posted:35,cross:true},BASE='data/sd/';
-let D,risky=false,layer,start=null,end=null,routeG=null,mk=[];
+let D,risky=false,layer,start=null,end=null,routeG=null,mk=[],routeLines=[],routeFull=null,navFlag=null;
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden (posted >=40 or untagged major)
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden. Cart paths ('c') always ok; designated ('d') ok in designated-only cart mode.
 // the rule itself lives in roadrule.js (one module, per vehicle type: MODE 'golf_cart' or 'lsv')
@@ -115,9 +115,8 @@ let routing=false;async function route(){$('title').innerHTML='<span class="spin
  // Outer dark edge, then white, then the solid stroke. Risky keeps that casing
  // and repaints the stroke yellow at the same width.
  const rs={renderer:routeR,opacity:1,lineCap:'round',lineJoin:'round'};
- L.polyline(ll,{...rs,color:'#0b3a78',weight:22,interactive:false}).addTo(routeG);
- L.polyline(ll,{...rs,color:'#fff',weight:18,interactive:false}).addTo(routeG);
- L.polyline(ll,{...rs,color:'#1d6fe0',weight:12,interactive:false}).addTo(routeG);
+ // Kept so navigation can trim the line behind the rider (Max t446u, navTrim).
+ routeLines=[['#0b3a78',22],['#fff',18],['#1d6fe0',12]].map(([color,weight])=>L.polyline(ll,{...rs,color,weight,interactive:false}).addTo(routeG));routeFull=ll;
  r.stretches.forEach(s=>L.polyline(s.p.map(p=>[p[1],p[0]]),{...rs,color:'#ffc400',weight:12}).addTo(routeG).bindTooltip(`Risky: ${ft(s.len)} on ${s.name}`));
  const min=Math.max(1,Math.round(r.dist/1609.34/22*60));
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
@@ -143,7 +142,7 @@ function focusStart(){if(!start)return;const sz=map.getSize(),Z=16,top=$('top').
  const want=L.point((x0+x1)/2,(y0+y1)/2),off=want.subtract(sz.divideBy(2));
  const c=map.unproject(map.project(start,Z).subtract(off),Z);window._focus={x:want.x,y:want.y};map.flyTo(c,Z,{duration:0.8})}
 window.focusStart=focusStart;
-const pinIcon=(c,e)=>L.divIcon({className:'',html:`<div class="pin" style="background:${c}"><span>${e}</span></div>`,iconSize:[30,30],iconAnchor:[15,30]});
+const pinIcon=(c,e)=>L.divIcon({className:c==='#ff7a59'?'gcm-to-pin':'',html:`<div class="pin" style="background:${c}"><span>${e}</span></div>`,iconSize:[30,30],iconAnchor:[15,30]});
 // ---- route state: From/To fields (Google-Maps style). A point is {ll,label,me}; me=true means live GPS ("Your location").
 let from=null,to=null,active=null; // active: field that the next map tap fills ('from'|'to'|null)
 const P=x=>x?(x.me?myLL:x.ll):null;
@@ -418,7 +417,10 @@ function liveNavSet(r){liveSteps=null;navPlan.reset();window._liveNav=null;
  if(r){const runs=r.legs.map(l=>({name:D.names[l.s[0]]||'',points:l.p.map(p=>[p[1],p[0]])}));liveSteps=GCMNav.buildSteps(runs,($('q').value||'').trim()||'your destination',{continuing:!!r.ahead});window._liveNav=liveSteps}
  if(follow)follow.preview(!!liveSteps);if(!liveSteps&&$('mapNav'))$('mapNav').classList.remove('show');
  if(liveSteps&&navOn()&&myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
-function liveNavFix(c){if(follow)follow.fix(c);if(!navOn()||!liveSteps)return;const st=GCMNav.status(liveSteps,[c.latitude,c.longitude]);const el=navBar();el.classList.add('show');
+// Max t446u: only the road still ahead stays blue; the part you drove disappears.
+function navTrim(along){const p=along>0&&liveSteps?GCMNavFx.trim(liveSteps.pts,along):routeFull;if(p&&p.length>1)routeLines.forEach(l=>l.setLatLngs(p))}
+function liveNavFix(c){if(follow)follow.fix(c);if(!navOn()||!liveSteps)return;const st=GCMNav.status(liveSteps,[c.latitude,c.longitude]);if(!window._navRerouting&&st.off<GCMNav.OFF_ROUTE_M)navTrim(st.along);
+ if(st.arrived&&!window._navRerouting)GCMNavFx.arrive(liveSteps,{place:($('q').value||'').trim(),say:navSay});const el=navBar();el.classList.add('show');
  if(window._navRerouting)return;
  $('mapNavT').textContent=st.arrived?liveSteps.steps[liveSteps.steps.length-1].text:st.text;$('mapNavS').textContent=st.arrived?'':GCMNav.fmtDist(st.remaining).replace('Now','under 50 ft')+' to go';if(follow)follow.eta(st.arrived?0:st.remaining,c.speed);
  if(st.arrived)navSay($('mapNavT').textContent);else{const t=navPlan.update(st,c.speed);if(t)navSay(t)}}
@@ -426,8 +428,8 @@ async function liveReroute(ll,course){window._navRerouting=true;routeHeading=Num
  try{if(!(from&&from.me)){from={me:true}}sync();await route()}finally{window._navRerouting=false}if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
 const follow=GCMFollow.controller({map,getRoute:()=>liveSteps,reroute:liveReroute,say:navSay,
  canStart:()=>!!liveSteps,
- onStart:()=>{liveSaid='';navPlan.reset();if(!watching)locate();setSnap('collapsed');navBar().classList.add('show');$('mapNavT').textContent=liveSteps.steps[0].text;$('mapNavS').textContent='';navSay(liveSteps.steps[0].text);if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})},
- onEnd:()=>{if($('mapNav'))$('mapNav').classList.remove('show');navVoice.stop();setSnap('half')}});
+ onStart:()=>{liveSaid='';navPlan.reset();GCMNavFx.resetTrip();if(navFlag)navFlag.remove();const fl=end||(liveSteps&&liveSteps.pts[liveSteps.pts.length-1]);navFlag=fl?GCMNavFx.flag(L,map,fl):null;if(!watching)locate();setSnap('collapsed');navBar().classList.add('show');$('mapNavT').textContent=liveSteps.steps[0].text;$('mapNavS').textContent='';navSay(liveSteps.steps[0].text);if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})},
+ onEnd:()=>{if(navFlag){navFlag.remove();navFlag=null}navTrim(0);if($('mapNav'))$('mapNav').classList.remove('show');navVoice.stop();setSnap('half')}});
 window.gcmFollow=follow;
 // Tap a step to zoom to where it starts; this pauses follow until Recenter.
 $('steps').addEventListener('click',e=>{const d=e.target.closest('.st[data-ll]');if(!d)return;const [a,b]=d.dataset.ll.split(',').map(Number);follow.pause();map.setView([a,b],18)});

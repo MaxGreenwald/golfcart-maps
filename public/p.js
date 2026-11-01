@@ -455,9 +455,14 @@ function addRouteLine(points, layer, dashed) {
     L.polyline(points, { ...base, color: '#1d6fe0', weight: 3, opacity: 0.75, dashArray: '4 8' }).addTo(layer);
     return;
   }
-  L.polyline(points, { ...base, color: '#0b3a78', weight: 22 }).addTo(layer);
-  L.polyline(points, { ...base, color: '#fff', weight: 18 }).addTo(layer);
-  L.polyline(points, { ...base, color: '#1d6fe0', weight: 12 }).addTo(layer);
+  const lines = [['#0b3a78', 22], ['#fff', 18], ['#1d6fe0', 12]].map(([color, weight]) => L.polyline(points, { ...base, color, weight }).addTo(layer));
+  if (layer === liveLayer) { navLines = lines; navFull = points; }
+}
+// Max t446u: during navigation only the road ahead stays blue; along = metres driven on navRoute.
+let navLines = [], navFull = null, navFlagMk = null;
+function trimNav(along) {
+  const p = along > 0 && navRoute ? GCMNavFx.trim(navRoute.pts, along) : navFull;
+  if (p && p.length > 1) navLines.forEach(l => l.setLatLngs(p));
 }
 
 // The shop's rental vehicle picks the road rules. Unset means golf cart (stricter).
@@ -623,6 +628,8 @@ window.GCMNavDebug = () => navRoute && { pts: navRoute.pts, steps: navRoute.step
 function stopNav() {
   if (navWatch != null && navigator.geolocation) navigator.geolocation.clearWatch(navWatch);
   navWatch = null; navRoute = null; navState = null; navStop = -1; navArrived = false;
+  if (navFlagMk) { navFlagMk.remove(); navFlagMk = null; }
+  trimNav(0);
   const el = document.getElementById('navBanner');
   if (el) el.classList.remove('show');
   document.body.classList.remove('has-nav');
@@ -635,6 +642,11 @@ function beginNav(leg, i, target) {
   const runs = leg.runs && leg.runs.length ? leg.runs : [{ name: '', points: leg.points }];
   navRoute = GCMNav.buildSteps(runs, stop.label || `stop ${i + 1}`, { continuing: !!leg.ahead });
   navStop = target ? -1 : i; navState = null; navArrived = false; navSpoken = ''; navPlan.reset();
+  GCMNavFx.resetTrip();
+  // Finish flag: the free-ride destination, or the experience's last stop.
+  if (navFlagMk) navFlagMk.remove();
+  const end = target || (stops || []).filter(s => finite(s.lat, s.lon)).pop();
+  navFlagMk = end && map ? GCMNavFx.flag(L, map, [+end.lat, +end.lon]) : null;
   const el = navEl();
   el.classList.add('show');
   document.body.classList.add('has-nav');
@@ -675,12 +687,14 @@ async function onNavFix(ll) {
   if (!navRoute || navArrived || navRerouting) return;
   const st = GCMNav.status(navRoute, [ll.lat, ll.lon], navState);
   navState = st;
+  if (st.off < GCMNav.OFF_ROUTE_M) trimNav(st.along);
   const stops = (activeEx && activeEx.stops) || [];
   if (st.arrived && navStop < 0) {
     navArrived = true;
     paintNav('⚑', `You’ve arrived at ${freeDest.label}`, 'Back to experiences any time.');
     navEl().querySelector('#navGo').hidden = true;
     say(`You’ve arrived at ${freeDest.label}.`);
+    GCMNavFx.arrive(navRoute, { place: freeDest.label, say });
     return;
   }
   if (st.arrived) {
@@ -695,6 +709,7 @@ async function onNavFix(ll) {
       go.onclick = () => routeToStop(nxt);
     } else go.hidden = true;
     say(`You’ve arrived at ${here.label || 'the stop'}.` + (nxt >= 0 ? ` Next stop: ${stops[nxt].label || ''}.` : ''));
+    if (nxt < 0) GCMNavFx.arrive(navRoute, { place: here.label || '', say });
     return;
   }
   // Off route: GCMFollow waits ~5 s past 30 m, then calls navReroute (debounced).

@@ -413,6 +413,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
         // dead zone near straight up/down so the cart does not flicker), else keep the last side.
         const mbv = mb != null ? Math.round(((mb % 360) + 360) % 360) : 0;
         if (h != null) flip = faceSide(h, mbv, flip);
+        document.documentElement.style.setProperty('--gcm-mb', mbv + 'deg'); // keeps the finish flag upright (navfx.js)
         document.querySelectorAll('.me-wrap').forEach(el => {
           el.classList.toggle('has-hd', h != null);
           if (h != null) el.style.setProperty('--hd', h + 'deg');
