@@ -85,7 +85,25 @@ class LiveNav(unittest.TestCase):
     CLUTTER = {"map": ["#top", "#chips", "#city", "#cNorm", "#cRisk", "#loc", "#sheet", "#range"],
                "renter": [".sheet", "header.top", "#goQ"]}
 
+    def assert_puck(self, pg, tag):
+        """Max t426u: the side-view cart stays upright on screen, faces the way it moves, and the chevron points along the heading."""
+        r = pg.evaluate("""(() => {
+          const ang = el => { const m = new DOMMatrix(getComputedStyle(el).transform); return Math.atan2(m.b, m.a) * 180 / Math.PI; };
+          const scr = el => { let a = 0; for (let e = el; e; e = e.parentElement) { const t = getComputedStyle(e).transform; if (t && t !== 'none') a += ang(e); } return ((a % 360) + 360) % 360; };
+          const w = document.querySelector('.me-wrap'), cart = w.querySelector('.me-cart'), chev = w.querySelector('.me-chev'), ico = w.querySelector('.me-ico');
+          const mb = window.gcmFollowState().mapBearing || 0, hd = parseFloat(getComputedStyle(w).getPropertyValue('--hd'));
+          const s = ((hd - mb) % 360 + 360) % 360;
+          return { cart: scr(cart) - (getComputedStyle(ico).transform.startsWith('matrix(-1') ? 180 : 0), chev: scr(chev), want: s,
+                   flip: new DOMMatrix(getComputedStyle(ico).transform).a, sx: Math.sin(s * Math.PI / 180) };
+        })()""")
+        d = lambda a, b: abs(((a - b) % 360 + 540) % 360 - 180)
+        self.assertLess(d(r["cart"] % 360, 0), 1.5, ("upright", tag, r))
+        self.assertLess(d(r["chev"], r["want"]), 1.5, ("chevron", tag, r))
+        if abs(r["sx"]) > 0.2:
+            self.assertEqual(r["flip"], -1 if r["sx"] > 0 else 1, ("flip side", tag, r))
+        return r
     @classmethod
+
     def setUpClass(cls):
         cls.srv = _S(("127.0.0.1", 0), functools.partial(_Quiet, directory=PUB))
         threading.Thread(target=cls.srv.serve_forever, daemon=True).start()
@@ -163,17 +181,14 @@ class LiveNav(unittest.TestCase):
         cb = pg.locator(".me-cart").bounding_box()
         self.assertTrue(cb and cb["width"] >= 40 and cb["height"] >= 40, (tag, cb))
         self.assertFalse(pg.is_visible(".me-wrap .me-dot"), tag)
+        self.assert_puck(pg, tag)
         # Panning pauses follow and goes back to north-up; Recenter brings it back.
         drag(pg, cdp, 200, 320, 0, -120)
         self.assertTrue(pg.is_visible("#navRecenter"), tag)
         pg.wait_for_timeout(300)
         self.assertEqual(pg.evaluate("window.gcmFollowState().mapBearing"), 0, tag)
         self.assertEqual(pg.evaluate("document.querySelector('.gcm-rot').style.transform"), "", tag)
-        # North-up now: the cart turns with the heading (its angle on screen equals --hd).
-        ang = pg.evaluate("""(() => { const m = new DOMMatrix(getComputedStyle(document.querySelector('.me-cart')).transform);
-          const hd = parseFloat(getComputedStyle(document.querySelector('.me-wrap')).getPropertyValue('--hd'));
-          return [(Math.atan2(m.b, m.a) * 180 / Math.PI + 360) % 360, (hd + 360) % 360]; })()""")
-        self.assertLess(abs(((ang[0] - ang[1]) % 360 + 540) % 360 - 180), 1.5, (tag, ang))
+        self.assert_puck(pg, tag + "-northup")
         pg.screenshot(path=os.path.join(SHOTS, f"livenav-{tag}-recenter.png"))
         pg.click("#navRecenter")
         self.assertFalse(pg.is_visible("#navRecenter"), tag)

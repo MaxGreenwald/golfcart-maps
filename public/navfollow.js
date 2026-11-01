@@ -167,10 +167,12 @@
   const CSS = `.me-wrap{position:relative;width:22px;height:22px}.me-wrap .me-dot{position:absolute;inset:0;margin:auto}
 .me-cone{display:none;position:absolute;left:50%;top:50%;width:0;height:0;margin-left:-11px;margin-top:-30px;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:22px solid rgba(29,111,224,.85);transform-origin:11px 30px;transform:rotate(var(--hd,0deg));filter:drop-shadow(0 0 1px #fff)}
 .me-wrap.has-hd .me-cone{display:block}
-.me-cart{display:none;position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;transform:rotate(var(--hd,0deg));transform-origin:50% 50%;will-change:transform;pointer-events:none}
-.me-cart svg{display:block;width:100%;height:100%}
-.me-cart:before{content:'';position:absolute;left:-10px;top:-10px;right:-10px;bottom:-10px;border-radius:50%;background:radial-gradient(circle,rgba(29,111,224,.22) 45%,rgba(29,111,224,0) 70%)}
-body.gcm-navigating .me-cart{display:block}
+.me-cart{display:none;position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;transform:rotate(var(--mb,0deg));transform-origin:50% 50%;will-change:transform;pointer-events:none}
+.me-ico{width:100%;height:100%;transform:scaleX(var(--flip,1));will-change:transform;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+.me-ico svg,.me-ico img{display:block;width:100%;height:100%}
+.me-chev{display:none;position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;transform:rotate(var(--hd,0deg));will-change:transform;pointer-events:none}
+.me-chev:before{content:'';position:absolute;left:50%;top:0;width:14px;height:9px;margin-left:-7px;background:#0b9fb3;clip-path:polygon(50% 0,100% 100%,50% 70%,0 100%);filter:drop-shadow(0 0 1px #fff)}
+body.gcm-navigating .me-cart,body.gcm-navigating .me-wrap.has-hd .me-chev{display:block}
 body.gcm-navigating .me-wrap .me-dot,body.gcm-navigating .me-wrap .me-cone{display:none}
 #navCtl{position:fixed;z-index:1200;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;gap:10px;pointer-events:none}
 #navCtl button{pointer-events:auto;border:0;border-radius:999px;font:900 17px Nunito,system-ui,sans-serif;padding:14px 26px;box-shadow:0 6px 18px rgba(0,0,0,.28);cursor:pointer}
@@ -191,10 +193,28 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     if (typeof document === 'undefined' || document.getElementById('navFollowCss')) return;
     const s = document.createElement('style'); s.id = 'navFollowCss'; s.textContent = CSS; document.head.appendChild(s);
   }
-  // Max t424u: while navigating the dot becomes a 48 px top-down golf cart (brand teal/white), turned by the
-  // same --hd the arrow uses, so it costs nothing extra per frame. Outside navigation the normal dot shows.
-  const CART = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><defs><linearGradient id="gcmCartB" x1="0" x2="1"><stop offset="0" stop-color="#0b8fa3"/><stop offset=".45" stop-color="#5ee0e6"/><stop offset="1" stop-color="#0a7d90"/></linearGradient><linearGradient id="gcmCartR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d9eef2"/></linearGradient></defs><ellipse cx="24" cy="27" rx="15" ry="18" fill="rgba(0,0,0,.28)"/><g fill="#1d2a33"><rect x="10" y="9" width="5" height="9" rx="2"/><rect x="33" y="9" width="5" height="9" rx="2"/><rect x="9" y="31" width="6" height="10" rx="2"/><rect x="33" y="31" width="6" height="10" rx="2"/></g><path d="M17 5h14q4 0 5 4l2 30q0 5-5 5H15q-5 0-5-5l2-30q1-4 5-4z" fill="url(#gcmCartB)" stroke="#fff" stroke-width="2"/><path d="M17 8h14l1 4H16z" fill="#fff" opacity=".9"/><path d="M15.5 14h17l1 6h-19z" fill="#123b4a" opacity=".85"/><rect x="13" y="21" width="22" height="19" rx="4" fill="url(#gcmCartR)" stroke="#0b6e86" stroke-width="1.2"/><path d="M16 24h16" stroke="#9fd6df" stroke-width="1.5" stroke-linecap="round"/><circle cx="18" cy="7" r="1.3" fill="#ffd23f"/><circle cx="30" cy="7" r="1.3" fill="#ffd23f"/></svg>';
-  const DOT = '<div class="me-wrap"><div class="me-cone"></div><div class="me-dot"></div><div class="me-cart" aria-hidden="true">' + CART + '</div></div>';
+  // Max t426u/t427u: while navigating the dot becomes the 48 px playful cart (design E), or the user's own
+  // photo icon (Settings > Your map icon). E is a side view, so it stays upright (counter-turned by --mb, the
+  // map bearing) and flips with --flip to face the way it moves on screen; a small teal chevron turned by --hd
+  // shows the heading. All three are CSS variables set in the same once-per-frame paint, so no extra work.
+  // The art faces left by default (golf bag at the back, on the right).
+  const CART = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><ellipse cx="32" cy="56" rx="22" ry="4" fill="rgba(0,0,0,.22)"/><path d="M10 14q22-8 44 0" fill="#fff" stroke="#0b6e86" stroke-width="2" stroke-linecap="round"/><path d="M10 14q22-4 44 0" fill="none" stroke="#ffd23f" stroke-width="2.4"/><path d="M15 16v18M49 16v18" stroke="#0b6e86" stroke-width="3.2" stroke-linecap="round"/><path d="M8 36q0-6 8-6h32q8 0 8 6v6q0 6-8 6H16q-8 0-8-6z" fill="#2fc6d1" stroke="#fff" stroke-width="2"/><path d="M14 36h36" stroke="#e9fbfc" stroke-width="3" stroke-linecap="round"/><rect x="44" y="20" width="10" height="18" rx="5" fill="#ff8a3d" stroke="#fff" stroke-width="1.6"/><path d="M47 20V6" stroke="#fff" stroke-width="1.6"/><path d="M47 6l8 3-8 3z" fill="#e5484d"/><circle cx="24" cy="38" r="2" fill="#123b4a"/><circle cx="36" cy="38" r="2" fill="#123b4a"/><path d="M27 42q3 2 6 0" stroke="#123b4a" stroke-width="1.6" fill="none" stroke-linecap="round"/><g fill="#1d2a33" stroke="#fff" stroke-width="2.6"><circle cx="18" cy="49" r="6.5"/><circle cx="46" cy="49" r="6.5"/></g><circle cx="18" cy="49" r="2.2" fill="#ffd23f"/><circle cx="46" cy="49" r="2.2" fill="#ffd23f"/></svg>';
+  // scaleX for the left-facing cart: -1 (face right) when the screen direction (heading minus map bearing)
+  // points right, 1 when it points left, and the previous side inside a 10 degree band around up/down.
+  function faceSide(heading, mapBearing, prev) {
+    const sx = Math.sin((heading - (mapBearing || 0)) * Math.PI / 180);
+    return sx > 0.17 ? -1 : sx < -0.17 ? 1 : (prev || 1);
+  }
+  const ICON_KEY = 'gcm_map_icon';
+  function iconHtml() {
+    let u = null; try { u = root.localStorage && localStorage.getItem(ICON_KEY); } catch (_) {}
+    return u && /^data:image\/(png|jpeg|webp);base64,/.test(u) ? '<img alt="" src="' + u + '">' : CART;
+  }
+  function refreshIcon() {
+    if (typeof document === 'undefined') return;
+    const h = iconHtml(); document.querySelectorAll('.me-ico').forEach(el => { el.innerHTML = h; });
+  }
+  const dotHtml = () => '<div class="me-wrap"><div class="me-cone"></div><div class="me-dot"></div><div class="me-chev" aria-hidden="true"></div><div class="me-cart" aria-hidden="true"><div class="me-ico">' + iconHtml() + '</div></div></div>';
 
   // Rotate a Leaflet map with CSS. The map pane goes inside a wrapper div that turns around the dot's
   // screen spot, so panning (which Leaflet does on the pane) and rotation never fight. While turned, tiles
@@ -303,7 +323,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     // Paint the heading at most once per frame, only when it moved >= 3 deg or toggled on/off.
     // deviceorientation fires ~60/s on iPhone; painting every event (querySelectorAll + style write)
     // kept the main thread busy and made typing lag (Oct 31 2026).
-    let painted, paintQueued = 0;
+    let painted, paintQueued = 0, flip = 1;
     function paintHeading(force) {
       if (force === true) painted = undefined;
       if (paintQueued) return;
@@ -318,9 +338,15 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
         if (painted !== undefined && (h == null) === (painted == null) && (h == null || Math.abs(((h - painted + 540) % 360) - 180) < 3)) return;
         painted = h;
         root.__navHeadingPaints = (root.__navHeadingPaints || 0) + 1;
+        // Screen direction = heading minus map bearing. Face right when it points right (with a 10 degree
+        // dead zone near straight up/down so the cart does not flicker), else keep the last side.
+        const mbv = mb != null ? Math.round(((mb % 360) + 360) % 360) : 0;
+        if (h != null) flip = faceSide(h, mbv, flip);
         document.querySelectorAll('.me-wrap').forEach(el => {
           el.classList.toggle('has-hd', h != null);
           if (h != null) el.style.setProperty('--hd', h + 'deg');
+          el.style.setProperty('--mb', mbv + 'deg');
+          el.style.setProperty('--flip', String(flip));
         });
       });
     }
@@ -454,7 +480,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     paintBtns();
     return api;
   }
-  const api = { C, P, voice, webEngine, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, DOT };
+  const api = { C, P, voice, webEngine, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, faceSide, get DOT() { return dotHtml(); }, CART, ICON_KEY, refreshIcon };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMFollow = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

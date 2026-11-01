@@ -136,3 +136,12 @@ test('missed the early prompt: one short "Turn left" at the turn, then silence',
   assert.equal(plan.update({ ...st, toNext: 5 }, 8), null);
   assert.equal(plan.update({ ...st, toNext: 150 }, 8), null, 'far away: wait');
 });
+
+test('faceSide: the side-view cart faces the way it moves on screen (Max t426u)', () => {
+  assert.equal(F.faceSide(90, 0, 1), -1);   // east, north-up: faces right
+  assert.equal(F.faceSide(270, 0, -1), 1);  // west (turning left): faces left
+  assert.equal(F.faceSide(0, 0, -1), -1);   // straight up: keeps its side
+  assert.equal(F.faceSide(180, 0, 1), 1);
+  assert.equal(F.faceSide(40, 40, -1), -1); // heading-up: road ahead is up, keeps its side
+  assert.equal(F.faceSide(10, 100, 1), 1);  // map turned 100: screen direction is left
+});
