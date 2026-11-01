@@ -353,8 +353,9 @@ $('city').onchange=e=>{setURL(e.target.value,true);window._regHow='picker';loadR
 // Partner overlay: when /map?partner=<slug>&code=… unlocks, lock the city chip and draw larger affiliate pins + experience stops.
 window.gcmPartnerOverlay=async function(P){
   const slug=P.get('partner'),code=(P.get('code')||'').trim(); if(!slug||!code)return;
-  const r=await fetch('/api/partner/public/'+encodeURIComponent(slug)+'/unlock?code='+encodeURIComponent(code));
-  if(!r.ok)return; const j=await r.json(); if(!j.unlocked||!j.shop)return;
+  const r=await fetch((window.GCM_NATIVE?'https://golfcartmap.com':'')+'/api/partner/public/'+encodeURIComponent(slug)+'/unlock?code='+encodeURIComponent(code));
+  if(!r.ok)return; const j=await r.json(); if(!j.unlocked||!j.shop)return; try{if(j.grant)localStorage.setItem('gcm_partner_grant:'+slug,j.grant)}catch(_){}
+  try{localStorage.setItem('gcm_partner_access',JSON.stringify({slug,code:j.code||code,at:Date.now(),shop:j.shop,experiences:j.experiences,affiliates:j.affiliates}))}catch(_){}  // CarPlay Experiences
   if(j.shop.region_id&&j.shop.region_id!==REG.id){window._regHow='partner';await loadRegion(j.shop.region_id,true)}
   const city=$('city'); if(city){city.disabled=true;city.title="Locked to this rental shop's city"}
   const g=L.layerGroup().addTo(map),bounds=[];
