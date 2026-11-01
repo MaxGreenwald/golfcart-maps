@@ -670,7 +670,7 @@ function beginNav(leg, i, target) {
   if (navWatch == null && navigator.geolocation && navigator.geolocation.watchPosition) {
     navWatch = navigator.geolocation.watchPosition(
       p => onNavFix({ lat: p.coords.latitude, lon: p.coords.longitude, coords: p.coords }),
-      () => {}, { enableHighAccuracy: true, maximumAge: 2000, timeout: 15000 });
+      () => {}, { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 });   // fresh fixes only (t451u)
   }
 }
 function paintNav(arrow, text, sub) {
@@ -685,7 +685,7 @@ async function onNavFix(ll) {
   placeMe();
   if (follow) follow.fix(ll.coords || { latitude: ll.lat, longitude: ll.lon });
   if (!navRoute || navArrived || navRerouting) return;
-  const st = GCMNav.status(navRoute, [ll.lat, ll.lon], navState);
+  const st = GCMNav.status(navRoute, [ll.lat, ll.lon], navState, ll.coords ? { course: ll.coords.heading, speed: ll.coords.speed } : null);
   navState = st;
   if (st.off < GCMNav.OFF_ROUTE_M) trimNav(st.along);
   const stops = (activeEx && activeEx.stops) || [];

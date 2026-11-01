@@ -46,3 +46,18 @@ test('distance format', () => {
   assert.equal(N.fmtDist(91.44), '300 ft');
   assert.equal(N.fmtDist(1609.34), '1.0 mi');
 });
+
+// Max t451u: "it assumed I turned and gave the next direction before I did." The Garnet turn is at
+// (32.798, -117.240); Garnet runs west (bearing ~270).
+test('turn advance waits until you are past the turn and heading down the new road', () => {
+  const before = N.status(r, [32.79807, -117.24], null, { course: 180, speed: 5 });  // ~8 m before the corner
+  assert.equal(before.next.name, 'Garnet Ave', 'build 41 rule already showed Mission here');
+  const corner = N.status(r, [32.798, -117.24004], null, { course: 180, speed: 5 });  // at the corner, still facing south
+  assert.equal(corner.next.name, 'Garnet Ave');
+  const turned = N.status(r, [32.798, -117.24008], null, { course: 268, speed: 5 });   // ~7 m onto Garnet, facing west
+  assert.equal(turned.next.name, 'Mission Blvd');
+  const noCourse = N.status(r, [32.798, -117.24008], null, { course: -1, speed: null });
+  assert.equal(noCourse.next.name, 'Garnet Ave', 'no course: wait for 20 m');
+  const far = N.status(r, [32.798, -117.24025], null, null);                           // ~23 m down Garnet
+  assert.equal(far.next.name, 'Mission Blvd');
+});

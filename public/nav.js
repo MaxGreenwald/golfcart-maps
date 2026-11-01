@@ -4,6 +4,9 @@
 (function (root) {
   const R = 6371000, rad = Math.PI / 180;
   const OFF_ROUTE_M = 35, ARRIVE_M = 25;
+  // A turn is done once you are past it on the new road (Max t451u: it gave the next direction before he turned):
+  // PAST_M along and heading within TURN_HEADING_DEG of the new road, or SURE_M along without a usable course.
+  const PAST_M = 5, SURE_M = 20, TURN_HEADING_DEG = 35;
   function hav(a, b) { // [lat, lon]
     const dl = (b[0] - a[0]) * rad, dn = (b[1] - a[1]) * rad;
     const x = Math.sin(dl / 2) ** 2 + Math.cos(a[0] * rad) * Math.cos(b[0] * rad) * Math.sin(dn / 2) ** 2;
@@ -67,7 +70,7 @@
       // An unnamed connector straight ahead is not worth a prompt.
       if (t.type === 'straight' && (!name || !groups[k - 1].name)) continue;
       const verb = t.type === 'straight' ? 'Continue onto' : `Turn ${t.mod} onto`;
-      steps.push({ kind: t.type === 'straight' ? 'continue' : 'turn', mod: t.mod, name, at: cum[i], ll: pts[i],
+      steps.push({ kind: t.type === 'straight' ? 'continue' : 'turn', mod: t.mod, name, at: cum[i], ll: pts[i], outBrg: bout,
         text: name ? `${verb} ${name}` : `Turn ${t.mod}` });
     }
     const total = cum[cum.length - 1];
@@ -104,20 +107,29 @@
     const t = step.text.charAt(0).toLowerCase() + step.text.slice(1);
     return d === 'Now' ? step.text : `In ${d}, ${t}`;
   }
+  const angDiff = (a, b) => Math.abs(((a - b) % 360 + 540) % 360 - 180);
+  // fix: {course, speed} from the GPS (optional). Before t451u a step counted as done 8 m BEFORE its turn.
+  function passed(s, along, fix) {
+    if (along < s.at + PAST_M) return false;
+    if (along >= s.at + SURE_M || s.outBrg == null) return true;
+    const c = fix && fix.course, v = fix && fix.speed;
+    if (!Number.isFinite(c) || c < 0 || (Number.isFinite(v) && v < 1)) return false;
+    return angDiff(c, s.outBrg) <= TURN_HEADING_DEG;
+  }
   // State for one live position. offCount carries across fixes (2 off fixes in a row = reroute).
-  function status(route, ll, prev) {
+  function status(route, ll, prev, fix) {
     const pr = project(route, ll);
     const offCount = pr.off > OFF_ROUTE_M ? ((prev && prev.offCount) || 0) + 1 : 0;
     const remaining = Math.max(0, route.total - pr.along);
     const arrived = remaining < ARRIVE_M && pr.off < OFF_ROUTE_M + 15;
-    let idx = route.steps.findIndex((s, i) => i > 0 && s.at > pr.along + 8);
+    let idx = route.steps.findIndex((s, i) => i > 0 && (s.kind === 'arrive' || !passed(s, pr.along, fix)));
     if (idx < 0) idx = route.steps.length - 1;
     const next = route.steps[idx];
     const toNext = Math.max(0, next.at - pr.along);
     return { along: pr.along, off: pr.off, offCount, offRoute: offCount >= 2, arrived, idx, next, toNext, remaining,
       text: arrived ? route.steps[route.steps.length - 1].text : phrase(next, toNext) };
   }
-  const api = { OFF_ROUTE_M, ARRIVE_M, hav, bearing, turnType, buildSteps, project, status, fmtDist, phrase };
+  const api = { OFF_ROUTE_M, ARRIVE_M, PAST_M, SURE_M, TURN_HEADING_DEG, passed, hav, bearing, turnType, buildSteps, project, status, fmtDist, phrase };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMNav = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
