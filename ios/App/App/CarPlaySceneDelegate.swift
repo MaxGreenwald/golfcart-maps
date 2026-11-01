@@ -124,9 +124,10 @@ final class CarPlayMapViewController: UIViewController, MKMapViewDelegate {
     // MARK: map icon (Max t434u): during guidance the dot becomes the phone's icon, cart E or the user's photo.
     var puck: CarPlayPuckView?
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard annotation is MKUserLocation, guiding else { return nil }
+        // Our view replaces the system blue dot entirely, so the location is never drawn twice.
+        guard annotation is MKUserLocation else { return nil }
         let v = CarPlayPuckView(annotation: annotation, reuseIdentifier: nil)
-        v.setIcon(CarPlayPuckView.savedPhoto())
+        if guiding { v.setIcon(CarPlayPuckView.savedPhoto()) } else { v.setDot() }
         puck = v
         #if DEBUG
         NSLog("GCMCarPlay puck %@", CarPlayPuckView.savedPhoto() == nil ? "cart" : "photo")
@@ -174,6 +175,16 @@ final class CarPlayPuckView: MKAnnotationView {
         img.layer.borderColor = UIColor.white.cgColor
         img.clipsToBounds = isPhoto
         img.transform = .identity
+    }
+    /// Not guiding: a blue dot with the same chevron (t435u: the plain system dot showed no direction).
+    func setDot() {
+        isPhoto = true
+        let r = UIGraphicsImageRenderer(size: CGSize(width: 22, height: 22)).image { _ in
+            UIColor.white.setFill(); UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 22, height: 22)).fill()
+            UIColor(red: 0.11, green: 0.44, blue: 0.88, alpha: 1).setFill(); UIBezierPath(ovalIn: CGRect(x: 3, y: 3, width: 16, height: 16)).fill()
+        }
+        img.image = r; img.contentMode = .center; img.transform = .identity
+        img.layer.borderWidth = 0; img.clipsToBounds = false
     }
     /// heading = travel direction, mapHeading = camera heading (both degrees).
     func point(heading: Double, mapHeading: Double) {
@@ -535,7 +546,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
     /// Heading-up like the phone: rotate the camera to the route bearing ~25 m ahead (GPS course off route).
     func headingUp(_ here: CLLocation, off: Double, line: [(Double, Double)]) {
-        if here.course >= 0 { mapVC.puck?.point(heading: here.course, mapHeading: mapVC.map.camera.heading) }
+        // Chevron along travel: GPS course, else the route-bearing camera heading (points up in heading-up).
+        if let h = here.course >= 0 ? here.course : camHeading { mapVC.puck?.point(heading: h, mapHeading: mapVC.map.camera.heading) }
         guard following else { return }
         let me = (here.coordinate.latitude, here.coordinate.longitude)
         guard let h = CarPlayHeading.pick(current: camHeading, routeBearing: CarPlayHeading.routeBearing(from: me, line: line), offRouteM: off,
@@ -549,7 +561,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     /// Map icon (t434u): read Settings > Your map icon from the web layer on connect and at each trip start,
     /// save it natively (UserDefaults) for CarPlay-only cold starts, and swap the guidance icon if it changed.
     func syncMapIcon() {
-        GCMBridge.shared.call("mapIcon()") { [weak self] any in
+        // Read the same localStorage key the phone uses (navfollow.js ICON_KEY); no web change needed, native validates it.
+        GCMBridge.shared.call("version&&localStorage.getItem('gcm_map_icon')") { [weak self] any in
             DispatchQueue.main.async {
                 let before = UserDefaults.standard.data(forKey: CarPlayIcon.key)
                 CarPlayPuckView.save(dataURL: any as? String)
@@ -600,6 +613,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             startFollowing(animated: true)
         }
         UserDefaults.standard.set([here.coordinate.latitude, here.coordinate.longitude], forKey: Self.savedKey)
+        // North-up / browsing: chevron follows GPS course (guidance also updates it in headingUp).
+        if here.course >= 0 { mapVC.puck?.point(heading: here.course, mapHeading: mapVC.map.camera.heading) }
         progress(here)
     }
     func progress(_ here: CLLocation) {

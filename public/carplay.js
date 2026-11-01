@@ -37,8 +37,6 @@ function maneuvers(r){
 window.GCMCarPlay={
  version:2,
  track:cpTrack,
- // Settings > Your map icon (navfollow.js ICON_KEY): the photo data URL, or null for the default cart. Native saves it for CarPlay-only starts.
- mapIcon(){try{const u=localStorage.getItem('gcm_map_icon');return u&&/^data:image\/(png|jpeg|webp);base64,/.test(u)?u:null}catch(_){return null}},
  async status(){await ready();return {region:REG&&REG.id,regionName:REG&&REG.short,mode:MODE,center:REG&&REG.center,
   regions:REGIONS.map(r=>({id:r.id,name:r.short||r.name,center:r.center,hidden:!!r.hidden})),range:GCMRange.rangeFor(),battery:(GCMRange.load().battery??100)}},
  // vehicle = phone Settings > Golf cart mode (localStorage 'gcm-veh', default 'lsv'); setMode changes it for phone + CarPlay
