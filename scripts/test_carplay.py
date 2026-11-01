@@ -1,8 +1,9 @@
 """CarPlay JS bridge: status, plan (SD + Villages, both modes), maneuvers, overlay, search."""
 from playwright.sync_api import sync_playwright
 import os,json
-URL=os.environ.get("URL","http://localhost:8767/");fails=[]
-def ck(n,c,x=""):print("PASS" if c else "FAIL",n,str(x)[:300]);(None if c else fails.append(n))
+from _check import ck as _ck, finish
+URL=os.environ.get("URL","http://localhost:8767/")
+def ck(n,c,x=""):return _ck(n,c,str(x)[:300])
 with sync_playwright() as p:
     b=p.chromium.launch();pg=b.new_page();pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000)
     st=pg.evaluate("GCMCarPlay.status()");ck("status",st["region"]=="sd" and len(st["regions"])>=3,st)
@@ -24,4 +25,4 @@ with sync_playwright() as p:
     o=pg.evaluate("GCMCarPlay.overlay(28.90,-81.99,28.92,-81.96,800)");ck("overlay",len(o["ok"])>20,(len(o["ok"]),len(o["bad"])))
     s=pg.evaluate("GCMCarPlay.search('spanish',28.91,-81.97)");ck("search",len(s)>0,s)
     pg.evaluate("GCMCarPlay.setMode('lsv')")
-print("FAILS:",fails);exit(1 if fails else 0)
+finish()
