@@ -27,6 +27,8 @@ jobs:
         run: node --test tests/partner_places.test.mjs
       - name: Shop rental vehicle (API values, worker stores and exposes it)
         run: node --test tests/partner_vehicle.test.mjs
+      - name: Nearest-stop start (visit order; experience setting defaults on)
+        run: node --test tests/stoporder.test.mjs tests/partner_nearest.test.mjs
       - name: Turn-by-turn maneuvers (turn side, distance, off route, arrival)
         run: node --test tests/nav.test.mjs
       - name: Live navigation (off-route timer, reroute debounce, heading)
@@ -114,6 +116,8 @@ jobs:
         run: python -m unittest tests.test_partner_places -v
       - name: test_partner_vehicle (admin saves vehicle; LSV shop draws 35 mph Grand Ave green, golf cart shop red)
         run: python -m unittest tests.test_partner_vehicle -v
+      - name: test_partner_nearest_start (rider near stop 4 starts there, pins renumber, Use shop order; off keeps order; admin checkbox)
+        run: python -m unittest tests.test_partner_nearest_start -v
       - name: test_turn_by_turn (renter banner follows GPS, step list, mute, reroute, arrival; picked ride folds the others away)
         run: python -m unittest tests.test_turn_by_turn -v
       - name: Live navigation (Start, follow, Recenter, reroute, pinch/pan preview)
