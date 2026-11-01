@@ -32,7 +32,9 @@
   }
   const COMPASS = ['north', 'northeast', 'east', 'southeast', 'south', 'southwest', 'west', 'northwest'];
   // runs: [{name, points:[[lat,lon],...]}]; dest: label of the stop.
-  function buildSteps(runs, dest) {
+  // opts.continuing: a reroute while driving that starts the way you are going, so the first step reads
+  // "Continue on X" instead of a compass "Head ..." (Max t433u).
+  function buildSteps(runs, dest, opts) {
     const pts = [], cum = [], steps = [];
     const groups = [];
     for (const r of runs || []) {
@@ -53,7 +55,8 @@
     if (pts.length < 2) return { pts, cum, steps, total: 0 };
     const b0 = bearing(pts[0], probe(pts, 0, 1, 20));
     steps.push({ kind: 'depart', mod: 'straight', name: groups[0].name, at: 0, ll: pts[0],
-      text: `Head ${COMPASS[Math.round(b0 / 45) % 8]}` + (groups[0].name ? ` on ${groups[0].name}` : '') });
+      text: opts && opts.continuing ? (groups[0].name ? `Continue on ${groups[0].name}` : 'Continue straight')
+        : `Head ${COMPASS[Math.round(b0 / 45) % 8]}` + (groups[0].name ? ` on ${groups[0].name}` : '') });
     for (let k = 1; k < groups.length; k++) {
       const i = starts[k];
       const bin = bearing(probe(pts, i, -1, 15), pts[i]);

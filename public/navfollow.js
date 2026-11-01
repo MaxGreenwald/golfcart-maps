@@ -8,6 +8,7 @@
     OFF_ROUTE_M: 30,       // farther than this from the route counts as off route
     START_AIM_M: 400,      // still aim heading-up along the route when this close to it but off it (Max t430u)
     START_GRACE_MS: 2000,  // after Start, only a real drag or pinch pauses follow (Max t430u)
+    REROUTE_MOVING_MS: 1.5, // at or above this GPS speed a reroute starts the way you are driving (Max t433u)
     OFF_ROUTE_MS: 5000,    // ...for this long before a reroute
     REROUTE_COOLDOWN_MS: 10000, // at most one reroute per this window, so it can't loop
     MIN_SPEED_MS: 0.8,     // GPS course is trusted only above ~1.8 mph
@@ -348,7 +349,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     injectCss();
     const map = opts.map;
     const track = offTracker(opts.offRoute);
-    let navigating = false, following = false, heading = null, compass = null, last = null, prevLL = null;
+    let navigating = false, following = false, heading = null, compass = null, last = null, prevLL = null, course = null, courseAt = 0;
     let timer = 0, rerouting = false, moving = 0, previewing = false;
     let mapBearing = null; // unwrapped; null = north-up
     const rot = rotator(map);
@@ -498,7 +499,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
         rerouting = true;
         opts.say && opts.say('Rerouting');
         root.__navReroutes = (root.__navReroutes || 0) + 1;
-        Promise.resolve(opts.reroute([last.latitude, last.longitude])).catch(() => {}).finally(() => { rerouting = false; track.reset(); });
+        Promise.resolve(opts.reroute([last.latitude, last.longitude], api.travelCourse())).catch(() => {}).finally(() => { rerouting = false; track.reset(); });
       }
       clearTimeout(timer);
       const s = track.offSince();
@@ -509,6 +510,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
       fix(coords) {
         if (!coords || !Number.isFinite(coords.latitude)) return;
         const h = pickHeading(coords, compass, prevLL);
+        const cr = courseHeading(coords, prevLL); if (cr != null) { course = cr; courseAt = Date.now(); }
         if (h != null) heading = h; else if (!Number.isFinite(compass)) heading = null;
         if (!prevLL || hav(prevLL, [coords.latitude, coords.longitude]) >= 8) prevLL = [coords.latitude, coords.longitude];
         last = coords;
@@ -517,6 +519,9 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
         if (navigating && following) center([coords.latitude, coords.longitude]);
         check(Date.now());
       },
+      // GPS course while clearly driving (speed >= REROUTE_MOVING_MS, or unknown speed but a fresh course
+      // from movement), else null so a reroute may start in any direction.
+      travelCourse() { return last ? travelCourseOf(course, Date.now() - courseAt, last.speed) : null; },
       preview(on) { previewing = !!on; if (!on && navigating) api.end(); paintBtns(); },
       start() {
         if (navigating) return;
@@ -559,7 +564,15 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     paintBtns();
     return api;
   }
-  const api = { C, P, voice, webEngine, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, faceSide, get DOT() { return dotHtml(); }, CART, ICON_KEY, refreshIcon, setIconFromFile, resetIcon };
+  // Course a reroute should honor: a fresh (<10 s) course, unless GPS says we are slower than
+  // REROUTE_MOVING_MS. Unknown speed with a fresh course from movement counts as moving.
+  function travelCourseOf(course, ageMs, speed) {
+    if (course == null || !(ageMs <= 10000)) return null;
+    if (Number.isFinite(speed) && speed < C.REROUTE_MOVING_MS) return null;
+    return course;
+  }
+
+  const api = { C, P, travelCourseOf, voice, webEngine, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, faceSide, get DOT() { return dotHtml(); }, CART, ICON_KEY, refreshIcon, setIconFromFile, resetIcon };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMFollow = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
