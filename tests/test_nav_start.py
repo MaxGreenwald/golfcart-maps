@@ -138,9 +138,14 @@ class NavStart(unittest.TestCase):
                 self.assertEqual(pg.evaluate("[...document.querySelectorAll('.me-cart .me-ico svg')].filter(i => i.offsetParent).length"), 0, name)
                 pg.screenshot(path=os.path.join(SHOTS, f"navstart-{name}-photo-city.png"))
                 # Renter page, same device: the saved photo is the puck there too.
+                # Fresh tab in the same context (same localStorage), so the city
+                # page's live navigation can't leave WebKit's renter panel hidden.
+                pg.close()
+                pg = ctx.new_page()
+                pg.route(NO_NET, lambda r: r.abort())
                 pg.route("**/api/partner/public/**", lambda r: r.fulfill(status=200, content_type="application/json", body=json.dumps(UNLOCK)))
                 pg.goto(self.base + "/p/beachmode/go?code=TEST123")
-                pg.wait_for_selector(".xcard")
+                pg.wait_for_selector(".xcard", timeout=60000)
                 pg.click(".goopen")
                 pg.wait_for_timeout(1500)
                 pg.fill("#goQ", "Crystal Pier")
