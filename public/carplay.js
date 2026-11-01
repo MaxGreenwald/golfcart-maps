@@ -75,6 +75,9 @@ window.GCMCarPlay={
   for(const x of D.segs){if(ok.length+bad.length>=max)break;const p=x[7];let hit=false;for(const q of p)if(q[1]>=s&&q[1]<=n&&q[0]>=w&&q[0]<=e){hit=true;break}
    if(!hit)continue;(cls(x)===3?bad:ok).push(p.map(q=>[+q[1].toFixed(6),+q[0].toFixed(6)]))}
   return {ok,bad}},
+ // Saved places on this phone (Home, Favorite beach, favorites) for CarPlay's Places list and empty search (Max t451u).
+ async places(){const G=window.GCMPlaces||globalThis.GCMPlaces;if(!G)return [];const P=G.make(localStorage);
+  return P.saved().map(p=>({name:P.label(p),sub:p.id.startsWith('fav')?'Favorite':(p.name&&p.name!==P.label(p)?p.name:''),lat:+p.lat,lon:+p.lon}))},
  async search(q,lat,lon){await ready();if(lat!=null)await regionFor(lat,lon);return localMatches(q).map(x=>({name:x.name,sub:x.sub,lat:x.lat,lon:x.lon}))}
 };
 })();
