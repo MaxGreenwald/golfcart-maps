@@ -200,7 +200,7 @@ function locate(){if(!navigator.geolocation){$('sub').textContent='Location not 
   if(first){first=false;const rg=regionAt(myLL.lat,myLL.lng);if(rg&&REG&&rg.id!==REG.id){setURL(rg.id,false);window._regHow='auto';loadRegion(rg.id,true)}map.setView(myLL,16);$('showloc').style.display='none';if(to&&to.me){sync();if(start&&end)route()}else setField('from',{me:true})}else if((from&&from.me)||(to&&to.me)){sync()}};
  const err=e=>{$('showloc').textContent='📍 Show my location';$('sub').textContent=e.code===1?'Location is blocked. Turn it on in Settings › Safari › Location.':'Couldn’t find you: '+e.message};
  if(watching){navigator.geolocation.getCurrentPosition(p=>{first=true;ok(p)},err,{enableHighAccuracy:true});return}
- watching=true;navigator.geolocation.watchPosition(ok,err,{enableHighAccuracy:true,maximumAge:5000})}
+ watching=true;navigator.geolocation.watchPosition(ok,err,{enableHighAccuracy:true,maximumAge:0})}  // maximumAge 0: never a cached fix, so turns are judged on where you are now (t451u)
 $('loc').onclick=locate;$('showloc').onclick=locate;$('useme').onmousedown=e=>e.preventDefault();$('useme').onclick=()=>{$('sugg').style.display='none';if(myLL)setField(active||'from',{me:true});else{active=null;locate()}};window.fakeLocate=(lat,lng)=>{myLL=L.latLng(lat,lng);if(!me){me=meMarker(myLL)}setField('from',{me:true})};
 // ---- fast search: local index (instant) + Photon autocomplete + Nominatim fallback ----
 const qcache=new Map();let POIS=[],nameAt=null,qseq=0,tmr;
@@ -420,7 +420,7 @@ function liveNavSet(r){liveSteps=null;navPlan.reset();window._liveNav=null;
  if(liveSteps&&navOn()&&myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
 // Max t446u: only the road still ahead stays blue; the part you drove disappears.
 function navTrim(along){const p=along>0&&liveSteps?GCMNavFx.trim(liveSteps.pts,along):routeFull;if(p&&p.length>1)routeLines.forEach(l=>l.setLatLngs(p))}
-function liveNavFix(c){if(follow)follow.fix(c);if(!navOn()||!liveSteps)return;const st=GCMNav.status(liveSteps,[c.latitude,c.longitude]);if(!window._navRerouting&&st.off<GCMNav.OFF_ROUTE_M)navTrim(st.along);
+function liveNavFix(c){if(follow)follow.fix(c);if(!navOn()||!liveSteps)return;const st=GCMNav.status(liveSteps,[c.latitude,c.longitude],null,{course:c.heading,speed:c.speed});if(!window._navRerouting&&st.off<GCMNav.OFF_ROUTE_M)navTrim(st.along);
  if(st.arrived&&!window._navRerouting)GCMNavFx.arrive(liveSteps,{place:($('q').value||'').trim(),say:navSay});const el=navBar();el.classList.add('show');
  if(window._navRerouting)return;
  $('mapNavT').textContent=st.arrived?liveSteps.steps[liveSteps.steps.length-1].text:st.text;$('mapNavS').textContent=st.arrived?'':GCMNav.fmtDist(st.remaining).replace('Now','under 50 ft')+' to go';if(follow)follow.eta(st.arrived?0:st.remaining,c.speed);
