@@ -455,9 +455,14 @@ function addRouteLine(points, layer, dashed) {
     L.polyline(points, { ...base, color: '#1d6fe0', weight: 3, opacity: 0.75, dashArray: '4 8' }).addTo(layer);
     return;
   }
-  L.polyline(points, { ...base, color: '#0b3a78', weight: 22 }).addTo(layer);
-  L.polyline(points, { ...base, color: '#fff', weight: 18 }).addTo(layer);
-  L.polyline(points, { ...base, color: '#1d6fe0', weight: 12 }).addTo(layer);
+  const lines = [['#0b3a78', 22], ['#fff', 18], ['#1d6fe0', 12]].map(([color, weight]) => L.polyline(points, { ...base, color, weight }).addTo(layer));
+  if (layer === liveLayer) { navLines = lines; navFull = points; }
+}
+// Max t446u: during navigation only the road ahead stays blue; along = metres driven on navRoute.
+let navLines = [], navFull = null, navFlagMk = null;
+function trimNav(along) {
+  const p = along > 0 && navRoute ? GCMNavFx.trim(navRoute.pts, along) : navFull;
+  if (p && p.length > 1) navLines.forEach(l => l.setLatLngs(p));
 }
 
 // The shop's rental vehicle picks the road rules. Unset means golf cart (stricter).
@@ -469,7 +474,7 @@ function vehLegend() {
     : 'Golf cart rules: roads up to 25 mph.';
 }
 
-function connectStops(stops) {
+function connectStops(stops, opts) {
   return withRoads(async () => {
     await loadRules();
     const veh = shopVeh();
@@ -478,7 +483,7 @@ function connectStops(stops) {
       roadApi = await GCMRouter.openRegion(region, rules, veh, freshFetch);
       roadKey = key;
     }
-    return roadApi.legs(stops);
+    return roadApi.legs(stops, opts);
   });
 }
 function describeRoute(legs, nStops) {
@@ -623,6 +628,8 @@ window.GCMNavDebug = () => navRoute && { pts: navRoute.pts, steps: navRoute.step
 function stopNav() {
   if (navWatch != null && navigator.geolocation) navigator.geolocation.clearWatch(navWatch);
   navWatch = null; navRoute = null; navState = null; navStop = -1; navArrived = false;
+  if (navFlagMk) { navFlagMk.remove(); navFlagMk = null; }
+  trimNav(0);
   const el = document.getElementById('navBanner');
   if (el) el.classList.remove('show');
   document.body.classList.remove('has-nav');
@@ -633,8 +640,13 @@ function beginNav(leg, i, target) {
   const stop = target || (stops && stops[i]);
   if (!stop || !leg || !leg.points || leg.points.length < 2) { stopNav(); return; }
   const runs = leg.runs && leg.runs.length ? leg.runs : [{ name: '', points: leg.points }];
-  navRoute = GCMNav.buildSteps(runs, stop.label || `stop ${i + 1}`);
+  navRoute = GCMNav.buildSteps(runs, stop.label || `stop ${i + 1}`, { continuing: !!leg.ahead });
   navStop = target ? -1 : i; navState = null; navArrived = false; navSpoken = ''; navPlan.reset();
+  GCMNavFx.resetTrip();
+  // Finish flag: the free-ride destination, or the experience's last stop.
+  if (navFlagMk) navFlagMk.remove();
+  const end = target || (stops || []).filter(s => finite(s.lat, s.lon)).pop();
+  navFlagMk = end && map ? GCMNavFx.flag(L, map, [+end.lat, +end.lon]) : null;
   const el = navEl();
   el.classList.add('show');
   document.body.classList.add('has-nav');
@@ -675,12 +687,14 @@ async function onNavFix(ll) {
   if (!navRoute || navArrived || navRerouting) return;
   const st = GCMNav.status(navRoute, [ll.lat, ll.lon], navState);
   navState = st;
+  if (st.off < GCMNav.OFF_ROUTE_M) trimNav(st.along);
   const stops = (activeEx && activeEx.stops) || [];
   if (st.arrived && navStop < 0) {
     navArrived = true;
     paintNav('⚑', `You’ve arrived at ${freeDest.label}`, 'Back to experiences any time.');
     navEl().querySelector('#navGo').hidden = true;
     say(`You’ve arrived at ${freeDest.label}.`);
+    GCMNavFx.arrive(navRoute, { place: freeDest.label, say });
     return;
   }
   if (st.arrived) {
@@ -695,6 +709,7 @@ async function onNavFix(ll) {
       go.onclick = () => routeToStop(nxt);
     } else go.hidden = true;
     say(`You’ve arrived at ${here.label || 'the stop'}.` + (nxt >= 0 ? ` Next stop: ${stops[nxt].label || ''}.` : ''));
+    if (nxt < 0) GCMNavFx.arrive(navRoute, { place: here.label || '', say });
     return;
   }
   // Off route: GCMFollow waits ~5 s past 30 m, then calls navReroute (debounced).
@@ -707,10 +722,14 @@ async function onNavFix(ll) {
   if (prompt) say(prompt);
 }
 // Off route for a while during navigation: new legal route from here to the same stop or place.
-async function navReroute() {
+// Max t433u: course = GPS heading while driving (else null); the new route starts the way you are going.
+let rerouteCourse = null;
+async function navReroute(ll, course) {
   navRerouting = true;
+  rerouteCourse = Number.isFinite(course) ? course : null;
+  window._navRerouteCourse = rerouteCourse;
   paintNav('↻', 'Rerouting on legal roads…', '');
-  try { if (navStop < 0) await routeFree(freeDest, true); else await routeToStop(navStop, true); } finally { navRerouting = false; }
+  try { if (navStop < 0) await routeFree(freeDest, true); else await routeToStop(navStop, true); } finally { navRerouting = false; rerouteCourse = null; }
 }
 // Route from the current position to stop i on legal roads, draw it, and guide.
 async function routeToStop(i, quiet) {
@@ -721,7 +740,7 @@ async function routeToStop(i, quiet) {
   updateNext();
   const from = meLL || (map && { lat: map.getCenter().lat, lon: map.getCenter().lng });
   let legs = null;
-  try { legs = await connectStops([from, stop]); } catch (e) { legs = null; }
+  try { legs = await connectStops([from, stop], { heading: rerouteCourse }); } catch (e) { legs = null; }
   const leg = legs && legs[0];
   if (liveLayer) liveLayer.clearLayers();
   if (leg && leg.points && leg.points.length >= 2) {
@@ -807,7 +826,7 @@ async function routeFree(dest, quiet) {
   let leg = null;
   try {
     await connectStops([]);
-    leg = await withRoads(() => roadApi.trip(from, dest, { risky: freeRisky }));
+    leg = await withRoads(() => roadApi.trip(from, dest, { risky: freeRisky, heading: rerouteCourse }));
   } catch (e) { leg = null; }
   if (!freeOn) return;
   if (liveLayer) liveLayer.clearLayers();
@@ -1077,6 +1096,9 @@ async function boot() {
         return;
       }
       unlocked = j;
+      // CarPlay Experiences (public/carplay.js experiences()) reads this to show the shop's rides in the car.
+      // The whole unlock answer is saved because unlock counts a use (single-use codes would fail a second call).
+      try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates })); } catch (e) {}
       await unlockedView();
     } else {
       const r = await fetch(`/api/partner/public/${encodeURIComponent(slug)}`);

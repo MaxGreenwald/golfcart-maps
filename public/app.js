@@ -20,7 +20,7 @@ const routeR=L.svg({pane:'route'});
 const $=id=>document.getElementById(id);
 const RISKY_MAX=152.4; // 500 ft risky-mode cap. Stretches of SHORT_LEGAL_FT (router.js) are legal.
 let REGIONS=[],RULES={},REG=null,MODE=(()=>{const q=new URLSearchParams(location.search).get('veh');if(GCMRule.VEHICLES.includes(q))return q;try{const v=localStorage.getItem('gcm-veh');if(GCMRule.VEHICLES.includes(v))return v}catch(_){}return GCMRule.DEFAULT_VEH})(),RULE={max_posted:35,cross:true},BASE='data/sd/';
-let D,risky=false,layer,start=null,end=null,routeG=null,mk=[];
+let D,risky=false,layer,start=null,end=null,routeG=null,mk=[],routeLines=[],routeFull=null,navFlag=null;
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden (posted >=40 or untagged major)
 // cls: 0 posted ok, 1 assumed ok, 3 forbidden. Cart paths ('c') always ok; designated ('d') ok in designated-only cart mode.
 // the rule itself lives in roadrule.js (one module, per vehicle type: MODE 'golf_cart' or 'lsv')
@@ -88,31 +88,35 @@ function hav(a,b){return GCMRouter.hav(a,b)}
 function len(p){return GCMRouter.len(p)}
 function buildGraph(from){if(from===0)roadNet.reset();roadNet.build(D,from,{cls:cls,unk:unk,rule:RULE})}
 function nearest(ll){return roadNet.nearest(D,buckets,ll,{cls:cls,G:G})}
-function astar(s,t){return roadNet.astar(s,t,{risky:risky,rule:RULE,riskyMax:RISKY_MAX})}
-function summarize(parts){let dist=0,stretches=[],cur=null,line=[];const legs=[];
+function astar(s,t,back){return roadNet.astar(s,t,{risky:risky,rule:RULE,riskyMax:RISKY_MAX,backSeg:back})}
+// Max t433u: set by a reroute while driving (GPS course, degrees); the next route() starts at the corner ahead.
+let routeHeading=null;
+function summarize(parts,H){let dist=0,stretches=[],cur=null,line=[];const legs=[];
+ // Heading-aware reroute: the stretch from you to the corner ahead comes first ("Continue on X").
+ if(H){const s=D.segs[H.si];dist+=H.stubLen;legs.push({p:H.stub,f:false,s,len:H.stubLen,u:unk(s),a:advOf(s)})}
  // Short faster-road runs are legal (blue line, no warning). The cutoff is SHORT_LEGAL_FT in router.js.
  const mask=GCMRouter.riskyMask(D.segs,parts,RULE,cls);
  for(let i=0;i<parts.length;i++){const [si,rev]=parts[i];const s=D.segs[si];let p=s[7];if(rev)p=p.slice().reverse();dist+=s._len;const f=!!mask[i];
   legs.push({p,f,s,u:!f&&unk(s),a:f?null:advOf(s)});
   if(f){if(!cur){cur={len:0,name:D.names[s[0]]||'unnamed road',sp:s[2],p:[]};stretches.push(cur)}cur.len+=s._len;cur.p.push(...p)}else cur=null}
  // turn-by-turn by street name
- const steps=[];for(const l of legs){const n=D.names[l.s[0]]||'unnamed road';const last=steps[steps.length-1];if(last&&last.n===n&&last.f===l.f&&last.u===l.u&&last.a===l.a)last.d+=l.s._len;else steps.push({n,d:l.s._len,f:l.f,u:l.u,sp:l.s[2],a:l.a,ll:[l.p[0][1],l.p[0][0]]})}
+ const steps=[];for(const l of legs){const n=D.names[l.s[0]]||'unnamed road',ln=l.len!=null?l.len:l.s._len;const last=steps[steps.length-1];if(last&&last.n===n&&last.f===l.f&&last.u===l.u&&last.a===l.a)last.d+=ln;else steps.push({n,d:ln,f:l.f,u:l.u,sp:l.s[2],a:l.a,ll:[l.p[0][1],l.p[0][0]]})}
  return {dist,stretches,legs,steps}}
 window.popSet=f=>{if(inMX(window._pll))return;map.closePopup();setField(f,{ll:window._pll,label:lbl(window._pll)})};
 const ft=m=>GCMRouter.shownFeet(m)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
 let routing=false;async function route(){$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
- await new Promise(r=>setTimeout(r,0));let parts=null;if(a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
+ await new Promise(r=>setTimeout(r,0));let parts=null,H=null;if(routeHeading!=null&&b!=null){H=GCMRouter.aheadStart(D,buckets,start,routeHeading,{cls:cls,G:G});if(H){for(const y of [b,b2]){parts=astar(H.node,y,H.backSeg);if(parts)break}if(!parts)H=null}}routeHeading=null;
+ if(!parts&&a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
  if(!parts){liveNavSet(null);trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
- const r=summarize(parts);trackRoute(true,r.dist/1609.34);routeG=L.layerGroup().addTo(map);
+ const r=summarize(parts,H);r.ahead=!!H;trackRoute(true,r.dist/1609.34);routeG=L.layerGroup().addTo(map);
  const all=[];r.legs.forEach(l=>all.push(...l.p));const ll=all.map(p=>[p[1],p[0]]);
  // Opaque casing wider than legal roads (weight ~3.2) so the path stays obvious
  // on a phone, especially over bright green. Blue matches the legend swatch.
  // Outer dark edge, then white, then the solid stroke. Risky keeps that casing
  // and repaints the stroke yellow at the same width.
  const rs={renderer:routeR,opacity:1,lineCap:'round',lineJoin:'round'};
- L.polyline(ll,{...rs,color:'#0b3a78',weight:22,interactive:false}).addTo(routeG);
- L.polyline(ll,{...rs,color:'#fff',weight:18,interactive:false}).addTo(routeG);
- L.polyline(ll,{...rs,color:'#1d6fe0',weight:12,interactive:false}).addTo(routeG);
+ // Kept so navigation can trim the line behind the rider (Max t446u, navTrim).
+ routeLines=[['#0b3a78',22],['#fff',18],['#1d6fe0',12]].map(([color,weight])=>L.polyline(ll,{...rs,color,weight,interactive:false}).addTo(routeG));routeFull=ll;
  r.stretches.forEach(s=>L.polyline(s.p.map(p=>[p[1],p[0]]),{...rs,color:'#ffc400',weight:12}).addTo(routeG).bindTooltip(`Risky: ${ft(s.len)} on ${s.name}`));
  const min=Math.max(1,Math.round(r.dist/1609.34/22*60));
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
@@ -138,7 +142,7 @@ function focusStart(){if(!start)return;const sz=map.getSize(),Z=16,top=$('top').
  const want=L.point((x0+x1)/2,(y0+y1)/2),off=want.subtract(sz.divideBy(2));
  const c=map.unproject(map.project(start,Z).subtract(off),Z);window._focus={x:want.x,y:want.y};map.flyTo(c,Z,{duration:0.8})}
 window.focusStart=focusStart;
-const pinIcon=(c,e)=>L.divIcon({className:'',html:`<div class="pin" style="background:${c}"><span>${e}</span></div>`,iconSize:[30,30],iconAnchor:[15,30]});
+const pinIcon=(c,e)=>L.divIcon({className:c==='#ff7a59'?'gcm-to-pin':'',html:`<div class="pin" style="background:${c}"><span>${e}</span></div>`,iconSize:[30,30],iconAnchor:[15,30]});
 // ---- route state: From/To fields (Google-Maps style). A point is {ll,label,me}; me=true means live GPS ("Your location").
 let from=null,to=null,active=null; // active: field that the next map tap fills ('from'|'to'|null)
 const P=x=>x?(x.me?myLL:x.ll):null;
@@ -268,7 +272,7 @@ function renderSaved(){const box=$('chips');if(!box)return;box.querySelectorAll(
 {const _s=sync;sync=function(){const r=_s.apply(this,arguments);try{renderSaved()}catch(_){}return r}}
 for(const id of ['q','qf'])$(id).addEventListener('focus',()=>{if(!$(id).value.trim()||$(id).value===$(id).defaultValue)setTimeout(()=>{if(document.activeElement===$(id)&&!$(id).value.trim())showSaved()},0)});
 $('q').oninput=onq;$('qf').oninput=onq;for(const id of ['q','qf'])$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){const f=$('sugg').firstChild;if(f)f.click()}});
-window.testRoute=async(a,b,rk=false)=>{risky=rk;from={ll:L.latLng(a),label:'A'};to={ll:L.latLng(b),label:'B'};active=null;sync();if(inMX(from.ll)||inMX(to.ll))return null;const r=await route();return r?window.lastRoute:null};
+window.testRoute=async(a,b,rk=false,heading=null)=>{risky=rk;routeHeading=Number.isFinite(heading)?heading:null;from={ll:L.latLng(a),label:'A'};to={ll:L.latLng(b),label:'B'};active=null;sync();if(inMX(from.ll)||inMX(to.ll))return null;const r=await route();return r?window.lastRoute:null};
 let readyRes,READY=new Promise(r=>readyRes=r);
 // ---- regions: ?r= / saved > geolocation (already-granted only) nearest within 50 mi > San Diego ----
 const modeName=()=>GCMRule.vname(RULE);  // 'golf carts' or 'LSVs' (RULE.who overrides, e.g. HI 'street-legal electric LSVs')
@@ -351,6 +355,7 @@ window.gcmPartnerOverlay=async function(P){
   const slug=P.get('partner'),code=(P.get('code')||'').trim(); if(!slug||!code)return;
   const r=await fetch('/api/partner/public/'+encodeURIComponent(slug)+'/unlock?code='+encodeURIComponent(code));
   if(!r.ok)return; const j=await r.json(); if(!j.unlocked||!j.shop)return;
+  try{localStorage.setItem('gcm_partner_access',JSON.stringify({slug,code:j.code||code,at:Date.now(),shop:j.shop,experiences:j.experiences,affiliates:j.affiliates}))}catch(_){}  // CarPlay Experiences
   if(j.shop.region_id&&j.shop.region_id!==REG.id){window._regHow='partner';await loadRegion(j.shop.region_id,true)}
   const city=$('city'); if(city){city.disabled=true;city.title="Locked to this rental shop's city"}
   const g=L.layerGroup().addTo(map),bounds=[];
@@ -410,19 +415,22 @@ const navVoice=GCMFollow.voice(GCMFollow.webEngine()),navPlan=GCMFollow.promptPl
 function navSay(t){if(!t||t===liveSaid||!navOn())return;liveSaid=t;navVoice.say(t)}
 function navBar(){let el=$('mapNav');if(el)return el;el=document.createElement('div');el.id='mapNav';el.setAttribute('aria-live','polite');el.innerHTML='<b id="mapNavT"></b><span id="mapNavS"></span>';document.body.appendChild(el);return el}
 function liveNavSet(r){liveSteps=null;navPlan.reset();window._liveNav=null;
- if(r){const runs=r.legs.map(l=>({name:D.names[l.s[0]]||'',points:l.p.map(p=>[p[1],p[0]])}));liveSteps=GCMNav.buildSteps(runs,($('q').value||'').trim()||'your destination');window._liveNav=liveSteps}
+ if(r){const runs=r.legs.map(l=>({name:D.names[l.s[0]]||'',points:l.p.map(p=>[p[1],p[0]])}));liveSteps=GCMNav.buildSteps(runs,($('q').value||'').trim()||'your destination',{continuing:!!r.ahead});window._liveNav=liveSteps}
  if(follow)follow.preview(!!liveSteps);if(!liveSteps&&$('mapNav'))$('mapNav').classList.remove('show');
  if(liveSteps&&navOn()&&myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
-function liveNavFix(c){if(follow)follow.fix(c);if(!navOn()||!liveSteps)return;const st=GCMNav.status(liveSteps,[c.latitude,c.longitude]);const el=navBar();el.classList.add('show');
+// Max t446u: only the road still ahead stays blue; the part you drove disappears.
+function navTrim(along){const p=along>0&&liveSteps?GCMNavFx.trim(liveSteps.pts,along):routeFull;if(p&&p.length>1)routeLines.forEach(l=>l.setLatLngs(p))}
+function liveNavFix(c){if(follow)follow.fix(c);if(!navOn()||!liveSteps)return;const st=GCMNav.status(liveSteps,[c.latitude,c.longitude]);if(!window._navRerouting&&st.off<GCMNav.OFF_ROUTE_M)navTrim(st.along);
+ if(st.arrived&&!window._navRerouting)GCMNavFx.arrive(liveSteps,{place:($('q').value||'').trim(),say:navSay});const el=navBar();el.classList.add('show');
  if(window._navRerouting)return;
  $('mapNavT').textContent=st.arrived?liveSteps.steps[liveSteps.steps.length-1].text:st.text;$('mapNavS').textContent=st.arrived?'':GCMNav.fmtDist(st.remaining).replace('Now','under 50 ft')+' to go';if(follow)follow.eta(st.arrived?0:st.remaining,c.speed);
  if(st.arrived)navSay($('mapNavT').textContent);else{const t=navPlan.update(st,c.speed);if(t)navSay(t)}}
-async function liveReroute(){window._navRerouting=true;const el=navBar();el.classList.add('show');$('mapNavT').textContent='↻ Rerouting on legal roads…';$('mapNavS').textContent='';
+async function liveReroute(ll,course){window._navRerouting=true;routeHeading=Number.isFinite(course)?course:null;window._navRerouteCourse=routeHeading;const el=navBar();el.classList.add('show');$('mapNavT').textContent='↻ Rerouting on legal roads…';$('mapNavS').textContent='';
  try{if(!(from&&from.me)){from={me:true}}sync();await route()}finally{window._navRerouting=false}if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
 const follow=GCMFollow.controller({map,getRoute:()=>liveSteps,reroute:liveReroute,say:navSay,
  canStart:()=>!!liveSteps,
- onStart:()=>{liveSaid='';navPlan.reset();if(!watching)locate();setSnap('collapsed');navBar().classList.add('show');$('mapNavT').textContent=liveSteps.steps[0].text;$('mapNavS').textContent='';navSay(liveSteps.steps[0].text);if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})},
- onEnd:()=>{if($('mapNav'))$('mapNav').classList.remove('show');navVoice.stop();setSnap('half')}});
+ onStart:()=>{liveSaid='';navPlan.reset();GCMNavFx.resetTrip();if(navFlag)navFlag.remove();const fl=end||(liveSteps&&liveSteps.pts[liveSteps.pts.length-1]);navFlag=fl?GCMNavFx.flag(L,map,fl):null;if(!watching)locate();setSnap('collapsed');navBar().classList.add('show');$('mapNavT').textContent=liveSteps.steps[0].text;$('mapNavS').textContent='';navSay(liveSteps.steps[0].text);if(myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})},
+ onEnd:()=>{if(navFlag){navFlag.remove();navFlag=null}navTrim(0);if($('mapNav'))$('mapNav').classList.remove('show');navVoice.stop();setSnap('half')}});
 window.gcmFollow=follow;
 // Tap a step to zoom to where it starts; this pauses follow until Recenter.
 $('steps').addEventListener('click',e=>{const d=e.target.closest('.st[data-ll]');if(!d)return;const [a,b]=d.dataset.ll.split(',').map(Number);follow.pause();map.setView([a,b],18)});
