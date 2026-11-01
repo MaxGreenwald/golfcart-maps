@@ -31,6 +31,8 @@ jobs:
         run: node --test tests/nav.test.mjs
       - name: Live navigation (off-route timer, reroute debounce, heading)
         run: node --test tests/navfollow.test.mjs
+      - name: Heading-aware reroute (start ahead, U-turn penalty)
+        run: node --test tests/heading_reroute.test.mjs
       - name: Local-first search (bias, distance rerank, far label)
         run: node --test tests/geosearch.test.mjs
       - name: Saved places (Home, Favorite beach, favorites)
@@ -120,6 +122,8 @@ jobs:
         run: python -m unittest tests.test_live_nav -v
       - name: Nav start (heading-up at Start standing still, Start not paused, photo icon in nav; Chromium + WebKit)
         run: python -m unittest tests.test_nav_start -v
+      - name: Wrong-way reroute (continue forward, one reroute, Max t433u)
+        run: python -m unittest tests.test_heading_reroute -v
       - name: Map icon setting (Settings > Your map icon)
         run: python -m unittest tests.test_map_icon -v
       - name: "test_foldable (iPhone Duo folded/unfolded sizes; fold and unfold mid-navigation keeps the route and follow)"

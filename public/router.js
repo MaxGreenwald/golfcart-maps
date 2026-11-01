@@ -13,6 +13,7 @@
   // A miss longer than this is omitted. A short gap may be a dashed stub.
   // Anything longer would be the chord Max saw crossing the La Jolla water.
   const GAP_MAX_M = 70;
+  const UTURN_M = 1500;   // extra cost (as metres) to turn back on the street you are driving on at a reroute (Max t433u)
 
   function hav(a, b) {
     const R = 6371000, r = Math.PI / 180;
@@ -189,6 +190,9 @@
         if (u === t && run === 0 && !hot) { goal = ku; break; }
         for (const [v, w, si, rev, kind, geo] of (adj[u] || [])) {
           let nr = 0, nGeo = 0, nW = 0, nN = 0, nHot = 0, nHold = null, cost = w;
+          // Heading-aware start (Max t433u): turning back along the street you are driving on costs a lot,
+          // so the route goes on to a corner and around unless reversing is the only way (dead end).
+          const uturn = o.backSeg != null && ku === k0 && si === o.backSeg ? UTURN_M : 0;
           const resume = kind === 1 && hold && hold.at === u ? hold : null;
           const onHot = kind === 1 && (hot || (resume && resume.hot));
           if (onHot) {
@@ -230,7 +234,7 @@
           }
           const cm = nHot ? 0 : (nGeo ? Math.round(nGeo * 100) : 0);
           const kv = keyOf(v, nr, cm, nHot, nHot ? 0 : nN, nHold);
-          const ng = g.get(ku) + cost;
+          const ng = g.get(ku) + cost + uturn;
           if (!g.has(kv) || ng < g.get(kv)) {
             g.set(kv, ng);
             prev.set(kv, [ku, si, rev]);
@@ -250,6 +254,46 @@
       return parts;
     }
     return { reset, build, nearest, astar };
+  }
+
+
+  // Max t433u: while driving, start the route at the corner AHEAD on the street you are on, not at
+  // whichever end of that block is closer (which was often behind you, so every reroute said to turn
+  // around). heading is the GPS course in degrees. Returns { node, backSeg, stub, stubLen, si } where
+  // stub is [lon, lat] points from your spot to that corner, or null when no road is close.
+  function bearingDeg(a, b) {
+    const k = Math.PI / 180, y = Math.sin((b[0] - a[0]) * k) * Math.cos(b[1] * k);
+    const x = Math.cos(a[1] * k) * Math.sin(b[1] * k) - Math.sin(a[1] * k) * Math.cos(b[1] * k) * Math.cos((b[0] - a[0]) * k);
+    return (Math.atan2(y, x) / k + 360) % 360;
+  }
+  function aheadStart(D, buckets, ll, heading, o) {
+    if (!Number.isFinite(heading)) return null;
+    const cls = o.cls, Gv = o.G || G, q = [ll.lng, ll.lat], kx = Math.cos(ll.lat * Math.PI / 180);
+    const bx = Math.floor(q[0] / Gv), by = Math.floor(q[1] / Gv);
+    let best = null, bd = 1e18;
+    for (let x = bx - 1; x <= bx + 1; x++) for (let y = by - 1; y <= by + 1; y++) for (const i of (buckets[x + ',' + y] || [])) {
+      const sg = D.segs[i];
+      if (cls(sg) === 3) continue;
+      const p = sg[7];
+      for (let j = 1; j < p.length; j++) {
+        const ax = (p[j - 1][0] - q[0]) * kx, ay = p[j - 1][1] - q[1], ex_ = (p[j][0] - q[0]) * kx, ey_ = p[j][1] - q[1];
+        const dx = ex_ - ax, dy = ey_ - ay, L2 = dx * dx + dy * dy;
+        const t = Math.max(0, Math.min(1, L2 ? -(ax * dx + ay * dy) / L2 : 0));
+        const ex = ax + t * dx, ey = ay + t * dy;
+        // Prefer pieces that run along the heading (either way), so a cross street at a corner does not win.
+        const bdeg = bearingDeg(p[j - 1], p[j]), dd = Math.abs(((bdeg - heading) % 180 + 270) % 180 - 90);
+        const d = (ex * ex + ey * ey) * (dd > 60 ? 9 : 1);
+        if (d < bd) { bd = d; best = { i, j, t, fwd: Math.abs(((bdeg - heading) % 360 + 540) % 360 - 180) <= 90 }; }
+      }
+    }
+    if (!best || Math.sqrt(bd) * 111320 > 40) return null;
+    const sg = D.segs[best.i], p = sg[7];
+    // One-way against your heading: no forward option on this street, use the normal start.
+    if ((best.fwd && sg[4] < 0) || (!best.fwd && sg[4] > 0)) return null;
+    const a = p[best.j - 1], b = p[best.j];
+    const snap = [a[0] + (b[0] - a[0]) * best.t, a[1] + (b[1] - a[1]) * best.t];
+    const stub = [snap].concat(best.fwd ? p.slice(best.j) : p.slice(0, best.j).reverse());
+    return { node: best.fwd ? sg[6] : sg[5], backSeg: best.i, si: best.i, stub, stubLen: len(stub) };
   }
 
   function geometry(D, parts) {
@@ -292,6 +336,18 @@
     const A = net.nearest(D, buckets, { lat: +a.lat, lng: +a.lon }, o);
     const B = net.nearest(D, buckets, { lat: +b.lat, lng: +b.lon }, o);
     let parts = null;
+    // Moving with a known course: start at the corner ahead and add the stretch up to it.
+    const H = o.heading != null && B[0] != null ? aheadStart(D, buckets, { lat: +a.lat, lng: +a.lon }, o.heading, o) : null;
+    if (H) {
+      for (const tb of [B[0], B[2]]) { parts = net.astar(H.node, tb, { ...o, backSeg: H.backSeg }); if (parts && parts.length) break; parts = null; }
+      if (parts) {
+        const stubPts = H.stub.map(pt => [pt[1], pt[0]]), names = D.names || [], sg = D.segs[H.si];
+        const runs = namedRuns(D, parts, o);
+        const pts = geometry(D, parts);
+        return { points: stubPts.concat(pts.slice(hav(H.stub[H.stub.length - 1], [pts[0][1], pts[0][0]]) < 0.5 ? 1 : 0)), dashed: false,
+          runs: [{ name: names[sg[0]] || '', hw: sg[1], risky: false, points: stubPts }].concat(runs), ahead: true };
+      }
+    }
     if (A[0] != null && B[0] != null) {
       for (const pair of [[A[0], B[0]], [A[2], B[0]], [A[0], B[2]], [A[2], B[2]]]) {
         parts = net.astar(pair[0], pair[1], o);
@@ -355,7 +411,7 @@
         net.build(D, from, o);
       }
     }
-    async function legs(stops) {
+    async function legs(stops, opts) {
       const pad = 0.06;
       let south = 90, west = 180, north = -90, east = -180;
       for (const p of stops) {
@@ -367,7 +423,8 @@
       if (south > north) return [];
       await ensure(south - pad, west - pad, north + pad, east + pad);
       const out = [];
-      for (let i = 1; i < stops.length; i++) out.push(routePair(net, D, buckets, stops[i - 1], stops[i], o));
+      const h0 = opts && Number.isFinite(opts.heading) ? opts.heading : null;
+      for (let i = 1; i < stops.length; i++) out.push(routePair(net, D, buckets, stops[i - 1], stops[i], i === 1 && h0 != null ? { ...o, heading: h0 } : o));
       return out;
     }
     // One trip from a to b (renter "Navigate somewhere else"). risky: true allows the
@@ -375,7 +432,7 @@
     async function trip(a, b, opts) {
       const pad = 0.04;
       await ensure(Math.min(a.lat, b.lat) - pad, Math.min(a.lon, b.lon) - pad, Math.max(a.lat, b.lat) + pad, Math.max(a.lon, b.lon) + pad);
-      return routePair(net, D, buckets, a, b, { ...o, risky: !!(opts && opts.risky) });
+      return routePair(net, D, buckets, a, b, { ...o, risky: !!(opts && opts.risky), heading: opts && Number.isFinite(opts.heading) ? opts.heading : null });
     }
     // Street-name matches among loaded tiles, for the renter search box.
     function streets(q, limit) {
@@ -407,7 +464,7 @@
     return { legs, trip, streets, rule, veh: rule.veh, cover: ensure, segments: () => D.segs, roadStyle };
   }
 
-  const api = { G, RISKY_MAX, SHORT_LEGAL_FT, UNKW, GAP_MAX_M, hav, len, shownFeet, explicitBan, riskyMask, create, geometry, namedRuns, bucketize, routePair, tilesIn, openRegion };
+  const api = { UTURN_M, aheadStart, bearingDeg, G, RISKY_MAX, SHORT_LEGAL_FT, UNKW, GAP_MAX_M, hav, len, shownFeet, explicitBan, riskyMask, create, geometry, namedRuns, bucketize, routePair, tilesIn, openRegion };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMRouter = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
