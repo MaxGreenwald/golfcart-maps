@@ -39,7 +39,7 @@ osascript -e "$WIN" -e 'tell application "System Events" to tell process "Simula
 osascript -e "$WIN" -e 'tell application "System Events" to tell process "Simulator" to get {position, size} of w' > shots-ci/carplay-window.txt 2>&1
 sleep 2
 screencapture -x shots-ci/carplay-home.png
-# Open our app on the CarPlay home screen (screen coords, CARPLAY_TAPS="x,y x,y").
+# Open our app from the CarPlay sidebar (screen coords, CARPLAY_TAPS="x,y x,y"); the sidebar icon sits at the same spot at every size.
 osascript -e "$WIN" -e 'tell application "System Events" to tell process "Simulator" to perform action "AXRaise" of w' >> shots-ci/osascript.txt 2>&1
 for xy in ${CARPLAY_TAPS:-}; do cliclick m:$xy w:300 dd:. w:120 du:. ; sleep 4; screencapture -x shots-ci/carplay-tap-$xy.png; done
 sleep 20

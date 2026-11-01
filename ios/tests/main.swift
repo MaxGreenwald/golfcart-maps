@@ -56,4 +56,10 @@ ck("off route uses GPS course", CarPlayHeading.pick(current: 90, routeBearing: 9
 ck("off route and stopped keeps heading (never compass)", CarPlayHeading.pick(current: 90, routeBearing: 90, offRouteM: 80, course: 180, speed: 0) == nil)
 ck("ignores under 5 degrees", CarPlayHeading.pick(current: 90, routeBearing: 93, offRouteM: 5, course: nil, speed: 5) == nil)
 ck("wraps 358 -> 2 as 4 degrees", CarPlayHeading.pick(current: 358, routeBearing: 2, offRouteM: 5, course: nil, speed: 5) == nil)
+// CarPlay map icon
+ck("icon decodes png data url", CarPlayIcon.decode("data:image/png;base64,iVBORw0KGgo=")?.count == 8)
+ck("icon rejects other urls", CarPlayIcon.decode("https://x/y.png") == nil && CarPlayIcon.decode(nil) == nil && CarPlayIcon.decode("data:image/svg+xml;base64,AAAA") == nil)
+ck("cart faces right heading east, map north-up", CarPlayIcon.faceSide(heading: 90, mapHeading: 0, prev: 1) == -1)
+ck("cart faces left heading west", CarPlayIcon.faceSide(heading: 270, mapHeading: 0, prev: -1) == 1)
+ck("heading-up (map = heading) keeps previous side", CarPlayIcon.faceSide(heading: 90, mapHeading: 90, prev: -1) == -1)
 exit(fails == 0 ? 0 : 1)
