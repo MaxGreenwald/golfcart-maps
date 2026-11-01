@@ -90,7 +90,7 @@ class LiveNav(unittest.TestCase):
         r = pg.evaluate("""(() => {
           const ang = el => { const m = new DOMMatrix(getComputedStyle(el).transform); return Math.atan2(m.b, m.a) * 180 / Math.PI; };
           const scr = el => { let a = 0; for (let e = el; e; e = e.parentElement) { const t = getComputedStyle(e).transform; if (t && t !== 'none') a += ang(e); } return ((a % 360) + 360) % 360; };
-          const w = document.querySelector('.me-wrap'), cart = w.querySelector('.me-cart'), chev = w.querySelector('.me-chev'), ico = w.querySelector('.me-ico');
+          const w = document.querySelector('.me-wrap'), cart = w.querySelector('.me-cart'), chev = w.querySelector('.me-chev'), ico = w.querySelector('.me-ico svg');
           const mb = window.gcmFollowState().mapBearing || 0, hd = parseFloat(getComputedStyle(w).getPropertyValue('--hd'));
           const s = ((hd - mb) % 360 + 360) % 360;
           return { cart: scr(cart) - (getComputedStyle(ico).transform.startsWith('matrix(-1') ? 180 : 0), chev: scr(chev), want: s,
@@ -103,7 +103,6 @@ class LiveNav(unittest.TestCase):
             self.assertEqual(r["flip"], -1 if r["sx"] > 0 else 1, ("flip side", tag, r))
         return r
     @classmethod
-
     def setUpClass(cls):
         cls.srv = _S(("127.0.0.1", 0), functools.partial(_Quiet, directory=PUB))
         threading.Thread(target=cls.srv.serve_forever, daemon=True).start()

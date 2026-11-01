@@ -168,10 +168,11 @@
 .me-cone{display:none;position:absolute;left:50%;top:50%;width:0;height:0;margin-left:-11px;margin-top:-30px;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:22px solid rgba(29,111,224,.85);transform-origin:11px 30px;transform:rotate(var(--hd,0deg));filter:drop-shadow(0 0 1px #fff)}
 .me-wrap.has-hd .me-cone{display:block}
 .me-cart{display:none;position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;transform:rotate(var(--mb,0deg));transform-origin:50% 50%;will-change:transform;pointer-events:none}
-.me-ico{width:100%;height:100%;transform:scaleX(var(--flip,1));will-change:transform;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+.me-ico{width:100%;height:100%;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
 .me-ico svg,.me-ico img{display:block;width:100%;height:100%}
-.me-chev{display:none;position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;transform:rotate(var(--hd,0deg));will-change:transform;pointer-events:none}
-.me-chev:before{content:'';position:absolute;left:50%;top:0;width:14px;height:9px;margin-left:-7px;background:#0b9fb3;clip-path:polygon(50% 0,100% 100%,50% 70%,0 100%);filter:drop-shadow(0 0 1px #fff)}
+.me-ico svg{transform:scaleX(var(--flip,1));will-change:transform}
+.me-chev{display:none;position:absolute;left:50%;top:50%;width:78px;height:78px;margin:-39px 0 0 -39px;transform:rotate(var(--hd,0deg));will-change:transform;pointer-events:none}
+.me-chev:before{content:'';position:absolute;left:50%;top:0;width:16px;height:10px;margin-left:-8px;background:#0b9fb3;clip-path:polygon(50% 0,100% 100%,50% 70%,0 100%);filter:drop-shadow(0 0 1px #fff)}
 body.gcm-navigating .me-cart,body.gcm-navigating .me-wrap.has-hd .me-chev{display:block}
 body.gcm-navigating .me-wrap .me-dot,body.gcm-navigating .me-wrap .me-cone{display:none}
 #navCtl{position:fixed;z-index:1200;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;gap:10px;pointer-events:none}
@@ -215,6 +216,69 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     const h = iconHtml(); document.querySelectorAll('.me-ico').forEach(el => { el.innerHTML = h; });
   }
   const dotHtml = () => '<div class="me-wrap"><div class="me-cone"></div><div class="me-dot"></div><div class="me-chev" aria-hidden="true"></div><div class="me-cart" aria-hidden="true"><div class="me-ico">' + iconHtml() + '</div></div></div>';
+
+  // Max t427u/t428u: Settings > Your map icon. A photo is processed on this device only (never uploaded):
+  // center square crop, 128 px, round with a white ring, saved as a small PNG data URL in localStorage.
+  const ICON_PX = 128, ICON_MAX_BYTES = 50000, FILE_MAX_BYTES = 30 * 1024 * 1024;
+  function loadImage(file) {
+    return new Promise((ok, bad) => {
+      const url = URL.createObjectURL(file), im = new Image();
+      im.onload = () => { URL.revokeObjectURL(url); ok(im); };
+      im.onerror = () => { URL.revokeObjectURL(url); bad(new Error('decode')); };
+      im.src = url;
+    });
+  }
+  function roundIcon(im, px) {
+    const c = document.createElement('canvas'); c.width = c.height = px;
+    const g = c.getContext('2d'), w = im.naturalWidth || im.width, h = im.naturalHeight || im.height, side = Math.min(w, h);
+    const ring = Math.max(3, Math.round(px * 0.06)), r = px / 2;
+    g.save(); g.beginPath(); g.arc(r, r, r - ring, 0, Math.PI * 2); g.clip();
+    g.imageSmoothingQuality = 'high';
+    g.drawImage(im, (w - side) / 2, (h - side) / 2, side, side, ring, ring, px - 2 * ring, px - 2 * ring);
+    g.restore();
+    g.beginPath(); g.arc(r, r, r - ring / 2, 0, Math.PI * 2); g.lineWidth = ring; g.strokeStyle = '#fff'; g.stroke();
+    return c.toDataURL('image/png');
+  }
+  // Resolves to the saved data URL, or rejects with a message for the user.
+  async function setIconFromFile(file) {
+    if (!file) throw new Error('No photo picked.');
+    if (file.size > FILE_MAX_BYTES) throw new Error('That photo is too big (over 30 MB). Try a smaller one.');
+    let im;
+    try { im = await loadImage(file); } catch (_) {
+      const heic = /hei[cf]/i.test(file.type || '') || /\.hei[cf]$/i.test(file.name || '');
+      throw new Error(heic ? 'This browser cannot read HEIC photos. Pick a JPEG or PNG, or take a screenshot of the photo and use that.' : 'Could not read that file as a picture. Try a JPEG or PNG.');
+    }
+    if (!(im.naturalWidth > 0)) throw new Error('Could not read that file as a picture. Try a JPEG or PNG.');
+    let px = ICON_PX, url = roundIcon(im, px);
+    while (url.length > ICON_MAX_BYTES && px > 48) { px -= 16; url = roundIcon(im, px); }
+    if (url.length > ICON_MAX_BYTES) throw new Error('Could not make that photo small enough. Try another one.');
+    try { localStorage.setItem(ICON_KEY, url); } catch (_) { throw new Error('Could not save the icon on this device.'); }
+    refreshIcon();
+    return url;
+  }
+  function resetIcon() { try { localStorage.removeItem(ICON_KEY); } catch (_) {} refreshIcon(); }
+  function hasCustomIcon() { try { return !!localStorage.getItem(ICON_KEY); } catch (_) { return false; } }
+  function wireIconSetting() {
+    if (typeof document === 'undefined') return;
+    const file = document.getElementById('iconFile'), reset = document.getElementById('iconReset'), sub = document.getElementById('iconSub'), prev = document.getElementById('iconPrev');
+    if (!file || file.dataset.wired) return; file.dataset.wired = '1';
+    const show = (msg, err) => {
+      prev.innerHTML = iconHtml(); reset.hidden = !hasCustomIcon();
+      sub.textContent = msg || (hasCustomIcon() ? 'Your photo. Shows while you navigate.' : 'Default cart. Shows while you navigate.');
+      sub.classList.toggle('err', !!err);
+    };
+    file.addEventListener('change', async () => {
+      const f = file.files && file.files[0]; file.value = '';
+      if (!f) return;
+      sub.textContent = 'Making your icon...'; sub.classList.remove('err');
+      try { await setIconFromFile(f); show(); } catch (e) { show(e.message, true); }
+    });
+    reset.addEventListener('click', () => { resetIcon(); show(); });
+    show();
+  }
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wireIconSetting); else wireIconSetting();
+  }
 
   // Rotate a Leaflet map with CSS. The map pane goes inside a wrapper div that turns around the dot's
   // screen spot, so panning (which Leaflet does on the pane) and rotation never fight. While turned, tiles
@@ -480,7 +544,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     paintBtns();
     return api;
   }
-  const api = { C, P, voice, webEngine, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, faceSide, get DOT() { return dotHtml(); }, CART, ICON_KEY, refreshIcon };
+  const api = { C, P, voice, webEngine, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, faceSide, get DOT() { return dotHtml(); }, CART, ICON_KEY, refreshIcon, setIconFromFile, resetIcon };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMFollow = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
