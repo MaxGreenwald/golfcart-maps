@@ -55,3 +55,21 @@ test('old access without saved experiences: not ok', async () => {
   const { cp } = load({ gcm_partner_access: JSON.stringify({ slug: 'beachmode', code: 'X', at: Date.now() }) }, () => ok(UNLOCK));
   assert.equal((await cp.experiences()).ok, false);
 });
+
+// Max t451u: CarPlay lists Home / Favorite beach / favorites before typing, so most trips need no keyboard.
+test('places(): saved Home, beach and favorites for the CarPlay Places list', async () => {
+  const PL = fs.readFileSync(new URL('../public/places.js', import.meta.url), 'utf8');
+  const store = { 'gcm-places': JSON.stringify({ home: { name: '123 Main St', lat: 32.8, lon: -117.25 }, beach: { name: 'Crystal Pier', lat: 32.795, lon: -117.256 },
+    fav1: { name: 'Destiny Coast', lat: 30.39, lon: -86.49 }, fav2: { name: 'bad', lat: 'x', lon: 1 } }) };
+  const ls = { getItem: k => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = String(v); } };
+  const win = {};
+  const ctx = { window: win, localStorage: ls, location: { protocol: 'capacitor:' }, console, setTimeout, Promise, JSON, Math, Date, isFinite, String, Object };
+  vm.createContext(ctx); vm.runInContext(PL, ctx); vm.runInContext(SRC, ctx);
+  const r = await win.GCMCarPlay.places();
+  assert.deepEqual(JSON.parse(JSON.stringify(r.map(p => p.name))), ['Home', 'Favorite beach', 'Destiny Coast']);
+  assert.equal(r[0].sub, '123 Main St'); assert.equal(r[2].sub, 'Favorite'); assert.equal(r[0].lat, 32.8);
+});
+test('places(): nothing saved or no places module gives an empty list', async () => {
+  const { cp } = load({}, () => ok(UNLOCK));
+  assert.equal((await cp.places()).length, 0);
+});

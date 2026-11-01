@@ -62,7 +62,15 @@
 #gcmArrive .msg{position:relative;z-index:3;max-width:86vw;text-align:center;font:800 clamp(26px,7vw,46px)/1.15 system-ui,-apple-system,sans-serif;color:#4b1fa8;
  text-shadow:0 2px 0 #fff,0 0 18px #fff;animation:gcmPop .6s cubic-bezier(.2,1.6,.4,1) .2s both}
 #gcmArrive .sub{display:block;margin-top:10px;font:600 15px system-ui,sans-serif;color:#5b3fb0;opacity:.85}
-#gcmArrive .u{position:absolute;left:0;z-index:2;animation:gcmRun 3.4s linear both}
+#gcmArrive .u{position:absolute;left:0;z-index:2;animation:gcmRun var(--d,4s) linear var(--dl,0s) var(--n,3) both}
+#gcmArrive .u.rtl{animation-name:gcmRunL}
+#gcmArrive .u .fl{transform:scaleX(-1)}
+#gcmArrive .u .wv{animation:gcmWave var(--w,1.6s) ease-in-out infinite alternate}
+#gcmArrive .cf{position:absolute;top:-20px;z-index:1;width:9px;height:14px;border-radius:2px;animation:gcmFall var(--d,5s) linear var(--dl,0s) infinite}
+#gcmArrive .arc{position:absolute;left:50%;bottom:-38vmin;width:110vmin;height:110vmin;margin-left:-55vmin;border-radius:50%;z-index:0;opacity:.55;
+ background:radial-gradient(circle,transparent 52%,#a06bff 52%,#a06bff 56%,#4dafff 56%,#4dafff 60%,#5ddc7a 60%,#5ddc7a 64%,#ffe14d 64%,#ffe14d 68%,#ffa64d 68%,#ffa64d 72%,#ff5d5d 72%,#ff5d5d 76%,transparent 76%);
+ animation:gcmRise 1.6s cubic-bezier(.2,1.3,.4,1) .3s both}
+#gcmArrive .msg{animation:gcmPop .6s cubic-bezier(.2,1.6,.4,1) .2s both,gcmPulse 1.8s ease-in-out 1s infinite}
 #gcmArrive .u svg{animation:gcmBob .32s ease-in-out infinite alternate;filter:drop-shadow(0 6px 6px rgba(60,20,140,.25))}
 #gcmArrive .u .u-l1{animation:gcmLeg .32s ease-in-out infinite alternate;transform-origin:top center;transform-box:fill-box}
 #gcmArrive .u .u-l2{animation:gcmLeg .32s ease-in-out infinite alternate-reverse;transform-origin:top center;transform-box:fill-box}
@@ -70,6 +78,11 @@
  background:linear-gradient(#ff5d5d,#ffa64d,#ffe14d,#5ddc7a,#4dafff,#a06bff);opacity:.85;filter:blur(.5px)}
 #gcmArrive .sp{position:absolute;z-index:1;font-size:22px;animation:gcmTw 1.2s ease-in-out infinite}
 @keyframes gcmRun{from{transform:translateX(-200px)}to{transform:translateX(calc(100vw + 60vw))}}
+@keyframes gcmRunL{from{transform:translateX(calc(100vw + 40px))}to{transform:translateX(calc(-200px - 60vw))}}
+@keyframes gcmWave{from{transform:translateY(calc(var(--a,24px) * -1))}to{transform:translateY(var(--a,24px))}}
+@keyframes gcmFall{from{transform:translateY(0) rotate(0)}to{transform:translateY(110vh) rotate(720deg)}}
+@keyframes gcmRise{from{transform:translateY(40vmin) scale(.6);opacity:0}to{transform:none;opacity:.55}}
+@keyframes gcmPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @keyframes gcmBob{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-10px) rotate(2deg)}}
 @keyframes gcmLeg{from{transform:rotate(-22deg)}to{transform:rotate(22deg)}}
 @keyframes gcmPop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
@@ -84,7 +97,9 @@
   }
   let shown = null, timer = null;
   function dismiss() { if (timer) clearTimeout(timer); timer = null; if (shown) { shown.remove(); shown = null; } }
-  // Full-screen unicorn parade, ~3.8 s, tap to dismiss. Reduced motion: a still card instead.
+  // Full-screen unicorn parade, 15 s (Max t451u: 3.8 s was way too fast), tap to dismiss. Eight unicorns on
+  // different lanes, speeds, directions and waves, plus confetti and a rainbow. Reduced motion: a still card, 6 s.
+  const PARADE_MS = 15000, CALM_MS = 6000, UNICORNS = 8;
   function celebrate(o) {
     o = o || {};
     if (typeof document === 'undefined') return null;
@@ -96,8 +111,17 @@
       el.className = 'calm';
       el.innerHTML = `<div class="card">🦄<br>${TEXT}${sub}</div>`;
     } else {
-      const cols = ['#ff7eb6', '#7ec8ff', '#b28bff'];
-      const us = cols.map((c, i) => `<div class="u" style="top:${18 + i * 26}%;animation-delay:${i * 0.35}s"><div class="rb"></div>${unicorn(c)}</div>`).join('');
+      const cols = ['#ff7eb6', '#7ec8ff', '#b28bff', '#ffd34d', '#5ddc7a'];
+      let us = '';
+      for (let i = 0; i < UNICORNS; i++) {
+        const d = 3.2 + (i % 3) * 0.9, dl = i * 0.8, n = Math.max(1, Math.floor((PARADE_MS / 1000 - 1 - dl) / d));
+        us += `<div class="u${i % 2 ? ' rtl' : ''}" style="top:${6 + (i * 23) % 72}%;--d:${d}s;--dl:${dl}s;--n:${n};scale:${[1, .8, .65][i % 3]}">` +
+          `<div class="wv" style="--a:${14 + (i % 4) * 8}px;--w:${1.2 + (i % 3) * 0.5}s"><div class="${i % 2 ? 'fl' : ''}"><div class="rb"></div>${unicorn(cols[i % cols.length])}</div></div></div>`;
+      }
+      let cf = '';
+      const cc = ['#ff5d5d', '#ffa64d', '#ffe14d', '#5ddc7a', '#4dafff', '#a06bff', '#ff7eb6'];
+      for (let i = 0; i < 40; i++) cf += `<i class="cf" style="left:${(i * 29) % 100}%;background:${cc[i % cc.length]};--d:${4 + (i % 5)}s;--dl:${(i % 10) * 0.3}s"></i>`;
+      us = '<div class="arc"></div>' + cf + us;
       let sp = '';
       for (let i = 0; i < 18; i++) sp += `<span class="sp" style="left:${(i * 53) % 100}%;top:${(i * 37) % 100}%;animation-delay:${(i % 6) * 0.2}s">${i % 3 ? '✨' : '⭐'}</span>`;
       el.innerHTML = sp + us + `<div class="msg">${TEXT}${sub}</div>`;
@@ -105,7 +129,7 @@
     el.addEventListener('click', dismiss);
     document.body.appendChild(el);
     shown = el;
-    timer = setTimeout(dismiss, o.ms || 3800);
+    timer = setTimeout(dismiss, o.ms || (el.className === 'calm' ? CALM_MS : PARADE_MS));
     if (o.say) try { o.say('Have a wonderful life, you legend!'); } catch (e) {}
     return el;
   }
@@ -134,7 +158,7 @@
     document.head.appendChild(st);
   }
 
-  const api = { trim, length, hav, flag, flagIcon, FLAG_SVG, TEXT, celebrate, dismiss, arrive, resetTrip };
+  const api = { PARADE_MS, CALM_MS, UNICORNS, trim, length, hav, flag, flagIcon, FLAG_SVG, TEXT, celebrate, dismiss, arrive, resetTrip };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   root.GCMNavFx = api;
 })(typeof window !== 'undefined' ? window : globalThis);
