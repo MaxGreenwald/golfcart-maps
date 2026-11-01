@@ -273,7 +273,7 @@ function renderSaved(){const box=$('chips');if(!box)return;box.querySelectorAll(
 {const _s=sync;sync=function(){const r=_s.apply(this,arguments);try{renderSaved()}catch(_){}return r}}
 for(const id of ['q','qf'])$(id).addEventListener('focus',()=>{if(!$(id).value.trim()||$(id).value===$(id).defaultValue)setTimeout(()=>{if(document.activeElement===$(id)&&!$(id).value.trim())showSaved()},0)});
 $('q').oninput=onq;$('qf').oninput=onq;for(const id of ['q','qf'])$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){const f=$('sugg').firstChild;if(f)f.click()}});
-window.testRoute=async(a,b,rk=false)=>{risky=rk;from={ll:L.latLng(a),label:'A'};to={ll:L.latLng(b),label:'B'};active=null;sync();if(inMX(from.ll)||inMX(to.ll))return null;const r=await route();return r?window.lastRoute:null};
+window.testRoute=async(a,b,rk=false,heading=null)=>{risky=rk;routeHeading=Number.isFinite(heading)?heading:null;from={ll:L.latLng(a),label:'A'};to={ll:L.latLng(b),label:'B'};active=null;sync();if(inMX(from.ll)||inMX(to.ll))return null;const r=await route();return r?window.lastRoute:null};
 let readyRes,READY=new Promise(r=>readyRes=r);
 // ---- regions: ?r= / saved > geolocation (already-granted only) nearest within 50 mi > San Diego ----
 const modeName=()=>GCMRule.vname(RULE);  // 'golf carts' or 'LSVs' (RULE.who overrides, e.g. HI 'street-legal electric LSVs')

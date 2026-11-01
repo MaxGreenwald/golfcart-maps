@@ -124,6 +124,11 @@ class HeadingReroute(unittest.TestCase):
         pg.wait_for_timeout(1500)
         self.assertEqual(pg.evaluate("window.__navReroutes || 0"), r1, "no reroute while following the fresh route")
         pg.screenshot(path=os.path.join(SHOTS, "reroute-wrong-way-following.png"))
+        # CarPlay plans through testRoute on the same page: a heading makes it start ahead too.
+        fwd = pg.evaluate("(async () => { await testRoute([%f,%f],[%s],false,105); return {ahead: !!window._lastDetail.ahead, road: D.names[window._lastDetail.legs[0].s[0]]}; })()" % (ME[0], ME[1], DEST))
+        self.assertEqual(fwd, {"ahead": True, "road": "Hornblend Street"})
+        still = pg.evaluate("(async () => { await testRoute([%f,%f],[%s]); return !!window._lastDetail.ahead; })()" % (ME[0], ME[1], DEST))
+        self.assertFalse(still, "no heading: any direction")
         ctx.close()
 
 
