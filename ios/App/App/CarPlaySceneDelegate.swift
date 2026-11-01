@@ -267,6 +267,10 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         syncMapIcon()
         #if DEBUG
         // CI screenshot hook: `simctl launch <dev> <bundle> -GCMCarPlayDemo YES` plans a demo trip, then starts guidance.
+        // CI screenshot hook (t451u): -GCMCarPlayCelebrateLoop YES runs the arrival celebration every 20 s.
+        if UserDefaults.standard.bool(forKey: "GCMCarPlayCelebrateLoop") {
+            Timer.scheduledTimer(withTimeInterval: 20, repeats: true) { [weak self] _ in self?.celebrate() }
+        }
         if UserDefaults.standard.bool(forKey: "GCMCarPlayDemo") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
                 // -GCMCarPlayDemoTo "lat,lon,Name" (default Crystal Pier)
