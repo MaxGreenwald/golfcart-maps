@@ -228,6 +228,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     var dest: (CLLocationCoordinate2D, String)?
     var camHeading: Double?
     var mode: String { "lsv" }
+    var codeSearch: CPSearchTemplate?   // rental code entry (Max t449u)
 
     // Scene lifecycle
     func templateApplicationScene(_ scene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController, to window: CPWindow) {
@@ -349,7 +350,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let searchBtn = CPBarButton(title: "Search") { [weak self] _ in self?.openSearch() }
         let savedBtn = CPBarButton(title: "Recent") { [weak self] _ in self?.openRecents() }
         mapTemplate.leadingNavigationBarButtons = [searchBtn, savedBtn]
-        mapTemplate.trailingNavigationBarButtons = [CPBarButton(title: "Experiences") { [weak self] _ in self?.openExperiences() }]
+        let gear = CPBarButton(image: UIImage(systemName: "gearshape.fill") ?? UIImage()) { [weak self] _ in self?.openSettings() }
+        mapTemplate.trailingNavigationBarButtons = [CPBarButton(title: "Experiences") { [weak self] _ in self?.openExperiences() }, gear]
         let recenter = CPMapButton { [weak self] _ in
             self?.startFollowing(animated: true)
         }
@@ -406,6 +408,14 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         interface?.pushTemplate(t, animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } })
     }
     func searchTemplate(_ searchTemplate: CPSearchTemplate, updatedSearchText searchText: String, completionHandler: @escaping ([CPListItem]) -> Void) {
+        if searchTemplate === codeSearch {
+            completionHandler(CarPlayRentalCode.rows(for: searchText).map { r in
+                let it = CPListItem(text: r.text, detailText: r.detail)
+                if let c = r.code { it.userInfo = ["rentalCode": c] }
+                return it
+            })
+            return
+        }
         guard searchText.count >= 2 else { completionHandler([]); return }
         let c = loc.location?.coordinate ?? mapVC.map.centerCoordinate
         GCMBridge.shared.call("search(q,lat,lon)", ["q": searchText, "lat": c.latitude, "lon": c.longitude]) { any in
@@ -430,6 +440,11 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         }
     }
     func searchTemplate(_ searchTemplate: CPSearchTemplate, selectedResult item: CPListItem, completionHandler: @escaping () -> Void) {
+        if searchTemplate === codeSearch {
+            if let c = (item.userInfo as? [String: Any])?["rentalCode"] as? String { enterCode(c) }
+            completionHandler()
+            return
+        }
         if let d = item.userInfo as? [String: Any] { choose(d) }
         completionHandler()
     }
@@ -657,6 +672,58 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     func dismiss() { interface?.dismissTemplate(animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } }) }
     func push(_ t: CPTemplate) { interface?.pushTemplate(t, animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } }) }
 
+    // MARK: Settings / rental code (Max t449u). Typing uses CPSearchTemplate, the only CarPlay text entry;
+    // the car may lock its keyboard while moving, so every screen also points to the phone's Settings.
+    func openSettings() {
+        GCMBridge.shared.call("rental()") { [weak self] any in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                let d = any as? [String: Any] ?? [:]
+                var items: [CPListItem] = []
+                if d["ok"] as? Bool == true {
+                    let shop = d["shop"] as? String ?? "Rental shop"
+                    let active = CPListItem(text: shop, detailText: "Active rental shop")
+                    active.handler = { [weak self] _, done in self?.openExperiences(); done() }
+                    let remove = CPListItem(text: "Remove \(shop)", detailText: "Stops showing its experiences")
+                    remove.handler = { [weak self] _, done in
+                        GCMBridge.shared.call("removeRental()") { _ in DispatchQueue.main.async { self?.interface?.popTemplate(animated: true, completion: nil) } }
+                        done()
+                    }
+                    items = [active, remove]
+                }
+                let enter = CPListItem(text: "Enter rental code", detailText: "Or in Settings in the phone app")
+                enter.handler = { [weak self] _, done in self?.openCodeEntry(); done() }
+                items.append(enter)
+                self.push(CPListTemplate(title: "Settings", sections: [CPListSection(items: items, header: "Rental code", sectionIndexTitle: nil)]))
+            }
+        }
+    }
+    func openCodeEntry() {
+        let t = CPSearchTemplate()
+        t.delegate = self
+        codeSearch = t
+        push(t)
+    }
+    func enterCode(_ code: String) {
+        GCMBridge.shared.call("enterCode(c)", ["c": code]) { [weak self] any in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                let d = any as? [String: Any] ?? [:]
+                if d["ok"] as? Bool == true {
+                    let shop = d["shop"] as? String ?? "Rental shop"
+                    self.presentAlert(["\(shop) unlocked", "Unlocked"], [CPAlertAction(title: "See experiences", style: .default) { [weak self] _ in
+                        self?.dismiss()
+                        self?.interface?.popToRootTemplate(animated: false, completion: nil)
+                        self?.openExperiences()
+                    }])
+                } else {
+                    self.presentAlert([d["reason"] as? String ?? "Could not unlock", "Could not unlock"],
+                                      [CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in self?.dismiss() }])
+                }
+            }
+        }
+    }
+
     // MARK: Partner experiences (Max t437s2290). Data: public/carplay.js experiences() / stops(id) from the
     // renter unlock saved on the phone. Short text only; coupon codes only when parked.
     func openExperiences() {
@@ -665,8 +732,9 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
                 guard let self = self else { return }
                 let d = any as? [String: Any] ?? [:]
                 guard d["ok"] as? Bool == true else {
-                    self.presentAlert([d["reason"] as? String ?? "Open your rental shop link on your phone to unlock experiences.", "Open your shop link on your phone"],
-                                      [CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in self?.dismiss() }])
+                    self.presentAlert([d["reason"] as? String ?? "No rental code yet. Tap the gear to enter one.", "No rental code yet"],
+                                      [CPAlertAction(title: "Enter code", style: .default) { [weak self] _ in self?.dismiss(); self?.openCodeEntry() },
+                                       CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in self?.dismiss() }])
                     return
                 }
                 let shop = d["shop"] as? [String: Any] ?? [:], veh = shop["vehicle"] as? String ?? "golf_cart"

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C0A300000000000000000002 /* CarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A300000000000000000001 /* CarPlaySceneDelegate.swift */; };
 		C0A300000000000000000004 /* CarPlayStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A300000000000000000003 /* CarPlayStartView.swift */; };
+		C0A800000000000000000002 /* CarPlayRentalCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A800000000000000000001 /* CarPlayRentalCode.swift */; };
 		C0A200000000000000000002 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A200000000000000000001 /* SceneDelegate.swift */; };
 		C0A100000000000000000002 /* GCMBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A100000000000000000001 /* GCMBridge.swift */; };
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
@@ -25,6 +26,7 @@
 		C0A400000000000000000001 /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
 		C0A300000000000000000001 /* CarPlaySceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySceneDelegate.swift; sourceTree = "<group>"; };
 		C0A300000000000000000003 /* CarPlayStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayStartView.swift; sourceTree = "<group>"; };
+		C0A800000000000000000001 /* CarPlayRentalCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayRentalCode.swift; sourceTree = "<group>"; };
 		C0A200000000000000000001 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C0A100000000000000000001 /* GCMBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCMBridge.swift; sourceTree = "<group>"; };
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				C0A400000000000000000001 /* App.entitlements */,
 				C0A300000000000000000001 /* CarPlaySceneDelegate.swift */,
 				C0A300000000000000000003 /* CarPlayStartView.swift */,
+				C0A800000000000000000001 /* CarPlayRentalCode.swift */,
 				C0A200000000000000000001 /* SceneDelegate.swift */,
 				C0A100000000000000000001 /* GCMBridge.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
@@ -226,6 +229,7 @@
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				C0A300000000000000000002 /* CarPlaySceneDelegate.swift in Sources */,
 				C0A300000000000000000004 /* CarPlayStartView.swift in Sources */,
+				C0A800000000000000000002 /* CarPlayRentalCode.swift in Sources */,
 				C0A200000000000000000002 /* SceneDelegate.swift in Sources */,
 				C0A100000000000000000002 /* GCMBridge.swift in Sources */,
 			);
