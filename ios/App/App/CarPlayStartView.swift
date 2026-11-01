@@ -129,3 +129,20 @@ enum CarPlayHeading {
         return d < minChange ? nil : w
     }
 }
+
+/// Map icon during CarPlay guidance, same as the phone (public/navfollow.js): cart E by default, or the user's
+/// photo from Settings > Your map icon (web localStorage 'gcm_map_icon', a small round data URL).
+enum CarPlayIcon {
+    static let key = "gcm_map_icon"
+    /// Image bytes from a data URL the phone accepts (png, jpeg, webp base64), else nil.
+    static func decode(_ url: String?) -> Data? {
+        guard let u = url, let r = u.range(of: "^data:image/(png|jpeg|webp);base64,", options: .regularExpression) else { return nil }
+        return Data(base64Encoded: String(u[r.upperBound...]), options: .ignoreUnknownCharacters)
+    }
+    /// scaleX for the left-facing cart, same as navfollow.js faceSide: -1 (face right) when the on-screen
+    /// direction (heading minus map heading) points right, 1 when left, keep the previous side near up/down.
+    static func faceSide(heading: Double, mapHeading: Double, prev: Double) -> Double {
+        let sx = sin((heading - mapHeading) * .pi / 180)
+        return sx > 0.17 ? -1 : sx < -0.17 ? 1 : (prev == 0 ? 1 : prev)
+    }
+}

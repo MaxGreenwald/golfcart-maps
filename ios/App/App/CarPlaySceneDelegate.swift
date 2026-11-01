@@ -84,7 +84,7 @@ final class AvoidLine: MKPolyline {}
 final class CarPlayMapViewController: UIViewController, MKMapViewDelegate {
     let map = MKMapView()
     var onRegionChange: ((MKCoordinateRegion) -> Void)?
-    var guiding = false { didSet { if guiding != oldValue { layoutMap() } } }
+    var guiding = false { didSet { if guiding != oldValue { layoutMap(); refreshPuck() } } }
     override func viewDidLoad() {
         super.viewDidLoad()
         map.frame = view.bounds
@@ -120,6 +120,68 @@ final class CarPlayMapViewController: UIViewController, MKMapViewDelegate {
         return r
     }
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) { onRegionChange?(mapView.region) }
+
+    // MARK: map icon (Max t434u): during guidance the dot becomes the phone's icon, cart E or the user's photo.
+    var puck: CarPlayPuckView?
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard annotation is MKUserLocation, guiding else { return nil }
+        let v = CarPlayPuckView(annotation: annotation, reuseIdentifier: nil)
+        v.setIcon(CarPlayPuckView.savedPhoto())
+        puck = v
+        #if DEBUG
+        NSLog("GCMCarPlay puck %@", CarPlayPuckView.savedPhoto() == nil ? "cart" : "photo")
+        #endif
+        return v
+    }
+    /// MapKit only asks for the user location view once, so toggle it to swap dot and icon.
+    func refreshPuck() {
+        puck = nil
+        map.showsUserLocation = false
+        map.showsUserLocation = true
+    }
+}
+
+/// 48 pt icon kept upright on the map. The cart flips left/right by on-screen travel direction (same rule as
+/// navfollow.js); a photo is never mirrored. A small teal chevron above it turns with the heading.
+final class CarPlayPuckView: MKAnnotationView {
+    private let img = UIImageView()
+    private let chev = UIImageView(image: UIImage(systemName: "chevron.up", withConfiguration: UIImage.SymbolConfiguration(pointSize: 14, weight: .heavy)))
+    private var isPhoto = false, side: Double = 1
+    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        frame = CGRect(x: 0, y: 0, width: 48, height: 48)
+        img.frame = bounds; img.contentMode = .scaleAspectFit
+        chev.tintColor = UIColor(red: 0.04, green: 0.6, blue: 0.66, alpha: 1)
+        chev.frame = CGRect(x: 16, y: -20, width: 16, height: 16)
+        addSubview(img); addSubview(chev)
+        canShowCallout = false; zPriority = .max
+    }
+    required init?(coder: NSCoder) { fatalError() }
+    static func savedPhoto() -> UIImage? {
+        guard let d = UserDefaults.standard.data(forKey: CarPlayIcon.key) else { return nil }
+        return UIImage(data: d)
+    }
+    /// Save the web setting natively so a CarPlay-only cold start still has it. nil = default cart.
+    static func save(dataURL: String?) {
+        if let d = CarPlayIcon.decode(dataURL), UIImage(data: d) != nil { UserDefaults.standard.set(d, forKey: CarPlayIcon.key) }
+        else { UserDefaults.standard.removeObject(forKey: CarPlayIcon.key) }
+    }
+    func setIcon(_ photo: UIImage?) {
+        isPhoto = photo != nil
+        img.image = photo ?? UIImage(named: "CartE")
+        img.layer.cornerRadius = isPhoto ? 24 : 0
+        img.layer.borderWidth = isPhoto ? 3 : 0
+        img.layer.borderColor = UIColor.white.cgColor
+        img.clipsToBounds = isPhoto
+        img.transform = .identity
+    }
+    /// heading = travel direction, mapHeading = camera heading (both degrees).
+    func point(heading: Double, mapHeading: Double) {
+        chev.transform = CGAffineTransform(rotationAngle: CGFloat((heading - mapHeading) * .pi / 180))
+        guard !isPhoto else { return }
+        side = CarPlayIcon.faceSide(heading: heading, mapHeading: mapHeading, prev: side)
+        img.transform = CGAffineTransform(scaleX: CGFloat(side), y: 1)
+    }
 }
 
 // MARK: - CarPlay scene
@@ -173,6 +235,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         NSLog("GCMCarPlay scene connected")
         #endif
         GCMBridge.shared.track("session")
+        syncMapIcon()
         #if DEBUG
         // CI screenshot hook: `simctl launch <dev> <bundle> -GCMCarPlayDemo YES` plans a demo trip, then starts guidance.
         if UserDefaults.standard.bool(forKey: "GCMCarPlayDemo") {
@@ -421,6 +484,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let s = mapTemplate.startNavigationSession(for: trip)
         session = s
         mapVC.guiding = true
+        syncMapIcon()
         GCMBridge.shared.track("route_started", ["mi": p.miles])
         step = p.maneuvers.count > 1 ? 1 : 0
         pushManeuvers(s, p)
@@ -471,6 +535,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
     /// Heading-up like the phone: rotate the camera to the route bearing ~25 m ahead (GPS course off route).
     func headingUp(_ here: CLLocation, off: Double, line: [(Double, Double)]) {
+        if here.course >= 0 { mapVC.puck?.point(heading: here.course, mapHeading: mapVC.map.camera.heading) }
         guard following else { return }
         let me = (here.coordinate.latitude, here.coordinate.longitude)
         guard let h = CarPlayHeading.pick(current: camHeading, routeBearing: CarPlayHeading.routeBearing(from: me, line: line), offRouteM: off,
@@ -480,6 +545,17 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         cam.heading = h; cam.centerCoordinate = here.coordinate
         mapVC.map.setCamera(cam, animated: true)
         mapVC.map.setUserTrackingMode(.follow, animated: false)
+    }
+    /// Map icon (t434u): read Settings > Your map icon from the web layer on connect and at each trip start,
+    /// save it natively (UserDefaults) for CarPlay-only cold starts, and swap the guidance icon if it changed.
+    func syncMapIcon() {
+        GCMBridge.shared.call("mapIcon()") { [weak self] any in
+            DispatchQueue.main.async {
+                let before = UserDefaults.standard.data(forKey: CarPlayIcon.key)
+                CarPlayPuckView.save(dataURL: any as? String)
+                if UserDefaults.standard.data(forKey: CarPlayIcon.key) != before, self?.mapVC.guiding == true { self?.mapVC.refreshPuck() }
+            }
+        }
     }
     /// Same as the phone: replan from here to the same destination, then swap the line, card and estimates.
     func reroute(from here: CLLocation) {
