@@ -153,3 +153,11 @@ test('routeBearing: maxOff lets Start aim along the road from a little off it (M
   const b = F.routeBearing(route, off, null, null, F.C.START_AIM_M);
   assert.ok(Math.abs(b - 180) < 1, String(b));
 });
+
+test('reroute course: moving keeps the course, slow or stale lets a reroute start any way (Max t433u)', () => {
+  assert.equal(F.travelCourseOf(105, 1000, 6), 105);
+  assert.equal(F.travelCourseOf(105, 1000, null), 105, 'unknown speed, fresh course from movement');
+  assert.equal(F.travelCourseOf(105, 1000, 0.5), null, 'creeping or stopped');
+  assert.equal(F.travelCourseOf(105, 20000, 6), null, 'stale');
+  assert.equal(F.travelCourseOf(null, 0, 6), null);
+});

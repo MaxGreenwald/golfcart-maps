@@ -25,6 +25,8 @@ jobs:
         run: node --test tests/carplay_experiences.test.mjs
       - name: Partner owner-endpoint authz (super-admin any shop; owners only their own)
         run: node --test tests/partner_access.test.mjs
+      - name: App links (AASA, handoff tokens) (node --test)
+        run: node --test tests/app_links.test.mjs
       - name: Partner places validation (category enum, no coupon, https link)
         run: node --test tests/partner_places.test.mjs
       - name: Shop rental vehicle (API values, worker stores and exposes it)
@@ -33,6 +35,10 @@ jobs:
         run: node --test tests/nav.test.mjs
       - name: Live navigation (off-route timer, reroute debounce, heading)
         run: node --test tests/navfollow.test.mjs
+      - name: Heading-aware reroute (start ahead, U-turn penalty)
+        run: node --test tests/heading_reroute.test.mjs
+      - name: Nav extras (finish flag, trimmed line, one arrival celebration)
+        run: node --test tests/navfx.test.mjs
       - name: Local-first search (bias, distance rerank, far label)
         run: node --test tests/geosearch.test.mjs
       - name: Saved places (Home, Favorite beach, favorites)
@@ -120,8 +126,12 @@ jobs:
         run: python -m unittest tests.test_turn_by_turn -v
       - name: Live navigation (Start, follow, Recenter, reroute, pinch/pan preview)
         run: python -m unittest tests.test_live_nav -v
+      - name: Arrival (finish flag, line trimmed behind you, unicorn celebration once, Max t446u)
+        run: python -m unittest tests.test_nav_arrive -v
       - name: Nav start (heading-up at Start standing still, Start not paused, photo icon in nav; Chromium + WebKit)
         run: python -m unittest tests.test_nav_start -v
+      - name: Wrong-way reroute (continue forward, one reroute, Max t433u)
+        run: python -m unittest tests.test_heading_reroute -v
       - name: Map icon setting (Settings > Your map icon)
         run: python -m unittest tests.test_map_icon -v
       - name: "test_foldable (iPhone Duo folded/unfolded sizes; fold and unfold mid-navigation keeps the route and follow)"

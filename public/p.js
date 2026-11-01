@@ -13,16 +13,16 @@ const nextBar = document.getElementById('nextBar');
 const nextLabel = document.getElementById('nextLabel');
 const nextBtn = document.getElementById('nextBtn');
 
-function slugFromPath() {
-  const parts = location.pathname.replace(/\/+$/, '').split('/').filter(Boolean);
-  if (parts[0] === 'p' && parts[1]) return parts[1].toLowerCase();
-  return '';
-}
+const AL = window.GCMAppLink;
+const API = AL.apiBase(window);
+function slugFromPath() { return AL.slugFrom(location.pathname, location.search); }
 
 const slug = slugFromPath();
 const params = new URLSearchParams(location.search);
 const codeParam = (params.get('code') || '').trim().toUpperCase();
-const isGo = /\/go\/?$/.test(location.pathname) || !!codeParam;
+const handoffParam = (params.get('handoff') || '').trim();
+const isGo = /\/go\/?$/.test(location.pathname) || !!codeParam || !!handoffParam;
+const GRANT_KEY = 'gcm_partner_grant:' + slug;
 
 let map, pins = null, routeLayer = null, liveLayer = null, regions = [], region = null, rules = null;
 let unlocked = null, activeEx = null, stopIdx = 0, drawToken = 0, startToken = 0;
@@ -455,9 +455,14 @@ function addRouteLine(points, layer, dashed) {
     L.polyline(points, { ...base, color: '#1d6fe0', weight: 3, opacity: 0.75, dashArray: '4 8' }).addTo(layer);
     return;
   }
-  L.polyline(points, { ...base, color: '#0b3a78', weight: 22 }).addTo(layer);
-  L.polyline(points, { ...base, color: '#fff', weight: 18 }).addTo(layer);
-  L.polyline(points, { ...base, color: '#1d6fe0', weight: 12 }).addTo(layer);
+  const lines = [['#0b3a78', 22], ['#fff', 18], ['#1d6fe0', 12]].map(([color, weight]) => L.polyline(points, { ...base, color, weight }).addTo(layer));
+  if (layer === liveLayer) { navLines = lines; navFull = points; }
+}
+// Max t446u: during navigation only the road ahead stays blue; along = metres driven on navRoute.
+let navLines = [], navFull = null, navFlagMk = null;
+function trimNav(along) {
+  const p = along > 0 && navRoute ? GCMNavFx.trim(navRoute.pts, along) : navFull;
+  if (p && p.length > 1) navLines.forEach(l => l.setLatLngs(p));
 }
 
 // The shop's rental vehicle picks the road rules. Unset means golf cart (stricter).
@@ -469,7 +474,7 @@ function vehLegend() {
     : 'Golf cart rules: roads up to 25 mph.';
 }
 
-function connectStops(stops) {
+function connectStops(stops, opts) {
   return withRoads(async () => {
     await loadRules();
     const veh = shopVeh();
@@ -478,7 +483,7 @@ function connectStops(stops) {
       roadApi = await GCMRouter.openRegion(region, rules, veh, freshFetch);
       roadKey = key;
     }
-    return roadApi.legs(stops);
+    return roadApi.legs(stops, opts);
   });
 }
 function describeRoute(legs, nStops) {
@@ -623,6 +628,8 @@ window.GCMNavDebug = () => navRoute && { pts: navRoute.pts, steps: navRoute.step
 function stopNav() {
   if (navWatch != null && navigator.geolocation) navigator.geolocation.clearWatch(navWatch);
   navWatch = null; navRoute = null; navState = null; navStop = -1; navArrived = false;
+  if (navFlagMk) { navFlagMk.remove(); navFlagMk = null; }
+  trimNav(0);
   const el = document.getElementById('navBanner');
   if (el) el.classList.remove('show');
   document.body.classList.remove('has-nav');
@@ -633,8 +640,13 @@ function beginNav(leg, i, target) {
   const stop = target || (stops && stops[i]);
   if (!stop || !leg || !leg.points || leg.points.length < 2) { stopNav(); return; }
   const runs = leg.runs && leg.runs.length ? leg.runs : [{ name: '', points: leg.points }];
-  navRoute = GCMNav.buildSteps(runs, stop.label || `stop ${i + 1}`);
+  navRoute = GCMNav.buildSteps(runs, stop.label || `stop ${i + 1}`, { continuing: !!leg.ahead });
   navStop = target ? -1 : i; navState = null; navArrived = false; navSpoken = ''; navPlan.reset();
+  GCMNavFx.resetTrip();
+  // Finish flag: the free-ride destination, or the experience's last stop.
+  if (navFlagMk) navFlagMk.remove();
+  const end = target || (stops || []).filter(s => finite(s.lat, s.lon)).pop();
+  navFlagMk = end && map ? GCMNavFx.flag(L, map, [+end.lat, +end.lon]) : null;
   const el = navEl();
   el.classList.add('show');
   document.body.classList.add('has-nav');
@@ -675,12 +687,14 @@ async function onNavFix(ll) {
   if (!navRoute || navArrived || navRerouting) return;
   const st = GCMNav.status(navRoute, [ll.lat, ll.lon], navState);
   navState = st;
+  if (st.off < GCMNav.OFF_ROUTE_M) trimNav(st.along);
   const stops = (activeEx && activeEx.stops) || [];
   if (st.arrived && navStop < 0) {
     navArrived = true;
     paintNav('⚑', `You’ve arrived at ${freeDest.label}`, 'Back to experiences any time.');
     navEl().querySelector('#navGo').hidden = true;
     say(`You’ve arrived at ${freeDest.label}.`);
+    GCMNavFx.arrive(navRoute, { place: freeDest.label, say });
     return;
   }
   if (st.arrived) {
@@ -695,6 +709,7 @@ async function onNavFix(ll) {
       go.onclick = () => routeToStop(nxt);
     } else go.hidden = true;
     say(`You’ve arrived at ${here.label || 'the stop'}.` + (nxt >= 0 ? ` Next stop: ${stops[nxt].label || ''}.` : ''));
+    if (nxt < 0) GCMNavFx.arrive(navRoute, { place: here.label || '', say });
     return;
   }
   // Off route: GCMFollow waits ~5 s past 30 m, then calls navReroute (debounced).
@@ -707,10 +722,14 @@ async function onNavFix(ll) {
   if (prompt) say(prompt);
 }
 // Off route for a while during navigation: new legal route from here to the same stop or place.
-async function navReroute() {
+// Max t433u: course = GPS heading while driving (else null); the new route starts the way you are going.
+let rerouteCourse = null;
+async function navReroute(ll, course) {
   navRerouting = true;
+  rerouteCourse = Number.isFinite(course) ? course : null;
+  window._navRerouteCourse = rerouteCourse;
   paintNav('↻', 'Rerouting on legal roads…', '');
-  try { if (navStop < 0) await routeFree(freeDest, true); else await routeToStop(navStop, true); } finally { navRerouting = false; }
+  try { if (navStop < 0) await routeFree(freeDest, true); else await routeToStop(navStop, true); } finally { navRerouting = false; rerouteCourse = null; }
 }
 // Route from the current position to stop i on legal roads, draw it, and guide.
 async function routeToStop(i, quiet) {
@@ -721,7 +740,7 @@ async function routeToStop(i, quiet) {
   updateNext();
   const from = meLL || (map && { lat: map.getCenter().lat, lon: map.getCenter().lng });
   let legs = null;
-  try { legs = await connectStops([from, stop]); } catch (e) { legs = null; }
+  try { legs = await connectStops([from, stop], { heading: rerouteCourse }); } catch (e) { legs = null; }
   const leg = legs && legs[0];
   if (liveLayer) liveLayer.clearLayers();
   if (leg && leg.points && leg.points.length >= 2) {
@@ -807,7 +826,7 @@ async function routeFree(dest, quiet) {
   let leg = null;
   try {
     await connectStops([]);
-    leg = await withRoads(() => roadApi.trip(from, dest, { risky: freeRisky }));
+    leg = await withRoads(() => roadApi.trip(from, dest, { risky: freeRisky, heading: rerouteCourse }));
   } catch (e) { leg = null; }
   if (!freeOn) return;
   if (liveLayer) liveLayer.clearLayers();
@@ -1069,20 +1088,25 @@ async function boot() {
     return;
   }
   try {
-    if (isGo && codeParam) {
-      const r = await fetch(`/api/partner/public/${encodeURIComponent(slug)}/unlock?code=${encodeURIComponent(codeParam)}`);
+    if (isGo && (codeParam || handoffParam)) {
+      // A handoff token (from "Open in the app") gives the same unlock without counting another code use.
+      const r = await fetch(handoffParam
+        ? `${API}/public/${encodeURIComponent(slug)}/redeem?token=${encodeURIComponent(handoffParam)}`
+        : `${API}/public/${encodeURIComponent(slug)}/unlock?code=${encodeURIComponent(codeParam)}`);
       const j = await r.json();
       if (!r.ok) {
         renderLocked(j.shop ? { shop: j.shop } : null, j.error || 'Could not unlock');
         return;
       }
       unlocked = j;
+      try { if (j.grant) localStorage.setItem(GRANT_KEY, j.grant); } catch (_) {}
       // CarPlay Experiences (public/carplay.js experiences()) reads this to show the shop's rides in the car.
       // The whole unlock answer is saved because unlock counts a use (single-use codes would fail a second call).
       try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates })); } catch (e) {}
       await unlockedView();
+      addAppButton();
     } else {
-      const r = await fetch(`/api/partner/public/${encodeURIComponent(slug)}`);
+      const r = await fetch(`${API}/public/${encodeURIComponent(slug)}`);
       const j = await r.json();
       if (!r.ok) {
         setLockedChrome();
@@ -1097,6 +1121,39 @@ async function boot() {
   } catch (e) {
     panel.innerHTML = `<div class="msg err">${esc(e.message)}</div>`;
   }
+}
+
+// "Open in the app": trade the saved grant for a 10-minute single-use token, then open the app with it.
+// If the app isn't installed the page stays put, so after a moment we offer the App Store instead.
+function addAppButton() {
+  if (!AL.wantsAppButton(window)) return;
+  let grant = '';
+  try { grant = localStorage.getItem(GRANT_KEY) || ''; } catch (_) {}
+  const host = document.querySelector('.yay');
+  if (!grant || !host || document.getElementById('openApp')) return;
+  const b = document.createElement('button');
+  b.type = 'button'; b.id = 'openApp'; b.className = 'allex'; b.textContent = 'Open in the Golf Cart Maps app';
+  const note = document.createElement('p'); note.className = 'fine'; note.id = 'openAppNote';
+  host.append(b, note);
+  b.addEventListener('click', async () => {
+    b.disabled = true; note.textContent = '';
+    try {
+      const r = await fetch(`${API}/public/${encodeURIComponent(slug)}/handoff`, {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ grant }),
+      });
+      const j = await r.json();
+      if (!r.ok || !j.token) throw new Error(j.error || 'Could not open the app');
+      const t = setTimeout(() => {
+        if (document.visibilityState === 'visible') note.innerHTML = `Don’t have the app? <a href="${AL.APP_STORE}">Get it on the App Store</a>, then tap this button again.`;
+      }, 1800);
+      document.addEventListener('visibilitychange', () => clearTimeout(t), { once: true });
+      location.href = AL.handoffUrl(slug, j.token);
+    } catch (e) {
+      note.textContent = e.message;
+    } finally {
+      b.disabled = false;
+    }
+  });
 }
 
 boot();
