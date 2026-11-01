@@ -6,6 +6,8 @@
 (function (root) {
   const C = {
     OFF_ROUTE_M: 30,       // farther than this from the route counts as off route
+    START_AIM_M: 400,      // still aim heading-up along the route when this close to it but off it (Max t430u)
+    START_GRACE_MS: 2000,  // after Start, only a real drag or pinch pauses follow (Max t430u)
     OFF_ROUTE_MS: 5000,    // ...for this long before a reroute
     REROUTE_COOLDOWN_MS: 10000, // at most one reroute per this window, so it can't loop
     MIN_SPEED_MS: 0.8,     // GPS course is trusted only above ~1.8 mph
@@ -78,11 +80,12 @@
   }
   // Direction of the road ahead: bearing from where we are on the route to a point aheadM further on.
   // Null when off the route (caller falls back to GPS course) or at the very end.
-  function routeBearing(route, ll, aheadM, proj) {
+  // maxOff: how far from the route the position may be (default OFF_ROUTE_M).
+  function routeBearing(route, ll, aheadM, proj, maxOff) {
     if (!route || !route.pts || route.pts.length < 2 || !ll) return null;
     const r = withCum(route);
     const p = (proj || (root.GCMNav && root.GCMNav.project))(r, ll);
-    if (!p || !(p.off <= C.OFF_ROUTE_M)) return null;
+    if (!p || !(p.off <= (maxOff == null ? C.OFF_ROUTE_M : maxOff))) return null;
     const total = r.cum[r.cum.length - 1];
     let a = Math.min(p.along, total), b = Math.min(a + (aheadM || C.BEARING_AHEAD_M), total);
     if (b - a < 3) a = Math.max(0, b - (aheadM || C.BEARING_AHEAD_M));
@@ -380,6 +383,9 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
       let t = null;
       try { t = routeBearing(r, ll); } catch (_) { t = null; }
       if (t == null) t = courseHeading(last, prevLL);
+      // Max t430u: standing still a bit off the line (driveway, parking lot, GPS drift at Start) gave no
+      // bearing at all, so the map stayed north-up. Use the road ahead from the nearest route point.
+      if (t == null) { try { t = routeBearing(r, ll, null, null, C.START_AIM_M); } catch (_) { t = null; } }
       if (t == null) return;
       const nb = nextBearing(mapBearing, t);
       if (nb !== mapBearing) { mapBearing = nb; paintHeading(true); }
@@ -451,10 +457,19 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     // fire for our own and the app's programmatic moves (fitBounds before Start, reroute framing,
     // animated zoom), which paused follow right after Start in the field (Max t409u).
     let touching = false;
-    function userMoved() { if (!touching || !navigating || !following) return; following = false; paintBtns(); }
+    // Max t430u: follow was found paused right after Start (Recenter showing, north-up). A finger still
+    // flagged as down from tapping the map to pick the destination, plus Start's own moves (sheet
+    // collapse, invalidateSize, recenter), counted as the user panning. For a short time after Start only
+    // a real drag or pinch counts.
+    let startedAt = 0, fingers = 0;
+    function userMoved(e) {
+      if (!touching || !navigating || !following) return;
+      if (Date.now() - startedAt < C.START_GRACE_MS && !(e && (e.type === 'dragstart' || (e.type === 'zoomstart' && fingers > 1)))) return;
+      following = false; paintBtns();
+    }
     if (map) {
       const el = map.getContainer();
-      const down = () => { touching = true; }, up = () => { setTimeout(() => { touching = false; }, 0); };
+      const down = e => { touching = true; if (e && e.touches) fingers = e.touches.length; }, up = () => { setTimeout(() => { touching = false; fingers = 0; }, 0); };
       ['pointerdown', 'touchstart', 'mousedown'].forEach(t => el.addEventListener(t, down, { passive: true }));
       ['pointerup', 'pointercancel', 'touchend', 'touchcancel', 'mouseup'].forEach(t => root.addEventListener(t, up, { passive: true }));
       el.addEventListener('wheel', () => { touching = true; userMoved(); touching = false; }, { passive: true });
@@ -506,7 +521,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
       start() {
         if (navigating) return;
         if (opts.canStart && !opts.canStart()) return;
-        navigating = true; following = true; track.reset();
+        navigating = true; following = true; track.reset(); startedAt = Date.now(); touching = false;
         listenCompass();
         paintBtns();
         if (opts.onStart) opts.onStart();
