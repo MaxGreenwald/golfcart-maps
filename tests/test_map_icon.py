@@ -27,14 +27,25 @@ SHOTS = os.environ.get("SHOTS_DIR") or tempfile.mkdtemp(prefix="mapicon-")
 
 def big_png():
     """A 3000x2000 test photo: sky, sand, a red sun. Made here, nothing copyrighted."""
-    from PIL import Image, ImageDraw
-    im = Image.new("RGB", (3000, 2000), "#7cc8f0")
-    d = ImageDraw.Draw(im)
-    d.rectangle([0, 1200, 3000, 2000], fill="#f2d59b")
-    d.ellipse([1150, 650, 1850, 1350], fill="#e5484d")
-    d.rectangle([1400, 900, 1600, 1100], fill="#ffffff")
-    b = io.BytesIO(); im.save(b, "PNG")
-    return b.getvalue()
+    import struct, zlib
+    W, H = 3000, 2000
+    sky, sand, red, white = b"\x7c\xc8\xf0", b"\xf2\xd5\x9b", b"\xe5\x48\x4d", b"\xff\xff\xff"
+    rows = []
+    for y in range(H):
+        base = sand if y >= 1200 else sky
+        dy = y - 1000
+        if abs(dy) <= 350:
+            half = int((350 * 350 - dy * dy) ** 0.5)
+            row = base * (1500 - half) + red * (2 * half) + base * (W - 1500 - half)
+            if 900 <= y <= 1100:
+                row = row[:1400 * 3] + white * 200 + row[1600 * 3:]
+        else:
+            row = base * W
+        rows.append(b"\x00" + row)
+    def chunk(t, d):
+        return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", W, H, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(b"".join(rows), 6)) + chunk(b"IEND", b""))
 
 
 @unittest.skipIf(sync_playwright is None, "playwright not installed")
