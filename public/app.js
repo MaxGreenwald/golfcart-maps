@@ -317,7 +317,10 @@ function tapMarker(m){m.on('add',()=>{const el=m.getElement();if(!el||el._tap)re
  L.DomEvent.on(el,'click',e=>{L.DomEvent.stop(e);if(Date.now()-(m._tapAt||0)>600)m.openPopup()})});
  m.off('click',m._openPopup,m);return m}
 window.tapMarker=tapMarker;
-const meIcon=L.divIcon({className:'tapm',html:GCMFollow.DOT,iconSize:[44,44],iconAnchor:[22,22]});
+// Max t430u: html is read when each marker is drawn, not once at load, so a photo picked in Settings
+// (Your map icon) shows on the nav puck without reloading the app.
+const MeIcon=L.DivIcon.extend({createIcon(o){this.options.html=GCMFollow.DOT;return L.DivIcon.prototype.createIcon.call(this,o)}});
+const meIcon=new MeIcon({className:'tapm',iconSize:[44,44],iconAnchor:[22,22]});
 function meMarker(ll){return addM(tapMarker(L.marker(ll,{icon:meIcon,zIndexOffset:1000,keyboard:false}).bindPopup(()=>'<div class="cpop"><b>📍 You are here</b><div style="display:flex;gap:6px;margin-top:6px"><button class="pbtn" onclick="map.closePopup();setField(\'from\',{me:true})">Start here</button><button class="pbtn" onclick="map.closePopup();setField(\'to\',{me:true})">Go here</button></div><button class="pbtn rpt" onclick="window._rseg={road:\'(near my location)\',ll:myLL};reportRoad()">🚩 Report a problem here</button></div>',{autoPanPaddingTopLeft:L.point(10,DESK()?20:240)})))}
 const addM=m=>m.addTo(map);
 // ---- public EV chargers (DOE AFDC, Level 1/2 only), loaded lazily per region ----

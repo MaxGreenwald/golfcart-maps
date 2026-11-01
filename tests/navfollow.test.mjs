@@ -145,3 +145,11 @@ test('faceSide: the side-view cart faces the way it moves on screen (Max t426u)'
   assert.equal(F.faceSide(40, 40, -1), -1); // heading-up: road ahead is up, keeps its side
   assert.equal(F.faceSide(10, 100, 1), 1);  // map turned 100: screen direction is left
 });
+
+test('routeBearing: maxOff lets Start aim along the road from a little off it (Max t430u)', () => {
+  const route = { pts: [[32.80, -117.25], [32.79, -117.25]] }; // heads south
+  const off = [32.7995, -117.2495]; // ~47 m east of the line
+  assert.equal(F.routeBearing(route, off), null);
+  const b = F.routeBearing(route, off, null, null, F.C.START_AIM_M);
+  assert.ok(Math.abs(b - 180) < 1, String(b));
+});
