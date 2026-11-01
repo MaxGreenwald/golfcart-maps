@@ -469,7 +469,7 @@ function vehLegend() {
     : 'Golf cart rules: roads up to 25 mph.';
 }
 
-function connectStops(stops) {
+function connectStops(stops, opts) {
   return withRoads(async () => {
     await loadRules();
     const veh = shopVeh();
@@ -478,7 +478,7 @@ function connectStops(stops) {
       roadApi = await GCMRouter.openRegion(region, rules, veh, freshFetch);
       roadKey = key;
     }
-    return roadApi.legs(stops);
+    return roadApi.legs(stops, opts);
   });
 }
 function describeRoute(legs, nStops) {
@@ -633,7 +633,7 @@ function beginNav(leg, i, target) {
   const stop = target || (stops && stops[i]);
   if (!stop || !leg || !leg.points || leg.points.length < 2) { stopNav(); return; }
   const runs = leg.runs && leg.runs.length ? leg.runs : [{ name: '', points: leg.points }];
-  navRoute = GCMNav.buildSteps(runs, stop.label || `stop ${i + 1}`);
+  navRoute = GCMNav.buildSteps(runs, stop.label || `stop ${i + 1}`, { continuing: !!leg.ahead });
   navStop = target ? -1 : i; navState = null; navArrived = false; navSpoken = ''; navPlan.reset();
   const el = navEl();
   el.classList.add('show');
@@ -707,10 +707,14 @@ async function onNavFix(ll) {
   if (prompt) say(prompt);
 }
 // Off route for a while during navigation: new legal route from here to the same stop or place.
-async function navReroute() {
+// Max t433u: course = GPS heading while driving (else null); the new route starts the way you are going.
+let rerouteCourse = null;
+async function navReroute(ll, course) {
   navRerouting = true;
+  rerouteCourse = Number.isFinite(course) ? course : null;
+  window._navRerouteCourse = rerouteCourse;
   paintNav('↻', 'Rerouting on legal roads…', '');
-  try { if (navStop < 0) await routeFree(freeDest, true); else await routeToStop(navStop, true); } finally { navRerouting = false; }
+  try { if (navStop < 0) await routeFree(freeDest, true); else await routeToStop(navStop, true); } finally { navRerouting = false; rerouteCourse = null; }
 }
 // Route from the current position to stop i on legal roads, draw it, and guide.
 async function routeToStop(i, quiet) {
@@ -721,7 +725,7 @@ async function routeToStop(i, quiet) {
   updateNext();
   const from = meLL || (map && { lat: map.getCenter().lat, lon: map.getCenter().lng });
   let legs = null;
-  try { legs = await connectStops([from, stop]); } catch (e) { legs = null; }
+  try { legs = await connectStops([from, stop], { heading: rerouteCourse }); } catch (e) { legs = null; }
   const leg = legs && legs[0];
   if (liveLayer) liveLayer.clearLayers();
   if (leg && leg.points && leg.points.length >= 2) {
@@ -807,7 +811,7 @@ async function routeFree(dest, quiet) {
   let leg = null;
   try {
     await connectStops([]);
-    leg = await withRoads(() => roadApi.trip(from, dest, { risky: freeRisky }));
+    leg = await withRoads(() => roadApi.trip(from, dest, { risky: freeRisky, heading: rerouteCourse }));
   } catch (e) { leg = null; }
   if (!freeOn) return;
   if (liveLayer) liveLayer.clearLayers();
