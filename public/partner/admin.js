@@ -275,7 +275,8 @@ function shopView() {
     Changes go live on the shop's page. <button class="btn alt" id="backToShops" type="button">Back to all shops</button></div>` : '';
   const exRows = (b.experiences || []).map(e => `<tr>
     <td><b>${esc(e.title)}</b><div class="muted">${esc(e.description || '')}</div>
-      <div class="muted ex-stops">${stopsLine(e.stops)}</div></td>
+      <div class="muted ex-stops">${stopsLine(e.stops)}</div>
+      <div class="muted ex-order">${e.nearest_start === false ? 'Riders follow your exact order' : 'Riders start at their nearest stop'}</div></td>
     <td><div class="ex-actions">
       <button class="btn alt" data-edit-ex="${esc(e.id)}" type="button">Edit</button>
       <button class="btn warn" data-del-ex="${esc(e.id)}" type="button">Delete</button>
@@ -325,6 +326,8 @@ function shopView() {
     <label>Title</label><input id="exTitle" placeholder="La Jolla seals joyride">
     <label>Description</label><textarea id="exDesc" placeholder="A 45-minute coastal loop"></textarea>
     <label>Stops</label>${stopEditor([{}])}
+    <label class="ns-row" style="margin-top:10px"><input type="checkbox" id="exNearest" checked> Start riders at their nearest stop</label>
+    <div class="muted" id="exNearestHelp">Off: riders follow your exact order</div>
     <p>
       <button class="btn" id="addEx" type="button">Add experience</button>
       <button class="btn alt hidden" id="cancelEx" type="button">Cancel</button>
@@ -817,6 +820,7 @@ function loadExperience(ex) {
   $('#exTitle').value = ex.title || '';
   $('#exDesc').value = ex.description || '';
   fillStopList(ex.stops || []);
+  if ($('#exNearest')) $('#exNearest').checked = ex.nearest_start !== false;
   setExperienceMode(true);
   const title = $('#exTitle');
   if (title && title.scrollIntoView) title.scrollIntoView({ block: 'start' });
@@ -828,6 +832,7 @@ function resetExperienceForm() {
   if ($('#exTitle')) $('#exTitle').value = '';
   if ($('#exDesc')) $('#exDesc').value = '';
   fillStopList([{}]);
+  if ($('#exNearest')) $('#exNearest').checked = true;
   setExperienceMode(false);
 }
 
@@ -969,6 +974,7 @@ function bindApp() {
         title: $('#exTitle').value.trim(),
         description: $('#exDesc').value,
         stops,
+        nearest_start: !$('#exNearest') || $('#exNearest').checked,
       };
       const eid = ($('#exId') && $('#exId').value) || '';
       if (eid) {

@@ -163,6 +163,10 @@ button.start{width:100%;border:0;border-radius:999px;background:#ffd23f;color:#5
   box-shadow:0 6px 16px rgba(90,67,0,.18)}
 button.start:disabled{opacity:.65;cursor:default}
 #startNote{margin:8px 0 0}
+#orderNote{margin:8px 0 0;font-weight:600}
+.nav-order{margin-top:8px;font-size:13px;line-height:1.4;opacity:.95}
+#orderNote .linkish,.nav-order .linkish{background:none;border:0;padding:0;font:inherit;font-weight:800;color:var(--brand,#0b6e8a);text-decoration:underline;cursor:pointer}
+.nav-order .linkish{color:#fff}
 body.is-open .grab{display:block}
 body.is-open .sheet{position:fixed;z-index:30;left:0;right:0;bottom:0;width:100%;max-width:none;margin:0;height:var(--dock);min-height:0;
   border-radius:22px 22px 0 0;padding:8px 14px calc(8px + var(--sab));display:flex;flex-direction:column;overflow:hidden;
@@ -310,6 +314,7 @@ body.gcm-navigating .leaflet-bottom{bottom:calc(84px + var(--sab,0px))}
 <script src="/nav.js"></script>
 <script src="/navfollow.js"></script>
 <script src="/geosearch.js"></script>
+<script src="/stoporder.js"></script>
 <script src="/p.js"></script>
 </body>
 </html>

@@ -26,6 +26,8 @@ const isGo = /\/go\/?$/.test(location.pathname) || !!codeParam;
 
 let map, pins = null, routeLayer = null, liveLayer = null, regions = [], region = null, rules = null;
 let unlocked = null, activeEx = null, stopIdx = 0, drawToken = 0, startToken = 0;
+// baseEx: the partner's experience as saved. activeEx: the same ride in visit order (nearest-stop start, Max t441u).
+let baseEx = null, riderShopOrder = false;
 let roadApi = null, roadKey = '', roadChain = Promise.resolve();
 let roadCanvas = null, roadCtx = null, routeR = null, roadTimer = 0, roadPaintToken = 0;
 let meLL = null, meMarker = null, guided = false;
@@ -490,7 +492,7 @@ function describeRoute(legs, nStops) {
   return `The line follows legal ${vehWord()} roads.`;
 }
 
-async function drawUnlocked() {
+async function drawUnlocked(opts) {
   const token = ++drawToken;
   if (!map || !pins || !routeLayer) return;
   const stops = (activeEx && activeEx.stops) || [];
@@ -535,7 +537,7 @@ async function drawUnlocked() {
     });
   }
   setRouteNote(describeRoute(legs, goodStops.length));
-  if (bounds.length) frameLatLngs(bounds);
+  if (bounds.length && !(opts && opts.noFrame)) frameLatLngs(bounds);
   scheduleRoads();
   updateNext();
 }
@@ -585,6 +587,7 @@ function navEl() {
     <button type="button" id="navMute" class="nav-btn" aria-pressed="false"></button></div>
     <div class="nav-acts"><button type="button" id="navListBtn" class="nav-link" aria-expanded="false">All steps</button>
     <button type="button" id="navGo" class="nav-go" hidden></button></div>
+    <div id="navOrder" class="nav-order" hidden></div>
     <ol id="navSteps" hidden></ol>`;
   document.body.appendChild(el);
   el.querySelector('#navMute').onclick = () => {
@@ -904,7 +907,15 @@ async function startExperience() {
     usedCenter = true;
   }
   if (btn) btn.textContent = 'Routing…';
-  const first = stops[0];
+  // Nearest-stop start: on unless the partner turned it off; the rider can switch back to shop order.
+  const allowed = !!(baseEx && baseEx.nearest_start !== false && !usedCenter);
+  const plan = GCMStopOrder.plan((baseEx && baseEx.stops) || [], usedCenter ? null : from, allowed && !riderShopOrder);
+  const reordered = plan.reordered;
+  activeEx = reordered ? Object.assign({}, baseEx, { stops: plan.order.map(i => baseEx.stops[i]) }) : baseEx;
+  setOrderNote(allowed, reordered, plan);
+  const ordered = activeEx.stops.filter(s => finite(s.lat, s.lon));
+  drawUnlocked({ noFrame: true });
+  const first = ordered[0];
   let legs = null;
   try { legs = await connectStops([from, first]); }
   catch (e) { legs = null; }
@@ -927,16 +938,41 @@ async function startExperience() {
     setStartNote('Legal golf cart roads from you to the first stop.');
   }
   guided = true;
-  stopIdx = 0;
+  stopIdx = activeEx.stops.indexOf(first);
   if (drawn) frameLatLngs(leg.points);
   else panIntoView(L.latLng(+first.lat, +first.lon), 15);
   updateNext();
   if (drawn) { beginNav(leg, ((activeEx && activeEx.stops) || []).indexOf(first)); if (follow) follow.start(); }
+  paintOrder();
   focusEx(true);
   scheduleRoads();
   if (btn) {
     btn.disabled = false;
     btn.textContent = 'Start experience';
+  }
+}
+
+function setOrderNote(allowed, reordered, plan) {
+  if (!allowed || (!reordered && !riderShopOrder)) { orderHTML = ''; paintOrder(); return; }
+  const way = { 'loop-forward': 'then around the loop in the shop’s direction, the shorter way.',
+    'loop-backward': 'then around the loop the other way, which is shorter from here.',
+    'line-forward-first': 'then the stops after it, then back for the earlier ones. That’s the shorter way.',
+    'line-backward-first': 'then back through the earlier stops, then on to the later ones. That’s the shorter way.' }[plan.mode] || '';
+  orderHTML = riderShopOrder
+    ? `<span>Following the shop’s order.</span> <button type="button" class="linkish order-toggle">Start at my nearest stop</button>`
+    : `<span><b>Starting at your nearest stop</b>, ${esc(way)}</span> <button type="button" class="linkish order-toggle">Use shop order</button>`;
+  paintOrder();
+}
+// Same note in the dock and on the turn-by-turn banner (the dock is hidden while navigating on a phone).
+let orderHTML = '';
+function paintOrder() {
+  for (const id of ['orderNote', 'navOrder']) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    el.hidden = !orderHTML;
+    el.innerHTML = orderHTML;
+    const b = el.querySelector('.order-toggle');
+    if (b) b.onclick = () => { riderShopOrder = !riderShopOrder; startExperience(); };
   }
 }
 
@@ -957,7 +993,9 @@ function focusEx(on) {
 }
 function selectEx(id) {
   const ex = (unlocked && unlocked.experiences) || [];
-  activeEx = ex.find(x => x.id === id) || null;
+  activeEx = baseEx = ex.find(x => x.id === id) || null;
+  riderShopOrder = false;
+  setOrderNote(false);
   stopIdx = 0;
   guided = false;
   startToken++;
@@ -1020,7 +1058,7 @@ async function unlockedView() {
       <p class="legend">Numbered pins are stops. Amber ★ pins are partner offers.${(unlocked.places || []).length ? ' Icon pins (🍽️ 🌅 ❓ 💡 📍) are places to see. Tap one to read about it.' : ''}</p>
       <p class="legend" id="routeNote" aria-live="polite"></p>
     </div>
-    ${ex.length ? `<div class="dock-foot"><button class="start" id="startEx" type="button">Start experience</button><p class="fine" id="startNote" aria-live="polite"></p></div>` : ''}`;
+    ${ex.length ? `<div class="dock-foot"><button class="start" id="startEx" type="button">Start experience</button><p class="fine" id="orderNote" aria-live="polite" hidden></p><p class="fine" id="startNote" aria-live="polite"></p></div>` : ''}`;
   panel.querySelectorAll('.xcard').forEach(el => {
     el.onclick = () => { selectEx(el.dataset.ex); focusEx(true); };
   });
@@ -1039,7 +1077,7 @@ async function unlockedView() {
   const startBtn = document.getElementById('startEx');
   if (startBtn) startBtn.onclick = () => { startExperience(); };
   if (ex[0]) {
-    activeEx = ex[0];
+    activeEx = baseEx = ex[0];
     markActive(ex[0].id);
   }
   try {
