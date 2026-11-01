@@ -576,7 +576,9 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         rerouting = true
         NSLog("GCMCarPlay reroute from %.5f,%.5f", here.coordinate.latitude, here.coordinate.longitude)
         if #available(iOS 15.4, *) { s.pauseTrip(for: .rerouting, description: "Rerouting on legal roads", turnCardColor: nil) } else { s.pauseTrip(for: .rerouting, description: "Rerouting on legal roads") }
-        GCMBridge.shared.call("plan(f,t,m,false)", ["f": ["lat": here.coordinate.latitude, "lon": here.coordinate.longitude], "t": ["lat": to.latitude, "lon": to.longitude], "m": mode]) { [weak self] any in
+        // Driving (>= 1.5 m/s with a valid course): replan forward on this road, no U-turn first (Max t433u).
+        let h: Any = (here.speed >= 1.5 && here.course >= 0) ? here.course : NSNull()
+        GCMBridge.shared.call("plan(f,t,m,false,h)", ["f": ["lat": here.coordinate.latitude, "lon": here.coordinate.longitude], "t": ["lat": to.latitude, "lon": to.longitude], "m": mode, "h": h]) { [weak self] any in
             guard let self = self else { return }
             defer { self.rerouting = false; self.offRoute.reset() }
             guard let s = self.session, let p = GCMPlan(any) else {
