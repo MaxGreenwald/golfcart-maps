@@ -13,6 +13,11 @@ with sync_playwright() as p:
     ck("turn angles + short text",all("turn" in m and m.get("short") for m in ms) and all((m["turn"]>0)==(m["type"].endswith("right")) for m in ms if m["type"] in("left","right")),[(m["type"],m["turn"]) for m in ms])
     ck("no unnamed straights",not any(m["type"]=="straight" and m["road"]=="unnamed road" for m in ms),[m["text"] for m in ms])
     ck("range info",r["range"] and "status" in r["range"],r.get("range"))
+    # Max t433u: reroute while driving the wrong way on Hornblend St starts ahead ("Continue on"), not a U-turn; no heading = old start.
+    w=pg.evaluate("GCMCarPlay.plan({lat:32.7973,lon:-117.24764},{lat:32.7930,lon:-117.2560},'lsv',false,105)")
+    ck("wrong-way reroute continues forward",w["ok"] and w["maneuvers"][0]["type"]=="straight" and w["maneuvers"][0]["road"]=="Hornblend Street" and abs(((w["maneuvers"][0]["outBrg"]-105)%360+540)%360-180)<45,[(m["type"],m["road"],m["outBrg"]) for m in w["maneuvers"][:3]] if w["ok"] else w)
+    n=pg.evaluate("GCMCarPlay.plan({lat:32.7973,lon:-117.24764},{lat:32.7930,lon:-117.2560},'lsv')")
+    ck("no heading: depart anywhere",n["ok"] and n["maneuvers"][0]["type"]=="depart",[(m["type"],m["road"]) for m in n["maneuvers"][:2]])
     pg.evaluate("GCMCarPlay.setMode('golf_cart')")  # plan() ignores its mode arg; the saved setting decides
     v=pg.evaluate("GCMCarPlay.plan({lat:28.9095,lon:-81.9745},{lat:28.9330,lon:-81.9590},'golf_cart')")
     ck("villages auto-region golf cart plan",v["ok"] and v["region"]=="villages" and v["mode"]=="golf_cart" and v["miles"]<3.5,{k:v[k] for k in v if k not in("line","maneuvers")})

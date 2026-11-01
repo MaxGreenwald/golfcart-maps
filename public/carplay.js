@@ -22,9 +22,9 @@ function maneuvers(r){
  // Each maneuver: meters = length of the road AFTER it; toMeters = distance driven to reach it (CPManeuver.initialTravelEstimates);
  // inBrg/outBrg/turn = approach + exit bearings and signed turn angle (junction diagram, CPManeuver junctionExitAngle).
  const g=[];for(const l of r.legs){const n=D.names[l.s[0]]||'unnamed road',last=g[g.length-1];
-  if(last&&last.n===n&&last.f===l.f){last.d+=l.s._len;last.p.push(...l.p)}else g.push({n,f:l.f,d:l.s._len,p:l.p.slice(),sp:l.s[2]})}
+  if(last&&last.n===n&&last.f===l.f){last.d+=(l.len??l.s._len);last.p.push(...l.p)}else g.push({n,f:l.f,d:(l.len??l.s._len),p:l.p.slice(),sp:l.s[2]})}
  const m=g.filter((s,i)=>s.d>15||i===0);const out=[];
- m.forEach((s,i)=>{let type='depart',turn=0,inB=null,outB=null;const b=s.p[Math.min(1,s.p.length-1)];outB=Math.round(brg(s.p[0],b));
+ m.forEach((s,i)=>{let type=i===0&&r.ahead?'straight':'depart',turn=0,inB=null,outB=null;const b=s.p[Math.min(1,s.p.length-1)];outB=Math.round(brg(s.p[0],b));
   if(i>0){const pv=m[i-1].p,a=pv[Math.max(0,pv.length-2)],j=pv[pv.length-1];inB=Math.round(brg(a,j));turn=Math.round(((brg(j,b)-brg(a,j)+540)%360)-180);type=turnOf(turn)}
   const verb=type==='depart'?'Head out on ':type==='straight'?'Continue on ':type==='uturn'?'Make a U-turn onto ':'Turn '+type.replace('slight_','slight ')+' onto ';
   out.push({type,road:s.n,meters:Math.round(s.d),toMeters:i>0?Math.round(m[i-1].d):0,turn,inBrg:inB,outBrg:outB,risky:!!s.f,mph:s.sp&&s.sp!==99?s.sp:null,lat:s.p[0][1],lon:s.p[0][0],
@@ -43,8 +43,10 @@ window.GCMCarPlay={
  async setMode(m){await ready();if((m==='golf_cart'||m==='lsv')&&m!==MODE){window.setVeh(m);await READY;for(let i=0;i<200&&!window.ready;i++)await new Promise(r=>setTimeout(r,50))}return MODE},
  // `mode` arg is ignored on purpose (native still passes a fixed 'lsv'); the saved setting decides.
  // from/to: {lat,lon}. Returns null-route with reason when there's no legal way.
- async plan(from,to,mode,allowRisky){await ready();await regionFor(to.lat,to.lon);
-  const lr=await asCarPlay(()=>window.testRoute([from.lat,from.lon],[to.lat,to.lon],!!allowRisky&&!window.GCM_IOS));const r=window._lastDetail;
+ // heading: GPS course while driving (native passes it on reroute, Max t433u). The plan then starts ahead on the
+ // current road ("Continue on X") instead of behind you; null/omitted keeps any direction.
+ async plan(from,to,mode,allowRisky,heading){await ready();await regionFor(to.lat,to.lon);
+  const lr=await asCarPlay(()=>window.testRoute([from.lat,from.lon],[to.lat,to.lon],!!allowRisky&&!window.GCM_IOS,Number.isFinite(heading)?heading:null));const r=window._lastDetail;
   if(!lr||!r)return {ok:false,reason:GCMRule.noRoute(RULE)};
   const line=[];r.legs.forEach(l=>l.p.forEach(p=>line.push([+p[1].toFixed(6),+p[0].toFixed(6)])));
   return {ok:true,mode:MODE,region:REG.id,meters:Math.round(r.dist),miles:lr.mi,roundTripMiles:lr.rt,minutes:lr.min,range:lr.range,
