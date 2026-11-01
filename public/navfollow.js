@@ -167,6 +167,14 @@
   const CSS = `.me-wrap{position:relative;width:22px;height:22px}.me-wrap .me-dot{position:absolute;inset:0;margin:auto}
 .me-cone{display:none;position:absolute;left:50%;top:50%;width:0;height:0;margin-left:-11px;margin-top:-30px;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:22px solid rgba(29,111,224,.85);transform-origin:11px 30px;transform:rotate(var(--hd,0deg));filter:drop-shadow(0 0 1px #fff)}
 .me-wrap.has-hd .me-cone{display:block}
+.me-cart{display:none;position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;transform:rotate(var(--mb,0deg));transform-origin:50% 50%;will-change:transform;pointer-events:none}
+.me-ico{width:100%;height:100%;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+.me-ico svg,.me-ico img{display:block;width:100%;height:100%}
+.me-ico svg{transform:scaleX(var(--flip,1));will-change:transform}
+.me-chev{display:none;position:absolute;left:50%;top:50%;width:78px;height:78px;margin:-39px 0 0 -39px;transform:rotate(var(--hd,0deg));will-change:transform;pointer-events:none}
+.me-chev:before{content:'';position:absolute;left:50%;top:0;width:16px;height:10px;margin-left:-8px;background:#0b9fb3;clip-path:polygon(50% 0,100% 100%,50% 70%,0 100%);filter:drop-shadow(0 0 1px #fff)}
+body.gcm-navigating .me-cart,body.gcm-navigating .me-wrap.has-hd .me-chev{display:block}
+body.gcm-navigating .me-wrap .me-dot,body.gcm-navigating .me-wrap .me-cone{display:none}
 #navCtl{position:fixed;z-index:1200;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;gap:10px;pointer-events:none}
 #navCtl button{pointer-events:auto;border:0;border-radius:999px;font:900 17px Nunito,system-ui,sans-serif;padding:14px 26px;box-shadow:0 6px 18px rgba(0,0,0,.28);cursor:pointer}
 #navCtl #navStart{background:#12a150;color:#fff}#navCtl #navEnd{background:#e5484d;color:#fff}#navCtl #navRecenter{background:#fff;color:#0b3a78}
@@ -186,7 +194,91 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     if (typeof document === 'undefined' || document.getElementById('navFollowCss')) return;
     const s = document.createElement('style'); s.id = 'navFollowCss'; s.textContent = CSS; document.head.appendChild(s);
   }
-  const DOT = '<div class="me-wrap"><div class="me-cone"></div><div class="me-dot"></div></div>';
+  // Max t426u/t427u: while navigating the dot becomes the 48 px playful cart (design E), or the user's own
+  // photo icon (Settings > Your map icon). E is a side view, so it stays upright (counter-turned by --mb, the
+  // map bearing) and flips with --flip to face the way it moves on screen; a small teal chevron turned by --hd
+  // shows the heading. All three are CSS variables set in the same once-per-frame paint, so no extra work.
+  // The art faces left by default (golf bag at the back, on the right).
+  const CART = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><ellipse cx="32" cy="56" rx="22" ry="4" fill="rgba(0,0,0,.22)"/><path d="M10 14q22-8 44 0" fill="#fff" stroke="#0b6e86" stroke-width="2" stroke-linecap="round"/><path d="M10 14q22-4 44 0" fill="none" stroke="#ffd23f" stroke-width="2.4"/><path d="M15 16v18M49 16v18" stroke="#0b6e86" stroke-width="3.2" stroke-linecap="round"/><path d="M8 36q0-6 8-6h32q8 0 8 6v6q0 6-8 6H16q-8 0-8-6z" fill="#2fc6d1" stroke="#fff" stroke-width="2"/><path d="M14 36h36" stroke="#e9fbfc" stroke-width="3" stroke-linecap="round"/><rect x="44" y="20" width="10" height="18" rx="5" fill="#ff8a3d" stroke="#fff" stroke-width="1.6"/><path d="M47 20V6" stroke="#fff" stroke-width="1.6"/><path d="M47 6l8 3-8 3z" fill="#e5484d"/><circle cx="24" cy="38" r="2" fill="#123b4a"/><circle cx="36" cy="38" r="2" fill="#123b4a"/><path d="M27 42q3 2 6 0" stroke="#123b4a" stroke-width="1.6" fill="none" stroke-linecap="round"/><g fill="#1d2a33" stroke="#fff" stroke-width="2.6"><circle cx="18" cy="49" r="6.5"/><circle cx="46" cy="49" r="6.5"/></g><circle cx="18" cy="49" r="2.2" fill="#ffd23f"/><circle cx="46" cy="49" r="2.2" fill="#ffd23f"/></svg>';
+  // scaleX for the left-facing cart: -1 (face right) when the screen direction (heading minus map bearing)
+  // points right, 1 when it points left, and the previous side inside a 10 degree band around up/down.
+  function faceSide(heading, mapBearing, prev) {
+    const sx = Math.sin((heading - (mapBearing || 0)) * Math.PI / 180);
+    return sx > 0.17 ? -1 : sx < -0.17 ? 1 : (prev || 1);
+  }
+  const ICON_KEY = 'gcm_map_icon';
+  function iconHtml() {
+    let u = null; try { u = root.localStorage && localStorage.getItem(ICON_KEY); } catch (_) {}
+    return u && /^data:image\/(png|jpeg|webp);base64,/.test(u) ? '<img alt="" src="' + u + '">' : CART;
+  }
+  function refreshIcon() {
+    if (typeof document === 'undefined') return;
+    const h = iconHtml(); document.querySelectorAll('.me-ico').forEach(el => { el.innerHTML = h; });
+  }
+  const dotHtml = () => '<div class="me-wrap"><div class="me-cone"></div><div class="me-dot"></div><div class="me-chev" aria-hidden="true"></div><div class="me-cart" aria-hidden="true"><div class="me-ico">' + iconHtml() + '</div></div></div>';
+
+  // Max t427u/t428u: Settings > Your map icon. A photo is processed on this device only (never uploaded):
+  // center square crop, 128 px, round with a white ring, saved as a small PNG data URL in localStorage.
+  const ICON_PX = 128, ICON_MAX_BYTES = 50000, FILE_MAX_BYTES = 30 * 1024 * 1024;
+  function loadImage(file) {
+    return new Promise((ok, bad) => {
+      const url = URL.createObjectURL(file), im = new Image();
+      im.onload = () => { URL.revokeObjectURL(url); ok(im); };
+      im.onerror = () => { URL.revokeObjectURL(url); bad(new Error('decode')); };
+      im.src = url;
+    });
+  }
+  function roundIcon(im, px) {
+    const c = document.createElement('canvas'); c.width = c.height = px;
+    const g = c.getContext('2d'), w = im.naturalWidth || im.width, h = im.naturalHeight || im.height, side = Math.min(w, h);
+    const ring = Math.max(3, Math.round(px * 0.06)), r = px / 2;
+    g.save(); g.beginPath(); g.arc(r, r, r - ring, 0, Math.PI * 2); g.clip();
+    g.imageSmoothingQuality = 'high';
+    g.drawImage(im, (w - side) / 2, (h - side) / 2, side, side, ring, ring, px - 2 * ring, px - 2 * ring);
+    g.restore();
+    g.beginPath(); g.arc(r, r, r - ring / 2, 0, Math.PI * 2); g.lineWidth = ring; g.strokeStyle = '#fff'; g.stroke();
+    return c.toDataURL('image/png');
+  }
+  // Resolves to the saved data URL, or rejects with a message for the user.
+  async function setIconFromFile(file) {
+    if (!file) throw new Error('No photo picked.');
+    if (file.size > FILE_MAX_BYTES) throw new Error('That photo is too big (over 30 MB). Try a smaller one.');
+    let im;
+    try { im = await loadImage(file); } catch (_) {
+      const heic = /hei[cf]/i.test(file.type || '') || /\.hei[cf]$/i.test(file.name || '');
+      throw new Error(heic ? 'This browser cannot read HEIC photos. Pick a JPEG or PNG, or take a screenshot of the photo and use that.' : 'Could not read that file as a picture. Try a JPEG or PNG.');
+    }
+    if (!(im.naturalWidth > 0)) throw new Error('Could not read that file as a picture. Try a JPEG or PNG.');
+    let px = ICON_PX, url = roundIcon(im, px);
+    while (url.length > ICON_MAX_BYTES && px > 48) { px -= 16; url = roundIcon(im, px); }
+    if (url.length > ICON_MAX_BYTES) throw new Error('Could not make that photo small enough. Try another one.');
+    try { localStorage.setItem(ICON_KEY, url); } catch (_) { throw new Error('Could not save the icon on this device.'); }
+    refreshIcon();
+    return url;
+  }
+  function resetIcon() { try { localStorage.removeItem(ICON_KEY); } catch (_) {} refreshIcon(); }
+  function hasCustomIcon() { try { return !!localStorage.getItem(ICON_KEY); } catch (_) { return false; } }
+  function wireIconSetting() {
+    if (typeof document === 'undefined') return;
+    const file = document.getElementById('iconFile'), reset = document.getElementById('iconReset'), sub = document.getElementById('iconSub'), prev = document.getElementById('iconPrev');
+    if (!file || file.dataset.wired) return; file.dataset.wired = '1';
+    const show = (msg, err) => {
+      prev.innerHTML = iconHtml(); reset.hidden = !hasCustomIcon();
+      sub.textContent = msg || (hasCustomIcon() ? 'Your photo. Shows while you navigate.' : 'Default cart. Shows while you navigate.');
+      sub.classList.toggle('err', !!err);
+    };
+    file.addEventListener('change', async () => {
+      const f = file.files && file.files[0]; file.value = '';
+      if (!f) return;
+      sub.textContent = 'Making your icon...'; sub.classList.remove('err');
+      try { await setIconFromFile(f); show(); } catch (e) { show(e.message, true); }
+    });
+    reset.addEventListener('click', () => { resetIcon(); show(); });
+    show();
+  }
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wireIconSetting); else wireIconSetting();
+  }
 
   // Rotate a Leaflet map with CSS. The map pane goes inside a wrapper div that turns around the dot's
   // screen spot, so panning (which Leaflet does on the pane) and rotation never fight. While turned, tiles
@@ -295,7 +387,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     // Paint the heading at most once per frame, only when it moved >= 3 deg or toggled on/off.
     // deviceorientation fires ~60/s on iPhone; painting every event (querySelectorAll + style write)
     // kept the main thread busy and made typing lag (Oct 31 2026).
-    let painted, paintQueued = 0;
+    let painted, paintQueued = 0, flip = 1;
     function paintHeading(force) {
       if (force === true) painted = undefined;
       if (paintQueued) return;
@@ -310,9 +402,15 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
         if (painted !== undefined && (h == null) === (painted == null) && (h == null || Math.abs(((h - painted + 540) % 360) - 180) < 3)) return;
         painted = h;
         root.__navHeadingPaints = (root.__navHeadingPaints || 0) + 1;
+        // Screen direction = heading minus map bearing. Face right when it points right (with a 10 degree
+        // dead zone near straight up/down so the cart does not flicker), else keep the last side.
+        const mbv = mb != null ? Math.round(((mb % 360) + 360) % 360) : 0;
+        if (h != null) flip = faceSide(h, mbv, flip);
         document.querySelectorAll('.me-wrap').forEach(el => {
           el.classList.toggle('has-hd', h != null);
           if (h != null) el.style.setProperty('--hd', h + 'deg');
+          el.style.setProperty('--mb', mbv + 'deg');
+          el.style.setProperty('--flip', String(flip));
         });
       });
     }
@@ -446,7 +544,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     paintBtns();
     return api;
   }
-  const api = { C, P, voice, webEngine, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, DOT };
+  const api = { C, P, voice, webEngine, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, faceSide, get DOT() { return dotHtml(); }, CART, ICON_KEY, refreshIcon, setIconFromFile, resetIcon };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMFollow = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
