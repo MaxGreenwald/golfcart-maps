@@ -76,6 +76,8 @@ struct GCMPlan {
 }
 
 final class RouteLine: MKPolyline {}
+/// Finish-flag pin at the destination (t446u).
+final class DestPin: MKPointAnnotation {}
 final class OkLine: MKPolyline {}
 final class AvoidLine: MKPolyline {}
 
@@ -124,6 +126,13 @@ final class CarPlayMapViewController: UIViewController, MKMapViewDelegate {
     // MARK: map icon (Max t434u): during guidance the dot becomes the phone's icon, cart E or the user's photo.
     var puck: CarPlayPuckView?
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is DestPin {
+            let v = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: nil)
+            v.markerTintColor = UIColor(red: 0.9, green: 0.28, blue: 0.3, alpha: 1)
+            v.glyphImage = UIImage(systemName: "flag.checkered") ?? UIImage(systemName: "flag.fill")
+            v.displayPriority = .required; v.canShowCallout = false
+            return v
+        }
         // Our view replaces the system blue dot entirely, so the location is never drawn twice.
         guard annotation is MKUserLocation else { return nil }
         let v = CarPlayPuckView(annotation: annotation, reuseIdentifier: nil)
@@ -213,6 +222,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     var gotFix = false
     var panLast = CGPoint.zero
     var offRoute = CarPlayOffRoute()
+    var tour: CarPlayTour?
+    var lastTrim = Date.distantPast
     var rerouting = false
     var dest: (CLLocationCoordinate2D, String)?
     var camHeading: Double?
@@ -338,7 +349,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let searchBtn = CPBarButton(title: "Search") { [weak self] _ in self?.openSearch() }
         let savedBtn = CPBarButton(title: "Recent") { [weak self] _ in self?.openRecents() }
         mapTemplate.leadingNavigationBarButtons = [searchBtn, savedBtn]
-        mapTemplate.trailingNavigationBarButtons = []
+        mapTemplate.trailingNavigationBarButtons = [CPBarButton(title: "Experiences") { [weak self] _ in self?.openExperiences() }]
         let recenter = CPMapButton { [weak self] _ in
             self?.startFollowing(animated: true)
         }
@@ -440,9 +451,9 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
 
     // Trip preview
-    func choose(_ d: [String: Any]) {
+    func choose(_ d: [String: Any], remember: Bool = true) {
         guard let name = d["name"] as? String, let lat = d["lat"] as? Double, let lon = d["lon"] as? Double else { return }
-        recents = [d] + recents.filter { ($0["name"] as? String) != name }
+        if remember { recents = [d] + recents.filter { ($0["name"] as? String) != name } }
         if (interface?.templates.count ?? 0) > 1 { interface?.popToRootTemplate(animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } }) }
         guard let from = loc.location?.coordinate ?? Optional(mapVC.map.centerCoordinate) else { return }
         let to = CLLocationCoordinate2D(latitude: lat, longitude: lon)
@@ -481,6 +492,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         var c = p.line
         let pl = RouteLine(coordinates: &c, count: c.count)
         m.addOverlay(pl, level: .aboveLabels)
+        m.removeAnnotations(m.annotations.filter { $0 is DestPin })
+        if let last = p.line.last { let pin = DestPin(); pin.coordinate = last; m.addAnnotation(pin) }
         m.setVisibleMapRect(pl.boundingMapRect, edgePadding: UIEdgeInsets(top: 40, left: 40, bottom: 40, right: 40), animated: true)
     }
 
@@ -604,8 +617,137 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         session = nil; plan = nil; offRoute.reset(); rerouting = false
         mapVC.guiding = false
         mapVC.map.removeOverlays(mapVC.map.overlays.filter { $0 is RouteLine })
+        mapVC.map.removeAnnotations(mapVC.map.annotations.filter { $0 is DestPin })
         refreshButtons()
         startFollowing(animated: true)
+        if arrived { celebrate(); tourArrived() } else { endTour() }
+    }
+
+    // MARK: Arrival celebration (t446u): ~3 s of cartoon unicorns over our own map view, non-interactive,
+    // only after arrival. Falls back to a short alert if the map view is not on screen.
+    func celebrate() {
+        let host = mapVC.view!
+        guard host.window != nil, let art = UIImage(named: "Unicorn") else {
+            presentAlert(["Have a wonderful life, you legend! 🦄", "You made it! 🦄"], [CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in self?.dismiss() }])
+            return
+        }
+        let layer = UIView(frame: host.bounds); layer.isUserInteractionEnabled = false
+        layer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        let label = UILabel(); label.text = "Have a wonderful life, you legend! 🦄"
+        label.font = .systemFont(ofSize: 22, weight: .heavy); label.textColor = .white; label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true; label.minimumScaleFactor = 0.5
+        label.backgroundColor = UIColor(red: 0.42, green: 0.25, blue: 0.75, alpha: 0.85); label.layer.cornerRadius = 14; label.clipsToBounds = true
+        let b = host.bounds, safe = b.inset(by: host.safeAreaInsets)
+        label.frame = CGRect(x: safe.minX + 12, y: safe.minY + 10, width: safe.width - 24, height: 44)
+        layer.addSubview(label); host.addSubview(layer)
+        for i in 0..<3 {
+            let h = min(90, safe.height / 3.2), w = h * 1.2
+            let v = UIImageView(image: art); v.frame = CGRect(x: -w - CGFloat(i) * 70, y: safe.minY + 64 + CGFloat(i) * (h * 0.55), width: w, height: h)
+            layer.addSubview(v)
+            UIView.animate(withDuration: 2.6, delay: Double(i) * 0.15, options: [.curveEaseInOut]) { v.frame.origin.x = b.maxX + 20 }
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.autoreverse, .repeat, .allowUserInteraction]) { v.transform = CGAffineTransform(translationX: 0, y: -8) }
+        }
+        #if DEBUG
+        NSLog("GCMCarPlay celebrate")
+        #endif
+        UIView.animate(withDuration: 0.4, delay: 3.0, options: []) { layer.alpha = 0 } completion: { _ in layer.removeFromSuperview() }
+    }
+
+    func presentAlert(_ titles: [String], _ actions: [CPAlertAction]) {
+        interface?.presentTemplate(CPAlertTemplate(titleVariants: titles, actions: actions), animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } })
+    }
+    func dismiss() { interface?.dismissTemplate(animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } }) }
+    func push(_ t: CPTemplate) { interface?.pushTemplate(t, animated: true, completion: { _, e in if let e = e { NSLog("CarPlay template op: %@", e.localizedDescription) } }) }
+
+    // MARK: Partner experiences (Max t437s2290). Data: public/carplay.js experiences() / stops(id) from the
+    // renter unlock saved on the phone. Short text only; coupon codes only when parked.
+    func openExperiences() {
+        GCMBridge.shared.call("experiences()") { [weak self] any in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                let d = any as? [String: Any] ?? [:]
+                guard d["ok"] as? Bool == true else {
+                    self.presentAlert([d["reason"] as? String ?? "Open your rental shop link on your phone to unlock experiences.", "Open your shop link on your phone"],
+                                      [CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in self?.dismiss() }])
+                    return
+                }
+                let shop = d["shop"] as? [String: Any] ?? [:], veh = shop["vehicle"] as? String ?? "golf_cart"
+                let speed = self.loc.location?.speed ?? -1
+                let xs = (d["experiences"] as? [[String: Any]] ?? []).map { e -> CPListItem in
+                    let n = (e["stops"] as? NSNumber)?.intValue ?? 0
+                    let it = CPListItem(text: e["title"] as? String ?? "Experience", detailText: "\(n) \(n == 1 ? "stop" : "stops")")
+                    it.handler = { [weak self] _, done in self?.openStops(String(describing: e["id"] ?? ""), title: e["title"] as? String ?? "", veh: veh); done() }
+                    return it
+                }
+                var sections = [CPListSection(items: xs)]
+                if speed >= 0, speed < 1 {
+                    let offers = (d["offers"] as? [[String: Any]] ?? []).filter { !($0["coupon"] as? String ?? "").isEmpty }.prefix(6).map {
+                        CPListItem(text: $0["name"] as? String ?? "", detailText: "Code \($0["coupon"] as? String ?? "")")
+                    }
+                    if !offers.isEmpty { sections.append(CPListSection(items: Array(offers), header: "Offers", sectionIndexTitle: nil)) }
+                }
+                let t = CPListTemplate(title: shop["name"] as? String ?? "Experiences", sections: sections)
+                t.emptyViewTitleVariants = ["No experiences yet"]
+                self.push(t)
+            }
+        }
+    }
+    func openStops(_ id: String, title: String, veh: String) {
+        let c = loc.location?.coordinate
+        var args: [String: Any] = ["id": id]
+        if let c = c { args["la"] = c.latitude; args["lo"] = c.longitude }
+        GCMBridge.shared.call(c == nil ? "stops(id,null,null)" : "stops(id,la,lo)", args) { [weak self] any in
+            DispatchQueue.main.async {
+                guard let self = self, let d = any as? [String: Any], d["ok"] as? Bool == true else { return }
+                let raw = d["stops"] as? [[String: Any]] ?? []
+                let stops = raw.compactMap { s -> CarPlayTour.Stop? in
+                    guard let la = (s["lat"] as? NSNumber)?.doubleValue, let lo = (s["lon"] as? NSNumber)?.doubleValue else { return nil }
+                    return .init(name: s["name"] as? String ?? "Stop", lat: la, lon: lo)
+                }
+                let speed = self.loc.location?.speed ?? -1
+                let start = CPListItem(text: "Start", detailText: stops.first.map { "Go to \($0.name)" })
+                start.handler = { [weak self] _, done in self?.startTour(title: title, stops: stops, veh: veh); done() }
+                let items = raw.enumerated().map { i, s in
+                    CPListItem(text: "\(i + 1). \(s["name"] as? String ?? "Stop")",
+                               detailText: CarPlayTour.detail(category: s["category"] as? String ?? "", meters: (s["meters"] as? NSNumber)?.doubleValue,
+                                                              coupon: s["coupon"] as? String ?? "", speed: speed))
+                }
+                self.push(CPListTemplate(title: title.isEmpty ? "Stops" : title, sections: [CPListSection(items: [start]), CPListSection(items: items)]))
+            }
+        }
+    }
+    /// Use the shop's vehicle rules (LSV for Beach Mode) for the tour, put the phone's setting back after.
+    func startTour(title: String, stops: [CarPlayTour.Stop], veh: String) {
+        guard !stops.isEmpty else { return }
+        GCMBridge.shared.call("status()") { [weak self] any in
+            let prev = (any as? [String: Any])?["mode"] as? String
+            GCMBridge.shared.call("setMode(m)", ["m": veh]) { _ in
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    self.tour = CarPlayTour(title: title, stops: stops, prevMode: prev == veh ? nil : prev)
+                    self.goToTourStop()
+                }
+            }
+        }
+    }
+    func goToTourStop() {
+        guard let s = tour?.current else { return }
+        choose(["name": s.name, "lat": s.lat, "lon": s.lon], remember: false)
+    }
+    func tourArrived() {
+        guard var t = tour else { return }
+        guard let next = t.advance() else { endTour(); return }
+        tour = t
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.4) { [weak self] in
+            self?.presentAlert(["Next stop: \(next.name)", "Next stop"], [
+                CPAlertAction(title: "Next stop", style: .default) { [weak self] _ in self?.dismiss(); self?.goToTourStop() },
+                CPAlertAction(title: "End", style: .cancel) { [weak self] _ in self?.dismiss(); self?.endTour() }])
+        }
+    }
+    func endTour() {
+        guard let t = tour else { return }
+        tour = nil
+        if let m = t.prevMode { GCMBridge.shared.call("setMode(m)", ["m": m]) { _ in } }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -624,6 +766,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let pts = p.line.map { ($0.latitude, $0.longitude) }, me = (here.coordinate.latitude, here.coordinate.longitude)
         let off = CarPlayOffRoute.distance(from: me, toLine: pts)
         headingUp(here, off: off, line: pts)
+        trimRoute(here, pts: pts, off: off)
         if !rerouting, here.horizontalAccuracy >= 0, here.horizontalAccuracy < 50 {
             if offRoute.update(offMeters: off, now: here.timestamp.timeIntervalSince1970) { reroute(from: here); return }
         }
@@ -647,6 +790,17 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         }
         let rest = p.maneuvers.dropFirst(step + 1).reduce(d) { $0 + $1.toMeters }
         mapTemplate.update(estimates(rest, rest / p.speed), for: s.trip, with: .default)
+    }
+
+    /// Trim the drawn line behind the driver (t446u), at most once a second and only while on the route.
+    /// plan.line stays whole for off-route checks and rerouting.
+    func trimRoute(_ here: CLLocation, pts: [(Double, Double)], off: Double) {
+        guard off < 30, Date().timeIntervalSince(lastTrim) >= 1 else { return }
+        lastTrim = Date()
+        var c = CarPlayTrim.ahead(of: (here.coordinate.latitude, here.coordinate.longitude), line: pts).map { CLLocationCoordinate2D(latitude: $0.0, longitude: $0.1) }
+        let m = mapVC.map, old = m.overlays.filter { $0 is RouteLine }
+        m.addOverlay(RouteLine(coordinates: &c, count: c.count), level: .aboveLabels)
+        m.removeOverlays(old)
     }
 
     #if DEBUG
