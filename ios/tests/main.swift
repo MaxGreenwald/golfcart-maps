@@ -62,4 +62,16 @@ ck("icon rejects other urls", CarPlayIcon.decode("https://x/y.png") == nil && Ca
 ck("cart faces right heading east, map north-up", CarPlayIcon.faceSide(heading: 90, mapHeading: 0, prev: 1) == -1)
 ck("cart faces left heading west", CarPlayIcon.faceSide(heading: 270, mapHeading: 0, prev: -1) == 1)
 ck("heading-up (map = heading) keeps previous side", CarPlayIcon.faceSide(heading: 90, mapHeading: 90, prev: -1) == -1)
+// Route trim behind the driver
+let tl = [(0.0, 0.0), (0.0, 0.001), (0.0, 0.002)]
+let tr = CarPlayTrim.ahead(of: (0.0001, 0.0015), line: tl)
+ck("trim drops what is behind", tr.count == 2 && abs(tr[0].1 - 0.0015) < 1e-9 && tr[1].1 == 0.002)
+ck("trim before the start keeps the whole line", CarPlayTrim.ahead(of: (0, -0.001), line: tl).count == 3)
+// Experience tour
+var tour = CarPlayTour(title: "PB", stops: [.init(name: "A", lat: 0, lon: 0), .init(name: "B", lat: 0, lon: 0)], prevMode: "golf_cart")
+ck("tour starts at stop 1", tour.current?.name == "A" && !tour.isLast)
+ck("tour next stop in order", tour.advance()?.name == "B" && tour.isLast)
+ck("tour ends after the last stop", tour.advance() == nil)
+ck("stop detail short", CarPlayTour.detail(category: "fun_fact", meters: 650, coupon: "BAR10", speed: 9) == "Fun Fact · 0.4 mi")
+ck("coupon only when parked", CarPlayTour.detail(category: "", meters: nil, coupon: "BAR10", speed: 0) == "Code BAR10")
 exit(fails == 0 ? 0 : 1)

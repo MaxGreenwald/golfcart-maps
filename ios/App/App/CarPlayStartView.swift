@@ -146,3 +146,41 @@ enum CarPlayIcon {
         return sx > 0.17 ? -1 : sx < -0.17 ? 1 : (prev == 0 ? 1 : prev)
     }
 }
+
+/// Route line trimmed behind the driver (t446u): snap to the nearest segment, keep the snapped point and
+/// everything ahead. Points are (lat, lon).
+enum CarPlayTrim {
+    static func ahead(of p: (Double, Double), line: [(Double, Double)]) -> [(Double, Double)] {
+        guard line.count >= 2 else { return line }
+        let k = cos(p.0 * .pi / 180)
+        var best = Double.infinity, bi = 0, bs = p
+        for i in 0..<(line.count - 1) {
+            let a = line[i], b = line[i + 1]
+            let ax = (a.1 - p.1) * k, ay = a.0 - p.0, bx = (b.1 - p.1) * k, by = b.0 - p.0
+            let dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy
+            let t = l2 > 0 ? max(0, min(1, -(ax * dx + ay * dy) / l2)) : 0
+            let x = ax + t * dx, y = ay + t * dy, d = x * x + y * y
+            if d < best { best = d; bi = i; bs = (a.0 + t * (b.0 - a.0), a.1 + t * (b.1 - a.1)) }
+        }
+        return [bs] + line[(bi + 1)...]
+    }
+}
+
+/// A partner experience driven stop by stop in order (t437s2290).
+struct CarPlayTour {
+    struct Stop { let name: String; let lat: Double; let lon: Double }
+    let title: String, stops: [Stop], prevMode: String?
+    var index = 0
+    var current: Stop? { index < stops.count ? stops[index] : nil }
+    /// After arriving at the current stop: the next one, or nil when the tour is done.
+    mutating func advance() -> Stop? { index += 1; return current }
+    var isLast: Bool { index >= stops.count - 1 }
+    /// CarPlay list detail: short, e.g. "Views · 0.4 mi". Coupon only when parked (speed < 1 m/s).
+    static func detail(category: String, meters: Double?, coupon: String, speed: Double) -> String {
+        var parts: [String] = []
+        if !category.isEmpty { parts.append(category.replacingOccurrences(of: "_", with: " ").capitalized) }
+        if let m = meters { parts.append(m < 160 ? "\(Int((m * 3.28084 / 50).rounded() * 50)) ft" : String(format: "%.1f mi", m / 1609.34)) }
+        if !coupon.isEmpty, speed >= 0, speed < 1 { parts.append("Code \(coupon)") }
+        return parts.joined(separator: " · ")
+    }
+}
