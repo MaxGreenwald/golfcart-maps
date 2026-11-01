@@ -1,7 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
-import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle } from '../../../lib/partner.js';
+import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, grantExpiry, handoffProblem, HANDOFF_TTL } from '../../../lib/partner.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -103,6 +103,8 @@ export class PartnerStore extends DurableObject {
         uses INTEGER NOT NULL DEFAULT 0, expires_at INTEGER, created_at INTEGER NOT NULL
       );
       CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY, v TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS grants(grant TEXT PRIMARY KEY, shop_id TEXT NOT NULL, code TEXT NOT NULL, expires_at INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS handoffs(token TEXT PRIMARY KEY, shop_id TEXT NOT NULL, code TEXT NOT NULL, expires_at INTEGER NOT NULL, used INTEGER NOT NULL DEFAULT 0);
     `);
     // Per-shop rental vehicle (road rules on /p/<slug>). Added Oct 29 2026.
     const cols = this.sql.exec('PRAGMA table_info(shops)').toArray().map(c => c.name);
@@ -136,6 +138,22 @@ export class PartnerStore extends DurableObject {
     return { id: r.id, shop_id: r.shop_id, name: r.name, lat: r.lat, lon: r.lon, offer: r.offer || '', coupon: r.coupon || '', created_at: r.created_at };
   }
 
+  /** The unlock answer for a code row; withGrant adds a grant for a later app handoff. */
+  unlockAnswer(sh, shop, c, withGrant) {
+    const experiences = this.q(
+      c.experience_id
+        ? 'SELECT * FROM experiences WHERE id=? AND shop_id=?'
+        : 'SELECT * FROM experiences WHERE shop_id=? ORDER BY created_at DESC',
+      ...(c.experience_id ? [c.experience_id, sh.id] : [sh.id]),
+    ).map(r => this.expRow(r));
+    const affiliates = this.q('SELECT * FROM affiliates WHERE shop_id=? ORDER BY created_at DESC', sh.id).map(r => this.affRow(r));
+    const out = { unlocked: true, shop, experiences, affiliates, places: this.places(sh.id), code: c.code };
+    if (withGrant) {
+      out.grant = randomToken(24);
+      this.sql.exec('INSERT INTO grants(grant,shop_id,code,expires_at) VALUES(?,?,?,?)', out.grant, sh.id, c.code, grantExpiry(now(), c.expires_at));
+    }
+    return out;
+  }
   async fetch(req) {
     const u = new URL(req.url);
     const path = u.pathname;
@@ -344,6 +362,18 @@ export class PartnerStore extends DurableObject {
         );
         return J({ code: this.one('SELECT * FROM codes WHERE code=?', code) }, 201);
       }
+      // App handoff: grant (from an unlock in the browser) -> single-use token, 10 minutes.
+      const hm = path.match(/^\/public\/([^/]+)\/handoff$/);
+      if (hm && method === 'POST') {
+        const sh = this.one('SELECT * FROM shops WHERE slug=? AND disabled=0', normalizeSlug(hm[1]));
+        const g = this.one('SELECT * FROM grants WHERE grant=?', String((body && body.grant) || ''));
+        const why = handoffProblem(g, now(), { shopId: sh && sh.id });
+        if (!sh || why) return J({ error: 'Handoff ' + (why || 'not found') }, 403);
+        const token = randomToken(18), expires_at = now() + HANDOFF_TTL;
+        this.sql.exec('INSERT INTO handoffs(token,shop_id,code,expires_at,used) VALUES(?,?,?,?,0)', token, sh.id, g.code, expires_at);
+        this.sql.exec('DELETE FROM handoffs WHERE expires_at<?', now() - 86400);
+        return J({ token, expires_at });
+      }
       // Public brand + unlock
       if (path.startsWith('/public/') && method === 'GET') {
         const parts = path.slice('/public/'.length).split('/');
@@ -360,14 +390,18 @@ export class PartnerStore extends DurableObject {
           if (!c.multi_use && c.uses > 0) return J({ error: 'Code already used', shop }, 403);
           if (c.max_uses > 0 && c.uses >= c.max_uses) return J({ error: 'Code use limit reached', shop }, 403);
           this.sql.exec('UPDATE codes SET uses=uses+1 WHERE code=?', code);
-          const experiences = this.q(
-            c.experience_id
-              ? 'SELECT * FROM experiences WHERE id=? AND shop_id=?'
-              : 'SELECT * FROM experiences WHERE shop_id=? ORDER BY created_at DESC',
-            ...(c.experience_id ? [c.experience_id, sh.id] : [sh.id]),
-          ).map(r => this.expRow(r));
-          const affiliates = this.q('SELECT * FROM affiliates WHERE shop_id=? ORDER BY created_at DESC', sh.id).map(r => this.affRow(r));
-          return J({ unlocked: true, shop, experiences, affiliates, places: this.places(sh.id), code });
+          return J(this.unlockAnswer(sh, shop, c, true));
+        }
+        if (parts[1] === 'redeem') {
+          // App handoff: same answer as unlock, no code use counted; the token works once.
+          const t = String(u.searchParams.get('token') || '');
+          const h = this.one('SELECT * FROM handoffs WHERE token=?', t);
+          const why = handoffProblem(h, now(), { shopId: sh.id, single: true });
+          if (why) return J({ error: 'Handoff ' + why, shop }, 403);
+          this.sql.exec('UPDATE handoffs SET used=1 WHERE token=?', t);
+          const c = this.one('SELECT * FROM codes WHERE code=? AND shop_id=?', h.code, sh.id);
+          if (!c || (c.expires_at && c.expires_at < now())) return J({ error: 'Code expired', shop }, 403);
+          return J(this.unlockAnswer(sh, shop, c, true));
         }
         // Teaser (no paid content)
         return J({
@@ -629,6 +663,9 @@ export default {
 
     // Public (no auth)
     if (u.pathname.startsWith('/public/')) {
+      if (req.method === 'POST' && /^\/public\/[^/]+\/handoff$/.test(u.pathname)) {
+        return doFetch(u.pathname, { method: 'POST', headers: { 'content-type': 'application/json' }, body: await req.text() });
+      }
       return doFetch(u.pathname + u.search, { method: 'GET' });
     }
 

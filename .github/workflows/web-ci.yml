@@ -23,6 +23,8 @@ jobs:
         run: node --test tests/livedata.test.mjs
       - name: Partner owner-endpoint authz (super-admin any shop; owners only their own)
         run: node --test tests/partner_access.test.mjs
+      - name: App links (AASA, handoff tokens) (node --test)
+        run: node --test tests/app_links.test.mjs
       - name: Partner places validation (category enum, no coupon, https link)
         run: node --test tests/partner_places.test.mjs
       - name: Shop rental vehicle (API values, worker stores and exposes it)
