@@ -13,16 +13,16 @@ const nextBar = document.getElementById('nextBar');
 const nextLabel = document.getElementById('nextLabel');
 const nextBtn = document.getElementById('nextBtn');
 
-function slugFromPath() {
-  const parts = location.pathname.replace(/\/+$/, '').split('/').filter(Boolean);
-  if (parts[0] === 'p' && parts[1]) return parts[1].toLowerCase();
-  return '';
-}
+const AL = window.GCMAppLink;
+const API = AL.apiBase(window);
+function slugFromPath() { return AL.slugFrom(location.pathname, location.search); }
 
 const slug = slugFromPath();
 const params = new URLSearchParams(location.search);
 const codeParam = (params.get('code') || '').trim().toUpperCase();
-const isGo = /\/go\/?$/.test(location.pathname) || !!codeParam;
+const handoffParam = (params.get('handoff') || '').trim();
+const isGo = /\/go\/?$/.test(location.pathname) || !!codeParam || !!handoffParam;
+const GRANT_KEY = 'gcm_partner_grant:' + slug;
 
 let map, pins = null, routeLayer = null, liveLayer = null, regions = [], region = null, rules = null;
 let unlocked = null, activeEx = null, stopIdx = 0, drawToken = 0, startToken = 0;
@@ -1088,17 +1088,22 @@ async function boot() {
     return;
   }
   try {
-    if (isGo && codeParam) {
-      const r = await fetch(`/api/partner/public/${encodeURIComponent(slug)}/unlock?code=${encodeURIComponent(codeParam)}`);
+    if (isGo && (codeParam || handoffParam)) {
+      // A handoff token (from "Open in the app") gives the same unlock without counting another code use.
+      const r = await fetch(handoffParam
+        ? `${API}/public/${encodeURIComponent(slug)}/redeem?token=${encodeURIComponent(handoffParam)}`
+        : `${API}/public/${encodeURIComponent(slug)}/unlock?code=${encodeURIComponent(codeParam)}`);
       const j = await r.json();
       if (!r.ok) {
         renderLocked(j.shop ? { shop: j.shop } : null, j.error || 'Could not unlock');
         return;
       }
       unlocked = j;
+      try { if (j.grant) localStorage.setItem(GRANT_KEY, j.grant); } catch (_) {}
       await unlockedView();
+      addAppButton();
     } else {
-      const r = await fetch(`/api/partner/public/${encodeURIComponent(slug)}`);
+      const r = await fetch(`${API}/public/${encodeURIComponent(slug)}`);
       const j = await r.json();
       if (!r.ok) {
         setLockedChrome();
@@ -1113,6 +1118,39 @@ async function boot() {
   } catch (e) {
     panel.innerHTML = `<div class="msg err">${esc(e.message)}</div>`;
   }
+}
+
+// "Open in the app": trade the saved grant for a 10-minute single-use token, then open the app with it.
+// If the app isn't installed the page stays put, so after a moment we offer the App Store instead.
+function addAppButton() {
+  if (!AL.wantsAppButton(window)) return;
+  let grant = '';
+  try { grant = localStorage.getItem(GRANT_KEY) || ''; } catch (_) {}
+  const host = document.querySelector('.yay');
+  if (!grant || !host || document.getElementById('openApp')) return;
+  const b = document.createElement('button');
+  b.type = 'button'; b.id = 'openApp'; b.className = 'allex'; b.textContent = 'Open in the Golf Cart Maps app';
+  const note = document.createElement('p'); note.className = 'fine'; note.id = 'openAppNote';
+  host.append(b, note);
+  b.addEventListener('click', async () => {
+    b.disabled = true; note.textContent = '';
+    try {
+      const r = await fetch(`${API}/public/${encodeURIComponent(slug)}/handoff`, {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ grant }),
+      });
+      const j = await r.json();
+      if (!r.ok || !j.token) throw new Error(j.error || 'Could not open the app');
+      const t = setTimeout(() => {
+        if (document.visibilityState === 'visible') note.innerHTML = `Don’t have the app? <a href="${AL.APP_STORE}">Get it on the App Store</a>, then tap this button again.`;
+      }, 1800);
+      document.addEventListener('visibilitychange', () => clearTimeout(t), { once: true });
+      location.href = AL.handoffUrl(slug, j.token);
+    } catch (e) {
+      note.textContent = e.message;
+    } finally {
+      b.disabled = false;
+    }
+  });
 }
 
 boot();
