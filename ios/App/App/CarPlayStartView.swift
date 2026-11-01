@@ -143,7 +143,7 @@ enum CarPlayChrome {
         navigating ? ["recenter", "mute", "zoomIn", "zoomOut"] : ["recenter", "layers", "zoomIn", "zoomOut"]
     }
     static func leading(navigating: Bool) -> [String] { navigating ? ["Search"] : ["Search", "Places"] }
-    static func trailing(navigating: Bool) -> [String] { navigating ? ["End"] : ["Experiences"] }
+    static func trailing(navigating: Bool) -> [String] { navigating ? ["End"] : ["Experiences", "Settings"] }
 }
 
 /// Arrival celebration layout (Max t451u): ~15 s. Three lines (build 43: the long second line ran under

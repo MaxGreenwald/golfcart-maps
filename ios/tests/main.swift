@@ -1,6 +1,6 @@
 import Foundation
 // CarPlay start-view logic test (top-level code needs the file to be named main.swift)
-// Run: swiftc ios/App/App/CarPlayStartView.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
+// Run: swiftc ios/App/App/CarPlayStartView.swift ios/App/App/CarPlayRentalCode.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
 var fails = 0
 func ck(_ name: String, _ ok: Bool) { print((ok ? "PASS " : "FAIL ") + name); if !ok { fails += 1 } }
 let json = try! Data(contentsOf: URL(fileURLWithPath: "public/data/regions.json"))
@@ -83,7 +83,7 @@ ck("browsing map buttons", CarPlayChrome.mapButtons(navigating: false) == ["rece
 ck("navigating map buttons keep zoom out and mute", CarPlayChrome.mapButtons(navigating: true) == ["recenter", "mute", "zoomIn", "zoomOut"])
 ck("never more than 4 map buttons", CarPlayChrome.mapButtons(navigating: false).count <= CarPlayChrome.mapButtonMax && CarPlayChrome.mapButtons(navigating: true).count <= CarPlayChrome.mapButtonMax)
 ck("navigating bar is Search and End", CarPlayChrome.leading(navigating: true) == ["Search"] && CarPlayChrome.trailing(navigating: true) == ["End"])
-ck("browsing bar shows Places and Experiences", CarPlayChrome.leading(navigating: false) == ["Search", "Places"] && CarPlayChrome.trailing(navigating: false) == ["Experiences"])
+ck("browsing bar shows Places, Experiences and Settings", CarPlayChrome.leading(navigating: false) == ["Search", "Places"] && CarPlayChrome.trailing(navigating: false) == ["Experiences", "Settings"])
 // Search rows
 ck("long title clipped", CarPlaySearchText.clip("Pacific Beach Boardwalk Shops and Restaurants", 28)!.count == 28)
 ck("address drops ZIP and country", CarPlaySearchText.shortAddress("123 Main St, San Diego, CA 92109, United States") == "123 Main St, San Diego")
@@ -108,4 +108,9 @@ GCMVoiceSetting.setMuted(true, vd); ck("mute is saved", GCMVoiceSetting.isMuted(
 // Reroute telemetry ring (t453u): last 200 lines, PT time stamps.
 var lg = CarPlayNavLog(); for i in 0..<250 { lg.add("x\(i)") }
 ck("nav log keeps the last 200 lines", lg.lines.count == 200 && lg.lines.last!.hasSuffix("x249"))
+// Rental code in CarPlay (Max t449u).
+ck("code normalized", CarPlayRentalCode.normalize(" ab12-cd3 ") == "AB12CD3")
+ck("short or junk is not a code", CarPlayRentalCode.normalize("ab") == nil && CarPlayRentalCode.normalize("<x>!") == nil)
+ck("typing a code offers one Unlock row", CarPlayRentalCode.rows(for: "ab12cd3").map { $0.code } == ["AB12CD3"])
+ck("before a code: hint row points to the phone", CarPlayRentalCode.rows(for: "a").first?.code == nil && CarPlayRentalCode.rows(for: "a").first?.detail == CarPlayRentalCode.phoneHint)
 exit(fails == 0 ? 0 : 1)
