@@ -21,6 +21,8 @@ jobs:
         run: node --test tests/analytics.test.mjs
       - name: Live town loader (native app prefers golfcartmap.com JSON; bundled fallback)
         run: node --test tests/livedata.test.mjs
+      - name: CarPlay Experiences bridge (node --test)
+        run: node --test tests/carplay_experiences.test.mjs
       - name: Partner owner-endpoint authz (super-admin any shop; owners only their own)
         run: node --test tests/partner_access.test.mjs
       - name: Partner places validation (category enum, no coupon, https link)

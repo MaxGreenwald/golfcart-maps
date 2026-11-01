@@ -1077,6 +1077,9 @@ async function boot() {
         return;
       }
       unlocked = j;
+      // CarPlay Experiences (public/carplay.js experiences()) reads this to show the shop's rides in the car.
+      // The whole unlock answer is saved because unlock counts a use (single-use codes would fail a second call).
+      try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates })); } catch (e) {}
       await unlockedView();
     } else {
       const r = await fetch(`/api/partner/public/${encodeURIComponent(slug)}`);
