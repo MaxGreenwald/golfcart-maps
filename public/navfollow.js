@@ -378,11 +378,55 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     };
   }
 
+
+  // ---- The one navigation engine (t453u/t459u). The phone (controller below + app.js) and CarPlay
+  // (carplay.js navStart/navFix, driven by CarPlaySceneDelegate.swift) both feed GPS fixes into this, so
+  // off-route, reroute timing and heading, turn advance and arrival are the same code on both screens.
+  // route: GCMNav.buildSteps(...). fix(coords, now) -> GCMNav.status(...) plus bearing (map heading target) and
+  // course (the heading a reroute should honor). offCheck(now) -> true once when off route for OFF_ROUTE_MS.
+  function engine(route, o) {
+    const track = offTracker(o);
+    // The route starts where you are, so matching starts at its beginning (a loop back through the start is later).
+    let prev = { matched: 0 }, prevLL = null, course = null, courseAt = -Infinity, speed = null;
+    const nav = () => root.GCMNav;
+    const e = {
+      route,
+      fix(c, now) {
+        const ll = [c.latitude, c.longitude];
+        const cr = courseHeading(c, prevLL); if (cr != null) { course = cr; courseAt = now; }
+        if (!prevLL || hav(prevLL, ll) >= 8) prevLL = ll;
+        speed = c.speed;
+        let st;
+        if (route.steps) st = nav().status(route, ll, prev, { course: c.heading, speed: c.speed });
+        else { const near0 = Number.isFinite(prev.matched) ? prev.matched : undefined, moved = prev.ll ? hav(prev.ll, ll) : 0;
+          const p = nav().project(route, ll, near0, nav().MATCH_AHEAD_M + 2 * moved);
+          st = { ll, along: p.along, off: p.off, matched: p.off <= nav().OFF_ROUTE_M ? p.along : (near0 != null ? near0 : p.along) }; }
+        prev = st;
+        const near = (r, q) => nav().project(r, q, st.matched);
+        // Map heading target: the road ahead of where you are on the route, else GPS course, else (standing a
+        // bit off the line at Start, Max t430u) the road ahead from the nearest route point within START_AIM_M.
+        let bearing = routeBearing(route, ll, null, near);
+        if (bearing == null) bearing = cr;
+        if (bearing == null) bearing = routeBearing(route, ll, null, near, C.START_AIM_M);
+        return Object.assign({}, st, { bearing, course: e.travelCourse(now) });
+      },
+      offCheck(now) { return Number.isFinite(prev.off) && track.update(prev.off, now); },
+      offSince: () => track.offSince(),
+      offMs: track.opts.offMs,
+      travelCourse(now) { return travelCourseOf(course, now - courseAt, speed); },
+      last: () => (Number.isFinite(prev.off) ? prev : null),
+      reset() { track.reset(); },
+    };
+    return e;
+  }
   // opts: map, getRoute() -> {pts} | null, reroute(ll) -> Promise, say(text), onStart(), onEnd(), canStart()
   function controller(opts) {
     injectCss();
     const map = opts.map;
-    const track = offTracker(opts.offRoute);
+    // Shared engine for the current route (rebuilt when getRoute() returns a new route).
+    let eng = null, engRoute = null, lastSt = null;
+    const E = () => { const r = opts.getRoute && opts.getRoute(); if (r !== engRoute) { engRoute = r; eng = r && r.pts && r.pts.length > 1 ? engine(r.cum && r.cum.length === r.pts.length ? r : Object.assign({}, r, withCum(r)), opts.offRoute) : null; lastSt = null; } return eng; };
+    const track = { reset() { if (eng) eng.reset(); } };
     let navigating = false, following = false, heading = null, compass = null, last = null, prevLL = null, course = null, courseAt = 0;
     let timer = 0, rerouting = false, moving = 0, previewing = false;
     let mapBearing = null; // unwrapped; null = north-up
@@ -419,7 +463,8 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
       const ll = [last.latitude, last.longitude];
       const r = opts.getRoute && opts.getRoute();
       let t = null;
-      try { t = routeBearing(r, ll); } catch (_) { t = null; }
+      if (lastSt && r === engRoute) t = lastSt.bearing;   // shared engine (same target CarPlay uses)
+      else try { t = routeBearing(r, ll); } catch (_) { t = null; }
       if (t == null) t = courseHeading(last, prevLL);
       // Max t430u: standing still a bit off the line (driveway, parking lot, GPS drift at Start) gave no
       // bearing at all, so the map stayed north-up. Use the road ahead from the nearest route point.
@@ -532,16 +577,17 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     function check(now) {
       const r = opts.getRoute && opts.getRoute();
       if (!navigating || rerouting || !last || !r || !r.pts || r.pts.length < 2) return;
-      const off = root.GCMNav.project(r, [last.latitude, last.longitude]).off;
-      if (track.update(off, now)) {
+      const e = E();
+      if (!e) return;
+      if (e.offCheck(now)) {
         rerouting = true;
         opts.say && opts.say('Rerouting');
         root.__navReroutes = (root.__navReroutes || 0) + 1;
         Promise.resolve(opts.reroute([last.latitude, last.longitude], api.travelCourse())).catch(() => {}).finally(() => { rerouting = false; track.reset(); });
       }
       clearTimeout(timer);
-      const s = track.offSince();
-      if (s != null) timer = setTimeout(() => check(Date.now()), Math.max(50, track.opts.offMs - (now - s) + 20));
+      const s = e.offSince();
+      if (s != null) timer = setTimeout(() => check(Date.now()), Math.max(50, e.offMs - (now - s) + 20));
     }
     const api = {
       // coords: a GeolocationCoordinates-like {latitude, longitude, heading, speed}
@@ -552,6 +598,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
         if (h != null) heading = h; else if (!Number.isFinite(compass)) heading = null;
         if (!prevLL || hav(prevLL, [coords.latitude, coords.longitude]) >= 8) prevLL = [coords.latitude, coords.longitude];
         last = coords;
+        const e = E(); lastSt = e ? e.fix(coords, Date.now()) : null;
         aimBearing();
         paintHeading();
         if (navigating && following) center([coords.latitude, coords.longitude]);
@@ -560,6 +607,8 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
       // GPS course while clearly driving (speed >= REROUTE_MOVING_MS, or unknown speed but a fresh course
       // from movement), else null so a reroute may start in any direction.
       travelCourse() { return last ? travelCourseOf(course, Date.now() - courseAt, last.speed) : null; },
+      // Latest shared-engine state for the last fix (GCMNav.status fields + bearing + course), or null.
+      status: () => lastSt,
       preview(on) { previewing = !!on; if (!on && navigating) api.end(); paintBtns(); },
       start() {
         if (navigating) return;
@@ -595,6 +644,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
       state: () => ({ navigating, following, previewing, heading, rerouting, compassOn, mapBearing: rot ? rot.get() : 0, headingUp: headingUp() && mapBearing != null }),
     };
     root.gcmFollowState = api.state; root.gcmFollowRoute = () => opts.getRoute && opts.getRoute(); // test hooks (read-only)
+    root.gcmFollowStatus = () => lastSt; // test hook (read-only): last shared-engine state
     $b('navStart').onclick = () => api.start();
     $b('navEnd').onclick = () => api.end();
     $b('navMute').onclick = () => setMuted(!muted);
@@ -612,7 +662,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     return course;
   }
 
-  const api = { C, P, travelCourseOf, voice, webEngine, nativeEngine, bestEngine, setMuted, isMuted: () => muted, MUTE_KEY, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, faceSide, get DOT() { return dotHtml(); }, CART, ICON_KEY, refreshIcon, setIconFromFile, resetIcon };
+  const api = { C, P, engine, travelCourseOf, voice, webEngine, nativeEngine, bestEngine, setMuted, isMuted: () => muted, MUTE_KEY, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, faceSide, get DOT() { return dotHtml(); }, CART, ICON_KEY, refreshIcon, setIconFromFile, resetIcon };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMFollow = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
