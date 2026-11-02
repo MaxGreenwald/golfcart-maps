@@ -217,6 +217,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     var session: CPNavigationSession?
     var plan: GCMPlan?
     var step = 0
+    var voiceObs: NSObjectProtocol?
     var lastTrip: CPTrip?
     var overlayTimer: Timer?
     var showLegal = true
@@ -225,14 +226,15 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     var idleTimer: Timer?
     var gotFix = false
     var panLast = CGPoint.zero
-    var offRoute = CarPlayOffRoute()
     var tour: CarPlayTour?
     var lastTrim = Date.distantPast
     var rerouting = false
     var dest: (CLLocationCoordinate2D, String)?
     var camHeading: Double?
-    var course = CarPlayCourse()       // last good travel course, for reroutes (t451u)
-    var wrongWay = CarPlayWrongWay()
+    // Guidance decisions come from the phone's engine (public/carplay.js navFix, AGENTS.md rule 35). We only render.
+    var nav: [String: Any]? = nil      // last navFix answer
+    var navBusy = Date.distantPast     // a navFix call in flight since
+    var navLog = CarPlayNavLog(lines: UserDefaults.standard.stringArray(forKey: CarPlayNavLog.key) ?? [])
     var rerouteTimeout: Timer?
     var destAddress: String?
     var mode: String { "lsv" }
@@ -250,6 +252,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         mapTemplate.guidanceBackgroundColor = UIColor(white: 0.13, alpha: 1)
         mapTemplate.tripEstimateStyle = .dark
         refreshButtons()
+        voiceObs = NotificationCenter.default.addObserver(forName: GCMVoice.mutedChanged, object: nil, queue: .main) { [weak self] _ in self?.refreshButtons() }
         interfaceController.setRootTemplate(mapTemplate, animated: false, completion: { _, _ in })
         loc.delegate = self
         loc.desiredAccuracy = kCLLocationAccuracyBestForNavigation
@@ -375,6 +378,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     func templateApplicationScene(_ scene: CPTemplateApplicationScene, didDisconnectInterfaceController interfaceController: CPInterfaceController, from window: CPWindow) {
         loc.stopUpdatingLocation()
         session?.cancelTrip()
+        if let o = voiceObs { NotificationCenter.default.removeObserver(o); voiceObs = nil }
+        GCMVoice.shared.stop()
         session = nil; interface = nil; self.window = nil
     }
 
@@ -398,7 +403,13 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         zin.image = UIImage(systemName: "plus.magnifyingglass")
         let zout = CPMapButton { [weak self] _ in self?.zoom(2) }
         zout.image = UIImage(systemName: "minus.magnifyingglass")
-        mapTemplate.mapButtons = [recenter, layers, zin, zout]
+        // Voice on/off (t455u), same switch as the phone nav screen. Muted: music only, no spoken directions.
+        let voice = CPMapButton { [weak self] _ in
+            GCMVoice.shared.muted.toggle()
+            self?.refreshButtons()
+        }
+        voice.image = UIImage(systemName: GCMVoice.shared.muted ? "speaker.slash.fill" : "speaker.wave.2.fill")
+        mapTemplate.mapButtons = [recenter, voice, layers, zin, zout]
     }
 
     func zoom(_ f: Double) {
@@ -524,7 +535,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         guard let from = loc.location?.coordinate ?? Optional(mapVC.map.centerCoordinate) else { return }
         let to = CLLocationCoordinate2D(latitude: lat, longitude: lon)
         dest = (to, name); destAddress = d["address"] as? String
-        GCMBridge.shared.call("plan(f,t,m,false)", ["f": ["lat": from.latitude, "lon": from.longitude], "t": ["lat": lat, "lon": lon], "m": mode]) { [weak self] any in
+        GCMBridge.shared.call("plan(f,t,m,false,null,d)", ["f": ["lat": from.latitude, "lon": from.longitude], "t": ["lat": lat, "lon": lon], "m": mode, "d": name]) { [weak self] any in
             guard let self = self else { return }
             guard let p = GCMPlan(any) else {
                 let reason = (any as? [String: Any])?["reason"] as? String ?? "No legal route found."
@@ -578,6 +589,12 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         GCMBridge.shared.track("route_started", ["mi": p.miles])
         step = p.maneuvers.count > 1 ? 1 : 0
         pushManeuvers(s, p)
+        nav = nil; navBusy = .distantPast
+        GCMBridge.shared.call("navStart()") { [weak self] any in
+            let r = any as? [String: Any]
+            self?.log("navStart \(r?["ok"] as? Bool == true ? "ok" : "failed: \(String(describing: any))")")
+            if let say = r?["say"] as? String { GCMVoice.shared.speak(say) }
+        }
         mapTemplate.update(estimates(p.meters, p.minutes * 60), for: trip, with: .default)
         let end = CPBarButton(title: "End") { [weak self] _ in self?.endTrip(arrived: false) }
         mapTemplate.trailingNavigationBarButtons = [end]
@@ -624,20 +641,17 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             s.currentRoadNameVariants = road.isEmpty ? [] : [road]
         }
     }
-    /// Heading-up like the phone: rotate the camera to the route bearing ~25 m ahead (GPS course off route).
-    func headingUp(_ here: CLLocation, off: Double, line: [(Double, Double)]) {
-        // Chevron along travel: GPS course, else the route-bearing camera heading (points up in heading-up).
+    /// Heading-up like the phone (t453u): the shared engine's map heading target (road ahead on the route, else GPS
+    /// course). Camera via moveCamera only, never MapKit .follow (it resets rotation and zoom, PR #58).
+    func headingUp(_ here: CLLocation, bearing: Double?) {
         if let h = here.course >= 0 ? here.course : camHeading { mapVC.puck?.point(heading: h, mapHeading: mapVC.map.camera.heading) }
         guard following else { return }
-        let me = (here.coordinate.latitude, here.coordinate.longitude)
-        guard let h = CarPlayHeading.pick(current: camHeading, routeBearing: CarPlayHeading.routeBearing(from: me, line: line), offRouteM: off,
-                                          course: here.course, speed: here.speed) else {
-            // No new heading this tick: still keep the dot centered (MapKit tracking used to do this).
-            moveCamera(here.coordinate, distance: mapVC.map.camera.centerCoordinateDistance, heading: camHeading, animated: true); return
-        }
-        camHeading = h
-        // Keep the driver's zoom: same camera distance, new center + heading. No MapKit .follow (it re-zooms).
-        moveCamera(here.coordinate, distance: mapVC.map.camera.centerCoordinateDistance, heading: h, animated: true)
+        if let b = bearing, camHeading.map({ abs(($0 - b + 540).truncatingRemainder(dividingBy: 360) - 180) >= 5 }) ?? true { camHeading = b }
+        moveCamera(here.coordinate, distance: mapVC.map.camera.centerCoordinateDistance, heading: camHeading, animated: true)
+    }
+    func log(_ line: String) {
+        NSLog("GCMCarPlay nav %@", line)
+        navLog.add(line); UserDefaults.standard.set(navLog.lines, forKey: CarPlayNavLog.key)
     }
     /// Map icon (t434u): read Settings > Your map icon from the web layer on connect and at each trip start,
     /// save it natively (UserDefaults) for CarPlay-only cold starts, and swap the guidance icon if it changed.
@@ -652,7 +666,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         }
     }
     /// Same as the phone: replan from here to the same destination, then swap the line, card and estimates.
-    func reroute(from here: CLLocation) {
+    func reroute(from here: CLLocation, course hd: Double?) {
         guard let s = session, let to = dest?.0 else { return }
         rerouting = true
         NSLog("GCMCarPlay reroute from %.5f,%.5f", here.coordinate.latitude, here.coordinate.longitude)
@@ -660,7 +674,6 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         // Driving (>= 1.5 m/s with a valid course): replan forward on this road, no U-turn first (Max t433u).
         // t451u: build 41 used here.course only if >= 0 at >= 1.5 m/s right now, so slowing down (or iOS reporting -1)
         // dropped the heading and the plan said turn around. Use the last good course from the past 10 s instead.
-        let hd = course.forReroute(now: here.timestamp.timeIntervalSince1970)
         let h: Any = hd ?? NSNull()
         NSLog("GCMCarPlay reroute heading %@ (gps course %.0f, speed %.1f)", hd.map { String(format: "%.0f", $0) } ?? "none", here.course, here.speed)
         // If the web view never answers (e.g. iOS suspended it), resume the old guidance so the next check can retry.
@@ -668,15 +681,15 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         rerouteTimeout = Timer.scheduledTimer(withTimeInterval: 12, repeats: false) { [weak self] _ in
             guard let self = self, self.rerouting else { return }
             NSLog("GCMCarPlay reroute timed out")
-            self.rerouting = false; self.offRoute.reset()
+            self.rerouting = false; self.log("reroute bridge timeout (12 s)")
             if let s = self.session, let p = self.plan { self.pushManeuvers(s, p) }
         }
-        GCMBridge.shared.call("plan(f,t,m,false,h)", ["f": ["lat": here.coordinate.latitude, "lon": here.coordinate.longitude], "t": ["lat": to.latitude, "lon": to.longitude], "m": mode, "h": h]) { [weak self] any in
+        GCMBridge.shared.call("plan(f,t,m,false,h,d)", ["f": ["lat": here.coordinate.latitude, "lon": here.coordinate.longitude], "t": ["lat": to.latitude, "lon": to.longitude], "m": mode, "h": h, "d": dest?.1 ?? ""]) { [weak self] any in
             guard let self = self, self.rerouting else { return }
             self.rerouteTimeout?.invalidate()
-            defer { self.rerouting = false; self.offRoute.reset(); self.wrongWay.reset() }
+            defer { self.rerouting = false }
             guard let s = self.session, let p = GCMPlan(any) else {
-                NSLog("GCMCarPlay reroute failed")
+                self.log("reroute bridge failed: \(String(describing: any).prefix(80))")
                 if let s = self.session, let p = self.plan { self.pushManeuvers(s, p) }   // resume the old guidance
                 return
             }
@@ -688,14 +701,17 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             m.addOverlay(RouteLine(coordinates: &c, count: c.count), level: .aboveLabels)
             self.pushManeuvers(s, p)
             self.mapTemplate.update(self.estimates(p.meters, p.minutes * 60), for: s.trip, with: .default)
-            NSLog("GCMCarPlay rerouted: %d maneuvers, %.0f m", p.maneuvers.count, p.meters)
+            self.log(String(format: "rerouted: %d maneuvers, %.0f m", p.maneuvers.count, p.meters))
+            self.nav = nil
+            GCMBridge.shared.call("navStart()") { [weak self] any in self?.log("navStart after reroute \((any as? [String: Any])?["ok"] as? Bool == true ? "ok" : "failed")") }
             if let here = self.loc.location { self.progress(here) }
         }
     }
     func endTrip(arrived: Bool) {
         if arrived, session != nil { GCMBridge.shared.track("route_completed", ["mi": plan?.miles ?? 0]) }
-        if arrived { session?.finishTrip() } else { session?.cancelTrip() }
-        session = nil; plan = nil; offRoute.reset(); wrongWay.reset(); rerouting = false; rerouteTimeout?.invalidate()
+        if arrived { session?.finishTrip() } else { session?.cancelTrip(); GCMVoice.shared.stop() }
+        session = nil; plan = nil; nav = nil; rerouting = false; rerouteTimeout?.invalidate()
+        GCMBridge.shared.call("navEnd()") { _ in }
         mapVC.guiding = false
         mapVC.map.removeOverlays(mapVC.map.overlays.filter { $0 is RouteLine })
         mapVC.map.removeAnnotations(mapVC.map.annotations.filter { $0 is DestPin })
@@ -888,44 +904,55 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             startFollowing(animated: true)
         }
         UserDefaults.standard.set([here.coordinate.latitude, here.coordinate.longitude], forKey: Self.savedKey)
-        course.update(lat: here.coordinate.latitude, lon: here.coordinate.longitude, course: here.course, speed: here.speed,
-                      accuracy: here.horizontalAccuracy, now: here.timestamp.timeIntervalSince1970)
         // North-up / browsing: chevron follows GPS course (guidance also updates it in headingUp).
         if here.course >= 0 { mapVC.puck?.point(heading: here.course, mapHeading: mapVC.map.camera.heading) }
         // Browsing (no trip): follow the dot ourselves at the current zoom.
         if session == nil, following, gotFix { moveCamera(here.coordinate, distance: mapVC.map.camera.centerCoordinateDistance, heading: nil, animated: true) }
         progress(here)
     }
+    /// One GPS fix during guidance: ask the shared engine (public/carplay.js navFix, same code as the phone) and render
+    /// its answer. No accuracy gate, no native off-route/advance/heading rules (build 42 had its own, and never rerouted).
     func progress(_ here: CLLocation) {
-        guard let s = session, let p = plan, step < p.maneuvers.count else { return }
-        let pts = p.line.map { ($0.latitude, $0.longitude) }, me = (here.coordinate.latitude, here.coordinate.longitude)
-        let off = CarPlayOffRoute.distance(from: me, toLine: pts)
-        headingUp(here, off: off, line: pts)
-        trimRoute(here, pts: pts, off: off)
-        if !rerouting, here.horizontalAccuracy >= 0, here.horizontalAccuracy < 50 {
-            if offRoute.update(offMeters: off, now: here.timestamp.timeIntervalSince1970) { reroute(from: here); return }
-            // Wrong way on the route line itself (t451u): course against the route for 5 s.
-            let now = here.timestamp.timeIntervalSince1970
-            if wrongWay.update(course: course.forReroute(now: now), speed: here.speed, routeBearing: CarPlayHeading.routeBearing(from: me, line: pts),
-                               onRoute: off <= CarPlayOffRoute.offM, now: now) { reroute(from: here); return }
+        guard session != nil, plan != nil else { return }
+        if let r = nav { headingUp(here, bearing: (r["bearing"] as? NSNumber)?.doubleValue) }   // camera keeps up between answers
+        guard Date().timeIntervalSince(navBusy) > 3 else { return }   // one call in flight (stale after 3 s)
+        navBusy = Date()
+        let c = here.coordinate
+        let f: [String: Any] = ["lat": c.latitude, "lon": c.longitude, "course": here.course, "speed": here.speed,
+                                "accuracy": here.horizontalAccuracy, "t": here.timestamp.timeIntervalSince1970 * 1000]
+        GCMBridge.shared.call("navFix(f)", ["f": f]) { [weak self] any in
+            guard let self = self else { return }
+            self.navBusy = .distantPast
+            guard let r = any as? [String: Any] else { self.log("navFix no answer from web view"); return }
+            self.apply(r, here)
         }
-        let next = p.maneuvers[step]
-        let d = here.distance(from: CLLocation(latitude: next.coord.latitude, longitude: next.coord.longitude))
-        // t451u: advance only once the driver is past the turn on the new road, heading along it (or 20 m down it).
-        // Build 41 advanced within 25 m, i.e. before the turn.
-        let c = here.course >= 0 ? here.course : course.forReroute(now: here.timestamp.timeIntervalSince1970)
-        if CarPlayAdvance.done(lat: me.0, lon: me.1, course: c, speed: here.speed, turnLat: next.coord.latitude, turnLon: next.coord.longitude,
-                               outBrg: next.outBrg, arrive: next.type == "arrive") {
-            if next.type == "arrive" { endTrip(arrived: true); return }
-            step += 1
-            pushManeuvers(s, p)
-            progress(here); return
+    }
+    func apply(_ r: [String: Any], _ here: CLLocation) {
+        guard let s = session, let p = plan else { return }
+        let num = { (k: String) in (r[k] as? NSNumber)?.doubleValue }
+        let wasOff = (num("off") ?? 0) > 30, prevOff = ((nav?["off"] as? NSNumber)?.doubleValue ?? 0) > 30
+        nav = r
+        if wasOff != prevOff { log(String(format: "%@ route, off %.0f m, course %.0f, speed %.1f, acc %.0f", wasOff ? "left" : "back on", num("off") ?? -1, here.course, here.speed, here.horizontalAccuracy)) }
+        headingUp(here, bearing: num("bearing"))
+        trimRoute(here, pts: p.line.map { ($0.latitude, $0.longitude) }, off: num("off") ?? 0)
+        if rerouting { return }
+        if let rr = r["reroute"] as? [String: Any] {
+            log("reroute: \(rr["reason"] as? String ?? "?"), course \((rr["course"] as? NSNumber)?.intValue ?? -1)")
+            GCMVoice.shared.speak("Rerouting")
+            reroute(from: here, course: (rr["course"] as? NSNumber)?.doubleValue); return
         }
+        if r["arrived"] as? Bool == true {
+            GCMVoice.shared.speak(CarPlayArrive.text(name: dest?.1, address: destAddress))
+            endTrip(arrived: true); return
+        }
+        let idx = min(max(1, (r["idx"] as? NSNumber)?.intValue ?? step), p.maneuvers.count - 1)
+        if idx != step { step = idx; pushManeuvers(s, p) }
+        if let say = r["say"] as? String { GCMVoice.shared.speak(say) }
+        let d = num("toNext") ?? 0, rest = num("remaining") ?? 0
         if let cur = s.upcomingManeuvers.first {
             s.updateEstimates(estimates(d, d / p.speed), for: cur)
             if #available(iOS 17.4, *) { s.maneuverState = d < 60 ? .execute : d < 250 ? .prepare : .continue }
         }
-        let rest = p.maneuvers.dropFirst(step + 1).reduce(d) { $0 + $1.toMeters }
         mapTemplate.update(estimates(rest, rest / p.speed), for: s.trip, with: .default)
     }
 

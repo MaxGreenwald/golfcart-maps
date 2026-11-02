@@ -23,8 +23,10 @@ final class GCMBridge {
 
     /// Ensures a web view exists. `host` is a view to park a headless web view in so WebKit keeps running JS.
     func attachHeadlessIfNeeded(to host: UIView) {
-        if phoneWebView() != nil || headless != nil { return }
-        let vc = CAPBridgeViewController()
+        // t453u: always park our own web view in the CarPlay window. The phone's web view is suspended when the phone
+        // is locked in a cupholder, so navFix/plan calls to it can hang and CarPlay never reroutes.
+        if headless != nil { return }
+        let vc = GCMViewController()   // native voice too (GCMVoice.swift)
         vc.loadViewIfNeeded()
         vc.view.frame = CGRect(x: 0, y: 0, width: 2, height: 2)
         vc.view.alpha = 0.01
@@ -34,7 +36,7 @@ final class GCMBridge {
         headless = vc
     }
 
-    private var webView: WKWebView? { phoneWebView() ?? headless?.bridge?.webView }
+    private var webView: WKWebView? { headless?.bridge?.webView ?? phoneWebView() }
 
     // Results come back through a WKScriptMessageHandler. (We avoid the Swift-overlay
     // callAsyncJavaScript/Result API: it pulls in libswiftWebKit.dylib, which older iOS runtimes lack.)

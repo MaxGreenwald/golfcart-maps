@@ -33,29 +33,8 @@ for (w, h, side) in [(800.0, 480.0, 90.0), (748.0, 456.0, 90.0), (1280.0, 480.0,
     ck("\(Int(w))x\(Int(h)): guiding dot on screen, lower part", sf.contains(dot) && dot.y > sf.midY)
     ck("\(Int(w))x\(Int(h)): map centered on dot and covers screen", mf.midX == dot.x && mf.midY == dot.y && mf.contains(bb))
 }
-// Off-route rule matches the phone (navfollow.js: 30 m, 5 s, 10 s cooldown).
-var tr = CarPlayOffRoute()
-ck("on route never fires", !(0..<20).contains { tr.update(offMeters: 10, now: Double($0)) })
-var fired: [Int] = []
-for t in 0..<30 { if tr.update(offMeters: 80, now: 100 + Double(t)) { fired.append(t) } }
-ck("off 5 s fires, then 10 s cooldown", fired == [5, 15, 25])
-var tr2 = CarPlayOffRoute()
-ck("one noisy fix does not fire", !tr2.update(offMeters: 80, now: 0) && !tr2.update(offMeters: 5, now: 6) && !tr2.update(offMeters: 80, now: 7))
-let line = [(32.8400, -117.2600), (32.8400, -117.2500)]
-ck("distance to route ~0 on it", CarPlayOffRoute.distance(from: (32.8400, -117.2550), toLine: line) < 1)
-let dd = CarPlayOffRoute.distance(from: (32.8405, -117.2550), toLine: line)
-ck("distance to route ~55 m off (got \(Int(dd)))", abs(dd - 55) < 3)
-// Heading-up matches the phone (PR #33).
-let east = [(32.84, -117.26), (32.84, -117.25)], northThenEast = [(32.84, -117.26), (32.8402, -117.26), (32.8402, -117.25)]
-let rb = CarPlayHeading.routeBearing(from: (32.84, -117.255), line: east)!
-ck("route bearing east ~90 (got \(Int(rb)))", abs(rb - 90) < 1)
-let rb2 = CarPlayHeading.routeBearing(from: (32.84, -117.26), line: northThenEast)!
-ck("looks 25 m ahead around a corner (got \(Int(rb2)))", rb2 > 0 && rb2 < 90)
-ck("on route uses route bearing", CarPlayHeading.pick(current: nil, routeBearing: 90, offRouteM: 5, course: 180, speed: 5) == 90)
-ck("off route uses GPS course", CarPlayHeading.pick(current: 90, routeBearing: 90, offRouteM: 80, course: 180, speed: 5) == 180)
-ck("off route and stopped keeps heading (never compass)", CarPlayHeading.pick(current: 90, routeBearing: 90, offRouteM: 80, course: 180, speed: 0) == nil)
-ck("ignores under 5 degrees", CarPlayHeading.pick(current: 90, routeBearing: 93, offRouteM: 5, course: nil, speed: 5) == nil)
-ck("wraps 358 -> 2 as 4 degrees", CarPlayHeading.pick(current: 358, routeBearing: 2, offRouteM: 5, course: nil, speed: 5) == nil)
+// Off-route, heading-up, reroute course, wrong way and turn advance moved to the shared phone engine (t459u,
+// AGENTS.md rule 35): tests/nav_shared.test.mjs, tests/navfollow.test.mjs and tests/nav.test.mjs cover them for both paths.
 // CarPlay map icon
 ck("icon decodes png data url", CarPlayIcon.decode("data:image/png;base64,iVBORw0KGgo=")?.count == 8)
 ck("icon rejects other urls", CarPlayIcon.decode("https://x/y.png") == nil && CarPlayIcon.decode(nil) == nil && CarPlayIcon.decode("data:image/svg+xml;base64,AAAA") == nil)
@@ -74,41 +53,6 @@ ck("tour next stop in order", tour.advance()?.name == "B" && tour.isLast)
 ck("tour ends after the last stop", tour.advance() == nil)
 ck("stop detail short", CarPlayTour.detail(category: "fun_fact", meters: 650, coupon: "BAR10", speed: 9) == "Fun Fact · 0.4 mi")
 ck("coupon only when parked", CarPlayTour.detail(category: "", meters: nil, coupon: "BAR10", speed: 0) == "Code BAR10")
-// t451u: build 41's reroute heading. Replay of the failure: driving west (270) at 6 m/s, then slowing to 1.2 m/s
-// with iOS reporting course -1 when the 5 s off-route timer fires. Old rule (speed >= 1.5 && course >= 0) gave no heading.
-func oldRerouteHeading(course: Double, speed: Double) -> Double? { (speed >= 1.5 && course >= 0) ? course : nil }
-var cc = CarPlayCourse()
-var lon0 = -117.2470
-for i in 0..<6 { cc.update(lat: 32.7973, lon: lon0, course: 270, speed: 6, accuracy: 5, now: Double(i)); lon0 -= 6 / (cos(32.7973 * .pi / 180) * 111_320) }
-cc.update(lat: 32.7973, lon: lon0, course: -1, speed: 1.2, accuracy: 5, now: 7)
-ck("replay: old rule drops the heading when slowing (bug)", oldRerouteHeading(course: -1, speed: 1.2) == nil)
-ck("replay: new rule keeps the last course from the past 10 s", cc.forReroute(now: 7).map { abs($0 - 270) < 1 } == true)
-ck("course goes stale after 10 s", cc.forReroute(now: 17) == nil)
-var cs = CarPlayCourse(); cs.update(lat: 32.79, lon: -117.25, course: 90, speed: 5, accuracy: 5, now: 0); cs.update(lat: 32.79, lon: -117.25, course: -1, speed: 0, accuracy: 5, now: 2)
-ck("stopped: no heading (any direction is fine)", cs.forReroute(now: 2) == nil)
-var cm = CarPlayCourse()
-cm.update(lat: 32.79, lon: -117.25, course: -1, speed: -1, accuracy: 5, now: 0)
-cm.update(lat: 32.7901, lon: -117.25, course: -1, speed: -1, accuracy: 5, now: 3)
-ck("course from movement when iOS gives -1 (got \(cm.forReroute(now: 3) ?? -1))", cm.forReroute(now: 3).map { $0 < 2 || $0 > 358 } == true)
-// Wrong way while still on the route line: never counted as off route in build 41.
-var ww = CarPlayWrongWay()
-let wfired = (0..<7).map { ww.update(course: 270, speed: 5, routeBearing: 90, onRoute: true, now: Double($0)) }
-ck("wrong way on the line fires after 5 s", wfired == [false, false, false, false, false, true, false])
-var ww2 = CarPlayWrongWay()
-ck("right way never fires", !(0..<20).contains { ww2.update(course: 95, speed: 5, routeBearing: 90, onRoute: true, now: Double($0)) })
-ck("wrong way but stopped does not fire", !(0..<20).contains { ww2.update(course: 270, speed: 0.5, routeBearing: 90, onRoute: true, now: Double($0)) })
-// Turn advance (t451u): a right turn north->east at (32.80,-117.25), outgoing bearing 90.
-let tl0 = 32.80, tn0 = -117.25, mlon = 1 / (cos(32.80 * .pi / 180) * 111_320), mlat = 1 / 110_540.0
-func adv(_ dn: Double, _ de: Double, _ c: Double?, _ v: Double = 5) -> Bool {
-    CarPlayAdvance.done(lat: tl0 + dn * mlat, lon: tn0 + de * mlon, course: c, speed: v, turnLat: tl0, turnLon: tn0, outBrg: 90, arrive: false)
-}
-ck("build 41 bug: 20 m before the turn no longer advances", !adv(-20, 0, 0))
-ck("at the corner, still heading north: wait", !adv(0, 2, 0))
-ck("5+ m into the new road, heading east: advance", adv(0, 7, 85))
-ck("into the new road but heading still north (cutting the corner): wait", !adv(-3, 7, 10))
-ck("20 m down the new road: advance even without a course", adv(0, 21, nil))
-ck("went straight past the turn: never advances (off-route handles it)", !adv(40, 0, 0) && !adv(25, 3, 0))
-ck("arrival keeps the 25 m radius", CarPlayAdvance.done(lat: tl0 + 20 * mlat, lon: tn0, course: nil, speed: 0, turnLat: tl0, turnLon: tn0, outBrg: nil, arrive: true))
 // Arrive text
 ck("arrive names the place", CarPlayArrive.text(name: "Destiny Coast", address: "1 Beach Rd") == "Arrive at Destiny Coast")
 ck("arrive falls back to address", CarPlayArrive.text(name: "Place", address: "1 Beach Rd") == "Arrive at 1 Beach Rd")
@@ -139,4 +83,11 @@ ck("no resume before idle", !fc.shouldAutoResume(now: 1000 + CarPlayFollow.idleR
 ck("resume after idle", fc.shouldAutoResume(now: 1000 + CarPlayFollow.idleResume) && fc.following)
 ck("resume fires once", !fc.shouldAutoResume(now: 2000))
 ck("zoom survives pan + resume", fc.distance(default: 720) == CarPlayFollow.maxM)
+// Voice (t455u): mute setting. Turn-timing now comes from the shared phone engine (carplay.js navFix say, t459u).
+let vd = UserDefaults(suiteName: "gcm-voice-test")!; vd.removeObject(forKey: GCMVoiceSetting.key)
+ck("voice is on by default", !GCMVoiceSetting.isMuted(vd))
+GCMVoiceSetting.setMuted(true, vd); ck("mute is saved", GCMVoiceSetting.isMuted(vd))
+// Reroute telemetry ring (t453u): last 200 lines, PT time stamps.
+var lg = CarPlayNavLog(); for i in 0..<250 { lg.add("x\(i)") }
+ck("nav log keeps the last 200 lines", lg.lines.count == 200 && lg.lines.last!.hasSuffix("x249"))
 exit(fails == 0 ? 0 : 1)

@@ -58,81 +58,6 @@ enum CarPlayStartView {
     }
 }
 
-/// Off-route rule shared with the phone (public/navfollow.js offTracker): farther than 30 m from the route
-/// for 5 s straight triggers one reroute, then at most one reroute per 10 s.
-struct CarPlayOffRoute {
-    static let offM = 30.0, offS = 5.0, cooldownS = 10.0
-    private var since: Double? = nil, last = -Double.infinity
-    mutating func update(offMeters: Double, now: Double) -> Bool {
-        guard offMeters > Self.offM else { since = nil; return false }
-        if since == nil { since = now }
-        if now - since! >= Self.offS && now - last >= Self.cooldownS { last = now; since = nil; return true }
-        return false
-    }
-    mutating func reset() { since = nil }
-
-    /// Meters from p to the nearest point on the polyline (local flat projection, fine at street scale).
-    static func distance(from p: (Double, Double), toLine line: [(Double, Double)]) -> Double {
-        guard let first = line.first else { return .infinity }
-        let k = cos(p.0 * .pi / 180) * 111_320.0, ky = 110_540.0
-        func xy(_ q: (Double, Double)) -> (Double, Double) { ((q.1 - p.1) * k, (q.0 - p.0) * ky) }
-        if line.count == 1 { let a = xy(first); return (a.0 * a.0 + a.1 * a.1).squareRoot() }
-        var best = Double.infinity
-        for i in 1..<line.count {
-            let a = xy(line[i - 1]), b = xy(line[i])
-            let dx = b.0 - a.0, dy = b.1 - a.1, L = dx * dx + dy * dy
-            let t = L == 0 ? 0 : max(0, min(1, -(a.0 * dx + a.1 * dy) / L))
-            let x = a.0 + t * dx, y = a.1 + t * dy
-            best = min(best, (x * x + y * y).squareRoot())
-        }
-        return best
-    }
-}
-
-/// Heading-up rule shared with the phone (PR #33): route bearing about 25 m ahead of where you are on the
-/// route; GPS course when off route; never the compass; ignore changes under 5 degrees.
-enum CarPlayHeading {
-    static let aheadM = 25.0, minChange = 5.0
-
-    /// Bearing (degrees) from the point on the line nearest p to the point `aheadM` further along it.
-    static func routeBearing(from p: (Double, Double), line: [(Double, Double)], aheadM: Double = aheadM) -> Double? {
-        guard line.count >= 2 else { return nil }
-        let k = cos(p.0 * .pi / 180) * 111_320.0, ky = 110_540.0
-        func xy(_ q: (Double, Double)) -> (Double, Double) { ((q.1 - p.1) * k, (q.0 - p.0) * ky) }
-        var best = Double.infinity, seg = 0, pt = (0.0, 0.0)
-        for i in 1..<line.count {
-            let a = xy(line[i - 1]), b = xy(line[i]), dx = b.0 - a.0, dy = b.1 - a.1, L = dx * dx + dy * dy
-            let t = L == 0 ? 0 : max(0, min(1, -(a.0 * dx + a.1 * dy) / L))
-            let x = a.0 + t * dx, y = a.1 + t * dy, d = x * x + y * y
-            if d < best { best = d; seg = i; pt = (x, y) }
-        }
-        var left = aheadM, cur = pt, i = seg
-        while i < line.count {
-            let b = xy(line[i]), dx = b.0 - cur.0, dy = b.1 - cur.1, L = (dx * dx + dy * dy).squareRoot()
-            if L >= left || i == line.count - 1 {
-                let f = L == 0 ? 0 : min(1, left / L)
-                let tx = cur.0 + dx * f, ty = cur.1 + dy * f
-                let ex = tx - pt.0, ey = ty - pt.1
-                if ex == 0 && ey == 0 { return nil }
-                return (atan2(ex, ey) * 180 / .pi + 360).truncatingRemainder(dividingBy: 360)
-            }
-            left -= L; cur = b; i += 1
-        }
-        return nil
-    }
-
-    /// New camera heading, or nil to keep the current one.
-    static func pick(current: Double?, routeBearing: Double?, offRouteM: Double, course: Double?, speed: Double?) -> Double? {
-        let onRoute = offRouteM <= CarPlayOffRoute.offM
-        let moving = (speed ?? 0) >= 1
-        let want: Double? = onRoute ? routeBearing : ((course ?? -1) >= 0 && moving ? course : nil)
-        guard let w = want else { return nil }
-        guard let c = current else { return w }
-        let d = abs((w - c + 540).truncatingRemainder(dividingBy: 360) - 180)
-        return d < minChange ? nil : w
-    }
-}
-
 /// Map icon during CarPlay guidance, same as the phone (public/navfollow.js): cart E by default, or the user's
 /// photo from Settings > Your map icon (web localStorage 'gcm_map_icon', a small round data URL).
 enum CarPlayIcon {
@@ -188,78 +113,16 @@ struct CarPlayTour {
     }
 }
 
-/// Course a reroute should honor (Max t451u). Build 41 read CLLocation.course only at the instant the 5 s
-/// off-route timer fired and dropped it under 1.5 m/s or when iOS reported -1, so a driver who slowed while
-/// realizing the mistake got a plan in any direction (usually "turn around"). Same rule as the phone
-/// (navfollow.js travelCourse): the last good course from the past 10 s, from GPS or from our own movement.
-struct CarPlayCourse {
-    static let movingMS = 1.5, freshS = 10.0, stepM = 8.0, stoppedMS = 0.3
-    private(set) var course: Double? = nil
-    private var at = -Double.infinity
-    private var anchor: (lat: Double, lon: Double, t: Double)? = nil
-    private var speed = -1.0
-    mutating func update(lat: Double, lon: Double, course c: Double, speed v: Double, accuracy: Double, now: Double) {
-        speed = v
-        if c >= 0, v >= Self.movingMS { course = c; at = now; anchor = (lat, lon, now); return }
-        guard accuracy >= 0, accuracy <= 30 else { return }
-        guard let a = anchor, now - a.t <= Self.freshS else { anchor = (lat, lon, now); return }
-        let d = CarPlayGeo.meters(a.lat, a.lon, lat, lon)
-        if d >= max(Self.stepM, accuracy) { course = CarPlayGeo.bearing(a.lat, a.lon, lat, lon); at = now; anchor = (lat, lon, now) }
-    }
-    /// nil when there is no course from the past 10 s, or GPS says we are stopped (then any direction is fine).
-    func forReroute(now: Double) -> Double? {
-        guard let c = course, now - at <= Self.freshS else { return nil }
-        if speed >= 0, speed < Self.stoppedMS { return nil }
-        return c
-    }
-}
-
-enum CarPlayGeo {
-    static func meters(_ a: Double, _ b: Double, _ c: Double, _ d: Double) -> Double {
-        let k = cos((a + c) / 2 * .pi / 180) * 111_320.0
-        let x = (d - b) * k, y = (c - a) * 110_540.0
-        return (x * x + y * y).squareRoot()
-    }
-    static func bearing(_ a: Double, _ b: Double, _ c: Double, _ d: Double) -> Double {
-        let x = (d - b) * cos((a + c) / 2 * .pi / 180), y = c - a
-        return (atan2(x, y) * 180 / .pi + 360).truncatingRemainder(dividingBy: 360)
-    }
-    static func diff(_ a: Double, _ b: Double) -> Double { abs((a - b + 540).truncatingRemainder(dividingBy: 360) - 180) }
-}
-
-/// Driving against the route while still on its line never counted as off route in build 41 (the line is under
-/// you), so no reroute. Course more than 120 degrees from the route bearing, moving, for 5 s straight -> reroute.
-struct CarPlayWrongWay {
-    static let minDiff = 120.0, holdS = 5.0
-    private var since: Double? = nil
-    mutating func update(course: Double?, speed: Double, routeBearing: Double?, onRoute: Bool, now: Double) -> Bool {
-        guard onRoute, let c = course, let r = routeBearing, speed >= CarPlayCourse.movingMS, CarPlayGeo.diff(c, r) > Self.minDiff else { since = nil; return false }
-        if since == nil { since = now }
-        if now - since! >= Self.holdS { since = nil; return true }
-        return false
-    }
-    mutating func reset() { since = nil }
-}
-
-/// When to move the card past a maneuver (Max t451u: "it assumed I turned before I did"). Build 41 advanced
-/// within 25 m of the turn point, i.e. before the turn. Now: past the turn point on the outgoing road, and
-/// either heading along it (within 35 degrees) or 20 m down it. Arrival keeps the 25 m radius.
-enum CarPlayAdvance {
-    static let pastM = 5.0, sureM = 20.0, crossM = 20.0, headingDeg = 35.0, arriveM = 25.0, nearM = 120.0
-    /// along/cross: meters from the turn point along outBrg and to its side.
-    static func frame(lat: Double, lon: Double, turnLat: Double, turnLon: Double, outBrg: Double) -> (along: Double, cross: Double) {
-        let k = cos(turnLat * .pi / 180) * 111_320.0
-        let x = (lon - turnLon) * k, y = (lat - turnLat) * 110_540.0, r = outBrg * .pi / 180
-        return (x * sin(r) + y * cos(r), x * cos(r) - y * sin(r))
-    }
-    static func done(lat: Double, lon: Double, course: Double?, speed: Double, turnLat: Double, turnLon: Double, outBrg: Double?, arrive: Bool) -> Bool {
-        if arrive { return CarPlayGeo.meters(lat, lon, turnLat, turnLon) < arriveM }
-        guard let ob = outBrg else { return CarPlayGeo.meters(lat, lon, turnLat, turnLon) < arriveM }
-        let f = frame(lat: lat, lon: lon, turnLat: turnLat, turnLon: turnLon, outBrg: ob)
-        guard abs(f.cross) <= crossM, f.along >= pastM else { return false }
-        if f.along >= sureM { return true }
-        guard let c = course, speed >= 1 else { return false }
-        return CarPlayGeo.diff(c, ob) <= headingDeg
+/// Reroute telemetry (t453u): what the shared engine decided on each notable fix and what the bridge answered.
+/// The scene delegate NSLogs each line and keeps the last 200 in UserDefaults (key below) for a TestFlight readout.
+struct CarPlayNavLog {
+    static let key = "gcm_cp_navlog", max = 200
+    private(set) var lines: [String]
+    init(lines: [String] = []) { self.lines = lines }
+    mutating func add(_ s: String, at t: Date = Date()) {
+        let f = DateFormatter(); f.dateFormat = "HH:mm:ss"; f.timeZone = TimeZone(identifier: "America/Los_Angeles")
+        lines.append(f.string(from: t) + " PT " + s)
+        if lines.count > Self.max { lines.removeFirst(lines.count - Self.max) }
     }
 }
 
