@@ -411,7 +411,7 @@ sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(
 let liveNav=null,liveSteps=null,liveSaid='';
 const navOn=()=>!!(follow&&follow.state().navigating);
 // One spoken sentence at a time, one per turn (Max t419u): GCMFollow.voice + promptPlan.
-const navVoice=GCMFollow.voice(GCMFollow.webEngine()),navPlan=GCMFollow.promptPlan();
+const navVoice=GCMFollow.voice(GCMFollow.bestEngine()),navPlan=GCMFollow.promptPlan();
 function navSay(t){if(!t||t===liveSaid||!navOn())return;liveSaid=t;navVoice.say(t)}
 function navBar(){let el=$('mapNav');if(el)return el;el=document.createElement('div');el.id='mapNav';el.setAttribute('aria-live','polite');el.innerHTML='<b id="mapNavT"></b><span id="mapNavS"></span>';document.body.appendChild(el);return el}
 // The one way a route detail becomes turn-by-turn steps, for the phone and CarPlay (carplay.js) alike (t459u).

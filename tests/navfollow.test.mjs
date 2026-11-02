@@ -161,3 +161,33 @@ test('reroute course: moving keeps the course, slow or stale lets a reroute star
   assert.equal(F.travelCourseOf(105, 20000, 6), null, 'stale');
   assert.equal(F.travelCourseOf(null, 0, 6), null);
 });
+
+// Voice on/off (Max t455u): mute silences every voice and is remembered; the iOS app speaks natively.
+test('mute: say() is silent while muted, stops a sentence in progress, saved to localStorage', () => {
+  const store = {};
+  globalThis.localStorage = { getItem: k => store[k] ?? null, setItem: (k, v) => { store[k] = String(v); } };
+  const e = fakeEngine(), v = F.voice(e);
+  assert.equal(F.isMuted(), false, 'voice is on by default');
+  v.say('In 400 ft, turn left onto Garnet Avenue');
+  F.setMuted(true);
+  assert.equal(e.cancels, 1, 'muting stops the current sentence');
+  assert.equal(store[F.MUTE_KEY], '1');
+  v.say('Turn right onto Bayard Street');
+  assert.deepEqual(e.log, ['In 400 ft, turn left onto Garnet Avenue'], 'nothing new spoken while muted');
+  F.setMuted(false);
+  assert.equal(store[F.MUTE_KEY], '0');
+  v.say('Turn right onto Bayard Street');
+  assert.equal(e.log.at(-1), 'Turn right onto Bayard Street');
+});
+test('native engine: posts to the gcmvoice handler, done when native reports the sentence ended', () => {
+  const posts = [];
+  const h = { postMessage: m => posts.push(m) };
+  const e = F.nativeEngine(h);
+  let done = 0;
+  e.speak('Turn left onto Garnet Avenue', () => done++);
+  assert.deepEqual(posts[0], { say: 'Turn left onto Garnet Avenue', id: posts[0].id });
+  globalThis.__gcmVoiceDone(posts[0].id);
+  assert.equal(done, 1);
+  e.cancel();
+  assert.deepEqual(posts[1], { stop: true });
+});
