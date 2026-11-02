@@ -728,7 +728,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     func celebrate() {
         let host = mapVC.view!
         guard host.window != nil, let art = UIImage(named: "Unicorn") else {
-            presentAlert(["Have a wonderful life, you legend! 🦄", "You made it! 🦄"], [CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in self?.dismiss() }])
+            presentAlert(["\(CarPlayCelebrate.line1) \(CarPlayCelebrate.line2)", CarPlayCelebrate.line1], [CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in self?.dismiss() }])
             return
         }
         let reduced = UIAccessibility.isReduceMotionEnabled, total = reduced ? CarPlayCelebrate.reducedSeconds : CarPlayCelebrate.seconds
@@ -784,11 +784,17 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
                 v.layer.add(spin, forKey: "wiggle")
             }
         }
-        let label = UILabel(); label.text = "Have a wonderful life, you legend! 🦄"
-        label.font = .systemFont(ofSize: 24, weight: .heavy); label.textColor = .white; label.textAlignment = .center
-        label.adjustsFontSizeToFitWidth = true; label.minimumScaleFactor = 0.5
+        // Two lines, each sized to fit the banner width (Max t454u). Measured with the real font, never clipped.
+        let frame = CarPlayCelebrate.bannerFrame(bounds: b, safe: safe)
+        let fs = CarPlayCelebrate.fontSizes(banner: frame) { text, size in
+            ceil((text as NSString).size(withAttributes: [.font: UIFont.systemFont(ofSize: size, weight: .heavy)]).width) + 2
+        }
+        let para = NSMutableParagraphStyle(); para.alignment = .center; para.lineBreakMode = .byClipping
+        let txt = NSMutableAttributedString(string: CarPlayCelebrate.line1 + "\n", attributes: [.font: UIFont.systemFont(ofSize: fs.title, weight: .heavy), .foregroundColor: UIColor.white, .paragraphStyle: para])
+        txt.append(NSAttributedString(string: CarPlayCelebrate.line2, attributes: [.font: UIFont.systemFont(ofSize: fs.sub, weight: .heavy), .foregroundColor: UIColor.white, .paragraphStyle: para]))
+        let label = UILabel(); label.attributedText = txt; label.numberOfLines = 2; label.textAlignment = .center
         label.backgroundColor = UIColor(red: 0.42, green: 0.25, blue: 0.75, alpha: 0.9); label.layer.cornerRadius = 16; label.clipsToBounds = true
-        label.frame = CarPlayCelebrate.bannerFrame(bounds: b, safe: safe)
+        label.frame = frame
         layer.addSubview(label)
         if !reduced {
             label.transform = CGAffineTransform(scaleX: 0.3, y: 0.3)
