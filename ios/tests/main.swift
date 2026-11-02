@@ -119,8 +119,14 @@ for (w, h) in [(800.0, 480.0), (1920.0 / 3 * 2, 720.0 / 3 * 2), (748.0, 456.0), 
     let bf = CarPlayCelebrate.bannerFrame(bounds: bb, safe: sf)
     ck("\(Int(w))x\(Int(h)): banner inside safe area, below the nav bar", sf.contains(bf) && bf.minY > 44)
     ck("\(Int(w))x\(Int(h)): banner centered", abs(bf.midX - sf.midX) <= 1 && abs(bf.midY - sf.midY) <= 1)
+    // Conservative width estimate: 0.62 em per char, emoji counted as 2 chars.
+    let est: (String, CGFloat) -> CGFloat = { t, sz in CGFloat(t.unicodeScalars.reduce(0) { $0 + ($1.value > 0xFFFF ? 2 : 1) }) * sz * 0.62 }
+    let fs = CarPlayCelebrate.fontSizes(banner: bf, measure: est), inner = bf.width - 2 * CarPlayCelebrate.padX
+    ck("\(Int(w))x\(Int(h)): both banner lines fit the width (t454u)", est(CarPlayCelebrate.line1, fs.title) <= inner && est(CarPlayCelebrate.line2, fs.sub) <= inner && fs.title >= 14)
+    ck("\(Int(w))x\(Int(h)): two lines fit the height", (fs.title + fs.sub) * 1.22 <= bf.height - 2 * CarPlayCelebrate.padY)
     ck("\(Int(w))x\(Int(h)): unicorn lanes inside safe area", CarPlayCelebrate.lanes(count: 8, safe: sf).allSatisfy { $0.y >= sf.minY && $0.y + $0.size <= sf.maxY })
 }
+ck("banner text (t454u)", CarPlayCelebrate.line1 == "You have Arrived!" && CarPlayCelebrate.line2 == "Have a wonderful life you LEGEND 🦄")
 ck("celebration lasts 15 s", CarPlayCelebrate.seconds == 15)
 // Search rows
 ck("long title clipped", CarPlaySearchText.clip("Pacific Beach Boardwalk Shops and Restaurants", 28)!.count == 28)

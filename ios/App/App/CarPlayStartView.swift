@@ -276,10 +276,25 @@ enum CarPlayArrive {
 /// buttons), never wider than the safe area.
 enum CarPlayCelebrate {
     static let seconds = 15.0, reducedSeconds = 4.0
+    /// Two lines (Max t454u: one line was cut off on both sides on a wide CarPlay screen).
+    static let line1 = "You have Arrived!", line2 = "Have a wonderful life you LEGEND 🦄"
+    static let padX: CGFloat = 16, padY: CGFloat = 8
     static func bannerFrame(bounds: CGRect, safe: CGRect) -> CGRect {
         let s = safe.width > 0 && safe.height > 0 ? safe : bounds
-        let w = min(s.width - 32, 520), h: CGFloat = s.height < 300 ? 52 : 64
+        let w = min(s.width - 32, 560), h: CGFloat = min(s.height - 16, s.height < 300 ? 84 : 104)
         return CGRect(x: s.midX - w / 2, y: s.midY - h / 2, width: w, height: h).integral
+    }
+    /// Largest point sizes (title, subtitle) so both lines fit inside the banner minus padding.
+    /// `measure(text, size)` returns the drawn width of text at that size (UIFont heavy in the app).
+    static func fontSizes(banner: CGRect, measure: (String, CGFloat) -> CGFloat) -> (title: CGFloat, sub: CGFloat) {
+        let innerW = banner.width - 2 * padX, innerH = banner.height - 2 * padY
+        var t: CGFloat = 30
+        while t > 8 {
+            let sub = t * 0.72
+            if measure(line1, t) <= innerW && measure(line2, sub) <= innerW && (t + sub) * 1.22 <= innerH { break }
+            t -= 0.5
+        }
+        return (t, t * 0.72)
     }
     /// Lanes for the unicorns: rows spread over the safe area, each a different speed, height and wave.
     static func lanes(count: Int, safe: CGRect) -> [(y: CGFloat, size: CGFloat, delay: Double, dur: Double, amp: CGFloat, rtl: Bool)] {

@@ -102,7 +102,8 @@ class NavArrive(unittest.TestCase):
         end = drive[-1]
         ctx.set_geolocation({"latitude": end[0], "longitude": end[1], "accuracy": 5})
         pg.wait_for_selector("#gcmArrive", timeout=5000)
-        self.assertIn("Have a wonderful life, you legend!", pg.inner_text("#gcmArrive"))
+        self.assertIn("You have Arrived!", pg.inner_text("#gcmArrive"))
+        self.assertIn("Have a wonderful life you LEGEND", pg.inner_text("#gcmArrive"))
         self.assertEqual(pg.locator("#gcmArrive .u").count(), 8, "eight unicorns (t451u, was three)")
         self.assertGreaterEqual(pg.locator("#gcmArrive .cf").count(), 30, "confetti")
         self.assertEqual(pg.locator("#gcmArrive .arc").count(), 1, "rainbow")
@@ -138,3 +139,53 @@ class NavArrive(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+@unittest.skipIf(sync_playwright is None, "playwright not installed")
+class ArriveBannerFits(unittest.TestCase):
+    """Max t454u: the banner is two lines and never clipped, at CarPlay-like widths and phone portrait/landscape."""
+    SIZES = [(800, 480), (1280, 480), (390, 844), (844, 390), (375, 667), (667, 375)]
+
+    @classmethod
+    def setUpClass(cls):
+        cls.srv = _S(("127.0.0.1", 0), functools.partial(_Quiet, directory=PUB))
+        threading.Thread(target=cls.srv.serve_forever, daemon=True).start()
+        cls.base = "http://127.0.0.1:%d" % cls.srv.server_address[1]
+        cls.pw = sync_playwright().start()
+        cls.b = cls.pw.chromium.launch()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.b.close()
+        cls.pw.stop()
+        cls.srv.shutdown()
+
+    def test_two_lines_fit(self):
+        for w, h in self.SIZES:
+            for calm in (False, True):
+                with self.subTest(size="%dx%d" % (w, h), calm=calm):
+                    ctx = self.b.new_context(viewport={"width": w, "height": h})
+                    pg = ctx.new_page()
+                    pg.route(NO_NET, lambda r: r.abort())
+                    pg.goto(self.base + "/")
+                    pg.wait_for_function("window.GCMNavFx", timeout=60000)
+                    pg.evaluate("GCMNavFx.celebrate({place: 'Destiny Coast', calm: %s})" % ("true" if calm else "false"))
+                    pg.wait_for_timeout(1300)  # pop-in done
+                    r = pg.evaluate("""() => { const a = document.querySelector('#gcmArrive .msg, #gcmArrive .card');
+                      const box = s => { const e = a.querySelector(s), b = e.getBoundingClientRect(), g = document.createRange();
+                        g.selectNodeContents(e); const t = g.getBoundingClientRect(); return {l: t.left, r: t.right, top: b.top, bot: b.bottom, sw: e.scrollWidth, cw: e.clientWidth, lines: Math.round(b.height / parseFloat(getComputedStyle(e).lineHeight))}; };
+                      return {l1: box('.l1'), l2: box('.l2'), vw: innerWidth, vh: innerHeight}; }""")
+                    pg.screenshot(path=os.path.join(SHOTS, "arrive-banner-%dx%d%s.png" % (w, h, "-calm" if calm else "")))
+                    for k in ("l1", "l2"):
+                        b = r[k]
+                        self.assertGreaterEqual(b["l"], 8, (k, b))
+                        self.assertLessEqual(b["r"], r["vw"] - 8, (k, b))
+                        self.assertGreaterEqual(b["top"], 0, (k, b))
+                        self.assertLessEqual(b["bot"], r["vh"], (k, b))
+                        self.assertLessEqual(b["sw"], b["cw"] + 1, (k, b))
+                    self.assertLess(r["l1"]["bot"], r["l2"]["top"] + 1, "line 2 under line 1")
+                    if w > h:
+                        self.assertEqual(r["l2"]["lines"], 1, "LEGEND line stays on one line on wide screens")
+                    mid = (r["l2"]["l"] + r["l2"]["r"]) / 2
+                    self.assertLess(abs(mid - r["vw"] / 2), 3, "centered")
+                    ctx.close()

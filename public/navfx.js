@@ -38,7 +38,10 @@
   }
 
   // ---- arrival celebration ----
-  const TEXT = 'Have a wonderful life, you legend! 🦄';
+  // Two lines (Max t454u: one long line was cut off on wide screens).
+  const LINE1 = 'You have Arrived!', LINE2 = 'Have a wonderful life you LEGEND 🦄';
+  const TEXT = LINE1 + ' ' + LINE2;
+  const HTML = `<span class="l1">${LINE1}</span><span class="l2">${LINE2}</span>`;
   const listeners = [];
   function unicorn(c) {
     // Original cartoon unicorn facing right: body, legs, head, mane, horn. c = mane color.
@@ -59,8 +62,10 @@
     s.textContent = `
 #gcmArrive{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;
  background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.88),rgba(186,160,255,.78) 60%,rgba(120,90,220,.82));cursor:pointer;animation:gcmFade .3s ease-out}
-#gcmArrive .msg{position:relative;z-index:3;max-width:86vw;text-align:center;font:800 clamp(26px,7vw,46px)/1.15 system-ui,-apple-system,sans-serif;color:#4b1fa8;
+#gcmArrive .msg{position:relative;z-index:3;box-sizing:border-box;max-width:calc(100vw - 32px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px));padding:0 8px;text-align:center;font:800 clamp(22px,min(7vw,9vh),46px)/1.15 system-ui,-apple-system,sans-serif;color:#4b1fa8;overflow-wrap:break-word;
  text-shadow:0 2px 0 #fff,0 0 18px #fff;animation:gcmPop .6s cubic-bezier(.2,1.6,.4,1) .2s both}
+#gcmArrive .l1,#gcmArrive .l2{display:block}
+#gcmArrive .l2{font-size:clamp(15px,min(4.6vw,6.5vh),32px);margin-top:4px}
 #gcmArrive .sub{display:block;margin-top:10px;font:600 15px system-ui,sans-serif;color:#5b3fb0;opacity:.85}
 #gcmArrive .u{position:absolute;left:0;z-index:2;animation:gcmRun var(--d,4s) linear var(--dl,0s) var(--n,3) both}
 #gcmArrive .u.rtl{animation-name:gcmRunL}
@@ -109,7 +114,7 @@
     const sub = o.place ? `<span class="sub">You made it to ${String(o.place).replace(/[<>&]/g, '')}</span>` : '';
     if (o.calm != null ? o.calm : reducedMotion()) {
       el.className = 'calm';
-      el.innerHTML = `<div class="card">🦄<br>${TEXT}${sub}</div>`;
+      el.innerHTML = `<div class="card">🦄<br>${HTML}${sub}</div>`;
     } else {
       const cols = ['#ff7eb6', '#7ec8ff', '#b28bff', '#ffd34d', '#5ddc7a'];
       let us = '';
@@ -124,13 +129,13 @@
       us = '<div class="arc"></div>' + cf + us;
       let sp = '';
       for (let i = 0; i < 18; i++) sp += `<span class="sp" style="left:${(i * 53) % 100}%;top:${(i * 37) % 100}%;animation-delay:${(i % 6) * 0.2}s">${i % 3 ? '✨' : '⭐'}</span>`;
-      el.innerHTML = sp + us + `<div class="msg">${TEXT}${sub}</div>`;
+      el.innerHTML = sp + us + `<div class="msg">${HTML}${sub}</div>`;
     }
     el.addEventListener('click', dismiss);
     document.body.appendChild(el);
     shown = el;
     timer = setTimeout(dismiss, o.ms || (el.className === 'calm' ? CALM_MS : PARADE_MS));
-    if (o.say) try { o.say('Have a wonderful life, you legend!'); } catch (e) {}
+    if (o.say) try { o.say('You have arrived! Have a wonderful life, you legend!'); } catch (e) {}
     return el;
   }
   // One celebration per trip: arrive(tripKey) shows it the first time for that key only.
@@ -158,7 +163,7 @@
     document.head.appendChild(st);
   }
 
-  const api = { PARADE_MS, CALM_MS, UNICORNS, trim, length, hav, flag, flagIcon, FLAG_SVG, TEXT, celebrate, dismiss, arrive, resetTrip };
+  const api = { PARADE_MS, CALM_MS, UNICORNS, trim, length, hav, flag, flagIcon, FLAG_SVG, TEXT, LINE1, LINE2, celebrate, dismiss, arrive, resetTrip };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   root.GCMNavFx = api;
 })(typeof window !== 'undefined' ? window : globalThis);
