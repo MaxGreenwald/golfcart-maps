@@ -622,7 +622,7 @@ function say(text) {
   navVoice.say(text);
 }
 // One spoken sentence at a time, one per turn (Max t419u).
-const navVoice = GCMFollow.voice(GCMFollow.webEngine()), navPlan = GCMFollow.promptPlan();
+const navVoice = GCMFollow.voice(GCMFollow.bestEngine()), navPlan = GCMFollow.promptPlan();
 // Read-only hook for browser tests (route points + steps).
 window.GCMNavDebug = () => navRoute && { pts: navRoute.pts, steps: navRoute.steps, stop: navStop };
 function stopNav() {
