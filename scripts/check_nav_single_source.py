@@ -19,7 +19,7 @@ need("public/carplay.js", r"GCMFollow\.engine\(", "CarPlay adapter must use the 
 need("public/carplay.js", r"navStepsFor\(", "CarPlay maneuvers must come from the phone's steps")
 
 # Nav decisions re-implemented in native code (the build 42 bug: CarPlay had its own off-route logic).
-BANNED = [r"\bstruct CarPlay(OffRoute|WrongWay|Advance|Course|Heading|Guard|Match|VoicePlan)\b", r"\bfunc routeBearing\b",
+BANNED = [r"\b(struct|enum) CarPlay(OffRoute|WrongWay|Advance|Course|Heading|Guard|Match|VoicePlan)\b", r"\bfunc routeBearing\b",
           r"distance\(from:[^)]*toLine", r"\boffRouteM\b", r"\bwrongWay\w*\s*[:=]"]
 for f in sorted((ROOT / "ios").rglob("*.swift")) if (ROOT / "ios").exists() else []:
     if "/tests/" in str(f):
