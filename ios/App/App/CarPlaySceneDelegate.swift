@@ -220,7 +220,9 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     var lastTrip: CPTrip?
     var overlayTimer: Timer?
     var showLegal = true
-    var following = false      // map follows the location dot until the driver pans
+    var cam = CarPlayFollow()   // follow mode + the driver's zoom (t456u)
+    var following: Bool { get { cam.following } set { newValue ? cam.resume() : (cam.following = false) } }
+    var idleTimer: Timer?
     var gotFix = false
     var panLast = CGPoint.zero
     var offRoute = CarPlayOffRoute()
@@ -315,10 +317,32 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     /// Center on the driver at about 1 km across and follow the dot.
     func startFollowing(animated: Bool) {
         guard let c = loc.location?.coordinate else { return }
-        following = true
-        mapVC.map.setRegion(MKCoordinateRegion(center: c, latitudinalMeters: CarPlayStartView.drivingMeters, longitudinalMeters: CarPlayStartView.drivingMeters), animated: animated)
-        mapVC.map.setUserTrackingMode(.follow, animated: animated)
+        following = true; idleTimer?.invalidate()
+        moveCamera(c, distance: cam.distance(default: Self.cameraDistance(meters: CarPlayStartView.drivingMeters)), heading: session == nil ? 0 : camHeading, animated: animated)
+        refreshRecenter()
     }
+    /// Region width in meters to an MKMapCamera distance (roughly what setRegion gave before).
+    static func cameraDistance(meters: Double) -> Double { meters * 1.2 }
+    /// Our own follow: never MKMapView .follow tracking, which re-zooms to MapKit's default each time it turns on.
+    func moveCamera(_ c: CLLocationCoordinate2D, distance: Double, heading: Double?, animated: Bool) {
+        let m = mapVC.map
+        if m.userTrackingMode != .none { m.setUserTrackingMode(.none, animated: false) }
+        let cm = MKMapCamera(lookingAtCenter: c, fromDistance: distance, pitch: 0, heading: heading ?? m.camera.heading)
+        m.setCamera(cm, animated: animated)
+    }
+    /// Pan pauses follow; resume after CarPlayFollow.idleResume s with no further pan.
+    func pausedByPan() {
+        cam.pan(now: Date().timeIntervalSince1970)
+        if mapVC.map.userTrackingMode != .none { mapVC.map.setUserTrackingMode(.none, animated: false) }
+        idleTimer?.invalidate()
+        idleTimer = Timer.scheduledTimer(withTimeInterval: CarPlayFollow.idleResume, repeats: false) { [weak self] _ in
+            guard let self = self, self.cam.shouldAutoResume(now: Date().timeIntervalSince1970) else { return }
+            self.startFollowing(animated: true)
+        }
+        refreshRecenter()
+    }
+    var recenterBtn: CPMapButton?
+    func refreshRecenter() { recenterBtn?.image = UIImage(systemName: following ? "location.fill" : "location") }
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways: manager.startUpdatingLocation()
@@ -327,6 +351,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
     // Panning on the CarPlay screen stops follow mode; the location button turns it back on.
     func mapTemplateDidShowPanningInterface(_ mapTemplate: CPMapTemplate) { stopFollowing() }
+    func mapTemplateDidEndPanGesture(_ mapTemplate: CPMapTemplate, velocity: CGPoint) { pausedByPan() }
     func mapTemplate(_ mapTemplate: CPMapTemplate, panWith direction: CPMapTemplate.PanDirection) {
         stopFollowing()
         var r = mapVC.map.region
@@ -339,15 +364,13 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
     func mapTemplateDidBeginPanGesture(_ mapTemplate: CPMapTemplate) { stopFollowing(); panLast = .zero }
     func mapTemplate(_ mapTemplate: CPMapTemplate, didUpdatePanGestureWithTranslation translation: CGPoint, velocity: CGPoint) {
+        if following { stopFollowing(); panLast = .zero }   // in case begin was not delivered
         // translation is cumulative since the gesture began; apply only the new part.
         let dx = translation.x - panLast.x, dy = translation.y - panLast.y; panLast = translation
         let m = mapVC.map, mid = CGPoint(x: m.bounds.midX - dx, y: m.bounds.midY - dy)
         m.setCenter(m.convert(mid, toCoordinateFrom: m), animated: false)
     }
-    func stopFollowing() {
-        following = false
-        mapVC.map.setUserTrackingMode(.none, animated: false)
-    }
+    func stopFollowing() { pausedByPan() }
 
     func templateApplicationScene(_ scene: CPTemplateApplicationScene, didDisconnectInterfaceController interfaceController: CPInterfaceController, from window: CPWindow) {
         loc.stopUpdatingLocation()
@@ -364,7 +387,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let recenter = CPMapButton { [weak self] _ in
             self?.startFollowing(animated: true)
         }
-        recenter.image = UIImage(systemName: "location.fill")
+        recenter.image = UIImage(systemName: following ? "location.fill" : "location")
+        recenterBtn = recenter
         let layers = CPMapButton { [weak self] _ in
             guard let self = self else { return }
             self.showLegal.toggle(); self.scheduleOverlay(now: true)
@@ -378,12 +402,11 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
 
     func zoom(_ f: Double) {
-        var r = mapVC.map.region
-        r.span.latitudeDelta = min(1, max(0.002, r.span.latitudeDelta * f))
-        r.span.longitudeDelta = min(1, max(0.002, r.span.longitudeDelta * f))
-        mapVC.map.setRegion(r, animated: true)
-        // setRegion drops MKMapView tracking; keep following at the new zoom.
-        if following { mapVC.map.setUserTrackingMode(.follow, animated: true) }
+        let m = mapVC.map
+        let d = cam.zoom(current: m.camera.centerCoordinateDistance, factor: f)
+        // Keep following at the new zoom (build 42 turned MapKit tracking back on here, which reset the zoom).
+        let c = following ? (loc.location?.coordinate ?? m.centerCoordinate) : m.centerCoordinate
+        moveCamera(c, distance: d, heading: nil, animated: true)
     }
 
     // Legal-road overlay (green = OK for current mode, red = avoid), same classification as the phone map
@@ -559,9 +582,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let end = CPBarButton(title: "End") { [weak self] _ in self?.endTrip(arrived: false) }
         mapTemplate.trailingNavigationBarButtons = [end]
         if let c = loc.location?.coordinate {
-            mapVC.map.setRegion(MKCoordinateRegion(center: c, latitudinalMeters: 600, longitudinalMeters: 600), animated: true)
-            following = true; camHeading = nil
-            mapVC.map.setUserTrackingMode(.follow, animated: true)
+            following = true; camHeading = nil; idleTimer?.invalidate()
+            moveCamera(c, distance: cam.distance(default: Self.cameraDistance(meters: 600)), heading: nil, animated: true)
         }
     }
     // CPManeuver from one step of the legal-road route (public/carplay.js maneuvers()).
@@ -609,12 +631,13 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         guard following else { return }
         let me = (here.coordinate.latitude, here.coordinate.longitude)
         guard let h = CarPlayHeading.pick(current: camHeading, routeBearing: CarPlayHeading.routeBearing(from: me, line: line), offRouteM: off,
-                                          course: here.course, speed: here.speed) else { return }
+                                          course: here.course, speed: here.speed) else {
+            // No new heading this tick: still keep the dot centered (MapKit tracking used to do this).
+            moveCamera(here.coordinate, distance: mapVC.map.camera.centerCoordinateDistance, heading: camHeading, animated: true); return
+        }
         camHeading = h
-        let cam = mapVC.map.camera.copy() as! MKMapCamera
-        cam.heading = h; cam.centerCoordinate = here.coordinate
-        mapVC.map.setCamera(cam, animated: true)
-        mapVC.map.setUserTrackingMode(.follow, animated: false)
+        // Keep the driver's zoom: same camera distance, new center + heading. No MapKit .follow (it re-zooms).
+        moveCamera(here.coordinate, distance: mapVC.map.camera.centerCoordinateDistance, heading: h, animated: true)
     }
     /// Map icon (t434u): read Settings > Your map icon from the web layer on connect and at each trip start,
     /// save it natively (UserDefaults) for CarPlay-only cold starts, and swap the guidance icon if it changed.
@@ -869,6 +892,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
                       accuracy: here.horizontalAccuracy, now: here.timestamp.timeIntervalSince1970)
         // North-up / browsing: chevron follows GPS course (guidance also updates it in headingUp).
         if here.course >= 0 { mapVC.puck?.point(heading: here.course, mapHeading: mapVC.map.camera.heading) }
+        // Browsing (no trip): follow the dot ourselves at the current zoom.
+        if session == nil, following, gotFix { moveCamera(here.coordinate, distance: mapVC.map.camera.centerCoordinateDistance, heading: nil, animated: true) }
         progress(here)
     }
     func progress(_ here: CLLocation) {

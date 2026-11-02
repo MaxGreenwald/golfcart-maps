@@ -321,3 +321,27 @@ enum CarPlaySearchText {
         }
     }
 }
+
+/// CarPlay follow camera (t456u-t458u). Build 42 re-enabled MKMapView's own .follow tracking after every zoom and on
+/// every guidance tick; MapKit re-zooms to its default when tracking turns on, so + / - and panning snapped back.
+/// Now we move the camera ourselves: the driver's zoom (camera distance) persists, panning pauses follow, and
+/// follow resumes on the recenter button or after `idleResume` seconds without touching the map.
+struct CarPlayFollow {
+    static let minM = 150.0, maxM = 60_000.0, idleResume = 12.0
+    var following = false
+    var userDistance: Double?          // set by + / -; kept through nav, reroutes and recenter
+    var pausedAt: Double?
+    /// Camera distance to use: the driver's choice, else the default for this view.
+    func distance(default d: Double) -> Double { userDistance ?? d }
+    /// + is factor 0.5, - is 2; clamped.
+    mutating func zoom(current: Double, factor: Double) -> Double {
+        let d = min(Self.maxM, max(Self.minM, current * factor)); userDistance = d; return d
+    }
+    mutating func pan(now: Double) { following = false; pausedAt = now }
+    mutating func resume() { following = true; pausedAt = nil }
+    /// True once when a pan pause has been idle long enough.
+    mutating func shouldAutoResume(now: Double) -> Bool {
+        guard !following, let p = pausedAt, now - p >= Self.idleResume else { return false }
+        resume(); return true
+    }
+}
