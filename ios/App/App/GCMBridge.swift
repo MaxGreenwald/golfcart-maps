@@ -24,7 +24,7 @@ final class GCMBridge {
     /// Ensures a web view exists. `host` is a view to park a headless web view in so WebKit keeps running JS.
     func attachHeadlessIfNeeded(to host: UIView) {
         if phoneWebView() != nil || headless != nil { return }
-        let vc = CAPBridgeViewController()
+        let vc = GCMViewController()   // native voice too (GCMVoice.swift)
         vc.loadViewIfNeeded()
         vc.view.frame = CGRect(x: 0, y: 0, width: 2, height: 2)
         vc.view.alpha = 0.01
