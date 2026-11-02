@@ -23,7 +23,6 @@ final class GCMVoice: NSObject, AVSpeechSynthesizerDelegate, WKScriptMessageHand
         super.init()
         synth.delegate = self
         synth.usesApplicationAudioSession = true
-        if #available(iOS 14.0, *) { synth.prefersAssistiveTechnologySettings = false }
     }
 
     var muted: Bool {
@@ -78,7 +77,7 @@ final class GCMVoice: NSObject, AVSpeechSynthesizerDelegate, WKScriptMessageHand
         let u = AVSpeechUtterance(string: t)
         u.voice = AVSpeechSynthesisVoice(language: AVSpeechSynthesisVoice.currentLanguageCode())
         u.rate = AVSpeechUtteranceDefaultSpeechRate
-        u.prefersAssistiveTechnologySettings = false
+        if #available(iOS 14.0, *) { u.prefersAssistiveTechnologySettings = false }
         if let n = notify { webIds[ObjectIdentifier(u)] = n }
         synth.speak(u)
         #if DEBUG
