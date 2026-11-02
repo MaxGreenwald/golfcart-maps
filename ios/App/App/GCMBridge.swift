@@ -61,8 +61,13 @@ final class GCMBridge {
     }
 
     /// Runs `await GCMCarPlay.<body>` with named JSON arguments; `done` gets the decoded JSON (main thread).
-    func call(_ body: String, _ args: [String: Any] = [:], prelude: String = "", done: @escaping (Any?) -> Void) {
+    func call(_ body: String, _ args: [String: Any] = [:], prelude: String = "", tries: Int = 0, done: @escaping (Any?) -> Void) {
         guard let wv = webView else { done(nil); return }
+        // A call sent while the (headless) page is still loading runs in the old document and is lost on navigation.
+        if (wv.url == nil || wv.isLoading), tries < 120 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in self?.call(body, args, prelude: prelude, tries: tries + 1, done: done) }
+            return
+        }
         let key = ObjectIdentifier(wv)
         if !registered.contains(key) {
             wv.configuration.userContentController.add(handler, name: "gcmcp")
