@@ -33,6 +33,8 @@ jobs:
         run: node --test tests/nav.test.mjs
       - name: Live navigation (off-route timer, reroute debounce, heading)
         run: node --test tests/navfollow.test.mjs
+      - name: One nav engine for phone and CarPlay (AGENTS.md rule 35)
+        run: python scripts/check_nav_single_source.py && node --test tests/nav_shared.test.mjs
       - name: Heading-aware reroute (start ahead, U-turn penalty)
         run: node --test tests/heading_reroute.test.mjs
       - name: Nav extras (finish flag, trimmed line, one arrival celebration)
