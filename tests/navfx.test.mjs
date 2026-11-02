@@ -32,6 +32,7 @@ test('arrive: once per trip, again after a new trip', () => {
 });
 
 test('celebration text: no em dash, life not live', () => {
-  assert.equal(X.TEXT, 'Have a wonderful life, you legend! 🦄');
+  assert.equal(X.LINE1, 'You have Arrived!');
+  assert.equal(X.LINE2, 'Have a wonderful life you LEGEND 🦄');
   assert.ok(!/\u2014/.test(X.TEXT));
 });
