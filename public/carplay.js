@@ -17,23 +17,21 @@ async function regionFor(lat,lon){if(REG&&inBox(REG,lat,lon))return;const r=REGI
 const CP_EVENTS={session:1,route_started:1,route_completed:1};
 function cpTrack(name,props){if(!CP_EVENTS[name])return {ok:false,reason:'not allowed'};const p={};if(props&&props.mi!=null&&isFinite(+props.mi))p.mi=Math.round(+props.mi*2)/2;
  if(!window.GCMTrack)return {ok:false,reason:'no tracker'};window.GCMTrack.track(name,p,name==='session'?{platform:'carplay',force:true}:CP);return {ok:true,event:name,platform:'carplay',props:p}}
-function maneuvers(r){
- // group legs by street name + risky flag, keep geometry, then derive turn types at joins.
- // Each maneuver: meters = length of the road AFTER it; toMeters = distance driven to reach it (CPManeuver.initialTravelEstimates);
- // inBrg/outBrg/turn = approach + exit bearings and signed turn angle (junction diagram, CPManeuver junctionExitAngle).
- const g=[];for(const l of r.legs){const n=D.names[l.s[0]]||'unnamed road',last=g[g.length-1];
-  if(last&&last.n===n&&last.f===l.f){last.d+=(l.len??l.s._len);last.p.push(...l.p)}else g.push({n,f:l.f,d:(l.len??l.s._len),p:l.p.slice(),sp:l.s[2]})}
- const m=g.filter((s,i)=>s.d>15||i===0);const out=[];
- m.forEach((s,i)=>{let type=i===0&&r.ahead?'straight':'depart',turn=0,inB=null,outB=null;const b=s.p[Math.min(1,s.p.length-1)];outB=Math.round(brg(s.p[0],b));
-  if(i>0){const pv=m[i-1].p,a=pv[Math.max(0,pv.length-2)],j=pv[pv.length-1];inB=Math.round(brg(a,j));turn=Math.round(((brg(j,b)-brg(a,j)+540)%360)-180);type=turnOf(turn)}
-  const verb=type==='depart'?'Head out on ':type==='straight'?'Continue on ':type==='uturn'?'Make a U-turn onto ':'Turn '+type.replace('slight_','slight ')+' onto ';
-  out.push({type,road:s.n,meters:Math.round(s.d),toMeters:i>0?Math.round(m[i-1].d):0,turn,inBrg:inB,outBrg:outB,risky:!!s.f,mph:s.sp&&s.sp!==99?s.sp:null,lat:s.p[0][1],lon:s.p[0][0],
-   text:verb+s.n+(s.f?' (risky stretch)':''),
-   short:(type==='depart'?'Head out on ':type==='straight'?'Continue on ':type==='uturn'?'U-turn onto ':(type.startsWith('slight_')?'Slight '+type.slice(7):type[0].toUpperCase()+type.slice(1))+' onto ')+s.n})});
- // a "Continue on unnamed road" is noise on screen: fold it into the previous step
- for(let i=out.length-1;i>0;i--){const x=out[i];if(x.type==='straight'&&x.road==='unnamed road'){out[i-1].meters+=x.meters;if(out[i+1])out[i+1].toMeters=out[i-1].meters;out.splice(i,1)}}
- const e=r.legs.length?r.legs[r.legs.length-1].p:null;if(e){const q=e[e.length-1];const L=out.length>0?out[out.length-1].meters:0;out.push({type:'arrive',road:'',meters:0,toMeters:Math.round(L),turn:0,inBrg:null,outBrg:null,risky:false,lat:q[1],lon:q[0],text:'Arrive at destination',short:'Arrive'})}
- return out}
+// CarPlay maneuvers are the phone's steps (navStepsFor -> GCMNav.buildSteps), one for one, so the engine's step
+// index (navFix idx) is the CarPlay card index (t459u). Only CarPlay display fields are added here.
+// meters = length of the road AFTER it; toMeters = distance driven to reach it; turn = signed angle (+ right).
+const cpType=s=>s.kind==='arrive'?'arrive':s.kind==='depart'?'depart':s.kind==='continue'?'straight':Math.abs(s.turn||0)>=160?'uturn':s.mod.startsWith('slight')?'slight_'+s.mod.split(' ')[1]:s.mod.split(' ').pop();
+function maneuvers(r,route){
+ const legAt=ll=>r.legs.find(l=>l.p.length&&Math.abs(l.p[0][1]-ll[0])<1e-6&&Math.abs(l.p[0][0]-ll[1])<1e-6);
+ return route.steps.map((s,i)=>{const type=i===0&&r.ahead?'straight':cpType(s),road=s.name||(s.kind==='arrive'?'':'unnamed road'),l=legAt(s.ll);
+  const short=type==='arrive'?'Arrive':type==='depart'?'Head out on '+road:type==='straight'?'Continue on '+road:type==='uturn'?'U-turn onto '+road:(type.startsWith('slight_')?'Slight '+type.slice(7):type[0].toUpperCase()+type.slice(1))+' onto '+road;
+  return {type,road,meters:Math.round(s.len||0),toMeters:i>0?Math.round(route.steps[i-1].len||0):0,turn:s.turn||0,inBrg:s.inBrg!=null?Math.round(s.inBrg):null,outBrg:s.outBrg!=null?Math.round(s.outBrg):(i===0&&route.pts.length>1?Math.round(GCMNav.bearing(route.pts[0],route.pts[1])):null),
+   risky:!!(l&&l.f),mph:l&&l.s[2]&&l.s[2]!==99?l.s[2]:null,lat:s.ll[0],lon:s.ll[1],text:s.text,short}})}
+// Live guidance for CarPlay through the SAME engine the phone uses (GCMFollow.engine). Native sends every GPS fix
+// and only renders what comes back (card index, distances, map heading, reroute, arrival).
+let cpNav=null,cpLast=null,cpPlan=null,cpArrived=false;
+const navOut=(st,reroute,say)=>({idx:st.idx,off:Math.round(st.off),along:Math.round(st.along),toNext:Math.round(st.toNext),remaining:Math.round(st.remaining),arrived:!!st.arrived,
+ bearing:st.bearing==null?null:Math.round(st.bearing),course:st.course==null?null:Math.round(st.course),reroute:reroute||null,say:say||null});
 
 // CarPlay Experiences: the renter access the phone saved (p.js / app.js partner overlay, key 'gcm_partner_access').
 // Short fields only (CarPlay driver-distraction rules): no descriptions. Access older than 14 days is ignored.
@@ -64,12 +62,23 @@ window.GCMCarPlay={
  // from/to: {lat,lon}. Returns null-route with reason when there's no legal way.
  // heading: GPS course while driving (native passes it on reroute, Max t433u). The plan then starts ahead on the
  // current road ("Continue on X") instead of behind you; null/omitted keeps any direction.
- async plan(from,to,mode,allowRisky,heading){await ready();await regionFor(to.lat,to.lon);
+ async plan(from,to,mode,allowRisky,heading,dest){await ready();await regionFor(to.lat,to.lon);
   const lr=await asCarPlay(()=>window.testRoute([from.lat,from.lon],[to.lat,to.lon],!!allowRisky&&!window.GCM_IOS,Number.isFinite(heading)?heading:null));const r=window._lastDetail;
   if(!lr||!r)return {ok:false,reason:GCMRule.noRoute(RULE)};
-  const line=[];r.legs.forEach(l=>l.p.forEach(p=>line.push([+p[1].toFixed(6),+p[0].toFixed(6)])));
+  const route=window.navStepsFor(r,dest||'');cpLast=route;
+  const line=route.pts.map(p=>[+p[0].toFixed(6),+p[1].toFixed(6)]);
   return {ok:true,mode:MODE,region:REG.id,meters:Math.round(r.dist),miles:lr.mi,roundTripMiles:lr.rt,minutes:lr.min,range:lr.range,
-   risky:lr.risky,line,maneuvers:maneuvers(r)}},
+   risky:lr.risky,line,maneuvers:maneuvers(r,route)}},
+ // Start live guidance on the last plan() (Go, or after a reroute plan). Same engine as the phone.
+ // Speech comes from the phone's promptPlan too (t459u): native only speaks `say` through GCMVoice, never its own timing.
+ navStart(){if(!cpLast)return {ok:false,reason:'no plan'};cpNav=GCMFollow.engine(cpLast);cpPlan=GCMFollow.promptPlan();cpArrived=false;return {ok:true,steps:cpLast.steps.length,say:cpLast.steps[0].text}},
+ // One GPS fix {lat,lon,course,speed,accuracy,t (ms)}. reroute: {reason, course} once when the phone rules say so.
+ navFix(f){if(!cpNav||!f)return null;const now=Number.isFinite(+f.t)&&f.t!==null?+f.t:Date.now();
+  const st=cpNav.fix({latitude:+f.lat,longitude:+f.lon,heading:f.course>=0?+f.course:null,speed:f.speed>=0?+f.speed:null},now);
+  const rr=cpNav.offCheck(now)?{reason:'off route '+Math.round(st.off)+' m',course:st.course}:null;if(rr)cpNav.reset();
+  let say=null;if(rr)say='Rerouting';else if(st.arrived){if(!cpArrived){cpArrived=true;say=cpLast.steps[cpLast.steps.length-1].text}}else say=cpPlan.update(st,f.speed>=0?+f.speed:null);
+  return navOut(st,rr,say)},
+ navEnd(){cpNav=null;cpPlan=null;return {ok:true}},
  // legal-road overlay for the visible CarPlay map. Returns up to `max` polylines: ok (green) + avoid (red).
  async overlay(s,w,n,e,max){await ready();await regionFor((s+n)/2,(w+e)/2);await ensure(s,w,n,e);max=max||1500;const ok=[],bad=[];
   for(const x of D.segs){if(ok.length+bad.length>=max)break;const p=x[7];let hit=false;for(const q of p)if(q[1]>=s&&q[1]<=n&&q[0]>=w&&q[0]<=e){hit=true;break}

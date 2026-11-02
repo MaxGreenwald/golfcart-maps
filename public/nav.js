@@ -4,6 +4,7 @@
 (function (root) {
   const R = 6371000, rad = Math.PI / 180;
   const OFF_ROUTE_M = 35, ARRIVE_M = 25;
+  const MATCH_BACK_M = 40, MATCH_AHEAD_M = 250;   // route matching window around your progress (t453u)
   // A turn is done once you are past it on the new road (Max t451u: it gave the next direction before he turned):
   // PAST_M along and heading within TURN_HEADING_DEG of the new road, or SURE_M along without a usable course.
   const PAST_M = 5, SURE_M = 20, TURN_HEADING_DEG = 35;
@@ -70,7 +71,7 @@
       // An unnamed connector straight ahead is not worth a prompt.
       if (t.type === 'straight' && (!name || !groups[k - 1].name)) continue;
       const verb = t.type === 'straight' ? 'Continue onto' : `Turn ${t.mod} onto`;
-      steps.push({ kind: t.type === 'straight' ? 'continue' : 'turn', mod: t.mod, name, at: cum[i], ll: pts[i], outBrg: bout,
+      steps.push({ kind: t.type === 'straight' ? 'continue' : 'turn', mod: t.mod, name, at: cum[i], ll: pts[i], outBrg: bout, inBrg: bin, turn: Math.round(delta),
         text: name ? `${verb} ${name}` : `Turn ${t.mod}` });
     }
     const total = cum[cum.length - 1];
@@ -80,18 +81,31 @@
     return { pts, cum, steps, total };
   }
   // Snap [lat,lon] onto the route. Returns {along, off} in metres.
-  function project(route, ll) {
+  // near: metres along the route where the last fix matched (t453u). Only the stretch from MATCH_BACK_M behind
+  // to MATCH_AHEAD_M ahead of it counts, so a later part of the route that runs past you (a loop around the
+  // block back up your road) is not mistaken for "on route". Omit near to search the whole line.
+  function project(route, ll, near, ahead) {
     const { pts, cum } = route;
     const kx = Math.cos(ll[0] * rad);
-    let best = { along: 0, off: Infinity };
+    // ahead (optional) widens the window past MATCH_AHEAD_M; the extra also widens it behind (a GPS jump back).
+    const extra = Number.isFinite(ahead) ? Math.max(0, ahead - MATCH_AHEAD_M) : 0;
+    const lo = Number.isFinite(near) ? near - MATCH_BACK_M - extra : -Infinity, hi = Number.isFinite(near) ? near + MATCH_AHEAD_M + extra : Infinity;
+    let best = { along: Number.isFinite(near) ? near : 0, off: Infinity };
     for (let i = 1; i < pts.length; i++) {
+      if (cum[i] < lo || cum[i - 1] > hi) continue;
       const ax = (pts[i - 1][1] - ll[1]) * kx, ay = pts[i - 1][0] - ll[0];
       const bx = (pts[i][1] - ll[1]) * kx, by = pts[i][0] - ll[0];
       const dx = bx - ax, dy = by - ay, L2 = dx * dx + dy * dy;
       let t = L2 ? -(ax * dx + ay * dy) / L2 : 0;
       t = Math.max(0, Math.min(1, t));
+      // Clamp to the window inside long segments too (the loop's return leg is one long line).
+      const seg = cum[i] - cum[i - 1];
+      if (seg > 0) t = Math.max((lo - cum[i - 1]) / seg, Math.min((hi - cum[i - 1]) / seg, t, 1), 0);
       const ex = ax + t * dx, ey = ay + t * dy, d = Math.sqrt(ex * ex + ey * ey) * 111320;
-      if (d < best.off) best = { along: cum[i - 1] + t * (cum[i] - cum[i - 1]), off: d };
+      const along = cum[i - 1] + t * seg;
+      // Two parts of the route equally close (a road driven twice): keep the one nearest the last match.
+      if (d < best.off - 0.5 || (d <= best.off + 0.5 && Number.isFinite(near) && Math.abs(along - near) < Math.abs(best.along - near)))
+        best = { along, off: d };
     }
     return best;
   }
@@ -118,7 +132,13 @@
   }
   // State for one live position. offCount carries across fixes (2 off fixes in a row = reroute).
   function status(route, ll, prev, fix) {
-    const pr = project(route, ll);
+    // Off the route, keep the last matched point (where you left it) instead of jumping to wherever is nearest.
+    const near = prev && Number.isFinite(prev.matched) ? prev.matched : undefined;
+    // The window ahead also grows by how far you moved since the last fix (a GPS gap, a fast stretch):
+    // you cannot have advanced along the route much more than you travelled.
+    const moved = prev && prev.ll ? hav(prev.ll, ll) : 0;
+    const pr = project(route, ll, near, MATCH_AHEAD_M + 2 * moved);
+    const matched = pr.off <= OFF_ROUTE_M ? pr.along : (near != null ? near : pr.along);
     const offCount = pr.off > OFF_ROUTE_M ? ((prev && prev.offCount) || 0) + 1 : 0;
     const remaining = Math.max(0, route.total - pr.along);
     const arrived = remaining < ARRIVE_M && pr.off < OFF_ROUTE_M + 15;
@@ -126,10 +146,10 @@
     if (idx < 0) idx = route.steps.length - 1;
     const next = route.steps[idx];
     const toNext = Math.max(0, next.at - pr.along);
-    return { along: pr.along, off: pr.off, offCount, offRoute: offCount >= 2, arrived, idx, next, toNext, remaining,
+    return { ll, along: pr.along, matched, off: pr.off, offCount, offRoute: offCount >= 2, arrived, idx, next, toNext, remaining,
       text: arrived ? route.steps[route.steps.length - 1].text : phrase(next, toNext) };
   }
-  const api = { OFF_ROUTE_M, ARRIVE_M, PAST_M, SURE_M, TURN_HEADING_DEG, passed, hav, bearing, turnType, buildSteps, project, status, fmtDist, phrase };
+  const api = { OFF_ROUTE_M, MATCH_BACK_M, MATCH_AHEAD_M, ARRIVE_M, PAST_M, SURE_M, TURN_HEADING_DEG, passed, hav, bearing, turnType, buildSteps, project, status, fmtDist, phrase };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMNav = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
