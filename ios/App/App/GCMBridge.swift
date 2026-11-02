@@ -61,7 +61,7 @@ final class GCMBridge {
     }
 
     /// Runs `await GCMCarPlay.<body>` with named JSON arguments; `done` gets the decoded JSON (main thread).
-    func call(_ body: String, _ args: [String: Any] = [:], done: @escaping (Any?) -> Void) {
+    func call(_ body: String, _ args: [String: Any] = [:], prelude: String = "", done: @escaping (Any?) -> Void) {
         guard let wv = webView else { done(nil); return }
         let key = ObjectIdentifier(wv)
         if !registered.contains(key) {
@@ -77,7 +77,7 @@ final class GCMBridge {
                   let json = String(data: data, encoding: .utf8) else { continue }
             decl += "const \(k)=\(json)[0];"
         }
-        let js = "(async()=>{let r=null;try{\(decl)for(let i=0;i<600&&!window.GCMCarPlay;i++)await new Promise(z=>setTimeout(z,50));if(window.GCMCarPlay)r=await GCMCarPlay.\(body);}catch(e){console.error('GCMCarPlay',e)}window.webkit.messageHandlers.gcmcp.postMessage({id:\(id),r:JSON.stringify(r===undefined?null:r)})})();0"
+        let js = "(async()=>{let r=null;try{\(decl)for(let i=0;i<600&&!window.GCMCarPlay;i++)await new Promise(z=>setTimeout(z,50));if(window.GCMCarPlay){\(prelude)r=await GCMCarPlay.\(body);}}catch(e){console.error('GCMCarPlay',e)}window.webkit.messageHandlers.gcmcp.postMessage({id:\(id),r:JSON.stringify(r===undefined?null:r)})})();0"
         wv.evaluateJavaScript(js) { [weak self] _, err in
             if let err = err {
                 NSLog("GCMBridge %@ failed: %@", body, err.localizedDescription)
@@ -90,11 +90,13 @@ final class GCMBridge {
     /// install id, platform "carplay"; the web layer drops it under GPC/Do Not Track/opt-out. Allowed: session,
     /// route_started, route_completed (mi rounded to 0.5). DEBUG builds log the result so the simulator run can check it.
     func track(_ name: String, _ props: [String: Any] = [:]) {
+        var prelude = ""
         #if DEBUG
         // Debug/simulator/CI runs (incl. CarPlay screenshot runs) use a local sink: nothing reaches live analytics.
-        webView?.evaluateJavaScript("window.GCM_TRACK_SINK=window.GCM_TRACK_SINK||function(o){console.log('GCMTrack sink',o.e)};0", completionHandler: nil)
+        // Set inside the call, after the page has loaded (the headless web view may still be loading at connect).
+        prelude = "window.GCM_TRACK_SINK=window.GCM_TRACK_SINK||function(o){console.log('GCMTrack sink',o.e)};"
         #endif
-        call("track(n,p)", ["n": name, "p": props]) { any in
+        call("track(n,p)", ["n": name, "p": props], prelude: prelude) { any in
             #if DEBUG
             let ok = (any as? [String: Any])?["ok"] as? Bool ?? false
             NSLog("GCMTrack %@ %@", name, ok ? "ok" : "failed: \(String(describing: any))")

@@ -702,6 +702,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             self.pushManeuvers(s, p)
             self.mapTemplate.update(self.estimates(p.meters, p.minutes * 60), for: s.trip, with: .default)
             self.log(String(format: "rerouted: %d maneuvers, %.0f m", p.maneuvers.count, p.meters))
+            NSLog("GCMCarPlay rerouted: %d maneuvers, %.0f m", p.maneuvers.count, p.meters)   // CI greps this
             self.nav = nil
             GCMBridge.shared.call("navStart()") { [weak self] any in self?.log("navStart after reroute \((any as? [String: Any])?["ok"] as? Bool == true ? "ok" : "failed")") }
             if let here = self.loc.location { self.progress(here) }
