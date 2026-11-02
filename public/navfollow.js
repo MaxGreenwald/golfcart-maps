@@ -110,8 +110,21 @@
   // ---- Spoken guidance (Max t419u): one sentence at a time, never cut off, one prompt per turn.
   // engine: { speak(text, done), cancel() }. A sentence always finishes; a newer prompt replaces an older
   // one still waiting (e.g. a reroute), but only between sentences. stop() is for End and mute.
+  // Voice on/off (Max t455u): default ON, saved on this device. In the iOS app the native side keeps the same
+  // setting (UserDefaults gcm_voice_muted), so the phone nav screen and CarPlay share one switch.
+  const MUTE_KEY = 'gcm_voice_muted', voices = [];
+  let muted = false;
+  try { muted = !!(root.localStorage && localStorage.getItem(MUTE_KEY) === '1'); } catch (_) {}
+  function nativeVoice() { try { return root.webkit && root.webkit.messageHandlers && root.webkit.messageHandlers.gcmvoice; } catch (_) { return null; } }
+  function setMuted(m, fromNative) {
+    muted = !!m;
+    try { localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); } catch (_) {}
+    if (muted) voices.forEach(v => v.stop());
+    const h = !fromNative && nativeVoice(); if (h) try { h.postMessage({ mute: muted }); } catch (_) {}
+    if (root.dispatchEvent && typeof CustomEvent === 'function') root.dispatchEvent(new CustomEvent('gcm-voice-muted', { detail: muted }));
+  }
   function voice(engine) {
-    let current = null, pending = null;
+    let current = null, pending = null, api;
     function play(t) {
       current = t;
       root.__navSaid = (root.__navSaid || []).concat(t);
@@ -119,16 +132,36 @@
       const done = () => { if (fin) return; fin = true; current = null; if (pending != null) { const n = pending; pending = null; play(n); } };
       try { engine.speak(t, done); } catch (_) { done(); }
     }
-    return {
+    api = {
       say(t) {
-        if (!t || t === current || t === pending) return;
+        if (!t || muted || t === current || t === pending) return;
         if (current == null) play(t); else pending = t;
       },
       stop() { pending = null; current = null; try { engine.cancel(); } catch (_) {} },
       speaking: () => current != null,
       pending: () => pending,
     };
+    voices.push(api);
+    return api;
   }
+  // iOS app (t455u): WKWebView speechSynthesis plays on an ambient audio session, so it is silenced or lost under
+  // Spotify and stops when the phone is locked for CarPlay. The app speaks natively instead (GCMVoice.swift:
+  // AVSpeechSynthesizer, voicePrompt session that ducks music). Native calls __gcmVoiceDone(id) when a sentence ends.
+  function nativeEngine(h) {
+    let gen = 0;
+    const waits = {};
+    root.__gcmVoiceDone = id => { const f = waits[id]; delete waits[id]; if (f) f(); };
+    return {
+      speak(t, done) {
+        const my = ++gen, fin = () => { delete waits[my]; if (my === gen) done(); };
+        waits[my] = fin;
+        setTimeout(fin, 3000 + t.length * 120);
+        h.postMessage({ say: t, id: my });
+      },
+      cancel() { gen++; try { h.postMessage({ stop: true }); } catch (_) {} },
+    };
+  }
+  function bestEngine() { const h = nativeVoice(); return h ? nativeEngine(h) : webEngine(); }
   // Browser / WKWebView speech. If onend never fires (an iOS quirk), a length-based timer frees the queue.
   function webEngine() {
     let gen = 0;
@@ -182,6 +215,7 @@ body.gcm-navigating .me-wrap .me-dot,body.gcm-navigating .me-wrap .me-cone{displ
 #navCtl{position:fixed;z-index:1200;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;gap:10px;pointer-events:none}
 #navCtl button{pointer-events:auto;border:0;border-radius:999px;font:900 17px Nunito,system-ui,sans-serif;padding:14px 26px;box-shadow:0 6px 18px rgba(0,0,0,.28);cursor:pointer}
 #navCtl #navStart{background:#12a150;color:#fff}#navCtl #navEnd{background:#e5484d;color:#fff}#navCtl #navRecenter{background:#fff;color:#0b3a78}
+#navCtl #navMute{background:#fff;color:#0b3a78;padding:12px 16px;font-size:20px;line-height:1}
 #navCtl [hidden]{display:none}
 #navEta{display:none}
 body.gcm-navigating #navCtl{left:0;right:0;bottom:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:#fff;box-shadow:0 -6px 20px rgba(0,0,0,.18);border-radius:18px 18px 0 0;justify-content:flex-end;align-items:center;pointer-events:auto}
@@ -344,18 +378,62 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     };
   }
 
+
+  // ---- The one navigation engine (t453u/t459u). The phone (controller below + app.js) and CarPlay
+  // (carplay.js navStart/navFix, driven by CarPlaySceneDelegate.swift) both feed GPS fixes into this, so
+  // off-route, reroute timing and heading, turn advance and arrival are the same code on both screens.
+  // route: GCMNav.buildSteps(...). fix(coords, now) -> GCMNav.status(...) plus bearing (map heading target) and
+  // course (the heading a reroute should honor). offCheck(now) -> true once when off route for OFF_ROUTE_MS.
+  function engine(route, o) {
+    const track = offTracker(o);
+    // The route starts where you are, so matching starts at its beginning (a loop back through the start is later).
+    let prev = { matched: 0 }, prevLL = null, course = null, courseAt = -Infinity, speed = null;
+    const nav = () => root.GCMNav;
+    const e = {
+      route,
+      fix(c, now) {
+        const ll = [c.latitude, c.longitude];
+        const cr = courseHeading(c, prevLL); if (cr != null) { course = cr; courseAt = now; }
+        if (!prevLL || hav(prevLL, ll) >= 8) prevLL = ll;
+        speed = c.speed;
+        let st;
+        if (route.steps) st = nav().status(route, ll, prev, { course: c.heading, speed: c.speed });
+        else { const near0 = Number.isFinite(prev.matched) ? prev.matched : undefined, moved = prev.ll ? hav(prev.ll, ll) : 0;
+          const p = nav().project(route, ll, near0, nav().MATCH_AHEAD_M + 2 * moved);
+          st = { ll, along: p.along, off: p.off, matched: p.off <= nav().OFF_ROUTE_M ? p.along : (near0 != null ? near0 : p.along) }; }
+        prev = st;
+        const near = (r, q) => nav().project(r, q, st.matched);
+        // Map heading target: the road ahead of where you are on the route, else GPS course, else (standing a
+        // bit off the line at Start, Max t430u) the road ahead from the nearest route point within START_AIM_M.
+        let bearing = routeBearing(route, ll, null, near);
+        if (bearing == null) bearing = cr;
+        if (bearing == null) bearing = routeBearing(route, ll, null, near, C.START_AIM_M);
+        return Object.assign({}, st, { bearing, course: e.travelCourse(now) });
+      },
+      offCheck(now) { return Number.isFinite(prev.off) && track.update(prev.off, now); },
+      offSince: () => track.offSince(),
+      offMs: track.opts.offMs,
+      travelCourse(now) { return travelCourseOf(course, now - courseAt, speed); },
+      last: () => (Number.isFinite(prev.off) ? prev : null),
+      reset() { track.reset(); },
+    };
+    return e;
+  }
   // opts: map, getRoute() -> {pts} | null, reroute(ll) -> Promise, say(text), onStart(), onEnd(), canStart()
   function controller(opts) {
     injectCss();
     const map = opts.map;
-    const track = offTracker(opts.offRoute);
+    // Shared engine for the current route (rebuilt when getRoute() returns a new route).
+    let eng = null, engRoute = null, lastSt = null;
+    const E = () => { const r = opts.getRoute && opts.getRoute(); if (r !== engRoute) { engRoute = r; eng = r && r.pts && r.pts.length > 1 ? engine(r.cum && r.cum.length === r.pts.length ? r : Object.assign({}, r, withCum(r)), opts.offRoute) : null; lastSt = null; } return eng; };
+    const track = { reset() { if (eng) eng.reset(); } };
     let navigating = false, following = false, heading = null, compass = null, last = null, prevLL = null, course = null, courseAt = 0;
     let timer = 0, rerouting = false, moving = 0, previewing = false;
     let mapBearing = null; // unwrapped; null = north-up
     const rot = rotator(map);
     const ctl = document.createElement('div');
     ctl.id = 'navCtl';
-    ctl.innerHTML = '<div id="navEta" aria-live="off"></div><button type="button" id="navStart" hidden>▶ Start</button><button type="button" id="navRecenter" hidden>◎ Recenter</button><button type="button" id="navEnd" hidden>■ End</button>';
+    ctl.innerHTML = '<div id="navEta" aria-live="off"></div><button type="button" id="navStart" hidden>▶ Start</button><button type="button" id="navRecenter" hidden>◎ Recenter</button><button type="button" id="navMute" hidden aria-pressed="false"></button><button type="button" id="navEnd" hidden>■ End</button>';
     document.body.appendChild(ctl);
     const north = document.createElement('button');
     north.type = 'button'; north.id = 'navNorth'; north.hidden = true; north.title = 'North up';
@@ -365,6 +443,9 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     function paintBtns() {
       $b('navStart').hidden = navigating || !previewing;
       $b('navEnd').hidden = !navigating;
+      const mb = $b('navMute'); mb.hidden = !navigating;
+      mb.textContent = muted ? '🔇' : '🔊'; mb.setAttribute('aria-pressed', String(muted));
+      mb.setAttribute('aria-label', muted ? 'Voice off. Tap to turn spoken directions on' : 'Voice on. Tap to mute spoken directions'); mb.title = muted ? 'Voice off' : 'Voice on';
       $b('navRecenter').hidden = !navigating || following;
       north.hidden = !navigating;
       // Max t417u: while driving, pages hide search, town picker, chips and other clutter via this class.
@@ -382,7 +463,8 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
       const ll = [last.latitude, last.longitude];
       const r = opts.getRoute && opts.getRoute();
       let t = null;
-      try { t = routeBearing(r, ll); } catch (_) { t = null; }
+      if (lastSt && r === engRoute) t = lastSt.bearing;   // shared engine (same target CarPlay uses)
+      else try { t = routeBearing(r, ll); } catch (_) { t = null; }
       if (t == null) t = courseHeading(last, prevLL);
       // Max t430u: standing still a bit off the line (driveway, parking lot, GPS drift at Start) gave no
       // bearing at all, so the map stayed north-up. Use the road ahead from the nearest route point.
@@ -495,16 +577,17 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     function check(now) {
       const r = opts.getRoute && opts.getRoute();
       if (!navigating || rerouting || !last || !r || !r.pts || r.pts.length < 2) return;
-      const off = root.GCMNav.project(r, [last.latitude, last.longitude]).off;
-      if (track.update(off, now)) {
+      const e = E();
+      if (!e) return;
+      if (e.offCheck(now)) {
         rerouting = true;
         opts.say && opts.say('Rerouting');
         root.__navReroutes = (root.__navReroutes || 0) + 1;
         Promise.resolve(opts.reroute([last.latitude, last.longitude], api.travelCourse())).catch(() => {}).finally(() => { rerouting = false; track.reset(); });
       }
       clearTimeout(timer);
-      const s = track.offSince();
-      if (s != null) timer = setTimeout(() => check(Date.now()), Math.max(50, track.opts.offMs - (now - s) + 20));
+      const s = e.offSince();
+      if (s != null) timer = setTimeout(() => check(Date.now()), Math.max(50, e.offMs - (now - s) + 20));
     }
     const api = {
       // coords: a GeolocationCoordinates-like {latitude, longitude, heading, speed}
@@ -515,6 +598,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
         if (h != null) heading = h; else if (!Number.isFinite(compass)) heading = null;
         if (!prevLL || hav(prevLL, [coords.latitude, coords.longitude]) >= 8) prevLL = [coords.latitude, coords.longitude];
         last = coords;
+        const e = E(); lastSt = e ? e.fix(coords, Date.now()) : null;
         aimBearing();
         paintHeading();
         if (navigating && following) center([coords.latitude, coords.longitude]);
@@ -523,6 +607,8 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
       // GPS course while clearly driving (speed >= REROUTE_MOVING_MS, or unknown speed but a fresh course
       // from movement), else null so a reroute may start in any direction.
       travelCourse() { return last ? travelCourseOf(course, Date.now() - courseAt, last.speed) : null; },
+      // Latest shared-engine state for the last fix (GCMNav.status fields + bearing + course), or null.
+      status: () => lastSt,
       preview(on) { previewing = !!on; if (!on && navigating) api.end(); paintBtns(); },
       start() {
         if (navigating) return;
@@ -558,8 +644,11 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
       state: () => ({ navigating, following, previewing, heading, rerouting, compassOn, mapBearing: rot ? rot.get() : 0, headingUp: headingUp() && mapBearing != null }),
     };
     root.gcmFollowState = api.state; root.gcmFollowRoute = () => opts.getRoute && opts.getRoute(); // test hooks (read-only)
+    root.gcmFollowStatus = () => lastSt; // test hook (read-only): last shared-engine state
     $b('navStart').onclick = () => api.start();
     $b('navEnd').onclick = () => api.end();
+    $b('navMute').onclick = () => setMuted(!muted);
+    if (root.addEventListener) root.addEventListener('gcm-voice-muted', paintBtns);
     $b('navRecenter').onclick = () => api.recenter();
     north.onclick = () => api.pause();
     paintBtns();
@@ -573,7 +662,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     return course;
   }
 
-  const api = { C, P, travelCourseOf, voice, webEngine, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, faceSide, get DOT() { return dotHtml(); }, CART, ICON_KEY, refreshIcon, setIconFromFile, resetIcon };
+  const api = { C, P, engine, travelCourseOf, voice, webEngine, nativeEngine, bestEngine, setMuted, isMuted: () => muted, MUTE_KEY, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, faceSide, get DOT() { return dotHtml(); }, CART, ICON_KEY, refreshIcon, setIconFromFile, resetIcon };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMFollow = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

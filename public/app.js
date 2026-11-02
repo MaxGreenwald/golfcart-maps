@@ -411,16 +411,18 @@ sizeSheet();sheet.style.transition='none';setSnap('half');requestAnimationFrame(
 let liveNav=null,liveSteps=null,liveSaid='';
 const navOn=()=>!!(follow&&follow.state().navigating);
 // One spoken sentence at a time, one per turn (Max t419u): GCMFollow.voice + promptPlan.
-const navVoice=GCMFollow.voice(GCMFollow.webEngine()),navPlan=GCMFollow.promptPlan();
+const navVoice=GCMFollow.voice(GCMFollow.bestEngine()),navPlan=GCMFollow.promptPlan();
 function navSay(t){if(!t||t===liveSaid||!navOn())return;liveSaid=t;navVoice.say(t)}
 function navBar(){let el=$('mapNav');if(el)return el;el=document.createElement('div');el.id='mapNav';el.setAttribute('aria-live','polite');el.innerHTML='<b id="mapNavT"></b><span id="mapNavS"></span>';document.body.appendChild(el);return el}
+// The one way a route detail becomes turn-by-turn steps, for the phone and CarPlay (carplay.js) alike (t459u).
+function navStepsFor(r,dest){const runs=r.legs.map(l=>({name:D.names[l.s[0]]||'',points:l.p.map(p=>[p[1],p[0]])}));return GCMNav.buildSteps(runs,dest,{continuing:!!r.ahead})}window.navStepsFor=navStepsFor;
 function liveNavSet(r){liveSteps=null;navPlan.reset();window._liveNav=null;
- if(r){const runs=r.legs.map(l=>({name:D.names[l.s[0]]||'',points:l.p.map(p=>[p[1],p[0]])}));liveSteps=GCMNav.buildSteps(runs,($('q').value||'').trim()||'your destination',{continuing:!!r.ahead});window._liveNav=liveSteps}
+ if(r){liveSteps=navStepsFor(r,($('q').value||'').trim()||'your destination');window._liveNav=liveSteps}
  if(follow)follow.preview(!!liveSteps);if(!liveSteps&&$('mapNav'))$('mapNav').classList.remove('show');
  if(liveSteps&&navOn()&&myLL)liveNavFix({latitude:myLL.lat,longitude:myLL.lng})}
 // Max t446u: only the road still ahead stays blue; the part you drove disappears.
 function navTrim(along){const p=along>0&&liveSteps?GCMNavFx.trim(liveSteps.pts,along):routeFull;if(p&&p.length>1)routeLines.forEach(l=>l.setLatLngs(p))}
-function liveNavFix(c){if(follow)follow.fix(c);if(!navOn()||!liveSteps)return;const st=GCMNav.status(liveSteps,[c.latitude,c.longitude],null,{course:c.heading,speed:c.speed});if(!window._navRerouting&&st.off<GCMNav.OFF_ROUTE_M)navTrim(st.along);
+function liveNavFix(c){if(follow)follow.fix(c);if(!navOn()||!liveSteps)return;const st=(follow&&follow.status())||GCMNav.status(liveSteps,[c.latitude,c.longitude],null,{course:c.heading,speed:c.speed});if(!window._navRerouting&&st.off<GCMNav.OFF_ROUTE_M)navTrim(st.along);
  if(st.arrived&&!window._navRerouting)GCMNavFx.arrive(liveSteps,{place:($('q').value||'').trim(),say:navSay});const el=navBar();el.classList.add('show');
  if(window._navRerouting)return;
  $('mapNavT').textContent=st.arrived?liveSteps.steps[liveSteps.steps.length-1].text:st.text;$('mapNavS').textContent=st.arrived?'':GCMNav.fmtDist(st.remaining).replace('Now','under 50 ft')+' to go';if(follow)follow.eta(st.arrived?0:st.remaining,c.speed);
