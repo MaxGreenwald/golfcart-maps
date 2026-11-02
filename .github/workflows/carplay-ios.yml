@@ -17,7 +17,7 @@ jobs:
         with: {node-version: 20}
       - run: python3 scripts/build_web.py && npm ci && npx cap sync ios
       - name: CarPlay logic tests (Swift, Foundation only)
-        run: swiftc ios/App/App/CarPlayStartView.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
+        run: swiftc ios/App/App/CarPlayStartView.swift ios/App/App/GCMVoicePlan.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
       # 1) Compile check exactly like a CI build with no Apple signing at all
       - name: Unsigned simulator build
         run: |

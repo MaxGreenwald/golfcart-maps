@@ -11,6 +11,8 @@
 		C0A300000000000000000004 /* CarPlayStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A300000000000000000003 /* CarPlayStartView.swift */; };
 		C0A200000000000000000002 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A200000000000000000001 /* SceneDelegate.swift */; };
 		C0A100000000000000000002 /* GCMBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A100000000000000000001 /* GCMBridge.swift */; };
+		C0A500000000000000000002 /* GCMVoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A500000000000000000001 /* GCMVoice.swift */; };
+		C0A500000000000000000004 /* GCMVoicePlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A500000000000000000003 /* GCMVoicePlan.swift */; };
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
 		50379B232058CBB4000EE86E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
 		504EC3081FED79650016851F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
@@ -27,6 +29,8 @@
 		C0A300000000000000000003 /* CarPlayStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayStartView.swift; sourceTree = "<group>"; };
 		C0A200000000000000000001 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C0A100000000000000000001 /* GCMBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCMBridge.swift; sourceTree = "<group>"; };
+		C0A500000000000000000001 /* GCMVoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCMVoice.swift; sourceTree = "<group>"; };
+		C0A500000000000000000003 /* GCMVoicePlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCMVoicePlan.swift; sourceTree = "<group>"; };
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
 		50379B222058CBB4000EE86E /* capacitor.config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacitor.config.json; sourceTree = "<group>"; };
 		504EC3041FED79650016851F /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,6 +93,8 @@
 				C0A300000000000000000003 /* CarPlayStartView.swift */,
 				C0A200000000000000000001 /* SceneDelegate.swift */,
 				C0A100000000000000000001 /* GCMBridge.swift */,
+				C0A500000000000000000001 /* GCMVoice.swift */,
+				C0A500000000000000000003 /* GCMVoicePlan.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
@@ -228,6 +234,8 @@
 				C0A300000000000000000004 /* CarPlayStartView.swift in Sources */,
 				C0A200000000000000000002 /* SceneDelegate.swift in Sources */,
 				C0A100000000000000000002 /* GCMBridge.swift in Sources */,
+				C0A500000000000000000002 /* GCMVoice.swift in Sources */,
+				C0A500000000000000000004 /* GCMVoicePlan.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

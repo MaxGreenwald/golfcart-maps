@@ -217,6 +217,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     var session: CPNavigationSession?
     var plan: GCMPlan?
     var step = 0
+    var voicePlan = CarPlayVoicePlan()   // spoken directions (t455u), GCMVoice.swift
+    var voiceObs: NSObjectProtocol?
     var lastTrip: CPTrip?
     var overlayTimer: Timer?
     var showLegal = true
@@ -248,6 +250,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         mapTemplate.guidanceBackgroundColor = UIColor(white: 0.13, alpha: 1)
         mapTemplate.tripEstimateStyle = .dark
         refreshButtons()
+        voiceObs = NotificationCenter.default.addObserver(forName: GCMVoice.mutedChanged, object: nil, queue: .main) { [weak self] _ in self?.refreshButtons() }
         interfaceController.setRootTemplate(mapTemplate, animated: false, completion: { _, _ in })
         loc.delegate = self
         loc.desiredAccuracy = kCLLocationAccuracyBestForNavigation
@@ -352,6 +355,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     func templateApplicationScene(_ scene: CPTemplateApplicationScene, didDisconnectInterfaceController interfaceController: CPInterfaceController, from window: CPWindow) {
         loc.stopUpdatingLocation()
         session?.cancelTrip()
+        if let o = voiceObs { NotificationCenter.default.removeObserver(o); voiceObs = nil }
+        GCMVoice.shared.stop()
         session = nil; interface = nil; self.window = nil
     }
 
@@ -374,7 +379,13 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         zin.image = UIImage(systemName: "plus.magnifyingglass")
         let zout = CPMapButton { [weak self] _ in self?.zoom(2) }
         zout.image = UIImage(systemName: "minus.magnifyingglass")
-        mapTemplate.mapButtons = [recenter, layers, zin, zout]
+        // Voice on/off (t455u), same switch as the phone nav screen. Muted: music only, no spoken directions.
+        let voice = CPMapButton { [weak self] _ in
+            GCMVoice.shared.muted.toggle()
+            self?.refreshButtons()
+        }
+        voice.image = UIImage(systemName: GCMVoice.shared.muted ? "speaker.slash.fill" : "speaker.wave.2.fill")
+        mapTemplate.mapButtons = [recenter, voice, layers, zin, zout]
     }
 
     func zoom(_ f: Double) {
@@ -555,6 +566,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         GCMBridge.shared.track("route_started", ["mi": p.miles])
         step = p.maneuvers.count > 1 ? 1 : 0
         pushManeuvers(s, p)
+        voicePlan.reset()
+        if let first = p.maneuvers.first { GCMVoice.shared.speak(first.text) }
         mapTemplate.update(estimates(p.meters, p.minutes * 60), for: trip, with: .default)
         let end = CPBarButton(title: "End") { [weak self] _ in self?.endTrip(arrived: false) }
         mapTemplate.trailingNavigationBarButtons = [end]
@@ -671,7 +684,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
     func endTrip(arrived: Bool) {
         if arrived, session != nil { GCMBridge.shared.track("route_completed", ["mi": plan?.miles ?? 0]) }
-        if arrived { session?.finishTrip() } else { session?.cancelTrip() }
+        if arrived { session?.finishTrip() } else { session?.cancelTrip(); GCMVoice.shared.stop() }
         session = nil; plan = nil; offRoute.reset(); wrongWay.reset(); rerouting = false; rerouteTimeout?.invalidate()
         mapVC.guiding = false
         mapVC.map.removeOverlays(mapVC.map.overlays.filter { $0 is RouteLine })
@@ -895,6 +908,12 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             step += 1
             pushManeuvers(s, p)
             progress(here); return
+        }
+        let vk = "\(Int(next.coord.latitude * 1e4)),\(Int(next.coord.longitude * 1e4)),\(next.type)"
+        if !rerouting, let say = voicePlan.update(key: vk, toNext: d, speed: here.speed >= 0 ? here.speed : nil,
+                                                  early: next.type == "arrive" ? CarPlayArrive.text(name: dest?.1, address: destAddress) : CarPlayVoicePlan.early(next.short, meters: d),
+                                                  atTurn: next.type == "arrive" ? CarPlayArrive.text(name: dest?.1, address: destAddress) : next.short) {
+            GCMVoice.shared.speak(say)
         }
         if let cur = s.upcomingManeuvers.first {
             s.updateEstimates(estimates(d, d / p.speed), for: cur)
