@@ -82,6 +82,18 @@
   // Direction of the road ahead: bearing from where we are on the route to a point aheadM further on.
   // Null when off the route (caller falls back to GPS course) or at the very end.
   // maxOff: how far from the route the position may be (default OFF_ROUTE_M).
+  const angDiff = (a, b) => Math.abs(((a - b) % 360 + 540) % 360 - 180);
+  // Bearing of the route segment the rider is matched to. Used to notice a U-turn back along
+  // the same road, which never leaves the line and so never trips the distance check.
+  function bearingAt(route, along) {
+    if (!route || !route.pts || route.pts.length < 2 || !Number.isFinite(along)) return null;
+    const r = withCum(route);
+    const { pts, cum } = r;
+    let i = 1;
+    while (i < pts.length - 1 && cum[i] < along) i++;
+    if (hav(pts[i - 1], pts[i]) < 1) return null;
+    return bearing(pts[i - 1], pts[i]);
+  }
   function routeBearing(route, ll, aheadM, proj, maxOff) {
     if (!route || !route.pts || route.pts.length < 2 || !ll) return null;
     const r = withCum(route);
@@ -408,9 +420,19 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
         let bearing = routeBearing(route, ll, null, near);
         if (bearing == null) bearing = cr;
         if (bearing == null) bearing = routeBearing(route, ll, null, near, C.START_AIM_M);
-        return Object.assign({}, st, { bearing, course: e.travelCourse(now) });
+        // Wrong way on the road you are matched to (build 43, Calle del Oro): still on the blue
+        // line, so distance-off stays small and the card freezes. Opposite the segment for a
+        // sustained stretch counts as off route. A normal turn is about 90 degrees and does not.
+        const segBrg = bearingAt(route, st.along);
+        const moving = !(Number.isFinite(speed) && speed < C.REROUTE_MOVING_MS);
+        const wrong = !st.arrived && cr != null && segBrg != null && moving && angDiff(cr, segBrg) >= 150;
+        st.wrong = wrong; // prev is this object; offCheck reads it
+        return Object.assign({}, st, { bearing, course: e.travelCourse(now), wrong });
       },
-      offCheck(now) { return Number.isFinite(prev.off) && track.update(prev.off, now); },
+      offCheck(now) {
+        const off = prev.wrong ? Math.max(prev.off || 0, C.OFF_ROUTE_M + 1) : prev.off;
+        return Number.isFinite(off) && track.update(off, now);
+      },
       offSince: () => track.offSince(),
       offMs: track.opts.offMs,
       travelCourse(now) { return travelCourseOf(course, now - courseAt, speed); },
@@ -662,7 +684,7 @@ body.gcm-navigating #navCtl #navRecenter{border:2px solid #d6e2ee}
     return course;
   }
 
-  const api = { C, P, engine, travelCourseOf, voice, webEngine, nativeEngine, bestEngine, setMuted, isMuted: () => muted, MUTE_KEY, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, nextBearing, courseHeading, pointAt, controller, faceSide, get DOT() { return dotHtml(); }, CART, ICON_KEY, refreshIcon, setIconFromFile, resetIcon };
+  const api = { C, P, engine, travelCourseOf, voice, webEngine, nativeEngine, bestEngine, setMuted, isMuted: () => muted, MUTE_KEY, promptPlan, offTracker, compassFrom, pickHeading, routeBearing, bearingAt, nextBearing, courseHeading, pointAt, controller, faceSide, get DOT() { return dotHtml(); }, CART, ICON_KEY, refreshIcon, setIconFromFile, resetIcon };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMFollow = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

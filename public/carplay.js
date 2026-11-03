@@ -75,7 +75,8 @@ window.GCMCarPlay={
  // One GPS fix {lat,lon,course,speed,accuracy,t (ms)}. reroute: {reason, course} once when the phone rules say so.
  navFix(f){if(!cpNav||!f)return null;const now=Number.isFinite(+f.t)&&f.t!==null?+f.t:Date.now();
   const st=cpNav.fix({latitude:+f.lat,longitude:+f.lon,heading:f.course>=0?+f.course:null,speed:f.speed>=0?+f.speed:null},now);
-  const rr=cpNav.offCheck(now)?{reason:'off route '+Math.round(st.off)+' m',course:st.course}:null;if(rr)cpNav.reset();
+  // "wrong way" is the on-the-line reversal (Calle del Oro). The native nav log stores this reason.
+  const rr=cpNav.offCheck(now)?{reason:(st.wrong?'wrong way, ':'')+'off route '+Math.round(st.off)+' m',course:st.course}:null;if(rr)cpNav.reset();
   let say=null;if(rr)say='Rerouting';else if(st.arrived){if(!cpArrived){cpArrived=true;say=cpLast.steps[cpLast.steps.length-1].text}}else say=cpPlan.update(st,f.speed>=0?+f.speed:null);
   return navOut(st,rr,say)},
  navEnd(){cpNav=null;cpPlan=null;return {ok:true}},
