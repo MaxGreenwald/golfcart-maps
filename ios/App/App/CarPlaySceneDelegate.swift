@@ -229,6 +229,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     var tour: CarPlayTour?
     var lastTrim = Date.distantPast
     var rerouting = false
+    var rerouteGen = 0          // drops a late answer after End or a newer reroute
+    var toldNoRoute = false     // one on-screen notice until a reroute succeeds
     var dest: (CLLocationCoordinate2D, String)?
     var camHeading: Double?
     // Guidance decisions come from the phone's engine (public/carplay.js navFix, AGENTS.md rule 35). We only render.
@@ -383,15 +385,25 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         session = nil; interface = nil; self.window = nil
     }
 
-    // Buttons
+    // Buttons. While navigating: Search and End only (Places and Experiences come back after End),
+    // and the four map buttons CarPlay will actually draw: recenter, mute, zoom in, zoom out.
     func refreshButtons() {
-        let searchBtn = CPBarButton(title: "Search") { [weak self] _ in self?.openSearch() }
-        let savedBtn = CPBarButton(title: "Places") { [weak self] _ in self?.openRecents() }
-        mapTemplate.leadingNavigationBarButtons = [searchBtn, savedBtn]
-        mapTemplate.trailingNavigationBarButtons = [CPBarButton(title: "Experiences") { [weak self] _ in self?.openExperiences() }]
-        let recenter = CPMapButton { [weak self] _ in
-            self?.startFollowing(animated: true)
+        let navOn = session != nil
+        func bar(_ title: String) -> CPBarButton {
+            CPBarButton(title: title) { [weak self] _ in
+                guard let self = self else { return }
+                switch title {
+                case "Search": self.openSearch()
+                case "Places": self.openRecents()
+                case "Experiences": self.openExperiences()
+                case "End": self.endTrip(arrived: false)
+                default: break
+                }
+            }
         }
+        mapTemplate.leadingNavigationBarButtons = CarPlayChrome.leading(navigating: navOn).map(bar)
+        mapTemplate.trailingNavigationBarButtons = CarPlayChrome.trailing(navigating: navOn).map(bar)
+        let recenter = CPMapButton { [weak self] _ in self?.startFollowing(animated: true) }
         recenter.image = UIImage(systemName: following ? "location.fill" : "location")
         recenterBtn = recenter
         let layers = CPMapButton { [weak self] _ in
@@ -409,7 +421,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             self?.refreshButtons()
         }
         voice.image = UIImage(systemName: GCMVoice.shared.muted ? "speaker.slash.fill" : "speaker.wave.2.fill")
-        mapTemplate.mapButtons = [recenter, voice, layers, zin, zout]
+        let made = ["recenter": recenter, "layers": layers, "zoomIn": zin, "zoomOut": zout, "mute": voice]
+        mapTemplate.mapButtons = CarPlayChrome.mapButtons(navigating: navOn).compactMap { made[$0] }
     }
 
     func zoom(_ f: Double) {
@@ -596,8 +609,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             if let say = r?["say"] as? String { GCMVoice.shared.speak(say) }
         }
         mapTemplate.update(estimates(p.meters, p.minutes * 60), for: trip, with: .default)
-        let end = CPBarButton(title: "End") { [weak self] _ in self?.endTrip(arrived: false) }
-        mapTemplate.trailingNavigationBarButtons = [end]
+        refreshButtons()
         if let c = loc.location?.coordinate {
             following = true; camHeading = nil; idleTimer?.invalidate()
             moveCamera(c, distance: cam.distance(default: Self.cameraDistance(meters: 600)), heading: nil, animated: true)
@@ -669,6 +681,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     func reroute(from here: CLLocation, course hd: Double?) {
         guard let s = session, let to = dest?.0 else { return }
         rerouting = true
+        rerouteGen += 1
+        let gen = rerouteGen
         NSLog("GCMCarPlay reroute from %.5f,%.5f", here.coordinate.latitude, here.coordinate.longitude)
         if #available(iOS 15.4, *) { s.pauseTrip(for: .rerouting, description: "Rerouting on legal roads", turnCardColor: nil) } else { s.pauseTrip(for: .rerouting, description: "Rerouting on legal roads") }
         // Driving (>= 1.5 m/s with a valid course): replan forward on this road, no U-turn first (Max t433u).
@@ -677,41 +691,60 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let h: Any = hd ?? NSNull()
         NSLog("GCMCarPlay reroute heading %@ (gps course %.0f, speed %.1f)", hd.map { String(format: "%.0f", $0) } ?? "none", here.course, here.speed)
         // If the web view never answers (e.g. iOS suspended it), resume the old guidance so the next check can retry.
+        // A slow answer that arrives after this still applies (build 43: the timeout used to throw a good route away
+        // and the old card stayed frozen at the missed turn).
         rerouteTimeout?.invalidate()
         rerouteTimeout = Timer.scheduledTimer(withTimeInterval: 12, repeats: false) { [weak self] _ in
-            guard let self = self, self.rerouting else { return }
+            guard let self = self, self.rerouting, self.rerouteGen == gen else { return }
             NSLog("GCMCarPlay reroute timed out")
             self.rerouting = false; self.log("reroute bridge timeout (12 s)")
             if let s = self.session, let p = self.plan { self.pushManeuvers(s, p) }
         }
         GCMBridge.shared.call("plan(f,t,m,false,h,d)", ["f": ["lat": here.coordinate.latitude, "lon": here.coordinate.longitude], "t": ["lat": to.latitude, "lon": to.longitude], "m": mode, "h": h, "d": dest?.1 ?? ""]) { [weak self] any in
-            guard let self = self, self.rerouting else { return }
-            self.rerouteTimeout?.invalidate()
-            defer { self.rerouting = false }
-            guard let s = self.session, let p = GCMPlan(any) else {
-                self.log("reroute bridge failed: \(String(describing: any).prefix(80))")
-                if let s = self.session, let p = self.plan { self.pushManeuvers(s, p) }   // resume the old guidance
-                return
+            DispatchQueue.main.async {
+                guard let self = self, self.rerouteGen == gen else { return }
+                self.rerouteTimeout?.invalidate()
+                self.rerouting = false
+                guard let s = self.session, let p = GCMPlan(any) else {
+                    self.noteNoRoute(any, here)
+                    if let s = self.session, let p = self.plan { self.pushManeuvers(s, p) }   // resume the old guidance
+                    return
+                }
+                self.toldNoRoute = false
+                self.plan = p
+                self.step = p.maneuvers.count > 1 ? 1 : 0
+                let m = self.mapVC.map
+                m.removeOverlays(m.overlays.filter { $0 is RouteLine })
+                var c = p.line
+                m.addOverlay(RouteLine(coordinates: &c, count: c.count), level: .aboveLabels)
+                self.pushManeuvers(s, p)
+                self.mapTemplate.update(self.estimates(p.meters, p.minutes * 60), for: s.trip, with: .default)
+                if p.maneuvers.contains(where: { $0.type == "uturn" }) { self.log("reroute includes a U-turn") }
+                self.log(String(format: "rerouted: %d maneuvers, %.0f m", p.maneuvers.count, p.meters))
+                NSLog("GCMCarPlay rerouted: %d maneuvers, %.0f m", p.maneuvers.count, p.meters)   // CI greps this
+                self.nav = nil
+                GCMBridge.shared.call("navStart()") { [weak self] any in self?.log("navStart after reroute \((any as? [String: Any])?["ok"] as? Bool == true ? "ok" : "failed")") }
+                if let here = self.loc.location { self.progress(here) }
             }
-            self.plan = p
-            self.step = p.maneuvers.count > 1 ? 1 : 0
-            let m = self.mapVC.map
-            m.removeOverlays(m.overlays.filter { $0 is RouteLine })
-            var c = p.line
-            m.addOverlay(RouteLine(coordinates: &c, count: c.count), level: .aboveLabels)
-            self.pushManeuvers(s, p)
-            self.mapTemplate.update(self.estimates(p.meters, p.minutes * 60), for: s.trip, with: .default)
-            self.log(String(format: "rerouted: %d maneuvers, %.0f m", p.maneuvers.count, p.meters))
-            NSLog("GCMCarPlay rerouted: %d maneuvers, %.0f m", p.maneuvers.count, p.meters)   // CI greps this
-            self.nav = nil
-            GCMBridge.shared.call("navStart()") { [weak self] any in self?.log("navStart after reroute \((any as? [String: Any])?["ok"] as? Bool == true ? "ok" : "failed")") }
-            if let here = self.loc.location { self.progress(here) }
         }
+    }
+    /// The router found no legal way back. Say so on the map and in gcm_cp_navlog. One notice until a later reroute works.
+    func noteNoRoute(_ any: Any?, _ here: CLLocation) {
+        let raw = (any as? [String: Any])?["reason"] as? String
+        let reason = (raw?.isEmpty == false ? raw! : "No legal route back")
+        log(String(format: "reroute failed: %@ (%.5f,%.5f)", reason, here.coordinate.latitude, here.coordinate.longitude))
+        guard !toldNoRoute else { return }
+        toldNoRoute = true
+        let alert = CPNavigationAlert(titleVariants: ["No legal route back"], subtitleVariants: [reason], image: nil,
+                                      primaryAction: CPAlertAction(title: "OK", style: .default) { [weak self] _ in
+                                          self?.mapTemplate.dismissNavigationAlert(animated: true, completion: { _ in })
+                                      }, secondaryAction: nil, duration: 12)
+        mapTemplate.present(navigationAlert: alert, animated: true)
     }
     func endTrip(arrived: Bool) {
         if arrived, session != nil { GCMBridge.shared.track("route_completed", ["mi": plan?.miles ?? 0]) }
         if arrived { session?.finishTrip() } else { session?.cancelTrip(); GCMVoice.shared.stop() }
-        session = nil; plan = nil; nav = nil; rerouting = false; rerouteTimeout?.invalidate()
+        session = nil; plan = nil; nav = nil; rerouting = false; toldNoRoute = false; rerouteGen += 1; rerouteTimeout?.invalidate()
         GCMBridge.shared.call("navEnd()") { _ in }
         mapVC.guiding = false
         mapVC.map.removeOverlays(mapVC.map.overlays.filter { $0 is RouteLine })
@@ -728,7 +761,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     func celebrate() {
         let host = mapVC.view!
         guard host.window != nil, let art = UIImage(named: "Unicorn") else {
-            presentAlert(["\(CarPlayCelebrate.line1) \(CarPlayCelebrate.line2)", CarPlayCelebrate.line1], [CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in self?.dismiss() }])
+            presentAlert(["\(CarPlayCelebrate.line1) \(CarPlayCelebrate.line2) \(CarPlayCelebrate.line3)", CarPlayCelebrate.line1], [CPAlertAction(title: "OK", style: .cancel) { [weak self] _ in self?.dismiss() }])
             return
         }
         let reduced = UIAccessibility.isReduceMotionEnabled, total = reduced ? CarPlayCelebrate.reducedSeconds : CarPlayCelebrate.seconds
@@ -784,15 +817,17 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
                 v.layer.add(spin, forKey: "wiggle")
             }
         }
-        // Two lines, each sized to fit the banner width (Max t454u). Measured with the real font, never clipped.
+        // Three lines, each sized to fit the visible area between the dock and the map buttons (build 43).
         let frame = CarPlayCelebrate.bannerFrame(bounds: b, safe: safe)
         let fs = CarPlayCelebrate.fontSizes(banner: frame) { text, size in
             ceil((text as NSString).size(withAttributes: [.font: UIFont.systemFont(ofSize: size, weight: .heavy)]).width) + 2
         }
         let para = NSMutableParagraphStyle(); para.alignment = .center; para.lineBreakMode = .byClipping
-        let txt = NSMutableAttributedString(string: CarPlayCelebrate.line1 + "\n", attributes: [.font: UIFont.systemFont(ofSize: fs.title, weight: .heavy), .foregroundColor: UIColor.white, .paragraphStyle: para])
-        txt.append(NSAttributedString(string: CarPlayCelebrate.line2, attributes: [.font: UIFont.systemFont(ofSize: fs.sub, weight: .heavy), .foregroundColor: UIColor.white, .paragraphStyle: para]))
-        let label = UILabel(); label.attributedText = txt; label.numberOfLines = 2; label.textAlignment = .center
+        let heavy: (CGFloat) -> UIFont = { UIFont.systemFont(ofSize: $0, weight: .heavy) }
+        let txt = NSMutableAttributedString(string: CarPlayCelebrate.line1 + "\n", attributes: [.font: heavy(fs.title), .foregroundColor: UIColor.white, .paragraphStyle: para])
+        txt.append(NSAttributedString(string: CarPlayCelebrate.line2 + "\n", attributes: [.font: heavy(fs.sub), .foregroundColor: UIColor.white, .paragraphStyle: para]))
+        txt.append(NSAttributedString(string: CarPlayCelebrate.line3, attributes: [.font: heavy(fs.legend), .foregroundColor: UIColor.white, .paragraphStyle: para]))
+        let label = UILabel(); label.attributedText = txt; label.numberOfLines = 3; label.textAlignment = .center
         label.backgroundColor = UIColor(red: 0.42, green: 0.25, blue: 0.75, alpha: 0.9); label.layer.cornerRadius = 16; label.clipsToBounds = true
         label.frame = frame
         layer.addSubview(label)
