@@ -35,7 +35,7 @@ function phone(route, fixes) {
     const st = e.fix({ latitude: f.lat, longitude: f.lon, heading: f.course, speed: f.speed }, f.t);
     const rr = e.offCheck(f.t); if (rr) e.reset();
     const say = rr ? 'Rerouting' : st.arrived ? null : plan.update(st, f.speed);
-    out.push({ say, idx: st.idx, off: Math.round(st.off), reroute: rr, bearing: st.bearing == null ? null : Math.round(st.bearing) });
+    out.push({ say, idx: st.idx, off: Math.round(st.off), reroute: rr, wrong: !!st.wrong, bearing: st.bearing == null ? null : Math.round(st.bearing) });
   }
   return out;
 }
@@ -66,6 +66,28 @@ test('the bug before t453u: whole-line matching sees the loop and never reroutes
   let fired = false;
   for (const f of trace(30)) if (t.update(N.project(route, [f.lat, f.lon]).off, f.t)) fired = true;
   assert.equal(fired, false);
+});
+
+test('wrong way back along the same road: phone and CarPlay reroute on the same fix', async () => {
+  // The route is the road. Turning around never leaves the line, so a distance check stays quiet
+  // and the card freezes (build 43, Calle del Oro). Course opposite the segment must reroute.
+  const runs = [{ name: 'Calle del Oro', points: [at(0, 0), at(0, 500)] }];
+  const route = N.buildSteps(runs, 'North end');
+  const fixes = [];
+  for (let i = 0; i <= 40; i++) fixes.push({ lat: S[0] + i * 4 * dLat, lon: S[1], course: 0, speed: 4, t: i * 1000 });
+  for (let i = 1; i <= 20; i++) fixes.push({ lat: S[0] + (160 - i * 4) * dLat, lon: S[1], course: 180, speed: 4, t: (40 + i) * 1000 });
+  const ph = phone(route, fixes);
+  const cp = carplay(route);
+  await cp.plan({ lat: S[0], lon: S[1] }, { lat: 0, lon: 0 }, 'lsv', false, null, 'North end');
+  cp.navStart();
+  const car = fixes.map(f => cp.navFix(f));
+  const phoneFire = ph.findIndex(x => x.reroute), carFire = car.findIndex(x => x.reroute);
+  assert.ok(phoneFire > 40 && phoneFire <= 48, `phone rerouted at fix ${phoneFire}`);
+  assert.equal(carFire, phoneFire, 'CarPlay reroutes on the same fix as the phone');
+  assert.equal(car[carFire].say, 'Rerouting');
+  assert.ok(String(car[carFire].reroute.reason).startsWith('wrong way'), car[carFire].reroute.reason);
+  assert.equal(ph.findIndex(x => x.reroute), phoneFire);
+  assert.equal(ph.slice(0, 40).some(x => x.reroute), false, 'following the road does not reroute');
 });
 
 test('driving the looping route correctly never reroutes and reaches the end on both paths', async () => {
