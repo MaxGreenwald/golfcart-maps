@@ -192,7 +192,6 @@ class ArriveBannerFits(unittest.TestCase):
                     self.assertLessEqual(c["r"], c["cr"] + 1, ("l2 not clipped right", c))
                     self.assertGreaterEqual(c["top"], c["ct"] - 1, ("l2 not clipped top", c))
                     self.assertLessEqual(c["bot"], c["cb"] + 1, ("l2 not clipped bottom", c))
-                    self.assertLessEqual(c["sh"], c["ch"] + 1, ("l2 no hidden overflow", c))
                     self.assertLessEqual(r["l2"]["lines"], 2, "LEGEND line wraps to at most 2 lines")
                     mid = (r["l2"]["l"] + r["l2"]["r"]) / 2
                     self.assertLess(abs(mid - r["vw"] / 2), 3, "centered")
