@@ -40,12 +40,13 @@
   // "Continue on X" instead of a compass "Head ..." (Max t433u).
   function buildSteps(runs, dest, opts) {
     const pts = [], cum = [], steps = [];
-    const groups = [];
+    const merged = [];
     for (const r of runs || []) {
       if (!r.points || !r.points.length) continue;
-      const g = groups[groups.length - 1];
-      if (g && g.name === r.name) g.points.push(...r.points); else groups.push({ name: r.name, points: r.points.slice() });
+      const g = merged[merged.length - 1];
+      if (g && g.name === r.name) g.points.push(...r.points); else merged.push({ name: r.name, points: r.points.slice() });
     }
+    const groups = splitReversals(merged);
     const starts = [];
     for (const g of groups) {
       starts.push(pts.length ? pts.length - 1 : 0);
@@ -66,13 +67,14 @@
       const bin = bearing(probe(pts, i, -1, 15), pts[i]);
       const bout = bearing(pts[i], probe(pts, i, 1, 15));
       const delta = ((bout - bin + 540) % 360) - 180;
-      const t = turnType(delta);
+      const uturn = Math.abs(delta) >= 150;
+      const t = uturn ? { type: 'uturn', mod: 'uturn' } : turnType(delta);
       const name = groups[k].name;
       // An unnamed connector straight ahead is not worth a prompt.
       if (t.type === 'straight' && (!name || !groups[k - 1].name)) continue;
-      const verb = t.type === 'straight' ? 'Continue onto' : `Turn ${t.mod} onto`;
-      steps.push({ kind: t.type === 'straight' ? 'continue' : 'turn', mod: t.mod, name, at: cum[i], ll: pts[i], outBrg: bout, inBrg: bin, turn: Math.round(delta),
-        text: name ? `${verb} ${name}` : `Turn ${t.mod}` });
+      const verb = t.type === 'uturn' ? 'Make a U-turn onto' : t.type === 'straight' ? 'Continue onto' : `Turn ${t.mod} onto`;
+      steps.push({ kind: t.type === 'uturn' ? 'uturn' : t.type === 'straight' ? 'continue' : 'turn', mod: t.mod, name, at: cum[i], ll: pts[i], outBrg: bout, inBrg: bin, turn: uturn ? (delta < 0 ? -180 : 180) : Math.round(delta),
+        text: t.type === 'uturn' ? (name ? `Make a U-turn onto ${name}` : 'Make a U-turn') : name ? `${verb} ${name}` : `Turn ${t.mod}` });
     }
     const total = cum[cum.length - 1];
     steps.push({ kind: 'arrive', mod: 'arrive', name: dest || '', at: total, ll: pts[pts.length - 1],
@@ -122,6 +124,29 @@
     return d === 'Now' ? step.text : `In ${d}, ${t}`;
   }
   const angDiff = (a, b) => Math.abs(((a - b) % 360 + 540) % 360 - 180);
+  // A reversal on one street (down a dead end and back) is one name, so it used to vanish into
+  // "Continue". Split it so the rider gets a U-turn step (Calle del Oro / Del Oro Court, build 43).
+  function splitReversals(groups) {
+    const out = [];
+    for (const g of groups) {
+      const p = g.points;
+      let start = 0, prev = null;
+      for (let i = 1; i < p.length; i++) {
+        if (hav(p[i - 1], p[i]) < 8) continue;
+        const b = bearing(p[i - 1], p[i]);
+        if (prev != null && angDiff(prev, b) >= 150) {
+          const chunk = p.slice(start, i);
+          if (chunk.length >= 2) out.push({ name: g.name, points: chunk });
+          start = i - 1;
+        }
+        prev = b;
+      }
+      const rest = p.slice(start);
+      if (rest.length >= 2) out.push({ name: g.name, points: rest });
+      else if (rest.length === 1 && out.length && out[out.length - 1].name === g.name) out[out.length - 1].points.push(rest[0]);
+    }
+    return out;
+  }
   // fix: {course, speed} from the GPS (optional). Before t451u a step counted as done 8 m BEFORE its turn.
   function passed(s, along, fix) {
     if (along < s.at + PAST_M) return false;
