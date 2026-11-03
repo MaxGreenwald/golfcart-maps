@@ -184,8 +184,16 @@ class ArriveBannerFits(unittest.TestCase):
                         self.assertLessEqual(b["bot"], r["vh"], (k, b))
                         self.assertLessEqual(b["sw"], b["cw"] + 1, (k, b))
                     self.assertLess(r["l1"]["bot"], r["l2"]["top"] + 1, "line 2 under line 1")
-                    if w > h:
-                        self.assertEqual(r["l2"]["lines"], 1, "LEGEND line stays on one line on wide screens")
+                    # Line 2 may wrap on narrow landscape screens (CI fonts are wider); it must never be clipped.
+                    c = pg.evaluate("""() => { const a = document.querySelector('#gcmArrive .msg, #gcmArrive .card').getBoundingClientRect();
+                      const e = document.querySelector('#gcmArrive .l2'), g = document.createRange(); g.selectNodeContents(e);
+                      const t = g.getBoundingClientRect(); return {cl: a.left, cr: a.right, ct: a.top, cb: a.bottom, l: t.left, r: t.right, top: t.top, bot: t.bottom, sh: e.scrollHeight, ch: e.clientHeight}; }""")
+                    self.assertGreaterEqual(c["l"], c["cl"] - 1, ("l2 not clipped left", c))
+                    self.assertLessEqual(c["r"], c["cr"] + 1, ("l2 not clipped right", c))
+                    self.assertGreaterEqual(c["top"], c["ct"] - 1, ("l2 not clipped top", c))
+                    self.assertLessEqual(c["bot"], c["cb"] + 1, ("l2 not clipped bottom", c))
+                    self.assertLessEqual(c["sh"], c["ch"] + 1, ("l2 no hidden overflow", c))
+                    self.assertLessEqual(r["l2"]["lines"], 2, "LEGEND line wraps to at most 2 lines")
                     mid = (r["l2"]["l"] + r["l2"]["r"]) / 2
                     self.assertLess(abs(mid - r["vw"] / 2), 3, "centered")
                     ctx.close()
