@@ -135,29 +135,53 @@ enum CarPlayArrive {
     }
 }
 
-/// Arrival celebration layout (Max t451u): ~15 s, banner centered in the CarPlay safe area (below the nav bar
-/// buttons), never wider than the safe area.
+/// Bar and map buttons. CarPlay draws at most 4 map buttons and drops the rest with no warning
+/// (build 43: adding mute pushed zoom out off the screen).
+enum CarPlayChrome {
+    static let mapButtonMax = 4
+    static func mapButtons(navigating: Bool) -> [String] {
+        navigating ? ["recenter", "mute", "zoomIn", "zoomOut"] : ["recenter", "layers", "zoomIn", "zoomOut"]
+    }
+    static func leading(navigating: Bool) -> [String] { navigating ? ["Search"] : ["Search", "Places"] }
+    static func trailing(navigating: Bool) -> [String] { navigating ? ["End"] : ["Experiences"] }
+}
+
+/// Arrival celebration layout (Max t451u): ~15 s. Three lines (build 43: the long second line ran under
+/// the left dock and the right map buttons on a full-bleed head unit). The banner sits in the visible
+/// area between that dock and those buttons, and the type shrinks until each line fits.
 enum CarPlayCelebrate {
     static let seconds = 15.0, reducedSeconds = 4.0
-    /// Two lines (Max t454u: one line was cut off on both sides on a wide CarPlay screen).
-    static let line1 = "You have Arrived!", line2 = "Have a wonderful life you LEGEND 🦄"
+    static let line1 = "You have Arrived!", line2 = "Have a wonderful life", line3 = "you LEGEND 🦄"
     static let padX: CGFloat = 16, padY: CGFloat = 8
+    /// Minimum chrome when the reported safe area is the full window (aftermarket units composite the
+    /// dock and the map buttons on top of the map). A larger reported inset still wins.
+    static let dock: CGFloat = 112, mapButtons: CGFloat = 84, navBar: CGFloat = 56
+    static func content(bounds: CGRect, safe: CGRect) -> CGRect {
+        let left = max(safe.minX, bounds.minX + dock)
+        let right = min(safe.maxX, bounds.maxX - mapButtons)
+        let top = max(safe.minY, bounds.minY + navBar)
+        let bot = min(safe.maxY, bounds.maxY)
+        let w = max(0, right - left), h = max(0, bot - top)
+        return CGRect(x: left, y: top, width: w, height: h)
+    }
     static func bannerFrame(bounds: CGRect, safe: CGRect) -> CGRect {
-        let s = safe.width > 0 && safe.height > 0 ? safe : bounds
-        let w = min(s.width - 32, 560), h: CGFloat = min(s.height - 16, s.height < 300 ? 84 : 104)
+        let s = content(bounds: bounds, safe: safe.width > 0 && safe.height > 0 ? safe : bounds)
+        let w = min(max(0, s.width - 16), 520)
+        let h = min(max(0, s.height - 16), s.height < 280 ? 120 : 148)
         return CGRect(x: s.midX - w / 2, y: s.midY - h / 2, width: w, height: h).integral
     }
-    /// Largest point sizes (title, subtitle) so both lines fit inside the banner minus padding.
+    /// Largest point sizes so all three lines fit inside the banner minus padding.
     /// `measure(text, size)` returns the drawn width of text at that size (UIFont heavy in the app).
-    static func fontSizes(banner: CGRect, measure: (String, CGFloat) -> CGFloat) -> (title: CGFloat, sub: CGFloat) {
+    static func fontSizes(banner: CGRect, measure: (String, CGFloat) -> CGFloat) -> (title: CGFloat, sub: CGFloat, legend: CGFloat) {
         let innerW = banner.width - 2 * padX, innerH = banner.height - 2 * padY
-        var t: CGFloat = 30
+        var t: CGFloat = 28
         while t > 8 {
-            let sub = t * 0.72
-            if measure(line1, t) <= innerW && measure(line2, sub) <= innerW && (t + sub) * 1.22 <= innerH { break }
+            let sub = t * 0.72, leg = t * 0.78
+            let wide = measure(line1, t) <= innerW && measure(line2, sub) <= innerW && measure(line3, leg) + 8 <= innerW
+            if wide && (t + sub + leg) * 1.25 <= innerH { break }
             t -= 0.5
         }
-        return (t, t * 0.72)
+        return (t, t * 0.72, t * 0.78)
     }
     /// Lanes for the unicorns: rows spread over the safe area, each a different speed, height and wave.
     static func lanes(count: Int, safe: CGRect) -> [(y: CGFloat, size: CGFloat, delay: Double, dur: Double, amp: CGFloat, rtl: Bool)] {

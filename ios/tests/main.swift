@@ -57,21 +57,33 @@ ck("coupon only when parked", CarPlayTour.detail(category: "", meters: nil, coup
 ck("arrive names the place", CarPlayArrive.text(name: "Destiny Coast", address: "1 Beach Rd") == "Arrive at Destiny Coast")
 ck("arrive falls back to address", CarPlayArrive.text(name: "Place", address: "1 Beach Rd") == "Arrive at 1 Beach Rd")
 ck("arrive last resort", CarPlayArrive.text(name: nil, address: nil) == "Arrive at destination")
-// Celebration banner centered in the safe area and fully inside it at Apple's test sizes.
-for (w, h) in [(800.0, 480.0), (1920.0 / 3 * 2, 720.0 / 3 * 2), (748.0, 456.0), (1280.0, 480.0)] {
+// Celebration banner: three lines, inside the area between the dock and the map buttons.
+// safe area here is only the nav bar (the head-unit bug: it does not exclude the dock or the buttons).
+let est: (String, CGFloat) -> CGFloat = { t, sz in CGFloat(t.unicodeScalars.reduce(0) { $0 + ($1.value > 0xFFFF ? 2 : 1) }) * sz * 0.62 }
+for (w, h) in [(800.0, 480.0), (1920.0 / 3 * 2, 720.0 / 3 * 2), (748.0, 456.0), (1280.0, 480.0), (1920.0, 720.0)] {
     let bb = CGRect(x: 0, y: 0, width: w, height: h), sf = CGRect(x: 0, y: 44, width: w, height: h - 44)
+    let vis = CarPlayCelebrate.content(bounds: bb, safe: sf)
     let bf = CarPlayCelebrate.bannerFrame(bounds: bb, safe: sf)
-    ck("\(Int(w))x\(Int(h)): banner inside safe area, below the nav bar", sf.contains(bf) && bf.minY > 44)
-    ck("\(Int(w))x\(Int(h)): banner centered", abs(bf.midX - sf.midX) <= 1 && abs(bf.midY - sf.midY) <= 1)
-    // Conservative width estimate: 0.62 em per char, emoji counted as 2 chars.
-    let est: (String, CGFloat) -> CGFloat = { t, sz in CGFloat(t.unicodeScalars.reduce(0) { $0 + ($1.value > 0xFFFF ? 2 : 1) }) * sz * 0.62 }
+    ck("\(Int(w))x\(Int(h)): banner inside the visible area", vis.insetBy(dx: -1, dy: -1).contains(bf))
+    ck("\(Int(w))x\(Int(h)): banner clears the dock and the map buttons", bf.minX >= CarPlayCelebrate.dock - 1 && bf.maxX <= w - CarPlayCelebrate.mapButtons + 1)
+    ck("\(Int(w))x\(Int(h)): banner centered in that area", abs(bf.midX - vis.midX) <= 1 && abs(bf.midY - vis.midY) <= 1)
     let fs = CarPlayCelebrate.fontSizes(banner: bf, measure: est), inner = bf.width - 2 * CarPlayCelebrate.padX
-    ck("\(Int(w))x\(Int(h)): both banner lines fit the width (t454u)", est(CarPlayCelebrate.line1, fs.title) <= inner && est(CarPlayCelebrate.line2, fs.sub) <= inner && fs.title >= 14)
-    ck("\(Int(w))x\(Int(h)): two lines fit the height", (fs.title + fs.sub) * 1.22 <= bf.height - 2 * CarPlayCelebrate.padY)
+    ck("\(Int(w))x\(Int(h)): three banner lines fit the width", est(CarPlayCelebrate.line1, fs.title) <= inner && est(CarPlayCelebrate.line2, fs.sub) <= inner && est(CarPlayCelebrate.line3, fs.legend) + 8 <= inner && fs.title >= 14)
+    ck("\(Int(w))x\(Int(h)): three lines fit the height", (fs.title + fs.sub + fs.legend) * 1.25 <= bf.height - 2 * CarPlayCelebrate.padY)
     ck("\(Int(w))x\(Int(h)): unicorn lanes inside safe area", CarPlayCelebrate.lanes(count: 8, safe: sf).allSatisfy { $0.y >= sf.minY && $0.y + $0.size <= sf.maxY })
 }
-ck("banner text (t454u)", CarPlayCelebrate.line1 == "You have Arrived!" && CarPlayCelebrate.line2 == "Have a wonderful life you LEGEND 🦄")
+// Full-bleed window: reported safe area is the whole screen, which is what clipped the banner.
+let wide = CGRect(x: 0, y: 0, width: 1920, height: 720)
+let wideBanner = CarPlayCelebrate.bannerFrame(bounds: wide, safe: wide)
+ck("wide full-bleed: banner clears dock and map buttons", wideBanner.minX >= CarPlayCelebrate.dock && wideBanner.maxX <= 1920 - CarPlayCelebrate.mapButtons)
+ck("banner text is three lines", CarPlayCelebrate.line1 == "You have Arrived!" && CarPlayCelebrate.line2 == "Have a wonderful life" && CarPlayCelebrate.line3 == "you LEGEND 🦄")
 ck("celebration lasts 15 s", CarPlayCelebrate.seconds == 15)
+// Map buttons: at most 4. Navigating keeps zoom out by dropping the layer toggle, and hides Places and Experiences.
+ck("browsing map buttons", CarPlayChrome.mapButtons(navigating: false) == ["recenter", "layers", "zoomIn", "zoomOut"])
+ck("navigating map buttons keep zoom out and mute", CarPlayChrome.mapButtons(navigating: true) == ["recenter", "mute", "zoomIn", "zoomOut"])
+ck("never more than 4 map buttons", CarPlayChrome.mapButtons(navigating: false).count <= CarPlayChrome.mapButtonMax && CarPlayChrome.mapButtons(navigating: true).count <= CarPlayChrome.mapButtonMax)
+ck("navigating bar is Search and End", CarPlayChrome.leading(navigating: true) == ["Search"] && CarPlayChrome.trailing(navigating: true) == ["End"])
+ck("browsing bar shows Places and Experiences", CarPlayChrome.leading(navigating: false) == ["Search", "Places"] && CarPlayChrome.trailing(navigating: false) == ["Experiences"])
 // Search rows
 ck("long title clipped", CarPlaySearchText.clip("Pacific Beach Boardwalk Shops and Restaurants", 28)!.count == 28)
 ck("address drops ZIP and country", CarPlaySearchText.shortAddress("123 Main St, San Diego, CA 92109, United States") == "123 Main St, San Diego")
