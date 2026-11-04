@@ -10,9 +10,11 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-        with: {fetch-depth: 0}   # tests/test_web_build.py replays a real missed cache bump from history
+        with: {fetch-depth: 0}   # all branch tips: test_web_build.py replays history; check_agents_md.py tells merged branches from open ones
       - name: public/ is the only copy of the web app (no committed ios/android/dist bundles)
         run: python scripts/check_single_source.py
+      - name: AGENTS.md paths, branch notes, stale phrases, and 16 KiB cap
+        run: python scripts/check_agents_md.py
       - name: "scripts/test_*.py cannot print FAIL and still exit 0"
         run: python scripts/check_test_exit.py
       - name: No 'verified' claims outside the coastal-SD verified badge

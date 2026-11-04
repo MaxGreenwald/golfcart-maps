@@ -140,7 +140,7 @@ def job_blocks(text):
 
 
 def check_guards(text):
-    """Return (missing, report). Report lists every kept guard and the added pr-body step."""
+    """Return (missing, report). Report lists every kept guard plus the added pr-body and agents-md steps."""
     blocks = job_blocks(text)
     lines = []
     missing = []
@@ -173,13 +173,19 @@ def check_guards(text):
     else:
         missing.append("pr-body")
         lines.append("REMOVED pr-body: python scripts/check_pr_body.py")
+    data = blocks.get("data", "")
+    if "python scripts/check_agents_md.py" in data and "fetch-depth: 0" in data:
+        lines.append("added data: python scripts/check_agents_md.py")
+    else:
+        missing.append("agents-md")
+        lines.append("REMOVED data: python scripts/check_agents_md.py")
     if not {"data", "browser", "pr-body"} <= set(blocks):
         missing.append("jobs %s" % sorted(blocks))
     kept_n = sum(1 for line in lines if line.startswith("kept "))
     if missing:
         header = "check_guards: FAIL %d removed" % len(missing)
     else:
-        header = "check_guards: pr-body added, %d existing guards kept" % kept_n
+        header = "check_guards: pr-body added, agents-md check added, %d existing guards kept" % kept_n
     return missing, "\n".join([header] + lines)
 
 
@@ -334,6 +340,8 @@ No road is recolored. Revert the commit to roll back.
         print(report, file=sys.stderr, flush=True)
         self.assertEqual(missing, [], report)
         self.assertIn("added pr-body: python scripts/check_pr_body.py", report)
+        self.assertIn("added data: python scripts/check_agents_md.py", report)
+        self.assertIn("agents-md check added", report)
         self.assertNotIn("REMOVED", report)
 
     def test_check_guards_flags_a_removed_step(self):
