@@ -1,7 +1,7 @@
 """App Store review guards for the iOS build, run against the built dist/ with a simulated Capacitor iOS bridge.
 - 3.1.1: no Stripe paywall, restore or Venmo tip link inside the iOS app.
 - 2.2: no visible "beta" labels inside the iOS app.
-- Risky mode (short illegal stretches) is hidden in the iOS app: no chip, no "What's Risky?", no risky legend/disclaimer, setRisky(true) and CarPlay allowRisky are ignored.
+- Risky mode is available in the iOS app and starts on: chip, What's Risky, and the risky legend show. setRisky(false) turns it off. A saved Legal only choice stays off. CarPlay follows the phone chip (on by default), not the allowRisky argument.
 - 4.2: native share sheet and haptics are wired (calls reach the Share/Haptics plugins).
 - Offline launch: the app needs nothing from third-party hosts to start (Leaflet is bundled, not loaded from unpkg).
 - The website (no Capacitor) is unchanged: Venmo link, chargers chip and beta badge still show there.
@@ -37,24 +37,36 @@ with sync_playwright() as p:
     ck('iOS: no "(beta)" in area picker', not any('beta' in t.lower() for t in opts))
     pg.evaluate("window.PAY&&PAY.sheet()")
     ck('iOS: paywall sheet never opens', pg.locator('#paySheet').count() == 0)
-    ck('iOS: Risky chip hidden', not vis(pg, '#cRisk'))
-    pg.evaluate("setRisky(true)")
-    ck('iOS: setRisky(true) ignored', pg.evaluate('!document.getElementById("cRisk").classList.contains("on")'))
+    ck('iOS: Risky chip shown and on by default', vis(pg, '#cRisk') and pg.evaluate('document.getElementById("cRisk").classList.contains("on")&&risky===true'))
+    ck('iOS: Legal only chip is not selected', pg.evaluate('!document.getElementById("cNorm").classList.contains("on")'))
     r = pg.evaluate(f'testRoute({A},{B})')
     ck('iOS: route found', r and r.get('mi', 0) > 0, str(r))
     pg.evaluate("setMenu(true)"); pg.wait_for_timeout(300)
     txt = pg.inner_text('body')
     ck('iOS: no visible "beta" text', not re.search(r'\bbeta\b', txt, re.I), str(re.findall(r'.{30}\bbeta\b.{30}', txt, re.I)[:2]))
-    ck('iOS: no visible Risky mode text', not re.search(r'risky', txt, re.I), str(re.findall(r'.{30}risky.{30}', txt, re.I)[:2]))
-    ck('iOS: What\'s Risky link hidden', not vis(pg, '#whatRisky'))
-    cp = pg.evaluate(f"GCMCarPlay.plan({{lat:{A[0]},lon:{A[1]}}},{{lat:{B[0]},lon:{B[1]}}},'lsv',true)")
-    ck('iOS: CarPlay allowRisky ignored (legal-only plan)', cp and cp.get('ok') and not cp.get('risky'), str({k: cp.get(k) for k in ('ok','risky')} if cp else cp))
+    ck('iOS: What\'s Risky link shown', vis(pg, '#whatRisky'))
+    ck('iOS: risky legend is shown', vis(pg, '.risky-only'))
+    cp = pg.evaluate(f"GCMCarPlay.plan({{lat:{A[0]},lon:{A[1]}}},{{lat:{B[0]},lon:{B[1]}}},'lsv',false)")
+    ck('iOS: CarPlay follows the Risky chip when allowRisky is false', cp and cp.get('ok') and pg.evaluate('risky===true&&document.getElementById("cRisk").classList.contains("on")'), str({k: cp.get(k) for k in ('ok','risky')} if cp else cp))
+    pg.evaluate("setRisky(false)")
+    cp2 = pg.evaluate(f"GCMCarPlay.plan({{lat:{A[0]},lon:{A[1]}}},{{lat:{B[0]},lon:{B[1]}}},'lsv',true)")
+    ck('iOS: CarPlay follows Legal only when the chip is off', cp2 and cp2.get('ok') and pg.evaluate('risky===false&&document.getElementById("cNorm").classList.contains("on")&&!document.getElementById("cRisk").classList.contains("on")'), str({k: cp2.get(k) for k in ('ok','risky')} if cp2 else cp2))
+    pg.evaluate("setRisky(true)")
+    ck('iOS: setRisky(true) turns Risky back on', pg.evaluate('risky===true&&document.getElementById("cRisk").classList.contains("on")'))
     ck('iOS: no visible Venmo/Stripe/$ price', not re.search(r'venmo|stripe|\$\d', txt, re.I))
     ck('iOS: haptic fired on route', any(k.startswith('Haptics.') for k, _ in pg.evaluate('__calls')))
     ck('iOS: Share button visible after route', vis(pg, '#share'))
     pg.click('#share'); pg.wait_for_timeout(300)
     sh = [o for k, o in pg.evaluate('__calls') if k == 'Share.share']
     ck('iOS: Share opens native share sheet with town link', sh and sh[0]['url'] == 'https://golfcartmap.com/map/villages' and 'min' in sh[0]['text'], str(sh[:1]))
+    pg.evaluate("localStorage.setItem('gcm-risky','0')")
+    pg.reload()
+    pg.wait_for_function('window.ready===true&&window.REG', timeout=60000); pg.wait_for_timeout(400)
+    ck('iOS: saved Legal only stays off after reload', pg.evaluate("risky===false&&!document.getElementById('cRisk').classList.contains('on')&&document.getElementById('cNorm').classList.contains('on')"))
+    pg.evaluate("localStorage.removeItem('gcm-risky')")
+    pg.reload()
+    pg.wait_for_function('window.ready===true&&window.REG', timeout=60000); pg.wait_for_timeout(400)
+    ck('iOS: no saved choice starts on Risky', pg.evaluate("risky===true&&document.getElementById('cRisk').classList.contains('on')&&!document.getElementById('cNorm').classList.contains('on')"))
     c.close()
     # --- website: unchanged ---
     c = b.new_context(viewport={'width': 440, 'height': 956})
@@ -65,6 +77,7 @@ with sync_playwright() as p:
     ck('web: chargers chip still shown', vis(pg, '#cChg'))
     ck('web: no beta badge (Max, Oct 22)', not vis(pg, '#cityBeta'))
     ck('web: Risky chip still shown', vis(pg, '#cRisk'))
+    ck('web: Legal only is still the default', pg.evaluate('risky===false&&document.getElementById("cNorm").classList.contains("on")&&!document.getElementById("cRisk").classList.contains("on")'))
     ck('web: native helpers report web', pg.evaluate('window.GCM_IOS===false&&window.GCM_NATIVE===false'))
     c.close(); b.close()
 finish()

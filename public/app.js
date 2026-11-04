@@ -107,7 +107,7 @@ const ft=m=>GCMRouter.shownFeet(m)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
 let routing=false;async function route(){$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
  await new Promise(r=>setTimeout(r,0));let parts=null,H=null;if(routeHeading!=null&&b!=null){H=GCMRouter.aheadStart(D,buckets,start,routeHeading,{cls:cls,G:G});if(H){for(const y of [b,b2]){parts=astar(H.node,y,H.backSeg);if(parts)break}if(!parts)H=null}}routeHeading=null;
  if(!parts&&a!=null&&b!=null){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){parts=astar(x,y);if(parts)break}}$('acts').style.display='flex';
- if(!parts){liveNavSet(null);trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+(window.GCM_IOS?'':' Try <b>⚠️ Risky</b> mode to see short-stretch options.');$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
+ if(!parts){liveNavSet(null);trackRoute(false,null,a==null||b==null?'no_road_nearby':'no_legal_route');$('title').innerHTML='🚫 No legal route';$('sub').innerHTML=risky?'Even in risky mode, there’s no way through.':GCMRule.noRoute(RULE)+' Try <b>⚠️ Risky</b> mode to see short-stretch options.';$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
  const r=summarize(parts,H);r.ahead=!!H;trackRoute(true,r.dist/1609.34);routeG=L.layerGroup().addTo(map);
  const all=[];r.legs.forEach(l=>all.push(...l.p));const ll=all.map(p=>[p[1],p[0]]);
  // Opaque casing wider than legal roads (weight ~3.2) so the path stays obvious
@@ -182,9 +182,12 @@ for(const [f,id,x] of [['from','qf','xf'],['to','q','xt']]){
  $(id).addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();clearField(f);$(id).value='';$('sugg').style.display='none'}});
  $(x).onclick=e=>{e.preventDefault();clearField(f);$('sugg').style.display='none'}}
 let curField='to';
-function setRisky(v){if(window.GCM_IOS)v=false;  // iOS (App Store build): Risky mode is hidden; legal routes only
- risky=v;$('cRisk').classList.toggle('on',v);$('cNorm').classList.toggle('on',!v);if(start&&end)route()}
+function setRisky(v){risky=!!v;$('cRisk').classList.toggle('on',risky);$('cNorm').classList.toggle('on',!risky);
+ if(window.GCM_IOS){try{localStorage.setItem('gcm-risky',risky?'1':'0')}catch(_){}}
+ if(start&&end)route()}
 window.setRisky=setRisky;
+// iPhone app: Risky starts on. It was hidden only for App Store review. A saved Legal only choice ('0') stays off. The website stays Legal only.
+if(window.GCM_IOS){let s=null;try{s=localStorage.getItem('gcm-risky')}catch(_){}setRisky(s!=='0')}
 $('cNorm').onclick=()=>setRisky(false);function riskyWarn(onOK){const old=document.getElementById('riskWarn');if(old)old.remove();const d=document.createElement('div');d.id='riskWarn';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.innerHTML='<div class="rbk"></div><div class="rcard"><h3>⚠️ Risky mode</h3><p>Risky routes can use short stretches (up to 500 ft) of roads posted over '+(RULE.max_posted||35)+' mph to connect legal streets. Driving a golf cart or LSV on those roads may be illegal and unsafe. Use at your own risk, and always follow posted signs.</p><button class="rok">Turn on Risky</button><button class="rno">Cancel</button></div>';document.body.appendChild(d);const close=()=>d.remove();d.querySelector('.rbk').onclick=close;d.querySelector('.rno').onclick=close;d.querySelector('.rok').onclick=()=>{try{localStorage.setItem('gcm-risky-ack','1')}catch(_){}close();setRisky(true)};d.querySelector('.rok').focus()}window.riskyWarn=riskyWarn;
 $('vehCart').onchange=e=>setVeh(e.target.checked?'golf_cart':'lsv');
 $('cRisk').onclick=()=>{let ack=null;try{ack=localStorage.getItem('gcm-risky-ack')}catch(_){}if(ack||risky)setRisky(true);else riskyWarn()};
