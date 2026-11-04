@@ -27,7 +27,7 @@ def render():
          "- Works in any web browser.", "",
          "## iPhone app + CarPlay",
          "- Native iPhone app with Apple CarPlay: legal cart roads and turn-by-turn routes on your car's dashboard screen.",
-         "- Download the iPhone app: https://testflight.apple.com/join/P7dVC4zh", "",
+         "- Download the iPhone app: " + SC.APPSTORE, "",
          "## Contact",
          "- Sales, partners, manufacturers and OEMs: max@golfcartmap.com", "",
          "## Regions by state"]

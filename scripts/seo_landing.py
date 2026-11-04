@@ -49,7 +49,7 @@ def render():
 <p>Golf cart maps of every legal golf cart and LSV road. Pick a town, pick a place, and ride roads your city actually allows.</p>
 <p><a href="/golf-cart-maps">Golf cart maps by town</a> · <a href="/lsv">LSV map app</a></p>
 <p>{cta("hero")}</p>
-<p><a class="appstore" href="{TESTFLIGHT}" data-ev="app_store_click" data-p=\'{{"position":"hero"}}\'><img src="/download-on-the-app-store.svg" width="143" height="48" alt="Download on the App Store"></a> <small>iPhone app + CarPlay</small></p>
+<p><a class="appstore" href="{APPSTORE}" data-ev="app_store_click" data-p=\'{{"position":"hero"}}\'><img src="/download-on-the-app-store.svg" width="143" height="48" alt="Download on the App Store"></a> <small>iPhone app + CarPlay</small></p>
 <p><label><input type="checkbox" id="remember"> Always open the map when I visit</label></p></section>
 <div class="stats" role="list"><div role="listitem"><b>{k(st["road_mi"])}</b><span>road miles mapped</span></div><div role="listitem"><b>{n}</b><span>regions live</span></div><div role="listitem"><b>{ns}</b><span>states</span></div><div role="listitem"><b>{len(towns)}</b><span>town guides</span></div></div>
 <img src="/og-v4.png" width="1200" height="630" alt="Golf cart map from Golf Cart Maps: legal golf cart and LSV roads in green, roads to avoid in red" style="width:100%;height:auto;border-radius:14px" loading="eager">
@@ -63,7 +63,7 @@ def render():
 <h3>Town guides</h3><p class="towns">{tl}</p>
 <section class="band app" id="iphone"><h2>iPhone app + CarPlay</h2>
 <p>Take Golf Cart Maps on the road. The native iPhone app works with Apple CarPlay, so legal cart roads and turn-by-turn routes show up right on your car's dashboard screen.</p>
-<p><a class="appstore" href="{TESTFLIGHT}" data-ev="app_store_click" data-p=\'{{"position":"app_section"}}\'><img src="/download-on-the-app-store.svg" width="161" height="54" alt="Download on the App Store"></a></p></section>
+<p><a class="appstore" href="{APPSTORE}" data-ev="app_store_click" data-p=\'{{"position":"app_section"}}\'><img src="/download-on-the-app-store.svg" width="161" height="54" alt="Download on the App Store"></a></p></section>
 <section class="band oem"><h2>For manufacturers and OEMs</h2>
 <p>We work with cart manufacturers and OEMs to bring legal-road maps to in-dash screens: town-by-town road rules for golf carts and LSVs, with the law behind each one.</p>
 <p><a class="cta" href="{PARTNER}" data-ev="partner_click" data-p=\'{{"section":"oem"}}\'>Partner with us</a> <a href="{SALES}" data-ev="sales_click" data-p=\'{{"section":"oem"}}\'>Contact sales</a></p></section>
