@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: {node-version: 20}
+        with: {node-version: 22}
       - run: python3 scripts/build_web.py && npm ci && npx cap sync ios
       - name: CarPlay logic tests (Swift, Foundation only)
         run: swiftc ios/App/App/CarPlayStartView.swift ios/App/App/GCMVoicePlan.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
