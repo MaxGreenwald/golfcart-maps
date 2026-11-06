@@ -10,8 +10,8 @@ ALT_NAMES = ["Golf Cart Map", "GolfCartMap"]   # Max Oct 23: people search both 
 LEGAL = "Golf Cart Maps LLC"
 CONTACT = "max@golfcartmap.com"
 SALES = "mailto:max@golfcartmap.com?subject=Golf%20Cart%20Maps%20sales%20inquiry"
-TESTFLIGHT = "https://testflight.apple.com/join/P7dVC4zh"  # Max Oct 22: shown as the App Store badge; never say the word on the page
-APPSTORE = "https://apps.apple.com/us/app/golf-cart-maps/id0000000000"  # placeholder: set once the App Store listing is live
+APPSTORE = "https://apps.apple.com/us/app/golf-cart-maps/id6823958385"  # live listing (Nov 4 2026). Badge href and schema installUrl. Never say testflight on the page.
+APP_ID = "6823958385"  # Apple Smart App Banner + App Store id
 STATES = {"CA":"California","FL":"Florida","GA":"Georgia","SC":"South Carolina","TX":"Texas","AL":"Alabama","AZ":"Arizona","OH":"Ohio","NC":"North Carolina","HI":"Hawaii","ME":"Maine","NJ":"New Jersey","DE":"Delaware","VA":"Virginia","CT":"Connecticut"}
 BANNED = re.compile(r"(?i)\bbeta\b|verified|android")  # guard-change: free allowed (Max Oct 22), beta banned
 e = lambda s: html.escape(str(s), quote=True)
@@ -68,7 +68,7 @@ def software():  # no offers block
 def mobile_app():  # the iPhone app (CarPlay built in); no ratings until real App Store ratings exist
     return {"@context":"https://schema.org","@type":"MobileApplication","name":BRAND,"alternateName":ALT_NAMES,"operatingSystem":"iOS","applicationCategory":"NavigationApplication",
             "description":"Golf cart map of legal golf cart and LSV roads, with routes, for iPhone, with Apple CarPlay on your car's dashboard screen.",
-            "installUrl":TESTFLIGHT,"url":SITE+"/#iphone","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":SITE+"/#org"}}
+            "installUrl":APPSTORE,"url":SITE+"/#iphone","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":SITE+"/#org"}}
 
 def faq_schema(faq):
     return {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q, a in faq]}
@@ -77,12 +77,16 @@ def crumbs(items):
     return {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":SITE+u} for i,(n,u) in enumerate(items)]}
 
 CSS = ("body{margin:0;font:17px/1.55 -apple-system,system-ui,Segoe UI,Roboto,sans-serif;color:#17384a;background:#fbfdfd}"
-       "header,main,footer{max-width:820px;margin:0 auto;padding:16px 20px}header{display:flex;gap:16px;align-items:center;flex-wrap:wrap}"
-       "header a.home{font-weight:800;color:#0b6e86;text-decoration:none;font-size:19px}nav a{margin-right:14px;color:#0b6e86}"
+       "header,main,footer{max-width:980px;margin:0 auto;padding:16px 20px}header{display:flex;gap:12px 18px;align-items:center;flex-wrap:wrap}"
+       "header a.home{font-weight:800;color:#0b6e86;text-decoration:none;font-size:19px}"
+       "nav{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;flex:1}"
+       "nav a{color:#0b6e86;text-decoration:none;font-weight:600}"
+       "nav a.nav-app{background:#0b7d91;color:#fff;font-weight:800;padding:8px 14px;border-radius:20px;margin-left:auto}"
        "h1{font-size:30px;line-height:1.2;margin:.4em 0}h2{margin-top:1.6em}a{color:#0b6e86}"
        ".cta{display:inline-block;background:#0b7d91;color:#fff;font-weight:800;padding:13px 22px;border-radius:28px;text-decoration:none;margin:8px 0}"
        "table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #dde9ec;padding:8px;text-align:left;vertical-align:top}"
-       ".muted{color:#5a7684;font-size:14px}footer{border-top:1px solid #dde9ec;margin-top:40px}ul.cols{columns:2}")
+       ".muted{color:#5a7684;font-size:14px}footer{border-top:1px solid #dde9ec;margin-top:40px}ul.cols{columns:2}"
+       "@media(max-width:640px){nav a.nav-app{margin-left:0}}")
 
 def page(title, desc, path, body, ld, extra_head=""):
     for t in (title, desc, body, json.dumps(ld)):
@@ -95,11 +99,11 @@ def page(title, desc, path, body, ld, extra_head=""):
 <meta property="og:type" content="website"><meta property="og:site_name" content="{BRAND}"><meta property="og:url" content="{SITE}{path}"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:image" content="{SITE}/og-v4.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#e8f7f8">{extra_head}
+<meta name="theme-color" content="#e8f7f8"><meta name="apple-itunes-app" content="app-id={APP_ID}">{extra_head}
 <style>{CSS}</style>
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 </head><body>
-<header><a class="home" href="/">🏖️ {BRAND}</a><nav aria-label="Site"><a href="/golf-cart-maps">Golf cart maps</a><a href="/lsv">LSV map</a><a href="/#regions">Regions</a><a href="/#iphone">iPhone app</a><a href="/privacy">Privacy</a></nav></header>
+<header><a class="home" href="/">🏖️ {BRAND}</a><nav aria-label="Site"><a href="/map">Map</a><a href="/golf-cart-maps">Towns</a><a href="/for-rental-shops">For Rental Shops</a><a href="/for-manufacturers">For Manufacturers</a><a class="nav-app" href="{APPSTORE}" data-ev="app_store_click" data-p='{{"position":"nav"}}'>Get the App</a></nav></header>
 <main>
 {body}
 </main>

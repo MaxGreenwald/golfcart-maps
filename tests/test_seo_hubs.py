@@ -26,7 +26,7 @@ class Hubs(unittest.TestCase):
         h1 = re.search(r"<h1>(.*?)</h1>", h).group(1)
         desc = re.search(r'<meta name="description" content="([^"]*)"', h).group(1)
         self.assertEqual(title, f"Golf Cart Maps: golf cart map for {self.n} towns | LSV Map")
-        self.assertEqual(h1, f"Golf Cart Maps: golf cart map for {self.n} towns")
+        self.assertEqual(h1, "Know which roads your golf cart can legally ride.")
         self.assertIn("Golf Cart Maps", desc)
         self.assertIn("golf cart map", desc)
         self.assertIn("Free to use", desc)

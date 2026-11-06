@@ -10,13 +10,17 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-        with: {fetch-depth: 0}   # tests/test_web_build.py replays a real missed cache bump from history
+        with: {fetch-depth: 0}   # all branch tips: test_web_build.py replays history; check_agents_md.py tells merged branches from open ones
       - name: public/ is the only copy of the web app (no committed ios/android/dist bundles)
         run: python scripts/check_single_source.py
+      - name: AGENTS.md paths, branch notes, stale phrases, and 16 KiB cap
+        run: python scripts/check_agents_md.py
       - name: "scripts/test_*.py cannot print FAIL and still exit 0"
         run: python scripts/check_test_exit.py
       - name: No 'verified' claims outside the coastal-SD verified badge
         run: python scripts/check_verified_wording.py
+      - name: No conversation residue in code
+        run: python scripts/check_no_agent_chatter.py
       - name: Analytics schema / PII guard (node --test)
         run: node --test tests/analytics.test.mjs
       - name: Live town loader (native app prefers golfcartmap.com JSON; bundled fallback)
@@ -25,10 +29,16 @@ jobs:
         run: node --test tests/carplay_experiences.test.mjs
       - name: Partner owner-endpoint authz (super-admin any shop; owners only their own)
         run: node --test tests/partner_access.test.mjs
+      - name: App links (AASA, handoff tokens) (node --test)
+        run: node --test tests/app_links.test.mjs
+      - name: Rental code (node --test)
+        run: node --test tests/rental_code.test.mjs
       - name: Partner places validation (category enum, no coupon, https link)
         run: node --test tests/partner_places.test.mjs
       - name: Shop rental vehicle (API values, worker stores and exposes it)
         run: node --test tests/partner_vehicle.test.mjs
+      - name: Nearest-stop start (visit order; experience setting defaults on)
+        run: node --test tests/stoporder.test.mjs tests/partner_nearest.test.mjs
       - name: Turn-by-turn maneuvers (turn side, distance, off route, arrival)
         run: node --test tests/nav.test.mjs
       - name: Live navigation (off-route timer, reroute debounce, heading)
@@ -45,6 +55,8 @@ jobs:
         run: node --test tests/geosearch.test.mjs
       - name: Saved places (Home, Favorite beach, favorites)
         run: node --test tests/places.test.mjs
+      - name: Offline city download (node --test)
+        run: node --test tests/offline.test.mjs
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - name: Unit tests (roundabout rule, validators, SW cache name, single source)
@@ -77,6 +89,9 @@ jobs:
           for i in $(seq 1 20); do curl -sf http://localhost:8765/ >/dev/null && break; sleep 1; done
       - name: test_sw (stamped cache name, old caches dropped, works offline)
         run: python scripts/test_sw.py
+        env: {URL: "http://localhost:8765/"}
+      - name: Offline city (download, then routes and roads with network off)
+        run: python scripts/test_offline.py
         env: {URL: "http://localhost:8765/"}
       - name: "test_search_keep_text (typed destination text survives GPS ticks; Phoenix->Sun City and SD)"
         run: python -m unittest tests.test_search_keep_text -v
@@ -124,6 +139,8 @@ jobs:
         run: python -m unittest tests.test_partner_places -v
       - name: test_partner_vehicle (admin saves vehicle; LSV shop draws 35 mph Grand Ave green, golf cart shop red)
         run: python -m unittest tests.test_partner_vehicle -v
+      - name: test_partner_nearest_start (rider near stop 4 starts there, pins renumber, Use shop order; off keeps order; admin checkbox)
+        run: python -m unittest tests.test_partner_nearest_start -v
       - name: test_turn_by_turn (renter banner follows GPS, step list, mute, reroute, arrival; picked ride folds the others away)
         run: python -m unittest tests.test_turn_by_turn -v
       - name: Live navigation (Start, follow, Recenter, reroute, pinch/pan preview)
@@ -144,6 +161,7 @@ jobs:
         if: failure()
         with: {name: ci-shots, path: ci-shots, if-no-files-found: ignore}
   # Push events have no pull request body. pull_request payloads do.
+  # PR_HEAD_SHA is the head commit. A stamp or Actions URL from an older push fails.
   pr-body:
     name: PR body has Summary, Evidence, and Merge danger
     if: github.event_name == 'pull_request'
@@ -154,4 +172,9 @@ jobs:
       - name: Check PR body for Summary, Evidence, and Merge danger
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: python scripts/check_pr_body.py
+      - name: No conversation residue in the pull request body
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: python scripts/check_no_agent_chatter.py --pr-body

@@ -356,9 +356,11 @@ $('city').onchange=e=>{setURL(e.target.value,true);window._regHow='picker';loadR
 // Partner overlay: when /map?partner=<slug>&code=… unlocks, lock the city chip and draw larger affiliate pins + experience stops.
 window.gcmPartnerOverlay=async function(P){
   const slug=P.get('partner'),code=(P.get('code')||'').trim(); if(!slug||!code)return;
-  const r=await fetch('/api/partner/public/'+encodeURIComponent(slug)+'/unlock?code='+encodeURIComponent(code));
+  const r=await fetch((window.GCM_NATIVE?'https://golfcartmap.com':'')+'/api/partner/public/'+encodeURIComponent(slug)+'/unlock?code='+encodeURIComponent(code));
   if(!r.ok)return; const j=await r.json(); if(!j.unlocked||!j.shop)return;
   try{localStorage.setItem('gcm_partner_access',JSON.stringify({slug,code:j.code||code,at:Date.now(),shop:j.shop,experiences:j.experiences,affiliates:j.affiliates}))}catch(_){}  // CarPlay Experiences
+  try{if(j.grant)localStorage.setItem('gcm_partner_grant:'+slug,j.grant)}catch(_){}
+
   if(j.shop.region_id&&j.shop.region_id!==REG.id){window._regHow='partner';await loadRegion(j.shop.region_id,true)}
   const city=$('city'); if(city){city.disabled=true;city.title="Locked to this rental shop's city"}
   const g=L.layerGroup().addTo(map),bounds=[];
@@ -439,3 +441,12 @@ const follow=GCMFollow.controller({map,getRoute:()=>liveSteps,reroute:liveRerout
 window.gcmFollow=follow;
 // Tap a step to zoom to where it starts; this pauses follow until Recenter.
 $('steps').addEventListener('click',e=>{const d=e.target.closest('.st[data-ll]');if(!d)return;const [a,b]=d.dataset.ll.split(',').map(Number);follow.pause();map.setView([a,b],18)});
+// ---- Download a city for offline (public/offline.js). Online the map still fetches live data first. ----
+(function(){const O=window.GCMOffline,b=$('cOff'),n=$('offNote');if(!O||!b){if(b)b.style.display='none';return}let busy=false;
+ async function paint(){if(busy||!window.REG)return;const r=window.REG,m=O.list()[r.id];
+  if(m){b.textContent='✅ '+r.name+' downloaded';n.textContent=`Saved ${O.fmtDate(m.at)} (${O.fmtBytes(m.bytes)}). Updates itself when you are online. Tap to remove.`}
+  else{const sz=await O.sizeOf(r.id);b.textContent='⬇️ Download '+r.name+' for offline'+(sz?` (${O.fmtBytes(sz)})`:'');n.textContent='Roads, routing and directions keep working with no signal. Street map images need a connection.'}}
+ b.onclick=async()=>{const r=window.REG;if(!r||busy)return;if(O.isDownloaded(r.id)){if(confirm(`Remove the offline copy of ${r.name}?`)){await O.remove(r.id);paint()}return}
+  busy=true;b.disabled=true;try{await O.download(r.id,{onProgress:(d,t,by)=>{b.textContent=`⬇️ Downloading ${Math.round(100*d/t)}% (${O.fmtBytes(by)})`}});}catch(e){n.textContent='Download failed. Check your connection and try again.'}busy=false;b.disabled=false;paint()};
+ window.addEventListener('gcm-offline-refreshed',paint);let last='';setInterval(()=>{const id=window.REG&&window.REG.id;if(id&&id!==last){last=id;paint()}},1000);window.paintOffline=paint})();
+

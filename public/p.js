@@ -13,19 +13,21 @@ const nextBar = document.getElementById('nextBar');
 const nextLabel = document.getElementById('nextLabel');
 const nextBtn = document.getElementById('nextBtn');
 
-function slugFromPath() {
-  const parts = location.pathname.replace(/\/+$/, '').split('/').filter(Boolean);
-  if (parts[0] === 'p' && parts[1]) return parts[1].toLowerCase();
-  return '';
-}
+const AL = window.GCMAppLink;
+const API = AL.apiBase(window);
+function slugFromPath() { return AL.slugFrom(location.pathname, location.search); }
 
 const slug = slugFromPath();
 const params = new URLSearchParams(location.search);
 const codeParam = (params.get('code') || '').trim().toUpperCase();
-const isGo = /\/go\/?$/.test(location.pathname) || !!codeParam;
+const handoffParam = (params.get('handoff') || '').trim();
+const isGo = /\/go\/?$/.test(location.pathname) || !!codeParam || !!handoffParam;
+const GRANT_KEY = 'gcm_partner_grant:' + slug;
 
 let map, pins = null, routeLayer = null, liveLayer = null, regions = [], region = null, rules = null;
 let unlocked = null, activeEx = null, stopIdx = 0, drawToken = 0, startToken = 0;
+// baseEx: the partner's experience as saved. activeEx: the same ride in visit order (nearest-stop start, Max t441u).
+let baseEx = null, riderShopOrder = false;
 let roadApi = null, roadKey = '', roadChain = Promise.resolve();
 let roadCanvas = null, roadCtx = null, routeR = null, roadTimer = 0, roadPaintToken = 0;
 let meLL = null, meMarker = null, guided = false;
@@ -495,7 +497,7 @@ function describeRoute(legs, nStops) {
   return `The line follows legal ${vehWord()} roads.`;
 }
 
-async function drawUnlocked() {
+async function drawUnlocked(opts) {
   const token = ++drawToken;
   if (!map || !pins || !routeLayer) return;
   const stops = (activeEx && activeEx.stops) || [];
@@ -540,7 +542,7 @@ async function drawUnlocked() {
     });
   }
   setRouteNote(describeRoute(legs, goodStops.length));
-  if (bounds.length) frameLatLngs(bounds);
+  if (bounds.length && !(opts && opts.noFrame)) frameLatLngs(bounds);
   scheduleRoads();
   updateNext();
 }
@@ -590,6 +592,7 @@ function navEl() {
     <button type="button" id="navMute" class="nav-btn" aria-pressed="false"></button></div>
     <div class="nav-acts"><button type="button" id="navListBtn" class="nav-link" aria-expanded="false">All steps</button>
     <button type="button" id="navGo" class="nav-go" hidden></button></div>
+    <div id="navOrder" class="nav-order" hidden></div>
     <ol id="navSteps" hidden></ol>`;
   document.body.appendChild(el);
   el.querySelector('#navMute').onclick = () => {
@@ -923,7 +926,15 @@ async function startExperience() {
     usedCenter = true;
   }
   if (btn) btn.textContent = 'Routing…';
-  const first = stops[0];
+  // Nearest-stop start: on unless the partner turned it off; the rider can switch back to shop order.
+  const allowed = !!(baseEx && baseEx.nearest_start !== false && !usedCenter);
+  const plan = GCMStopOrder.plan((baseEx && baseEx.stops) || [], usedCenter ? null : from, allowed && !riderShopOrder);
+  const reordered = plan.reordered;
+  activeEx = reordered ? Object.assign({}, baseEx, { stops: plan.order.map(i => baseEx.stops[i]) }) : baseEx;
+  setOrderNote(allowed, reordered, plan);
+  const ordered = activeEx.stops.filter(s => finite(s.lat, s.lon));
+  drawUnlocked({ noFrame: true });
+  const first = ordered[0];
   let legs = null;
   try { legs = await connectStops([from, first]); }
   catch (e) { legs = null; }
@@ -946,16 +957,41 @@ async function startExperience() {
     setStartNote('Legal golf cart roads from you to the first stop.');
   }
   guided = true;
-  stopIdx = 0;
+  stopIdx = activeEx.stops.indexOf(first);
   if (drawn) frameLatLngs(leg.points);
   else panIntoView(L.latLng(+first.lat, +first.lon), 15);
   updateNext();
   if (drawn) { beginNav(leg, ((activeEx && activeEx.stops) || []).indexOf(first)); if (follow) follow.start(); }
+  paintOrder();
   focusEx(true);
   scheduleRoads();
   if (btn) {
     btn.disabled = false;
     btn.textContent = 'Start experience';
+  }
+}
+
+function setOrderNote(allowed, reordered, plan) {
+  if (!allowed || (!reordered && !riderShopOrder)) { orderHTML = ''; paintOrder(); return; }
+  const way = { 'loop-forward': 'then around the loop in the shop’s direction, the shorter way.',
+    'loop-backward': 'then around the loop the other way, which is shorter from here.',
+    'line-forward-first': 'then the stops after it, then back for the earlier ones. That’s the shorter way.',
+    'line-backward-first': 'then back through the earlier stops, then on to the later ones. That’s the shorter way.' }[plan.mode] || '';
+  orderHTML = riderShopOrder
+    ? `<span>Following the shop’s order.</span> <button type="button" class="linkish order-toggle">Start at my nearest stop</button>`
+    : `<span><b>Starting at your nearest stop</b>, ${esc(way)}</span> <button type="button" class="linkish order-toggle">Use shop order</button>`;
+  paintOrder();
+}
+// Same note in the dock and on the turn-by-turn banner (the dock is hidden while navigating on a phone).
+let orderHTML = '';
+function paintOrder() {
+  for (const id of ['orderNote', 'navOrder']) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    el.hidden = !orderHTML;
+    el.innerHTML = orderHTML;
+    const b = el.querySelector('.order-toggle');
+    if (b) b.onclick = () => { riderShopOrder = !riderShopOrder; startExperience(); };
   }
 }
 
@@ -976,7 +1012,9 @@ function focusEx(on) {
 }
 function selectEx(id) {
   const ex = (unlocked && unlocked.experiences) || [];
-  activeEx = ex.find(x => x.id === id) || null;
+  activeEx = baseEx = ex.find(x => x.id === id) || null;
+  riderShopOrder = false;
+  setOrderNote(false);
   stopIdx = 0;
   guided = false;
   startToken++;
@@ -990,6 +1028,32 @@ function selectEx(id) {
   drawUnlocked();
 }
 
+// Download this shop's town for offline (public/offline.js). Online, everything still loads live first;
+// the saved copy is only used with no signal, and then the page says the map may be outdated.
+function wireOffline() {
+  const O = window.GCMOffline, b = document.getElementById('offBtn'), n = document.getElementById('offNote');
+  if (!O || !b || !region) return;
+  b.hidden = false;
+  const extra = () => [location.pathname + location.search, '/p.js', '/offline.js', '/roadrule.js', '/router.js', '/nav.js',
+    '/vendor/leaflet/leaflet.js', '/vendor/leaflet/leaflet.css',
+    `/api/partner/public/${encodeURIComponent(slug)}` + (codeParam ? `/unlock?code=${encodeURIComponent(codeParam)}` : '')];
+  let busy = false;
+  const paint = async () => {
+    const m = O.list()[region.id];
+    if (m) { b.textContent = `✅ ${region.name} saved for offline`; n.textContent = `Saved ${O.fmtDate(m.at)} (${O.fmtBytes(m.bytes)}). Updates itself when you are online. Tap to remove.`; }
+    else { const sz = await O.sizeOf(region.id); b.textContent = `⬇️ Download map for offline${sz ? ` (${O.fmtBytes(sz)})` : ''}`; n.textContent = 'Keeps roads, stops and directions working with no signal.'; }
+  };
+  b.onclick = async () => {
+    if (busy) return;
+    if (O.isDownloaded(region.id)) { if (confirm(`Remove the offline copy of ${region.name}?`)) { await O.remove(region.id); paint(); } return; }
+    busy = true; b.disabled = true;
+    try { await O.download(region.id, { extra: extra(), optional: extra(), onProgress: (d, t, by) => { b.textContent = `⬇️ Downloading ${Math.round(100 * d / t)}% (${O.fmtBytes(by)})`; } }); }
+    catch (e) { n.textContent = 'Download failed. Check your connection and try again.'; }
+    busy = false; b.disabled = false; paint();
+  };
+  addEventListener('gcm-offline-refreshed', paint);
+  paint();
+}
 async function unlockedView() {
   const shop = unlocked.shop;
   applyShop(shop, true);
@@ -1005,6 +1069,7 @@ async function unlockedView() {
         <p class="yay-kicker">You’re in</p>
         <p>Code <b>${esc(code)}</b> unlocked ${esc(shop.name)}. Pick a ride, then start from where you are.</p>
       </div>
+      <div class="offrow"><button class="allex" id="offBtn" type="button" hidden>⬇️ Download map for offline</button><p class="fine" id="offNote" aria-live="polite"></p></div>
       <div id="goPane" hidden>
         <button class="allex" id="goBack" type="button">‹ Back to experiences</button>
         <h2 class="sec">Navigate somewhere else</h2>
@@ -1039,7 +1104,9 @@ async function unlockedView() {
       <p class="legend">Numbered pins are stops. Amber ★ pins are partner offers.${(unlocked.places || []).length ? ' Icon pins (🍽️ 🌅 ❓ 💡 📍) are places to see. Tap one to read about it.' : ''}</p>
       <p class="legend" id="routeNote" aria-live="polite"></p>
     </div>
-    ${ex.length ? `<div class="dock-foot"><button class="start" id="startEx" type="button">Start experience</button><p class="fine" id="startNote" aria-live="polite"></p></div>` : ''}`;
+    ${ex.length ? `<div class="dock-foot"><button class="start" id="startEx" type="button">Start experience</button><p class="fine" id="orderNote" aria-live="polite" hidden></p><p class="fine" id="startNote" aria-live="polite"></p></div>` : ''}`;
+  wireOffline();
+
   panel.querySelectorAll('.xcard').forEach(el => {
     el.onclick = () => { selectEx(el.dataset.ex); focusEx(true); };
   });
@@ -1058,7 +1125,7 @@ async function unlockedView() {
   const startBtn = document.getElementById('startEx');
   if (startBtn) startBtn.onclick = () => { startExperience(); };
   if (ex[0]) {
-    activeEx = ex[0];
+    activeEx = baseEx = ex[0];
     markActive(ex[0].id);
   }
   try {
@@ -1088,8 +1155,11 @@ async function boot() {
     return;
   }
   try {
-    if (isGo && codeParam) {
-      const r = await fetch(`/api/partner/public/${encodeURIComponent(slug)}/unlock?code=${encodeURIComponent(codeParam)}`);
+    if (isGo && (codeParam || handoffParam)) {
+      // A handoff token (from "Open in the app") gives the same unlock without counting another code use.
+      const r = await fetch(handoffParam
+        ? `${API}/public/${encodeURIComponent(slug)}/redeem?token=${encodeURIComponent(handoffParam)}`
+        : `${API}/public/${encodeURIComponent(slug)}/unlock?code=${encodeURIComponent(codeParam)}`);
       const j = await r.json();
       if (!r.ok) {
         renderLocked(j.shop ? { shop: j.shop } : null, j.error || 'Could not unlock');
@@ -1099,9 +1169,16 @@ async function boot() {
       // CarPlay Experiences (public/carplay.js experiences()) reads this to show the shop's rides in the car.
       // The whole unlock answer is saved because unlock counts a use (single-use codes would fail a second call).
       try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates })); } catch (e) {}
+      try { if (j.grant) localStorage.setItem(GRANT_KEY, j.grant); } catch (_) {}
+
+      await unlockedView();
+      addAppButton();
+    } else if (savedAccess()) {
+      // Unlocked earlier (rental code in Settings, or a code link): show it again without another code use.
+      unlocked = savedAccess();
       await unlockedView();
     } else {
-      const r = await fetch(`/api/partner/public/${encodeURIComponent(slug)}`);
+      const r = await fetch(`${API}/public/${encodeURIComponent(slug)}`);
       const j = await r.json();
       if (!r.ok) {
         setLockedChrome();
@@ -1116,6 +1193,44 @@ async function boot() {
   } catch (e) {
     panel.innerHTML = `<div class="msg err">${esc(e.message)}</div>`;
   }
+}
+
+// "Open in the app": trade the saved grant for a 10-minute single-use token, then open the app with it.
+// If the app isn't installed the page stays put, so after a moment we offer the App Store instead.
+function addAppButton() {
+  if (!AL.wantsAppButton(window)) return;
+  let grant = '';
+  try { grant = localStorage.getItem(GRANT_KEY) || ''; } catch (_) {}
+  const host = document.querySelector('.yay');
+  if (!grant || !host || document.getElementById('openApp')) return;
+  const b = document.createElement('button');
+  b.type = 'button'; b.id = 'openApp'; b.className = 'allex'; b.textContent = 'Open in the Golf Cart Maps app';
+  const note = document.createElement('p'); note.className = 'fine'; note.id = 'openAppNote';
+  host.append(b, note);
+  b.addEventListener('click', async () => {
+    b.disabled = true; note.textContent = '';
+    try {
+      const r = await fetch(`${API}/public/${encodeURIComponent(slug)}/handoff`, {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ grant }),
+      });
+      const j = await r.json();
+      if (!r.ok || !j.token) throw new Error(j.error || 'Could not open the app');
+      const t = setTimeout(() => {
+        if (document.visibilityState === 'visible') note.innerHTML = `Don’t have the app? <a href="${AL.APP_STORE}">Get it on the App Store</a>, then tap this button again.`;
+      }, 1800);
+      document.addEventListener('visibilitychange', () => clearTimeout(t), { once: true });
+      location.href = AL.handoffUrl(slug, j.token);
+    } catch (e) {
+      note.textContent = e.message;
+    } finally {
+      b.disabled = false;
+    }
+  });
+}
+
+function savedAccess() {
+  const a = window.GCMRental && window.GCMRental.load(localStorage);
+  return a && a.slug === slug && a.shop ? { unlocked: true, ...a } : null;
 }
 
 boot();

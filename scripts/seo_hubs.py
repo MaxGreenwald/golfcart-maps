@@ -123,7 +123,7 @@ def lsv_page():
 <ul>{markets}</ul>
 <h2>Golf cart vs LSV</h2>
 <p>The golf cart map and the LSV map are separate layers. An LSV is the street-legal vehicle. A plain golf cart is not, so most towns give it fewer roads. <a href="/">Golf Cart Maps</a> shows both, for {n} beach and golf towns.</p>
-<p><a class="appstore" href="{TESTFLIGHT}"><img src="/download-on-the-app-store.svg" width="143" height="48" alt="Download on the App Store"></a> <small>iPhone app. The web map works in any browser.</small></p>
+<p><a class="appstore" href="{APPSTORE}"><img src="/download-on-the-app-store.svg" width="143" height="48" alt="Download on the App Store"></a> <small>iPhone app. The web map works in any browser.</small></p>
 <h2>FAQ</h2>
 {''.join(f'<h3>{e(q)}</h3><p>{e(a)}</p>' for q, a in faq)}"""
     webpage = {"@context": "https://schema.org", "@type": "WebPage", "name": title,

@@ -371,6 +371,8 @@ class BrandColorPicker(unittest.TestCase):
             )
 
             state["color"] = ""
+            # The go?code= unlock above is saved and reopens unlocked (Max t449u); clear it to see the locked page.
+            pg.evaluate("localStorage.clear()")
             pg.goto(self.base + "/p/lajollacartco", wait_until="domcontentloaded")
             pg.wait_for_selector("#unlockBtn")
             self.assertEqual(
