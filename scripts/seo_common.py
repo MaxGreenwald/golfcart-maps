@@ -12,6 +12,7 @@ CONTACT = "max@golfcartmap.com"
 SALES = "mailto:max@golfcartmap.com?subject=Golf%20Cart%20Maps%20sales%20inquiry"
 APPSTORE = "https://apps.apple.com/us/app/golf-cart-maps/id6823958385"  # live listing (Nov 4 2026). Badge href and schema installUrl. Never say testflight on the page.
 APP_ID = "6823958385"  # Apple Smart App Banner + App Store id
+LINKEDIN = "https://www.linkedin.com/company/golf-cart-maps"  # company page (Max, Nov 6 2026)
 STATES = {"CA":"California","FL":"Florida","GA":"Georgia","SC":"South Carolina","TX":"Texas","AL":"Alabama","AZ":"Arizona","OH":"Ohio","NC":"North Carolina","HI":"Hawaii","ME":"Maine","NJ":"New Jersey","DE":"Delaware","VA":"Virginia","CT":"Connecticut"}
 BANNED = re.compile(r"(?i)\bbeta\b|verified|android")  # guard-change: free allowed (Max Oct 22), beta banned
 e = lambda s: html.escape(str(s), quote=True)
@@ -36,7 +37,7 @@ def effective_rules():
     return json.loads(subprocess.run(["node", "-e", js], capture_output=True, text=True, check=True).stdout)
 
 def org():
-    return {"@context":"https://schema.org","@type":"Organization","@id":SITE+"/#org","name":BRAND,"alternateName":ALT_NAMES,"legalName":LEGAL,"url":SITE+"/","logo":SITE+"/icon-512.png","email":CONTACT,"contactPoint":{"@type":"ContactPoint","contactType":"sales","email":CONTACT,"areaServed":"US","availableLanguage":"en"}}
+    return {"@context":"https://schema.org","@type":"Organization","@id":SITE+"/#org","name":BRAND,"alternateName":ALT_NAMES,"legalName":LEGAL,"url":SITE+"/","logo":SITE+"/icon-512.png","email":CONTACT,"sameAs":[LINKEDIN],"contactPoint":{"@type":"ContactPoint","contactType":"sales","email":CONTACT,"areaServed":"US","availableLanguage":"en"}}
 
 def website():
     return {"@context":"https://schema.org","@type":"WebSite","@id":SITE+"/#website","name":BRAND,"alternateName":ALT_NAMES,"url":SITE+"/","publisher":{"@id":SITE+"/#org"}}
@@ -107,7 +108,7 @@ def page(title, desc, path, body, ld, extra_head=""):
 <main>
 {body}
 </main>
-<footer><p class="muted">{BRAND} (golfcartmap.com){POS.FOOTER_STATUS}. Not legal advice; posted signs and local law win. Updated {e(today())}. &copy; {LEGAL}. <a href="/privacy">Privacy</a> · Contact: <a href="mailto:{CONTACT}">{CONTACT}</a></p></footer>
+<footer><p class="muted">{BRAND} (golfcartmap.com){POS.FOOTER_STATUS}. Not legal advice; posted signs and local law win. Updated {e(today())}. &copy; {LEGAL}. <a href="/privacy">Privacy</a> · <a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a> · Contact: <a href="mailto:{CONTACT}">{CONTACT}</a></p></footer>
 <script defer src="/track.js"></script><script>addEventListener('load',function(){{var T=window.GCMTrack;if(!T)return;document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.target.closest('a[data-ev]');if(a)T.track(a.dataset.ev,JSON.parse(a.dataset.p||'{{}}'))}})}})</script>
 </body></html>
 """
