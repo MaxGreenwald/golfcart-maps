@@ -6,10 +6,11 @@
 // That filter runs at read time, so it covers events already stored. It is live only after this
 // Worker is deployed; until then production /stats is the unfiltered build.
 //   GET  /daily.csv?days=30      one row per day                  (same key)
+//   GET  /top-iids?town=&days=7   per-iid top-N for one town        (same key; not public)
 // Raw events older than 400 days are deleted.
 import { DurableObject } from 'cloudflare:workers';
 import { sanitize } from '../../../lib/analytics.js';
-import { computeStats } from '../../../lib/analytics_stats.js';
+import { computeStats, topIidsByTown } from '../../../lib/analytics_stats.js';
 
 const J = (o, s = 200) => new Response(JSON.stringify(o, null, 1), { status: s, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
 const NC = () => new Response(null, { status: 204, headers: { 'cache-control': 'no-store', 'access-control-allow-origin': '*' } });
@@ -28,10 +29,15 @@ export class Events extends DurableObject {
   }
   q(s, ...a) { return this.sql.exec(s, ...a).toArray() }
   stats(days, now) { return computeStats((s, ...a) => this.q(s, ...a), days, now); }
+  topIids(days, now, town, limit) { return topIidsByTown((s, ...a) => this.q(s, ...a), days, now, { town, limit }); }
   async fetch(req) {
     const u = new URL(req.url), now = Date.now();
     if (u.pathname === '/add') { const r = await req.json(); this.add(r, now); return new Response(null, { status: 204 }) }
     const days = Math.min(400, Math.max(1, +u.searchParams.get('days') || 30));
+    if (u.pathname === '/top-iids') {
+      try { return J(this.topIids(days, now, u.searchParams.get('town') || '', +(u.searchParams.get('limit') || 5))); }
+      catch (e) { return J({ error: String(e && e.message || e) }, 400); }
+    }
     return J(this.stats(days, now));
   }
 }
@@ -48,9 +54,17 @@ export default {
       } catch (_) {}
       return NC();
     }
-    if (u.pathname === '/stats' || u.pathname === '/daily.csv') {
+    if (u.pathname === '/stats' || u.pathname === '/daily.csv' || u.pathname === '/top-iids') {
       const k = req.headers.get('x-stats-key') || u.searchParams.get('k') || '';
       if (!env.STATS_KEY || !eq(k, env.STATS_KEY)) return J({ error: 'unauthorized' }, 401);
+      if (u.pathname === '/top-iids') {
+        const qs = new URLSearchParams({ days: u.searchParams.get('days') || '7' });
+        if (u.searchParams.get('town')) qs.set('town', u.searchParams.get('town'));
+        if (u.searchParams.get('limit')) qs.set('limit', u.searchParams.get('limit'));
+        const r = await stub.fetch('https://do/top-iids?' + qs);
+        const body = await r.json();
+        return J(body, r.status === 400 || body.error ? 400 : 200);
+      }
       const s = await (await stub.fetch('https://do/stats?days=' + (u.searchParams.get('days') || 30))).json();
       if (u.pathname === '/stats') return J(s);
       const cols = ['day', 'active_installs', 'sessions', 'new_installs', 'town_views', 'routes_searched', 'routes_found', 'routes_completed', 'road_reports'];
