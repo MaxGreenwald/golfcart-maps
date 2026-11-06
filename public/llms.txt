@@ -18,6 +18,10 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 - Native iPhone app with Apple CarPlay: legal cart roads and turn-by-turn routes on your car's dashboard screen.
 - Download the iPhone app: https://apps.apple.com/us/app/golf-cart-maps/id6823958385
 
+## For rental shops and manufacturers
+- Rental shops (design partners at no cost): https://golfcartmap.com/for-rental-shops
+- Manufacturers and dealers (CarPlay pilot): https://golfcartmap.com/for-manufacturers
+
 ## Contact
 - Sales, partners, manufacturers and OEMs: max@golfcartmap.com
 
