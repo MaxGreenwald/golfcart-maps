@@ -1,0 +1,55 @@
+{
+ "poly": [
+  [
+   -75.994,
+   35.104
+  ],
+  [
+   -75.97,
+   35.104
+  ],
+  [
+   -75.97,
+   35.12
+  ],
+  [
+   -75.994,
+   35.12
+  ],
+  [
+   -75.994,
+   35.104
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "The sheriff's 2026 quotation of Ordinance 2009-09-01 is countywide at 35 mph. This map is only the village. NC 12 north of the village, the beach, and the ferry are outside the box. A rental company also tells riders to stay off Southpoint Road; that limit is not in the quoted ordinance, so Southpoint Road is not given an extra ban."
+ ],
+ "sources": [
+  "Ocracoke Observer: Hyde County Sheriff golf cart reminder (Ordinance 2009-09-01) https://ocracokeobserver.com/2026/08/01/july-safety-report-on-ocracoke/",
+  "N.C.G.S. 153A-245 https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_153A/GS_153A-245.html",
+  "N.C.G.S. 20-121.1 https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-121.1.html",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "Ocracoke Observer: Hyde County Sheriff golf cart reminder (Ordinance 2009-09-01)",
+    "url": "https://ocracokeobserver.com/2026/08/01/july-safety-report-on-ocracoke/"
+   },
+   {
+    "label": "N.C.G.S. 153A-245",
+    "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_153A/GS_153A-245.html"
+   },
+   {
+    "label": "N.C.G.S. 20-121.1",
+    "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-121.1.html"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)"
+}

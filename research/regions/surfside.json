@@ -1,0 +1,62 @@
+{
+ "poly": [
+  [
+   -95.34,
+   28.93
+  ],
+  [
+   -95.27,
+   28.93
+  ],
+  [
+   -95.27,
+   28.98
+  ],
+  [
+   -95.34,
+   28.98
+  ],
+  [
+   -95.34,
+   28.93
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "The pedestrian beach is not a road in this data. A beach driving lane is not mapped as a golf cart route."
+ ],
+ "sources": [
+  "Surfside Beach Code Sec. 46-171 https://library.municode.com/tx/surfside_beach/codes/code_of_ordinances?nodeId=COOR_CH46TRVE",
+  "Village of Surfside Beach golf cart page https://www.surfsidetx.org/page/Golfcart",
+  "Tex. Transp. Code 551.404 https://texas.public.law/statutes/tex._transp._code_section_551.404",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Surfside Beach Code Sec. 46-171",
+    "url": "https://library.municode.com/tx/surfside_beach/codes/code_of_ordinances?nodeId=COOR_CH46TRVE"
+   },
+   {
+    "label": "Village of Surfside Beach golf cart page",
+    "url": "https://www.surfsidetx.org/page/Golfcart"
+   },
+   {
+    "label": "Tex. Transp. Code 551.404",
+    "url": "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)",
+ "cart_only_bans": [
+  {
+   "names": "^(Bluewater Highway|Fort Velasco Boulevard|Surfside Bridge|CR 257|County Road 257)$|(^|;)CR[- ]?257($|;)",
+   "url": "https://library.municode.com/tx/surfside_beach/codes/code_of_ordinances?nodeId=COOR_CH46TRVE",
+   "label": "Surfside Beach Code Sec. 46-171: golf carts may use village streets except Surfside Bridge, Bluewater Highway (CR 257) and Fort Velasco Boulevard, which they may only cross at an intersection"
+  }
+ ]
+}

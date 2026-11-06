@@ -1,0 +1,70 @@
+{
+ "slug": "cedar-key",
+ "region": "cedarkey",
+ "name": "Cedar Key",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Cedar Key?",
+ "answer_short": "Street-legal LSVs yes. Plain golf carts only on streets the city designates and signs. No current street list for Cedar Key was found, so plain golf carts stay red except a tagged cart path. LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated streets only",
+  "speed_line": "n/a",
+  "notes": "No current street list found"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+  },
+  {
+   "topic": "Local questions",
+   "rule": "A Florida Attorney General opinion discusses how F.S. 316.212 applies when Cedar Key regulates golf carts",
+   "citation": "Florida Attorney General opinion",
+   "source_url": "https://www.myfloridalegal.com/ag-opinions/municipalities-operation-of-golf-carts"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  }
+ ],
+ "banned_roads": [],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Cedar Key?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart on the island?",
+   "a": "Only on a street the city has designated and signed. No current list was found, so this map does not show island streets as golf cart roads."
+  },
+  {
+   "q": "Can I drive an LSV in Cedar Key?",
+   "a": "Yes, on a road posted 35 mph or less."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  29.1386,
+  -83.0351
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+  "https://www.myfloridalegal.com/ag-opinions/municipalities-operation-of-golf-carts"
+ ]
+}

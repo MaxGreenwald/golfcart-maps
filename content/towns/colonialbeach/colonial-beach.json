@@ -1,0 +1,75 @@
+{
+ "slug": "colonial-beach",
+ "region": "colonialbeach",
+ "name": "Colonial Beach",
+ "state": "VA",
+ "question_title": "Can you drive a golf cart in Colonial Beach?",
+ "answer_short": "Only on designated streets posted 25 mph or less. Colonial Beach bars golf carts from State Route 205 except a marked crossing. That street list is not on this map yet, so plain golf carts stay red except a tagged cart path.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated streets posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Not on State Route 205; list not digitized"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts only on streets the town designates, posted 25 mph or less, sunrise to sunset unless equipped",
+   "citation": "Va. Code 46.2-916.3",
+   "source_url": "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/"
+  },
+  {
+   "topic": "State Route 205",
+   "rule": "No golf carts on State Route 205. Cross only at a designated golf cart crossing.",
+   "citation": "Colonial Beach Code Sec. 14-95",
+   "source_url": "https://colonialbeachva.gov/DocumentCenter/View/1830/Golf-Cart-Ordinance"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "LSVs on highways posted 35 mph or less",
+   "citation": "Va. Code 46.2-908.3",
+   "source_url": "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-908.3/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "State Route 205",
+   "rule": "No golf carts; designated crossing only",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Colonial Beach?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on State Route 205?",
+   "a": "No. You may cross it only at a crossing the town and VDOT have marked."
+  },
+  {
+   "q": "Why are most streets red for a golf cart?",
+   "a": "Virginia requires a designated street posted 25 mph or less. That list is not digitized, so plain golf carts stay off streets that are not tagged cart paths."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  38.2532,
+  -76.9597
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://colonialbeachva.gov/DocumentCenter/View/1830/Golf-Cart-Ordinance",
+  "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/"
+ ]
+}

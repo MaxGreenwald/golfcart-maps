@@ -1,0 +1,56 @@
+{
+ "poly": [
+  [
+   -120.66,
+   35.13
+  ],
+  [
+   -120.62,
+   35.13
+  ],
+  [
+   -120.62,
+   35.16
+  ],
+  [
+   -120.66,
+   35.16
+  ],
+  [
+   -120.66,
+   35.13
+  ]
+ ],
+ "bans": [
+  {
+   "names": "^(US 101|U\\.S\\. 101)$|(^|;)US 101($|;)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260",
+   "label": "US 101 is a freeway posted well above 35 mph (no golf carts or LSVs)"
+  }
+ ],
+ "unverified": [
+  "No city golf cart transportation plan was found, so the California state speed caps apply. Price Street (CA 1) is not given a separate ban; it stays red where the posted or inferred limit is over the cap."
+ ],
+ "sources": [
+  "CVC 21716 https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716",
+  "CVC 21260 https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "CVC 21716",
+    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716"
+   },
+   {
+    "label": "CVC 21260",
+    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)"
+}

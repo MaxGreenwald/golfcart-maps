@@ -1,0 +1,51 @@
+{
+ "poly": [
+  [
+   -87.94,
+   30.49
+  ],
+  [
+   -87.86,
+   30.49
+  ],
+  [
+   -87.86,
+   30.56
+  ],
+  [
+   -87.94,
+   30.56
+  ],
+  [
+   -87.94,
+   30.49
+  ]
+ ],
+ "bans": [
+  {
+   "names": "^(Greeno Road|Scenic Highway 98)$|(^|;)US[- ]?98($|;)",
+   "url": "https://www.fairhopeal.gov/DocumentCenter/View/601/Fairhopesap-Final-Safe-Roads-Web-PDF",
+   "label": "City of Fairhope Safe Streets plan: LSVs may not travel along Greeno Road (US 98), including shoulders and side paths. Crossings at Fairhope Avenue and Morphy Avenue are the named exceptions."
+  }
+ ],
+ "unverified": [
+  "The plan names crossings of Greeno Road at Fairhope Avenue and Morphy Avenue. The road itself stays red, including short pieces, because the ban is explicit."
+ ],
+ "sources": [
+  "City of Fairhope Safe Streets plan https://www.fairhopeal.gov/DocumentCenter/View/601/Fairhopesap-Final-Safe-Roads-Web-PDF",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "City of Fairhope Safe Streets plan",
+    "url": "https://www.fairhopeal.gov/DocumentCenter/View/601/Fairhopesap-Final-Safe-Roads-Web-PDF"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)"
+}

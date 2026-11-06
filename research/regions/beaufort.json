@@ -1,0 +1,57 @@
+{
+ "poly": [
+  [
+   -80.72,
+   32.405
+  ],
+  [
+   -80.64,
+   32.405
+  ],
+  [
+   -80.64,
+   32.455
+  ],
+  [
+   -80.72,
+   32.455
+  ],
+  [
+   -80.72,
+   32.405
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "The 4 mile radius is a note, not a geometry limit. The ordinance allows night use when the cart has headlights, taillights and turn signals; the map keeps the state daylight flag."
+ ],
+ "sources": [
+  "City of Beaufort Ordinance 2025/28 https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10399/1396567/pdf",
+  "S.C. Code 56-2-90 https://www.scstatehouse.gov/code/t56c002.php",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "City of Beaufort Ordinance 2025/28",
+    "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10399/1396567/pdf"
+   },
+   {
+    "label": "S.C. Code 56-2-90",
+    "url": "https://www.scstatehouse.gov/code/t56c002.php"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)",
+ "cart_only_bans": [
+  {
+   "names": "^(Ribaut Road|Boundary Street|Carteret Street|Trask Parkway|Parris Island Gateway)$|(^|;)US 21($|;)",
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10399/1396567/pdf",
+   "label": "Beaufort Ordinance 2025/28: golf carts only on secondary roads posted 35 mph or less. Ribaut Road, Boundary Street and Carteret Street (US 21) are primary roads."
+  }
+ ]
+}

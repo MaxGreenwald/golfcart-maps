@@ -1,0 +1,57 @@
+{
+ "poly": [
+  [
+   -76.98,
+   38.24
+  ],
+  [
+   -76.95,
+   38.24
+  ],
+  [
+   -76.95,
+   38.27
+  ],
+  [
+   -76.98,
+   38.27
+  ],
+  [
+   -76.98,
+   38.24
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "Virginia allows golf carts only on designated streets posted 25 mph or less. Colonial Beach's designated-street list is not digitized, so plain golf carts stay red except tagged cart paths. State Route 205 is banned on top of that."
+ ],
+ "sources": [
+  "Colonial Beach golf cart ordinance https://colonialbeachva.gov/DocumentCenter/View/1830/Golf-Cart-Ordinance",
+  "Va. Code 46.2-916.3 https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Colonial Beach golf cart ordinance",
+    "url": "https://colonialbeachva.gov/DocumentCenter/View/1830/Golf-Cart-Ordinance"
+   },
+   {
+    "label": "Va. Code 46.2-916.3",
+    "url": "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)",
+ "cart_only_bans": [
+  {
+   "names": "^(State Route 205)$|(^|;)(VA 205|SR 205)($|;)",
+   "url": "https://colonialbeachva.gov/DocumentCenter/View/1830/Golf-Cart-Ordinance",
+   "label": "Colonial Beach Code Sec. 14-95: golf carts may not be operated on State Route 205, and may cross it only at a designated golf cart crossing"
+  }
+ ]
+}

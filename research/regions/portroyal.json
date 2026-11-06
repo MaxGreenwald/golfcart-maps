@@ -1,0 +1,57 @@
+{
+ "poly": [
+  [
+   -80.72,
+   32.355
+  ],
+  [
+   -80.64,
+   32.355
+  ],
+  [
+   -80.64,
+   32.4
+  ],
+  [
+   -80.72,
+   32.4
+  ],
+  [
+   -80.72,
+   32.355
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "A Port Royal night-use ordinance was reported in the press. The ordinance text naming streets was not found, so roads follow 56-2-90 and the map keeps the daylight flag."
+ ],
+ "sources": [
+  "S.C. Code 56-2-90 https://www.scstatehouse.gov/code/t56c002.php",
+  "SCDPS golf cart law https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "S.C. Code 56-2-90",
+    "url": "https://www.scstatehouse.gov/code/t56c002.php"
+   },
+   {
+    "label": "SCDPS golf cart law",
+    "url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)",
+ "cart_only_bans": [
+  {
+   "names": "^(Ribaut Road|Parris Island Gateway)$|(^|;)US 21($|;)",
+   "url": "https://www.scstatehouse.gov/code/t56c002.php",
+   "label": "S.C. Code 56-2-90: golf carts are not allowed on a primary highway. Ribaut Road (US 21) is a primary road."
+  }
+ ]
+}

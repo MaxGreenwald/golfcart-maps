@@ -11,15 +11,20 @@ def all_resources():
 class LocalLinks(unittest.TestCase):
     def test_counts_and_shape(self):
         items = [(p, r) for p, L in all_resources() for r in L]
-        self.assertEqual(len(items), 60 + 23 + 4 + 11)   # Oct 22 list (49) + South Bay (11) + regions-25-batch region pages (23) + Fort Myers (2) and Siesta Key (2) + Greenwich and next 10 region pages (11)
+        self.assertEqual(len(items), 60 + 23 + 4 + 11 + 24)   # prior batches, plus 24 region pages added to reach 100 towns
         urls = [r["url"] for _, r in items]
         by_page = collections.defaultdict(list)
         for p, r in items: by_page[p].append(r["url"])
         for p, us in by_page.items(): self.assertEqual(len(us), len(set(us)), p)
-        # F.S. 316.2122 is the LSV rule on both the Fort Myers and Siesta Key region pages.
-        shared = "https://www.flsenate.gov/Laws/Statutes/2026/0316.2122"
+        # Shared on purpose: the same statute covers more than one town.
+        shared = {
+            "https://www.flsenate.gov/Laws/Statutes/2026/0316.2122",  # Fort Myers and Siesta Key
+            "https://www.scstatehouse.gov/code/t56c002.php",  # Port Royal and Georgetown
+            "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716",  # Morro Bay and Pismo Beach
+            "https://www.flsenate.gov/Laws/Statutes/2025/316.2122",  # Islamorada and Key Largo
+        }
         dups = {u for u, n in collections.Counter(urls).items() if n > 1}
-        self.assertEqual(dups, {shared})
+        self.assertEqual(dups, shared)
         self.assertFalse(DROPPED & set(urls))
         for p, r in items:
             self.assertTrue(r["url"].startswith("https://"), r)

@@ -291,6 +291,102 @@
    "url": "https://cocoabeach.granicus.com/MetaViewer.php?clip_id=4536&meta_id=240956&view_id=4",
    "label": "Cocoa Beach Resolution 2023-07 Golf Cart Network Map; Ord. 1660 / Code Sec. 15-47",
    "applied": "public/data/regions.json rule.golf_cart (designated only, 30 mph) + research/regions/cocoabeach.json cart_only_bans"
+  },
+  "fairhope": {
+   "kind": "city safety plan (LSV rule)",
+   "url": "https://www.fairhopeal.gov/DocumentCenter/View/601/Fairhopesap-Final-Safe-Roads-Web-PDF",
+   "label": "City of Fairhope Safe Streets plan: LSVs on streets posted 35 mph or less; Greeno Road (US 98) prohibited except to cross",
+   "applied": "public/data/regions.json rule.golf_cart not_street_legal; research/regions/fairhope.json bans"
+  },
+  "ocracoke": {
+   "kind": "county ordinance quoted by the sheriff",
+   "url": "https://ocracokeobserver.com/2026/08/01/july-safety-report-on-ocracoke/",
+   "label": "Hyde County Sheriff reminder of Ordinance 2009-09-01 (golf carts on streets posted 35 mph or less)",
+   "applied": "public/data/regions.json rule.golf_cart max_posted 35; village bbox only"
+  },
+  "dadecity": {
+   "kind": "city ordinance and street resolution",
+   "url": "https://www.dadecityfl.com/Documents/Government/Departments/Finance/Apply%20for%20Golf%20Cart%20Registration.pdf",
+   "label": "Dade City Ordinance 2024-01 and the registration packet street list",
+   "applied": "research/regions/dadecity.json designated_names and bans"
+  },
+  "mountdora": {
+   "kind": "city ordinance",
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10266/1298003/pdf",
+   "label": "Mount Dora Ordinance 2024-12 (golf carts on city streets posted 30 mph or less; no state or county roads)",
+   "applied": "public/data/regions.json rule.golf_cart; research/regions/mountdora.json bans"
+  },
+  "pinehurst": {
+   "kind": "village code",
+   "url": "https://codelibrary.amlegal.com/codes/pinehurst/latest/pinehurst_nc/0-0-0-601",
+   "label": "Village of Pinehurst Code Sec. 71.17",
+   "applied": "public/data/regions.json rule.golf_cart; research/regions/pinehurst.json cart_only_bans"
+  },
+  "beaufort": {
+   "kind": "city ordinance",
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10399/1396567/pdf",
+   "label": "City of Beaufort Ordinance 2025/28 (golf carts)",
+   "applied": "public/data/regions.json rule.golf_cart; research/regions/beaufort.json cart_only_bans"
+  },
+  "horseshoebay": {
+   "kind": "city golf cart brochure",
+   "url": "https://www.horseshoe-bay-tx.gov/Archive.aspx?ADID=376",
+   "label": "City of Horseshoe Bay golf cart brochure: Tex. Transp. Code 551.404, streets in the city posted 35 mph or less",
+   "applied": "Texas golf cart profile in public/data/rules.json (roads posted 35 mph or less)"
+  },
+  "surfside": {
+   "kind": "village code",
+   "url": "https://library.municode.com/tx/surfside_beach/codes/code_of_ordinances?nodeId=COOR_CH46TRVE",
+   "label": "Surfside Beach Code Sec. 46-171 (golf carts and utility vehicles)",
+   "applied": "research/regions/surfside.json cart_only_bans"
+  },
+  "colonialbeach": {
+   "kind": "town ordinance",
+   "url": "https://colonialbeachva.gov/DocumentCenter/View/1830/Golf-Cart-Ordinance",
+   "label": "Town of Colonial Beach golf cart ordinance (Secs. 14-90 through 14-95)",
+   "applied": "research/regions/colonialbeach.json cart_only_bans; Virginia designated-street rule"
+  },
+  "flaglerbeach": {
+   "kind": "city golf cart packet",
+   "url": "https://www.cityofflaglerbeach.com/DocumentCenter/View/6750/Golf-Cart-Info-Packet-2026",
+   "label": "City of Flagler Beach golf cart information packet (2026), Code Secs. 19-57 to 19-64",
+   "applied": "research/regions/flaglerbeach.json cart_only_bans; Florida designated-street rule"
+  },
+  "oriental": {
+   "kind": "town code",
+   "url": "https://townoforiental.com/vertical/sites/%7B8227B748-6F08-4124-B0ED-02789B9A2F82%7D/uploads/6-9-26_CHAPTER_F.pdf",
+   "label": "Town of Oriental Chapter F, Section 16 (operation of golf carts)",
+   "applied": "public/data/regions.json rule.golf_cart max_posted 35"
+  },
+  "celina": {
+   "kind": "city code",
+   "url": "https://codelibrary.amlegal.com/codes/celina/latest/celina_oh/0-0-0-29408",
+   "label": "Celina Code Chapter 345: under-speed vehicles, including golf carts, on city streets posted 35 mph or less after a police inspection and Ohio title",
+   "applied": "Ohio golf cart profile in public/data/rules.json"
+  },
+  "capecharles": {
+   "kind": "town resolution and decal",
+   "url": "https://www.capecharles.org/media/13461",
+   "label": "Town of Cape Charles Resolution 20250515: golf carts only in 25 mph zones; town golf cart decal required on public roads",
+   "applied": "Virginia designated-street rule (posted 25 mph or less). The designated list is not digitized."
+  },
+  "sunlakes": {
+   "kind": "sheriff posse notice",
+   "url": "https://sunlakessplash.com/sun-lakes-sheriffs-posse-golf-carts/",
+   "label": "Sun Lakes Sheriff's Posse: golf carts are not allowed on roads posted over 35 mph; Alma School Road's 45 mph zone is enforced",
+   "applied": "research/regions/sunlakes.json bans; Arizona LSV and golf cart profiles"
+  },
+  "howey": {
+   "kind": "police registration letter",
+   "url": "https://www.howey.org/DocumentCenter/View/507/Golf-Cart-Letter-2026",
+   "label": "Howey-in-the-Hills Police: town ordinance requires annual golf cart registration. The designated street list is not in the letter.",
+   "applied": "Florida designated-street rule (F.S. 316.212). Street list not digitized, so plain golf carts stay red except tagged cart paths."
+  },
+  "crystalriver": {
+   "kind": "city code and resolution",
+   "url": "https://library.municode.com/fl/crystal_river/codes/code_of_ordinances?nodeId=PTIICOOR_CH15TR",
+   "label": "Crystal River Code Secs. 15-80 to 15-82 (golf carts on streets designated by resolution). The resolution in hand names SE 8th Avenue between SE Governors Boulevard and 250 feet east of US 19.",
+   "applied": "US 19 ban. The short SE 8th Avenue piece is not split out, so plain golf carts stay red except tagged cart paths."
   }
  },
  "candidates": {
@@ -350,6 +446,54 @@
    "law": "F.S. 316.212 (golf carts only on roads a city or county designates and signs) and F.S. 316.2122 (LSVs on roads posted 35 mph or less). No Venice designation of golf cart streets was found.",
    "law_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212",
    "searched": "City of Venice code of ordinances (library.municode.com/fl/venice); web search 'Venice Florida golf cart ordinance designated streets'"
+  },
+  "portroyal": {
+   "text": "state law, no local ordinance found",
+   "law": "S.C. Code 56-2-90 (secondary roads posted 35 mph or less, daylight unless the town allows equipped night use, within 4 miles). No Port Royal street list that differs from the statute was found.",
+   "law_url": "https://www.scstatehouse.gov/code/t56c002.php",
+   "searched": "Town of Port Royal code index (portroyal.org code page); web search 'Port Royal SC golf cart ordinance'. News reports say the town allows night use with lights. The road rule used here is the state secondary-road rule."
+  },
+  "georgetown": {
+   "text": "state law, no local ordinance found",
+   "law": "S.C. Code 56-2-90. No City of Georgetown golf cart street list that differs from the statute was found.",
+   "law_url": "https://www.scstatehouse.gov/code/t56c002.php",
+   "searched": "City of Georgetown code index and web search 'Georgetown SC golf cart ordinance designated streets'."
+  },
+  "morrobay": {
+   "text": "state law, no local ordinance found",
+   "law": "CVC 21716 (golf carts on highways posted 25 mph or less in a business or residence district) and CVC 21260 (LSVs on roads posted 35 mph or less). No Morro Bay golf cart transportation plan was found.",
+   "law_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716",
+   "searched": "City of Morro Bay municipal code index and web search 'Morro Bay golf cart ordinance' and 'Morro Bay golf cart transportation plan'."
+  },
+  "pismo": {
+   "text": "state law, no local ordinance found",
+   "law": "CVC 21716 (golf carts on highways posted 25 mph or less in a business or residence district) and CVC 21260 (LSVs on roads posted 35 mph or less). No Pismo Beach golf cart transportation plan was found.",
+   "law_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716",
+   "searched": "City of Pismo Beach municipal code index and web search 'Pismo Beach golf cart ordinance' and 'Pismo Beach golf cart transportation plan'."
+  },
+  "apalachicola": {
+   "text": "state law, no local ordinance found",
+   "law": "F.S. 316.212 (golf carts only on designated, signed streets) and F.S. 316.2122 (LSVs on roads posted 35 mph or less). The city fee schedule charges a golf cart registration under an ordinance. The street list was not found.",
+   "law_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+   "searched": "City of Apalachicola fee schedule (golf cart registration per ordinance); web search 'Apalachicola golf cart ordinance designated streets'. The street list was not online."
+  },
+  "cedarkey": {
+   "text": "state law, no local ordinance found",
+   "law": "F.S. 316.212 (golf carts only on streets the city designates and signs) and F.S. 316.2122 (LSVs on roads posted 35 mph or less). A Florida Attorney General opinion discusses Cedar Key's questions about that statute. No current designated-street list was found.",
+   "law_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+   "searched": "Florida Attorney General opinion on Cedar Key golf carts; web search 'Cedar Key golf cart ordinance designated streets'. No current street list was found."
+  },
+  "islamorada": {
+   "text": "state law, no local ordinance found",
+   "law": "F.S. 316.212 (golf carts only on designated, signed streets) and F.S. 316.2122 (LSVs on roads posted 35 mph or less). No Village of Islamorada designated-street list was found on an official page.",
+   "law_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+   "searched": "Web search 'Islamorada golf cart ordinance designated streets'; village council materials. A street list on an official village page was not found."
+  },
+  "keylargo": {
+   "text": "state law, no local ordinance found",
+   "law": "F.S. 316.212 (golf carts only on designated, signed streets) and F.S. 316.2122 (LSVs on roads posted 35 mph or less). Key Largo is unincorporated Monroe County. No county designated-street list for this area was found.",
+   "law_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+   "searched": "Monroe County code and web search 'Key Largo golf cart ordinance designated streets'. No street list for this area was found."
   }
  },
  "_note_v3": "v3 is the OFFICIAL bar (Max, Oct 22 2026, 2:47 PM ET): access check = a local-rules search is recorded: 'regions' (local source) or 'state_law' (no local ordinance found, with what was searched)."

@@ -3762,6 +3762,46 @@
    "cite": [
     "Checked Oct 28 2026: OpenStreetMap has no maxspeed on this short stretch, and at least one side is only the 25 mph residential assumption, so it stays red rather than being painted legal."
    ]
+  },
+  {
+   "region": "surfside",
+   "road": "Casco Road",
+   "at": [
+    28.95877,
+    -95.29605
+   ],
+   "m": 754,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [
+    "Untagged OpenStreetMap primary link between residential sides assumed at 25 mph. Left red. No posted-speed source."
+   ]
+  },
+  {
+   "region": "pismo",
+   "road": "Pomeroy Avenue",
+   "at": [
+    35.14153,
+    -120.64021
+   ],
+   "m": 170,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [
+    "Untagged OpenStreetMap secondary piece of Pomeroy Avenue between residential sides assumed at 25 mph. Left red. No posted-speed source."
+   ]
   }
  ]
 }

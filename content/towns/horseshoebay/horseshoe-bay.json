@@ -1,0 +1,69 @@
+{
+ "slug": "horseshoe-bay",
+ "region": "horseshoebay",
+ "name": "Horseshoe Bay",
+ "state": "TX",
+ "question_title": "Can you drive a golf cart in Horseshoe Bay?",
+ "answer_short": "Yes, on streets posted 35 mph or less. Horseshoe Bay tells residents that Texas law lets a city allow a licensed driver to operate an equipped golf cart on a public road inside the city posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "City streets posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Licensed driver; slow-moving emblem if under 25 mph"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "A municipality may allow golf carts on a public highway inside the city posted 35 mph or less. The driver must be licensed, and the cart needs lights, reflectors, a parking brake and mirrors.",
+   "citation": "Horseshoe Bay golf cart brochure",
+   "source_url": "https://www.horseshoe-bay-tx.gov/Archive.aspx?ADID=376"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts with the required plate and equipment on roads posted 35 mph or less where the city or county allows them, in daylight",
+   "citation": "Tex. Transp. Code 551.404",
+   "source_url": "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "RM 2147 and SH 71 where posted over 35 mph",
+   "rule": "Over the golf cart cap",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Horseshoe Bay?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on RM 2147?",
+   "a": "Only where it is posted 35 mph or less. Much of it is posted higher."
+  },
+  {
+   "q": "Do I need a license to drive a golf cart in Horseshoe Bay?",
+   "a": "Yes. The city brochure says only a licensed driver may operate a golf cart on a public road."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  30.5446,
+  -98.3681
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://texas.public.law/statutes/tex._transp._code_section_551.404",
+  "https://www.horseshoe-bay-tx.gov/Archive.aspx?ADID=376"
+ ]
+}

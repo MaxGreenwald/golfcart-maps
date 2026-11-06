@@ -1,0 +1,69 @@
+{
+ "slug": "port-royal",
+ "region": "portroyal",
+ "name": "Port Royal",
+ "state": "SC",
+ "question_title": "Can you drive a golf cart in Port Royal?",
+ "answer_short": "Yes, under the state rule. In Port Royal, a permitted golf cart may use secondary roads posted 35 mph or less, within 4 miles of the registration address. Ribaut Road is a primary road. The town has allowed equipped carts at night; a faster road is still closed.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Secondary roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Within 4 miles"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Permitted golf carts on secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address, unless the city sets a different hour rule",
+   "citation": "S.C. Code 56-2-90",
+   "source_url": "https://www.scstatehouse.gov/code/t56c002.php"
+  },
+  {
+   "topic": "Primary roads",
+   "rule": "Golf carts are not allowed on a primary highway such as US 21 (Ribaut Road)",
+   "citation": "S.C. Code 56-2-90",
+   "source_url": "https://www.scstatehouse.gov/code/t56c002.php"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Ribaut Road (US 21)",
+   "rule": "Primary road; no golf carts",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Port Royal?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Ribaut Road in Port Royal?",
+   "a": "No. It is a primary highway."
+  },
+  {
+   "q": "Can I drive a golf cart at night in Port Royal?",
+   "a": "The town has allowed night use when the cart has lights. The road still has to be a secondary road posted 35 mph or less."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  32.3785,
+  -80.6926
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "https://www.scstatehouse.gov/code/t56c002.php"
+ ]
+}

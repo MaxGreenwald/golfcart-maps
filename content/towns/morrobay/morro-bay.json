@@ -1,0 +1,75 @@
+{
+ "slug": "morro-bay",
+ "region": "morrobay",
+ "name": "Morro Bay",
+ "state": "CA",
+ "question_title": "Can you drive a golf cart in Morro Bay?",
+ "answer_short": "Yes, with the California caps. In Morro Bay, a golf cart may use a street posted 25 mph or less in a business or residence district. An LSV may use a road posted 35 mph or less. US 101 is a freeway and is closed to both.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Streets posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Business or residence district"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts on highways posted 25 mph or less in a business or residence district",
+   "citation": "CVC 21716",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "LSVs on roads posted 35 mph or less; they may cross faster roads at intersections",
+   "citation": "CVC 21260",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260"
+  },
+  {
+   "topic": "US 101",
+   "rule": "Freeway; no golf carts or LSVs",
+   "citation": "CVC 21260",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 101",
+   "rule": "No golf carts or LSVs",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Morro Bay?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on a 25 mph street in Morro Bay?",
+   "a": "Yes, in a business or residence district, under CVC 21716."
+  },
+  {
+   "q": "Can an LSV use a 35 mph road?",
+   "a": "Yes. California limits LSVs to roads posted 35 mph or less."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  35.3658,
+  -120.8499
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260",
+  "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716"
+ ]
+}
