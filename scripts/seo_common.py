@@ -10,8 +10,8 @@ ALT_NAMES = ["Golf Cart Map", "GolfCartMap"]   # Max Oct 23: people search both 
 LEGAL = "Golf Cart Maps LLC"
 CONTACT = "max@golfcartmap.com"
 SALES = "mailto:max@golfcartmap.com?subject=Golf%20Cart%20Maps%20sales%20inquiry"
-TESTFLIGHT = "https://testflight.apple.com/join/P7dVC4zh"  # Max Oct 22: shown as the App Store badge; never say the word on the page
-APPSTORE = "https://apps.apple.com/us/app/golf-cart-maps/id0000000000"  # placeholder: set once the App Store listing is live
+APPSTORE = "https://apps.apple.com/us/app/golf-cart-maps/id6823958385"  # live listing (Nov 4 2026). Badge href and schema installUrl. Never say testflight on the page.
+APP_ID = "6823958385"  # Apple Smart App Banner + App Store id
 STATES = {"CA":"California","FL":"Florida","GA":"Georgia","SC":"South Carolina","TX":"Texas","AL":"Alabama","AZ":"Arizona","OH":"Ohio","NC":"North Carolina","HI":"Hawaii","ME":"Maine","NJ":"New Jersey","DE":"Delaware","VA":"Virginia","CT":"Connecticut"}
 BANNED = re.compile(r"(?i)\bbeta\b|verified|android")  # guard-change: free allowed (Max Oct 22), beta banned
 e = lambda s: html.escape(str(s), quote=True)
@@ -68,7 +68,7 @@ def software():  # no offers block
 def mobile_app():  # the iPhone app (CarPlay built in); no ratings until real App Store ratings exist
     return {"@context":"https://schema.org","@type":"MobileApplication","name":BRAND,"alternateName":ALT_NAMES,"operatingSystem":"iOS","applicationCategory":"NavigationApplication",
             "description":"Golf cart map of legal golf cart and LSV roads, with routes, for iPhone, with Apple CarPlay on your car's dashboard screen.",
-            "installUrl":TESTFLIGHT,"url":SITE+"/#iphone","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":SITE+"/#org"}}
+            "installUrl":APPSTORE,"url":SITE+"/#iphone","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":SITE+"/#org"}}
 
 def faq_schema(faq):
     return {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q, a in faq]}
@@ -95,7 +95,7 @@ def page(title, desc, path, body, ld, extra_head=""):
 <meta property="og:type" content="website"><meta property="og:site_name" content="{BRAND}"><meta property="og:url" content="{SITE}{path}"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:image" content="{SITE}/og-v4.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#e8f7f8">{extra_head}
+<meta name="theme-color" content="#e8f7f8"><meta name="apple-itunes-app" content="app-id={APP_ID}">{extra_head}
 <style>{CSS}</style>
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 </head><body>
