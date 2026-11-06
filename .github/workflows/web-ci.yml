@@ -144,6 +144,7 @@ jobs:
         if: failure()
         with: {name: ci-shots, path: ci-shots, if-no-files-found: ignore}
   # Push events have no pull request body. pull_request payloads do.
+  # PR_HEAD_SHA is the head commit. A stamp or Actions URL from an older push fails.
   pr-body:
     name: PR body has Summary, Evidence, and Merge danger
     if: github.event_name == 'pull_request'
@@ -154,4 +155,5 @@ jobs:
       - name: Check PR body for Summary, Evidence, and Merge danger
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: python scripts/check_pr_body.py

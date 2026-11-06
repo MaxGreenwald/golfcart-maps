@@ -1,4 +1,4 @@
-<!-- Replace each paragraph below. CI fails if a section is missing or still this placeholder, and if Evidence has no command output or URL. -->
+<!-- Replace each paragraph below. CI fails if a section is missing or still this placeholder, if Evidence has no command output or URL, if no EVIDENCE stamp or GitHub Actions run URL matches the PR head SHA, or if a command only prints its own result. After a later push, rerun scripts/evidence.sh on HEAD. -->
 
 ## Summary
 
@@ -6,7 +6,19 @@ What changes for a driver or shop, in 1 to 3 lines.
 
 ## Evidence
 
-The commands you ran with their PASS output, live or preview URLs, screenshots for UI changes, and the source for road data.
+Run a real check on this PR's HEAD and paste the stamp block plus the command output:
+
+```
+scripts/evidence.sh python -m unittest discover -s tests -v
+EVIDENCE sha=0123456789ab exit=0 cmd=python -m unittest discover -s tests -v
+<command output>
+```
+
+A GitHub Actions run URL that contains this PR's head SHA also counts (the commit checks page for that full SHA).
+
+These do not count, because the command only prints its own result: python -c "print('PASS')", echo PASS, printf PASS.
+
+Screenshots for UI changes, and the source for road data, still belong here.
 
 ## Merge danger
 
