@@ -1,0 +1,82 @@
+{
+ "slug": "cape-charles",
+ "region": "capecharles",
+ "name": "Cape Charles",
+ "state": "VA",
+ "question_title": "Can you drive a golf cart in Cape Charles?",
+ "answer_short": "Only on designated streets posted 25 mph or less, with a town decal. Cape Charles follows that Virginia cap. The street list is not on this map yet, so plain golf carts stay red except a tagged cart path. LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated streets posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Town decal; list not digitized"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts only on streets the town designates, posted 25 mph or less, sunrise to sunset unless equipped",
+   "citation": "Va. Code 46.2-916.3",
+   "source_url": "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/"
+  },
+  {
+   "topic": "Town decal",
+   "rule": "A golf cart on a public road in town needs a current town decal",
+   "citation": "Cape Charles golf cart decals",
+   "source_url": "https://www.capecharles.org/treasurer/page/golf-cart-decals"
+  },
+  {
+   "topic": "25 mph",
+   "rule": "The town states that golf carts operate in 25 mph zones",
+   "citation": "Cape Charles Resolution 20250515",
+   "source_url": "https://www.capecharles.org/media/13461"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "LSVs on highways posted 35 mph or less",
+   "citation": "Va. Code 46.2-908.3",
+   "source_url": "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-908.3/"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Old Cape Charles Road where it is posted 35 mph",
+   "rule": "Over the 25 mph golf cart cap",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Cape Charles?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Do I need a decal in Cape Charles?",
+   "a": "Yes. The town requires a golf cart decal on carts driven on public roads."
+  },
+  {
+   "q": "Can I drive a golf cart on a 35 mph road?",
+   "a": "No. The town and Virginia law keep golf carts to streets posted 25 mph or less."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  37.2676,
+  -76.0171
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/",
+  "https://www.capecharles.org/media/13461",
+  "https://www.capecharles.org/treasurer/page/golf-cart-decals"
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "slug": "fairhope",
+ "region": "fairhope",
+ "name": "Fairhope",
+ "state": "AL",
+ "question_title": "Can you drive a golf cart in Fairhope?",
+ "answer_short": "Street-legal LSVs yes, plain golf carts no. In Fairhope, the city's safety plan allows LSVs on streets posted 35 mph or less. They may cross Greeno Road (US 98). They may not drive along it.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not on public roads",
+  "speed_line": "n/a",
+  "notes": "No plain-golf-cart ordinance found"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Streets posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not along Greeno Road"
+ },
+ "rules": [
+  {
+   "topic": "LSVs",
+   "rule": "LSVs on streets posted 35 mph or less. They may cross faster roads. They may not travel along Greeno Road (US 98).",
+   "citation": "City of Fairhope Safe Streets plan",
+   "source_url": "https://www.fairhopeal.gov/DocumentCenter/View/601/Fairhopesap-Final-Safe-Roads-Web-PDF"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "No Fairhope ordinance allowing plain golf carts on public streets was found",
+   "citation": "City of Fairhope Safe Streets plan",
+   "source_url": "https://www.fairhopeal.gov/DocumentCenter/View/601/Fairhopesap-Final-Safe-Roads-Web-PDF"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Greeno Road (US 98)",
+   "rule": "No LSVs along the road; cross at Fairhope Avenue or Morphy Avenue",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Fairhope?",
+   "a": "Streets posted 35 mph or less. Not along Greeno Road. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Fairhope?",
+   "a": "No. Fairhope's published rule is for low-speed vehicles, not plain golf carts."
+  },
+  {
+   "q": "Can I drive an LSV on Greeno Road?",
+   "a": "No. The city's safety plan says LSVs may not travel along Greeno Road. They may cross it."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  30.5228,
+  -87.9033
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.fairhopeal.gov/DocumentCenter/View/601/Fairhopesap-Final-Safe-Roads-Web-PDF"
+ ]
+}

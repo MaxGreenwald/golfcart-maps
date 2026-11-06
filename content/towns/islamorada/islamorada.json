@@ -1,0 +1,70 @@
+{
+ "slug": "islamorada",
+ "region": "islamorada",
+ "name": "Islamorada",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Islamorada?",
+ "answer_short": "Street-legal LSVs yes. Plain golf carts only on designated streets, and no official street list was found for Islamorada. LSVs may use roads posted 35 mph or less. US 1 stays closed where it is posted higher.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated streets only",
+  "speed_line": "n/a",
+  "notes": "Street list not found"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 1 (Overseas Highway) where posted over 35 mph",
+   "rule": "No LSVs",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Islamorada?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive an LSV on US 1 in Islamorada?",
+   "a": "Only where it is posted 35 mph or less. Much of Overseas Highway is posted higher."
+  },
+  {
+   "q": "Can I drive a regular golf cart on a side street?",
+   "a": "Only if the village has designated and signed that street. No official list was found, so this map does not show those streets as golf cart roads."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  24.9243,
+  -80.6278
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+ ]
+}

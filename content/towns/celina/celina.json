@@ -1,0 +1,69 @@
+{
+ "slug": "celina",
+ "region": "celina",
+ "name": "Celina",
+ "state": "OH",
+ "question_title": "Can you drive a golf cart in Celina?",
+ "answer_short": "Yes, after an inspection. Celina allows an under-speed vehicle, including a golf cart, on city streets posted 35 mph or less once it passes a police inspection and has an Ohio title and registration. Out-of-state carts are not allowed on city streets.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "City streets posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Ohio title, police inspection, licensed driver"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Under-speed vehicles, including golf carts, on city streets posted 35 mph or less after inspection and Ohio registration",
+   "citation": "Celina Code Chapter 345",
+   "source_url": "https://codelibrary.amlegal.com/codes/celina/latest/celina_oh/0-0-0-29408"
+  },
+  {
+   "topic": "State rule",
+   "rule": "Under-speed vehicles on roads posted 35 mph or less where the local authority allows them",
+   "citation": "Ohio Revised Code 4511.214",
+   "source_url": "https://codes.ohio.gov/ohio-revised-code/section-4511.214"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Streets posted over 35 mph",
+   "rule": "Closed to golf carts",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Celina?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I bring an out-of-state golf cart to Celina?",
+   "a": "No. The code says out-of-state multi-use vehicles are not permitted on city streets."
+  },
+  {
+   "q": "Do I need a police inspection?",
+   "a": "Yes, before the cart is used on a city street, plus an Ohio title and registration."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  40.5489,
+  -84.5702
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://codelibrary.amlegal.com/codes/celina/latest/celina_oh/0-0-0-29408",
+  "https://codes.ohio.gov/ohio-revised-code/section-4511.214"
+ ]
+}

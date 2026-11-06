@@ -1,0 +1,55 @@
+{
+ "poly": [
+  [
+   -83.06,
+   29.12
+  ],
+  [
+   -83.02,
+   29.12
+  ],
+  [
+   -83.02,
+   29.15
+  ],
+  [
+   -83.06,
+   29.15
+  ],
+  [
+   -83.06,
+   29.12
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "No current designated-street list was found, so plain golf carts stay red except tagged cart paths."
+ ],
+ "sources": [
+  "F.S. 316.212 https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "Florida Attorney General opinion, Cedar Key golf carts https://www.myfloridalegal.com/ag-opinions/municipalities-operation-of-golf-carts",
+  "F.S. 316.2122 https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "F.S. 316.212",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+   },
+   {
+    "label": "Florida Attorney General opinion, Cedar Key golf carts",
+    "url": "https://www.myfloridalegal.com/ag-opinions/municipalities-operation-of-golf-carts"
+   },
+   {
+    "label": "F.S. 316.2122",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)"
+}

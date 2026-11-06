@@ -47,6 +47,7 @@ def _region_list(regs):
 def _item_list(regs):
     ordered = sorted(regs, key=lambda r: (STATES.get(r["state"], r["state"]), r["name"]))
     return {"@context": "https://schema.org", "@type": "ItemList", "name": "Golf cart maps by town",
+            "numberOfItems": len(ordered),
             "itemListElement": [{"@type": "ListItem", "position": i + 1,
                                  "name": r["name"] + " golf cart map", "url": SITE + "/" + r["slug"]}
                                 for i, r in enumerate(ordered)]}

@@ -1,0 +1,56 @@
+{
+ "poly": [
+  [
+   -81.68,
+   28.77
+  ],
+  [
+   -81.62,
+   28.77
+  ],
+  [
+   -81.62,
+   28.83
+  ],
+  [
+   -81.68,
+   28.83
+  ],
+  [
+   -81.68,
+   28.77
+  ]
+ ],
+ "bans": [
+  {
+   "names": "^(Donnelly Street|County Road .+|CR Old 441|Old (US |Highway )?441)$|(^|;)(US 441|SR 19|FL 19|SR 46|FL 46|CR \\d+[A-Z]?|CR Old 441)($|;)",
+   "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10266/1298003/pdf",
+   "label": "Mount Dora Ordinance 2024-12 Sec. 42-201(D): this article does not allow a golf cart or LSV on a county, state or federal roadway"
+  }
+ ],
+ "unverified": [
+  "Streets posted over 30 mph stay red for golf carts even when they are city streets. A sign that says no golf carts is not in the road data."
+ ],
+ "sources": [
+  "Mount Dora Ordinance 2024-12 https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10266/1298003/pdf",
+  "F.S. 316.2122 https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Mount Dora Ordinance 2024-12",
+    "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10266/1298003/pdf"
+   },
+   {
+    "label": "F.S. 316.2122",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)"
+}

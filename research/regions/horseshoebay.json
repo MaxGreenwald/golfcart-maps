@@ -1,0 +1,50 @@
+{
+ "poly": [
+  [
+   -98.4,
+   30.51
+  ],
+  [
+   -98.32,
+   30.51
+  ],
+  [
+   -98.32,
+   30.58
+  ],
+  [
+   -98.4,
+   30.58
+  ],
+  [
+   -98.4,
+   30.51
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "The city brochure states the state 35 mph municipal rule. It does not name a separate banned-street list. RM 2147 and SH 71 stay red where they are posted over 35 or untagged as major roads."
+ ],
+ "sources": [
+  "City of Horseshoe Bay golf cart brochure https://www.horseshoe-bay-tx.gov/Archive.aspx?ADID=376",
+  "Tex. Transp. Code 551.404 https://texas.public.law/statutes/tex._transp._code_section_551.404",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "City of Horseshoe Bay golf cart brochure",
+    "url": "https://www.horseshoe-bay-tx.gov/Archive.aspx?ADID=376"
+   },
+   {
+    "label": "Tex. Transp. Code 551.404",
+    "url": "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)"
+}

@@ -1,0 +1,76 @@
+{
+ "slug": "crystal-river",
+ "region": "crystalriver",
+ "name": "Crystal River",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Crystal River?",
+ "answer_short": "Street-legal LSVs yes. Plain golf carts only on streets a city resolution designates. The resolution in hand names one stretch of SE 8th Avenue, between SE Governors Boulevard and a point just east of US 19. That piece is not split out on this map, so plain golf carts stay red. US 19 itself is not a golf cart road.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Resolution streets only",
+  "speed_line": "n/a",
+  "notes": "SE 8th Avenue piece not drawn"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not along US 19"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts only on streets designated by resolution. The resolution names SE 8th Avenue between SE Governors Boulevard and 250 feet east of US 19.",
+   "citation": "Crystal River resolution",
+   "source_url": "https://www.crystalriverfl.org/media/12356"
+  },
+  {
+   "topic": "Code",
+   "rule": "The city authorizes golf carts on designated streets, with a driver's license and insurance",
+   "citation": "Crystal River Code Secs. 15-80 to 15-82",
+   "source_url": "https://library.municode.com/fl/crystal_river/codes/code_of_ordinances?nodeId=PTIICOOR_CH15TR"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 19",
+   "rule": "No golf carts along the highway",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Crystal River?",
+   "a": "Roads posted 35 mph or less. Not along US 19. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on US 19?",
+   "a": "No. The resolution does not authorize driving along US 19."
+  },
+  {
+   "q": "Is SE 8th Avenue shown as a golf cart road?",
+   "a": "Not on this map. The designated piece is shorter than the whole street, so it is left red rather than painting the whole avenue green."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  28.9022,
+  -82.5926
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://library.municode.com/fl/crystal_river/codes/code_of_ordinances?nodeId=PTIICOOR_CH15TR",
+  "https://www.crystalriverfl.org/media/12356",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+ ]
+}

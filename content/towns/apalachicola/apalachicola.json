@@ -1,0 +1,70 @@
+{
+ "slug": "apalachicola",
+ "region": "apalachicola",
+ "name": "Apalachicola",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Apalachicola?",
+ "answer_short": "Street-legal LSVs yes. Plain golf carts only on streets the city designates, and that list was not found. Apalachicola charges a golf cart registration fee. This map does not turn a street green for a golf cart without the street list. LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated streets only",
+  "speed_line": "n/a",
+  "notes": "Street list not found"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+  },
+  {
+   "topic": "Registration",
+   "rule": "The city fee schedule charges a golf cart registration under an ordinance",
+   "citation": "Apalachicola fee schedule",
+   "source_url": "https://www.cityofapalachicola.com/wp-content/uploads/2022/09/2022-23-Fee-Schedule.pdf"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  }
+ ],
+ "banned_roads": [],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Apalachicola?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Apalachicola?",
+   "a": "Only on a street the city has designated and signed. That list was not found, so this map does not show those streets as golf cart roads."
+  },
+  {
+   "q": "Can I drive an LSV in Apalachicola?",
+   "a": "Yes, on a road posted 35 mph or less."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  29.7258,
+  -84.9924
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.cityofapalachicola.com/wp-content/uploads/2022/09/2022-23-Fee-Schedule.pdf",
+  "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "slug": "sun-lakes",
+ "region": "sunlakes",
+ "name": "Sun Lakes",
+ "state": "AZ",
+ "question_title": "Can you drive a golf cart in Sun Lakes?",
+ "answer_short": "Yes, on roads posted 35 mph or less. The Sun Lakes Sheriff's Posse says golf carts are not allowed on a road posted over 35 mph, and it names the 45 mph zone of Alma School Road. That road is red on this map.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Streets posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not Alma School Road"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Alma School Road",
+   "rule": "The 45 mph zone is not a golf cart road",
+   "citation": "Sun Lakes Sheriff's Posse",
+   "source_url": "https://sunlakessplash.com/sun-lakes-sheriffs-posse-golf-carts/"
+  },
+  {
+   "topic": "LSVs",
+   "rule": "Neighborhood electric vehicles on roads posted 35 mph or less",
+   "citation": "A.R.S. 28-966",
+   "source_url": "https://www.azleg.gov/ars/28/00966.htm"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Alma School Road",
+   "rule": "No golf carts or LSVs",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Sun Lakes?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Alma School Road?",
+   "a": "No. The posse says the 45 mph zone is enforced, and this map keeps the whole named road red."
+  },
+  {
+   "q": "What is the speed cap in Sun Lakes?",
+   "a": "35 mph. A road posted over 35 mph is closed."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  33.2148,
+  -111.8756
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://sunlakessplash.com/sun-lakes-sheriffs-posse-golf-carts/",
+  "https://www.azleg.gov/ars/28/00966.htm"
+ ]
+}
