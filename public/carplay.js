@@ -63,7 +63,12 @@ window.GCMCarPlay={
  // heading: GPS course while driving (native passes it on reroute, Max t433u). The plan then starts ahead on the
  // current road ("Continue on X") instead of behind you; null/omitted keeps any direction.
  async plan(from,to,mode,allowRisky,heading,dest){await ready();await regionFor(to.lat,to.lon);
-  const lr=await asCarPlay(()=>window.testRoute([from.lat,from.lon],[to.lat,to.lon],!!allowRisky&&!window.GCM_IOS,Number.isFinite(heading)?heading:null));const r=window._lastDetail;
+  // One Risky choice for the phone and CarPlay (AGENTS.md rule 35). On iOS the chip
+  // decides and starts on. Native still passes allowRisky; the website uses that argument.
+  // document is only read on iOS: the node nav tests call plan() with no DOM.
+  let useRisky=!!allowRisky;
+  if(window.GCM_IOS){const chip=document.getElementById('cRisk');useRisky=!!(chip&&chip.classList.contains('on'))}
+  const lr=await asCarPlay(()=>window.testRoute([from.lat,from.lon],[to.lat,to.lon],useRisky,Number.isFinite(heading)?heading:null));const r=window._lastDetail;
   if(!lr||!r)return {ok:false,reason:GCMRule.noRoute(RULE)};
   const route=window.navStepsFor(r,dest||'');cpLast=route;
   const line=route.pts.map(p=>[+p[0].toFixed(6),+p[1].toFixed(6)]);

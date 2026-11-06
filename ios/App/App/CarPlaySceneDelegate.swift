@@ -548,7 +548,9 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         guard let from = loc.location?.coordinate ?? Optional(mapVC.map.centerCoordinate) else { return }
         let to = CLLocationCoordinate2D(latitude: lat, longitude: lon)
         dest = (to, name); destAddress = d["address"] as? String
-        GCMBridge.shared.call("plan(f,t,m,false,null,d)", ["f": ["lat": from.latitude, "lon": from.longitude], "t": ["lat": lat, "lon": lon], "m": mode, "d": name]) { [weak self] any in
+        // allowRisky starts true. On iOS, carplay.js uses the phone Risky chip (on by default)
+        // and ignores this bool, so a Legal only toggle matches the phone (AGENTS.md rule 35).
+        GCMBridge.shared.call("plan(f,t,m,true,null,d)", ["f": ["lat": from.latitude, "lon": from.longitude], "t": ["lat": lat, "lon": lon], "m": mode, "d": name]) { [weak self] any in
             guard let self = self else { return }
             guard let p = GCMPlan(any) else {
                 let reason = (any as? [String: Any])?["reason"] as? String ?? "No legal route found."
@@ -700,7 +702,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             self.rerouting = false; self.log("reroute bridge timeout (12 s)")
             if let s = self.session, let p = self.plan { self.pushManeuvers(s, p) }
         }
-        GCMBridge.shared.call("plan(f,t,m,false,h,d)", ["f": ["lat": here.coordinate.latitude, "lon": here.coordinate.longitude], "t": ["lat": to.latitude, "lon": to.longitude], "m": mode, "h": h, "d": dest?.1 ?? ""]) { [weak self] any in
+        // Same Risky chip as the phone (carplay.js). true is the default; Legal only on the phone turns it off.
+        GCMBridge.shared.call("plan(f,t,m,true,h,d)", ["f": ["lat": here.coordinate.latitude, "lon": here.coordinate.longitude], "t": ["lat": to.latitude, "lon": to.longitude], "m": mode, "h": h, "d": dest?.1 ?? ""]) { [weak self] any in
             DispatchQueue.main.async {
                 guard let self = self, self.rerouteGen == gen else { return }
                 self.rerouteTimeout?.invalidate()
