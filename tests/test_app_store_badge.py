@@ -39,6 +39,11 @@ class AppStoreBadge(unittest.TestCase):
         llms = open(os.path.join(C.PUB, "llms.txt")).read()
         self.assertNotRegex(strip_urls(llms), r"(?i)testflight")
         self.assertIn(URL, llms)
+    def test_smart_app_banner(self):
+        banner = '<meta name="apple-itunes-app" content="app-id=6823958385">'
+        self.assertIn(banner, self.home)
+        self.assertIn(banner, self.map)
+        self.assertEqual(C.APP_ID, "6823958385")
     def test_og_free_text_unchanged(self):
         # Map page (public/index.html) keeps the standing og line. Landing keeps " Free to use."
         for frozen in re.findall(r'<meta (?:property="og:description"|name="twitter:description")[^>]*>', open(os.path.join(C.PUB, "index.html")).read()):
