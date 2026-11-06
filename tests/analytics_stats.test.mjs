@@ -158,3 +158,12 @@ test('topIidsByTown ranks the busiest install in a town and rejects a bad town',
   assert.equal(top.iids[1].iid, COLD);
   assert.throws(() => topIidsByTown(qOf(db), 7, NOW, { town: '../x' }), /bad town/);
 });
+
+test('rowIsInternalSql stays under SQLite expression-tree depth 100', () => {
+  const db = dbWith([{ iid: REAL, event: 'session' }]);
+  const sig = rowIsInternalSql('props');
+  assert.ok((sig.match(/ OR /g) || []).length < 40, 'OR count must stay well under SQLite depth 100');
+  assert.doesNotThrow(() => qOf(db)(`SELECT COUNT(*) n FROM events WHERE ${sig}`));
+  const s = computeStats(qOf(db), 7, NOW);
+  assert.equal(s.weekly_active, 1);
+});
