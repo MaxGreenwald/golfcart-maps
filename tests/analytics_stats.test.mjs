@@ -134,3 +134,27 @@ test('track.js does not beacon internal traffic and keeps the build stamp token'
   const worker = readFileSync(new URL('../workers/analytics/src/index.js', import.meta.url), 'utf8');
   assert.match(worker, /computeStats/);
 });
+
+import { topIidsByTown } from '../lib/analytics_stats.js';
+
+test('topIidsByTown ranks the busiest install in a town and rejects a bad town', () => {
+  const HOT = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+  const COLD = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
+  const db = dbWith([
+    { iid: HOT, town: 'sd', event: 'route_started' },
+    { iid: HOT, town: 'sd', event: 'route_started' },
+    { iid: HOT, town: 'sd', event: 'route_completed' },
+    { iid: HOT, town: 'sd', event: 'session' },
+    { iid: COLD, town: 'sd', event: 'session' },
+    { iid: COLD, town: 'sd', event: 'route_searched' },
+    { iid: HOT, town: 'villages', event: 'route_started' },
+  ]);
+  const top = topIidsByTown(qOf(db), 7, NOW, { town: 'sd', limit: 5 });
+  assert.equal(top.town, 'sd');
+  assert.equal(top.iids.length, 2);
+  assert.equal(top.iids[0].iid, HOT);
+  assert.equal(top.iids[0].route_started, 2);
+  assert.equal(top.iids[0].route_completed, 1);
+  assert.equal(top.iids[1].iid, COLD);
+  assert.throws(() => topIidsByTown(qOf(db), 7, NOW, { town: '../x' }), /bad town/);
+});
