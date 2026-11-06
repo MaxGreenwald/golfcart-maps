@@ -120,6 +120,8 @@ def build(src=os.path.join(ROOT, "public"), out=os.path.join(ROOT, "dist"), nati
         seo_compare.build(out)   # static /compare page (not precached)
         import seo_hubs
         seo_hubs.build(out)   # /golf-cart-maps and /lsv (not precached)
+        import seo_partner
+        seo_partner.build(out)   # /for-rental-shops and /for-manufacturers (not precached)
     stamp_analytics_internal(out)
     return name
 

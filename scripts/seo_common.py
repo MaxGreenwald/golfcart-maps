@@ -77,12 +77,16 @@ def crumbs(items):
     return {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":SITE+u} for i,(n,u) in enumerate(items)]}
 
 CSS = ("body{margin:0;font:17px/1.55 -apple-system,system-ui,Segoe UI,Roboto,sans-serif;color:#17384a;background:#fbfdfd}"
-       "header,main,footer{max-width:820px;margin:0 auto;padding:16px 20px}header{display:flex;gap:16px;align-items:center;flex-wrap:wrap}"
-       "header a.home{font-weight:800;color:#0b6e86;text-decoration:none;font-size:19px}nav a{margin-right:14px;color:#0b6e86}"
+       "header,main,footer{max-width:980px;margin:0 auto;padding:16px 20px}header{display:flex;gap:12px 18px;align-items:center;flex-wrap:wrap}"
+       "header a.home{font-weight:800;color:#0b6e86;text-decoration:none;font-size:19px}"
+       "nav{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;flex:1}"
+       "nav a{color:#0b6e86;text-decoration:none;font-weight:600}"
+       "nav a.nav-app{background:#0b7d91;color:#fff;font-weight:800;padding:8px 14px;border-radius:20px;margin-left:auto}"
        "h1{font-size:30px;line-height:1.2;margin:.4em 0}h2{margin-top:1.6em}a{color:#0b6e86}"
        ".cta{display:inline-block;background:#0b7d91;color:#fff;font-weight:800;padding:13px 22px;border-radius:28px;text-decoration:none;margin:8px 0}"
        "table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #dde9ec;padding:8px;text-align:left;vertical-align:top}"
-       ".muted{color:#5a7684;font-size:14px}footer{border-top:1px solid #dde9ec;margin-top:40px}ul.cols{columns:2}")
+       ".muted{color:#5a7684;font-size:14px}footer{border-top:1px solid #dde9ec;margin-top:40px}ul.cols{columns:2}"
+       "@media(max-width:640px){nav a.nav-app{margin-left:0}}")
 
 def page(title, desc, path, body, ld, extra_head=""):
     for t in (title, desc, body, json.dumps(ld)):
@@ -99,7 +103,7 @@ def page(title, desc, path, body, ld, extra_head=""):
 <style>{CSS}</style>
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 </head><body>
-<header><a class="home" href="/">🏖️ {BRAND}</a><nav aria-label="Site"><a href="/golf-cart-maps">Golf cart maps</a><a href="/lsv">LSV map</a><a href="/#regions">Regions</a><a href="/#iphone">iPhone app</a><a href="/privacy">Privacy</a></nav></header>
+<header><a class="home" href="/">🏖️ {BRAND}</a><nav aria-label="Site"><a href="/map">Map</a><a href="/golf-cart-maps">Towns</a><a href="/for-rental-shops">For Rental Shops</a><a href="/for-manufacturers">For Manufacturers</a><a class="nav-app" href="{APPSTORE}" data-ev="app_store_click" data-p='{{"position":"nav"}}'>Get the App</a></nav></header>
 <main>
 {body}
 </main>
