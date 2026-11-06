@@ -15,7 +15,7 @@ xcrun simctl boot "$DEV"; open -a Simulator; xcrun simctl bootstatus "$DEV" -b
 xcrun simctl location "$DEV" set ${DEMO_FROM:-32.8328,-117.2713} || true
 xcrun simctl install "$DEV" "$APP"
 xcrun simctl privacy "$DEV" grant location-always com.matchimus.golfcartmaps || xcrun simctl privacy "$DEV" grant location com.matchimus.golfcartmaps || true
-(xcrun simctl launch --console-pty "$DEV" com.matchimus.golfcartmaps -GCMCarPlayDemo YES -GCMCarPlayDemoTo "${DEMO_TO:-32.7950,-117.2560,Crystal Pier}" -GCMCarPlayDemoDrive ${DEMO_DRIVE:-0} > shots-ci/app-console.txt 2>&1 &)
+(xcrun simctl launch --console-pty "$DEV" com.matchimus.golfcartmaps -GCMCarPlayDemo YES -GCMCarPlayDemoTo "${DEMO_TO:-32.7950,-117.2560,Crystal Pier}" -GCMCarPlayDemoDrive ${DEMO_DRIVE:-0} -GCMCarPlayCelebrateLoop ${CELEBRATE_LOOP:-NO} > shots-ci/app-console.txt 2>&1 &)
 sleep 25
 xcrun simctl io "$DEV" screenshot shots-ci/phone.png
 # With CarPlayExtraOptions the item is named "CarPlay..." so match by prefix, and log the names.
@@ -39,13 +39,14 @@ osascript -e "$WIN" -e 'tell application "System Events" to tell process "Simula
 osascript -e "$WIN" -e 'tell application "System Events" to tell process "Simulator" to get {position, size} of w' > shots-ci/carplay-window.txt 2>&1
 sleep 2
 screencapture -x shots-ci/carplay-home.png
-# Open our app on the CarPlay home screen (screen coords, CARPLAY_TAPS="x,y x,y").
+# Open our app from the CarPlay sidebar (screen coords, CARPLAY_TAPS="x,y x,y"); the sidebar icon sits at the same spot at every size.
 osascript -e "$WIN" -e 'tell application "System Events" to tell process "Simulator" to perform action "AXRaise" of w' >> shots-ci/osascript.txt 2>&1
 for xy in ${CARPLAY_TAPS:-}; do cliclick m:$xy w:300 dd:. w:120 du:. ; sleep 4; screencapture -x shots-ci/carplay-tap-$xy.png; done
 sleep 20
 screencapture -x shots-ci/carplay-preview.png
 xcrun simctl io "$DEV" screenshot --display=external shots-ci/cp-ext-preview.png 2>>shots-ci/ext-err.txt || true
 sleep 35
+if [ "${CELEBRATE_LOOP:-NO}" = "YES" ]; then for i in $(seq -w 1 10); do sleep 2.5; screencapture -x shots-ci/carplay-celebrate-$i.png; xcrun simctl io "$DEV" screenshot --display=external shots-ci/cp-ext-celebrate-$i.png 2>>shots-ci/ext-err.txt || true; done; fi
 screencapture -x shots-ci/carplay-guidance.png
 # demo drive: one shot every 4 s while the car steps through the maneuvers
 if [ "${DEMO_DRIVE:-0}" != "0" ]; then for i in $(seq -w 1 22); do sleep 4; screencapture -x shots-ci/carplay-drive-$i.png; xcrun simctl io "$DEV" screenshot --display=external shots-ci/cp-ext-$i.png 2>>shots-ci/ext-err.txt || true; done; fi

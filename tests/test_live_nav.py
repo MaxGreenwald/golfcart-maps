@@ -139,7 +139,11 @@ class LiveNav(unittest.TestCase):
         # Max t417u: no town picker, chips, Reset or search while driving.
         for sel in self.CLUTTER[tag]:
             self.assertFalse(pg.is_visible(sel), (tag, sel, "visible during navigation"))
+        self.assertEqual(pg.locator(".gcm-flag").count(), 1, (tag, "finish flag while navigating (Max t446u)"))
         self.drive_along(pg, ctx, pts, tag)
+        self.assertEqual(pg.evaluate("window.__gcmArrivals || 0"), 1, (tag, "one arrival celebration"))
+        # Driving to the end shows the arrival unicorns (Max t446u, test_nav_arrive); clear them for the pan checks.
+        pg.evaluate("window.GCMNavFx && GCMNavFx.dismiss()")
         i = len(pts) // 3
         a = pts[i]
         b = next((q for q in pts[i:] if hav(a, q) > 40), pts[-1])

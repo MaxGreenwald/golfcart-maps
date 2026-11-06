@@ -32,7 +32,7 @@ jobs:
       - name: public/ is the only copy of the web app
         run: python3 scripts/check_single_source.py
       - name: CarPlay start-view logic test (Swift, Foundation only)
-        run: swiftc ios/App/App/CarPlayStartView.swift ios/App/App/AppLinkRouter.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
+        run: swiftc ios/App/App/CarPlayStartView.swift ios/App/App/GCMVoicePlan.swift ios/App/App/CarPlayRentalCode.swift ios/App/App/AppLinkRouter.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
   testflight:
     needs: sync-guard
     if: github.ref == 'refs/heads/ios-release'
@@ -108,7 +108,7 @@ jobs:
             -destination 'generic/platform=iOS' -archivePath build/App.xcarchive \
             -allowProvisioningUpdates \
             -authenticationKeyPath "$KEY_PATH" -authenticationKeyID "${{ secrets.ASC_KEY_ID }}" -authenticationKeyIssuerID "${{ secrets.ASC_ISSUER_ID }}" \
-            DEVELOPMENT_TEAM=$TEAM_ID MARKETING_VERSION=1.0 CURRENT_PROJECT_VERSION=$BUILD_NUMBER \
+            DEVELOPMENT_TEAM=$TEAM_ID MARKETING_VERSION=1.2 CURRENT_PROJECT_VERSION=$BUILD_NUMBER \
             archive | tail -n 120
       - name: Verify signed entitlements in the archive
         run: |

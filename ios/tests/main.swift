@@ -1,6 +1,6 @@
 import Foundation
 // CarPlay start-view logic test (top-level code needs the file to be named main.swift)
-// Run: swiftc ios/App/App/CarPlayStartView.swift ios/App/App/AppLinkRouter.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
+// Run: swiftc ios/App/App/CarPlayStartView.swift ios/App/App/GCMVoicePlan.swift ios/App/App/CarPlayRentalCode.swift ios/App/App/AppLinkRouter.swift ios/tests/main.swift -o /tmp/cpsv && /tmp/cpsv
 var fails = 0
 func ck(_ name: String, _ ok: Bool) { print((ok ? "PASS " : "FAIL ") + name); if !ok { fails += 1 } }
 let json = try! Data(contentsOf: URL(fileURLWithPath: "public/data/regions.json"))
@@ -33,29 +33,86 @@ for (w, h, side) in [(800.0, 480.0, 90.0), (748.0, 456.0, 90.0), (1280.0, 480.0,
     ck("\(Int(w))x\(Int(h)): guiding dot on screen, lower part", sf.contains(dot) && dot.y > sf.midY)
     ck("\(Int(w))x\(Int(h)): map centered on dot and covers screen", mf.midX == dot.x && mf.midY == dot.y && mf.contains(bb))
 }
-// Off-route rule matches the phone (navfollow.js: 30 m, 5 s, 10 s cooldown).
-var tr = CarPlayOffRoute()
-ck("on route never fires", !(0..<20).contains { tr.update(offMeters: 10, now: Double($0)) })
-var fired: [Int] = []
-for t in 0..<30 { if tr.update(offMeters: 80, now: 100 + Double(t)) { fired.append(t) } }
-ck("off 5 s fires, then 10 s cooldown", fired == [5, 15, 25])
-var tr2 = CarPlayOffRoute()
-ck("one noisy fix does not fire", !tr2.update(offMeters: 80, now: 0) && !tr2.update(offMeters: 5, now: 6) && !tr2.update(offMeters: 80, now: 7))
-let line = [(32.8400, -117.2600), (32.8400, -117.2500)]
-ck("distance to route ~0 on it", CarPlayOffRoute.distance(from: (32.8400, -117.2550), toLine: line) < 1)
-let dd = CarPlayOffRoute.distance(from: (32.8405, -117.2550), toLine: line)
-ck("distance to route ~55 m off (got \(Int(dd)))", abs(dd - 55) < 3)
-// Heading-up matches the phone (PR #33).
-let east = [(32.84, -117.26), (32.84, -117.25)], northThenEast = [(32.84, -117.26), (32.8402, -117.26), (32.8402, -117.25)]
-let rb = CarPlayHeading.routeBearing(from: (32.84, -117.255), line: east)!
-ck("route bearing east ~90 (got \(Int(rb)))", abs(rb - 90) < 1)
-let rb2 = CarPlayHeading.routeBearing(from: (32.84, -117.26), line: northThenEast)!
-ck("looks 25 m ahead around a corner (got \(Int(rb2)))", rb2 > 0 && rb2 < 90)
-ck("on route uses route bearing", CarPlayHeading.pick(current: nil, routeBearing: 90, offRouteM: 5, course: 180, speed: 5) == 90)
-ck("off route uses GPS course", CarPlayHeading.pick(current: 90, routeBearing: 90, offRouteM: 80, course: 180, speed: 5) == 180)
-ck("off route and stopped keeps heading (never compass)", CarPlayHeading.pick(current: 90, routeBearing: 90, offRouteM: 80, course: 180, speed: 0) == nil)
-ck("ignores under 5 degrees", CarPlayHeading.pick(current: 90, routeBearing: 93, offRouteM: 5, course: nil, speed: 5) == nil)
-ck("wraps 358 -> 2 as 4 degrees", CarPlayHeading.pick(current: 358, routeBearing: 2, offRouteM: 5, course: nil, speed: 5) == nil)
+// Off-route, heading-up, reroute course, wrong way and turn advance moved to the shared phone engine (t459u,
+// AGENTS.md rule 35): tests/nav_shared.test.mjs, tests/navfollow.test.mjs and tests/nav.test.mjs cover them for both paths.
+// CarPlay map icon
+ck("icon decodes png data url", CarPlayIcon.decode("data:image/png;base64,iVBORw0KGgo=")?.count == 8)
+ck("icon rejects other urls", CarPlayIcon.decode("https://x/y.png") == nil && CarPlayIcon.decode(nil) == nil && CarPlayIcon.decode("data:image/svg+xml;base64,AAAA") == nil)
+ck("cart faces right heading east, map north-up", CarPlayIcon.faceSide(heading: 90, mapHeading: 0, prev: 1) == -1)
+ck("cart faces left heading west", CarPlayIcon.faceSide(heading: 270, mapHeading: 0, prev: -1) == 1)
+ck("heading-up (map = heading) keeps previous side", CarPlayIcon.faceSide(heading: 90, mapHeading: 90, prev: -1) == -1)
+// Route trim behind the driver
+let tl = [(0.0, 0.0), (0.0, 0.001), (0.0, 0.002)]
+let trimmed = CarPlayTrim.ahead(of: (0.0001, 0.0015), line: tl)
+ck("trim drops what is behind", trimmed.count == 2 && abs(trimmed[0].1 - 0.0015) < 1e-9 && trimmed[1].1 == 0.002)
+ck("trim before the start keeps the whole line", CarPlayTrim.ahead(of: (0, -0.001), line: tl).count == 3)
+// Experience tour
+var tour = CarPlayTour(title: "PB", stops: [.init(name: "A", lat: 0, lon: 0), .init(name: "B", lat: 0, lon: 0)], prevMode: "golf_cart")
+ck("tour starts at stop 1", tour.current?.name == "A" && !tour.isLast)
+ck("tour next stop in order", tour.advance()?.name == "B" && tour.isLast)
+ck("tour ends after the last stop", tour.advance() == nil)
+ck("stop detail short", CarPlayTour.detail(category: "fun_fact", meters: 650, coupon: "BAR10", speed: 9) == "Fun Fact · 0.4 mi")
+ck("coupon only when parked", CarPlayTour.detail(category: "", meters: nil, coupon: "BAR10", speed: 0) == "Code BAR10")
+// Arrive text
+ck("arrive names the place", CarPlayArrive.text(name: "Destiny Coast", address: "1 Beach Rd") == "Arrive at Destiny Coast")
+ck("arrive falls back to address", CarPlayArrive.text(name: "Place", address: "1 Beach Rd") == "Arrive at 1 Beach Rd")
+ck("arrive last resort", CarPlayArrive.text(name: nil, address: nil) == "Arrive at destination")
+// Celebration banner: three lines, inside the area between the dock and the map buttons.
+// safe area here is only the nav bar (the head-unit bug: it does not exclude the dock or the buttons).
+let est: (String, CGFloat) -> CGFloat = { t, sz in CGFloat(t.unicodeScalars.reduce(0) { $0 + ($1.value > 0xFFFF ? 2 : 1) }) * sz * 0.62 }
+for (w, h) in [(800.0, 480.0), (1920.0 / 3 * 2, 720.0 / 3 * 2), (748.0, 456.0), (1280.0, 480.0), (1920.0, 720.0)] {
+    let bb = CGRect(x: 0, y: 0, width: w, height: h), sf = CGRect(x: 0, y: 44, width: w, height: h - 44)
+    let vis = CarPlayCelebrate.content(bounds: bb, safe: sf)
+    let bf = CarPlayCelebrate.bannerFrame(bounds: bb, safe: sf)
+    ck("\(Int(w))x\(Int(h)): banner inside the visible area", vis.insetBy(dx: -1, dy: -1).contains(bf))
+    ck("\(Int(w))x\(Int(h)): banner clears the dock and the map buttons", bf.minX >= CarPlayCelebrate.dock - 1 && bf.maxX <= w - CarPlayCelebrate.mapButtons + 1)
+    ck("\(Int(w))x\(Int(h)): banner centered in that area", abs(bf.midX - vis.midX) <= 1 && abs(bf.midY - vis.midY) <= 1)
+    let fs = CarPlayCelebrate.fontSizes(banner: bf, measure: est), inner = bf.width - 2 * CarPlayCelebrate.padX
+    ck("\(Int(w))x\(Int(h)): three banner lines fit the width", est(CarPlayCelebrate.line1, fs.title) <= inner && est(CarPlayCelebrate.line2, fs.sub) <= inner && est(CarPlayCelebrate.line3, fs.legend) + 8 <= inner && fs.title >= 14)
+    ck("\(Int(w))x\(Int(h)): three lines fit the height", (fs.title + fs.sub + fs.legend) * 1.25 <= bf.height - 2 * CarPlayCelebrate.padY)
+    ck("\(Int(w))x\(Int(h)): unicorn lanes inside safe area", CarPlayCelebrate.lanes(count: 8, safe: sf).allSatisfy { $0.y >= sf.minY && $0.y + $0.size <= sf.maxY })
+}
+// Full-bleed window: reported safe area is the whole screen, which is what clipped the banner.
+let wide = CGRect(x: 0, y: 0, width: 1920, height: 720)
+let wideBanner = CarPlayCelebrate.bannerFrame(bounds: wide, safe: wide)
+ck("wide full-bleed: banner clears dock and map buttons", wideBanner.minX >= CarPlayCelebrate.dock && wideBanner.maxX <= 1920 - CarPlayCelebrate.mapButtons)
+ck("banner text is three lines", CarPlayCelebrate.line1 == "You have Arrived!" && CarPlayCelebrate.line2 == "Have a wonderful life" && CarPlayCelebrate.line3 == "you LEGEND 🦄")
+ck("celebration lasts 15 s", CarPlayCelebrate.seconds == 15)
+// Map buttons: at most 4. Navigating keeps zoom out by dropping the layer toggle, and hides Places and Experiences.
+ck("browsing map buttons", CarPlayChrome.mapButtons(navigating: false) == ["recenter", "layers", "zoomIn", "zoomOut"])
+ck("navigating map buttons keep zoom out and mute", CarPlayChrome.mapButtons(navigating: true) == ["recenter", "mute", "zoomIn", "zoomOut"])
+ck("never more than 4 map buttons", CarPlayChrome.mapButtons(navigating: false).count <= CarPlayChrome.mapButtonMax && CarPlayChrome.mapButtons(navigating: true).count <= CarPlayChrome.mapButtonMax)
+ck("navigating bar is Search and End", CarPlayChrome.leading(navigating: true) == ["Search"] && CarPlayChrome.trailing(navigating: true) == ["End"])
+ck("browsing bar shows Places, Experiences and Settings", CarPlayChrome.leading(navigating: false) == ["Search", "Places"] && CarPlayChrome.trailing(navigating: false) == ["Experiences", "Settings"])
+// Search rows
+ck("long title clipped", CarPlaySearchText.clip("Pacific Beach Boardwalk Shops and Restaurants", 28)!.count == 28)
+ck("address drops ZIP and country", CarPlaySearchText.shortAddress("123 Main St, San Diego, CA 92109, United States") == "123 Main St, San Diego")
+ck("prefix matches first, then nearest", CarPlaySearchText.rank([("The Crystal Pier", 100), ("Crystal Pier Hotel", 900), ("Crystal Cove", 50)], query: "crys") == [2, 1, 0])
+// Follow camera (t456u-t458u): zoom persists, pan pauses, idle resumes.
+var fc = CarPlayFollow(); fc.resume()
+ck("default zoom when driver never zoomed", fc.distance(default: 720) == 720)
+let zin = fc.zoom(current: 720, factor: 0.5)
+ck("+ halves distance and is remembered", zin == 360 && fc.distance(default: 720) == 360)
+ck("zoom keeps following", fc.following)
+ck("zoom clamps", fc.zoom(current: 200, factor: 0.5) == CarPlayFollow.minM && fc.zoom(current: 50_000, factor: 2) == CarPlayFollow.maxM)
+fc.pan(now: 1000)
+ck("pan pauses follow", !fc.following)
+ck("no resume before idle", !fc.shouldAutoResume(now: 1000 + CarPlayFollow.idleResume - 1))
+ck("resume after idle", fc.shouldAutoResume(now: 1000 + CarPlayFollow.idleResume) && fc.following)
+ck("resume fires once", !fc.shouldAutoResume(now: 2000))
+ck("zoom survives pan + resume", fc.distance(default: 720) == CarPlayFollow.maxM)
+// Voice (t455u): mute setting. Turn-timing now comes from the shared phone engine (carplay.js navFix say, t459u).
+let vd = UserDefaults(suiteName: "gcm-voice-test")!; vd.removeObject(forKey: GCMVoiceSetting.key)
+ck("voice is on by default", !GCMVoiceSetting.isMuted(vd))
+GCMVoiceSetting.setMuted(true, vd); ck("mute is saved", GCMVoiceSetting.isMuted(vd))
+// Reroute telemetry ring (t453u): last 200 lines, PT time stamps.
+var lg = CarPlayNavLog(); for i in 0..<250 { lg.add("x\(i)") }
+ck("nav log keeps the last 200 lines", lg.lines.count == 200 && lg.lines.last!.hasSuffix("x249"))
+// Rental code in CarPlay (Max t449u).
+ck("code normalized", CarPlayRentalCode.normalize(" ab12-cd3 ") == "AB12CD3")
+ck("short or junk is not a code", CarPlayRentalCode.normalize("ab") == nil && CarPlayRentalCode.normalize("<x>!") == nil)
+ck("typing a code offers one Unlock row", CarPlayRentalCode.rows(for: "ab12cd3").map { $0.code } == ["AB12CD3"])
+ck("before a code: hint row points to the phone", CarPlayRentalCode.rows(for: "a").first?.code == nil && CarPlayRentalCode.rows(for: "a").first?.detail == CarPlayRentalCode.phoneHint)
 // App links (Max t448u): shop links map to bundled pages.
 func link(_ s: String) -> String? { AppLinkRouter.localPath(for: URL(string: s)!) }
 ck("shop page", link("https://golfcartmap.com/p/BeachMode") == "/p.html?slug=beachmode")
