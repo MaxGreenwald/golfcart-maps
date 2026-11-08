@@ -11,7 +11,7 @@
  ],
  "sources": [
   "CrystalBeach.com golf cart rules https://crystalbeach.com/area-information/information/golf-carts-atvs/",
-  "Tex. Transp. Code 551.404 https://texas.public.law/statutes/tex._transp._code_section_551.404",
+  "Tex. Transp. Code 551.404 https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404",
   "OpenStreetMap",
   "FHWA HPMS speed limits"
  ],
@@ -25,7 +25,7 @@
    },
    {
     "label": "Tex. Transp. Code 551.404",
-    "url": "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+    "url": "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404"
    }
   ],
   "note": "Golf Cart Maps regions-25-batch research (Oct 22 2026). Posted signs never lift a ban. No local sheriff/police/city cart road ban list beyond state law found."

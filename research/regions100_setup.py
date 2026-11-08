@@ -22,8 +22,9 @@ NCLSV = "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapte
 NC160 = "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_160A/GS_160A-300.6.html"
 NC153 = "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_153A/GS_153A-245.html"
 SC90 = "https://www.scstatehouse.gov/code/t56c002.php"
-SCDPS = "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
-TX551 = "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+SCDPS = "https://www.scdps.sc.gov/golf-cart"
+TX551 = "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404"
+TX303 = "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.303"
 VA9163 = "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/"
 VA9083 = "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-908.3/"
 CVC = "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum="
@@ -153,7 +154,7 @@ add(id="beaufort", name="Beaufort, SC", short="Beaufort", state="SC", slug="beau
     bbox=[32.405, -80.72, 32.455, -80.64], zoom=14,
     cover="Beaufort, South Carolina only. Pick another city in the menu above.",
     rule={"golf_cart": {"max_posted": 35, "radius_mi": 4, "daylight_only": True, "cross": True,
-                        "cite": "City of Beaufort Ordinance 2025/28 and S.C. Code 56-2-90: permitted golf carts on secondary roads posted 35 mph or less, within 4 miles of the registration address. Night driving needs headlights, taillights and turn signals.",
+                        "cite": "City of Beaufort Ordinance 2025/28 and S.C. Code 56-2-90: permitted golf carts on secondary roads posted 35 mph or less, within 4 miles of the registration address or of a gated-community entrance. Night driving needs headlights, taillights and turn signals.",
                         "url": BEAU}},
     bans=[],
     cart_only=[{"names": r"^(Ribaut Road|Boundary Street|Carteret Street|Trask Parkway|Parris Island Gateway)$|(^|;)US 21($|;)",
@@ -170,7 +171,7 @@ add(id="portroyal", name="Port Royal, SC", short="Port Royal", state="SC", slug=
     bbox=[32.355, -80.72, 32.400, -80.64], zoom=14,
     cover="Port Royal, South Carolina only. Pick another city in the menu above.",
     rule={"golf_cart": {"max_posted": 35, "radius_mi": 4, "daylight_only": True, "cross": True,
-                        "cite": "S.C. Code 56-2-90: without a different road list, a permitted golf cart may use secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address. Port Royal has allowed equipped carts at night; that does not open a faster road.",
+                        "cite": "S.C. Code 56-2-90: without a different road list, a permitted golf cart may use secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address or of a gated-community entrance. Port Royal has allowed equipped carts at night; that does not open a faster road.",
                         "url": SC90}},
     bans=[],
     cart_only=[{"names": r"^(Ribaut Road|Parris Island Gateway)$|(^|;)US 21($|;)", "url": SC90,
@@ -188,7 +189,7 @@ add(id="georgetown", name="Georgetown, SC", short="Georgetown", state="SC", slug
     bbox=[33.355, -79.31, 33.395, -79.26], zoom=14,
     cover="Georgetown, South Carolina only. Pick another city in the menu above.",
     rule={"golf_cart": {"max_posted": 35, "radius_mi": 4, "daylight_only": True, "cross": True,
-                        "cite": "S.C. Code 56-2-90: a permitted golf cart on a secondary road posted 35 mph or less, in daylight, within 4 miles of the registration address.",
+                        "cite": "S.C. Code 56-2-90: a permitted golf cart on a secondary road posted 35 mph or less, in daylight, within 4 miles of the registration address or of a gated-community entrance.",
                         "url": SC90}},
     bans=[],
     cart_only=[{"names": r"(^|;)(US 17|US 521|US 701)($|;)", "url": SC90,

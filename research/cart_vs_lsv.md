@@ -66,7 +66,7 @@ Reading the table:
 3. NC: rules are town by town. The app uses 25 for OBX (Duck ≤25, Nags Head ≤35, Kill Devil Hills LSVs only; the KDH ban isn't modeled). BHI/Southport/Oak Island stay at 35.
 4. CA golf cart plans: Palm Desert and La Quinta (Coachella) designate some routes above 25, and Laguna Woods is in OC coast. These need route data. Avalon autoettes are a separate class.
 5. AZ: are registered and insured golf carts allowed on streets ≤35 statewide, or only by local practice? (Sun City.)
-6. TX: plate (551.402), 2 mi radius from where parked, daytime, and city authorization (551.404). SC: 4 mi radius and daylight. These are shown as notes only, not modeled.
+6. TX: plate (551.402), daytime within 5 miles of where parked and only to or from a golf course (551.403), plus master-planned communities, beaches, and city or eligible-county authorization (551.404). SC: 4 mi radius and daylight under 56-2-90. These are shown as notes only, not modeled.
 7. Product decision for Max: the default vehicle. The branch defaults to LSV, which leaves today's map unchanged. Defaulting to golf cart is safer for CA, GA and NC, but makes FL mostly red.
 
 ## Copy that implies 30–35 mph roads are OK for plain golf carts

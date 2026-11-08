@@ -9,7 +9,8 @@ FLS = "https://www.flsenate.gov/Laws/Statutes/2026/"
 CA = "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum="
 WCSO = "https://waltonso.org/lsv/"
 WMAP = "https://waltonso.org/wp-content/uploads/2022/10/lsv_map_102022.png"
-SCDPS = "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+SC90 = "https://www.scstatehouse.gov/code/t56c002.php"
+TX303 = "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.303"
 P = {}
 P["30a"] = dict(
   q="Can I drive a golf cart in {n}?",
@@ -36,15 +37,15 @@ P["hhi"] = dict(
   a="Yes, with limits. In {n}, a permitted, insured golf cart may use secondary roads posted 35 mph or less, in daylight, within 4 miles of its registration address. Street-legal LSVs may use roads posted 35 mph or less. Carts stay off US 278 and the Cross Island Parkway.",
   gc=dict(allowed="limited", roads="Secondary roads posted 35 mph or less", speed_line="35 mph", notes="Daylight, within 4 mi of registration, SCDMV permit and insurance"),
   lsv=dict(allowed="yes", roads="Roads posted 35 mph or less", speed_line="35 mph", notes="Registered and insured like a car"),
-  rules=[("Golf cart roads","Secondary highway or street posted 35 mph or less","S.C. golf cart law (SCDPS)",SCDPS),
-         ("Distance","Within 4 miles of the registration address (or a gated community entrance)","S.C. golf cart law (SCDPS)",SCDPS),
-         ("Hours","Daylight only, unless a local ordinance says otherwise","S.C. Code 56-2-90 (SCDPS)",SCDPS),
-         ("Driver and permit","Driver 16+ with a license; cart permitted, registered with SCDMV and insured","S.C. golf cart law (SCDPS)",SCDPS)],
+  rules=[("Golf cart roads","Secondary highway or street posted 35 mph or less","S.C. Code 56-2-90",SC90),
+         ("Distance","Within 4 miles of the registration address (or a gated community entrance)","S.C. Code 56-2-90",SC90),
+         ("Hours","Daylight only, unless a local ordinance allows night driving with working headlights and taillights","S.C. Code 56-2-90",SC90),
+         ("Driver and permit","Driver 16+ with a license; cart permitted, registered with SCDMV and insured","S.C. Code 56-2-90",SC90)],
   banned=[("US 278 (William Hilton Pkwy, Fording Island Rd)","Primary road; carts not allowed",True),("Cross Island Parkway","Primary road; carts not allowed",False),("SC 46","Primary road; carts not allowed",True)],
-  faq=[("Can I drive a golf cart at night in {n}?","Not under the state default. South Carolina allows golf carts on public roads in daylight only unless a local ordinance sets other hours."),
+  faq=[("Can I drive a golf cart at night in {n}?","Not under the state default. South Carolina allows golf carts on public roads in daylight only unless a local ordinance allows night driving with working headlights and taillights."),
        ("How far can I drive a golf cart from home?","Within 4 miles of the address on the cart's SCDMV registration, or of a gated community entrance if you live inside one."),
        ("Can I drive a golf cart on US 278?","No. US 278 is a primary road, and South Carolina only allows golf carts on secondary roads posted 35 mph or less.")],
-  sources=[SCDPS, "https://hiltonheadislandsc.gov/news/news.cfm?NewsID=3193"])
+  sources=[SC90, "https://hiltonheadislandsc.gov/news/news.cfm?NewsID=3193"])
 P["sd"] = dict(
   q="Can you drive a golf cart in {n}?",
   a="A street-legal LSV can drive on {n} streets posted 35 mph or less under CVC 21260. A plain golf cart is limited to streets posted 25 mph or less in a business or residence district (CVC 21716). Freeways like I-5 are off limits. Posted signs win.",
@@ -102,27 +103,28 @@ P["myrtle"] = dict(
   gc=dict(allowed="limited", roads="Secondary streets posted 35 mph or less", speed_line="35 mph", notes="Daylight, within 4 mi of registration"),
   lsv=dict(allowed="yes", roads="Roads posted 35 mph or less", speed_line="35 mph", notes="Registered and insured like a car"),
   rules=[("Primary roads","No golf carts on Kings Highway, US 501 or roads posted over 35 mph","City of Myrtle Beach golf cart rules",MB),
-         ("Golf cart roads","Secondary streets posted 35 mph or less, daylight, within 4 miles of the registered address","S.C. golf cart law (SCDPS)",SCDPS),
+         ("Golf cart roads","Secondary streets posted 35 mph or less, daylight, within 4 miles of the registered address or a gated-community entrance","S.C. Code 56-2-90",SC90),
          ("Sidewalks","Not on sidewalks, multipurpose lanes or bike lanes; no more riders than seats","City of Myrtle Beach golf cart rules",MB)],
   banned=[("Kings Highway (US 17 Business)","Primary road",True),("US 501","Primary road",True),("US 17 Bypass","Primary road",True),("SC 31 (Carolina Bays Pkwy)","Primary road",False),("SC 22, SC 707, SC 544","Primary roads",True)],
   faq=[("Can I drive a golf cart on Kings Highway?","No. The City of Myrtle Beach says golf carts are not allowed on Kings Highway, US 501 or any road posted over 35 mph."),
        ("Can kids drive golf carts in {n}?","No. Only licensed drivers may drive golf carts on public streets.")],
-  sources=[MB, SCDPS])
+  sources=[MB, SC90])
 PA = "https://cityofportaransas.org/golf-cart-information-and-regulations/"
 PAP = "https://cityofportaransas.org/wp-content/uploads/2026/02/Golf-Cart-Laws-Strictly-Enforced.pdf"
 P["portaransas"] = dict(
   q="Can you drive a golf cart in {n}?",
   a="Yes, with a city golf cart plate. In {n}, a licensed, insured golf cart with lights, reflectors, seat belts and a slow-moving vehicle emblem may use city streets. Carts are prohibited on Hwy 361 south of Avenue G. ATVs and UTVs are not allowed.",
   gc=dict(allowed="yes", roads="City streets with a city golf cart plate", speed_line="n/a", notes="Plate renews every Jan 1"),
-  lsv=dict(allowed="yes", roads="Roads posted 45 mph or less under state law; the map plans on 35 mph or less", speed_line="45 mph", notes="State-registered LSV/NEV (Tex. Transp. Code 551.304)"),
+  lsv=dict(allowed="yes", roads="Roads posted 45 mph or less under state law; the map plans on 35 mph or less", speed_line="45 mph", notes="State-registered neighborhood electric vehicle (Tex. Transp. Code 551.303)"),
   rules=[("Golf cart plate","City golf cart license and plate required on public streets; renews each calendar year","Port Aransas Golf Cart Ordinance Art. VIII",PA),
          ("Equipment","Head lamps, tail lamps, reflectors, seat belts, SMV emblem, parking brake, mirror; no engine mods","Port Aransas golf cart regulations",PA),
          ("Hwy 361","Carts prohibited on Hwy 361 south of Avenue G","Port Aransas: Golf Cart Laws Strictly Enforced",PAP),
+         ("LSV roads","A registered neighborhood electric vehicle may use a road posted 45 mph or less and may not travel faster than 35 mph. This map plans on 35 mph or less.","Tex. Transp. Code 551.303",TX303),
          ("ATVs","ATVs and UTVs are not golf carts and are not allowed in city limits, including the beach","Port Aransas golf cart regulations",PA)],
   banned=[("Hwy 361 south of Avenue G","Carts prohibited",False)],
   faq=[("How much is a Port Aransas golf cart plate?","$50 a year for year-round residents and $100 for non-residents; plates expire December 31."),
        ("Can I drive a UTV or ATV in Port Aransas?","No. The city says ATVs and UTVs are not golf carts and are not allowed anywhere in city limits, including the beach.")],
-  sources=[PA, PAP])
+  sources=[PA, PAP, TX303])
 P["naples"] = dict(
   q="Can you drive a golf cart in {n}?",
   a="Only where the city or county has designated it. Florida lets golf carts use only roads a local government has designated and signed. Street-legal LSVs may use roads posted 35 mph or less. US 41, SR 84, SR 951 and I-75 are off limits.",

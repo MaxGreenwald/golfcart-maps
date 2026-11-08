@@ -1850,7 +1850,7 @@
     "radius_mi": 4,
     "daylight_only": true,
     "cross": true,
-    "cite": "City of Beaufort Ordinance 2025/28 and S.C. Code 56-2-90: permitted golf carts on secondary roads posted 35 mph or less, within 4 miles of the registration address. Night driving needs headlights, taillights and turn signals.",
+    "cite": "City of Beaufort Ordinance 2025/28 and S.C. Code 56-2-90: permitted golf carts on secondary roads posted 35 mph or less, within 4 miles of the registration address or of a gated-community entrance. Night driving needs headlights, taillights and turn signals.",
     "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10399/1396567/pdf"
    }
   },
@@ -1880,7 +1880,7 @@
     "radius_mi": 4,
     "daylight_only": true,
     "cross": true,
-    "cite": "S.C. Code 56-2-90: without a different road list, a permitted golf cart may use secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address. Port Royal has allowed equipped carts at night; that does not open a faster road.",
+    "cite": "S.C. Code 56-2-90: without a different road list, a permitted golf cart may use secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address or of a gated-community entrance. Port Royal has allowed equipped carts at night; that does not open a faster road.",
     "url": "https://www.scstatehouse.gov/code/t56c002.php"
    }
   },
@@ -1910,7 +1910,7 @@
     "radius_mi": 4,
     "daylight_only": true,
     "cross": true,
-    "cite": "S.C. Code 56-2-90: a permitted golf cart on a secondary road posted 35 mph or less, in daylight, within 4 miles of the registration address.",
+    "cite": "S.C. Code 56-2-90: a permitted golf cart on a secondary road posted 35 mph or less, in daylight, within 4 miles of the registration address or of a gated-community entrance.",
     "url": "https://www.scstatehouse.gov/code/t56c002.php"
    }
   },

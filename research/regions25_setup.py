@@ -13,8 +13,8 @@ FLS = "https://www.flsenate.gov/Laws/statutes/2025/"
 FLHSMV = "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
 NJMVC = "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
 NCLSV = "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-121.1.html"
-SCDPS = "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
-TX551 = "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+SCDPS = "https://www.scdps.sc.gov/golf-cart"
+TX551 = "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404"
 DE2113 = "https://delcode.delaware.gov/title21/c021/sc01/index.html"
 DEDMV = "https://dmv.de.gov/VehicleServices/specialvehicles/index.shtml?dc=ve_reg_golf"
 VA9163 = "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/"
@@ -204,7 +204,7 @@ CB = "https://crystalbeach.com/area-information/information/golf-carts-atvs/"
 add(id="crystalbeach", name="Bolivar Peninsula, TX", short="Crystal Beach", state="TX", slug="crystalbeach", bbox=[29.36, -94.80, 29.60, -94.35], zoom=13,
     cover="Bolivar Peninsula (Port Bolivar, Crystal Beach, Gilchrist and High Island) only. Pick another city in the menu above.",
     bans=[{"names": "^TX 87$|^State Highway 87$", "url": CB, "label": "Golf carts prohibited on highways (SH 87, posted 50 to 60 mph); cross at intersections only"}],
-    state_law=dict(text="state law, no local ordinance found", law="Tex. Transp. Code \u00a7551.404 (golf carts on roads posted 35 mph or less within 2 mi of the master-planned community/beach or where the county allows) and \u00a7551.304 (LSVs on roads posted 35 or less). Galveston County unincorporated peninsula; SH 87 is crossing only.",
+    state_law=dict(text="state law, no local ordinance found", law="Tex. Transp. Code 551.403 and 551.404 (daytime on a road posted 35 mph or less within 5 miles of where the cart is parked, and only to or from a golf course, or in a master-planned community, or on a beach open to vehicles, or where a city or an eligible county authorizes) and 551.303 (a neighborhood electric vehicle may use a road posted 45 mph or less; this map plans on 35). Galveston County unincorporated peninsula; SH 87 is crossing only.",
                    law_url=TX551, searched="Galveston County code and commissioners court orders; web search 'Bolivar Peninsula golf cart ordinance'; community page crystalbeach.com"),
     enf=[src("CrystalBeach.com golf cart rules", CB), src("Tex. Transp. Code 551.404", TX551)],
     unverified=["Galveston County hasn't published a peninsula golf cart ordinance; the state rules apply."],

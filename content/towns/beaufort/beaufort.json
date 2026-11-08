@@ -20,7 +20,7 @@
  "rules": [
   {
    "topic": "Golf carts",
-   "rule": "Permitted golf carts on secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address, unless the city sets a different hour rule",
+   "rule": "Permitted golf carts on secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address or a gated-community entrance, unless the city sets different hours or roads. Night driving under an ordinance needs working headlights and taillights.",
    "citation": "S.C. Code 56-2-90",
    "source_url": "https://www.scstatehouse.gov/code/t56c002.php"
   },
@@ -60,7 +60,7 @@
  ],
  "zoom": 15,
  "published": "2026-11-06",
- "last_checked": "2026-11-06",
+ "last_checked": "2026-11-08",
  "checked_by": "Golf Cart Maps",
  "sources": [
   "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10399/1396567/pdf",

@@ -28,7 +28,7 @@
    "topic": "State law",
    "rule": "Golf cart rules for roads posted 35 mph or less",
    "citation": "Tex. Transp. Code 551.404",
-   "source_url": "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+   "source_url": "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404"
   }
  ],
  "banned_roads": [
@@ -64,6 +64,6 @@
  "checked_by": "Golf Cart Maps",
  "sources": [
   "https://crystalbeach.com/area-information/information/golf-carts-atvs/",
-  "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+  "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404"
  ]
 }

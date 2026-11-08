@@ -425,8 +425,8 @@
   },
   "crystalbeach": {
    "text": "state law, no local ordinance found",
-   "law": "Tex. Transp. Code §551.404 (golf carts on roads posted 35 mph or less within 2 mi of the master-planned community/beach or where the county allows) and §551.304 (LSVs on roads posted 35 or less). Galveston County unincorporated peninsula; SH 87 is crossing only.",
-   "law_url": "https://texas.public.law/statutes/tex._transp._code_section_551.404",
+   "law": "Tex. Transp. Code 551.403 and 551.404 (daytime on a road posted 35 mph or less within 5 miles of where the cart is parked, and only to or from a golf course, or in a master-planned community, or on a beach open to vehicles, or where a city or an eligible county authorizes) and 551.303 (a neighborhood electric vehicle may use a road posted 45 mph or less; this map plans on 35). Galveston County unincorporated peninsula; SH 87 is crossing only.",
+   "law_url": "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404",
    "searched": "Galveston County code and commissioners court orders; web search 'Bolivar Peninsula golf cart ordinance'; community page crystalbeach.com"
   },
   "greenwich": {
