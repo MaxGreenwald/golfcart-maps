@@ -5,6 +5,7 @@ Called by build_web.py; `seo_pages.py --check` renders everything and exits 1 on
 import glob, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from seo_common import *
+import town_videos
 
 # Markets Gary flagged (2026-W44): a live map region already exists, so these pages link to it.
 # Place names are the query names ("Hilton Head"), which are shorter than the region name.
@@ -71,6 +72,8 @@ def resources_html(items):
 
 def region_page(g, R):
     n, st, slug = g["name"], STATES.get(g["state"], g["state"]), g["slug"]
+    vid = town_videos.video_for(slug)
+    video = town_videos.embed_html(vid)
     place = MARKETS.get(slug)
     title = (f"{BRAND}: {place} golf cart map and LSV map ({month()})" if place
              else f"{n} Golf Cart Map & LSV Map: Rules and Legal Roads ({month()})")
@@ -92,7 +95,7 @@ def region_page(g, R):
 <h1>{e(h1)}</h1>
 <p>{e(lsv[1])} Plain golf carts: {e(cart[1][0].lower()+cart[1][1:])} The {e(g['short'] or n)} golf cart map and LSV map on {BRAND} (golfcartmap.com) colors every road and plans routes that stay on legal ones. Rules last checked {e(month())}.</p>
 <p><a class="cta" href="{mapurl}" data-ev="cta_try_map_click" data-p='{{"position":"region","region":"{e(g['id'])}"}}'>Open the {e(g['short'] or n)} map</a></p>
-{market}<h2>The rules in {e(n)}</h2>
+{video}{market}<h2>The rules in {e(n)}</h2>
 <table><thead><tr><th>Vehicle</th><th>Where it may drive</th><th>Law</th></tr></thead><tbody>{rows}</tbody></table>
 <h2>Coverage</h2><p>{e(g.get('cover',''))}</p>
 <h2>FAQ</h2>
@@ -102,6 +105,9 @@ def region_page(g, R):
     ld = [org(), website(), software(), faq_schema(faq), crumbs([("Home", "/"), ("Golf cart maps", "/golf-cart-maps"), (n, "/" + slug)])]
     # old share links with map state (?lat, ?lon, ?veh, ?z, ?r) go straight to the map
     head = f"<script>(function(q){{if(/[?&](lat|lon|veh|z|r|paid)=/.test(q))location.replace('/map?r={g['id']}'+(q?'&'+q.slice(1):''))}})(location.search)</script>"
+    if vid:
+        ld.append(town_videos.video_ld(vid))
+        head += town_videos.video_head()
     return page(title, desc, "/" + slug, body, ld, head)
 
 def build(out):
