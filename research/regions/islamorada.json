@@ -1,0 +1,55 @@
+{
+ "poly": [
+  [
+   -80.7,
+   24.9
+  ],
+  [
+   -80.55,
+   24.9
+  ],
+  [
+   -80.55,
+   24.96
+  ],
+  [
+   -80.7,
+   24.96
+  ],
+  [
+   -80.7,
+   24.9
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "Overseas Highway (US 1) is red where it is posted over 35 mph or untagged as a major road. Plain golf carts stay red except tagged cart paths."
+ ],
+ "sources": [
+  "F.S. 316.2122 https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+  "F.S. 316.212 https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "FLHSMV low-speed vehicles https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "F.S. 316.2122",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+   },
+   {
+    "label": "F.S. 316.212",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+   },
+   {
+    "label": "FLHSMV low-speed vehicles",
+    "url": "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)"
+}

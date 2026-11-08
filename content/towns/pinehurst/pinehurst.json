@@ -1,0 +1,85 @@
+{
+ "slug": "pinehurst",
+ "region": "pinehurst",
+ "name": "Pinehurst",
+ "state": "NC",
+ "question_title": "Can you drive a golf cart in Pinehurst?",
+ "answer_short": "Yes, with a village sticker, except the named roads. In Pinehurst, golf carts may use streets posted 35 mph or less. They may not drive on NC 211 or US 15-501 except to cross at a traffic signal, and they may not drive on NC 2, NC 5, Morganton Road, Page Road or Linden Road.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Village streets posted 35 mph or less, not the named roads",
+  "speed_line": "35 mph",
+  "notes": "Village sticker; driver's license"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Streets posted 35 mph or less. Not NC 211 or US 15-501 except a signalized crossing. Not NC 2, NC 5, Morganton Road, Page Road or Linden Road except to cross.",
+   "citation": "Pinehurst Code Sec. 71.17",
+   "source_url": "https://codelibrary.amlegal.com/codes/pinehurst/latest/pinehurst_nc/0-0-0-601"
+  },
+  {
+   "topic": "Hospital area",
+   "rule": "No golf carts on Page Drive, Aviemore Drive, Memorial Drive or Regional Drive",
+   "citation": "Pinehurst Code Sec. 71.17",
+   "source_url": "https://codelibrary.amlegal.com/codes/pinehurst/latest/pinehurst_nc/0-0-0-601"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; may cross faster roads at intersections",
+   "citation": "N.C.G.S. 20-121.1",
+   "source_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-121.1.html"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "NC 211 and US 15-501",
+   "rule": "Cross only at a signal",
+   "crossings_ok": true
+  },
+  {
+   "name": "NC 2, NC 5, Morganton Road, Page Road, Linden Road",
+   "rule": "Cross only",
+   "crossings_ok": true
+  },
+  {
+   "name": "Page Drive, Aviemore Drive, Memorial Drive, Regional Drive",
+   "rule": "No golf carts",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Pinehurst?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on NC 211 in Pinehurst?",
+   "a": "No, except to cross it at a traffic signal."
+  },
+  {
+   "q": "Do I need a sticker in Pinehurst?",
+   "a": "Yes. The village requires a registration sticker on the front and rear."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  35.1954,
+  -79.4695
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://codelibrary.amlegal.com/codes/pinehurst/latest/pinehurst_nc/0-0-0-601",
+  "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_160A/GS_160A-300.6.html"
+ ]
+}

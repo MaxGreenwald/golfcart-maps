@@ -1,0 +1,75 @@
+{
+ "slug": "oriental",
+ "region": "oriental",
+ "name": "Oriental",
+ "state": "NC",
+ "question_title": "Can you drive a golf cart in Oriental?",
+ "answer_short": "Yes. Oriental allows a licensed driver to operate a golf cart on public streets. State law lets the town do that on streets posted 35 mph or less. The cart needs a mirror and brake lights, and lights if you drive after dark.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Public streets posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Licensed driver"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "A licensed driver may operate a golf cart on public streets in town. After dark the cart needs headlights, turn signals and brake lights.",
+   "citation": "Oriental Chapter F, Section 16",
+   "source_url": "https://townoforiental.com/vertical/sites/%7B8227B748-6F08-4124-B0ED-02789B9A2F82%7D/uploads/6-9-26_CHAPTER_F.pdf"
+  },
+  {
+   "topic": "Speed",
+   "rule": "A city may allow golf carts on streets posted 35 mph or less",
+   "citation": "N.C.G.S. 160A-300.6",
+   "source_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_160A/GS_160A-300.6.html"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; may cross faster roads at intersections",
+   "citation": "N.C.G.S. 20-121.1",
+   "source_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-121.1.html"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "NC 55 where posted over 35 mph",
+   "rule": "Over the golf cart cap",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Oriental?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on NC 55 in Oriental?",
+   "a": "Only where it is posted 35 mph or less. Faster stretches stay closed."
+  },
+  {
+   "q": "Do I need lights?",
+   "a": "Yes, if you drive during the hours of darkness. A mirror and brake lights are required at all times."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  35.0254,
+  -76.6938
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://townoforiental.com/vertical/sites/%7B8227B748-6F08-4124-B0ED-02789B9A2F82%7D/uploads/6-9-26_CHAPTER_F.pdf",
+  "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_160A/GS_160A-300.6.html"
+ ]
+}

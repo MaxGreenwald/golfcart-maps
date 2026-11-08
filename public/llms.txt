@@ -1,13 +1,13 @@
 # Golf Cart Maps
 
-> Golf Cart Maps (golfcartmap.com) is a golf cart map, LSV map and route planner for golf carts and street-legal LSVs (low speed vehicles), free to use. It shows which roads are legal for golf carts and street-legal LSVs in 76 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
+> Golf Cart Maps (golfcartmap.com) is a golf cart map, LSV map and route planner for golf carts and street-legal LSVs (low speed vehicles), free to use. It shows which roads are legal for golf carts and street-legal LSVs in 100 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
 
 URL: https://golfcartmap.com/
 Also written: Golf Cart Map, GolfCartMap (same site).
 
 ## What it does
 - Colors every road: green = allowed for your vehicle, red = too fast or banned (avoid).
-- LSV map (low speed vehicle map): for street-legal golf carts and other LSVs it shows roads posted 35 mph or less in 70 of our 76 regions (25 mph in Avalon (Catalina Island), CA; Cape May & the Wildwoods, NJ; Greenwich, CT; Gulf Shores / Orange Beach, AL; Long Beach Island, NJ; Ocean City, NJ), minus roads a town or county bans for LSVs. LSV map app: https://golfcartmap.com/lsv.
+- LSV map (low speed vehicle map): for street-legal golf carts and other LSVs it shows roads posted 35 mph or less in 94 of our 100 regions (25 mph in Avalon (Catalina Island), CA; Cape May & the Wildwoods, NJ; Greenwich, CT; Gulf Shores / Orange Beach, AL; Long Beach Island, NJ; Ocean City, NJ), minus roads a town or county bans for LSVs. LSV map app: https://golfcartmap.com/lsv.
 - Golf cart map: plain golf carts get their own state and local rules, usually fewer roads.
 - Golf cart maps (plural): https://golfcartmap.com/golf-cart-maps lists every town map.
 - Plans routes on allowed roads; crossing a faster road at an intersection is allowed where state law permits it.
@@ -28,14 +28,18 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 ## Regions by state
 ### Alabama
 - [Dauphin Island, AL](https://golfcartmap.com/dauphinisland)
+- [Fairhope, AL](https://golfcartmap.com/fairhope)
 - [Gulf Shores / Orange Beach, AL](https://golfcartmap.com/gulfshores)
 ### Arizona
 - [Sun City / Sun City West, AZ](https://golfcartmap.com/suncity)
+- [Sun Lakes, AZ](https://golfcartmap.com/sunlakes)
 ### California
 - [Avalon (Catalina Island), CA](https://golfcartmap.com/catalina)
 - [Coachella Valley, CA](https://golfcartmap.com/coachella)
+- [Morro Bay, CA](https://golfcartmap.com/morrobay)
 - [Newport Beach & Balboa, CA](https://golfcartmap.com/newportbeach)
 - [Laguna Woods / OC coast, CA](https://golfcartmap.com/occoast)
+- [Pismo Beach, CA](https://golfcartmap.com/pismo)
 - [San Diego coast](https://golfcartmap.com/sandiego)
 - [South Bay LA, CA](https://golfcartmap.com/southbay)
 ### Connecticut
@@ -46,16 +50,25 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 - [30A / South Walton, FL](https://golfcartmap.com/30a)
 - [Amelia Island / Fernandina Beach, FL](https://golfcartmap.com/ameliaisland)
 - [Anna Maria Island, FL](https://golfcartmap.com/annamaria)
+- [Apalachicola, FL](https://golfcartmap.com/apalachicola)
 - [Boca Grande, FL](https://golfcartmap.com/bocagrande)
 - [Cape San Blas & Mexico Beach, FL](https://golfcartmap.com/capesanblas)
+- [Cedar Key, FL](https://golfcartmap.com/cedarkey)
 - [Clearwater Beach & Dunedin, FL](https://golfcartmap.com/clearwater)
 - [Cocoa Beach, FL](https://golfcartmap.com/cocoabeach)
+- [Crystal River, FL](https://golfcartmap.com/crystalriver)
+- [Dade City, FL](https://golfcartmap.com/dadecity)
 - [Destin / Okaloosa Island, FL](https://golfcartmap.com/destin)
+- [Flagler Beach, FL](https://golfcartmap.com/flaglerbeach)
 - [Fort Myers & San Carlos, FL](https://golfcartmap.com/fortmyers)
 - [Fort Myers Beach, FL](https://golfcartmap.com/fortmyersbeach)
+- [Howey-in-the-Hills, FL](https://golfcartmap.com/howey)
+- [Islamorada, FL](https://golfcartmap.com/islamorada)
+- [Key Largo, FL](https://golfcartmap.com/keylargo)
 - [Key West, FL](https://golfcartmap.com/keywest)
 - [Lakewood Ranch, FL](https://golfcartmap.com/lakewoodranch)
 - [Lower Keys / Marathon, FL](https://golfcartmap.com/lowerkeys)
+- [Mount Dora, FL](https://golfcartmap.com/mountdora)
 - [Naples / Marco Island, FL](https://golfcartmap.com/naples)
 - [New Smyrna Beach, FL](https://golfcartmap.com/newsmyrnabeach)
 - [Nocatee / Ponte Vedra, FL](https://golfcartmap.com/nocatee)
@@ -96,27 +109,38 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 - [Brunswick Islands, NC](https://golfcartmap.com/brunswickislands)
 - [Carolina Beach & Kure Beach, NC](https://golfcartmap.com/carolinabeach)
 - [Emerald Isle & Atlantic Beach, NC](https://golfcartmap.com/emeraldisle)
+- [Ocracoke, NC](https://golfcartmap.com/ocracoke)
+- [Oriental, NC](https://golfcartmap.com/oriental)
 - [Outer Banks, NC](https://golfcartmap.com/outerbanks)
+- [Pinehurst, NC](https://golfcartmap.com/pinehurst)
 - [Bald Head Island / Southport, NC](https://golfcartmap.com/southport)
 - [Topsail Island, NC](https://golfcartmap.com/topsail)
 ### Ohio
+- [Celina, OH](https://golfcartmap.com/celina)
 - [Kelleys Island & Marblehead, OH](https://golfcartmap.com/kelleysisland)
 - [Put-in-Bay, OH](https://golfcartmap.com/putinbay)
 ### South Carolina
+- [Beaufort, SC](https://golfcartmap.com/beaufort)
 - [Charleston beach towns, SC](https://golfcartmap.com/charleston)
 - [Edisto Beach, SC](https://golfcartmap.com/edisto)
+- [Georgetown, SC](https://golfcartmap.com/georgetown)
 - [Hilton Head / Bluffton, SC](https://golfcartmap.com/hiltonhead)
 - [Myrtle Beach / Grand Strand, SC](https://golfcartmap.com/myrtlebeach)
 - [Pawleys Island & Litchfield, SC](https://golfcartmap.com/pawleysisland)
+- [Port Royal, SC](https://golfcartmap.com/portroyal)
 ### Texas
 - [Bolivar Peninsula, TX](https://golfcartmap.com/crystalbeach)
 - [Galveston, TX](https://golfcartmap.com/galveston)
+- [Horseshoe Bay, TX](https://golfcartmap.com/horseshoebay)
 - [North Padre & Mustang Island, TX](https://golfcartmap.com/padreisland)
 - [Port Aransas, TX](https://golfcartmap.com/portaransas)
 - [Rockport / Fulton, TX](https://golfcartmap.com/rockport)
 - [South Padre Island, TX](https://golfcartmap.com/southpadre)
+- [Surfside Beach, TX](https://golfcartmap.com/surfside)
 ### Virginia
+- [Cape Charles, VA](https://golfcartmap.com/capecharles)
 - [Chincoteague, VA](https://golfcartmap.com/chincoteague)
+- [Colonial Beach, VA](https://golfcartmap.com/colonialbeach)
 
 ## State rules used
 - Alabama: LSVs on roads posted 35 mph or less (Single app rule ≤35 (Code of Ala. 32-1-1.1 LSV); Gulf Shores/Orange Beach region cap ≤25 (regions.json rule)). Golf carts: No state golf-cart road statute; local ordinance (Gulf Shores Sec. 21-13, Orange Beach Sec. 70-273: streets ≤25 mph).

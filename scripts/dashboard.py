@@ -40,12 +40,9 @@ def pct(a, b): return f"{100 * a / b:.0f}%" if b else "–"
 
 
 def exclude_line(s):
-    """Second headline line once /stats is the filtered worker. Absent on the old worker."""
-    if "weekly_active_unfiltered" not in s:
-        return []
-    w, r = s.get("weekly_active") or 0, s.get("weekly_active_route_users") or 0
-    wu, ru = s.get("weekly_active_unfiltered") or 0, s.get("weekly_active_route_users_unfiltered") or 0
-    return [f"- Excluded internal/test installs: {wu - w} (route users: {ru - r}). Unfiltered was {wu} / {ru}."]
+    """Kept for callers/tests. Headline numbers are filtered permanently (EXCLUDE_IIDS);
+    do not print an Unfiltered caveat."""
+    return []
 
 
 def render(s, env, base, today):

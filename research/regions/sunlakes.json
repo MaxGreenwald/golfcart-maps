@@ -1,0 +1,56 @@
+{
+ "poly": [
+  [
+   -111.89,
+   33.19
+  ],
+  [
+   -111.83,
+   33.19
+  ],
+  [
+   -111.83,
+   33.24
+  ],
+  [
+   -111.89,
+   33.24
+  ],
+  [
+   -111.89,
+   33.19
+  ]
+ ],
+ "bans": [
+  {
+   "names": "^(North |South |East |West )?Alma School Road$",
+   "url": "https://sunlakessplash.com/sun-lakes-sheriffs-posse-golf-carts/",
+   "label": "Sun Lakes Sheriff's Posse (Maricopa County Sheriff's Office): Alma School Road at the 45 mph zone is not a golf cart road"
+  }
+ ],
+ "unverified": [
+  "The posse notice is about the 45 mph stretch of Alma School Road. The whole named road inside this box is red so an untagged piece cannot show as legal."
+ ],
+ "sources": [
+  "Sun Lakes Sheriff's Posse on golf carts https://sunlakessplash.com/sun-lakes-sheriffs-posse-golf-carts/",
+  "A.R.S. 28-966 https://www.azleg.gov/ars/28/00966.htm",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Sun Lakes Sheriff's Posse on golf carts",
+    "url": "https://sunlakessplash.com/sun-lakes-sheriffs-posse-golf-carts/"
+   },
+   {
+    "label": "A.R.S. 28-966",
+    "url": "https://www.azleg.gov/ars/28/00966.htm"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)"
+}

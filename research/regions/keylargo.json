@@ -1,0 +1,50 @@
+{
+ "poly": [
+  [
+   -80.47,
+   25.08
+  ],
+  [
+   -80.39,
+   25.08
+  ],
+  [
+   -80.39,
+   25.14
+  ],
+  [
+   -80.47,
+   25.14
+  ],
+  [
+   -80.47,
+   25.08
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "This box is the town center, not all of Key Largo. Overseas Highway stays red where it is posted over 35 mph."
+ ],
+ "sources": [
+  "F.S. 316.2122 https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+  "F.S. 316.212 https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "F.S. 316.2122",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+   },
+   {
+    "label": "F.S. 316.212",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)"
+}

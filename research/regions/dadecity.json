@@ -1,0 +1,99 @@
+{
+ "poly": [
+  [
+   -82.22,
+   28.34
+  ],
+  [
+   -82.16,
+   28.34
+  ],
+  [
+   -82.16,
+   28.39
+  ],
+  [
+   -82.22,
+   28.39
+  ],
+  [
+   -82.22,
+   28.34
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "The resolution street list is matched by name. A listed street that OpenStreetMap also tags as US 301, US 98 or SR 52 stays red."
+ ],
+ "sources": [
+  "Dade City golf cart registration packet (Ordinance 2024-01 street list) https://www.dadecityfl.com/Documents/Government/Departments/Finance/Apply%20for%20Golf%20Cart%20Registration.pdf",
+  "F.S. 316.212 https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Dade City golf cart registration packet (Ordinance 2024-01 street list)",
+    "url": "https://www.dadecityfl.com/Documents/Government/Departments/Finance/Apply%20for%20Golf%20Cart%20Registration.pdf"
+   },
+   {
+    "label": "F.S. 316.212",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)",
+ "cart_only_bans": [
+  {
+   "names": "^(US 301|US 98|SR 52|State Road 52|County Road \\d+[A-Z]?)$|(^|;)(US 301|US 98|SR 52|FL 52|CR \\d+[A-Z]?)($|;)",
+   "url": "https://www.dadecityfl.com/Documents/Government/Departments/Finance/Apply%20for%20Golf%20Cart%20Registration.pdf",
+   "label": "Dade City Ordinance 2024-01: golf carts are not authorized on state or county roads. US 301, US 98, SR 52 and county roads stay closed to golf carts. An LSV still follows the posted speed."
+  }
+ ],
+ "designated_names": [
+  {
+   "names": [
+    "Sumner Avenue",
+    "Martin Luther King Boulevard",
+    "Martin Luther King Jr Boulevard",
+    "Ross Avenue",
+    "Beauchamp Avenue",
+    "Madill Avenue",
+    "Robinson Avenue",
+    "Carter Avenue",
+    "Pineapple Avenue",
+    "Edwinola Way",
+    "Magnolia Avenue",
+    "Live Oak Avenue",
+    "Pasco Avenue",
+    "Church Avenue",
+    "McMinn Avenue",
+    "Buford Avenue",
+    "Howard Avenue",
+    "12th Street",
+    "11th Street",
+    "10th Street",
+    "9th Street",
+    "8th Street",
+    "7th Street",
+    "6th Street",
+    "5th Street",
+    "4th Street",
+    "3rd Street",
+    "2nd Street"
+   ],
+   "bbox": [
+    28.34,
+    -82.22,
+    28.39,
+    -82.16
+   ],
+   "url": "https://www.dadecityfl.com/Documents/Government/Departments/Finance/Apply%20for%20Golf%20Cart%20Registration.pdf",
+   "label": "Dade City resolution under Ordinance 2024-01: registered golf carts on the listed city streets"
+  }
+ ]
+}

@@ -1,0 +1,80 @@
+{
+ "slug": "surfside-beach",
+ "region": "surfside",
+ "name": "Surfside Beach",
+ "state": "TX",
+ "question_title": "Can you drive a golf cart in Surfside Beach?",
+ "answer_short": "Yes, except three roads. In Surfside Beach, golf carts may use village streets. They may not drive on the Surfside Bridge, Bluewater Highway (CR 257) or Fort Velasco Boulevard, except to cross at an intersection. The driver needs a license, and the cart needs a Texas golf cart plate.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Village streets, not the bridge, Bluewater Highway or Fort Velasco Boulevard",
+  "speed_line": "35 mph",
+  "notes": "License plate and a licensed driver"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "All village streets except Surfside Bridge, Bluewater Highway (CR 257) and Fort Velasco Boulevard, which may be crossed at an intersection",
+   "citation": "Surfside Beach Code Sec. 46-171",
+   "source_url": "https://library.municode.com/tx/surfside_beach/codes/code_of_ordinances?nodeId=COOR_CH46TRVE"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts with the required plate and equipment on roads posted 35 mph or less where the city or county allows them, in daylight",
+   "citation": "Tex. Transp. Code 551.404",
+   "source_url": "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Bluewater Highway (CR 257)",
+   "rule": "Cross only",
+   "crossings_ok": true
+  },
+  {
+   "name": "Fort Velasco Boulevard",
+   "rule": "Cross only",
+   "crossings_ok": true
+  },
+  {
+   "name": "Surfside Bridge",
+   "rule": "No golf carts",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Surfside Beach?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Bluewater Highway?",
+   "a": "No, except to cross it at an intersection."
+  },
+  {
+   "q": "Can I drive a golf cart on the beach in Surfside Beach?",
+   "a": "The pedestrian beach is closed to golf carts, with a narrow exception for a displayed disabled placard. A beach vehicle pass is a separate rule."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  28.9522,
+  -95.2888
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://library.municode.com/tx/surfside_beach/codes/code_of_ordinances?nodeId=COOR_CH46TRVE",
+  "https://texas.public.law/statutes/tex._transp._code_section_551.404",
+  "https://www.surfsidetx.org/page/Golfcart"
+ ]
+}

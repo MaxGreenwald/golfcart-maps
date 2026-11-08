@@ -1,0 +1,75 @@
+{
+ "slug": "dade-city",
+ "region": "dadecity",
+ "name": "Dade City",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Dade City?",
+ "answer_short": "Yes, on the city's list. Dade City lets a registered golf cart use specific city streets under Ordinance 2024-01. State and county roads, including US 301, US 98 and SR 52, are not on that list. LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "The streets named in the city resolution",
+  "speed_line": "n/a",
+  "notes": "City registration and insurance"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Not on a road the city has closed"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Registered golf carts on the city streets listed in the resolution under Ordinance 2024-01. Not on state or county roads.",
+   "citation": "Dade City golf cart packet",
+   "source_url": "https://www.dadecityfl.com/Documents/Government/Departments/Finance/Apply%20for%20Golf%20Cart%20Registration.pdf"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 301, US 98 and SR 52",
+   "rule": "No golf carts",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Dade City?",
+   "a": "Roads posted 35 mph or less. Not on a road the city has closed. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Which streets allow a golf cart in Dade City?",
+   "a": "The city's list includes Sumner Avenue, Martin Luther King Boulevard, the numbered streets from 2nd through 12th, and the avenues named in the registration packet."
+  },
+  {
+   "q": "Can I drive a golf cart on US 301 in Dade City?",
+   "a": "No. Ordinance 2024-01 does not authorize golf carts on state or county roads."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  28.3647,
+  -82.1959
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.dadecityfl.com/Documents/Government/Departments/Finance/Apply%20for%20Golf%20Cart%20Registration.pdf",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+ ]
+}

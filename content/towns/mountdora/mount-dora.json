@@ -1,0 +1,80 @@
+{
+ "slug": "mount-dora",
+ "region": "mountdora",
+ "name": "Mount Dora",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Mount Dora?",
+ "answer_short": "Yes, on city streets posted 30 mph or less. Mount Dora lets a registered golf cart use those streets unless a sign says no golf carts. County, state and federal roads, including Donnelly Street (US 441), are closed to carts and LSVs.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "City streets posted 30 mph or less",
+  "speed_line": "30 mph",
+  "notes": "Not on state or county roads"
+ },
+ "lsv": {
+  "allowed": "limited",
+  "roads": "City streets posted 35 mph or less, not state or county roads",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Registered golf carts on a city right of way posted 30 mph or less, 24 hours, unless posted no golf carts",
+   "citation": "Mount Dora Ordinance 2024-12",
+   "source_url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10266/1298003/pdf"
+  },
+  {
+   "topic": "State roads",
+   "rule": "The ordinance does not allow a golf cart or LSV on a county, state or federal roadway",
+   "citation": "Mount Dora Ordinance 2024-12",
+   "source_url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10266/1298003/pdf"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Donnelly Street (US 441)",
+   "rule": "State road; no golf carts or LSVs",
+   "crossings_ok": true
+  },
+  {
+   "name": "SR 19 and SR 46",
+   "rule": "State roads",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Mount Dora?",
+   "a": "City streets posted 35 mph or less, not state or county roads. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on Donnelly Street?",
+   "a": "No. Donnelly Street is US 441, a state road, and the ordinance does not allow carts or LSVs on state roads."
+  },
+  {
+   "q": "What is the golf cart speed cap in Mount Dora?",
+   "a": "30 mph. A city street posted over 30 mph is closed to golf carts."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  28.8025,
+  -81.6445
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10266/1298003/pdf",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+ ]
+}

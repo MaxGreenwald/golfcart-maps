@@ -1,0 +1,22 @@
+[
+ {
+  "region": "dadecity",
+  "road": "21st Street",
+  "n": 11,
+  "url": "https://www.mapillary.com/app/?lat=28.360440&lng=-82.204140&z=19&focus=map&mapFeatureId=603040957334357",
+  "label": "Mapillary: 14 posted 15 mph sign(s) detected",
+  "old": 45,
+  "new": 15,
+  "reason": "A 15 mph reading on a road posted 45 mph was not applied. It can be a school-zone or advisory sign, and one cluster of detections is not enough to open the road."
+ },
+ {
+  "region": "dadecity",
+  "road": "Old State Road 52",
+  "n": 5,
+  "url": "https://www.mapillary.com/app/?lat=28.352169&lng=-82.207310&z=19&focus=map&mapFeatureId=852125468712883",
+  "label": "Mapillary: 4 posted 15 mph sign(s) detected",
+  "old": 45,
+  "new": 15,
+  "reason": "A 15 mph reading on a road posted 45 mph was not applied. It can be a school-zone or advisory sign, and one cluster of detections is not enough to open the road."
+ }
+]

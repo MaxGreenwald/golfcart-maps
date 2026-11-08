@@ -1,0 +1,69 @@
+{
+ "slug": "key-largo",
+ "region": "keylargo",
+ "name": "Key Largo",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Key Largo?",
+ "answer_short": "Street-legal LSVs yes. Plain golf carts only on designated streets, and no county street list was found for Key Largo. This map is the town center, not the whole island. LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated streets only",
+  "speed_line": "n/a",
+  "notes": "Street list not found"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 1 (Overseas Highway) where posted over 35 mph",
+   "rule": "No LSVs",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Key Largo?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive an LSV on a side street in Key Largo?",
+   "a": "Yes, where it is posted 35 mph or less."
+  },
+  {
+   "q": "Does this map cover all of Key Largo?",
+   "a": "No. It covers the town center in this box."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  25.0865,
+  -80.4473
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+ ]
+}

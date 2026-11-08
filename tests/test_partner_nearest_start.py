@@ -12,7 +12,12 @@ import threading
 import unittest
 from urllib.parse import urlsplit
 
-from test_partner_vehicle import _Quiet, _S, shop, PUB, SHOTS
+# CI runs this as `python -m unittest tests.test_partner_nearest_start` from the repo root,
+# which does not put tests/ on sys.path. `python -m unittest discover -s tests` does.
+try:
+    from test_partner_vehicle import _Quiet, _S, shop, PUB, SHOTS
+except ImportError:
+    from tests.test_partner_vehicle import _Quiet, _S, shop, PUB, SHOTS
 
 try:
     from playwright.sync_api import sync_playwright
