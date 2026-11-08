@@ -27,7 +27,7 @@
  ],
  "sources": [
   "S.C. Code 56-2-90 https://www.scstatehouse.gov/code/t56c002.php",
-  "SCDPS golf cart law https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "SCDPS golf cart law https://www.scdps.sc.gov/golf-cart",
   "OpenStreetMap",
   "FHWA HPMS speed limits"
  ],
@@ -41,7 +41,7 @@
    },
    {
     "label": "SCDPS golf cart law",
-    "url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+    "url": "https://www.scdps.sc.gov/golf-cart"
    }
   ],
   "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."

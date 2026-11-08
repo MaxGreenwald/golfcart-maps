@@ -26,9 +26,9 @@
   },
   {
    "topic": "Golf cart roads",
-   "rule": "Secondary streets posted 35 mph or less, daylight, within 4 miles of the registered address",
-   "citation": "S.C. golf cart law (SCDPS)",
-   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+   "rule": "Secondary streets posted 35 mph or less, daylight, within 4 miles of the registered address or a gated-community entrance",
+   "citation": "S.C. Code 56-2-90",
+   "source_url": "https://www.scstatehouse.gov/code/t56c002.php"
   },
   {
    "topic": "Sidewalks",
@@ -96,10 +96,10 @@
  ],
  "zoom": 15,
  "published": "2026-10-21",
- "last_checked": "2026-10-21",
+ "last_checked": "2026-11-08",
  "checked_by": "Golf Cart Maps",
  "sources": [
   "https://www.cityofmyrtlebeach.com/news_detail_T6_R2337.php",
-  "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+  "https://www.scstatehouse.gov/code/t56c002.php"
  ]
 }

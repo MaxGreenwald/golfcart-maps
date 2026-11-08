@@ -11,18 +11,18 @@
   "Town code (traffic chapter, may hold speed zones): https://library.municode.com/sc/hilton_head_island/codes/code_of_ordinances",
   "Town ordinances/resolutions archive: https://hiltonheadislandsc.gov/government/publications/index.php",
   "SCDOT lowered William Hilton Pkwy (US-278) to 40 mph between Beach City Rd and Dillon Rd, 2024-10-22: https://hiltonheadislandsc.gov/news/news.cfm?NewsID=3193",
-  "SC golf cart law (\u226435 mph secondary roads, 4 mi, daylight; locals may set hours since 2025-05-22): https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "SC golf cart law (≤35 mph secondary roads, 4 mi, daylight; locals may set hours since 2025-05-22): https://www.scdps.sc.gov/golf-cart",
   "Next: SCDOT road inventory / speed-limit GIS for Beaufort County, Bluffton Municode traffic chapter, Beaufort County Municode, or a public-records request."
  ],
  "bans": [
   {
    "names": "US ?278|William Hilton|Cross Island|Fording Island|SC ?46\\b",
-   "url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law",
-   "label": "US 278 / Cross Island Pkwy: primary roads, carts banned under S.C. 56-2-105"
+   "url": "https://www.scstatehouse.gov/code/t56c002.php",
+   "label": "US 278 / Cross Island Pkwy: primary roads, carts banned under S.C. Code 56-2-90"
   }
  ],
  "sources": [
-  "https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "https://www.scdps.sc.gov/golf-cart",
   "https://www.islandpacket.com/news/local/article301916509.html",
   "https://hiltonheadislandsc.gov/news/news.cfm?NewsID=3193 (US 278 40 mph zone)"
  ],
@@ -36,7 +36,7 @@
    },
    {
     "label": "SCDPS golf cart law",
-    "url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+    "url": "https://www.scdps.sc.gov/golf-cart"
    }
   ],
   "note": "No separate sheriff/town golf cart road list found; US 278 / Cross Island / Fording Island / SC 46 bans applied."

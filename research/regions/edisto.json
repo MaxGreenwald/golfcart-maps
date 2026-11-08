@@ -10,7 +10,7 @@
  "unverified": [],
  "sources": [
   "Town of Edisto Beach golf cart and LSV use https://www.townofedistobeach.com/police/golf-cart-and-low-speed-vehicle-use",
-  "SCDPS golf cart law https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "SCDPS golf cart law https://www.scdps.sc.gov/golf-cart",
   "OpenStreetMap",
   "FHWA HPMS speed limits"
  ],
@@ -24,7 +24,7 @@
    },
    {
     "label": "SCDPS golf cart law",
-    "url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+    "url": "https://www.scdps.sc.gov/golf-cart"
    }
   ],
   "note": "Local ordinance sources checked in the regions-25-batch research (Oct 22 2026); bans/rules recorded into this region. Posted signs never lift a ban."

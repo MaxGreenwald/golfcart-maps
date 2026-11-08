@@ -21,26 +21,26 @@
   {
    "topic": "Golf cart roads",
    "rule": "Secondary highway or street posted 35 mph or less",
-   "citation": "S.C. golf cart law (SCDPS)",
-   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+   "citation": "S.C. Code 56-2-90",
+   "source_url": "https://www.scstatehouse.gov/code/t56c002.php"
   },
   {
    "topic": "Distance",
    "rule": "Within 4 miles of the registration address (or a gated community entrance)",
-   "citation": "S.C. golf cart law (SCDPS)",
-   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+   "citation": "S.C. Code 56-2-90",
+   "source_url": "https://www.scstatehouse.gov/code/t56c002.php"
   },
   {
    "topic": "Hours",
-   "rule": "Daylight only, unless a local ordinance says otherwise",
-   "citation": "S.C. Code 56-2-90 (SCDPS)",
-   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+   "rule": "Daylight only, unless a local ordinance allows night driving with working headlights and taillights",
+   "citation": "S.C. Code 56-2-90",
+   "source_url": "https://www.scstatehouse.gov/code/t56c002.php"
   },
   {
    "topic": "Driver and permit",
    "rule": "Driver 16+ with a license; cart permitted, registered with SCDMV and insured",
-   "citation": "S.C. golf cart law (SCDPS)",
-   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+   "citation": "S.C. Code 56-2-90",
+   "source_url": "https://www.scstatehouse.gov/code/t56c002.php"
   }
  ],
  "banned_roads": [
@@ -67,7 +67,7 @@
   },
   {
    "q": "Can I drive a golf cart at night in North Forest Beach?",
-   "a": "Not under the state default. South Carolina allows golf carts on public roads in daylight only unless a local ordinance sets other hours."
+   "a": "Not under the state default. South Carolina allows golf carts on public roads in daylight only unless a local ordinance allows night driving with working headlights and taillights."
   },
   {
    "q": "How far can I drive a golf cart from home?",
@@ -83,7 +83,7 @@
   {
    "lead": "South Carolina's Department of Public Safety lists the state golf cart rules: permit, 35 mph roads, daylight, 4 miles.",
    "name": "South Carolina golf cart law checklist (SCDPS)",
-   "url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+   "url": "https://www.scdps.sc.gov/golf-cart"
   }
  ],
  "nearby": [
@@ -97,10 +97,10 @@
  ],
  "zoom": 15,
  "published": "2026-10-21",
- "last_checked": "2026-10-21",
+ "last_checked": "2026-11-08",
  "checked_by": "Golf Cart Maps",
  "sources": [
-  "https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "https://www.scstatehouse.gov/code/t56c002.php",
   "https://hiltonheadislandsc.gov/news/news.cfm?NewsID=3193"
  ]
 }

@@ -28,7 +28,7 @@
  "sources": [
   "Surfside Beach Code Sec. 46-171 https://library.municode.com/tx/surfside_beach/codes/code_of_ordinances?nodeId=COOR_CH46TRVE",
   "Village of Surfside Beach golf cart page https://www.surfsidetx.org/page/Golfcart",
-  "Tex. Transp. Code 551.404 https://texas.public.law/statutes/tex._transp._code_section_551.404",
+  "Tex. Transp. Code 551.404 https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404",
   "OpenStreetMap",
   "FHWA HPMS speed limits"
  ],
@@ -46,7 +46,7 @@
    },
    {
     "label": "Tex. Transp. Code 551.404",
-    "url": "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+    "url": "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404"
    }
   ],
   "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."

@@ -3,7 +3,7 @@ Every rule line carries the official (or best available) source; the same source
 import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "research"))
 import regions25_setup as S
-FLS = S.FLS; NJ = S.NJMVC; FLH = S.FLHSMV; NC = S.NCLSV; SC = S.SCDPS
+FLS = S.FLS; NJ = S.NJMVC; FLH = S.FLHSMV; NC = S.NCLSV
 P, T, RID = {}, [], {}
 def prof(rid, a, gc, lsv, rules, banned, faq, q="Can you drive a golf cart in {n}?"):
     r = next(x for x in S.R if x["id"] == rid)
@@ -16,7 +16,7 @@ NJGC = ("Golf carts", "Plain golf carts aren't street-legal; only titled, regist
 FLGC = ("Golf carts", "Plain golf carts only on roads a city or county has designated and signed for carts", "F.S. 316.212", FLS + "316.212")
 FLLSV = ("LSV roads", "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections", "FLHSMV low-speed vehicles", FLH)
 NCLSVR = ("LSV roads", "Registered, insured LSVs on roads posted 35 mph or less; may cross faster roads at intersections", "N.C.G.S. 20-121.1", NC)
-SCGC = ("Golf carts (SC law)", "Permitted, insured golf carts on secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address", "S.C. golf cart law (SCDPS)", SC)
+SCGC = ("Golf carts (SC law)", "Permitted, insured golf carts on secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address or a gated-community entrance. A city or county may set other hours or roads, still only on a highway posted 35 mph or less.", "S.C. Code 56-2-90", "https://www.scstatehouse.gov/code/t56c002.php")
 
 prof("ocnj", "Street-legal LSVs yes, plain golf carts no. In {n}, registered LSVs may use roads posted 25 mph or less, but not Bay Ave, West Ave, Route 52, the 34th Street bridge or Ocean Drive south of South Inlet Drive.",
      ("no", "Not on public roads", "n/a", "Not street-legal in NJ"), ("yes", "Roads posted 25 mph or less", "25 mph", "Cross Bay Ave and West Ave at intersections"),
