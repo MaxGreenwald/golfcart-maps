@@ -1,0 +1,80 @@
+{
+ "slug": "flagler-beach",
+ "region": "flaglerbeach",
+ "name": "Flagler Beach",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Flagler Beach?",
+ "answer_short": "Only on designated city streets. Flagler Beach requires registration, and golf carts may not travel on SR A1A (Oceanshore Boulevard) or SR 100 (Moody Boulevard). They may cross SR 100 at Flagler Avenue. The designated-street list is not drawn here yet, so plain golf carts stay red except tagged cart paths. LSVs may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated city streets only",
+  "speed_line": "n/a",
+  "notes": "Not A1A or SR 100; list not digitized"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "A1A and SR 100",
+   "rule": "Golf carts are not permitted on SR A1A or SR 100. They may cross SR 100 at Flagler Avenue.",
+   "citation": "Flagler Beach golf cart packet",
+   "source_url": "https://www.cityofflaglerbeach.com/DocumentCenter/View/6750/Golf-Cart-Info-Packet-2026"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "SR A1A (Oceanshore Boulevard)",
+   "rule": "No golf carts",
+   "crossings_ok": true
+  },
+  {
+   "name": "SR 100 (Moody Boulevard)",
+   "rule": "No golf carts; cross at Flagler Avenue",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Flagler Beach?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on A1A in Flagler Beach?",
+   "a": "No. The city packet says golf carts are not permitted on SR A1A."
+  },
+  {
+   "q": "Can I cross SR 100?",
+   "a": "Yes, at the Flagler Avenue intersection. Other crossings of SR 100 or A1A are not the city's exception."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  29.4749,
+  -81.1276
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.cityofflaglerbeach.com/DocumentCenter/View/6750/Golf-Cart-Info-Packet-2026",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+ ]
+}

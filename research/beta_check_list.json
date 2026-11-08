@@ -11909,5 +11909,1728 @@
     "conflict": false
    }
   ]
+ },
+ "apalachicola": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "US 98",
+    "mi": 4.45,
+    "mph": 60,
+    "conflict": false
+   },
+   {
+    "name": "Bluff Road",
+    "mi": 3.64,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Airport Road",
+    "mi": 1.17,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "12th Street",
+    "mi": 1.06,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Avenue E",
+    "mi": 0.84,
+    "mph": 35,
+    "conflict": false
+   }
+  ]
+ },
+ "beaufort": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Boundary Street",
+    "mi": 4.05,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Ribaut Road",
+    "mi": 3.11,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Sea Island Parkway",
+    "mi": 2.19,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Sams Point Road",
+    "mi": 2.12,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Battery Creek Road",
+    "mi": 1.98,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Robert Smalls Parkway",
+    "mi": 1.74,
+    "mph": 99,
+    "conflict": false
+   }
+  ]
+ },
+ "capecharles": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Townefield Road",
+    "mi": 1.7,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Stone Road",
+    "mi": 1.65,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Old Cape Charles Road",
+    "mi": 1.12,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Cape Charles Road",
+    "mi": 0.79,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Old Cape Charles Road",
+    "mi": 0.73,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "cedarkey": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Gulf Boulevard",
+    "mi": 0.64,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Airport Road",
+    "mi": 0.59,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "SR 24",
+    "mi": 0.55,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Whiddon Avenue",
+    "mi": 0.55,
+    "mph": 20,
+    "conflict": false
+   }
+  ]
+ },
+ "celina": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "SR 703",
+    "mi": 1.73,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Touvelle Street",
+    "mi": 1.32,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Celina Mendon Road",
+    "mi": 1.16,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "East Wayne Street",
+    "mi": 1.16,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Myers Road",
+    "mi": 1.15,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Market Street",
+    "mi": 1.12,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Grand Lake Road",
+    "mi": 0.8,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Logan Street",
+    "mi": 0.75,
+    "mph": 35,
+    "conflict": false
+   }
+  ]
+ },
+ "colonialbeach": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "James Monroe Highway",
+    "mi": 4.04,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "McKinney Boulevard",
+    "mi": 2.11,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Irving Avenue",
+    "mi": 1.37,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "crystalriver": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "North Citrus Avenue",
+    "mi": 7.78,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "West Fort Island Trail",
+    "mi": 5.67,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Tallahassee Road",
+    "mi": 3.37,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Turkey Oak Drive",
+    "mi": 3.28,
+    "mph": 99,
+    "conflict": false
+   }
+  ]
+ },
+ "dadecity": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Old Lakeland Highway",
+    "mi": 4.01,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "14th Street",
+    "mi": 2.42,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Saint Joe Road",
+    "mi": 1.77,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "US 98;US 301",
+    "mi": 1.6,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "17th Street",
+    "mi": 1.51,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "7th Street",
+    "mi": 1.33,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Blanton Road",
+    "mi": 1.17,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Lakeland Road",
+    "mi": 1.16,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Fort King Road",
+    "mi": 1.12,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Morningside Drive",
+    "mi": 1.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Meridian Avenue",
+    "mi": 0.98,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "21st Street",
+    "mi": 0.79,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Lock Street",
+    "mi": 0.77,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "US 98;US 301",
+    "mi": 0.76,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "US 98;US 301",
+    "mi": 0.76,
+    "mph": 45,
+    "conflict": false
+   }
+  ]
+ },
+ "fairhope": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "County Road 13",
+    "mi": 3.48,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Fairhope Avenue",
+    "mi": 2.6,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South Section Street",
+    "mi": 2.25,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "State Highway 104",
+    "mi": 2.1,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Twin Beech Road",
+    "mi": 2.03,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "County Road 13",
+    "mi": 1.72,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "CR 98",
+    "mi": 1.56,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Main Street",
+    "mi": 1.28,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Oberg Road",
+    "mi": 1.27,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South Mobile Street",
+    "mi": 1.26,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Section Street",
+    "mi": 1.08,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Manley Road",
+    "mi": 1.02,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "flaglerbeach": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "North Ocean Shore Boulevard",
+    "mi": 1.69,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "South Oceanshore Boulevard",
+    "mi": 1.16,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Moody Boulevard",
+    "mi": 0.6,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Moody Boulevard",
+    "mi": 0.59,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "South Oceanshore Boulevard",
+    "mi": 0.58,
+    "mph": 99,
+    "conflict": false
+   }
+  ]
+ },
+ "fortmyers": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "Del Prado Boulevard South",
+    "mi": 5.9,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Daniels Parkway",
+    "mi": 4.12,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Winkler Road",
+    "mi": 3.73,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Three Oaks Parkway",
+    "mi": 3.54,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Three Oaks Parkway",
+    "mi": 3.03,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Summerlin Road",
+    "mi": 2.59,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Summerlin Road",
+    "mi": 2.5,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Winkler Avenue",
+    "mi": 2.27,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "McGregor Boulevard",
+    "mi": 2.19,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "McGregor Boulevard",
+    "mi": 2.04,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Winkler Road",
+    "mi": 2.0,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Fowler Street",
+    "mi": 1.89,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Treeline Avenue",
+    "mi": 1.2,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Gladiolus Drive",
+    "mi": 1.13,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "El Dorado Parkway East",
+    "mi": 1.09,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Metro Parkway",
+    "mi": 0.96,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Coronado Parkway",
+    "mi": 0.86,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "College Parkway",
+    "mi": 0.84,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Michael G Rippe Parkway",
+    "mi": 0.82,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Winkler Avenue",
+    "mi": 0.75,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ben C Pratt Six Mile Cypress Parkway",
+    "mi": 0.72,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Metro Parkway",
+    "mi": 0.68,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Summerlin Road",
+    "mi": 0.65,
+    "mph": 35,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Colonial Boulevard",
+    "mi": 0.65,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Ben Hill Griffin Parkway",
+    "mi": 0.64,
+    "mph": 50,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "A and W Bulb Road",
+    "mi": 0.63,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Del Prado Boulevard South",
+    "mi": 0.63,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Gladiolus Drive",
+    "mi": 0.57,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Metro Parkway",
+    "mi": 0.55,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Summerlin Road",
+    "mi": 0.51,
+    "mph": 55,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Gladiolus Drive",
+    "mi": 0.49,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "A and W Bulb Road",
+    "mi": 0.46,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Whiskey Creek Drive",
+    "mi": 0.46,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Gladiolus Drive",
+    "mi": 0.44,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Fowler Street",
+    "mi": 0.41,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Colonial Boulevard",
+    "mi": 0.32,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Gladiolus Drive",
+    "mi": 0.31,
+    "mph": 99,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Cape Coral Parkway East",
+    "mi": 0.28,
+    "mph": 40,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Summerlin Road",
+    "mi": 0.27,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   },
+   {
+    "name": "Del Prado Boulevard South",
+    "mi": 0.25,
+    "mph": 45,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": [
+   {
+    "name": "Del Prado Boulevard South",
+    "mi": 5.9,
+    "mph": 35,
+    "conflict": true
+   },
+   {
+    "name": "Daniels Parkway",
+    "mi": 4.12,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Winkler Road",
+    "mi": 3.73,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Three Oaks Parkway",
+    "mi": 3.54,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Three Oaks Parkway",
+    "mi": 3.03,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Summerlin Road",
+    "mi": 2.59,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "Summerlin Road",
+    "mi": 2.5,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Winkler Avenue",
+    "mi": 2.27,
+    "mph": 45,
+    "conflict": true
+   },
+   {
+    "name": "McGregor Boulevard",
+    "mi": 2.19,
+    "mph": 55,
+    "conflict": true
+   },
+   {
+    "name": "McGregor Boulevard",
+    "mi": 2.04,
+    "mph": 55,
+    "conflict": true
+   },
+   {
+    "name": "Winkler Road",
+    "mi": 2.0,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Fowler Street",
+    "mi": 1.89,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "Treeline Avenue",
+    "mi": 1.2,
+    "mph": 50,
+    "conflict": true
+   },
+   {
+    "name": "Gladiolus Drive",
+    "mi": 1.13,
+    "mph": 99,
+    "conflict": true
+   },
+   {
+    "name": "El Dorado Parkway East",
+    "mi": 1.09,
+    "mph": 25,
+    "conflict": true
+   },
+   {
+    "name": "Three Oaks Parkway",
+    "mi": 6.8,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Country Club Boulevard",
+    "mi": 4.36,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Country Club Boulevard",
+    "mi": 4.29,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Plantation Road",
+    "mi": 3.71,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Ben Hill Griffin Parkway",
+    "mi": 3.27,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Daniels Parkway",
+    "mi": 3.14,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Pine Ridge Road",
+    "mi": 3.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Coronado Parkway",
+    "mi": 2.66,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Plantation Road",
+    "mi": 2.63,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Treeline Avenue South",
+    "mi": 2.44,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "San Carlos Boulevard",
+    "mi": 2.38,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Ben Hill Griffin Parkway",
+    "mi": 2.36,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Summerlin Road",
+    "mi": 2.3,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Winkler Avenue",
+    "mi": 2.28,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Central Avenue",
+    "mi": 2.23,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Alico Road",
+    "mi": 2.15,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Alico Road",
+    "mi": 2.14,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Palomino Lane",
+    "mi": 2.04,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Treeline Avenue South",
+    "mi": 2.02,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "McGregor Boulevard",
+    "mi": 2.0,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Summerlin Road",
+    "mi": 1.78,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Veronica S. Shoemaker Boulevard",
+    "mi": 1.77,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Whiskey Creek Drive",
+    "mi": 1.77,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Veronica S. Shoemaker Boulevard",
+    "mi": 1.77,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "El Dorado Parkway East",
+    "mi": 1.74,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Island Park Road",
+    "mi": 1.7,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "San Carlos Boulevard",
+    "mi": 1.6,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Academy Boulevard",
+    "mi": 1.6,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Gladiolus Drive",
+    "mi": 1.5,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Everest Parkway",
+    "mi": 1.5,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Everest Parkway",
+    "mi": 1.49,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Academy Boulevard",
+    "mi": 1.46,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Ben C Pratt Six Mile Cypress Parkway",
+    "mi": 1.36,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Penzance Boulevard",
+    "mi": 1.36,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Plantation Gardens Drive",
+    "mi": 1.36,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "College Parkway",
+    "mi": 1.35,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Plantation Gardens Drive",
+    "mi": 1.33,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Forum Boulevard",
+    "mi": 1.32,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Jones Walker Boulevard",
+    "mi": 1.29,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Summerlin Road",
+    "mi": 1.28,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "Kelly Road",
+    "mi": 1.27,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "College Parkway",
+    "mi": 1.24,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Palm Tree Boulevard",
+    "mi": 1.24,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Palm Tree Boulevard",
+    "mi": 1.22,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Penzance Boulevard",
+    "mi": 1.21,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Ortiz Avenue",
+    "mi": 1.17,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Sanibel Boulevard",
+    "mi": 1.17,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Gladiolus Drive",
+    "mi": 1.11,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Pine Chase Drive",
+    "mi": 1.09,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "georgetown": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "North Fraser Street",
+    "mi": 2.85,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Highmarket Street",
+    "mi": 0.9,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Front Street",
+    "mi": 0.9,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Anthuan Maybank Drive",
+    "mi": 0.88,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Front Street",
+    "mi": 0.88,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Black River Road",
+    "mi": 0.78,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "North Hazard Street",
+    "mi": 0.76,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "horseshoebay": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "West Ranch Road 2147",
+    "mi": 6.56,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "TX 71",
+    "mi": 2.63,
+    "mph": 75,
+    "conflict": false
+   },
+   {
+    "name": "TX 71",
+    "mi": 1.69,
+    "mph": 99,
+    "conflict": false
+   }
+  ]
+ },
+ "howey": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Number Two Road",
+    "mi": 5.42,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "CR 48",
+    "mi": 2.0,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "SR 19",
+    "mi": 1.32,
+    "mph": 55,
+    "conflict": false
+   }
+  ]
+ },
+ "islamorada": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Old State Highway 4A",
+    "mi": 3.16,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "keylargo": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Ocean Bay Drive",
+    "mi": 0.74,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "morrobay": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Old U.S. Route 466",
+    "mi": 7.23,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Main Street",
+    "mi": 2.05,
+    "mph": 99,
+    "conflict": false
+   }
+  ]
+ },
+ "mountdora": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Lakeshore Drive",
+    "mi": 3.79,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "East Crooked Lake Drive",
+    "mi": 1.72,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Old Mt Dora Road",
+    "mi": 1.43,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Old Eustis Road",
+    "mi": 1.33,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Wolf Branch Road",
+    "mi": 1.17,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Lincoln Avenue",
+    "mi": 1.17,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Morningside Drive",
+    "mi": 1.15,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "North Donnelly Street",
+    "mi": 1.06,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Terrell Road",
+    "mi": 0.96,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Dora Drive",
+    "mi": 0.79,
+    "mph": 50,
+    "conflict": false
+   },
+   {
+    "name": "East Shirley Shores Road",
+    "mi": 0.77,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "South Clayton Street",
+    "mi": 0.76,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Limit Avenue",
+    "mi": 0.72,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "State Route 44",
+    "mi": 0.69,
+    "mph": 45,
+    "conflict": false
+   }
+  ]
+ },
+ "ocracoke": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Irvin Garrish Highway",
+    "mi": 1.26,
+    "mph": 20,
+    "conflict": false
+   },
+   {
+    "name": "Back Road",
+    "mi": 0.59,
+    "mph": 20,
+    "conflict": false
+   }
+  ]
+ },
+ "oriental": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Oriental Road",
+    "mi": 1.15,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Broad Street",
+    "mi": 0.75,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Broad Street",
+    "mi": 0.45,
+    "mph": 35,
+    "conflict": false
+   }
+  ]
+ },
+ "pinehurst": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Linden Road",
+    "mi": 3.21,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "NC 211 Highway",
+    "mi": 3.18,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Airport Road",
+    "mi": 3.06,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Saint Andrews Drive",
+    "mi": 2.69,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "US 15;US 501;NC 211",
+    "mi": 2.44,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "NC 211 Highway",
+    "mi": 2.36,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Burning Tree Road",
+    "mi": 2.02,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Morganton Road",
+    "mi": 1.96,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Monticello Drive",
+    "mi": 1.66,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Diamondhead Drive South",
+    "mi": 1.58,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Midland Road",
+    "mi": 1.46,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "US 15;US 501",
+    "mi": 1.34,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Beulah Hill Road South",
+    "mi": 1.16,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Juniper Lake Road",
+    "mi": 1.12,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Page Road",
+    "mi": 1.08,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Beulah Hill Road North",
+    "mi": 1.03,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Juniper Lake Road",
+    "mi": 0.93,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "NC 211 Highway",
+    "mi": 0.86,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Murdocksville Road",
+    "mi": 0.82,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Midland Road",
+    "mi": 0.81,
+    "mph": 35,
+    "conflict": false
+   }
+  ]
+ },
+ "pismo": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Price Canyon Road",
+    "mi": 3.14,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Mattie Road",
+    "mi": 0.94,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Dolliver Street",
+    "mi": 0.88,
+    "mph": 30,
+    "conflict": false
+   },
+   {
+    "name": "Price Street",
+    "mi": 0.8,
+    "mph": 15,
+    "conflict": false
+   },
+   {
+    "name": "North 4th Street",
+    "mi": 0.67,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Price Street",
+    "mi": 0.64,
+    "mph": 35,
+    "conflict": false
+   },
+   {
+    "name": "Five Cities Drive",
+    "mi": 0.64,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "James Way",
+    "mi": 0.63,
+    "mph": 99,
+    "conflict": false
+   }
+  ]
+ },
+ "portroyal": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Ladys Island Drive",
+    "mi": 3.28,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Ribaut Road",
+    "mi": 1.99,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Battery Creek Road",
+    "mi": 1.98,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Malecon Drive",
+    "mi": 1.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Ribaut Road",
+    "mi": 0.91,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Paris Avenue",
+    "mi": 0.8,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Waddell Road",
+    "mi": 0.74,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
+ },
+ "sunlakes": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "East Chandler Heights Road",
+    "mi": 2.81,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "East Riggs Road",
+    "mi": 2.74,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "South Alma School Road",
+    "mi": 2.48,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Southwest Fulton Ranch Boulevard",
+    "mi": 2.34,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "West Hunt Highway",
+    "mi": 2.0,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "East Riggs Road",
+    "mi": 1.82,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "South Arizona Avenue",
+    "mi": 1.49,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "AZ 587",
+    "mi": 1.32,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "East Hunt Highway",
+    "mi": 1.08,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "Junction I-10\u2013Mesa Highway",
+    "mi": 1.02,
+    "mph": 65,
+    "conflict": false
+   },
+   {
+    "name": "South Dobson Road",
+    "mi": 1.0,
+    "mph": 99,
+    "conflict": false
+   },
+   {
+    "name": "South Arizona Avenue",
+    "mi": 1.0,
+    "mph": 99,
+    "conflict": false
+   }
+  ]
+ },
+ "surfside": {
+  "reports": [],
+  "conflicts": [],
+  "gap": [
+   {
+    "name": "Bluewater Highway",
+    "mi": 2.97,
+    "mph": 40,
+    "conflict": false
+   },
+   {
+    "name": "Levee Road",
+    "mi": 2.75,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "East State Highway 332",
+    "mi": 2.5,
+    "mph": 55,
+    "conflict": false
+   },
+   {
+    "name": "Old Surfside Road",
+    "mi": 1.43,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Levee Road",
+    "mi": 1.26,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "East State Highway 332",
+    "mi": 1.12,
+    "mph": 45,
+    "conflict": false
+   },
+   {
+    "name": "Surf Drive",
+    "mi": 1.0,
+    "mph": 25,
+    "conflict": false
+   },
+   {
+    "name": "Fort Velasco Drive",
+    "mi": 0.99,
+    "mph": 25,
+    "conflict": false
+   }
+  ]
  }
 }

@@ -1,0 +1,70 @@
+{
+ "slug": "howey-in-the-hills",
+ "region": "howey",
+ "name": "Howey-in-the-Hills",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Howey-in-the-Hills?",
+ "answer_short": "Street-legal LSVs yes. Plain golf carts only on streets the town has designated, and that list is not drawn here. Howey-in-the-Hills police require every golf cart to be registered each year. Until the street list is on the map, plan on an LSV.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated streets only",
+  "speed_line": "n/a",
+  "notes": "Annual registration; list not digitized"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Registration",
+   "rule": "The town ordinance and state law require golf carts to be registered each calendar year",
+   "citation": "Howey-in-the-Hills Police",
+   "source_url": "https://www.howey.org/DocumentCenter/View/507/Golf-Cart-Letter-2026"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a city or county has designated and signed for carts",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; cross faster roads only at intersections",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  }
+ ],
+ "banned_roads": [],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Howey-in-the-Hills?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Do I need a sticker in Howey-in-the-Hills?",
+   "a": "Yes. Police say registration opens January 1 and the sticker goes on the rear of the cart."
+  },
+  {
+   "q": "Why are the streets red for a golf cart?",
+   "a": "Florida allows golf carts only on designated streets. The town's list is not digitized, so those streets are not shown as golf cart roads."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  28.7169,
+  -81.7734
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+  "https://www.howey.org/DocumentCenter/View/507/Golf-Cart-Letter-2026"
+ ]
+}

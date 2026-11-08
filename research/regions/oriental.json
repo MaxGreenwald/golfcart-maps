@@ -1,0 +1,50 @@
+{
+ "poly": [
+  [
+   -76.71,
+   35.015
+  ],
+  [
+   -76.68,
+   35.015
+  ],
+  [
+   -76.68,
+   35.035
+  ],
+  [
+   -76.71,
+   35.035
+  ],
+  [
+   -76.71,
+   35.015
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "Section 16 does not name a banned street. Streets posted over 35 mph stay red because that is the ceiling in N.C.G.S. 160A-300.6."
+ ],
+ "sources": [
+  "Town of Oriental Chapter F, Section 16 https://townoforiental.com/vertical/sites/%7B8227B748-6F08-4124-B0ED-02789B9A2F82%7D/uploads/6-9-26_CHAPTER_F.pdf",
+  "N.C.G.S. 160A-300.6 https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_160A/GS_160A-300.6.html",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "Town of Oriental Chapter F, Section 16",
+    "url": "https://townoforiental.com/vertical/sites/%7B8227B748-6F08-4124-B0ED-02789B9A2F82%7D/uploads/6-9-26_CHAPTER_F.pdf"
+   },
+   {
+    "label": "N.C.G.S. 160A-300.6",
+    "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_160A/GS_160A-300.6.html"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)"
+}

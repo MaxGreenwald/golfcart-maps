@@ -1,0 +1,76 @@
+{
+ "slug": "ocracoke",
+ "region": "ocracoke",
+ "name": "Ocracoke",
+ "state": "NC",
+ "question_title": "Can you drive a golf cart in Ocracoke?",
+ "answer_short": "Yes, inside the village. Hyde County's ordinance, as the sheriff quotes it, allows a golf cart on public streets posted 35 mph or less. The driver must be at least 16. This map is the village only.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Village streets posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Driver at least 16; lights and a seat for each rider"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts on public streets in Hyde County where the speed limit is 35 mph or less",
+   "citation": "Hyde County Ordinance 2009-09-01 (sheriff reminder)",
+   "source_url": "https://ocracokeobserver.com/2026/08/01/july-safety-report-on-ocracoke/"
+  },
+  {
+   "topic": "Age",
+   "rule": "No person under 16 may operate a golf cart on a public street",
+   "citation": "N.C.G.S. 153A-245",
+   "source_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_153A/GS_153A-245.html"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs on roads posted 35 mph or less; may cross faster roads at intersections",
+   "citation": "N.C.G.S. 20-121.1",
+   "source_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-121.1.html"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "NC 12 north of the village",
+   "rule": "Outside this map",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Ocracoke?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I take a golf cart up NC 12 to the ferry?",
+   "a": "This map covers the village. The highway north of the village is not in it."
+  },
+  {
+   "q": "How old do you have to be to drive a golf cart in Ocracoke?",
+   "a": "At least 16, under the county statute the sheriff cites."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  35.1146,
+  -75.981
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://ocracokeobserver.com/2026/08/01/july-safety-report-on-ocracoke/",
+  "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_153A/GS_153A-245.html",
+  "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-121.1.html"
+ ]
+}

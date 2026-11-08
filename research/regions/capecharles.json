@@ -1,0 +1,55 @@
+{
+ "poly": [
+  [
+   -76.03,
+   37.25
+  ],
+  [
+   -75.99,
+   37.25
+  ],
+  [
+   -75.99,
+   37.29
+  ],
+  [
+   -76.03,
+   37.29
+  ],
+  [
+   -76.03,
+   37.25
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "The town's designated-street list is not digitized, so plain golf carts stay red except tagged cart paths. Old Cape Charles Road between Bayshore Road and Cassatt Parkway was still posted 35 mph in the May 2025 resolution, which is over the 25 mph golf cart cap."
+ ],
+ "sources": [
+  "Cape Charles Resolution 20250515 https://www.capecharles.org/media/13461",
+  "Cape Charles golf cart decals https://www.capecharles.org/treasurer/page/golf-cart-decals",
+  "Va. Code 46.2-916.3 https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "Cape Charles Resolution 20250515",
+    "url": "https://www.capecharles.org/media/13461"
+   },
+   {
+    "label": "Cape Charles golf cart decals",
+    "url": "https://www.capecharles.org/treasurer/page/golf-cart-decals"
+   },
+   {
+    "label": "Va. Code 46.2-916.3",
+    "url": "https://law.lis.virginia.gov/vacode/title46.2/chapter8/section46.2-916.3/"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)"
+}

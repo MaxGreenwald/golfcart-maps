@@ -1,0 +1,69 @@
+{
+ "slug": "georgetown",
+ "region": "georgetown",
+ "name": "Georgetown",
+ "state": "SC",
+ "question_title": "Can you drive a golf cart in Georgetown?",
+ "answer_short": "Yes, under the state rule. In Georgetown, a permitted golf cart may use secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address. US 17, US 521 and US 701 are primary highways.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Secondary roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Daylight; within 4 miles"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Permitted golf carts on secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address, unless the city sets a different hour rule",
+   "citation": "S.C. Code 56-2-90",
+   "source_url": "https://www.scstatehouse.gov/code/t56c002.php"
+  },
+  {
+   "topic": "Primary highways",
+   "rule": "No golf carts on US 17, US 521 or US 701",
+   "citation": "S.C. Code 56-2-90",
+   "source_url": "https://www.scstatehouse.gov/code/t56c002.php"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 17, US 521 and US 701",
+   "rule": "Primary highways; no golf carts",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Georgetown?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart on US 17 in Georgetown?",
+   "a": "No. US 17 is a primary highway."
+  },
+  {
+   "q": "How far can I drive from home?",
+   "a": "Within 4 miles of the address on the cart's registration, on a secondary road posted 35 mph or less."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  33.3768,
+  -79.2945
+ ],
+ "zoom": 15,
+ "published": "2026-11-06",
+ "last_checked": "2026-11-06",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "https://www.scstatehouse.gov/code/t56c002.php"
+ ]
+}

@@ -1,0 +1,57 @@
+{
+ "poly": [
+  [
+   -79.5,
+   35.17
+  ],
+  [
+   -79.44,
+   35.17
+  ],
+  [
+   -79.44,
+   35.22
+  ],
+  [
+   -79.5,
+   35.22
+  ],
+  [
+   -79.5,
+   35.17
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "The hospital zoning district ban is applied by the named streets in Sec. 71.17 (Page Drive, Aviemore Drive, Memorial Drive, Regional Drive), not by the zoning polygon."
+ ],
+ "sources": [
+  "Pinehurst Code Sec. 71.17 https://codelibrary.amlegal.com/codes/pinehurst/latest/pinehurst_nc/0-0-0-601",
+  "N.C.G.S. 160A-300.6 https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_160A/GS_160A-300.6.html",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-06",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "Pinehurst Code Sec. 71.17",
+    "url": "https://codelibrary.amlegal.com/codes/pinehurst/latest/pinehurst_nc/0-0-0-601"
+   },
+   {
+    "label": "N.C.G.S. 160A-300.6",
+    "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_160A/GS_160A-300.6.html"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. A designated street list that is not digitized stays red for plain golf carts."
+ },
+ "status": "Added (regions-100, 2026-11-06)",
+ "cart_only_bans": [
+  {
+   "names": "^(Morganton Road|Page Road|Linden Road|Page Drive|Aviemore Drive|Memorial Drive|Regional Drive)$|(^|;)(NC 211|NC 2|NC 5|US 15|US 501|US 15-501)($|;)",
+   "url": "https://codelibrary.amlegal.com/codes/pinehurst/latest/pinehurst_nc/0-0-0-601",
+   "label": "Pinehurst Sec. 71.17: no golf carts on NC 211 or US 15-501 except a signalized crossing, and no golf carts on NC 5, NC 2, Morganton Road, Page Road, Linden Road, or Page Drive, Aviemore Drive, Memorial Drive and Regional Drive"
+  }
+ ]
+}

@@ -3762,6 +3762,90 @@
    "cite": [
     "Checked Oct 28 2026: OpenStreetMap has no maxspeed on this short stretch, and at least one side is only the 25 mph residential assumption, so it stays red rather than being painted legal."
    ]
+  },
+  {
+   "region": "surfside",
+   "road": "Casco Road",
+   "at": [
+    28.95877,
+    -95.29605
+   ],
+   "m": 754,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [
+    "Untagged OpenStreetMap primary link between residential sides assumed at 25 mph. Left red. No posted-speed source."
+   ]
+  },
+  {
+   "region": "pismo",
+   "road": "Pomeroy Avenue",
+   "at": [
+    35.14153,
+    -120.64021
+   ],
+   "m": 170,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [
+    "Untagged OpenStreetMap secondary piece of Pomeroy Avenue between residential sides assumed at 25 mph. Left red. No posted-speed source."
+   ]
+  },
+  {
+   "region": "dadecity",
+   "road": "US 98;US 301",
+   "at": [
+    28.35578,
+    -82.18671
+   ],
+   "m": 766,
+   "mph": [
+    40,
+    45,
+    99
+   ],
+   "sides": [
+    30,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "OpenStreetMap maxspeed 40 mph on the connected pieces, and one Mapillary 45 mph sign. The ends are an OSM 35 and four Mapillary 30 mph signs. This 766 m stretch stays closed to LSVs. Seven untagged pieces inside it have no sign of their own and stay closed with the 40."
+   ]
+  },
+  {
+   "region": "morrobay",
+   "road": "Main Street",
+   "at": [
+    35.37673,
+    -120.85382
+   ],
+   "m": 496,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": [
+    "No Mapillary speed sign within 50 m. One end is Main Street assumed at 25 mph, not a posted sign, so the builder does not copy the other end's four-sign 35 mph onto this 496 m secondary stretch. Left closed."
+   ]
   }
  ]
 }

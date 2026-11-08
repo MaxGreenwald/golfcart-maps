@@ -1689,5 +1689,559 @@
   "cover": "Venice, Florida only (south of Siesta Key). Pick another city in the menu above.",
   "slug": "venice",
   "beta": true
+ },
+ {
+  "id": "fairhope",
+  "name": "Fairhope, AL",
+  "short": "Fairhope",
+  "state": "AL",
+  "center": [
+   30.5228,
+   -87.9033
+  ],
+  "zoom": 14,
+  "bbox": [
+   30.49,
+   -87.94,
+   30.56,
+   -87.86
+  ],
+  "cover": "Fairhope, Alabama only. Pick another city in the menu above.",
+  "slug": "fairhope",
+  "rule": {
+   "golf_cart": {
+    "not_street_legal": true,
+    "max_posted": 0,
+    "cross": false,
+    "note": "No Fairhope ordinance allowing plain golf carts was found. The city's published rule is for low-speed vehicles.",
+    "cite": "City of Fairhope Safe Streets plan: LSVs may use streets posted 35 mph or less and may cross faster roads, but may not travel along Greeno Road (US 98). Plain golf carts are not that rule.",
+    "url": "https://www.fairhopeal.gov/DocumentCenter/View/601/Fairhopesap-Final-Safe-Roads-Web-PDF"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "ocracoke",
+  "name": "Ocracoke, NC",
+  "short": "Ocracoke",
+  "state": "NC",
+  "center": [
+   35.1146,
+   -75.981
+  ],
+  "zoom": 15,
+  "bbox": [
+   35.104,
+   -75.994,
+   35.12,
+   -75.97
+  ],
+  "cover": "Ocracoke Village only. The highway north of the village is outside this map. Pick another city in the menu above.",
+  "slug": "ocracoke",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "cross": true,
+    "cite": "Hyde County Ordinance 2009-09-01, as quoted by the Hyde County Sheriff (2026): golf carts on public streets in Hyde County where the speed limit is 35 mph or less. N.C.G.S. 153A-245 (operator at least 16).",
+    "url": "https://ocracokeobserver.com/2026/08/01/july-safety-report-on-ocracoke/"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "dadecity",
+  "name": "Dade City, FL",
+  "short": "Dade City",
+  "state": "FL",
+  "center": [
+   28.3647,
+   -82.1959
+  ],
+  "zoom": 15,
+  "bbox": [
+   28.34,
+   -82.22,
+   28.39,
+   -82.16
+  ],
+  "cover": "Dade City, Florida only. Pick another city in the menu above.",
+  "slug": "dadecity",
+  "beta": true
+ },
+ {
+  "id": "mountdora",
+  "name": "Mount Dora, FL",
+  "short": "Mount Dora",
+  "state": "FL",
+  "center": [
+   28.8025,
+   -81.6445
+  ],
+  "zoom": 14,
+  "bbox": [
+   28.77,
+   -81.68,
+   28.83,
+   -81.62
+  ],
+  "cover": "Mount Dora, Florida only. Pick another city in the menu above.",
+  "slug": "mountdora",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 30,
+    "designated_only": false,
+    "daylight_only": false,
+    "cross": true,
+    "cite": "City of Mount Dora Ordinance 2024-12, Sec. 42-201: a registered golf cart on a city right of way posted 30 mph or less, unless posted no golf carts. Not on a county, state or federal roadway. LSVs follow F.S. 316.2122 (35 mph) and the same state-road ban.",
+    "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10266/1298003/pdf"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "pinehurst",
+  "name": "Pinehurst, NC",
+  "short": "Pinehurst",
+  "state": "NC",
+  "center": [
+   35.1954,
+   -79.4695
+  ],
+  "zoom": 14,
+  "bbox": [
+   35.17,
+   -79.5,
+   35.22,
+   -79.44
+  ],
+  "cover": "Pinehurst, North Carolina only. Pick another city in the menu above.",
+  "slug": "pinehurst",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "cross": true,
+    "cite": "Village of Pinehurst Code Sec. 71.17: golf carts on village streets posted 35 mph or less, not on or alongside NC 211 or US 15-501 except to cross at a signal, and not on NC 5, NC 2, Morganton Road, Page Road or Linden Road except to cross.",
+    "url": "https://codelibrary.amlegal.com/codes/pinehurst/latest/pinehurst_nc/0-0-0-601"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "beaufort",
+  "name": "Beaufort, SC",
+  "short": "Beaufort",
+  "state": "SC",
+  "center": [
+   32.4316,
+   -80.6698
+  ],
+  "zoom": 14,
+  "bbox": [
+   32.405,
+   -80.72,
+   32.455,
+   -80.64
+  ],
+  "cover": "Beaufort, South Carolina only. Pick another city in the menu above.",
+  "slug": "beaufort",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "radius_mi": 4,
+    "daylight_only": true,
+    "cross": true,
+    "cite": "City of Beaufort Ordinance 2025/28 and S.C. Code 56-2-90: permitted golf carts on secondary roads posted 35 mph or less, within 4 miles of the registration address. Night driving needs headlights, taillights and turn signals.",
+    "url": "https://mcclibraryfunctions.azurewebsites.us/api/ordinanceDownload/10399/1396567/pdf"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "portroyal",
+  "name": "Port Royal, SC",
+  "short": "Port Royal",
+  "state": "SC",
+  "center": [
+   32.3785,
+   -80.6926
+  ],
+  "zoom": 14,
+  "bbox": [
+   32.355,
+   -80.72,
+   32.4,
+   -80.64
+  ],
+  "cover": "Port Royal, South Carolina only. Pick another city in the menu above.",
+  "slug": "portroyal",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "radius_mi": 4,
+    "daylight_only": true,
+    "cross": true,
+    "cite": "S.C. Code 56-2-90: without a different road list, a permitted golf cart may use secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address. Port Royal has allowed equipped carts at night; that does not open a faster road.",
+    "url": "https://www.scstatehouse.gov/code/t56c002.php"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "georgetown",
+  "name": "Georgetown, SC",
+  "short": "Georgetown",
+  "state": "SC",
+  "center": [
+   33.3768,
+   -79.2945
+  ],
+  "zoom": 14,
+  "bbox": [
+   33.355,
+   -79.31,
+   33.395,
+   -79.26
+  ],
+  "cover": "Georgetown, South Carolina only. Pick another city in the menu above.",
+  "slug": "georgetown",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "radius_mi": 4,
+    "daylight_only": true,
+    "cross": true,
+    "cite": "S.C. Code 56-2-90: a permitted golf cart on a secondary road posted 35 mph or less, in daylight, within 4 miles of the registration address.",
+    "url": "https://www.scstatehouse.gov/code/t56c002.php"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "horseshoebay",
+  "name": "Horseshoe Bay, TX",
+  "short": "Horseshoe Bay",
+  "state": "TX",
+  "center": [
+   30.5446,
+   -98.3681
+  ],
+  "zoom": 13,
+  "bbox": [
+   30.51,
+   -98.4,
+   30.58,
+   -98.32
+  ],
+  "cover": "Horseshoe Bay, Texas only. Pick another city in the menu above.",
+  "slug": "horseshoebay",
+  "beta": true
+ },
+ {
+  "id": "surfside",
+  "name": "Surfside Beach, TX",
+  "short": "Surfside Beach",
+  "state": "TX",
+  "center": [
+   28.9522,
+   -95.2888
+  ],
+  "zoom": 14,
+  "bbox": [
+   28.93,
+   -95.34,
+   28.98,
+   -95.27
+  ],
+  "cover": "Surfside Beach, Texas only. Pick another city in the menu above.",
+  "slug": "surfside",
+  "beta": true
+ },
+ {
+  "id": "colonialbeach",
+  "name": "Colonial Beach, VA",
+  "short": "Colonial Beach",
+  "state": "VA",
+  "center": [
+   38.2532,
+   -76.9597
+  ],
+  "zoom": 14,
+  "bbox": [
+   38.24,
+   -76.98,
+   38.27,
+   -76.95
+  ],
+  "cover": "Colonial Beach, Virginia only. Pick another city in the menu above.",
+  "slug": "colonialbeach",
+  "beta": true
+ },
+ {
+  "id": "flaglerbeach",
+  "name": "Flagler Beach, FL",
+  "short": "Flagler Beach",
+  "state": "FL",
+  "center": [
+   29.4749,
+   -81.1276
+  ],
+  "zoom": 15,
+  "bbox": [
+   29.46,
+   -81.14,
+   29.49,
+   -81.11
+  ],
+  "cover": "Flagler Beach, Florida only. Pick another city in the menu above.",
+  "slug": "flaglerbeach",
+  "beta": true
+ },
+ {
+  "id": "oriental",
+  "name": "Oriental, NC",
+  "short": "Oriental",
+  "state": "NC",
+  "center": [
+   35.0254,
+   -76.6938
+  ],
+  "zoom": 15,
+  "bbox": [
+   35.015,
+   -76.71,
+   35.035,
+   -76.68
+  ],
+  "cover": "Oriental, North Carolina only. Pick another city in the menu above.",
+  "slug": "oriental",
+  "rule": {
+   "golf_cart": {
+    "max_posted": 35,
+    "cross": true,
+    "cite": "Town of Oriental traffic code, Chapter F, Section 16: a licensed driver may operate a golf cart on public streets in Oriental. N.C.G.S. 160A-300.6 allows that ordinance only on streets posted 35 mph or less.",
+    "url": "https://townoforiental.com/vertical/sites/%7B8227B748-6F08-4124-B0ED-02789B9A2F82%7D/uploads/6-9-26_CHAPTER_F.pdf"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "celina",
+  "name": "Celina, OH",
+  "short": "Celina",
+  "state": "OH",
+  "center": [
+   40.5489,
+   -84.5702
+  ],
+  "zoom": 14,
+  "bbox": [
+   40.53,
+   -84.59,
+   40.57,
+   -84.54
+  ],
+  "cover": "Celina, Ohio only. Pick another city in the menu above.",
+  "slug": "celina",
+  "beta": true
+ },
+ {
+  "id": "capecharles",
+  "name": "Cape Charles, VA",
+  "short": "Cape Charles",
+  "state": "VA",
+  "center": [
+   37.2676,
+   -76.0171
+  ],
+  "zoom": 14,
+  "bbox": [
+   37.25,
+   -76.03,
+   37.29,
+   -75.99
+  ],
+  "cover": "Cape Charles, Virginia only. Pick another city in the menu above.",
+  "slug": "capecharles",
+  "beta": true
+ },
+ {
+  "id": "sunlakes",
+  "name": "Sun Lakes, AZ",
+  "short": "Sun Lakes",
+  "state": "AZ",
+  "center": [
+   33.2148,
+   -111.8756
+  ],
+  "zoom": 14,
+  "bbox": [
+   33.19,
+   -111.89,
+   33.24,
+   -111.83
+  ],
+  "cover": "Sun Lakes, Arizona only. Pick another city in the menu above.",
+  "slug": "sunlakes",
+  "beta": true
+ },
+ {
+  "id": "morrobay",
+  "name": "Morro Bay, CA",
+  "short": "Morro Bay",
+  "state": "CA",
+  "center": [
+   35.3658,
+   -120.8499
+  ],
+  "zoom": 14,
+  "bbox": [
+   35.35,
+   -120.87,
+   35.39,
+   -120.84
+  ],
+  "cover": "Morro Bay, California only. Pick another city in the menu above.",
+  "slug": "morrobay",
+  "beta": true
+ },
+ {
+  "id": "pismo",
+  "name": "Pismo Beach, CA",
+  "short": "Pismo Beach",
+  "state": "CA",
+  "center": [
+   35.1428,
+   -120.6413
+  ],
+  "zoom": 14,
+  "bbox": [
+   35.13,
+   -120.66,
+   35.16,
+   -120.62
+  ],
+  "cover": "Pismo Beach, California only. Pick another city in the menu above.",
+  "slug": "pismo",
+  "beta": true
+ },
+ {
+  "id": "howey",
+  "name": "Howey-in-the-Hills, FL",
+  "short": "Howey-in-the-Hills",
+  "state": "FL",
+  "center": [
+   28.7169,
+   -81.7734
+  ],
+  "zoom": 14,
+  "bbox": [
+   28.69,
+   -81.8,
+   28.74,
+   -81.74
+  ],
+  "cover": "Howey-in-the-Hills, Florida only. Pick another city in the menu above.",
+  "slug": "howey",
+  "beta": true
+ },
+ {
+  "id": "apalachicola",
+  "name": "Apalachicola, FL",
+  "short": "Apalachicola",
+  "state": "FL",
+  "center": [
+   29.7258,
+   -84.9924
+  ],
+  "zoom": 15,
+  "bbox": [
+   29.715,
+   -85.04,
+   29.745,
+   -84.97
+  ],
+  "cover": "Apalachicola, Florida only. Pick another city in the menu above.",
+  "slug": "apalachicola",
+  "beta": true
+ },
+ {
+  "id": "cedarkey",
+  "name": "Cedar Key, FL",
+  "short": "Cedar Key",
+  "state": "FL",
+  "center": [
+   29.1386,
+   -83.0351
+  ],
+  "zoom": 15,
+  "bbox": [
+   29.12,
+   -83.06,
+   29.15,
+   -83.02
+  ],
+  "cover": "Cedar Key, Florida only. Pick another city in the menu above.",
+  "slug": "cedarkey",
+  "beta": true
+ },
+ {
+  "id": "islamorada",
+  "name": "Islamorada, FL",
+  "short": "Islamorada",
+  "state": "FL",
+  "center": [
+   24.9243,
+   -80.6278
+  ],
+  "zoom": 13,
+  "bbox": [
+   24.9,
+   -80.7,
+   24.96,
+   -80.55
+  ],
+  "cover": "Islamorada (Upper Matecumbe and the nearby village islands in this box) only. Pick another city in the menu above.",
+  "slug": "islamorada",
+  "beta": true
+ },
+ {
+  "id": "keylargo",
+  "name": "Key Largo, FL",
+  "short": "Key Largo",
+  "state": "FL",
+  "center": [
+   25.0865,
+   -80.4473
+  ],
+  "zoom": 13,
+  "bbox": [
+   25.08,
+   -80.47,
+   25.14,
+   -80.39
+  ],
+  "cover": "Key Largo town center only, not the whole island. Pick another city in the menu above.",
+  "slug": "keylargo",
+  "beta": true
+ },
+ {
+  "id": "crystalriver",
+  "name": "Crystal River, FL",
+  "short": "Crystal River",
+  "state": "FL",
+  "center": [
+   28.9022,
+   -82.5926
+  ],
+  "zoom": 14,
+  "bbox": [
+   28.87,
+   -82.64,
+   28.93,
+   -82.54
+  ],
+  "cover": "Crystal River, Florida only. Pick another city in the menu above.",
+  "slug": "crystalriver",
+  "beta": true
  }
 ]
