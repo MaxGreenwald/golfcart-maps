@@ -13,7 +13,7 @@ import math, re
 ISLAND_M = 805            # 0.5 mi
 SINGLE_M = 300            # one disagreeing source is only overruled on short stretches; a longer 40+ run may be a real zone
 CAP = 35                  # LSV cap; "red" here means over 35 mph or no limit
-KNOWN = set("tvmdrkno")   # o = trusted OSM (scripts/trusted_osm.py)    # codes that carry a real posted limit (tag, official, Mapillary, designated, inherited, same-road)
+KNOWN = set("tvmdrknos")   # o = trusted OSM (scripts/trusted_osm.py); s = Street View posted sign    # codes that carry a real posted limit (tag, official, Mapillary, Street View, designated, inherited, same-road)
 SKIP_HW = ("motorway", "trunk")   # freeways/expressways: red is expected
 NOT_ROAD = {"path", "footway", "cycleway", "track", "pedestrian", "steps", "bridleway"}
 

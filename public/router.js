@@ -89,7 +89,7 @@
         s._len ??= len(p);
         nodes[a] = p[0];
         nodes[b] = p[p.length - 1];
-        if ((s[3] === 't' || s[3] === 'o' || s[3] === 'm') && s[2] > rule.max_posted) { fast.add(a); fast.add(b); }
+        if ((s[3] === 't' || s[3] === 'o' || s[3] === 'm' || s[3] === 's') && s[2] > rule.max_posted) { fast.add(a); fast.add(b); }
         if (c === 3) { fnode.add(a); fnode.add(b); }
         if (s[3] === 'c') { cnode.add(a); cnode.add(b); }
         // kind: 0 legal, 1 faster-road (75 ft waiver can apply), 2 explicit ban (never waived)

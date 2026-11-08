@@ -48,7 +48,7 @@ def rows_of(idx, segs):
 
 def is_sign_backed(seg, sources):
     """A drawn piece whose speed comes from Mapillary or a Street View posted sign."""
-    if seg[3] == "m":
+    if seg[3] in ("m", "s"):
         return True
     if len(seg) > 8 and isinstance(seg[8], int) and 0 <= seg[8] < len(sources or []):
         lab = sources[seg[8]][1].lower()
@@ -183,7 +183,7 @@ def main():
              "Posted speeds come from the Mapillary detections in the cached run of `scripts/build_region.py` (`scripts/mapillary_signs.py`). They were copied onto the road lines already in master d2e58d3. A different OSM extract would have added 64 pieces and removed 183 across Fairhope, Dade City, Mount Dora, Pinehurst, Howey-in-the-Hills, and Crystal River. Those line changes were not applied.",
              "A 15 mph detection on a piece posted 45 mph was not applied. That pattern fits a school-zone or advisory sign, and it is not enough to open the road. See `research/expansion100_sign_rejections.json`.",
              "Street View batches 3 and 4 still need a person to read a sign photo. No Street View sheet was filled, and no posted speed was guessed from an unread image.",
-             "A road piece is one drawn segment. It is backed by a posted sign when its source code is `m`, or its cited source names Mapillary or a Street View posted sign. Before counts are the pre-sign build (git 62e364b). A listed road is dropped only when every current piece of that name has that evidence and none has an explicit ban (flag 1 or 4).",
+             "A road piece is one drawn segment. It is backed by a posted sign when its source code is `m` (Mapillary) or `s` (Street View), or its cited source names Mapillary or a Street View posted sign. Before counts are the pre-sign build (git 62e364b). A listed road is dropped only when every current piece of that name has that evidence and none has an explicit ban (flag 1 or 4).",
              "",
              "| Town | Posted-sign pieces before | Posted-sign pieces after |",
              "|---|---:|---:|"]

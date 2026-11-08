@@ -8,20 +8,20 @@ Posted signs win. A road listed here is not a claim that the map is wrong.
 Posted speeds come from the Mapillary detections in the cached run of `scripts/build_region.py` (`scripts/mapillary_signs.py`). They were copied onto the road lines already in master d2e58d3. A different OSM extract would have added 64 pieces and removed 183 across Fairhope, Dade City, Mount Dora, Pinehurst, Howey-in-the-Hills, and Crystal River. Those line changes were not applied.
 A 15 mph detection on a piece posted 45 mph was not applied. That pattern fits a school-zone or advisory sign, and it is not enough to open the road. See `research/expansion100_sign_rejections.json`.
 Street View batches 3 and 4 still need a person to read a sign photo. No Street View sheet was filled, and no posted speed was guessed from an unread image.
-A road piece is one drawn segment. It is backed by a posted sign when its source code is `m`, or its cited source names Mapillary or a Street View posted sign. Before counts are the pre-sign build (git 62e364b). A listed road is dropped only when every current piece of that name has that evidence and none has an explicit ban (flag 1 or 4).
+A road piece is one drawn segment. It is backed by a posted sign when its source code is `m` (Mapillary) or `s` (Street View), or its cited source names Mapillary or a Street View posted sign. Before counts are the pre-sign build (git 62e364b). A listed road is dropped only when every current piece of that name has that evidence and none has an explicit ban (flag 1 or 4).
 
 | Town | Posted-sign pieces before | Posted-sign pieces after |
 |---|---:|---:|
 | Fairhope, AL | 0 | 13 |
 | Ocracoke, NC | 0 | 12 |
-| Dade City, FL | 0 | 91 |
+| Dade City, FL | 0 | 99 |
 | Mount Dora, FL | 0 | 43 |
-| Pinehurst, NC | 0 | 93 |
+| Pinehurst, NC | 0 | 97 |
 | Beaufort, SC | 0 | 41 |
 | Port Royal, SC | 0 | 0 |
 | Georgetown, SC | 0 | 85 |
 | Horseshoe Bay, TX | 0 | 4 |
-| Surfside Beach, TX | 0 | 60 |
+| Surfside Beach, TX | 0 | 62 |
 | Colonial Beach, VA | 0 | 0 |
 | Flagler Beach, FL | 0 | 83 |
 | Oriental, NC | 0 | 0 |
@@ -35,7 +35,7 @@ A road piece is one drawn segment. It is backed by a posted sign when its source
 | Cedar Key, FL | 0 | 68 |
 | Islamorada, FL | 0 | 101 |
 | Key Largo, FL | 0 | 224 |
-| Crystal River, FL | 0 | 102 |
+| Crystal River, FL | 0 | 109 |
 
 ## Roads whose legal status changed
 
@@ -45,12 +45,15 @@ Open and closed follow `public/roadrule.js` for each vehicle, on pieces whose li
 |---|---|---|---|---:|---:|---:|---|
 | Dade City, FL | 7th Street | golf_cart | closed to open | 99 | 30 | 19 | https://www.dadecityfl.com/Documents/Government/Departments/Finance/Apply%20for%20Golf%20Cart%20Registration.pdf |
 | Dade City, FL | 7th Street | lsv | closed to open | 99 | 30 | 19 | https://www.dadecityfl.com/Documents/Government/Departments/Finance/Apply%20for%20Golf%20Cart%20Registration.pdf |
+| Dade City, FL | Fort King Road | lsv | open to closed | 25 | 45 | 8 | https://www.google.com/maps/@28.34824,-82.20170,3a,75y,180h,90t/data=!3m1!1e3 |
 | Dade City, FL | Lakeland Road | lsv | closed to open | 40 | 30 | 1 | https://www.mapillary.com/app/?lat=28.374360&lng=-82.189890&z=19&focus=map&mapFeatureId=1454735534880599 |
 | Dade City, FL | Lakeland Road | lsv | closed to open | 40 | 35 | 2 | https://www.mapillary.com/app/?lat=28.373615&lng=-82.189450&z=19&focus=map&mapFeatureId=1454905984863554 |
 | Dade City, FL | US 98;US 301 | lsv | closed to open | 40 | 30 | 5 | https://www.mapillary.com/app/?lat=28.354141&lng=-82.187430&z=19&focus=map&mapFeatureId=3025208554468577 |
 | Mount Dora, FL | Robie Avenue | golf_cart | open to closed | 25 | 35 | 5 | https://www.mapillary.com/app/?lat=28.789480&lng=-81.623940&z=19&focus=map&mapFeatureId=477584210240692 |
 | Pinehurst, NC | Cherokee Road | golf_cart | closed to open | 99 | 35 | 3 | https://www.mapillary.com/app/?lat=35.193030&lng=-79.470230&z=19&focus=map&mapFeatureId=3592701827621093 |
 | Pinehurst, NC | Cherokee Road | lsv | closed to open | 99 | 35 | 3 | https://www.mapillary.com/app/?lat=35.193030&lng=-79.470230&z=19&focus=map&mapFeatureId=3592701827621093 |
+| Pinehurst, NC | Midland Road | golf_cart | closed to open | 99 | 35 | 4 | https://www.google.com/maps/@35.19845,-79.45889,3a,75y,100h,90t/data=!3m1!1e3 |
+| Pinehurst, NC | Midland Road | lsv | closed to open | 99 | 35 | 4 | https://www.google.com/maps/@35.19845,-79.45889,3a,75y,100h,90t/data=!3m1!1e3 |
 | Georgetown, SC | Church Street | lsv | closed to open | 45 | 35 | 15 | https://www.mapillary.com/app/?lat=33.367176&lng=-79.267890&z=19&focus=map&mapFeatureId=964106591026636; https://www.mapillary.com/app/?lat=33.370450&lng=-79.278660&z=19&focus=map&mapFeatureId=3789990867765691 |
 | Georgetown, SC | Front Street | golf_cart | closed to open | 99 | 25 | 2 | https://www.mapillary.com/app/?lat=33.370663&lng=-79.289500&z=19&focus=map&mapFeatureId=4417807658537458 |
 | Georgetown, SC | Front Street | lsv | closed to open | 99 | 25 | 2 | https://www.mapillary.com/app/?lat=33.370663&lng=-79.289500&z=19&focus=map&mapFeatureId=4417807658537458 |
@@ -124,7 +127,7 @@ A row is resolved only when every current piece of that road name has sign evide
 - **Meridian Avenue** (secondary, 30 mph, source t): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: 10/30/35 mph. Source: https://www.mapillary.com/app/?lat=28.364510&lng=-82.202010&z=19&focus=map&mapFeatureId=543642230134398; https://www.mapillary.com/app/?lat=28.364653&lng=-82.197970&z=19&focus=map&mapFeatureId=931599710717723; https://www.mapillary.com/app/?lat=28.364660&lng=-82.193230&z=19&focus=map&mapFeatureId=544758036902550; https://www.mapillary.com/app/?lat=28.364716&lng=-82.187200&z=19&focus=map&mapFeatureId=771725843543677; https://www.mapillary.com/app/?lat=28.364752&lng=-82.189960&z=19&focus=map&mapFeatureId=544749346903419. Sign coverage: 18/38 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Meridian+Avenue+Dade+City+FL+@28.36464,-82.18464)
 - **Lakeland Road** (primary, 40 mph, source t): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: 30/35/45 mph. Source: https://www.mapillary.com/app/?lat=28.362251&lng=-82.183350&z=19&focus=map&mapFeatureId=482921726371195; https://www.mapillary.com/app/?lat=28.366793&lng=-82.185330&z=19&focus=map&mapFeatureId=483018589694842; https://www.mapillary.com/app/?lat=28.373615&lng=-82.189450&z=19&focus=map&mapFeatureId=1454905984863554; https://www.mapillary.com/app/?lat=28.374360&lng=-82.189890&z=19&focus=map&mapFeatureId=1454735534880599. Sign coverage: 11/30 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Lakeland+Road+Dade+City+FL+@28.36155,-82.18293)
 - **Old State Road 52** (secondary, 45 mph, source t): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: 45 mph. Source: https://www.mapillary.com/app/?lat=28.348377&lng=-82.212390&z=19&focus=map&mapFeatureId=4022207541207173; https://www.mapillary.com/app/?lat=28.350382&lng=-82.210110&z=19&focus=map&mapFeatureId=820802238851302; https://www.mapillary.com/app/?lat=28.351492&lng=-82.208150&z=19&focus=map&mapFeatureId=399244841192132. Sign coverage: 8/21 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Old+State+Road+52+Dade+City+FL+@28.35410,-82.20496)
-- **Fort King Road** (tertiary, 25 mph, source i): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: not read. Source: none. Sign coverage: 0/17 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Fort+King+Road+Dade+City+FL+@28.34902,-82.20170)
+- **Fort King Road** (tertiary, 25 mph, source i): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: 45 mph. Source: https://www.google.com/maps/@28.34824,-82.20170,3a,75y,180h,90t/data=!3m1!1e3. Sign coverage: 8/17 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Fort+King+Road+Dade+City+FL+@28.34902,-82.20170)
 - **Blanton Road** (secondary, 99 mph, source i): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: not read. Source: none. Sign coverage: 0/13 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Blanton+Road+Dade+City+FL+@28.37606,-82.20452)
 
 ## Mount Dora, FL
@@ -141,7 +144,7 @@ A row is resolved only when every current piece of that road name has sign evide
 ## Pinehurst, NC
 
 - **NC 211 Highway** (primary, 55 mph, source t): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: 55 mph. Source: https://www.mapillary.com/app/?lat=35.206690&lng=-79.465836&z=19&focus=map&mapFeatureId=150272917055603. Sign coverage: 1/34 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=NC+211+Highway+Pinehurst+NC+@35.20550,-79.47610)
-- **Midland Road** (primary, 99 mph, source i): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: not read. Source: none. Sign coverage: 0/29 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Midland+Road+Pinehurst+NC+@35.20213,-79.44907)
+- **Midland Road** (primary, 99 mph, source i): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: 35 mph. Source: https://www.google.com/maps/@35.19845,-79.45889,3a,75y,100h,90t/data=!3m1!1e3. Sign coverage: 4/29 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Midland+Road+Pinehurst+NC+@35.20213,-79.44907)
 - **Page Road** (tertiary, 25 mph, source i): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: not read. Source: none. Sign coverage: 0/24 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Page+Road+Pinehurst+NC+@35.19745,-79.46183)
 - **US 15;US 501;NC 211** (primary, 45 mph, source t): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: not read. Source: none. Sign coverage: 0/20 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=US+15;US+501;NC+211+Pinehurst+NC+@35.18656,-79.44237)
 - **Morganton Road** (secondary, 99 mph, source i): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: not read. Source: none. Sign coverage: 0/18 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Morganton+Road+Pinehurst+NC+@35.18473,-79.46684)
@@ -196,7 +199,7 @@ A row is resolved only when every current piece of that road name has sign evide
 ## Surfside Beach, TX
 
 - **Bluewater Highway** (primary, 40 mph, source t): Golf-cart-only ban. An LSV may still use it where the posted limit allows. Confirm the ordinance names this road. Posted speed seen: 40 mph. Source: https://www.mapillary.com/app/?lat=28.952305&lng=-95.286890&z=19&focus=map&mapFeatureId=3306187043030275. Sign coverage: 30/30 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Bluewater+Highway+Surfside+Beach+TX+@28.95202,-95.28721)
-- **Baldwin Road** (primary, 99 mph, source i): Untagged major road, drawn at the fast default. The real posted limit may be lower. Posted speed seen: not read. Source: none. Sign coverage: 0/3 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Baldwin+Road+Surfside+Beach+TX+@28.97820,-95.33990)
+- **Baldwin Road** (primary, 99 mph, source i): Untagged major road, drawn at the fast default. The real posted limit may be lower. Posted speed seen: 40 mph. Source: https://www.google.com/maps/@28.97935,-95.33888,3a,75y,68h,90t/data=!3m1!1e3. Sign coverage: 2/3 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Baldwin+Road+Surfside+Beach+TX+@28.97820,-95.33990)
 - **Surf Drive** (tertiary, 25 mph, source i): Tertiary road with no posted speed, assumed 25 mph. A higher sign would close it. Posted speed seen: not read. Source: none. Sign coverage: 0/15 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Surf+Drive+Surfside+Beach+TX+@28.94001,-95.29535)
 - **Thunder Road** (tertiary, 25 mph, source i): Tertiary road with no posted speed, assumed 25 mph. A higher sign would close it. Posted speed seen: not read. Source: none. Sign coverage: 0/13 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Thunder+Road+Surfside+Beach+TX+@28.94367,-95.29839)
 - **Old Surfside Road** (tertiary, 25 mph, source i): Tertiary road with no posted speed, assumed 25 mph. A higher sign would close it. Posted speed seen: not read. Source: none. Sign coverage: 0/12 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Old+Surfside+Road+Surfside+Beach+TX+@28.95909,-95.33843)
@@ -332,7 +335,7 @@ A row is resolved only when every current piece of that road name has sign evide
 - **Suncoast Boulevard** (trunk, 99 mph, source v): Explicit ban (closed to golf carts and LSVs). Confirm the sign and the crossing. Posted speed seen: not read. Source: none. Sign coverage: 0/158 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=Suncoast+Boulevard+Crystal+River+FL+@28.88361,-82.58295)
 - **North Citrus Avenue** (secondary, 99 mph, source i): Untagged major road, drawn at the fast default. The real posted limit may be lower. Posted speed seen: not read. Source: none. Sign coverage: 0/36 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=North+Citrus+Avenue+Crystal+River+FL+@28.90034,-82.59309)
 - **North Turkey Oak Drive** (secondary, 99 mph, source i): Untagged major road, drawn at the fast default. The real posted limit may be lower. Posted speed seen: not read. Source: none. Sign coverage: 0/22 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=North+Turkey+Oak+Drive+Crystal+River+FL+@28.90113,-82.56940)
-- **West Norvell Bryant Highway** (secondary, 99 mph, source i): Untagged major road, drawn at the fast default. The real posted limit may be lower. Posted speed seen: not read. Source: none. Sign coverage: 0/15 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=West+Norvell+Bryant+Highway+Crystal+River+FL+@28.89148,-82.54806)
+- **West Norvell Bryant Highway** (secondary, 99 mph, source i): Untagged major road, drawn at the fast default. The real posted limit may be lower. Posted speed seen: 40 mph. Source: https://www.google.com/maps/@28.89149,-82.54636,3a,75y,90h,90t/data=!3m1!1e3. Sign coverage: 7/15 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=West+Norvell+Bryant+Highway+Crystal+River+FL+@28.89148,-82.54806)
 - **West Fort Island Trail** (tertiary, 25 mph, source i): Tertiary road with no posted speed, assumed 25 mph. A higher sign would close it. Posted speed seen: not read. Source: none. Sign coverage: 0/35 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=West+Fort+Island+Trail+Crystal+River+FL+@28.87129,-82.59845)
 - **West State Park Street** (tertiary, 25 mph, source i): Tertiary road with no posted speed, assumed 25 mph. A higher sign would close it. Posted speed seen: not read. Source: none. Sign coverage: 0/17 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=West+State+Park+Street+Crystal+River+FL+@28.91912,-82.62759)
 - **North Dunkenfield Avenue** (tertiary, 25 mph, source i): Tertiary road with no posted speed, assumed 25 mph. A higher sign would close it. Posted speed seen: not read. Source: none. Sign coverage: 0/16 current pieces. [Map](https://www.google.com/maps/search/?api=1&query=North+Dunkenfield+Avenue+Crystal+River+FL+@28.87323,-82.55078)
