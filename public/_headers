@@ -1,4 +1,7 @@
 # Cloudflare Pages headers (ignored by GitHub Pages)
+# Town videos (content/videos.json) use a https://www.youtube-nocookie.com frame and an
+# https://i.ytimg.com thumbnail. No Content-Security-Policy is set, so those hosts are
+# allowed. If a CSP is added, keep both. tests/test_town_videos.py checks this.
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

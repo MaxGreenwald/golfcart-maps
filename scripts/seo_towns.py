@@ -4,6 +4,7 @@ and add them to dist/sitemap.xml with lastmod = last_checked. content/towns/_exa
 import glob, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from seo_common import *
+import town_videos
 TOWNS = os.path.join(ROOT, "content", "towns")
 REQ = ["slug","region","name","state","question_title","answer_short","golf_cart","lsv","rules","faq","map_center","zoom","published","last_checked"]
 
@@ -16,6 +17,8 @@ def check(t, path):
 
 def town_page(t, reg, path, noindex=False):
     rslug, n = t["region"], t["name"]
+    vid = town_videos.video_for(rslug)
+    video = town_videos.embed_html(vid)
     url = f"/{rslug}/{t['slug']}"
     lat, lon = t["map_center"]
     mapurl = f"/map/{rslug}?lat={lat}&lon={lon}&z={t['zoom']}"
@@ -30,7 +33,7 @@ def town_page(t, reg, path, noindex=False):
 <h1>{e(t['question_title'])}</h1>
 <p>{e(t['answer_short'])}</p>
 <p class="muted checked">Rules last checked {e(t['last_checked'])}{(' by ' + e(t['checked_by'])) if t.get('checked_by') else ''}. Published {e(t['published'])}.</p>
-<table><thead><tr><th>Vehicle</th><th>Allowed</th><th>Roads</th><th>Speed</th><th>Notes</th></tr></thead><tbody>{veh('Golf cart', t['golf_cart'])}{veh('Street-legal LSV', t['lsv'])}</tbody></table>
+{video}<table><thead><tr><th>Vehicle</th><th>Allowed</th><th>Roads</th><th>Speed</th><th>Notes</th></tr></thead><tbody>{veh('Golf cart', t['golf_cart'])}{veh('Street-legal LSV', t['lsv'])}</tbody></table>
 <h2>The rules</h2><table><thead><tr><th>Topic</th><th>Rule</th><th>Law</th></tr></thead><tbody>{rules}</tbody></table>
 {('<h2>Roads to avoid</h2><ul>' + banned + '</ul>') if banned else ''}
 <p><a class="cta" href="{e(mapurl)}" data-ev="cta_try_map_click" data-p='{{"position":"town","region":"{e(reg['id'])}"}}'>Open the live {e(n)} golf cart map in {BRAND} (golfcartmap.com)</a></p>
@@ -41,12 +44,16 @@ def town_page(t, reg, path, noindex=False):
 <p class="muted">Not legal advice; posted signs win.</p>"""
     webpage = {"@context":"https://schema.org","@type":"WebPage","name":t["question_title"],"url":SITE+url,"datePublished":t["published"],"dateModified":t["last_checked"],"isPartOf":{"@id":SITE+"/#website"}}
     ld = [webpage, crumbs([("Home", "/"), (reg["name"], "/" + rslug), (n, url)])] + ([faq_schema(faq)] if faq else [])
+    if vid:
+        ld.append(town_videos.video_ld(vid))
     # seo_title is optional and only for pages whose question already names the place and the vehicle.
     # It does not replace the H1 (question_title). Leave it off pages with no map/LSV hook.
     title = (f"{t['seo_title']} | {BRAND} ({month(t['last_checked'])})" if t.get("seo_title")
              else f"{t['question_title']} Rules and legal roads ({month(t['last_checked'])})")
-    return page(title, t["answer_short"][:152].rsplit(" ", 1)[0] + ("..." if len(t["answer_short"]) > 152 else ""), url, body, ld,
-                '<meta name="robots" content="noindex">' if noindex else "")
+    extra = '<meta name="robots" content="noindex">' if noindex else ""
+    if vid:
+        extra += town_videos.video_head()
+    return page(title, t["answer_short"][:152].rsplit(" ", 1)[0] + ("..." if len(t["answer_short"]) > 152 else ""), url, body, ld, extra)
 
 def build(out, root=TOWNS):
     regs = {r["slug"]: r for r in regions()}; made = []
