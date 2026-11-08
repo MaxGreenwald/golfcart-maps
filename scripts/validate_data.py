@@ -23,7 +23,7 @@ import check_enforcement as CE
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 BASE = os.path.join(ROOT, "research", "validation_baseline.json")
 ALLOW = os.path.join(ROOT, "research", "red_island_allowlist.json")
-POSTED = set("tvmdrknq")   # tagged, verified, mapillary, designated, roundabout-/turn-lane-/same-road-inherited, sources-disagree
+POSTED = set("tvmdrknqs")   # tagged, verified, mapillary, street view, designated, roundabout-/turn-lane-/same-road-inherited, sources-disagree
 MAJOR_OK = ("motorway", "trunk")   # untagged freeways are legitimately red; ignore them
 
 def load(region):
