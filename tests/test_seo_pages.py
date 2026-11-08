@@ -25,7 +25,9 @@ class T(unittest.TestCase):
         for slug, h in self.pages.items():
             ld = json.loads(self.grab(r'<script type="application/ld\+json">(.*?)</script>', h))
             types = {x["@type"] for x in ld}
-            self.assertEqual(types, {"Organization", "WebSite", "SoftwareApplication", "FAQPage", "BreadcrumbList"})
+            base = {"Organization", "WebSite", "SoftwareApplication", "FAQPage", "BreadcrumbList"}
+            self.assertTrue(base <= types, slug)
+            self.assertLessEqual(types - base, {"VideoObject"}, slug)
             app = [x for x in ld if x["@type"] == "SoftwareApplication"][0]
             self.assertNotIn("offers", app); self.assertEqual(app["name"], "Golf Cart Maps")
             faq = [x for x in ld if x["@type"] == "FAQPage"][0]
