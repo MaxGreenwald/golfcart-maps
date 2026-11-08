@@ -1,7 +1,8 @@
 {
  "_note": "Reviewed known cases. Fail = more than this. Lower when fixed; raise only after checking the listed islands. Same-road islands are checked by location instead: research/red_island_allowlist.json.",
  "_islands_explained": {
-  "poipu": "Kaumualii Hwy (HI-50, state highway, untagged) at Omao Rd/Lawai: correctly red"
+  "poipu": "Kaumualii Hwy (HI-50, state highway, untagged) at Omao Rd/Lawai: correctly red",
+  "pinehurst": "NC 5, Morganton Road, Cherokee Road, and Beulah Hill Road South near 35.16687,-79.47158 have no OSM maxspeed and no two agreeing Mapillary signs. One Cherokee Road piece with two 35 mph signs is posted and dropped out of the unknown cluster. The other 39 pieces stay closed."
  },
  "red_islands": {
   "30a": 0,
@@ -83,7 +84,7 @@
   "ocracoke": 0,
   "dadecity": 1,
   "mountdora": 0,
-  "pinehurst": 2,
+  "pinehurst": 3,
   "beaufort": 0,
   "portroyal": 0,
   "georgetown": 0,
