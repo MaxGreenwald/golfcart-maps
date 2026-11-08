@@ -26,9 +26,9 @@
   },
   {
    "topic": "Golf carts (SC law)",
-   "rule": "Permitted, insured golf carts on secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address",
-   "citation": "S.C. golf cart law (SCDPS)",
-   "source_url": "https://scdps.sc.gov/DrivinginSC/golf-cart-law"
+   "rule": "Permitted, insured golf carts on secondary roads posted 35 mph or less, in daylight, within 4 miles of the registration address or a gated-community entrance. A city or county may set other hours or roads, still only on a highway posted 35 mph or less.",
+   "citation": "S.C. Code 56-2-90",
+   "source_url": "https://www.scstatehouse.gov/code/t56c002.php"
   }
  ],
  "banned_roads": [
@@ -60,10 +60,10 @@
  ],
  "zoom": 15,
  "published": "2026-10-21",
- "last_checked": "2026-10-21",
+ "last_checked": "2026-11-08",
  "checked_by": "Golf Cart Maps",
  "sources": [
-  "https://scdps.sc.gov/DrivinginSC/golf-cart-law",
+  "https://www.scstatehouse.gov/code/t56c002.php",
   "https://www.townofedistobeach.com/police/golf-cart-and-low-speed-vehicle-use"
  ]
 }

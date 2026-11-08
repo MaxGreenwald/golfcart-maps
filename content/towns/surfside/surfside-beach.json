@@ -28,7 +28,7 @@
    "topic": "Golf carts",
    "rule": "Golf carts with the required plate and equipment on roads posted 35 mph or less where the city or county allows them, in daylight",
    "citation": "Tex. Transp. Code 551.404",
-   "source_url": "https://texas.public.law/statutes/tex._transp._code_section_551.404"
+   "source_url": "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404"
   }
  ],
  "banned_roads": [
@@ -74,7 +74,7 @@
  "checked_by": "Golf Cart Maps",
  "sources": [
   "https://library.municode.com/tx/surfside_beach/codes/code_of_ordinances?nodeId=COOR_CH46TRVE",
-  "https://texas.public.law/statutes/tex._transp._code_section_551.404",
+  "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404",
   "https://www.surfsidetx.org/page/Golfcart"
  ]
 }

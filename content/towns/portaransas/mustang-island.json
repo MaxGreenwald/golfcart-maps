@@ -15,7 +15,7 @@
   "allowed": "yes",
   "roads": "Roads posted 45 mph or less under state law; the map plans on 35 mph or less",
   "speed_line": "45 mph",
-  "notes": "State-registered LSV/NEV (Tex. Transp. Code 551.304)"
+  "notes": "State-registered neighborhood electric vehicle (Tex. Transp. Code 551.303)"
  },
  "rules": [
   {
@@ -37,6 +37,12 @@
    "source_url": "https://cityofportaransas.org/wp-content/uploads/2026/02/Golf-Cart-Laws-Strictly-Enforced.pdf"
   },
   {
+   "topic": "LSV roads",
+   "rule": "A registered neighborhood electric vehicle may use a road posted 45 mph or less and may not travel faster than 35 mph. This map plans on 35 mph or less.",
+   "citation": "Tex. Transp. Code 551.303",
+   "source_url": "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.303"
+  },
+  {
    "topic": "ATVs",
    "rule": "ATVs and UTVs are not golf carts and are not allowed in city limits, including the beach",
    "citation": "Port Aransas golf cart regulations",
@@ -53,7 +59,7 @@
  "faq": [
   {
    "q": "Where can I drive my LSV in Mustang Island?",
-   "a": "Roads posted 45 mph or less under state law; the map plans on 35 mph or less. State-registered LSV/NEV (Tex. Transp. Code 551.304). A town or county can still ban LSVs from a specific road, and posted signs win."
+   "a": "Roads posted 45 mph or less under state law; the map plans on 35 mph or less. State-registered neighborhood electric vehicle (Tex. Transp. Code 551.303). A town or county can still ban LSVs from a specific road, and posted signs win."
   },
   {
    "q": "How much is a Port Aransas golf cart plate?",
@@ -81,10 +87,11 @@
  ],
  "zoom": 15,
  "published": "2026-10-21",
- "last_checked": "2026-10-21",
+ "last_checked": "2026-11-08",
  "checked_by": "Golf Cart Maps",
  "sources": [
   "https://cityofportaransas.org/golf-cart-information-and-regulations/",
-  "https://cityofportaransas.org/wp-content/uploads/2026/02/Golf-Cart-Laws-Strictly-Enforced.pdf"
+  "https://cityofportaransas.org/wp-content/uploads/2026/02/Golf-Cart-Laws-Strictly-Enforced.pdf",
+  "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.303"
  ]
 }

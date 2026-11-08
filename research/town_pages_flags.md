@@ -9,7 +9,7 @@ Rules we could not source were left OFF the pages. Open items:
 6. **San Diego coast:** state CVC rules only. Carlsbad's ordinance-only flips are held (no specific Carlsbad roads are claimed). Del Mar's Camino del Mar 40->30 change on Nov 19, 2026 is not mentioned. Coronado is held for city email but has a page with state rules only; pull it if Coronado should stay off.
 7. **The Villages / Lady Lake / Wildwood:** Sumter County's designated-road lists aren't online. The banned list (US 27/441, US 301, SR 44) comes from our data (2018 Villages-News compilation plus the District rules). The "age 14" FAQ comes from F.S. 316.212.
 8. **Naples / Vanderbilt Beach / Marco Island:** the City of Naples golf cart street designations aren't digitized. The pages only say "designated and signed roads".
-9. **Port Aransas / Mustang Island:** the LSV row cites Tex. Transp. Code 551.304 (<=45) while the map plans on <=35. Whether the Mustang Island (county) area outside city limits needs the city plate is unconfirmed.
+9. **Port Aransas / Mustang Island:** state law (Tex. Transp. Code 551.303) lets a neighborhood electric vehicle use roads posted 45 mph or less. The map plans on 35 mph or less. Whether the Mustang Island (county) area outside city limits needs the city plate is unconfirmed.
 10. **Sun City West / Youngtown:** the source is the Sun City HOA's MCSO guidance (written for Sun City). Sun City West (PORA) and the Town of Youngtown rules were not checked.
 11. **Gulf Shores / Orange Beach:** the Orange Beach list was OCR'd and Ord. 2025-1521 wasn't fully read. Pages say only "25 mph cap" and "state highways".
 12. Map centers are approximate town centers (checked to fall inside the region bbox). They were not checked on the ground.

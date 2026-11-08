@@ -46,14 +46,16 @@
   "lsv": {
    "max_posted": 35,
    "cross": true,
-   "cite": "S.C. 56-5-820"
+   "cite": "S.C. Code 56-2-100 (a low speed vehicle may use a highway posted 35 mph or less and may cross a faster highway at an intersection)",
+   "url": "https://www.scstatehouse.gov/code/t56c002.php"
   },
   "golf_cart": {
    "max_posted": 35,
    "radius_mi": 4,
    "daylight_only": true,
    "cross": true,
-   "cite": "S.C. 56-2-105 (secondary roads posted ≤35 mph, within 4 mi of registration address, daylight unless local ordinance; permit + decal)"
+   "cite": "S.C. Code 56-2-90 (2025 Act No. 64, H.3292, eff. May 22, 2025; amended by 2026 Act No. 164, S.222, Section 6.A, eff. May 18, 2026): without a local ordinance, a permitted golf cart may use a secondary highway posted 35 mph or less, in daylight, within 4 miles of the registration address or of a gated-community entrance, and may cross a faster road at an intersection. A city or county may set hours, methods and locations by ordinance, still only on highways posted 35 mph or less, and may allow night driving with working headlights and taillights. A half-mile window around certain large athletic events is not drawn on the map.",
+   "url": "https://www.scstatehouse.gov/code/t56c002.php"
   }
  },
  "TX": {
@@ -61,13 +63,15 @@
   "lsv": {
    "max_posted": 35,
    "cross": true,
-   "cite": "Tex. Transp. Code 551.304 (NEV/LSV on roads ≤45; app uses ≤35)"
+   "cite": "Tex. Transp. Code 551.303 (a neighborhood electric vehicle may use a street or highway posted 45 mph or less, may cross a faster road at an intersection, and may not travel faster than 35 mph; the map plans on roads posted 35 mph or less)",
+   "url": "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.303"
   },
   "golf_cart": {
    "max_posted": 35,
    "daylight_only": true,
    "cross": true,
-   "cite": "Tex. Transp. Code 551.403-551.404 (golf cart plate required, 551.402; daytime on roads ≤35 within 2 mi of where parked or in a master-planned community, or where the city/county authorizes)"
+   "cite": "Tex. Transp. Code 551.402 through 551.405 (license plate required, 551.402; daytime on a road posted 35 mph or less within 5 miles of where the cart is parked, and only to or from a golf course, 551.403; or in a master-planned community or on a beach open to vehicles; or where a city or an eligible county authorizes, 551.404; may cross a faster road at an intersection, 551.405)",
+   "url": "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.403"
   }
  },
  "AL": {
