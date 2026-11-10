@@ -35,6 +35,8 @@ jobs:
         run: node --test tests/rental_code.test.mjs
       - name: Partner places validation (category enum, no coupon, https link)
         run: node --test tests/partner_places.test.mjs
+      - name: Experience route check (miles, time, battery, legal roads)
+        run: node --test tests/routecheck.test.mjs
       - name: Shop rental vehicle (API values, worker stores and exposes it)
         run: node --test tests/partner_vehicle.test.mjs
       - name: Nearest-stop start (visit order; experience setting defaults on)
@@ -133,6 +135,8 @@ jobs:
         run: python -m unittest tests.test_partner_brand_color -v
       - name: test_partner_experience_stops (edit a stop and reorder, then the save sticks)
         run: python -m unittest tests.test_partner_experience_stops -v
+      - name: test_partner_route_check (miles, time, battery, unreachable stop)
+        run: python -m unittest tests.test_partner_route_check -v
       - name: test_partner_super_edit (super-admin opens any shop's owner editor, banner, scoped calls, back)
         run: python -m unittest tests.test_partner_super_edit -v
       - name: test_partner_places (owner place CRUD, place as stop, renter icons + notes)
