@@ -476,6 +476,10 @@ function vehLegend() {
     : 'Golf cart rules: roads up to 25 mph.';
 }
 
+function routePoint(s) {
+  const d = window.GCMPark ? GCMPark.dest(s) : { lat: +s.lat, lon: +s.lon, parked: false };
+  return Object.assign({}, s, { lat: d.lat, lon: d.lon, parked: !!d.parked });
+}
 function connectStops(stops, opts) {
   return withRoads(async () => {
     await loadRules();
@@ -501,7 +505,7 @@ async function drawUnlocked(opts) {
   const token = ++drawToken;
   if (!map || !pins || !routeLayer) return;
   const stops = (activeEx && activeEx.stops) || [];
-  const goodStops = stops.filter(s => finite(s.lat, s.lon));
+  const goodStops = stops.filter(s => finite(s.lat, s.lon)).map(routePoint);
   let legs = null;
   if (goodStops.length > 1) {
     setRouteNote(`Tracing ${vehWord()} roads…`);
@@ -539,6 +543,11 @@ async function drawUnlocked(opts) {
       const m = L.marker([+s.lat, +s.lon], { icon: stopIcon(i + 1), zIndexOffset: 700 }).addTo(pins);
       m.bindPopup(`<b>${i + 1}. ${esc(s.label)}</b>${s.note ? `<br>${esc(s.note)}` : ''}`);
       bounds.push([+s.lat, +s.lon]);
+      const park = routePoint(s);
+      if (park.parked) {
+        const dot = L.marker([park.lat, park.lon], { icon: L.divIcon({ className: '', html: '<div style="width:22px;height:22px;border-radius:50%;background:#0b3c50;color:#fff;font:800 11px Nunito;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px #0006">P</div>', iconSize: [22, 22], iconAnchor: [11, 11] }), zIndexOffset: 650 }).addTo(pins);
+        dot.bindPopup(`<b>Park here</b><br>${esc(s.label || 'this stop')}`);
+      }
     });
   }
   setRouteNote(describeRoute(legs, goodStops.length));
@@ -648,7 +657,8 @@ function beginNav(leg, i, target) {
   GCMNavFx.resetTrip();
   // Finish flag: the free-ride destination, or the experience's last stop.
   if (navFlagMk) navFlagMk.remove();
-  const end = target || (stops || []).filter(s => finite(s.lat, s.lon)).pop();
+  const endRaw = target || (stops || []).filter(s => finite(s.lat, s.lon)).pop();
+  const end = endRaw && (target ? endRaw : routePoint(endRaw));
   navFlagMk = end && map ? GCMNavFx.flag(L, map, [+end.lat, +end.lon]) : null;
   const el = navEl();
   el.classList.add('show');
@@ -743,7 +753,7 @@ async function routeToStop(i, quiet) {
   updateNext();
   const from = meLL || (map && { lat: map.getCenter().lat, lon: map.getCenter().lng });
   let legs = null;
-  try { legs = await connectStops([from, stop], { heading: rerouteCourse }); } catch (e) { legs = null; }
+  try { legs = await connectStops([from, routePoint(stop)], { heading: rerouteCourse }); } catch (e) { legs = null; }
   const leg = legs && legs[0];
   if (liveLayer) liveLayer.clearLayers();
   if (leg && leg.points && leg.points.length >= 2) {
@@ -936,7 +946,7 @@ async function startExperience() {
   drawUnlocked({ noFrame: true });
   const first = ordered[0];
   let legs = null;
-  try { legs = await connectStops([from, first]); }
+  try { legs = await connectStops([from, routePoint(first)]); }
   catch (e) { legs = null; }
   if (token !== startToken || !liveLayer) return;
   liveLayer.clearLayers();

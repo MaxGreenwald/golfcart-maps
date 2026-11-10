@@ -1,7 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
-import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL } from '../../../lib/partner.js';
+import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL, withPark } from '../../../lib/partner.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -258,7 +258,7 @@ export class PartnerStore extends DurableObject {
         if (!this.one('SELECT id FROM shops WHERE id=?', sid)) return J({ error: 'not found' }, 404);
         const title = String(body.title || '').trim();
         if (!title) return J({ error: 'Title required' }, 400);
-        const stops = Array.isArray(body.stops) ? body.stops : [];
+        const stops = Array.isArray(body.stops) ? body.stops.map(withPark) : [];
         const eid = id();
         const t = now();
         this.sql.exec(
@@ -273,7 +273,7 @@ export class PartnerStore extends DurableObject {
         if (!ex) return J({ error: 'not found' }, 404);
         const title = body.title != null ? String(body.title).trim() : ex.title;
         const description = body.description != null ? String(body.description) : ex.description;
-        const stops = body.stops != null ? JSON.stringify(body.stops) : ex.stops_json;
+        const stops = body.stops != null ? JSON.stringify(Array.isArray(body.stops) ? body.stops.map(withPark) : []) : ex.stops_json;
         const ns = body.nearest_start != null ? (nearestStart(body.nearest_start) ? 1 : 0) : (nearestStart(ex.nearest_start) ? 1 : 0);
         this.sql.exec('UPDATE experiences SET title=?, description=?, stops_json=?, nearest_start=?, updated_at=? WHERE id=?', title, description, stops, ns, now(), eid);
         return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)) });
