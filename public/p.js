@@ -1138,6 +1138,9 @@ async function unlockedView() {
     setRouteNote('Map couldn’t load. Your stops are still listed above.');
     mapCard.hidden = false;
   }
+  if (window.GCMHelp && unlocked && unlocked.shop && unlocked.shop.phone) {
+    GCMHelp.mount(document, { phone: unlocked.shop.phone, shopName: unlocked.shop.name, getFix: () => meLL });
+  }
 }
 
 async function boot() {

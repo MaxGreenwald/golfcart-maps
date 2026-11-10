@@ -313,6 +313,9 @@ function shopView() {
     </select>
     <p class="muted" id="brandVehicleHint">Sets which roads show green and how routes run on your renter page.</p>
     <label>Short blurb</label><textarea id="brandBlurb">${esc(s.blurb || '')}</textarea>
+    <label for="brandPhone">Shop phone for renter help</label>
+    <input id="brandPhone" inputmode="tel" placeholder="858-555-0100" value="${esc(s.phone || '')}">
+    <p class="muted">Renters who unlocked your page can call or text this number. A text includes their location. Nothing is stored here.</p>
     <div class="row">
       <div><label>Logo URL (optional)</label><input id="brandLogo" value="${esc(s.logo_url || '')}" placeholder="https://…"></div>
       ${brandColorFields(s.color)}
@@ -945,6 +948,7 @@ function bindApp() {
         logo_url: $('#brandLogo').value.trim(),
         color: $('#brandColor').value.trim(),
         vehicle: $('#brandVehicle').value,
+        phone: $('#brandPhone') ? $('#brandPhone').value.trim() : '',
       }) });
       flash(true, 'Brand saved');
       await refreshShop();

@@ -1,7 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
-import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL } from '../../../lib/partner.js';
+import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL, cleanPhone } from '../../../lib/partner.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -109,6 +109,8 @@ export class PartnerStore extends DurableObject {
     // Per-shop rental vehicle (road rules on /p/<slug>). Added Oct 29 2026.
     const cols = this.sql.exec('PRAGMA table_info(shops)').toArray().map(c => c.name);
     if (!cols.includes('vehicle')) this.sql.exec("ALTER TABLE shops ADD COLUMN vehicle TEXT DEFAULT ''");
+    // Shop phone for the renter Help button. A rental info card should keep this column name.
+    if (!cols.includes('phone')) this.sql.exec("ALTER TABLE shops ADD COLUMN phone TEXT DEFAULT ''");
     // Per-experience nearest-stop start (on by default; existing rows read 1). Added Oct 31 2026.
     const exCols = this.sql.exec('PRAGMA table_info(experiences)').toArray().map(c => c.name);
     if (!exCols.includes('nearest_start')) this.sql.exec('ALTER TABLE experiences ADD COLUMN nearest_start INTEGER NOT NULL DEFAULT 1');
@@ -123,6 +125,7 @@ export class PartnerStore extends DurableObject {
       blurb: r.blurb || '', logo_url: r.logo_url || '', color: r.color || '',
       owner_email: r.owner_email || '', disabled: !!r.disabled, created_at: r.created_at,
       vehicle: shopVehicle(r.vehicle),
+      phone: r.phone || '',
     };
   }
   expRow(r) {
@@ -201,9 +204,12 @@ export class PartnerStore extends DurableObject {
           return J({ error: 'vehicle must be one of ' + SHOP_VEHICLES.join(', ') }, 400);
         }
         const vehicle = body.vehicle != null ? body.vehicle : (sh.vehicle || '');
+        const ph = cleanPhone(body.phone !== undefined ? body.phone : null);
+        if (ph.error) return J({ error: ph.error }, 400);
+        const phone = ph.skip ? (sh.phone || '') : ph.value;
         this.sql.exec(
-          'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=? WHERE id=?',
-          name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, sid,
+          'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=?, phone=? WHERE id=?',
+          name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, phone, sid,
         );
         return J({ shop: this.shopRow(this.one('SELECT * FROM shops WHERE id=?', sid)) });
       }

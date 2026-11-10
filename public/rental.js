@@ -65,6 +65,10 @@
       row.querySelector('#rentForm').hidden = !!a;
       row.querySelector('#rentOn').hidden = !a;
       if (a) row.querySelector('#rentView').href = shopUrl(a.slug, win);
+      const Help = typeof globalThis !== 'undefined' ? globalThis.GCMHelp : null;
+      if (Help && !doc.getElementById('shopHelp') && a && a.shop && a.shop.phone) {
+        Help.mount(doc, { phone: a.shop.phone, shopName: a.shop.name, getFix: () => globalThis.gcmMyFix && globalThis.gcmMyFix() });
+      }
     };
     row.querySelector('#rentForm').addEventListener('submit', async e => {
       e.preventDefault();
