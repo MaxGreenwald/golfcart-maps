@@ -267,6 +267,34 @@ function superView() {
   </div>`;
 }
 
+function copyCard() {
+  const locs = state.locations || [];
+  const here = state.shopBundle && state.shopBundle.shop;
+  if (!here) return '';
+  if (!locs.length) {
+    return `<div class="card" id="copyCard"><h2>Other locations</h2>
+      <p class="muted">This account has one location. A second shop on the same owner can receive a copy of a ride or this whole page.</p></div>`;
+  }
+  const opts = locs.map(s => `<option value="${esc(s.id)}">${esc(s.name)} (${esc(s.region_id)})</option>`).join('');
+  const switcher = `<label for="locPick">Location</label>
+    <select id="locPick">${[`<option value="${esc(here.id)}" selected>${esc(here.name)} (${esc(here.region_id)})</option>`, opts].join('')}</select>`;
+  return `<div class="card" id="copyCard"><h2>Other locations</h2>
+    <p class="muted">Copy this page, or one ride, to another shop you own. Pins come along when the town matches. A different town gets the ride names, and you drop new pins.</p>
+    ${switcher}
+    <label for="pageDest">Copy this page to</label>
+    <select id="pageDest">${opts}</select>
+    <label class="ns-row"><input type="checkbox" id="pageSync" checked> Update other locations when you edit</label>
+    <p><button class="btn" id="copyPage" type="button">Copy page</button></p>
+    <div id="copyExBox" class="hidden">
+      <p class="muted" id="copyExLabel"></p>
+      <label for="exDest">Copy this ride to</label>
+      <select id="exDest">${opts}</select>
+      <label class="ns-row"><input type="checkbox" id="exSync" checked> Update other locations when you edit this ride</label>
+      <p><button class="btn" id="copyExGo" type="button">Copy ride</button></p>
+    </div>
+  </div>`;
+}
+
 function shopView() {
   const b = state.shopBundle;
   if (!b || !b.shop) return `<div class="card"><p class="msg err">No shop linked to this account yet. Accept an invite from Max.</p></div>`;
@@ -276,9 +304,11 @@ function shopView() {
   const exRows = (b.experiences || []).map(e => `<tr>
     <td><b>${esc(e.title)}</b><div class="muted">${esc(e.description || '')}</div>
       <div class="muted ex-stops">${stopsLine(e.stops)}</div>
-      <div class="muted ex-order">${e.nearest_start === false ? 'Riders follow your exact order' : 'Riders start at their nearest stop'}</div></td>
+      <div class="muted ex-order">${e.nearest_start === false ? 'Riders follow your exact order' : 'Riders start at their nearest stop'}</div>
+      ${e.template_id ? '<div class="muted">Linked to your other locations</div>' : ''}</td>
     <td><div class="ex-actions">
       <button class="btn alt" data-edit-ex="${esc(e.id)}" type="button">Edit</button>
+      <button class="btn alt" data-copy-ex="${esc(e.id)}" type="button">Copy</button>
       <button class="btn warn" data-del-ex="${esc(e.id)}" type="button">Delete</button>
     </div></td>
   </tr>`).join('') || '<tr><td colspan="2" class="muted">No experiences yet.</td></tr>';
@@ -317,6 +347,7 @@ function shopView() {
       <div><label>Logo URL (optional)</label><input id="brandLogo" value="${esc(s.logo_url || '')}" placeholder="https://…"></div>
       ${brandColorFields(s.color)}
     </div>
+    ${s.page_template_id ? '<label class="ns-row"><input type="checkbox" id="brandPush" checked> Update the brand at your other locations</label>' : ''}
     <p style="margin-top:12px"><button class="btn" id="saveBrand" type="button">Save brand</button></p>
   </div>
   <div class="card"><h2>Experiences</h2>
@@ -328,12 +359,14 @@ function shopView() {
     <label>Stops</label>${stopEditor([{}])}
     <label class="ns-row" style="margin-top:10px"><input type="checkbox" id="exNearest" checked> Start riders at their nearest stop</label>
     <div class="muted" id="exNearestHelp">Off: riders follow your exact order</div>
+    <label class="ns-row hidden" id="exPushRow"><input type="checkbox" id="exPush" checked> Update copies at your other locations</label>
     <p>
       <button class="btn" id="addEx" type="button">Add experience</button>
       <button class="btn alt hidden" id="cancelEx" type="button">Cancel</button>
     </p>
     <table><thead><tr><th>Experience</th><th></th></tr></thead><tbody>${exRows}</tbody></table>
   </div>
+  ${copyCard()}
   ${placesCard()}
   <div class="card af-place"><h2>Affiliate offers</h2>
     <p class="muted">Restaurants and deals for your renters. Larger ★ pins on the map.</p>
@@ -786,13 +819,15 @@ function readStops() {
   return [...document.querySelectorAll('#stopList .stop')].map(row => {
     const named = ($('[data-k=name]', row) && $('[data-k=name]', row).value.trim()) || '';
     const hidden = ($('[data-k=label]', row) && $('[data-k=label]', row).value.trim()) || '';
-    return {
+    const lat = +$('[data-k=lat]', row).value;
+    const lon = +$('[data-k=lon]', row).value;
+    const stop = {
       label: named || hidden,
-      lat: +$('[data-k=lat]', row).value,
-      lon: +$('[data-k=lon]', row).value,
       note: $('[data-k=note]', row).value.trim(),
     };
-  }).filter(s => s.label && Number.isFinite(s.lat) && Number.isFinite(s.lon));
+    if (Number.isFinite(lat) && Number.isFinite(lon)) { stop.lat = lat; stop.lon = lon; }
+    return stop;
+  }).filter(s => s.label);
 }
 
 function setExperienceMode(editing) {
@@ -821,6 +856,9 @@ function loadExperience(ex) {
   $('#exDesc').value = ex.description || '';
   fillStopList(ex.stops || []);
   if ($('#exNearest')) $('#exNearest').checked = ex.nearest_start !== false;
+  const pushRow = $('#exPushRow');
+  if (pushRow) pushRow.classList.toggle('hidden', !ex.template_id);
+  if ($('#exPush')) $('#exPush').checked = !!ex.template_id;
   setExperienceMode(true);
   const title = $('#exTitle');
   if (title && title.scrollIntoView) title.scrollIntoView({ block: 'start' });
@@ -945,6 +983,7 @@ function bindApp() {
         logo_url: $('#brandLogo').value.trim(),
         color: $('#brandColor').value.trim(),
         vehicle: $('#brandVehicle').value,
+        push_page: !!($('#brandPush') && $('#brandPush').checked),
       }) });
       flash(true, 'Brand saved');
       await refreshShop();
@@ -975,6 +1014,7 @@ function bindApp() {
         description: $('#exDesc').value,
         stops,
         nearest_start: !$('#exNearest') || $('#exNearest').checked,
+        push: !!($('#exPushRow') && !$('#exPushRow').classList.contains('hidden') && $('#exPush') && $('#exPush').checked),
       };
       const eid = ($('#exId') && $('#exId').value) || '';
       if (eid) {
@@ -1059,6 +1099,49 @@ function bindApp() {
   });
   if (daysIn) daysIn.oninput = () => chips.forEach(x => x.classList.toggle('on', x.dataset.days === daysIn.value));
   const genCode = $('#genCode');
+  const locPick = $('#locPick');
+  if (locPick) locPick.onchange = async () => {
+    const id = locPick.value;
+    const here = state.shopBundle && state.shopBundle.shop;
+    if (!here || id === here.id) return;
+    const hit = (state.locations || []).find(s => s.id === id);
+    if (!hit) return;
+    state.actingShop = { id: hit.id, name: hit.name };
+    state.msg = ''; state.err = '';
+    try { await refreshShop(); } catch (e) { flash(false, e.message); }
+  };
+  document.querySelectorAll('[data-copy-ex]').forEach(b => b.onclick = () => {
+    const box = $('#copyExBox');
+    const ex = ((state.shopBundle && state.shopBundle.experiences) || []).find(e => e.id === b.dataset.copyEx);
+    if (!box || !ex) return;
+    box.classList.remove('hidden');
+    box.dataset.ex = ex.id;
+    const label = $('#copyExLabel');
+    if (label) label.textContent = 'Copy "' + ex.title + '" to another location.';
+    box.scrollIntoView({ block: 'nearest' });
+  });
+  const copyExGo = $('#copyExGo');
+  if (copyExGo) copyExGo.onclick = async () => {
+    const box = $('#copyExBox');
+    try {
+      const j = await api('/shop/copy-experience', { method: 'POST', body: JSON.stringify({
+        experience_id: box && box.dataset.ex, dest_shop_id: $('#exDest').value, sync: $('#exSync').checked,
+      }) });
+      const extra = j.keep_pins ? '' : ' This town is different, so drop new pins on the copy.';
+      flash(true, 'Ride copied.' + extra);
+    } catch (e) { flash(false, e.message); }
+  };
+  const copyPage = $('#copyPage');
+  if (copyPage) copyPage.onclick = async () => {
+    try {
+      const j = await api('/shop/copy-page', { method: 'POST', body: JSON.stringify({
+        dest_shop_id: $('#pageDest').value, sync: $('#pageSync').checked,
+      }) });
+      const n = j.copied || {};
+      const extra = j.keep_pins ? '' : ' Pins stay in the original town. Drop new pins on the rides.';
+      flash(true, 'Page copied (' + (n.experiences || 0) + ' rides).' + extra);
+    } catch (e) { flash(false, e.message); }
+  };
   if (genCode) genCode.onclick = async () => {
     try {
       const never = !!$('#codeChips [data-days=never].on');
@@ -1082,6 +1165,8 @@ async function refreshSuper() {
 }
 async function refreshShop() {
   state.shopBundle = await api('/shop');
+  try { state.locations = (await api('/shop/locations')).locations || []; }
+  catch (e) { state.locations = state.locations || []; }
   state.view = 'shop';
   render();
 }

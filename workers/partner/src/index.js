@@ -2,6 +2,7 @@
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
 import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL } from '../../../lib/partner.js';
+import { sameTown, pushStops, brandFields, experiencePayload } from '../../../lib/partner_templates.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -112,6 +113,12 @@ export class PartnerStore extends DurableObject {
     // Per-experience nearest-stop start (on by default; existing rows read 1). Added Oct 31 2026.
     const exCols = this.sql.exec('PRAGMA table_info(experiences)').toArray().map(c => c.name);
     if (!exCols.includes('nearest_start')) this.sql.exec('ALTER TABLE experiences ADD COLUMN nearest_start INTEGER NOT NULL DEFAULT 1');
+    if (!exCols.includes('template_id')) this.sql.exec('ALTER TABLE experiences ADD COLUMN template_id TEXT');
+    const afCols = this.sql.exec('PRAGMA table_info(affiliates)').toArray().map(c => c.name);
+    if (!afCols.includes('template_id')) this.sql.exec('ALTER TABLE affiliates ADD COLUMN template_id TEXT');
+    const plCols = this.sql.exec('PRAGMA table_info(places)').toArray().map(c => c.name);
+    if (!plCols.includes('template_id')) this.sql.exec('ALTER TABLE places ADD COLUMN template_id TEXT');
+    if (!cols.includes('page_template_id')) this.sql.exec('ALTER TABLE shops ADD COLUMN page_template_id TEXT');
   }
   q(s, ...a) { return this.sql.exec(s, ...a).toArray(); }
   one(s, ...a) { return this.q(s, ...a)[0] || null; }
@@ -123,22 +130,23 @@ export class PartnerStore extends DurableObject {
       blurb: r.blurb || '', logo_url: r.logo_url || '', color: r.color || '',
       owner_email: r.owner_email || '', disabled: !!r.disabled, created_at: r.created_at,
       vehicle: shopVehicle(r.vehicle),
+      page_template_id: r.page_template_id || '',
     };
   }
   expRow(r) {
     if (!r) return null;
     let stops = [];
     try { stops = JSON.parse(r.stops_json || '[]'); } catch { stops = []; }
-    return { id: r.id, shop_id: r.shop_id, title: r.title, description: r.description || '', stops, nearest_start: nearestStart(r.nearest_start), created_at: r.created_at, updated_at: r.updated_at };
+    return { id: r.id, shop_id: r.shop_id, title: r.title, description: r.description || '', stops, nearest_start: nearestStart(r.nearest_start), template_id: r.template_id || '', created_at: r.created_at, updated_at: r.updated_at };
   }
   placeRow(r) {
     if (!r) return null;
-    return { id: r.id, shop_id: r.shop_id, name: r.name, category: r.category, lat: r.lat, lon: r.lon, note: r.note || '', link: r.link || '', created_at: r.created_at };
+    return { id: r.id, shop_id: r.shop_id, name: r.name, category: r.category, lat: r.lat, lon: r.lon, note: r.note || '', link: r.link || '', template_id: r.template_id || '', created_at: r.created_at };
   }
   places(sid) { return this.q('SELECT * FROM places WHERE shop_id=? ORDER BY created_at', sid).map(r => this.placeRow(r)); }
   affRow(r) {
     if (!r) return null;
-    return { id: r.id, shop_id: r.shop_id, name: r.name, lat: r.lat, lon: r.lon, offer: r.offer || '', coupon: r.coupon || '', created_at: r.created_at };
+    return { id: r.id, shop_id: r.shop_id, name: r.name, lat: r.lat, lon: r.lon, offer: r.offer || '', coupon: r.coupon || '', template_id: r.template_id || '', created_at: r.created_at };
   }
 
   /** The unlock answer for a code row; withGrant adds a grant for a later app handoff. */
@@ -205,7 +213,17 @@ export class PartnerStore extends DurableObject {
           'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=? WHERE id=?',
           name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, sid,
         );
-        return J({ shop: this.shopRow(this.one('SELECT * FROM shops WHERE id=?', sid)) });
+        let pushed = 0;
+        if (body.push_page && sh.page_template_id) {
+          const fields = brandFields({ blurb, logo_url, color, vehicle });
+          const allow = Array.isArray(body.push_shop_ids) ? body.push_shop_ids : null;
+          for (const sib of this.q('SELECT id FROM shops WHERE page_template_id=? AND id<>?', sh.page_template_id, sid)) {
+            if (allow && !allow.includes(sib.id)) continue;
+            this.sql.exec('UPDATE shops SET blurb=?, logo_url=?, color=?, vehicle=? WHERE id=?', fields.blurb, fields.logo_url, fields.color, fields.vehicle, sib.id);
+            pushed++;
+          }
+        }
+        return J({ shop: this.shopRow(this.one('SELECT * FROM shops WHERE id=?', sid)), pushed });
       }
       if (path.match(/^\/shops\/[^/]+\/invite$/) && method === 'POST') {
         const sid = path.split('/')[2];
@@ -240,6 +258,11 @@ export class PartnerStore extends DurableObject {
         const sh = this.one('SELECT * FROM shops WHERE lower(owner_email)=? AND disabled=0 ORDER BY created_at DESC LIMIT 1', email);
         return J({ shop: this.shopRow(sh) });
       }
+      if (path === '/shops-by-owner' && method === 'GET') {
+        const email = (u.searchParams.get('email') || '').toLowerCase();
+        const rows = email ? this.q('SELECT * FROM shops WHERE lower(owner_email)=? AND disabled=0 ORDER BY created_at', email) : [];
+        return J({ shops: rows.map(r => this.shopRow(r)) });
+      }
       if (path.startsWith('/shops/') && path.endsWith('/bundle') && method === 'GET') {
         const sid = path.split('/')[2];
         const sh = this.one('SELECT * FROM shops WHERE id=?', sid);
@@ -262,8 +285,8 @@ export class PartnerStore extends DurableObject {
         const eid = id();
         const t = now();
         this.sql.exec(
-          'INSERT INTO experiences(id,shop_id,title,description,stops_json,nearest_start,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?)',
-          eid, sid, title, String(body.description || ''), JSON.stringify(stops), nearestStart(body.nearest_start) ? 1 : 0, t, t,
+          'INSERT INTO experiences(id,shop_id,title,description,stops_json,nearest_start,template_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?)',
+          eid, sid, title, String(body.description || ''), JSON.stringify(stops), nearestStart(body.nearest_start) ? 1 : 0, body.template_id || null, t, t,
         );
         return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)) }, 201);
       }
@@ -276,7 +299,27 @@ export class PartnerStore extends DurableObject {
         const stops = body.stops != null ? JSON.stringify(body.stops) : ex.stops_json;
         const ns = body.nearest_start != null ? (nearestStart(body.nearest_start) ? 1 : 0) : (nearestStart(ex.nearest_start) ? 1 : 0);
         this.sql.exec('UPDATE experiences SET title=?, description=?, stops_json=?, nearest_start=?, updated_at=? WHERE id=?', title, description, stops, ns, now(), eid);
-        return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)) });
+        let pushed = 0;
+        if (body.push && ex.template_id) {
+          const saved = this.one('SELECT * FROM experiences WHERE id=?', eid);
+          const srcShop = this.one('SELECT * FROM shops WHERE id=?', saved.shop_id);
+          const allow = Array.isArray(body.push_shop_ids) ? body.push_shop_ids : null;
+          let srcStops = [];
+          try { srcStops = JSON.parse(saved.stops_json || '[]'); } catch { srcStops = []; }
+          for (const sib of this.q('SELECT * FROM experiences WHERE template_id=? AND id<>?', ex.template_id, eid)) {
+            if (allow && !allow.includes(sib.shop_id)) continue;
+            const destShop = this.one('SELECT * FROM shops WHERE id=?', sib.shop_id);
+            let destStops = [];
+            try { destStops = JSON.parse(sib.stops_json || '[]'); } catch { destStops = []; }
+            const next = pushStops(srcStops, destStops, sameTown(srcShop, destShop));
+            this.sql.exec(
+              'UPDATE experiences SET title=?, description=?, stops_json=?, nearest_start=?, updated_at=? WHERE id=?',
+              saved.title, saved.description, JSON.stringify(next), saved.nearest_start, now(), sib.id,
+            );
+            pushed++;
+          }
+        }
+        return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)), pushed });
       }
       if (path.match(/^\/(experiences|affiliates|places)\/[^/]+\/owner$/) && method === 'GET') {
         const [, tbl, rid] = path.split('/');
@@ -348,6 +391,83 @@ export class PartnerStore extends DurableObject {
       if (path.match(/^\/places\/[^/]+$/) && method === 'DELETE') {
         this.sql.exec('DELETE FROM places WHERE id=?', path.split('/')[2]);
         return J({ ok: true });
+      }
+      // Copy one experience, or the whole page, to another shop this partner owns.
+      const copyEx = path.match(/^\/shops\/([^/]+)\/copy-experience$/);
+      if (copyEx && method === 'POST') {
+        const sid = copyEx[1];
+        const srcShop = this.one('SELECT * FROM shops WHERE id=?', sid);
+        const ex = this.one('SELECT * FROM experiences WHERE id=? AND shop_id=?', String(body.experience_id || ''), sid);
+        const dest = this.one('SELECT * FROM shops WHERE id=? AND disabled=0', String(body.dest_shop_id || ''));
+        if (!srcShop || !ex || !dest) return J({ error: 'not found' }, 404);
+        if (dest.id === sid) return J({ error: 'Pick a different location' }, 400);
+        const keep = sameTown(srcShop, dest);
+        const sync = !!body.sync;
+        const tid = sync ? (ex.template_id || randomToken(8)) : null;
+        if (tid && !ex.template_id) this.sql.exec('UPDATE experiences SET template_id=? WHERE id=?', tid, ex.id);
+        const payload = experiencePayload(this.expRow(this.one('SELECT * FROM experiences WHERE id=?', ex.id)), { keepPins: keep, templateId: tid });
+        if (!payload.title) return J({ error: 'Title required' }, 400);
+        const eid = id();
+        const t = now();
+        this.sql.exec(
+          'INSERT INTO experiences(id,shop_id,title,description,stops_json,nearest_start,template_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?)',
+          eid, dest.id, payload.title, payload.description, JSON.stringify(payload.stops), payload.nearest_start ? 1 : 0, tid, t, t,
+        );
+        return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)), keep_pins: keep, synced: !!tid }, 201);
+      }
+      const copyPage = path.match(/^\/shops\/([^/]+)\/copy-page$/);
+      if (copyPage && method === 'POST') {
+        const sid = copyPage[1];
+        const srcShop = this.one('SELECT * FROM shops WHERE id=?', sid);
+        const dest = this.one('SELECT * FROM shops WHERE id=? AND disabled=0', String(body.dest_shop_id || ''));
+        if (!srcShop || !dest) return J({ error: 'not found' }, 404);
+        if (dest.id === sid) return J({ error: 'Pick a different location' }, 400);
+        const keep = sameTown(srcShop, dest);
+        const sync = !!body.sync;
+        const pageId = sync ? (srcShop.page_template_id || randomToken(8)) : (dest.page_template_id || null);
+        const brand = brandFields(this.shopRow(srcShop));
+        if (sync && !srcShop.page_template_id) this.sql.exec('UPDATE shops SET page_template_id=? WHERE id=?', pageId, sid);
+        this.sql.exec('UPDATE shops SET blurb=?, logo_url=?, color=?, vehicle=?, page_template_id=? WHERE id=?',
+          brand.blurb, brand.logo_url, brand.color, brand.vehicle, sync ? pageId : dest.page_template_id, dest.id);
+        const copied = { experiences: 0, affiliates: 0, places: 0 };
+        for (const ex of this.q('SELECT * FROM experiences WHERE shop_id=? ORDER BY created_at', sid)) {
+          const tid = sync ? (ex.template_id || randomToken(8)) : null;
+          if (tid && !ex.template_id) this.sql.exec('UPDATE experiences SET template_id=? WHERE id=?', tid, ex.id);
+          const payload = experiencePayload(this.expRow(this.one('SELECT * FROM experiences WHERE id=?', ex.id)), { keepPins: keep, templateId: tid });
+          const eid = id();
+          const t = now();
+          this.sql.exec(
+            'INSERT INTO experiences(id,shop_id,title,description,stops_json,nearest_start,template_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?)',
+            eid, dest.id, payload.title, payload.description, JSON.stringify(payload.stops), payload.nearest_start ? 1 : 0, tid, t, t,
+          );
+          copied.experiences++;
+        }
+        if (keep) {
+          for (const af of this.q('SELECT * FROM affiliates WHERE shop_id=? ORDER BY created_at', sid)) {
+            const tid = sync ? (af.template_id || randomToken(8)) : null;
+            if (tid && !af.template_id) this.sql.exec('UPDATE affiliates SET template_id=? WHERE id=?', tid, af.id);
+            const aid = id();
+            this.sql.exec(
+              'INSERT INTO affiliates(id,shop_id,name,lat,lon,offer,coupon,template_id,created_at) VALUES(?,?,?,?,?,?,?,?,?)',
+              aid, dest.id, af.name, af.lat, af.lon, af.offer || '', af.coupon || '', tid, now(),
+            );
+            copied.affiliates++;
+          }
+          for (const p of this.q('SELECT * FROM places WHERE shop_id=? ORDER BY created_at', sid)) {
+            const tid = sync ? (p.template_id || randomToken(8)) : null;
+            if (tid && !p.template_id) this.sql.exec('UPDATE places SET template_id=? WHERE id=?', tid, p.id);
+            const pid = id();
+            this.sql.exec(
+              'INSERT INTO places(id,shop_id,name,category,lat,lon,note,link,template_id,created_at) VALUES(?,?,?,?,?,?,?,?,?,?)',
+              pid, dest.id, p.name, p.category, p.lat, p.lon, p.note || '', p.link || '', tid, now(),
+            );
+            copied.places++;
+          }
+        }
+        return J({
+          shop: this.shopRow(this.one('SELECT * FROM shops WHERE id=?', dest.id)),
+          keep_pins: keep, synced: sync, copied,
+        }, 201);
       }
       // Codes
       if (path.match(/^\/shops\/[^/]+\/codes$/) && method === 'POST') {
@@ -612,35 +732,39 @@ export default {
       return doFetch('/invite/' + body.token, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email: sess.email }) });
     }
 
-    async function shopFor(sess) {
-      if (!sess) return null;
-      if (supers(env).has(sess.email)) {
-        // Super may pass ?shop_id=
-        return null;
-      }
-      const r = await (await doFetch('/shop-by-owner?email=' + encodeURIComponent(sess.email))).json();
-      return r.shop;
+    async function ownedShops(sess) {
+      if (!sess || supers(env).has(sess.email)) return [];
+      const r = await (await doFetch('/shops-by-owner?email=' + encodeURIComponent(sess.email))).json();
+      return r.shops || [];
     }
 
     // Owner endpoints. A super-admin may act on any shop by passing ?shop_id= (or body.shop_id);
     // an owner only on their own shop, and only on experiences/affiliates that belong to it.
     async function access(body, resource) {
       if (!sess) return { status: 401, error: 'unauthorized' };
-      const own = isSuper ? null : await shopFor(sess);
+      const owned = isSuper ? [] : await ownedShops(sess);
+      const own = owned[0] || null;
       let resourceShopId;
       if (resource) {
         const r = await (await doFetch('/' + resource + '/owner')).json();
         resourceShopId = r.shop_id || null;
       }
       const a = shopAccess({
-        isSuper, ownShopId: own && own.id, resourceShopId,
+        isSuper, ownShopId: own && own.id, ownedShopIds: owned.map(s => s.id), resourceShopId,
         requestedShopId: u.searchParams.get('shop_id') || (body && body.shop_id) || '',
       });
       if (a.shopId && isSuper && req.method !== 'GET') {
         // Audit trail (Workers logs): which super-admin edited which shop.
         console.log(JSON.stringify({ audit: 'super_edit', email: sess.email, shop_id: a.shopId, method: req.method, path: u.pathname }));
       }
-      return a;
+      return Object.assign(a, { owned });
+    }
+    function withPush(body, a) {
+      const b = body && typeof body === 'object' ? { ...body } : {};
+      delete b.push_shop_ids;
+      delete b.shop_id;
+      if (b.push || b.push_page) b.push_shop_ids = isSuper ? null : (a.owned || []).map(s => s.id);
+      return b;
     }
     const deny = a => J({ error: a.error }, a.status);
     const readBody = async () => { try { return await req.json(); } catch { return {}; } };
@@ -661,8 +785,27 @@ export default {
         delete body.owner_email;
         delete body.slug;
       }
-      delete body.shop_id;
-      return send('/shops/' + a.shopId, 'PATCH', body);
+      return send('/shops/' + a.shopId, 'PATCH', withPush(body, a));
+    }
+    if (u.pathname === '/shop/locations' && req.method === 'GET') {
+      const a = await access(null);
+      if (!a.shopId) return deny(a);
+      const bundle = await (await doFetch('/shops/' + a.shopId + '/bundle')).json();
+      const email = (bundle.shop && bundle.shop.owner_email) || '';
+      const listed = email
+        ? (await (await doFetch('/shops-by-owner?email=' + encodeURIComponent(email))).json()).shops || []
+        : [];
+      const locations = listed.filter(s => s.id !== a.shopId).map(s => ({ id: s.id, name: s.name, slug: s.slug, region_id: s.region_id }));
+      return J({ locations });
+    }
+    if ((u.pathname === '/shop/copy-experience' || u.pathname === '/shop/copy-page') && req.method === 'POST') {
+      const body = await readBody();
+      const a = await access(body);
+      if (!a.shopId) return deny(a);
+      const dest = String(body.dest_shop_id || '');
+      if (!isSuper && !(a.owned || []).some(s => s.id === dest)) return J({ error: 'forbidden' }, 403);
+      const kind = u.pathname === '/shop/copy-page' ? 'copy-page' : 'copy-experience';
+      return send('/shops/' + a.shopId + '/' + kind, 'POST', { experience_id: body.experience_id, dest_shop_id: dest, sync: !!body.sync });
     }
     for (const kind of ['experiences', 'affiliates', 'places', 'codes']) {
       if (u.pathname === '/shop/' + kind && req.method === 'POST') {
@@ -677,7 +820,8 @@ export default {
       const body = req.method === 'PATCH' ? await readBody() : undefined;
       const a = await access(body, rm[1] + '/' + rm[2]);
       if (!a.shopId) return deny(a);
-      return send('/' + rm[1] + '/' + rm[2], req.method, body);
+      const payload = req.method === 'PATCH' && rm[1] === 'experiences' ? withPush(body, a) : body;
+      return send('/' + rm[1] + '/' + rm[2], req.method, payload);
     }
 
     // Public (no auth)

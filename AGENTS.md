@@ -58,6 +58,7 @@ Where a check lives only on an unmerged branch, the branch is named; it becomes 
 | 37 | Code and pull request prose do not carry conversation, prompt, or iteration history | Magnolio Manager coaching Nov 5 2026 | `scripts/check_no_agent_chatter.py`, `tests/test_no_agent_chatter.py` | web-ci data job; pr-body job (`--pr-body`) |
 | 38 | Partner experiences start riders at their nearest stop by default (`nearest_start` on experiences, missing reads as on), then keep the partner's sequence the shorter way (loops wrap). Off: riders follow the exact order. Riders can pick "Use shop order" | Max, Oct 31 2026 (t441u) | `tests/stoporder.test.mjs` (`public/stoporder.js`), `tests/partner_nearest.test.mjs`, `tests/test_partner_nearest_start.py` | web-ci |
 | 39 | Town and city counts on the homepage, partner pages, SEO hubs, llms.txt, and schema equal the number of regions in `public/data/regions.json` | expansion to 100 towns | `tests/test_town_count.py` | web-ci |
+| 40 | A partner can copy a ride or a whole page to another shop they own. Pins move only when the town matches. A linked edit can update the other copies | Nov 10 2026 | `tests/partner_templates.test.mjs`, `tests/test_partner_templates.py` | web-ci |
 
 When you add a check, add a row. When a rule has no check, say so here rather than leaving it implied.
 
