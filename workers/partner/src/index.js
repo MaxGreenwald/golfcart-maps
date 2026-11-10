@@ -1,7 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
-import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL } from '../../../lib/partner.js';
+import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL, bytesFromB64, cleanStops, storeImage, MEDIA_MAX_COUNT } from '../../../lib/partner.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -105,6 +105,10 @@ export class PartnerStore extends DurableObject {
       CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY, v TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS grants(grant TEXT PRIMARY KEY, shop_id TEXT NOT NULL, code TEXT NOT NULL, expires_at INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS handoffs(token TEXT PRIMARY KEY, shop_id TEXT NOT NULL, code TEXT NOT NULL, expires_at INTEGER NOT NULL, used INTEGER NOT NULL DEFAULT 0);
+      CREATE TABLE IF NOT EXISTS media(
+        id TEXT PRIMARY KEY, shop_id TEXT NOT NULL, kind TEXT NOT NULL,
+        r2_key TEXT NOT NULL, content_type TEXT NOT NULL, bytes INTEGER NOT NULL, created_at INTEGER NOT NULL
+      );
     `);
     // Per-shop rental vehicle (road rules on /p/<slug>). Added Oct 29 2026.
     const cols = this.sql.exec('PRAGMA table_info(shops)').toArray().map(c => c.name);
@@ -258,7 +262,7 @@ export class PartnerStore extends DurableObject {
         if (!this.one('SELECT id FROM shops WHERE id=?', sid)) return J({ error: 'not found' }, 404);
         const title = String(body.title || '').trim();
         if (!title) return J({ error: 'Title required' }, 400);
-        const stops = Array.isArray(body.stops) ? body.stops : [];
+        const stops = cleanStops(Array.isArray(body.stops) ? body.stops : []);
         const eid = id();
         const t = now();
         this.sql.exec(
@@ -273,7 +277,7 @@ export class PartnerStore extends DurableObject {
         if (!ex) return J({ error: 'not found' }, 404);
         const title = body.title != null ? String(body.title).trim() : ex.title;
         const description = body.description != null ? String(body.description) : ex.description;
-        const stops = body.stops != null ? JSON.stringify(body.stops) : ex.stops_json;
+        const stops = body.stops != null ? JSON.stringify(cleanStops(body.stops)) : ex.stops_json;
         const ns = body.nearest_start != null ? (nearestStart(body.nearest_start) ? 1 : 0) : (nearestStart(ex.nearest_start) ? 1 : 0);
         this.sql.exec('UPDATE experiences SET title=?, description=?, stops_json=?, nearest_start=?, updated_at=? WHERE id=?', title, description, stops, ns, now(), eid);
         return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)) });
@@ -348,6 +352,34 @@ export class PartnerStore extends DurableObject {
       if (path.match(/^\/places\/[^/]+$/) && method === 'DELETE') {
         this.sql.exec('DELETE FROM places WHERE id=?', path.split('/')[2]);
         return J({ ok: true });
+      }
+      // Photos (bytes live in R2; this row is the lookup).
+      if (path.match(/^\/shops\/[^/]+\/media-room$/) && method === 'GET') {
+        const sid = path.split('/')[2];
+        const n = this.one('SELECT COUNT(*) n FROM media WHERE shop_id=?', sid);
+        const count = n ? n.n : 0;
+        if (count >= MEDIA_MAX_COUNT) return J({ ok: false, error: 'This shop has ' + MEDIA_MAX_COUNT + ' photos. Remove one before adding another.' }, 400);
+        return J({ ok: true, count });
+      }
+      if (path.match(/^\/shops\/[^/]+\/media$/) && method === 'POST') {
+        const sid = path.split('/')[2];
+        if (!this.one('SELECT id FROM shops WHERE id=?', sid)) return J({ error: 'not found' }, 404);
+        const n = this.one('SELECT COUNT(*) n FROM media WHERE shop_id=?', sid);
+        if ((n ? n.n : 0) >= MEDIA_MAX_COUNT) return J({ error: 'This shop has ' + MEDIA_MAX_COUNT + ' photos. Remove one before adding another.' }, 400);
+        this.sql.exec(
+          'INSERT INTO media(id,shop_id,kind,r2_key,content_type,bytes,created_at) VALUES(?,?,?,?,?,?,?)',
+          String(body.id || ''), sid, String(body.kind || ''), String(body.r2_key || ''), String(body.content_type || ''), +body.bytes || 0, now(),
+        );
+        return J({ ok: true }, 201);
+      }
+      if (path.match(/^\/media\/[^/]+$/) && method === 'GET') {
+        const mid = path.split('/')[2];
+        const row = this.one(
+          'SELECT m.r2_key, m.content_type FROM media m JOIN shops s ON s.id = m.shop_id WHERE m.id=? AND s.disabled=0',
+          mid,
+        );
+        if (!row) return J({ error: 'not found' }, 404);
+        return J({ r2_key: row.r2_key, content_type: row.content_type });
       }
       // Codes
       if (path.match(/^\/shops\/[^/]+\/codes$/) && method === 'POST') {
@@ -646,6 +678,32 @@ export default {
     const readBody = async () => { try { return await req.json(); } catch { return {}; } };
     const send = (path, method, body) => doFetch(path, { method, headers: { 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) });
 
+    if (u.pathname === '/shop/media' && req.method === 'POST') {
+      if (!env.MEDIA) return J({ error: 'Photo storage is not configured' }, 503);
+      const body = await readBody();
+      const a = await access(body);
+      if (!a.shopId) return deny(a);
+      const decoded = bytesFromB64(body.data_base64);
+      if (decoded.error) return J({ error: decoded.error }, 400);
+      const roomRes = await doFetch('/shops/' + a.shopId + '/media-room');
+      const room = await roomRes.json();
+      if (!roomRes.ok) return J({ error: room.error || 'Too many photos' }, roomRes.status);
+      const mid = randomToken(16);
+      let stored;
+      try {
+        stored = await storeImage({
+          bytes: decoded.bytes, shopId: a.shopId, kind: body.kind, id: mid,
+          put: (key, bytes, type) => env.MEDIA.put(key, bytes, { httpMetadata: { contentType: type } }),
+        });
+      } catch (e) {
+        return J({ error: 'Could not store that image' }, 502);
+      }
+      if (stored.status !== 201) return J({ error: stored.error }, stored.status);
+      const ins = await send('/shops/' + a.shopId + '/media', 'POST', stored.row);
+      if (!ins.ok) return ins;
+      const origin = originOf(req, env);
+      return J({ id: mid, url: origin + '/api/partner/media/' + mid, content_type: stored.row.content_type, bytes: stored.row.bytes }, 201);
+    }
     if (u.pathname === '/shop' && req.method === 'GET') {
       const a = await access(null);
       if (!a.shopId) return deny(a);
@@ -682,6 +740,22 @@ export default {
 
     // Public (no auth)
     if (u.pathname === '/public-code/unlock') return doFetch(u.pathname + u.search, { method: 'GET' });
+    if (req.method === 'GET' && /^\/media\/[a-f0-9]{16,64}$/.test(u.pathname)) {
+      if (!env.MEDIA) return J({ error: 'Photo storage is not configured' }, 503);
+      const metaRes = await doFetch(u.pathname);
+      const meta = await metaRes.json();
+      if (!metaRes.ok || !meta.r2_key) return J({ error: 'not found' }, 404);
+      const obj = await env.MEDIA.get(meta.r2_key);
+      if (!obj) return J({ error: 'not found' }, 404);
+      return new Response(obj.body, {
+        headers: {
+          'content-type': meta.content_type || 'application/octet-stream',
+          'cache-control': 'public, max-age=86400',
+          'x-content-type-options': 'nosniff',
+          'access-control-allow-origin': '*',
+        },
+      });
+    }
     if (u.pathname.startsWith('/public/')) {
       if (req.method === 'POST' && /^\/public\/[^/]+\/handoff$/.test(u.pathname)) {
         return doFetch(u.pathname, { method: 'POST', headers: { 'content-type': 'application/json' }, body: await req.text() });

@@ -9,6 +9,10 @@
 # Optional for real Google OAuth (omit to use DEV_AUTH_EMAIL mock login):
 #   GOOGLE_CLIENT_ID
 #   GOOGLE_CLIENT_SECRET
+# R2 (no secret; the bucket must exist before a worker deploy):
+#   wrangler r2 bucket create gcm-partner-media
+#   wrangler r2 bucket create gcm-partner-media-preview
+# Binding name is MEDIA. Without the binding, logo and stop uploads return 503.
 # Vars:
 #   DEV_AUTH_EMAIL           if set and Google secrets missing, /auth/dev accepts this email
 #   SUPER_ADMINS             comma emails (default max@golfcartmap.com,maxgreenwald.assistant@gmail.com)
@@ -26,6 +30,10 @@ DEV_AUTH_EMAIL = "maxgreenwald.assistant@gmail.com"
 name = "STORE"
 class_name = "PartnerStore"
 
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "gcm-partner-media"
+
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["PartnerStore"]
@@ -38,3 +46,6 @@ DEV_AUTH_EMAIL = "maxgreenwald.assistant@gmail.com"
 [[env.preview.durable_objects.bindings]]
 name = "STORE"
 class_name = "PartnerStore"
+[[env.preview.r2_buckets]]
+binding = "MEDIA"
+bucket_name = "gcm-partner-media-preview"

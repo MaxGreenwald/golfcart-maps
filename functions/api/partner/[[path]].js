@@ -44,9 +44,10 @@ export async function onRequest(context) {
     });
   }
   const out = new Headers(res.headers);
-  out.set('cache-control', 'no-store');
-  // Public shop pages are read from the iOS app too (capacitor://localhost), so allow any origin, no cookies.
-  if (path.startsWith('/public/') || path === '/public-code/unlock') {
+  const media = path.startsWith('/media/');
+  out.set('cache-control', media ? (res.headers.get('cache-control') || 'public, max-age=86400') : 'no-store');
+  // Public shop pages and photos are read from the iOS app too (capacitor://localhost).
+  if (media || path.startsWith('/public/') || path === '/public-code/unlock') {
     out.set('access-control-allow-origin', '*');
     out.delete('access-control-allow-credentials');
   }
