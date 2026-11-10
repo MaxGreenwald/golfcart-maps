@@ -267,6 +267,99 @@ function superView() {
   </div>`;
 }
 
+function dashCard() {
+  return `<div class="card" id="shopDash">
+    <h2>Shop activity</h2>
+    <p class="muted" id="dashHint">Unlocks, rides started and finished, and offer taps. Test installs are left out.</p>
+    <div class="mode-row" id="dashRange">
+      <button type="button" class="btn alt" data-dash-days="7">7 days</button>
+      <button type="button" class="btn alt on" data-dash-days="30">30 days</button>
+    </div>
+    <div id="dashBody"><p class="muted">Loading activity…</p></div>
+  </div>`;
+}
+
+function dashNum(v) { const n = Number(v); return Number.isFinite(n) ? n : 0; }
+
+function dashHtml(j, bundle) {
+  if (!j || j.ready !== true) {
+    const why = j && j.reason === 'not_configured'
+      ? 'Activity shows here after the analytics connection is set.'
+      : 'Activity could not be loaded. Try again in a moment.';
+    return `<p class="muted" id="dashEmpty">${esc(why)}</p>`;
+  }
+  const codes = (bundle && bundle.codes) || [];
+  const ex = (bundle && bundle.experiences) || [];
+  const af = (bundle && bundle.affiliates) || [];
+  const codeName = c => {
+    const hit = codes.find(x => String(x.code || '').toLowerCase() === String(c || '').toLowerCase());
+    if (hit) return hit.code;
+    return c ? String(c).toUpperCase() : 'Unknown code';
+  };
+  const rideName = id => {
+    const hit = ex.find(x => String(x.id).toLowerCase() === String(id || '').toLowerCase());
+    return hit ? hit.title : (id || 'Unknown ride');
+  };
+  const pinName = id => {
+    const hit = af.find(x => String(x.id).toLowerCase() === String(id || '').toLowerCase());
+    return hit ? hit.name : (id || 'Unknown offer');
+  };
+  const t = j.totals || {};
+  const codeRows = (j.codes || []).map(c => `<tr><td><code>${esc(codeName(c.code))}</code></td><td>${dashNum(c.unlocks)}</td></tr>`).join('')
+    || '<tr><td colspan="2" class="muted">No unlocks in this window.</td></tr>';
+  const dayRows = (j.daily || []).map(d => `<tr><td>${esc(d.day)}</td><td>${dashNum(d.unlocks)}</td><td>${dashNum(d.started)}</td><td>${dashNum(d.finished)}</td><td>${dashNum(d.affiliate_taps)}</td></tr>`).join('')
+    || '<tr><td colspan="5" class="muted">No activity in this window.</td></tr>';
+  const rideRows = (j.rides || []).map(r => `<tr><td>${esc(rideName(r.ride))}</td><td>${dashNum(r.started)}</td><td>${dashNum(r.finished)}</td></tr>`).join('')
+    || '<tr><td colspan="3" class="muted">No rides in this window.</td></tr>';
+  const pinRows = (j.pins || []).map(p => `<tr><td>${esc(pinName(p.pin))}</td><td>${dashNum(p.taps)}</td></tr>`).join('')
+    || '<tr><td colspan="2" class="muted">No offer taps in this window.</td></tr>';
+  return `<div class="stats" id="dashTotals">
+      <div class="stat"><b>${dashNum(t.unlocks)}</b><span>Unlocks</span></div>
+      <div class="stat"><b>${dashNum(t.started)}</b><span>Rides started</span></div>
+      <div class="stat"><b>${dashNum(t.finished)}</b><span>Rides finished</span></div>
+      <div class="stat"><b>${dashNum(t.affiliate_taps)}</b><span>Offer taps</span></div>
+    </div>
+    <h3 class="dash-h">Unlocks by code</h3>
+    <table id="dashCodes"><thead><tr><th>Code</th><th>Unlocks</th></tr></thead><tbody>${codeRows}</tbody></table>
+    <h3 class="dash-h">By day</h3>
+    <table id="dashDays"><thead><tr><th>Day</th><th>Unlocks</th><th>Started</th><th>Finished</th><th>Offer taps</th></tr></thead><tbody>${dayRows}</tbody></table>
+    <h3 class="dash-h">Rides</h3>
+    <table id="dashRides"><thead><tr><th>Ride</th><th>Started</th><th>Finished</th></tr></thead><tbody>${rideRows}</tbody></table>
+    <h3 class="dash-h">Offers</h3>
+    <table id="dashPins"><thead><tr><th>Offer</th><th>Taps</th></tr></thead><tbody>${pinRows}</tbody></table>`;
+}
+
+let dashDays = 30, dashToken = 0;
+async function loadDash() {
+  const body = $('#dashBody');
+  if (!body) return;
+  const token = ++dashToken;
+  body.innerHTML = '<p class="muted">Loading activity…</p>';
+  try {
+    const j = await api('/shop/stats?days=' + dashDays);
+    if (token !== dashToken) return;
+    const host = $('#dashBody');
+    if (host) host.innerHTML = dashHtml(j, state.shopBundle || {});
+  } catch (e) {
+    if (token !== dashToken) return;
+    const host = $('#dashBody');
+    if (host) host.innerHTML = `<p class="muted" id="dashEmpty">${esc(e.message || 'Activity could not be loaded.')}</p>`;
+  }
+}
+function wireDash() {
+  const box = $('#shopDash');
+  if (!box) return;
+  box.querySelectorAll('[data-dash-days]').forEach(b => {
+    b.classList.toggle('on', Number(b.dataset.dashDays) === dashDays);
+    b.onclick = () => {
+      dashDays = Number(b.dataset.dashDays) || 30;
+      box.querySelectorAll('[data-dash-days]').forEach(x => x.classList.toggle('on', x === b));
+      loadDash();
+    };
+  });
+  loadDash();
+}
+
 function shopView() {
   const b = state.shopBundle;
   if (!b || !b.shop) return `<div class="card"><p class="msg err">No shop linked to this account yet. Accept an invite from Max.</p></div>`;
@@ -303,6 +396,7 @@ function shopView() {
     ${state.msg ? `<div class="msg ok">${esc(state.msg)}</div>` : ''}
     ${state.err ? `<div class="msg err">${esc(state.err)}</div>` : ''}
   </div>
+  ${dashCard()}
   <div class="card"><h2>Brand</h2>
     <label>Display name</label><input id="brandName" value="${esc(s.name)}">
     <label>City / region</label><select id="brandRegion">${regionOptions(s.region_id || 'sd')}</select>
@@ -1058,6 +1152,7 @@ function bindApp() {
     if (!never) daysIn.value = c.dataset.days;
   });
   if (daysIn) daysIn.oninput = () => chips.forEach(x => x.classList.toggle('on', x.dataset.days === daysIn.value));
+  wireDash();
   const genCode = $('#genCode');
   if (genCode) genCode.onclick = async () => {
     try {

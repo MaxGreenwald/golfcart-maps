@@ -24,6 +24,21 @@ const handoffParam = (params.get('handoff') || '').trim();
 const isGo = /\/go\/?$/.test(location.pathname) || !!codeParam || !!handoffParam;
 const GRANT_KEY = 'gcm_partner_grant:' + slug;
 
+// Shop activity (public/track.js). Tokens only: slug, access code, experience id, affiliate id.
+function trackShop(e, props) {
+  try {
+    const T = window.GCMTrack;
+    if (!T) return;
+    const shop = ((unlocked && unlocked.shop && unlocked.shop.slug) || slug || '').toLowerCase();
+    if (!shop) return;
+    const p = { shop };
+    const src = props || {};
+    for (const k of ['code', 'ride', 'pin']) if (src[k]) p[k] = String(src[k]).toLowerCase();
+    const town = (region && region.id) || (unlocked && unlocked.shop && unlocked.shop.region_id) || null;
+    T.track(e, p, { town });
+  } catch (_) {}
+}
+
 let map, pins = null, routeLayer = null, liveLayer = null, regions = [], region = null, rules = null;
 let unlocked = null, activeEx = null, stopIdx = 0, drawToken = 0, startToken = 0;
 // baseEx: the partner's experience as saved. activeEx: the same ride in visit order (nearest-stop start, Max t441u).
@@ -523,6 +538,7 @@ async function drawUnlocked(opts) {
     if (!finite(a.lat, a.lon)) return;
     const m = L.marker([+a.lat, +a.lon], { icon: affIcon(), zIndexOffset: 600 }).addTo(pins);
     m.bindPopup(`<b>${esc(a.name)}</b><br>${esc(a.offer || '')}${a.coupon ? `<br>Coupon: <code>${esc(a.coupon)}</code>` : ''}<br><span class="muted">Partner offer</span>`);
+    m.on('click', () => trackShop('affiliate_tap', { pin: a.id }));
     affMarks.push({ id: a.id, marker: m });
     bounds.push([+a.lat, +a.lon]);
   });
@@ -712,7 +728,10 @@ async function onNavFix(ll) {
       go.onclick = () => routeToStop(nxt);
     } else go.hidden = true;
     say(`You’ve arrived at ${here.label || 'the stop'}.` + (nxt >= 0 ? ` Next stop: ${stops[nxt].label || ''}.` : ''));
-    if (nxt < 0) GCMNavFx.arrive(navRoute, { place: here.label || '', say });
+    if (nxt < 0) {
+      GCMNavFx.arrive(navRoute, { place: here.label || '', say });
+      trackShop('experience_finished', { ride: activeEx && activeEx.id });
+    }
     return;
   }
   // Off route: GCMFollow waits ~5 s past 30 m, then calls navReroute (debounced).
@@ -957,6 +976,7 @@ async function startExperience() {
     setStartNote('Legal golf cart roads from you to the first stop.');
   }
   guided = true;
+  trackShop('experience_started', { ride: activeEx && activeEx.id });
   stopIdx = activeEx.stops.indexOf(first);
   if (drawn) frameLatLngs(leg.points);
   else panIntoView(L.latLng(+first.lat, +first.lon), 15);
@@ -1034,7 +1054,7 @@ function wireOffline() {
   const O = window.GCMOffline, b = document.getElementById('offBtn'), n = document.getElementById('offNote');
   if (!O || !b || !region) return;
   b.hidden = false;
-  const extra = () => [location.pathname + location.search, '/p.js', '/offline.js', '/roadrule.js', '/router.js', '/nav.js',
+  const extra = () => [location.pathname + location.search, '/track.js', '/p.js', '/offline.js', '/roadrule.js', '/router.js', '/nav.js',
     '/vendor/leaflet/leaflet.js', '/vendor/leaflet/leaflet.css',
     `/api/partner/public/${encodeURIComponent(slug)}` + (codeParam ? `/unlock?code=${encodeURIComponent(codeParam)}` : '')];
   let busy = false;
@@ -1115,6 +1135,7 @@ async function unlockedView() {
   if (allBtn) allBtn.onclick = () => focusEx(false);
   panel.querySelectorAll('.ocard').forEach(el => {
     el.onclick = () => {
+      if (el.dataset.af) trackShop('affiliate_tap', { pin: el.dataset.af });
       const hit = el.dataset.place ? placeMarks.find(a => a.id === el.dataset.place) : affMarks.find(a => a.id === el.dataset.af);
       if (hit && map) {
         panIntoView(hit.marker.getLatLng(), Math.max(map.getZoom(), 15));
@@ -1166,6 +1187,8 @@ async function boot() {
         return;
       }
       unlocked = j;
+      // A handoff redeem does not spend a code, so it is not another unlock.
+      if (!handoffParam) trackShop('partner_unlock', { code: j.code || codeParam });
       // CarPlay Experiences (public/carplay.js experiences()) reads this to show the shop's rides in the car.
       // The whole unlock answer is saved because unlock counts a use (single-use codes would fail a second call).
       try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates })); } catch (e) {}
