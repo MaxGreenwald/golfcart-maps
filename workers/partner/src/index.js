@@ -1,7 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
-import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL } from '../../../lib/partner.js';
+import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL, cleanReturnBy, cleanRangeMi, cleanReturnSpot } from '../../../lib/partner.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -112,6 +112,11 @@ export class PartnerStore extends DurableObject {
     // Per-experience nearest-stop start (on by default; existing rows read 1). Added Oct 31 2026.
     const exCols = this.sql.exec('PRAGMA table_info(experiences)').toArray().map(c => c.name);
     if (!exCols.includes('nearest_start')) this.sql.exec('ALTER TABLE experiences ADD COLUMN nearest_start INTEGER NOT NULL DEFAULT 1');
+    // Return reminders. Names match the rental info card: return_by HH:MM, range_mi, return lat/lon.
+    if (!cols.includes('return_by')) this.sql.exec("ALTER TABLE shops ADD COLUMN return_by TEXT DEFAULT ''");
+    if (!cols.includes('range_mi')) this.sql.exec('ALTER TABLE shops ADD COLUMN range_mi REAL DEFAULT 0');
+    if (!cols.includes('return_lat')) this.sql.exec('ALTER TABLE shops ADD COLUMN return_lat REAL');
+    if (!cols.includes('return_lon')) this.sql.exec('ALTER TABLE shops ADD COLUMN return_lon REAL');
   }
   q(s, ...a) { return this.sql.exec(s, ...a).toArray(); }
   one(s, ...a) { return this.q(s, ...a)[0] || null; }
@@ -123,6 +128,10 @@ export class PartnerStore extends DurableObject {
       blurb: r.blurb || '', logo_url: r.logo_url || '', color: r.color || '',
       owner_email: r.owner_email || '', disabled: !!r.disabled, created_at: r.created_at,
       vehicle: shopVehicle(r.vehicle),
+      return_by: r.return_by || '',
+      range_mi: Number(r.range_mi) > 0 ? Number(r.range_mi) : 0,
+      return_lat: Number.isFinite(r.return_lat) ? r.return_lat : null,
+      return_lon: Number.isFinite(r.return_lon) ? r.return_lon : null,
     };
   }
   expRow(r) {
@@ -201,9 +210,20 @@ export class PartnerStore extends DurableObject {
           return J({ error: 'vehicle must be one of ' + SHOP_VEHICLES.join(', ') }, 400);
         }
         const vehicle = body.vehicle != null ? body.vehicle : (sh.vehicle || '');
+        const retBy = cleanReturnBy(body.return_by !== undefined ? body.return_by : null);
+        if (retBy.error) return J({ error: retBy.error }, 400);
+        const range = cleanRangeMi(body.range_mi !== undefined ? body.range_mi : null);
+        if (range.error) return J({ error: range.error }, 400);
+        const spotSent = body.return_lat !== undefined || body.return_lon !== undefined;
+        const spot = cleanReturnSpot(body.return_lat, body.return_lon, spotSent);
+        if (spot.error) return J({ error: spot.error }, 400);
+        const return_by = retBy.skip ? (sh.return_by || '') : retBy.value;
+        const range_mi = range.skip ? (Number(sh.range_mi) || 0) : range.value;
+        const return_lat = spot.skip ? sh.return_lat : spot.lat;
+        const return_lon = spot.skip ? sh.return_lon : spot.lon;
         this.sql.exec(
-          'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=? WHERE id=?',
-          name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, sid,
+          'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=?, return_by=?, range_mi=?, return_lat=?, return_lon=? WHERE id=?',
+          name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, return_by, range_mi, return_lat, return_lon, sid,
         );
         return J({ shop: this.shopRow(this.one('SELECT * FROM shops WHERE id=?', sid)) });
       }

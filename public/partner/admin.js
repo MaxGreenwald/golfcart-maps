@@ -319,6 +319,7 @@ function shopView() {
     </div>
     <p style="margin-top:12px"><button class="btn" id="saveBrand" type="button">Save brand</button></p>
   </div>
+  ${rentalCard(s)}
   <div class="card"><h2>Experiences</h2>
     <p class="muted">Ordered joyride stops. Search a place or drop a pin and name it yourself. Edit an experience to change a stop or its order.</p>
     <p class="muted hidden" id="exEditing">Editing this experience. Save changes keeps the stops and their order.</p>
@@ -774,6 +775,27 @@ function render() {
   bindApp();
 }
 
+function rentalCard(s) {
+  const lat = Number.isFinite(+s.return_lat) ? String(s.return_lat) : '';
+  const lon = Number.isFinite(+s.return_lon) ? String(s.return_lon) : '';
+  const placed = lat !== '' && lon !== '';
+  return `<div class="card" id="rentalCard"><h2>Return reminders</h2>
+    <p class="muted">Renters get a nudge before this time, and a warning when the legal ride back is close to the cart range.</p>
+    <label for="rentReturnBy">Return by</label>
+    <input id="rentReturnBy" type="time" value="${esc(s.return_by || '')}">
+    <label for="rentRange">Cart range when full (miles)</label>
+    <input id="rentRange" inputmode="decimal" placeholder="25" value="${s.range_mi ? esc(String(s.range_mi)) : ''}">
+    <label>Where the cart goes back</label>
+    <div class="pinmap" id="rentPinMap"></div>
+    <p class="muted">Click the map to set the return spot. With no spot, the nudge uses the clock only.</p>
+    <input type="hidden" id="rentReturnLat" value="${esc(lat)}">
+    <input type="hidden" id="rentReturnLon" value="${esc(lon)}">
+    <p id="rentSpot" class="picked${placed ? ' ok' : ''}">${placed ? `Return spot ${(+lat).toFixed(5)}, ${(+lon).toFixed(5)}` : 'No return spot yet.'}</p>
+    <p><button class="btn" id="saveReminders" type="button">Save reminders</button>
+      <button class="btn alt" id="clearReturn" type="button">Clear return spot</button></p>
+  </div>`;
+}
+
 function stopsLine(stops) {
   const parts = (stops || []).map((x, i) => {
     const note = x.note ? ` (${esc(x.note)})` : '';
@@ -947,6 +969,38 @@ function bindApp() {
         vehicle: $('#brandVehicle').value,
       }) });
       flash(true, 'Brand saved');
+      await refreshShop();
+    } catch (e) { flash(false, e.message); }
+  };
+
+  const pin = $('#rentPinMap');
+  if (pin) {
+    try { ensurePinMap(pin, $('#rentReturnLat').value, $('#rentReturnLon').value, (lat, lon) => {
+      $('#rentReturnLat').value = lat;
+      $('#rentReturnLon').value = lon;
+      const p = $('#rentSpot');
+      p.className = 'picked ok';
+      p.textContent = `Return spot ${(+lat).toFixed(5)}, ${(+lon).toFixed(5)}`;
+    }); } catch (e) { /* map tiles are optional; the fields still save */ }
+  }
+  const clearReturn = $('#clearReturn');
+  if (clearReturn) clearReturn.onclick = () => {
+    $('#rentReturnLat').value = '';
+    $('#rentReturnLon').value = '';
+    const p = $('#rentSpot');
+    if (p) { p.className = 'picked'; p.textContent = 'No return spot yet.'; }
+    if (pin && pin._gcmMarker && pin._gcmMap) { pin._gcmMap.removeLayer(pin._gcmMarker); pin._gcmMarker = null; }
+  };
+  const saveRemind = $('#saveReminders');
+  if (saveRemind) saveRemind.onclick = async () => {
+    try {
+      await api('/shop', { method: 'PATCH', body: JSON.stringify({
+        return_by: $('#rentReturnBy').value,
+        range_mi: $('#rentRange').value,
+        return_lat: $('#rentReturnLat').value,
+        return_lon: $('#rentReturnLon').value,
+      }) });
+      flash(true, 'Reminders saved');
       await refreshShop();
     } catch (e) { flash(false, e.message); }
   };
