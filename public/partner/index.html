@@ -58,6 +58,9 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 .mode-row{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
 .mode-row button.on{background:var(--aqua);color:#fff}
 .muted{opacity:.7;font-size:12px}.hidden{display:none}
+#qrKit{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+#qrKit h3{margin:0 0 6px;font-size:15px;color:var(--deep)}
+#qrKit select{max-width:280px}
 #login{max-width:420px;margin:40px auto}
 .af-place .place-wrap{margin-bottom:8px}
 </style>
@@ -73,6 +76,8 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 <main id="app"></main>
 <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
 <script src="/vendor/leaflet/leaflet.js"></script>
+<script src="/vendor/qrcode.js"></script>
+<script src="/qrkit.js"></script>
 <script src="/partner/admin.js"></script>
 </body>
 </html>

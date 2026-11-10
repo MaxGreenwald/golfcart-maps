@@ -381,6 +381,20 @@ function shopView() {
       <div class="muted" id="codeDaysHint">1 to 30 days, or No expiry.</div></div></div>
     <p><button class="btn" id="genCode" type="button">Generate access code</button></p>
     <table><thead><tr><th>Code</th><th>Usage</th><th>Link</th></tr></thead><tbody>${codeRows}</tbody></table>
+    ${qrKitBlock(s, b.codes)}
+  </div>`;
+}
+
+function qrKitBlock(shop, codes) {
+  const list = codes || [];
+  const opts = list.map(c => `<option value="${esc(c.code)}">${esc(c.code)}</option>`).join('');
+  const disabled = list.length ? '' : ' disabled';
+  return `<div id="qrKit">
+    <h3>QR sticker and counter card</h3>
+    <p class="muted">One print page: a cart sticker and a counter card with your logo and color. The QR opens /p/${esc(shop.slug)} with the code filled in. Save a PDF from the print dialog.</p>
+    <label for="qrCode">Access code on the QR</label>
+    <select id="qrCode"${disabled}>${opts || '<option value="">Generate an access code first</option>'}</select>
+    <p><button class="btn" id="printQr" type="button"${disabled}>Print QR kit</button></p>
   </div>`;
 }
 
@@ -1069,6 +1083,23 @@ function bindApp() {
       const link = location.origin + '/p/' + state.shopBundle.shop.slug + '/go?code=' + j.code.code;
       try { await navigator.clipboard.writeText(link); } catch (_) {}
       await refreshShop();
+    } catch (e) { flash(false, e.message); }
+  };
+  const printQr = $('#printQr');
+  if (printQr) printQr.onclick = () => {
+    try {
+      const code = ($('#qrCode') && $('#qrCode').value) || '';
+      if (!code) throw new Error('Generate an access code first');
+      if (!window.GCMQrKit) throw new Error('QR kit did not load');
+      const s = state.shopBundle.shop;
+      const html = GCMQrKit.printHtml({
+        name: s.name, slug: s.slug, color: s.color, logoUrl: s.logo_url, code, origin: location.origin,
+      });
+      const w = window.open('', 'gcm-qr-kit');
+      if (!w) throw new Error('Allow pop-ups to print the QR kit.');
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
     } catch (e) { flash(false, e.message); }
   };
 }
