@@ -1,7 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
-import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL } from '../../../lib/partner.js';
+import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL, cleanRental, rentalFromRow } from '../../../lib/partner.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -109,6 +109,8 @@ export class PartnerStore extends DurableObject {
     // Per-shop rental vehicle (road rules on /p/<slug>). Added Oct 29 2026.
     const cols = this.sql.exec('PRAGMA table_info(shops)').toArray().map(c => c.name);
     if (!cols.includes('vehicle')) this.sql.exec("ALTER TABLE shops ADD COLUMN vehicle TEXT DEFAULT ''");
+    // Pickup, return, phone, cart rules. Omitted from the locked teaser. Added Nov 10 2026.
+    if (!cols.includes('rental_json')) this.sql.exec("ALTER TABLE shops ADD COLUMN rental_json TEXT DEFAULT ''");
     // Per-experience nearest-stop start (on by default; existing rows read 1). Added Oct 31 2026.
     const exCols = this.sql.exec('PRAGMA table_info(experiences)').toArray().map(c => c.name);
     if (!exCols.includes('nearest_start')) this.sql.exec('ALTER TABLE experiences ADD COLUMN nearest_start INTEGER NOT NULL DEFAULT 1');
@@ -116,14 +118,16 @@ export class PartnerStore extends DurableObject {
   q(s, ...a) { return this.sql.exec(s, ...a).toArray(); }
   one(s, ...a) { return this.q(s, ...a)[0] || null; }
 
-  shopRow(r) {
+  shopRow(r, opts) {
     if (!r) return null;
-    return {
+    const row = {
       id: r.id, slug: r.slug, name: r.name, region_id: r.region_id,
       blurb: r.blurb || '', logo_url: r.logo_url || '', color: r.color || '',
       owner_email: r.owner_email || '', disabled: !!r.disabled, created_at: r.created_at,
       vehicle: shopVehicle(r.vehicle),
     };
+    if (opts && opts.rental) row.rental = rentalFromRow(r.rental_json);
+    return row;
   }
   expRow(r) {
     if (!r) return null;
@@ -150,7 +154,11 @@ export class PartnerStore extends DurableObject {
       ...(c.experience_id ? [c.experience_id, sh.id] : [sh.id]),
     ).map(r => this.expRow(r));
     const affiliates = this.q('SELECT * FROM affiliates WHERE shop_id=? ORDER BY created_at DESC', sh.id).map(r => this.affRow(r));
-    const out = { unlocked: true, shop, experiences, affiliates, places: this.places(sh.id), code: c.code };
+    const out = {
+      unlocked: true,
+      shop: { ...shop, rental: rentalFromRow(sh.rental_json) },
+      experiences, affiliates, places: this.places(sh.id), code: c.code,
+    };
     if (withGrant) {
       out.grant = randomToken(24);
       this.sql.exec('INSERT INTO grants(grant,shop_id,code,expires_at) VALUES(?,?,?,?)', out.grant, sh.id, c.code, grantExpiry(now(), c.expires_at));
@@ -201,11 +209,17 @@ export class PartnerStore extends DurableObject {
           return J({ error: 'vehicle must be one of ' + SHOP_VEHICLES.join(', ') }, 400);
         }
         const vehicle = body.vehicle != null ? body.vehicle : (sh.vehicle || '');
+        let rental_json = sh.rental_json || '';
+        if (body.rental != null) {
+          const c = cleanRental(body.rental);
+          if (c.error) return J({ error: c.error }, 400);
+          rental_json = JSON.stringify(c.rental);
+        }
         this.sql.exec(
-          'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=? WHERE id=?',
-          name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, sid,
+          'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=?, rental_json=? WHERE id=?',
+          name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, rental_json, sid,
         );
-        return J({ shop: this.shopRow(this.one('SELECT * FROM shops WHERE id=?', sid)) });
+        return J({ shop: this.shopRow(this.one('SELECT * FROM shops WHERE id=?', sid), { rental: true }) });
       }
       if (path.match(/^\/shops\/[^/]+\/invite$/) && method === 'POST') {
         const sid = path.split('/')[2];
@@ -245,7 +259,7 @@ export class PartnerStore extends DurableObject {
         const sh = this.one('SELECT * FROM shops WHERE id=?', sid);
         if (!sh) return J({ error: 'not found' }, 404);
         return J({
-          shop: this.shopRow(sh),
+          shop: this.shopRow(sh, { rental: true }),
           experiences: this.q('SELECT * FROM experiences WHERE shop_id=? ORDER BY created_at DESC', sid).map(r => this.expRow(r)),
           affiliates: this.q('SELECT * FROM affiliates WHERE shop_id=? ORDER BY created_at DESC', sid).map(r => this.affRow(r)),
           places: this.places(sid),
@@ -422,9 +436,11 @@ export class PartnerStore extends DurableObject {
           if (!c || (c.expires_at && c.expires_at < now())) return J({ error: 'Code expired', shop }, 403);
           return J(this.unlockAnswer(sh, shop, c, true));
         }
-        // Teaser (no paid content)
+        // Teaser (no paid content). Rental phone and rules stay off this response.
+        const teaserShop = { ...shop };
+        delete teaserShop.rental;
         return J({
-          shop,
+          shop: teaserShop,
           unlocked: false,
           experience_count: this.one('SELECT COUNT(*) n FROM experiences WHERE shop_id=?', sh.id).n,
           affiliate_count: this.one('SELECT COUNT(*) n FROM affiliates WHERE shop_id=?', sh.id).n,
