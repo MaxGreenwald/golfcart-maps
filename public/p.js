@@ -590,7 +590,9 @@ function navEl() {
   el.innerHTML = `<div class="nav-row"><span class="nav-arrow" id="navArrow" aria-hidden="true">↑</span>
     <div class="nav-main"><b id="navText">Starting…</b><span id="navSub"></span></div>
     <button type="button" id="navMute" class="nav-btn" aria-pressed="false"></button></div>
+    <p id="navStoryText" hidden></p>
     <div class="nav-acts"><button type="button" id="navListBtn" class="nav-link" aria-expanded="false">All steps</button>
+    <button type="button" id="navStory" class="nav-go" hidden>Play story</button>
     <button type="button" id="navGo" class="nav-go" hidden></button></div>
     <div id="navOrder" class="nav-order" hidden></div>
     <ol id="navSteps" hidden></ol>`;
@@ -611,7 +613,7 @@ function navEl() {
   return el;
 }
 function paintMute() {
-  const b = document.getElementById('navMute');
+  const b = document.querySelector('#navBanner #navMute');
   if (!b) return;
   b.textContent = navMuted ? '🔇' : '🔊';
   b.setAttribute('aria-pressed', navMuted ? 'true' : 'false');
@@ -624,6 +626,41 @@ function say(text) {
   navSpoken = text;
   navVoice.say(text);
 }
+// Shop note for this stop, spoken after the arrival callout. Same voice (mute + ducking).
+let navStory = '';
+function hideStory() {
+  navStory = '';
+  const el = document.getElementById('navBanner');
+  if (!el) return;
+  const t = el.querySelector('#navStoryText'), b = el.querySelector('#navStory');
+  if (t) { t.hidden = true; t.textContent = ''; }
+  if (b) b.hidden = true;
+}
+function showStory(note) {
+  navStory = window.GCMStories ? GCMStories.storyLine(note) : '';
+  const el = navEl();
+  const t = el.querySelector('#navStoryText'), b = el.querySelector('#navStory');
+  if (!navStory) { hideStory(); return; }
+  t.hidden = false;
+  t.textContent = navStory;
+  b.hidden = false;
+  b.onclick = () => {
+    const off = navMuted || (window.GCMFollow && GCMFollow.isMuted && GCMFollow.isMuted());
+    if (off) { t.textContent = 'Voice is muted. Unmute to hear this stop.'; return; }
+    t.textContent = navStory;
+    navVoice.stop();
+    navSpoken = '';
+    navVoice.say(navStory);
+  };
+}
+function arrivedSpeech(place, note, nextLabel) {
+  const lines = window.GCMStories
+    ? GCMStories.arrivalLines(place, note, nextLabel)
+    : { callout: `You’ve arrived at ${place || 'the stop'}.` + (nextLabel ? ` Next stop: ${nextLabel}.` : ''), story: '' };
+  say(lines.callout);
+  if (lines.story) say(lines.story);
+  showStory(lines.story);
+}
 // One spoken sentence at a time, one per turn (Max t419u).
 const navVoice = GCMFollow.voice(GCMFollow.bestEngine()), navPlan = GCMFollow.promptPlan();
 // Read-only hook for browser tests (route points + steps).
@@ -631,6 +668,7 @@ window.GCMNavDebug = () => navRoute && { pts: navRoute.pts, steps: navRoute.step
 function stopNav() {
   if (navWatch != null && navigator.geolocation) navigator.geolocation.clearWatch(navWatch);
   navWatch = null; navRoute = null; navState = null; navStop = -1; navArrived = false;
+  hideStory();
   if (navFlagMk) { navFlagMk.remove(); navFlagMk = null; }
   trimNav(0);
   const el = document.getElementById('navBanner');
@@ -645,6 +683,7 @@ function beginNav(leg, i, target) {
   const runs = leg.runs && leg.runs.length ? leg.runs : [{ name: '', points: leg.points }];
   navRoute = GCMNav.buildSteps(runs, stop.label || `stop ${i + 1}`, { continuing: !!leg.ahead });
   navStop = target ? -1 : i; navState = null; navArrived = false; navSpoken = ''; navPlan.reset();
+  hideStory();
   GCMNavFx.resetTrip();
   // Finish flag: the free-ride destination, or the experience's last stop.
   if (navFlagMk) navFlagMk.remove();
@@ -696,7 +735,7 @@ async function onNavFix(ll) {
     navArrived = true;
     paintNav('⚑', `You’ve arrived at ${freeDest.label}`, 'Back to experiences any time.');
     navEl().querySelector('#navGo').hidden = true;
-    say(`You’ve arrived at ${freeDest.label}.`);
+    arrivedSpeech(freeDest.label, '', '');
     GCMNavFx.arrive(navRoute, { place: freeDest.label, say });
     return;
   }
@@ -704,14 +743,15 @@ async function onNavFix(ll) {
     navArrived = true;
     const here = stops[navStop];
     const nxt = stops.findIndex((s, k) => k > navStop && finite(s.lat, s.lon));
-    paintNav('⚑', `You’ve arrived at ${here.label || 'the stop'}`, nxt >= 0 ? `Next: stop ${nxt + 1}, ${stops[nxt].label || ''}` : 'That was the last stop. Nice ride!');
+    const storyNote = here.note || '';
+    paintNav('⚑', `You’ve arrived at ${here.label || 'the stop'}`, storyNote ? '' : (nxt >= 0 ? `Next: stop ${nxt + 1}, ${stops[nxt].label || ''}` : 'That was the last stop. Nice ride!'));
     const go = navEl().querySelector('#navGo');
     if (nxt >= 0) {
       go.hidden = false;
       go.textContent = `Go to stop ${nxt + 1}`;
       go.onclick = () => routeToStop(nxt);
     } else go.hidden = true;
-    say(`You’ve arrived at ${here.label || 'the stop'}.` + (nxt >= 0 ? ` Next stop: ${stops[nxt].label || ''}.` : ''));
+    arrivedSpeech(here.label || 'the stop', storyNote, nxt >= 0 ? (stops[nxt].label || '') : '');
     if (nxt < 0) GCMNavFx.arrive(navRoute, { place: here.label || '', say });
     return;
   }
