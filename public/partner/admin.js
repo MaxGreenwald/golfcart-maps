@@ -150,8 +150,8 @@ function parkFields(s) {
       <button type="button" class="btn alt parkDrop">Drop parking pin</button>
       <button type="button" class="btn alt parkClear">Clear parking</button>
     </div>
-    <div class="place-pin hidden" data-k="parkbox">
-      <div class="pinmap" data-k="parkmap"></div>
+    <div class="hidden" data-k="parkbox">
+      <div data-k="parkmap"></div>
       <p class="muted">Navigation ends here instead of the address. Farther than about half a mile is ignored.</p>
     </div>
     <input type="hidden" data-k="park_lat" value="${esc(plat)}">
@@ -690,6 +690,7 @@ function wireStop(row) {
   if (parkDrop && parkBox) parkDrop.onclick = () => {
     parkBox.classList.remove('hidden');
     const mapEl = $('[data-k=parkmap]', row);
+    mapEl.classList.add('pinmap');
     ensurePinMap(mapEl, $('[data-k=park_lat]', row).value || $('[data-k=lat]', row).value, $('[data-k=park_lon]', row).value || $('[data-k=lon]', row).value, (lat, lon) => {
       $('[data-k=park_lat]', row).value = lat;
       $('[data-k=park_lon]', row).value = lon;
