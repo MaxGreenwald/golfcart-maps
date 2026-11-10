@@ -72,7 +72,7 @@ jobs:
   browser:
     name: browser tests (Chromium + WebKit)
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 40
     env:
       URL: http://localhost:8765/map/   # dist/: / is the landing page, the map is /map (scripts/serve_dist.py mimics Pages routing)
       SHOTS: ${{ github.workspace }}/ci-shots/

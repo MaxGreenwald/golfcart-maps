@@ -60,8 +60,9 @@ class QrKitSource(unittest.TestCase):
         ):
             self.assertIn(line, admin)
             self.assertNotIn("\u2014", line)
-        self.assertIn("/vendor/qrcode.js", page)
-        self.assertIn("/qrkit.js", page)
+        self.assertIn("/vendor/qrcode.js", admin)
+        self.assertIn("/qrkit.js", admin)
+        self.assertNotIn("/vendor/qrcode.js", page)
 
 
 @unittest.skipIf(sync_playwright is None, "playwright not installed (runs in the browser CI job)")

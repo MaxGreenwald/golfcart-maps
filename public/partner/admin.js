@@ -385,6 +385,22 @@ function shopView() {
   </div>`;
 }
 
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error('QR kit did not load'));
+    document.body.appendChild(s);
+  });
+}
+let qrKitLoad = null;
+function loadQrKit() {
+  if (window.GCMQrKit) return Promise.resolve();
+  if (!qrKitLoad) qrKitLoad = loadScript('/vendor/qrcode.js').then(() => loadScript('/qrkit.js'));
+  return qrKitLoad;
+}
+
 function qrKitBlock(shop, codes) {
   const list = codes || [];
   const opts = list.map(c => `<option value="${esc(c.code)}">${esc(c.code)}</option>`).join('');
@@ -1086,21 +1102,22 @@ function bindApp() {
     } catch (e) { flash(false, e.message); }
   };
   const printQr = $('#printQr');
-  if (printQr) printQr.onclick = () => {
+  if (printQr) printQr.onclick = async () => {
+    const code = ($('#qrCode') && $('#qrCode').value) || '';
+    if (!code) { flash(false, 'Generate an access code first'); return; }
+    const w = window.open('', 'gcm-qr-kit');
+    if (!w) { flash(false, 'Allow pop-ups to print the QR kit.'); return; }
     try {
-      const code = ($('#qrCode') && $('#qrCode').value) || '';
-      if (!code) throw new Error('Generate an access code first');
+      await loadQrKit();
       if (!window.GCMQrKit) throw new Error('QR kit did not load');
       const s = state.shopBundle.shop;
       const html = GCMQrKit.printHtml({
         name: s.name, slug: s.slug, color: s.color, logoUrl: s.logo_url, code, origin: location.origin,
       });
-      const w = window.open('', 'gcm-qr-kit');
-      if (!w) throw new Error('Allow pop-ups to print the QR kit.');
       w.document.open();
       w.document.write(html);
       w.document.close();
-    } catch (e) { flash(false, e.message); }
+    } catch (e) { w.close(); flash(false, e.message); }
   };
 }
 
