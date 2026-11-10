@@ -1,10 +1,10 @@
 // Printable cart sticker and counter card for a partner shop.
 // The QR encodes the same renter link the admin already copies: /p/<slug>/go?code=CODE.
 (function (root, factory) {
-  const api = factory(typeof root.qrcode === 'function' ? root.qrcode : null);
+  const api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.GCMQrKit = api;
-})(typeof globalThis !== 'undefined' ? globalThis : this, function (qrcode) {
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   const DEFAULT_COLOR = '#14b8c4';
 
   function esc(s) {
@@ -36,20 +36,275 @@
     return base + '/p/' + s + '/go?code=' + c;
   }
 
+  // Byte-mode QR, error correction M, versions 1 to 10. Enough for a shop URL.
+  // Matrix placement follows the same rules as the Kazuhiko Arase generator (ISO/IEC 18004).
+  const RS_M = [
+    [[1, 26, 16]],
+    [[1, 44, 28]],
+    [[1, 70, 44]],
+    [[2, 50, 32]],
+    [[2, 67, 43]],
+    [[4, 43, 27]],
+    [[4, 49, 31]],
+    [[2, 60, 38], [2, 61, 39]],
+    [[3, 58, 36], [2, 59, 37]],
+    [[4, 69, 43], [1, 70, 44]],
+  ];
+  const ALIGN = [
+    [], [6, 18], [6, 22], [6, 26], [6, 30], [6, 34],
+    [6, 22, 38], [6, 24, 42], [6, 26, 46], [6, 28, 50],
+  ];
+  const EXP = new Array(256);
+  const LOG = new Array(256);
+  for (let i = 0; i < 8; i++) EXP[i] = 1 << i;
+  for (let i = 8; i < 256; i++) EXP[i] = EXP[i - 4] ^ EXP[i - 5] ^ EXP[i - 6] ^ EXP[i - 8];
+  for (let i = 0; i < 255; i++) LOG[EXP[i]] = i;
+  function gexp(n) { while (n < 0) n += 255; while (n >= 256) n -= 255; return EXP[n]; }
+  function glog(n) { if (n < 1) throw new Error('bad gf'); return LOG[n]; }
+
+  function poly(num) {
+    let off = 0;
+    while (off < num.length && num[off] === 0) off++;
+    const a = num.slice(off);
+    if (!a.length) a.push(0);
+    return {
+      at: i => a[i],
+      len: () => a.length,
+      mul(e) {
+        const out = new Array(a.length + e.len() - 1).fill(0);
+        for (let i = 0; i < a.length; i++) if (a[i]) {
+          for (let j = 0; j < e.len(); j++) if (e.at(j)) out[i + j] ^= gexp(glog(a[i]) + glog(e.at(j)));
+        }
+        return poly(out);
+      },
+      mod(e) {
+        if (a.length - e.len() < 0) return this;
+        const ratio = glog(a[0]) - glog(e.at(0));
+        const out = a.slice();
+        for (let i = 0; i < e.len(); i++) if (e.at(i)) out[i] ^= gexp(glog(e.at(i)) + ratio);
+        return poly(out).mod(e);
+      },
+    };
+  }
+  function eccPoly(n) {
+    let p = poly([1]);
+    for (let i = 0; i < n; i++) p = p.mul(poly([1, gexp(i)]));
+    return p;
+  }
+  const ECC_POLY = {};
+  function blocksFor(version) {
+    const out = [];
+    for (const [count, total, data] of RS_M[version - 1]) {
+      for (let i = 0; i < count; i++) out.push({ total, data, ecc: total - data });
+    }
+    return out;
+  }
+  function bytesOf(text) {
+    const s = String(text || '');
+    const out = [];
+    for (let i = 0; i < s.length; i++) {
+      const c = s.charCodeAt(i);
+      if (c > 255) throw new Error('QR text must be plain ASCII');
+      out.push(c);
+    }
+    return out;
+  }
+  function dataBytes(raw, version) {
+    const blocks = blocksFor(version);
+    let dataCW = 0;
+    for (const b of blocks) dataCW += b.data;
+    const lenBits = version < 10 ? 8 : 16;
+    const bits = [];
+    const put = (num, len) => { for (let i = len - 1; i >= 0; i--) bits.push((num >>> i) & 1); };
+    put(0b0100, 4);
+    put(raw.length, lenBits);
+    for (const byte of raw) put(byte, 8);
+    const maxBits = dataCW * 8;
+    if (bits.length > maxBits) return null;
+    for (let i = 0; i < 4 && bits.length < maxBits; i++) bits.push(0);
+    while (bits.length % 8) bits.push(0);
+    const pad = [0xec, 0x11];
+    let p = 0;
+    while (bits.length < maxBits) { put(pad[p], 8); p ^= 1; }
+    const buf = [];
+    for (let i = 0; i < bits.length; i += 8) {
+      let v = 0;
+      for (let b = 0; b < 8; b++) v = (v << 1) | bits[i + b];
+      buf.push(v);
+    }
+    let offset = 0;
+    let maxDc = 0;
+    let maxEc = 0;
+    const dc = [];
+    const ec = [];
+    for (const block of blocks) {
+      maxDc = Math.max(maxDc, block.data);
+      maxEc = Math.max(maxEc, block.ecc);
+      const chunk = buf.slice(offset, offset + block.data);
+      offset += block.data;
+      dc.push(chunk);
+      const gen = ECC_POLY[block.ecc] || (ECC_POLY[block.ecc] = eccPoly(block.ecc));
+      const mod = poly(chunk.concat(new Array(gen.len() - 1).fill(0))).mod(gen);
+      const ecc = new Array(gen.len() - 1).fill(0);
+      for (let i = 0; i < ecc.length; i++) {
+        const idx = i + mod.len() - ecc.length;
+        ecc[i] = idx >= 0 ? mod.at(idx) : 0;
+      }
+      ec.push(ecc);
+    }
+    const out = [];
+    for (let i = 0; i < maxDc; i++) for (const row of dc) if (i < row.length) out.push(row[i]);
+    for (let i = 0; i < maxEc; i++) for (const row of ec) if (i < row.length) out.push(row[i]);
+    return out;
+  }
+  function bchDigit(data) { let n = 0; while (data) { n++; data >>>= 1; } return n; }
+  function bch(data, poly, shift) {
+    let d = data << shift;
+    while (bchDigit(d) - bchDigit(poly) >= 0) d ^= poly << (bchDigit(d) - bchDigit(poly));
+    return (data << shift) | d;
+  }
+  const G15 = 0x537;
+  const G18 = 0x1f25;
+  const G15_MASK = 0x5412;
+  const MASKS = [
+    (i, j) => (i + j) % 2 === 0,
+    (i, j) => i % 2 === 0,
+    (i, j) => j % 3 === 0,
+    (i, j) => (i + j) % 3 === 0,
+    (i, j) => (Math.floor(i / 2) + Math.floor(j / 3)) % 2 === 0,
+    (i, j) => ((i * j) % 2 + (i * j) % 3) === 0,
+    (i, j) => (((i * j) % 2 + (i * j) % 3) % 2) === 0,
+    (i, j) => (((i * j) % 3 + (i + j) % 2) % 2) === 0,
+  ];
+  function paint(version, codewords, mask, test) {
+    const n = version * 4 + 17;
+    const m = Array.from({ length: n }, () => Array(n).fill(null));
+    const setFinder = (row, col) => {
+      for (let r = -1; r <= 7; r++) {
+        if (row + r < 0 || row + r >= n) continue;
+        for (let c = -1; c <= 7; c++) {
+          if (col + c < 0 || col + c >= n) continue;
+          const edge = (r >= 0 && r <= 6 && (c === 0 || c === 6)) || (c >= 0 && c <= 6 && (r === 0 || r === 6));
+          const core = r >= 2 && r <= 4 && c >= 2 && c <= 4;
+          m[row + r][col + c] = edge || core;
+        }
+      }
+    };
+    setFinder(0, 0);
+    setFinder(n - 7, 0);
+    setFinder(0, n - 7);
+    const pos = ALIGN[version - 1];
+    for (const row of pos) for (const col of pos) {
+      if (m[row][col] != null) continue;
+      for (let r = -2; r <= 2; r++) for (let c = -2; c <= 2; c++) {
+        m[row + r][col + c] = r === -2 || r === 2 || c === -2 || c === 2 || (r === 0 && c === 0);
+      }
+    }
+    for (let i = 8; i < n - 8; i++) {
+      if (m[i][6] == null) m[i][6] = i % 2 === 0;
+      if (m[6][i] == null) m[6][i] = i % 2 === 0;
+    }
+    const info = bch((0 << 3) | mask, G15, 10) ^ G15_MASK;
+    for (let i = 0; i < 15; i++) {
+      const bit = !test && ((info >> i) & 1) === 1;
+      if (i < 6) m[i][8] = bit;
+      else if (i < 8) m[i + 1][8] = bit;
+      else m[n - 15 + i][8] = bit;
+      if (i < 8) m[8][n - i - 1] = bit;
+      else if (i < 9) m[8][15 - i - 1 + 1] = bit;
+      else m[8][15 - i - 1] = bit;
+    }
+    m[n - 8][8] = !test;
+    if (version >= 7) {
+      const bits = bch(version, G18, 12);
+      for (let i = 0; i < 18; i++) {
+        const mod = !test && ((bits >> i) & 1) === 1;
+        m[Math.floor(i / 3)][i % 3 + n - 11] = mod;
+        m[i % 3 + n - 11][Math.floor(i / 3)] = mod;
+      }
+    }
+    let row = n - 1;
+    let col = n - 1;
+    let dir = -1;
+    let bitIndex = 7;
+    let byteIndex = 0;
+    const maskFn = MASKS[mask];
+    while (col > 0) {
+      if (col === 6) col--;
+      while (true) {
+        for (let c = 0; c < 2; c++) {
+          if (m[row][col - c] == null) {
+            let dark = false;
+            if (byteIndex < codewords.length) dark = ((codewords[byteIndex] >>> bitIndex) & 1) === 1;
+            if (maskFn(row, col - c)) dark = !dark;
+            m[row][col - c] = dark;
+            bitIndex--;
+            if (bitIndex < 0) { byteIndex++; bitIndex = 7; }
+          }
+        }
+        row += dir;
+        if (row < 0 || row >= n) { row -= dir; dir = -dir; break; }
+      }
+      col -= 2;
+    }
+    return m;
+  }
+  function penalty(grid) {
+    const n = grid.length;
+    const darkAt = (r, c) => grid[r][c] === true;
+    let lost = 0;
+    for (let row = 0; row < n; row++) for (let col = 0; col < n; col++) {
+      let same = 0;
+      const dark = darkAt(row, col);
+      for (let r = -1; r <= 1; r++) {
+        if (row + r < 0 || row + r >= n) continue;
+        for (let c = -1; c <= 1; c++) {
+          if (col + c < 0 || col + c >= n || (r === 0 && c === 0)) continue;
+          if (dark === darkAt(row + r, col + c)) same++;
+        }
+      }
+      if (same > 5) lost += 3 + same - 5;
+    }
+    for (let row = 0; row < n - 1; row++) for (let col = 0; col < n - 1; col++) {
+      let count = 0;
+      if (darkAt(row, col)) count++;
+      if (darkAt(row + 1, col)) count++;
+      if (darkAt(row, col + 1)) count++;
+      if (darkAt(row + 1, col + 1)) count++;
+      if (count === 0 || count === 4) lost += 3;
+    }
+    for (let row = 0; row < n; row++) for (let col = 0; col < n - 6; col++) {
+      if (darkAt(row, col) && !darkAt(row, col + 1) && darkAt(row, col + 2) && darkAt(row, col + 3) && darkAt(row, col + 4) && !darkAt(row, col + 5) && darkAt(row, col + 6)) lost += 40;
+    }
+    for (let col = 0; col < n; col++) for (let row = 0; row < n - 6; row++) {
+      if (darkAt(row, col) && !darkAt(row + 1, col) && darkAt(row + 2, col) && darkAt(row + 3, col) && darkAt(row + 4, col) && !darkAt(row + 5, col) && darkAt(row + 6, col)) lost += 40;
+    }
+    let darkCount = 0;
+    for (let row = 0; row < n; row++) for (let col = 0; col < n; col++) if (darkAt(row, col)) darkCount++;
+    lost += (Math.abs(100 * darkCount / n / n - 50) / 5) * 10;
+    return lost;
+  }
+  function gridFor(text) {
+    const raw = bytesOf(text);
+    let version = 0;
+    let codewords = null;
+    for (let v = 1; v <= RS_M.length; v++) {
+      const data = dataBytes(raw, v);
+      if (data) { version = v; codewords = data; break; }
+    }
+    if (!codewords) throw new Error('That link is too long for a QR code');
+    let best = 0;
+    let bestLost = 0;
+    for (let mask = 0; mask < 8; mask++) {
+      const lost = penalty(paint(version, codewords, mask, true));
+      if (mask === 0 || lost < bestLost) { bestLost = lost; best = mask; }
+    }
+    return paint(version, codewords, best, false);
+  }
+
   /** Module rows as '0'/'1' strings. Finder patterns sit in the corners (no quiet zone). */
   function modules(text) {
-    if (typeof qrcode !== 'function') throw new Error('QR library did not load');
-    const qr = qrcode(0, 'M');
-    qr.addData(String(text || ''));
-    qr.make();
-    const n = qr.getModuleCount();
-    const rows = [];
-    for (let r = 0; r < n; r++) {
-      let bits = '';
-      for (let c = 0; c < n; c++) bits += qr.isDark(r, c) ? '1' : '0';
-      rows.push(bits);
-    }
-    return rows;
+    return gridFor(text).map(row => row.map(cell => (cell ? '1' : '0')).join(''));
   }
 
   function softUrl(url) {

@@ -4,7 +4,6 @@ import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-globalThis.qrcode = require('../public/vendor/qrcode.js');
 const kit = require('../public/qrkit.js');
 
 const URL = 'https://golfcartmap.com/p/lajollacartco/go?code=TESTCODE';
@@ -24,6 +23,10 @@ test('matrix is square and has the three finder frames', () => {
     assert.equal(rows[r0 + 6].slice(c0, c0 + 7), '1111111');
     assert.equal(rows[r0 + 1].slice(c0, c0 + 7), '1000001');
   }
+  const longUrl = 'https://partner-portal-mvp.golfcart-maps.pages.dev/p/' + 'beachmode'.repeat(4) + '/go?code=DESKCODE12';
+  const longRows = kit.modules(longUrl);
+  assert.ok(longRows.length > rows.length);
+  assert.equal(longRows[0].slice(0, 7), '1111111');
   const svg = kit.svg(rows);
   assert.match(svg, /<svg/);
   assert.match(svg, /fill="#000000"/);

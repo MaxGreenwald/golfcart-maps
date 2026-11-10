@@ -397,7 +397,7 @@ function loadScript(src) {
 let qrKitLoad = null;
 function loadQrKit() {
   if (window.GCMQrKit) return Promise.resolve();
-  if (!qrKitLoad) qrKitLoad = loadScript('/vendor/qrcode.js').then(() => loadScript('/qrkit.js'));
+  if (!qrKitLoad) qrKitLoad = loadScript('/qrkit.js');
   return qrKitLoad;
 }
 
