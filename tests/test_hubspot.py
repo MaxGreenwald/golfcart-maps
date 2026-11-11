@@ -47,7 +47,7 @@ class HubSpotPages(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertEqual(count_tags(html), 1, name)
                 self.assertNotIn(OLD, html)
-                self.assertNotIn("js.hs-scripts.com", html)
+                self.assertNotRegex(html, r"<script[^>]+js\.hs-scripts\.com")
 
     def test_partner_admin_has_no_loader(self):
         html = read(os.path.join(PUB, "partner", "index.html"))
@@ -90,6 +90,20 @@ class HubSpotPages(unittest.TestCase):
             self.assertEqual(built.count(LOADER), 1)
             self.assertIn('src="hubspot.js"', read(os.path.join(tmp, "map.html")))
             self.assertIn('src="/hubspot.js"', read(os.path.join(tmp, "index.html")))
+
+    def test_privacy_policy_matches_the_opt_in(self):
+        html = read(os.path.join(PUB, "privacy.html"))
+        self.assertIn("Effective November 11, 2026", html)
+        self.assertIn("not loaded until you click Allow HubSpot", html)
+        self.assertIn("Collect data from website forms", html)
+        self.assertIn("This site has not confirmed that switch is off", html)
+        self.assertIn("What these events never include", html)
+        self.assertNotIn(OLD, html)
+        self.assertNotIn("we never sell your data", html)
+        self.assertNotRegex(
+            html,
+            r"(?i)forms are disabled|form collection is off|will not collect form|we guarantee|GDPR compliant|CCPA compliant|we never use cookies|no cookies",
+        )
 
 
 if __name__ == "__main__":
