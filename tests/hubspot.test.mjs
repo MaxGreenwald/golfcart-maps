@@ -64,11 +64,13 @@ function boot(opts = {}) {
     fn(node);
     for (const child of node.children || []) walk(child, fn);
   }
+  const cookies = [];
   const document = {
     readyState: opts.readyState ?? 'complete',
     head,
     body,
     documentElement: root,
+    cookies,
     getElementById(id) {
       let found = null;
       walk(root, (n) => { if (n.id === id) found = n; });
@@ -100,7 +102,12 @@ function boot(opts = {}) {
     Capacitor: opts.Capacitor,
     NO_TRACK: opts.NO_TRACK,
     GCM_INTERNAL: opts.GCM_INTERNAL,
+    HubSpotConversations: opts.conversations,
   };
+  Object.defineProperty(document, 'cookie', {
+    get() { return cookies.map((row) => row.split(';')[0]).join('; '); },
+    set(value) { cookies.push(String(value)); },
+  });
   sandbox.window = sandbox;
   vm.runInNewContext(code, sandbox, { filename: 'hubspot.js' });
   function buttons() {
@@ -124,6 +131,7 @@ function boot(opts = {}) {
     buttons,
     byText,
     loaders,
+    cookies,
     fire(type) { (document.listeners[type] || []).forEach((fn) => fn()); },
   };
 }
@@ -134,6 +142,8 @@ test('source is the https loader for portal 52245531 only', () => {
   assert.equal(/(^|[^:])\/\/js\.hs-scripts\.com/.test(code), false);
   assert.equal((code.match(/https?:\/\/[^\s'"]+/g) || []).join('\n'), LOADER);
   assert.equal(/\b(hapikey|private[_-]?app|client_secret|pat-[a-z0-9]|bearer|api[_-]?key)\b/i.test(code), false);
+  assert.equal(code.includes('widget.open'), false);
+  assert.equal(code.includes('usemessages'), false);
 });
 
 test('no loader and two equal choices before consent', () => {
@@ -175,17 +185,25 @@ test('allow inserts one loader and a town change keeps one', () => {
   assert.equal(page.loaders()[0].src, LOADER);
 });
 
-test('revoke stops a later load and calls the tracking opt-out', () => {
-  const page = boot();
+test('revoke stops a later load, calls the tracking opt-out, and expires HubSpot cookies', () => {
+  let removed = 0;
+  const page = boot({ conversations: { widget: { remove() { removed += 1; } } } });
   page.byText('Allow HubSpot').click();
   assert.equal(page.loaders().length, 1);
+  assert.equal(page.document.getElementById('gcm-hs').className, 'float revoke');
   page.byText('Turn it off').click();
   assert.equal(page.store['gcm-hubspot'], 'deny');
   assert.equal(page.loaders().length, 0);
+  assert.equal(removed, 1);
   const calls = page.sandbox._hsq.map((x) => x[0]);
   assert.ok(calls.includes('doNotTrack'));
   assert.ok(calls.includes('revokeCookieConsent'));
   assert.ok(page.sandbox._hsp.some((x) => x[0] === 'revokeCookieConsent'));
+  const expired = page.cookies.join('\n');
+  for (const name of ['__hstc', 'hubspotutk', '__hssc', '__hssrc', 'messagesUtk']) {
+    assert.match(expired, new RegExp(name + '=; expires=Thu, 01 Jan 1970'));
+  }
+  assert.equal(expired.includes('__hs_do_not_track='), false);
   const later = boot({ ls: { 'gcm-hubspot': 'deny' } });
   assert.equal(later.loaders().length, 0);
 });

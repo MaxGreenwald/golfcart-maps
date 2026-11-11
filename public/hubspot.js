@@ -6,6 +6,9 @@
 (function () {
   var SRC = 'https://js.hs-scripts.com/52245531.js';
   var KEY = 'gcm-hubspot';
+  // Analytics and chat cookies named in HubSpot's cookie documentation.
+  // __hs_do_not_track is left in place: that cookie is the stop signal.
+  var CLEAR = ['__hstc', 'hubspotutk', '__hssc', '__hssrc', 'messagesUtk', 'hs-messages-is-open', 'hs-messages-hide-welcome-message', '__hs_cookie_cat_pref', '__hs_initial_opt_in'];
   var W = window;
   function lsGet(k) {
     try { return W.localStorage && W.localStorage.getItem(k); } catch (e) { return null; }
@@ -82,16 +85,37 @@
     load();
     render();
   }
-  function deny() {
-    if (excluded()) return;
-    lsSet(KEY, 'deny');
-    if (document.getElementById('hs-script-loader')) {
+  function clearCookies() {
+    var host = '';
+    try { host = location.hostname || ''; } catch (e) {}
+    var domains = [''];
+    if (host) domains.push(host);
+    if (host.indexOf('.') > 0) domains.push('.' + host.replace(/^www\./, ''));
+    for (var i = 0; i < CLEAR.length; i++) {
+      for (var d = 0; d < domains.length; d++) {
+        var tail = '; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+        if (domains[d]) tail += '; domain=' + domains[d];
+        try { document.cookie = CLEAR[i] + '=' + tail; } catch (e) {}
+      }
+    }
+  }
+  function stopHubSpot() {
+    try {
       var q = (W._hsq = W._hsq || []);
       q.push(['doNotTrack']);
       q.push(['revokeCookieConsent']);
       var hsp = (W._hsp = W._hsp || []);
       hsp.push(['revokeCookieConsent']);
-    }
+    } catch (e) {}
+    try {
+      if (W.HubSpotConversations && W.HubSpotConversations.widget && W.HubSpotConversations.widget.remove) W.HubSpotConversations.widget.remove();
+    } catch (e) {}
+    clearCookies();
+  }
+  function deny() {
+    if (excluded()) return;
+    lsSet(KEY, 'deny');
+    stopHubSpot();
     load();
     render();
   }
@@ -101,6 +125,7 @@
     tag.id = 'gcm-hs-style';
     tag.textContent = '#gcm-hs{box-sizing:border-box;font:16px/1.45 system-ui,-apple-system,sans-serif;color:#17384a}'
       + '#gcm-hs.float{position:fixed;z-index:5000;left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));max-width:36rem;margin:0 auto;background:#fff;border:2px solid #0b6e86;border-radius:16px;padding:14px 14px 12px;box-shadow:0 8px 28px rgba(11,60,80,.2)}'
+      + '#gcm-hs.float.revoke{right:auto;width:max-content;max-width:16rem;padding:10px 12px}'
       + '#gcm-hs.page{position:static;background:#fff;border:2px solid #0b6e86;border-radius:16px;padding:14px;margin:12px 0 0}'
       + '#gcm-hs p{margin:0 0 10px}'
       + '#gcm-hs .row{display:flex;flex-wrap:wrap;gap:8px}'
@@ -163,7 +188,10 @@
     var root = mount(policy);
     empty(root);
     if (c === 'allow') {
-      root.appendChild(para('HubSpot is allowed in this browser. Its script can set cookies, record page views, and collect form submissions while this stays on.'));
+      if (!policy) root.className = 'float revoke';
+      root.appendChild(para(policy
+        ? 'HubSpot is allowed in this browser. Its script can set cookies, record page views, and collect form submissions while this stays on. Turn it off to stop that and clear those cookies.'
+        : 'HubSpot is on.'));
       root.appendChild(row([button('Turn it off', deny)]));
     } else if (c === 'deny') {
       root.appendChild(para('HubSpot is off in this browser. Its script is not loaded.'));
