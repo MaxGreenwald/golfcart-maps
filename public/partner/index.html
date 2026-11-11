@@ -52,6 +52,10 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 .picked{font-size:12px;margin-top:4px;color:var(--deep)}
 .picked.ok{color:var(--ok)}
 .picked.miss{color:#b38600}
+.route-check{margin-top:8px;padding:10px 12px;border-radius:12px;background:#f4fafb;border:1px solid var(--line)}
+.route-check .route-miles{margin:0;font-weight:800}
+.route-check .route-flags{margin:8px 0 0;padding-left:18px;color:var(--bad)}
+.route-check .err{color:var(--bad);margin:0}
 .pinmap{height:220px;border-radius:12px;border:1px solid var(--line);margin-top:8px;z-index:1;background:#d4dadc}
 .pinmap .leaflet-container{font:600 12px Nunito,system-ui,sans-serif}
 .pinmap img.leaflet-tile{max-width:none !important;max-height:none !important;mix-blend-mode:normal !important}
@@ -73,6 +77,9 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 <main id="app"></main>
 <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
 <script src="/vendor/leaflet/leaflet.js"></script>
+<script src="/roadrule.js"></script>
+<script src="/router.js"></script>
+<script src="/routecheck.js"></script>
 <script src="/partner/admin.js"></script>
 </body>
 </html>

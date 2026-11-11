@@ -326,6 +326,7 @@ function shopView() {
     <label>Title</label><input id="exTitle" placeholder="La Jolla seals joyride">
     <label>Description</label><textarea id="exDesc" placeholder="A 45-minute coastal loop"></textarea>
     <label>Stops</label>${stopEditor([{}])}
+    <div id="routeCheck" class="route-check" aria-live="polite"></div>
     <label class="ns-row" style="margin-top:10px"><input type="checkbox" id="exNearest" checked> Start riders at their nearest stop</label>
     <div class="muted" id="exNearestHelp">Off: riders follow your exact order</div>
     <p>
@@ -874,6 +875,66 @@ function wireBrandColor() {
   if (clearBtn) clearBtn.addEventListener('click', () => apply(''));
 }
 
+let routeSeq = 0;
+let routeCache = { geo: '', summary: null };
+
+function relabelRoute(summary, stops) {
+  const flags = (summary.flags || []).map(f => ({
+    ...f,
+    label: (stops[f.index] && stops[f.index].label) || f.label,
+  }));
+  return { ...summary, flags, stops: stops.length };
+}
+
+function wireRouteCheck() {
+  const box = $('#routeCheck');
+  const list = $('#stopList');
+  if (!box || !list || !window.GCMRouteCheck) return;
+  let tmr = null;
+  const schedule = () => { clearTimeout(tmr); tmr = setTimeout(runRouteCheck, 280); };
+  list.addEventListener('input', schedule);
+  list.addEventListener('click', schedule);
+  const add = $('#addStop');
+  if (add) add.addEventListener('click', schedule);
+  const place = $('#addPlaceStop');
+  if (place) place.addEventListener('change', schedule);
+  const veh = $('#brandVehicle');
+  if (veh) veh.addEventListener('change', () => { routeCache = { geo: '', summary: null }; schedule(); });
+  const reg = $('#brandRegion');
+  if (reg) reg.addEventListener('change', () => { routeCache = { geo: '', summary: null }; schedule(); });
+  schedule();
+}
+
+async function runRouteCheck() {
+  const box = $('#routeCheck');
+  if (!box || !window.GCMRouteCheck) return;
+  const stops = readStops();
+  const vehicle = ($('#brandVehicle') && $('#brandVehicle').value) || ((state.shopBundle && state.shopBundle.shop && state.shopBundle.shop.vehicle) || 'golf_cart');
+  const regionId = ($('#brandRegion') && $('#brandRegion').value) || ((state.shopBundle && state.shopBundle.shop && state.shopBundle.shop.region_id) || 'sd');
+  const geo = vehicle + '|' + regionId + '|' + stops.map(s => (+s.lat).toFixed(5) + ',' + (+s.lon).toFixed(5)).join(';');
+  if (routeCache.geo === geo && routeCache.summary) {
+    box.innerHTML = GCMRouteCheck.html(relabelRoute(routeCache.summary, stops));
+    return;
+  }
+  const my = ++routeSeq;
+  if (stops.length < 2) {
+    routeCache = { geo, summary: GCMRouteCheck.summarize(stops, [], vehicle) };
+    box.innerHTML = GCMRouteCheck.html(routeCache.summary);
+    return;
+  }
+  box.innerHTML = '<p class="muted">Checking legal roads...</p>';
+  try {
+    const summary = await GCMRouteCheck.check({ regionId, vehicle, stops });
+    if (my !== routeSeq) return;
+    routeCache = { geo, summary };
+    box.innerHTML = GCMRouteCheck.html(summary);
+  } catch (e) {
+    if (my !== routeSeq) return;
+    routeCache = { geo: '', summary: null };
+    box.innerHTML = '<p class="err">Could not check this route. Stops still save.</p>';
+  }
+}
+
 function bindLogin() {
   const btn = $('#devLogin');
   if (!btn) return;
@@ -952,6 +1013,7 @@ function bindApp() {
   };
 
   document.querySelectorAll('#stopList .stop').forEach(wireStop);
+  wireRouteCheck();
   const addStop = $('#addStop');
   if (addStop) addStop.onclick = () => {
     const list = $('#stopList');
