@@ -110,6 +110,5 @@ def page(title, desc, path, body, ld, extra_head=""):
 </main>
 <footer><p class="muted">{BRAND} (golfcartmap.com){POS.FOOTER_STATUS}. Not legal advice; posted signs and local law win. Updated {e(today())}. &copy; {LEGAL}. <a href="/privacy">Privacy</a> · <a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn</a> · Contact: <a href="mailto:{CONTACT}">{CONTACT}</a></p></footer>
 <script defer src="/track.js"></script><script>addEventListener('load',function(){{var T=window.GCMTrack;if(!T)return;document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.target.closest('a[data-ev]');if(a)T.track(a.dataset.ev,JSON.parse(a.dataset.p||'{{}}'))}})}})</script>
-<script defer src="/hubspot.js"></script>
 </body></html>
 """

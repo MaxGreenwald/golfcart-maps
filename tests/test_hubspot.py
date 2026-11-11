@@ -41,13 +41,15 @@ class HubSpotPages(unittest.TestCase):
         sw = read(os.path.join(PUB, "sw.js"))
         self.assertNotIn("hubspot.js", sw)
 
-    def test_static_public_pages_include_it_once(self):
-        for name in ("index.html", "p.html", "privacy.html", "404.html"):
+    def test_static_pages_include_the_gate_only_on_privacy(self):
+        privacy = read(os.path.join(PUB, "privacy.html"))
+        self.assertEqual(count_tags(privacy), 1)
+        self.assertNotRegex(privacy, r"<script[^>]+js\.hs-scripts\.com")
+        for name in ("index.html", "p.html", "404.html"):
             html = read(os.path.join(PUB, name))
             with self.subTest(name=name):
-                self.assertEqual(count_tags(html), 1, name)
+                self.assertEqual(count_tags(html), 0, name)
                 self.assertNotIn(OLD, html)
-                self.assertNotRegex(html, r"<script[^>]+js\.hs-scripts\.com")
 
     def test_partner_admin_has_no_loader(self):
         html = read(os.path.join(PUB, "partner", "index.html"))
@@ -60,11 +62,10 @@ class HubSpotPages(unittest.TestCase):
     def test_generated_pages_include_it_once(self):
         home = L.render()
         sample = C.page("Town", "A town page.", "/sample", "<p>Hello</p>", [])
-        for label, html in (("landing", home), ("page", sample)):
-            with self.subTest(label=label):
-                self.assertEqual(count_tags(html), 1, label)
-                self.assertNotIn(OLD, html)
-                self.assertNotIn("js.hs-scripts.com", html)
+        self.assertEqual(count_tags(home), 1)
+        self.assertEqual(count_tags(sample), 0)
+        self.assertNotIn(OLD, home)
+        self.assertNotIn("js.hs-scripts.com", home)
         self.assertEqual(home.count("</body>"), 1)
 
     def test_web_build_keeps_one_tag_on_public_html(self):
@@ -81,22 +82,22 @@ class HubSpotPages(unittest.TestCase):
                     seen += 1
                     with self.subTest(rel=rel):
                         self.assertNotIn(OLD, html)
-                        if rel.startswith("partner" + os.sep) or rel.startswith("partner/"):
-                            self.assertEqual(count_tags(html), 0, rel)
-                        else:
-                            self.assertEqual(count_tags(html), 1, rel)
+                        want = 1 if rel in ("index.html", "privacy.html") else 0
+                        self.assertEqual(count_tags(html), want, rel)
             self.assertGreater(seen, 10)
             built = read(os.path.join(tmp, "hubspot.js"))
             self.assertEqual(built.count(LOADER), 1)
-            self.assertIn('src="hubspot.js"', read(os.path.join(tmp, "map.html")))
-            self.assertIn('src="/hubspot.js"', read(os.path.join(tmp, "index.html")))
+            self.assertNotIn("hubspot.js", read(os.path.join(tmp, "map.html")))
+            self.assertEqual(count_tags(read(os.path.join(tmp, "index.html"))), 1)
 
     def test_privacy_policy_matches_the_opt_in(self):
         html = read(os.path.join(PUB, "privacy.html"))
         self.assertIn("Effective November 11, 2026", html)
+        self.assertIn("homepage https://golfcartmap.com/", html)
         self.assertIn("not loaded until you click Allow HubSpot", html)
         self.assertIn("Collect data from website forms", html)
-        self.assertIn("This site has not confirmed that switch is off", html)
+        self.assertIn('the switch "Collect data from website forms" is off', html)
+        self.assertNotIn("has not confirmed that switch is off", html)
         self.assertIn("What these events never include", html)
         self.assertNotIn(OLD, html)
         self.assertNotIn("we never sell your data", html)

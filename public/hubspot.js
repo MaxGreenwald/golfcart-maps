@@ -1,8 +1,8 @@
-// Public-site HubSpot loader (portal 52245531).
-// The script is not inserted until this browser has an explicit allow,
-// and a privacy signal (GPC, Do Not Track, gcm-notrack, NO_TRACK) blocks it.
-// Native app, partner admin, and non-public hosts are skipped.
-// Town changes use history.pushState and do not insert a second tag.
+// Homepage HubSpot loader (portal 52245531).
+// The portal script is inserted only on the apex homepage after an
+// explicit allow. A privacy signal blocks it. The map, town pages, native
+// app, and partner admin do not load it. The chat channel targets that
+// homepage, so this file does not add a second embed.
 (function () {
   var SRC = 'https://js.hs-scripts.com/52245531.js';
   var KEY = 'gcm-hubspot';
@@ -36,10 +36,12 @@
   function adminPath() {
     try { return /^\/partner(?:\/|$)/.test(location.pathname || ''); } catch (e) { return false; }
   }
-  function publicHost() {
+  function homePage() {
     try {
-      var h = location.hostname || '';
-      return h === 'golfcartmap.com' || h === 'www.golfcartmap.com';
+      if ((location.hostname || '') !== 'golfcartmap.com') return false;
+      var p = location.pathname || '/';
+      if (p.length > 1 && p.charAt(p.length - 1) === '/') p = p.slice(0, -1);
+      return p === '/' || p === '';
     } catch (e) { return false; }
   }
   function internal() {
@@ -50,7 +52,7 @@
     } catch (e) {}
     return false;
   }
-  function excluded() { return !publicHost() || nativeApp() || adminPath() || internal(); }
+  function blocked() { return nativeApp() || adminPath() || internal(); }
   function choice() {
     var v = lsGet(KEY);
     return v === 'allow' || v === 'deny' ? v : '';
@@ -60,7 +62,7 @@
     return p === '/privacy' || p === '/privacy/';
   }
   function load() {
-    var ok = !excluded() && !privacySignal() && choice() === 'allow';
+    var ok = homePage() && !blocked() && !privacySignal() && choice() === 'allow';
     var existing = document.getElementById('hs-script-loader');
     if (!ok) {
       W.__gcmHs = 0;
@@ -78,7 +80,7 @@
     (document.body || document.documentElement).appendChild(s);
   }
   function allow() {
-    if (excluded() || privacySignal()) return;
+    if (blocked() || privacySignal()) return;
     lsSet(KEY, 'allow');
     var q = (W._hsq = W._hsq || []);
     q.push(['doNotTrack', { track: true }]);
@@ -113,7 +115,7 @@
     clearCookies();
   }
   function deny() {
-    if (excluded()) return;
+    if (blocked()) return;
     lsSet(KEY, 'deny');
     stopHubSpot();
     load();
@@ -173,8 +175,10 @@
     if (root && root.parentNode) root.parentNode.removeChild(root);
   }
   function render() {
-    if (excluded()) return;
+    if (blocked()) return;
     var policy = onPolicy();
+    var home = homePage();
+    if (!home && !policy) return;
     if (privacySignal()) {
       removeBox();
       if (!policy) return;
@@ -197,7 +201,7 @@
       root.appendChild(para('HubSpot is off in this browser. Its script is not loaded.'));
       root.appendChild(row([button('Allow HubSpot', allow)]));
     } else {
-      root.appendChild(para("HubSpot stays off until you allow it. Allowing loads HubSpot's script on this site. That script sets HubSpot cookies, records page views, and can send form submissions to HubSpot when form collection is on in the HubSpot account. This site cannot switch that off. The map works if you do not allow it."));
+      root.appendChild(para("HubSpot stays off until you allow it. Allowing loads HubSpot's script on the homepage. That script sets HubSpot cookies, records the page view, and shows the Golf Cart Map Assistant chat. The map works if you do not allow it."));
       root.appendChild(row([button('Allow HubSpot', allow), button("Don't allow", deny)]));
     }
   }
