@@ -1138,6 +1138,81 @@ async function unlockedView() {
     setRouteNote('Map couldn’t load. Your stops are still listed above.');
     mapCard.hidden = false;
   }
+  armNudges();
+}
+
+// Return-by and range reminders. The shop sets return_by (HH:MM), range_mi, and a return spot.
+let nudgeTimer = 0, nudgeSaid = new Set();
+function batteryPct() {
+  try {
+    const s = JSON.parse(localStorage.getItem('gcm-range') || '{}');
+    if (s.battery == null || s.battery === '') return 100;
+    const n = +s.battery;
+    return Number.isFinite(n) ? n : 100;
+  } catch (e) { return 100; }
+}
+function paintNudge(lines) {
+  const el = document.getElementById('nudgeBar');
+  if (!el) return;
+  if (!lines || !lines.length) { el.hidden = true; el.textContent = ''; return; }
+  el.hidden = false;
+  el.textContent = lines.map(n => n.text).join(' ');
+}
+function voiceBusy() {
+  return !!(navVoice && (navVoice.speaking() || navVoice.pending()));
+}
+function nudgeMuted() {
+  return navMuted || !!(window.GCMFollow && GCMFollow.isMuted && GCMFollow.isMuted());
+}
+async function homeTrip() {
+  const s = (unlocked && unlocked.shop) || {};
+  if (!meLL || !finite(s.return_lat, s.return_lon) || !window.GCMRemind || !window.GCMNav) return null;
+  let leg = null;
+  try {
+    const legs = await connectStops([meLL, { lat: +s.return_lat, lon: +s.return_lon }]);
+    leg = legs && legs[0];
+  } catch (e) { leg = null; }
+  if (!leg || !leg.points || leg.points.length < 2) return null;
+  const homeMi = GCMRemind.pathMiles(leg.points, GCMNav.hav);
+  if (homeMi == null) return null;
+  return { homeMi, travelMin: GCMRemind.travelMinutes(homeMi, shopVeh()) };
+}
+async function refreshNudge() {
+  if (!window.GCMRemind || !unlocked || !unlocked.shop) { paintNudge([]); return 60000; }
+  const s = unlocked.shop;
+  const hasTime = !!s.return_by;
+  const hasRange = +s.range_mi > 0;
+  if (!hasTime && !hasRange) { paintNudge([]); return 60000; }
+  if (!meLL) { const loc = await locateMe(); if (loc) { meLL = loc; placeMe(); } }
+  const pinned = finite(s.return_lat, s.return_lon);
+  const trip = pinned ? await homeTrip() : null;
+  if (pinned && !trip) return 5000;
+  const lines = GCMRemind.nudges({
+    now: new Date(),
+    returnBy: s.return_by,
+    travelMin: trip ? trip.travelMin : (hasTime ? 0 : null),
+    homeMi: trip ? trip.homeMi : null,
+    rangeMi: s.range_mi,
+    batteryPct: batteryPct(),
+  });
+  paintNudge(lines);
+  for (const n of lines) {
+    if (nudgeSaid.has(n.id)) continue;
+    if (nudgeMuted()) { nudgeSaid.add(n.id); continue; }
+    if (voiceBusy()) continue;
+    navVoice.say(n.text);
+    nudgeSaid.add(n.id);
+  }
+  return 60000;
+}
+function armNudges() {
+  if (nudgeTimer) clearTimeout(nudgeTimer);
+  const tick = async () => {
+    let wait = 60000;
+    try { wait = await refreshNudge(); } catch (e) { wait = 15000; }
+    nudgeTimer = setTimeout(tick, wait || 60000);
+  };
+  tick();
 }
 
 async function boot() {

@@ -214,6 +214,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offs
 /* Turn-by-turn banner: top of the map, map-native card. */
 #navBanner{display:none;position:fixed;z-index:40;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));max-width:536px;margin:0 auto;background:#0b3a78;color:#fff;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.28);padding:10px 12px;font-family:Nunito,system-ui,sans-serif}
 #navBanner.show{display:block}
+#nudgeBar{position:fixed;z-index:45;left:12px;right:12px;top:calc(8px + env(safe-area-inset-top,0px));max-width:536px;margin:0 auto;background:#7a2e00;color:#fff;border-radius:14px;padding:10px 14px;font:800 14px/1.35 Nunito,system-ui,sans-serif;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+#nudgeBar[hidden]{display:none!important}
+body.has-nav #nudgeBar{top:calc(118px + env(safe-area-inset-top,0px))}
 #navBanner .nav-row{display:flex;align-items:center;gap:10px}
 #navBanner .nav-arrow{flex:none;width:46px;height:46px;border-radius:12px;background:#1d6fe0;display:grid;place-items:center;font:900 30px/1 system-ui}
 #navBanner .nav-arrow.sm{width:26px;height:26px;font-size:16px;border-radius:8px}
@@ -310,6 +313,7 @@ html.gcm-offline .leaflet-container{background:#eef2ea}
   </div>
   <div id="panel"><p class="fine">Loading the welcome mat…</p></div>
 </main>
+<div id="nudgeBar" hidden role="status"></div>
 <div id="nextBar"><b id="nextLabel">Next stop</b><button id="nextBtn" type="button">Next</button></div>
 <script src="/offline.js"></script>
 <script src="/roadrule.js"></script>
@@ -320,6 +324,7 @@ html.gcm-offline .leaflet-container{background:#eef2ea}
 <script src="/geosearch.js"></script>
 <script src="/stoporder.js"></script>
 <script src="/applink.js"></script>
+<script src="/reminders.js"></script>
 <script src="/rental.js"></script>
 <script src="/p.js"></script>
 </body>

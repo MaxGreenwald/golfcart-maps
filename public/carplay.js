@@ -30,6 +30,27 @@ function maneuvers(r,route){
 // Live guidance for CarPlay through the SAME engine the phone uses (GCMFollow.engine). Native sends every GPS fix
 // and only renders what comes back (card index, distances, map heading, reroute, arrival).
 let cpNav=null,cpLast=null,cpPlan=null,cpArrived=false;
+let cpNudge=[],cpNudgeAt=0,cpNudgeSaid=new Set(),cpHomeApi=null,cpHomeKey='';
+function remindMuted(){
+ try{if(window.GCMFollow&&GCMFollow.isMuted())return true}catch(_){}
+ try{if(localStorage.getItem('gcm_voice_muted')==='1'||localStorage.getItem('gcm_nav_mute')==='1')return true}catch(_){}
+ return false}
+async function refreshCpNudge(lat,lon){
+ if(!window.GCMRemind)return;
+ let a=null;try{a=JSON.parse(localStorage.getItem('gcm_partner_access')||'null')}catch(_){}
+ if(!a||!a.shop)return;
+ const sh=a.shop,veh=sh.vehicle==='lsv'?'lsv':'golf_cart';
+ let homeMi=null,travelMin=null;
+ const pinned=Number.isFinite(+sh.return_lat)&&Number.isFinite(+sh.return_lon);
+ if(pinned&&window.GCMRouter&&typeof REG!=='undefined'&&REG&&typeof RULES!=='undefined'){
+  const key=REG.id+':'+veh;
+  if(!cpHomeApi||cpHomeKey!==key){cpHomeApi=await window.GCMRouter.openRegion(REG,RULES,veh,u=>fetch(u));cpHomeKey=key}
+  const leg=await cpHomeApi.trip({lat:+lat,lon:+lon},{lat:+sh.return_lat,lon:+sh.return_lon},{risky:false});
+  if(leg&&leg.points&&leg.points.length>1){homeMi=window.GCMRemind.pathMiles(leg.points,window.GCMRouter.hav);travelMin=window.GCMRemind.travelMinutes(homeMi,veh)}
+ }else if(sh.return_by)travelMin=0;
+ const GS=window.GCMRemind;
+ const battery=window.GCMRange?(GCMRange.load().battery??100):100;
+ cpNudge=GS.nudges({now:new Date(),returnBy:sh.return_by||'',travelMin,homeMi,rangeMi:sh.range_mi,batteryPct:battery})}
 const navOut=(st,reroute,say)=>({idx:st.idx,off:Math.round(st.off),along:Math.round(st.along),toNext:Math.round(st.toNext),remaining:Math.round(st.remaining),arrived:!!st.arrived,
  bearing:st.bearing==null?null:Math.round(st.bearing),course:st.course==null?null:Math.round(st.course),reroute:reroute||null,say:say||null});
 
@@ -89,6 +110,8 @@ window.GCMCarPlay={
   // "wrong way" is the on-the-line reversal (Calle del Oro). The native nav log stores this reason.
   const rr=cpNav.offCheck(now)?{reason:(st.wrong?'wrong way, ':'')+'off route '+Math.round(st.off)+' m',course:st.course}:null;if(rr)cpNav.reset();
   let say=null;if(rr)say='Rerouting';else if(st.arrived){if(!cpArrived){cpArrived=true;say=cpLast.steps[cpLast.steps.length-1].text}}else say=cpPlan.update(st,f.speed>=0?+f.speed:null);
+  if(window.GCMRemind&&now-cpNudgeAt>60000){cpNudgeAt=now;refreshCpNudge(+f.lat,+f.lon).catch(()=>{})}
+  if(!say&&!remindMuted()){const n=cpNudge.find(x=>!cpNudgeSaid.has(x.id));if(n){cpNudgeSaid.add(n.id);say=n.text}}
   return navOut(st,rr,say)},
  navEnd(){cpNav=null;cpPlan=null;return {ok:true}},
  // legal-road overlay for the visible CarPlay map. Returns up to `max` polylines: ok (green) + avoid (red).
