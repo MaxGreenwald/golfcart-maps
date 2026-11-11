@@ -23,6 +23,8 @@ jobs:
         run: python scripts/check_no_agent_chatter.py
       - name: Analytics schema / PII guard (node --test)
         run: node --test tests/analytics.test.mjs
+      - name: HubSpot tracking loader once on public pages (node --test)
+        run: node --test tests/hubspot.test.mjs
       - name: Live town loader (native app prefers golfcartmap.com JSON; bundled fallback)
         run: node --test tests/livedata.test.mjs
       - name: CarPlay Experiences bridge (node --test)

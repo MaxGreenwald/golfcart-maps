@@ -58,6 +58,8 @@ Where a check lives only on an unmerged branch, the branch is named; it becomes 
 | 37 | Code and pull request prose do not carry conversation, prompt, or iteration history | Magnolio Manager coaching Nov 5 2026 | `scripts/check_no_agent_chatter.py`, `tests/test_no_agent_chatter.py` | web-ci data job; pr-body job (`--pr-body`) |
 | 38 | Partner experiences start riders at their nearest stop by default (`nearest_start` on experiences, missing reads as on), then keep the partner's sequence the shorter way (loops wrap). Off: riders follow the exact order. Riders can pick "Use shop order" | Max, Oct 31 2026 (t441u) | `tests/stoporder.test.mjs` (`public/stoporder.js`), `tests/partner_nearest.test.mjs`, `tests/test_partner_nearest_start.py` | web-ci |
 | 39 | Town and city counts on the homepage, partner pages, SEO hubs, llms.txt, and schema equal the number of regions in `public/data/regions.json` | expansion to 100 towns | `tests/test_town_count.py` | web-ci |
+| 40 | HubSpot portal 52245531 loads only on `https://golfcartmap.com/` after an explicit allow in `public/hubspot.js`. GPC, Do Not Track, gcm-notrack, and NO_TRACK block it. Not the map, native app, or `/partner`. Not portal 247729169 | Max t494u, Nov 11 2026 | `tests/hubspot.test.mjs`, `tests/test_hubspot.py` | web-ci |
+| 41 | Public HTML, sitemap, robots.txt, llms.txt, and SEO generators do not name sdr-chat.golfcartmap.com or gcm-sdr-chat.maxgreenwald-assistant.workers.dev. golfcartmap.com stays crawlable | Max t486u, Nov 11 2026 | `tests/test_sdr_discovery.py` | web-ci |
 
 When you add a check, add a row. When a rule has no check, say so here rather than leaving it implied.
 

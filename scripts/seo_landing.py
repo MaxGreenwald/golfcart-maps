@@ -136,7 +136,7 @@ def render():
     tail = ("<script>addEventListener('load',function(){var T=window.GCMTrack,c=document.getElementById('remember');try{c.checked=localStorage.getItem('gcm_skip_landing')==='1'}catch(_){}"
             "T&&T.track('landing_view',{});c.onchange=function(){try{if(c.checked){localStorage.setItem('gcm_skip_landing','1');document.cookie='gcm_skip=1; Max-Age=31536000; Path=/; SameSite=Lax'}else{localStorage.removeItem('gcm_skip_landing');document.cookie='gcm_skip=; Max-Age=0; Path=/'}}catch(_){}T&&T.track('remember_map_toggle',{on:c.checked})};"
             "document.querySelectorAll('a.cta').forEach(function(a){a.addEventListener('click',function(){try{sessionStorage.setItem('gcm_from_landing','1')}catch(_){}})})})</script>")
-    return page(title, desc, "/", body, ld, head + "<style>" + LCSS + "</style>").replace("</body>", find_js + tail + "</body>")
+    return page(title, desc, "/", body, ld, head + "<style>" + LCSS + "</style>").replace("</body>", find_js + tail + '<script defer src="/hubspot.js"></script></body>')
 
 if __name__ == "__main__":
     print(render()[:300])
