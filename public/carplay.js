@@ -47,6 +47,12 @@ window.GCMCarPlay={
   return r.ok?{ok:true,shop:(r.access.shop&&r.access.shop.name)||r.access.slug,experiences:r.access.experiences.length}:r},
  // Active rental shop for the CarPlay settings screen, or {ok:false}.
  rental(){const a=window.GCMRental&&GCMRental.load(localStorage);return a?{ok:true,shop:(a.shop&&a.shop.name)||a.slug,code:a.code}:{ok:false}},
+ // Call or text the shop. The message is built here, including the renter's location. Native only opens the URL.
+ help(lat,lon){let a=null;try{a=JSON.parse(localStorage.getItem(XP_KEY)||'null')}catch(_){}
+  const phone=a&&a.shop&&a.shop.phone,H=window.GCMHelp;
+  if(!H||!H.digits(phone))return {ok:false,reason:'This shop has no phone number yet.'};
+  const body=H.message(lat,lon);
+  return {ok:true,phone:H.digits(phone),tel:H.telHref(phone),sms:H.smsHref(phone,body),body}},
  removeRental(){if(window.GCMRental)GCMRental.remove(localStorage);return {ok:true}},
  version:2,
  track:cpTrack,
