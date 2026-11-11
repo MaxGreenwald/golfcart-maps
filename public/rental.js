@@ -14,6 +14,15 @@
     const c = String(code || '').replace(/[\s-]+/g, '').toUpperCase();
     return /^[0-9A-Z]{4,16}$/.test(c) ? c : '';
   }
+  /** One line for Settings. The full card lives on the unlocked shop page. */
+  function summary(rental) {
+    const r = rental || {};
+    const bits = [];
+    if (r.return_by) bits.push('Return by ' + r.return_by);
+    if (r.pickup) bits.push('Pickup: ' + r.pickup);
+    if (r.phone) bits.push(r.phone);
+    return bits.join('. ');
+  }
   function record(j, code, nowMs) {
     return { slug: j.slug || (j.shop && j.shop.slug) || '', code: j.code || code, at: nowMs, shop: j.shop,
       experiences: j.experiences || [], affiliates: j.affiliates || [], places: j.places || [] };
@@ -58,8 +67,10 @@
     const paint = (msg, err) => {
       const a = load(st);
       const n = a ? a.experiences.length : 0;
+      const extra = a && a.shop ? summary(a.shop.rental) : '';
+      const active = `${(a && a.shop && a.shop.name) || (a && a.slug) || ''} is active: ${n} experience${n === 1 ? '' : 's'}. Also in CarPlay.`;
       row.querySelector('#rentSub').textContent = msg || (a
-        ? `${(a.shop && a.shop.name) || a.slug} is active: ${n} experience${n === 1 ? '' : 's'}. Also in CarPlay.`
+        ? (extra ? active + ' ' + extra + '.' : active)
         : 'Got a code from your rental shop? Enter it to unlock its rides here and in CarPlay.');
       row.querySelector('#rentSub').classList.toggle('err', !!err);
       row.querySelector('#rentForm').hidden = !!a;
@@ -83,5 +94,5 @@
     const go = () => mountSettings(document, window);
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
   }
-  return { KEY, DAYS, normalize, record, load, remove, enter, shopUrl, apiBase, mountSettings };
+  return { KEY, DAYS, normalize, summary, record, load, remove, enter, shopUrl, apiBase, mountSettings };
 });

@@ -184,6 +184,31 @@ function setLockedChrome() {
   guided = false;
 }
 
+function telHref(phone) {
+  const t = String(phone || '').trim();
+  const digits = t.replace(/\D/g, '');
+  if (digits.length < 7) return '';
+  return 'tel:' + (t.startsWith('+') ? '+' : '') + digits;
+}
+function rentalCard(shop) {
+  const r = shop && shop.rental;
+  if (!r) return '';
+  const rows = [];
+  const add = (label, value, href) => {
+    const v = String(value || '').trim();
+    if (!v) return;
+    const inner = href ? `<a href="${esc(href)}">${esc(v)}</a>` : esc(v);
+    rows.push(`<div><dt>${label}</dt><dd>${inner}</dd></div>`);
+  };
+  add('Pickup', r.pickup);
+  add('Return', r.return_spot);
+  add('Return by', r.return_by);
+  add('Shop phone', r.phone, telHref(r.phone));
+  add('Cart rules', r.rules);
+  add('If the cart dies', r.if_cart_dies);
+  if (!rows.length) return '';
+  return `<section class="rental" id="rentalCard"><h2 class="sec">Your rental</h2><dl>${rows.join('')}</dl></section>`;
+}
 function countWord(n, one, many) {
   return `${n} ${n === 1 ? one : many}`;
 }
@@ -1069,6 +1094,7 @@ async function unlockedView() {
         <p class="yay-kicker">You’re in</p>
         <p>Code <b>${esc(code)}</b> unlocked ${esc(shop.name)}. Pick a ride, then start from where you are.</p>
       </div>
+      ${rentalCard(shop)}
       <div class="offrow"><button class="allex" id="offBtn" type="button" hidden>⬇️ Download map for offline</button><p class="fine" id="offNote" aria-live="polite"></p></div>
       <div id="goPane" hidden>
         <button class="allex" id="goBack" type="button">‹ Back to experiences</button>
