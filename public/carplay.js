@@ -59,7 +59,9 @@ window.GCMCarPlay={
  async stops(id,lat,lon){const x=await xpLoad();if(!x.ok)return x;const e=(x.j.experiences||[]).find(e=>String(e.id)===String(id));if(!e)return {ok:false,reason:'Experience not found'};
   const af=x.j.affiliates||[];
   return {ok:true,title:e.title||'',stops:(e.stops||[]).filter(s=>s.lat!==null&&s.lon!==null&&isFinite(+s.lat)&&isFinite(+s.lon)).map(s=>{const a=af.find(a=>(s.affiliate_id&&a.id===s.affiliate_id)||(a.name&&a.name===s.name));
-   return {name:s.name||'Stop',category:s.category||'',lat:+s.lat,lon:+s.lon,meters:lat==null?null:xpDist(+lat,+lon,+s.lat,+s.lon),coupon:a&&a.coupon||''}})}},
+   const Park=window.GCMPark;
+   const d=Park?Park.dest(s):{lat:+s.lat,lon:+s.lon,parked:false};
+   return {name:s.name||s.label||'Stop',category:s.category||'',lat:+d.lat,lon:+d.lon,parked:!!d.parked,place_lat:+s.lat,place_lon:+s.lon,meters:lat==null?null:xpDist(+lat,+lon,+d.lat,+d.lon),coupon:a&&a.coupon||''}})}},
  async status(){await ready();return {region:REG&&REG.id,regionName:REG&&REG.short,mode:MODE,center:REG&&REG.center,
   regions:REGIONS.map(r=>({id:r.id,name:r.short||r.name,center:r.center,hidden:!!r.hidden})),range:GCMRange.rangeFor(),battery:(GCMRange.load().battery??100)}},
  // vehicle = phone Settings > Golf cart mode (localStorage 'gcm-veh', default 'lsv'); setMode changes it for phone + CarPlay

@@ -141,7 +141,25 @@ function pickedLine(lat, lon, label) {
   return `<div class="picked miss" data-k="picked">Search a place or drop a pin on the map</div>`;
 }
 
-function stopRowHtml(s = {}, i = 0) {
+function parkFields(s) {
+  const plat = Number.isFinite(+s.park_lat) ? s.park_lat : '';
+  const plon = Number.isFinite(+s.park_lon) ? s.park_lon : '';
+  const placed = plat !== '' && plon !== '';
+  return `<label>Cart parking (optional)</label>
+    <div class="mode-row">
+      <button type="button" class="btn alt parkDrop">Drop parking pin</button>
+      <button type="button" class="btn alt parkClear">Clear parking</button>
+    </div>
+    <div class="hidden" data-k="parkbox">
+      <div data-k="parkmap"></div>
+      <p class="muted">Navigation ends here instead of the address. Farther than about half a mile is ignored.</p>
+    </div>
+    <input type="hidden" data-k="park_lat" value="${esc(plat)}">
+    <input type="hidden" data-k="park_lon" value="${esc(plon)}">
+    <div class="picked${placed ? ' ok' : ''}" data-k="parkpicked">${placed ? `Park here ${(+plat).toFixed(5)}, ${(+plon).toFixed(5)}` : 'No parking pin. Navigation ends at the address.'}</div>`;
+}
+
+function stopRowHtml(s = {}, i = 0, opts = {}) {
   const has = Number.isFinite(numCoord(s.lat)) && Number.isFinite(numCoord(s.lon));
   return `<div class="stop" data-i="${i}">
     <div>
@@ -169,6 +187,7 @@ function stopRowHtml(s = {}, i = 0) {
       ${pickedLine(s.lat, s.lon, s.label)}
       <label>Note (optional)</label>
       <input data-k="note" placeholder="What to do here" value="${esc(s.note || '')}">
+      ${opts.parking ? parkFields(s) : ''}
     </div>
     <div class="stop-actions">
       <button type="button" class="btn alt moveUp">Move up</button>
@@ -179,7 +198,7 @@ function stopRowHtml(s = {}, i = 0) {
 }
 
 function stopEditor(stops) {
-  const rows = (stops && stops.length ? stops : [{}]).map((s, i) => stopRowHtml(s, i)).join('');
+  const rows = (stops && stops.length ? stops : [{}]).map((s, i) => stopRowHtml(s, i, { parking: true })).join('');
   return `<div class="stops" id="stopList">${rows}</div>
     <p class="muted">Places via Photon / OpenStreetMap. Or drop a pin and type your own name for unofficial spots.</p>
     <p class="muted">Move up and Move down set the order. Save to keep it.</p>
@@ -652,6 +671,40 @@ function wireStop(row) {
     if (Number.isFinite(lat) && Number.isFinite(lon)) setPicked(row, lat, lon, text || 'Custom stop');
     mirrorStopName(row, custom.value, 'custom');
   });
+  const parkDrop = $('.parkDrop', row);
+  const parkClear = $('.parkClear', row);
+  const parkBox = $('[data-k=parkbox]', row);
+  const paintPark = () => {
+    const el = $('[data-k=parkpicked]', row);
+    if (!el) return;
+    const plat = numCoord($('[data-k=park_lat]', row).value);
+    const plon = numCoord($('[data-k=park_lon]', row).value);
+    if (Number.isFinite(plat) && Number.isFinite(plon)) {
+      el.className = 'picked ok';
+      el.textContent = `Park here ${plat.toFixed(5)}, ${plon.toFixed(5)}`;
+    } else {
+      el.className = 'picked';
+      el.textContent = 'No parking pin. Navigation ends at the address.';
+    }
+  };
+  if (parkDrop && parkBox) parkDrop.onclick = () => {
+    parkBox.classList.remove('hidden');
+    const mapEl = $('[data-k=parkmap]', row);
+    mapEl.classList.add('pinmap');
+    ensurePinMap(mapEl, $('[data-k=park_lat]', row).value || $('[data-k=lat]', row).value, $('[data-k=park_lon]', row).value || $('[data-k=lon]', row).value, (lat, lon) => {
+      $('[data-k=park_lat]', row).value = lat;
+      $('[data-k=park_lon]', row).value = lon;
+      paintPark();
+    });
+  };
+  if (parkClear) parkClear.onclick = () => {
+    const lat = $('[data-k=park_lat]', row), lon = $('[data-k=park_lon]', row);
+    if (lat) lat.value = '';
+    if (lon) lon.value = '';
+    const mapEl = $('[data-k=parkmap]', row);
+    if (mapEl && mapEl._gcmMarker && mapEl._gcmMap) { mapEl._gcmMap.removeLayer(mapEl._gcmMarker); mapEl._gcmMarker = null; }
+    paintPark();
+  };
   $('.remStop', row).onclick = () => { row.remove(); refreshMoveButtons(); };
   const up = $('.moveUp', row);
   const down = $('.moveDown', row);
@@ -676,7 +729,7 @@ function wirePlaces() {
     // Fill an empty first row, else append.
     const blank = [...list.querySelectorAll('.stop')].find(r => !$('[data-k=lat]', r).value);
     const wrap = document.createElement('div');
-    wrap.innerHTML = stopRowHtml({ label: p.name, lat: p.lat, lon: p.lon, note: p.note }, list.children.length);
+    wrap.innerHTML = stopRowHtml({ label: p.name, lat: p.lat, lon: p.lon, note: p.note }, list.children.length, { parking: true });
     const nr = wrap.firstElementChild;
     if (blank) list.replaceChild(nr, blank); else list.appendChild(nr);
     wireStop(nr);
@@ -786,12 +839,16 @@ function readStops() {
   return [...document.querySelectorAll('#stopList .stop')].map(row => {
     const named = ($('[data-k=name]', row) && $('[data-k=name]', row).value.trim()) || '';
     const hidden = ($('[data-k=label]', row) && $('[data-k=label]', row).value.trim()) || '';
-    return {
+    const stop = {
       label: named || hidden,
       lat: +$('[data-k=lat]', row).value,
       lon: +$('[data-k=lon]', row).value,
       note: $('[data-k=note]', row).value.trim(),
     };
+    const plat = $('[data-k=park_lat]', row) ? numCoord($('[data-k=park_lat]', row).value) : NaN;
+    const plon = $('[data-k=park_lon]', row) ? numCoord($('[data-k=park_lon]', row).value) : NaN;
+    if (Number.isFinite(plat) && Number.isFinite(plon)) { stop.park_lat = plat; stop.park_lon = plon; }
+    return stop;
   }).filter(s => s.label && Number.isFinite(s.lat) && Number.isFinite(s.lon));
 }
 
@@ -808,7 +865,7 @@ function fillStopList(stops) {
   const list = $('#stopList');
   if (!list) return;
   const rows = (stops && stops.length ? stops : [{}]);
-  list.innerHTML = rows.map((s, i) => stopRowHtml(s, i)).join('');
+  list.innerHTML = rows.map((s, i) => stopRowHtml(s, i, { parking: true })).join('');
   list.querySelectorAll('.stop').forEach(wireStop);
   refreshMoveButtons();
 }
@@ -956,7 +1013,7 @@ function bindApp() {
   if (addStop) addStop.onclick = () => {
     const list = $('#stopList');
     const wrap = document.createElement('div');
-    wrap.innerHTML = stopRowHtml({}, list.children.length);
+    wrap.innerHTML = stopRowHtml({}, list.children.length, { parking: true });
     const row = wrap.firstElementChild;
     list.appendChild(row);
     wireStop(row);
