@@ -189,6 +189,7 @@ body.is-open.has-next .leaflet-bottom{bottom:calc(var(--dock) + 78px)}
   background:#0b3c50;color:#fff;border-radius:18px;padding:10px 10px 10px 16px;align-items:center;gap:10px;
   box-shadow:0 10px 30px rgba(11,60,80,.28)}
 #nextBar.show{display:flex}
+#nextPhoto{width:48px;height:48px;object-fit:cover;border-radius:10px;flex:none;background:#fff}
 #nextLabel{flex:1;font-size:14px;line-height:1.25}
 #nextBtn{border:0;background:var(--sun);color:#5a4300;font:800 14px Nunito;border-radius:999px;padding:10px 16px;cursor:pointer}
 body.has-next{padding-bottom:calc(78px + var(--sab))}
@@ -310,7 +311,7 @@ html.gcm-offline .leaflet-container{background:#eef2ea}
   </div>
   <div id="panel"><p class="fine">Loading the welcome mat…</p></div>
 </main>
-<div id="nextBar"><b id="nextLabel">Next stop</b><button id="nextBtn" type="button">Next</button></div>
+<div id="nextBar"><img id="nextPhoto" alt="" hidden><b id="nextLabel">Next stop</b><button id="nextBtn" type="button">Next</button></div>
 <script src="/offline.js"></script>
 <script src="/roadrule.js"></script>
 <script src="/router.js"></script>

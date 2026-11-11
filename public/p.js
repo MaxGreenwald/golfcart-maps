@@ -400,6 +400,10 @@ function drawRoadCanvas() {
   ctx.setLineDash([]);
 }
 
+function stopPopupHtml(s, i) {
+  const photo = safeLogo(s.photo);
+  return `<b>${i + 1}. ${esc(s.label)}</b>${photo ? `<br><img src="${esc(photo)}" alt="" style="max-width:220px;border-radius:8px;margin-top:6px">` : ''}${s.note ? `<br>${esc(s.note)}` : ''}`;
+}
 function stopIcon(n) {
   return L.divIcon({
     className: '',
@@ -537,7 +541,7 @@ async function drawUnlocked(opts) {
     (activeEx.stops || []).forEach((s, i) => {
       if (!finite(s.lat, s.lon)) return;
       const m = L.marker([+s.lat, +s.lon], { icon: stopIcon(i + 1), zIndexOffset: 700 }).addTo(pins);
-      m.bindPopup(`<b>${i + 1}. ${esc(s.label)}</b>${s.note ? `<br>${esc(s.note)}` : ''}`);
+      m.bindPopup(stopPopupHtml(s, i));
       bounds.push([+s.lat, +s.lon]);
     });
   }
@@ -565,6 +569,12 @@ function updateNext(opts) {
   document.body.classList.add('has-next');
   const s = stops[stopIdx];
   nextLabel.textContent = `Stop ${stopIdx + 1}/${stops.length}: ${s.label || 'Stop'}`;
+  const photo = document.getElementById('nextPhoto');
+  const src = safeLogo(s.photo);
+  if (photo) {
+    if (src) { photo.hidden = false; photo.src = src; }
+    else { photo.hidden = true; photo.removeAttribute('src'); }
+  }
   if (opts && opts.pan && map && finite(s.lat, s.lon)) panIntoView(L.latLng(+s.lat, +s.lon), 16);
 }
 nextBtn.onclick = () => {
@@ -1034,9 +1044,18 @@ function wireOffline() {
   const O = window.GCMOffline, b = document.getElementById('offBtn'), n = document.getElementById('offNote');
   if (!O || !b || !region) return;
   b.hidden = false;
-  const extra = () => [location.pathname + location.search, '/p.js', '/offline.js', '/roadrule.js', '/router.js', '/nav.js',
-    '/vendor/leaflet/leaflet.js', '/vendor/leaflet/leaflet.css',
-    `/api/partner/public/${encodeURIComponent(slug)}` + (codeParam ? `/unlock?code=${encodeURIComponent(codeParam)}` : '')];
+  const extra = () => {
+    const photos = [];
+    const shop = unlocked && unlocked.shop;
+    if (shop && safeLogo(shop.logo_url)) photos.push(shop.logo_url);
+    for (const e of (unlocked && unlocked.experiences) || []) {
+      for (const s of e.stops || []) if (safeLogo(s.photo)) photos.push(s.photo);
+    }
+    return [location.pathname + location.search, '/p.js', '/offline.js', '/roadrule.js', '/router.js', '/nav.js',
+      '/vendor/leaflet/leaflet.js', '/vendor/leaflet/leaflet.css',
+      `/api/partner/public/${encodeURIComponent(slug)}` + (codeParam ? `/unlock?code=${encodeURIComponent(codeParam)}` : ''),
+      ...photos];
+  };
   let busy = false;
   const paint = async () => {
     const m = O.list()[region.id];

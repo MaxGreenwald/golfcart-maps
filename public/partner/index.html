@@ -55,6 +55,9 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 .pinmap{height:220px;border-radius:12px;border:1px solid var(--line);margin-top:8px;z-index:1;background:#d4dadc}
 .pinmap .leaflet-container{font:600 12px Nunito,system-ui,sans-serif}
 .pinmap img.leaflet-tile{max-width:none !important;max-height:none !important;mix-blend-mode:normal !important}
+.stop input[type=file],#brandLogoFile{max-width:100%}
+#logoPreview,[data-k=photoPreview]{display:block;max-width:160px;max-height:120px;object-fit:cover;border-radius:10px;margin-top:6px;border:1px solid var(--line)}
+[data-k=photoPreview][hidden],#logoPreview[hidden]{display:none}
 .mode-row{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
 .mode-row button.on{background:var(--aqua);color:#fff}
 .muted{opacity:.7;font-size:12px}.hidden{display:none}
@@ -73,6 +76,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 <main id="app"></main>
 <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
 <script src="/vendor/leaflet/leaflet.js"></script>
+<script src="/photoupload.js"></script>
 <script src="/partner/admin.js"></script>
 </body>
 </html>
