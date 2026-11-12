@@ -5,20 +5,30 @@
 #   scripts/prod_gate.sh --max-ok <Max chat or card id> --paths public functions lib \
 #       --dirty-msg "uncommitted changes in public/ functions/ lib/; commit first"
 #
-# Refuses (exit 1) when any of these is true:
+# Refuses (exit 1) before any deploy when any of these is true:
 #   - --max-ok is missing, empty, or not a single token
-#     (exception: --new-region-ok <ref> --live-commit <sha> instead of --max-ok passes only when
-#      scripts/check_new_region_only.py finds the diff from the live commit to HEAD just adds
-#      new regions. Max, Oct 30 2026, chat ref t390s2042. Anything else still needs --max-ok.)
+#   - the ref is not in the allowlist, the allowlist is missing, unreadable, or invalid,
+#     the ref looks relayed (*relay*, including gary-relay-*), or a one_time ref was already used
+#     (scripts/check_deploy_ref.py). The allowlist is not in this repo.
+#     Default: /workspace/gcm/approvals/deploy_refs.json
+#     Override: GCM_DEPLOY_REFS=/path/to/deploy_refs.json
+#     Shape: {"refs":[{"ref":"<Max chat or card id>","source":"<where Max's own words are>","scope":"<what it covers>","one_time":true}]}
+#     check does not record use (a dry run stays unused). Use is recorded only when a deploy
+#     logs (--append-log) or a worker deploy finishes (--mark-used).
 #   - the branch is not master
 #   - the given paths have uncommitted changes
 #   - HEAD is not exactly refs/remotes/origin/master (unpushed or local-only commits)
+#   exception: --new-region-ok <ref> --live-commit <sha> instead of --max-ok passes only when
+#   scripts/check_new_region_only.py finds the diff from the live commit to HEAD just adds
+#   new regions. Max, Oct 30 2026, chat ref t390s2042. Anything else still needs --max-ok.
+#   That path does not consult the allowlist. Its log line uses max-ok=new-region-ok:<ref>.
 #
 # After a production Pages upload, deploy_web.sh records the result with:
 #   GCM_BOT_LOG=/path/to/bot-log.md scripts/prod_gate.sh --append-log --max-ok <ref> --status PASS|FAIL
 # GCM_BOT_LOG defaults to /workspace/gcm/bot-log.md. That file is not on a cloud-agent
 # VM; tests and any other machine set GCM_BOT_LOG to a writable path. One line:
 #   YYYY-MM-DD HH:MM PT commit=<12 hex> max-ok=<ref> PASS|FAIL
+# --append-log runs the same allowlist check, then writes the line, then marks a one_time ref used.
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
@@ -49,6 +59,26 @@ check_ref() {
   if [ "${#ref}" -gt 200 ]; then
     refuse "--max-ok ref is too long"
   fi
+}
+
+# new-region deploys log max-ok=new-region-ok:<ref>. That token is the standing
+# exception, not an allowlist row. A relay-shaped token does not skip the check.
+skips_allowlist() {
+  local low
+  low=$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')
+  case "$low" in
+    *relay*) return 1 ;;
+    new-region-ok:*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+allowlist_check() {
+  python3 "$ROOT/scripts/check_deploy_ref.py" check --ref "$1"
+}
+
+allowlist_mark() {
+  python3 "$ROOT/scripts/check_deploy_ref.py" mark --ref "$1"
 }
 
 prod_gate() {
@@ -101,6 +131,7 @@ prod_gate() {
     NEW_REGION_LIVE=$live_commit
   else
     check_ref "$max_ok"
+    allowlist_check "$max_ok"
   fi
 
   local cur
@@ -167,17 +198,48 @@ append_bot_log() {
     PASS|FAIL) ;;
     *) refuse "--status must be PASS or FAIL" ;;
   esac
+  if ! skips_allowlist "$max_ok"; then
+    allowlist_check "$max_ok"
+  fi
   local log when commit
   log=${GCM_BOT_LOG:-/workspace/gcm/bot-log.md}
   when=$(TZ=America/Los_Angeles date +"%Y-%m-%d %H:%M PT")
   commit=$(gitc rev-parse --short=12 HEAD)
   mkdir -p "$(dirname "$log")"
+  # The log line is the durable web record of a one_time ref. The used-ref file
+  # is marked after that line is written. A dry run only calls check, which does not write.
   printf '%s commit=%s max-ok=%s %s\n' "$when" "$commit" "$max_ok" "$status" >> "$log"
+  if ! skips_allowlist "$max_ok"; then
+    allowlist_mark "$max_ok"
+  fi
+}
+
+mark_used() {
+  local max_ok=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --max-ok)
+        if [ $# -lt 2 ]; then
+          refuse "--max-ok <ref> is required (Max chat or card id)"
+        fi
+        max_ok=$2
+        shift 2
+        ;;
+      *)
+        refuse "unknown argument: $1"
+        ;;
+    esac
+  done
+  check_ref "$max_ok"
+  allowlist_mark "$max_ok"
 }
 
 if [ "${1:-}" = "--append-log" ]; then
   shift
   append_bot_log "$@"
+elif [ "${1:-}" = "--mark-used" ]; then
+  shift
+  mark_used "$@"
 else
   prod_gate "$@"
 fi

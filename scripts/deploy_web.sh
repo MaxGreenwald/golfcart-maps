@@ -8,9 +8,11 @@
 #       -> https://golfcartmap.com
 #
 # Production calls the shared gate (scripts/prod_gate.sh) before any build or wrangler
-# call. The gate exits 1 when --max-ok is missing, the branch is not master,
+# call. The gate exits 1 when --max-ok is missing or not on the deploy allowlist
+# (GCM_DEPLOY_REFS, default /workspace/gcm/approvals/deploy_refs.json; relay-shaped
+# and reused one_time refs are refused), the branch is not master,
 # public/ functions/ lib/ are dirty, or HEAD is not origin/master
-# (an unpushed or local-only commit).
+# (an unpushed or local-only commit). --new-region-ok does not use that allowlist.
 #
 # After a production Pages upload, this runs scripts/verify_live against
 # https://golfcartmap.com and appends one line to $GCM_BOT_LOG
