@@ -1,6 +1,7 @@
 // node --test tests/hubspot.test.mjs
-// No HubSpot tag until an explicit allow. Refusal sticks. A privacy signal
-// blocks a stored allow. After allow, a map path change keeps one tag.
+// The portal script is inserted on the first view of a public golfcartmap.com
+// page. No site consent prompt. Native, partner, other hosts, and internal
+// or NO_TRACK sessions stay unloaded.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -48,11 +49,6 @@ function boot(opts = {}) {
   const root = make('html');
   root.appendChild(head);
   root.appendChild(body);
-  if (opts.slot) {
-    const slot = make('div');
-    slot.id = 'gcm-hs-slot';
-    body.appendChild(slot);
-  }
   if (opts.existing) {
     const prior = make('script');
     prior.id = 'hs-script-loader';
@@ -102,7 +98,6 @@ function boot(opts = {}) {
     Capacitor: opts.Capacitor,
     NO_TRACK: opts.NO_TRACK,
     GCM_INTERNAL: opts.GCM_INTERNAL,
-    HubSpotConversations: opts.conversations,
   };
   Object.defineProperty(document, 'cookie', {
     get() { return cookies.map((row) => row.split(';')[0]).join('; '); },
@@ -115,13 +110,15 @@ function boot(opts = {}) {
     walk(root, (n) => { if (n.tagName === 'BUTTON') found.push(n); });
     return found;
   }
-  function byText(label) {
-    return buttons().find((b) => b.textContent === label) || null;
-  }
   function loaders() {
     const found = [];
     walk(root, (n) => { if (n.id === 'hs-script-loader') found.push(n); });
     return found;
+  }
+  function text() {
+    const bits = [];
+    walk(root, (n) => { if (n.textContent) bits.push(n.textContent); });
+    return bits.join('\n');
   }
   return {
     store,
@@ -129,11 +126,21 @@ function boot(opts = {}) {
     sandbox,
     document,
     buttons,
-    byText,
     loaders,
     cookies,
+    text,
     fire(type) { (document.listeners[type] || []).forEach((fn) => fn()); },
   };
+}
+
+function assertLoaded(page, label) {
+  assert.equal(page.loaders().length, 1, label);
+  assert.equal(page.loaders()[0].src, LOADER, label);
+  assert.equal(page.loaders()[0].async, true, label);
+  assert.equal(page.loaders()[0].defer, true, label);
+  assert.equal(page.buttons().length, 0, label);
+  assert.equal(page.document.getElementById('gcm-hs'), null, label);
+  assert.equal(page.cookies.length, 0, label);
 }
 
 test('source is the https loader for portal 52245531 only', () => {
@@ -144,145 +151,77 @@ test('source is the https loader for portal 52245531 only', () => {
   assert.equal(/\b(hapikey|private[_-]?app|client_secret|pat-[a-z0-9]|bearer|api[_-]?key)\b/i.test(code), false);
   assert.equal(code.includes('widget.open'), false);
   assert.equal(code.includes('usemessages'), false);
+  assert.equal(code.includes('Allow HubSpot'), false);
+  assert.equal(code.includes('gcm-hs'), false);
+  assert.equal(code.includes('gcm-hubspot'), false);
+  assert.equal(code.includes('globalPrivacyControl'), false);
+  assert.equal(/EU|GDPR|United Kingdom|geolocation|geoip/i.test(code), false);
 });
 
-test('no loader and two equal choices before consent', () => {
-  const page = boot();
-  assert.equal(page.loaders().length, 0);
-  const allow = page.byText('Allow HubSpot');
-  const refuse = page.byText("Don't allow");
-  assert.ok(allow && refuse);
-  assert.equal(allow.className, refuse.className);
-  assert.equal(allow.type, 'button');
-  assert.equal(refuse.type, 'button');
-  assert.equal(allow.hidden, false);
-  assert.equal(refuse.hidden, false);
-});
-
-test('refusal is stored and still does not load', () => {
-  const page = boot();
-  page.byText("Don't allow").click();
-  assert.equal(page.store['gcm-hubspot'], 'deny');
-  assert.equal(page.loaders().length, 0);
-  assert.equal(page.byText('Allow HubSpot'), null);
-  const again = boot({ ls: { ...page.store } });
-  assert.equal(again.loaders().length, 0);
-  assert.equal(again.byText('Allow HubSpot'), null);
-});
-
-test('allow on the homepage inserts one loader and leaving the homepage removes it', () => {
-  const page = boot({ pathname: '/' });
-  page.byText('Allow HubSpot').click();
-  assert.equal(page.loaders().length, 1);
-  assert.equal(page.loaders()[0].src, LOADER);
-  assert.equal(page.loaders()[0].async, true);
-  assert.equal(page.loaders()[0].defer, true);
-  page.location.pathname = '/map/pacific-beach';
-  page.sandbox.GCMHubSpot.load();
-  assert.equal(page.loaders().length, 0);
-  page.location.pathname = '/';
-  page.sandbox.GCMHubSpot.load();
-  assert.equal(page.loaders().length, 1);
-});
-
-test('revoke stops a later load, calls the tracking opt-out, and expires HubSpot cookies', () => {
-  let removed = 0;
-  const page = boot({ conversations: { widget: { remove() { removed += 1; } } } });
-  page.byText('Allow HubSpot').click();
-  assert.equal(page.loaders().length, 1);
-  assert.equal(page.document.getElementById('gcm-hs').className, 'float revoke');
-  page.byText('Turn it off').click();
-  assert.equal(page.store['gcm-hubspot'], 'deny');
-  assert.equal(page.loaders().length, 0);
-  assert.equal(removed, 1);
-  const calls = page.sandbox._hsq.map((x) => x[0]);
-  assert.ok(calls.includes('doNotTrack'));
-  assert.ok(calls.includes('revokeCookieConsent'));
-  assert.ok(page.sandbox._hsp.some((x) => x[0] === 'revokeCookieConsent'));
-  const expired = page.cookies.join('\n');
-  for (const name of ['__hstc', 'hubspotutk', '__hssc', '__hssrc', 'messagesUtk']) {
-    assert.match(expired, new RegExp(name + '=; expires=Thu, 01 Jan 1970'));
-  }
-  assert.equal(expired.includes('__hs_do_not_track='), false);
-  const later = boot({ ls: { 'gcm-hubspot': 'deny' } });
-  assert.equal(later.loaders().length, 0);
-});
-
-test('a stored allow loads only on the apex homepage', () => {
-  assert.equal(boot({ pathname: '/', ls: { 'gcm-hubspot': 'allow' } }).loaders().length, 1);
-  assert.equal(boot({ pathname: '/', doNotTrack: '0', ls: { 'gcm-hubspot': 'allow' } }).loaders().length, 1);
-  for (const opts of [
-    { hostname: 'www.golfcartmap.com', pathname: '/' },
-    { pathname: '/map' },
-    { pathname: '/p/beach-mode' },
-    { pathname: '/privacy', slot: true },
-    { pathname: '/sandiego' },
-  ]) {
-    const page = boot({ ...opts, ls: { 'gcm-hubspot': 'allow' } });
-    assert.equal(page.loaders().length, 0, JSON.stringify(opts));
+test('first public page view inserts one loader and no consent prompt', () => {
+  for (const pathname of ['/', '/map', '/privacy', '/sandiego', '/golf-cart-maps', '/p/beach-mode', '/for-rental-shops', '/404']) {
+    const page = boot({ pathname });
+    assertLoaded(page, pathname);
+    assert.equal(page.text().includes('Allow'), false, pathname);
+    assert.deepEqual(page.store, {}, pathname);
   }
 });
 
-test('privacy signals block a stored allow and hide the allow button', () => {
+test('a stored deny and privacy signals still load on first view', () => {
   const cases = [
-    ['GPC', { gpc: true }],
-    ['DNT', { doNotTrack: '1' }],
-    ['gcm-notrack', { ls: { 'gcm-notrack': '1', 'gcm-hubspot': 'allow' } }],
-    ['NO_TRACK', { NO_TRACK: 1 }],
+    { ls: { 'gcm-hubspot': 'deny' } },
+    { ls: { 'gcm-hubspot': 'allow' } },
+    { gpc: true },
+    { doNotTrack: '1' },
+    { doNotTrack: '0' },
+    { ls: { 'gcm-notrack': '1' } },
   ];
-  for (const [label, opts] of cases) {
-    const page = boot({ ls: { 'gcm-hubspot': 'allow' }, ...opts });
-    assert.equal(page.loaders().length, 0, label);
-    assert.equal(page.byText('Allow HubSpot'), null, label);
-    page.sandbox.GCMHubSpot.allow();
-    assert.equal(page.loaders().length, 0, label);
+  for (const opts of cases) {
+    const page = boot(opts);
+    assertLoaded(page, JSON.stringify(opts));
   }
 });
 
-test('native app, partner admin, preview hosts, and internal traffic stay unloaded', () => {
+test('DOMContentLoaded loads once without a click', () => {
+  const page = boot({ readyState: 'loading' });
+  assert.equal(page.loaders().length, 0);
+  assert.equal(page.buttons().length, 0);
+  page.fire('DOMContentLoaded');
+  page.fire('DOMContentLoaded');
+  assertLoaded(page, 'after');
+});
+
+test('an existing loader is kept, and a partner path removes it', () => {
+  const page = boot({ existing: true, pathname: '/' });
+  assert.equal(page.loaders().length, 1);
+  page.location.pathname = '/partner/shops';
+  page.sandbox.GCMHubSpot.load();
+  assert.equal(page.loaders().length, 0);
+  page.location.pathname = '/map';
+  page.sandbox.GCMHubSpot.load();
+  assert.equal(page.loaders().length, 1);
+});
+
+test('native app, partner admin, other hosts, and internal sessions stay unloaded', () => {
   const cases = [
     ['native', { Capacitor: { isNativePlatform: () => true } }],
     ['file', { protocol: 'file:' }],
     ['capacitor', { protocol: 'capacitor:' }],
+    ['ionic', { protocol: 'ionic:' }],
     ['partner', { pathname: '/partner' }],
     ['partner shop', { pathname: '/partner/shops' }],
+    ['www', { hostname: 'www.golfcartmap.com' }],
     ['localhost', { hostname: 'localhost' }],
     ['preview', { hostname: 'abc.golfcart-maps.pages.dev' }],
     ['webdriver', { webdriver: true }],
     ['GCM_INTERNAL', { GCM_INTERNAL: 'sim' }],
     ['gcm-internal', { ls: { 'gcm-internal': 'debug' } }],
+    ['NO_TRACK', { NO_TRACK: 1 }],
   ];
   for (const [label, opts] of cases) {
-    const page = boot({ ls: { 'gcm-hubspot': 'allow' }, ...opts });
+    const page = boot(opts);
     assert.equal(page.loaders().length, 0, label);
-    assert.equal(page.byText('Allow HubSpot'), null, label);
+    assert.equal(page.buttons().length, 0, label);
+    assert.equal(page.document.getElementById('gcm-hs'), null, label);
   }
-});
-
-test('an existing tag without consent is removed', () => {
-  const page = boot({ existing: true });
-  assert.equal(page.loaders().length, 0);
-});
-
-test('DOMContentLoaded does not load before a choice', () => {
-  const page = boot({ readyState: 'loading' });
-  assert.equal(page.loaders().length, 0);
-  page.fire('DOMContentLoaded');
-  page.fire('DOMContentLoaded');
-  assert.equal(page.loaders().length, 0);
-  page.byText('Allow HubSpot').click();
-  assert.equal(page.loaders().length, 1);
-});
-
-test('the privacy page can record an allow without loading the script', () => {
-  const page = boot({ pathname: '/privacy', slot: true, ls: { 'gcm-hubspot': 'deny' } });
-  assert.equal(page.loaders().length, 0);
-  const allow = page.byText('Allow HubSpot');
-  assert.ok(allow);
-  assert.equal(page.document.getElementById('gcm-hs').className, 'page');
-  allow.click();
-  assert.equal(page.loaders().length, 0);
-  assert.equal(page.store['gcm-hubspot'], 'allow');
-  const home = boot({ pathname: '/', ls: { ...page.store } });
-  assert.equal(home.loaders().length, 1);
 });

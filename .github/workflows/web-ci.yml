@@ -89,6 +89,9 @@ jobs:
           python scripts/build_web.py
           (python scripts/serve_dist.py 8765 dist >/dev/null 2>&1 &)
           for i in $(seq 1 20); do curl -sf http://localhost:8765/ >/dev/null && break; sleep 1; done
+      - name: HubSpot loads on the first public view, with no site consent banner
+        run: python scripts/test_hubspot_first_view.py
+        env: {URL: "http://127.0.0.1:8765/"}
       - name: test_sw (stamped cache name, old caches dropped, works offline)
         run: python scripts/test_sw.py
         env: {URL: "http://localhost:8765/"}
