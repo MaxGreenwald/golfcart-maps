@@ -44,6 +44,7 @@ class SearchKeepsText(unittest.TestCase):
             pass
 
     def test_out_of_region_keeps_text_when_suggestions_arrive(self):
+        # Outside every bbox. Sun City's center is about 12 km away; Scottsdale's is about 37 km.
         pg = self.run_case(33.55, -112.25, "suncity", "60")
         self.assertEqual(pg.evaluate("$('sugg').style.display"), "block")  # 'Arapaho Village Units 201-560' showed
         pg.click("#sugg div"); pg.wait_for_timeout(300)                 # picking still fills the box
