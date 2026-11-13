@@ -1,0 +1,59 @@
+{
+ "poly": [
+  [
+   -74.49,
+   39.348
+  ],
+  [
+   -74.405,
+   39.348
+  ],
+  [
+   -74.405,
+   39.385
+  ],
+  [
+   -74.49,
+   39.385
+  ],
+  [
+   -74.49,
+   39.348
+  ]
+ ],
+ "bans": [
+  {
+   "names": "Atlantic City Expressway|(^|;)ACE($|;)",
+   "url": "https://law.justia.com/codes/new-jersey/title-39/section-39-4-31-1/",
+   "label": "The Atlantic City Expressway is above the 25 mph low-speed vehicle cap in N.J.S.A. 39:4-31.1"
+  }
+ ],
+ "unverified": [
+  "Untagged residential, living street, service, unclassified, and tertiary roads are assumed 25 mph. A tertiary road posted above the cap would show as legal until a sign or a DOT speed is added. Those roads are listed for a person to check. A posted sign still wins."
+ ],
+ "sources": [
+  "N.J.S.A. 39:4-31.1 https://law.justia.com/codes/new-jersey/title-39/section-39-4-31-1/",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-13",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "N.J.S.A. 39:4-31.1",
+    "url": "https://law.justia.com/codes/new-jersey/title-39/section-39-4-31-1/"
+   },
+   {
+    "label": "NJ MVC low-speed vehicles",
+    "url": "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+   },
+   {
+    "label": "Atlantic City vehicles and traffic code",
+    "url": "https://ecode360.com/15216595"
+   }
+  ],
+  "note": "Plain golf carts are not street-legal in New Jersey. LSVs may use roads posted 25 mph or less. Searched the city traffic code for an ordinance opening roads up to 35 mph or banning LSVs. None was found. The expressway is banned."
+ },
+ "status": "Added (legal-towns, 2026-11-13)"
+}

@@ -1,0 +1,51 @@
+{
+ "poly": [
+  [
+   -69.66,
+   43.838
+  ],
+  [
+   -69.608,
+   43.838
+  ],
+  [
+   -69.608,
+   43.868
+  ],
+  [
+   -69.66,
+   43.868
+  ],
+  [
+   -69.66,
+   43.838
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "Untagged residential, living street, service, unclassified, and tertiary roads are assumed 25 mph. A tertiary road posted above the cap would show as legal until a sign or a DOT speed is added. Those roads are listed for a person to check. A posted sign still wins."
+ ],
+ "sources": [
+  "29-A M.R.S. section 2089 https://legislature.maine.gov/legis/statutes/29-a/title29-Asec2089.html",
+  "OpenStreetMap",
+  "MaineDOT posted speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-13",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "29-A M.R.S. section 2089",
+    "url": "https://legislature.maine.gov/legis/statutes/29-a/title29-Asec2089.html"
+   },
+   {
+    "label": "Boothbay Harbor ordinances",
+    "url": "https://boothbayharbor.maine.gov/ordinances/"
+   }
+  ],
+  "note": "Searched the town ordinance index and the web for a Boothbay Harbor golf cart or LSV ban. None was found. Plain golf carts stay off mainland public roads under 29-A M.R.S. section 501(2-A). LSVs follow section 2089: roads posted 35 mph or less."
+ },
+ "status": "Added (legal-towns, 2026-11-13)",
+ "dot_all_classes": true,
+ "_dot_all_classes": "State speed regulations cover local streets, so match them on every road class."
+}

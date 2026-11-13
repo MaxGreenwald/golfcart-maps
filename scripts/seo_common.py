@@ -13,7 +13,7 @@ SALES = "mailto:max@golfcartmap.com?subject=Golf%20Cart%20Maps%20sales%20inquiry
 APPSTORE = "https://apps.apple.com/us/app/golf-cart-maps/id6823958385"  # live listing (Nov 4 2026). Badge href and schema installUrl. Never say testflight on the page.
 APP_ID = "6823958385"  # Apple Smart App Banner + App Store id
 LINKEDIN = "https://www.linkedin.com/company/golf-cart-maps"  # company page (Max, Nov 6 2026)
-STATES = {"CA":"California","FL":"Florida","GA":"Georgia","SC":"South Carolina","TX":"Texas","AL":"Alabama","AZ":"Arizona","OH":"Ohio","NC":"North Carolina","HI":"Hawaii","ME":"Maine","NJ":"New Jersey","DE":"Delaware","VA":"Virginia","CT":"Connecticut"}
+STATES = {"CA":"California","FL":"Florida","GA":"Georgia","SC":"South Carolina","TX":"Texas","AL":"Alabama","AZ":"Arizona","OH":"Ohio","NC":"North Carolina","HI":"Hawaii","ME":"Maine","NJ":"New Jersey","DE":"Delaware","VA":"Virginia","CT":"Connecticut","MI":"Michigan","WI":"Wisconsin","RI":"Rhode Island"}
 BANNED = re.compile(r"(?i)\bbeta\b|verified|android")  # guard-change: free allowed (Max Oct 22), beta banned
 e = lambda s: html.escape(str(s), quote=True)
 

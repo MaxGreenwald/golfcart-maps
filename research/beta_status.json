@@ -2134,6 +2134,203 @@
    "pct_bans_in": 60.8,
    "pct_nonban": 60.8,
    "reports": 0
+  },
+  "traversecity": {
+   "access_check": true,
+   "assumed_mi": 32.3,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 1,
+   "corridor_mi_to_70": 34.6,
+   "corridors_to_70": 22,
+   "county_assumed_mi": 0,
+   "exempt": false,
+   "grid_mi": 0,
+   "important_mi": 56.0,
+   "missing": [
+    "8.2% < 70% (bans in)",
+    "non-ban 8.2% < 50% floor"
+   ],
+   "override": null,
+   "passes": false,
+   "pct_bans_in": 8.2,
+   "pct_nonban": 8.2,
+   "reports": 0
+  },
+  "holland": {
+   "access_check": true,
+   "assumed_mi": 2.1,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 10,
+   "corridor_mi_to_70": 35.7,
+   "corridors_to_70": 28,
+   "county_assumed_mi": 0,
+   "exempt": false,
+   "grid_mi": 0,
+   "important_mi": 64.5,
+   "missing": [
+    "14.9% < 70% (bans in)",
+    "non-ban 14.9% < 50% floor"
+   ],
+   "override": null,
+   "passes": false,
+   "pct_bans_in": 14.9,
+   "pct_nonban": 14.9,
+   "reports": 0
+  },
+  "mystic": {
+   "access_check": true,
+   "assumed_mi": 12.2,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 0,
+   "corridor_mi_to_70": 11.1,
+   "corridors_to_70": 9,
+   "county_assumed_mi": 0,
+   "exempt": false,
+   "grid_mi": 0,
+   "important_mi": 15.0,
+   "missing": [
+    "0.0% < 70% (bans in)",
+    "non-ban 0.0% < 50% floor"
+   ],
+   "override": null,
+   "passes": false,
+   "pct_bans_in": 0.0,
+   "pct_nonban": 0.0,
+   "reports": 0
+  },
+  "boothbay": {
+   "access_check": true,
+   "assumed_mi": 9.7,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 2,
+   "corridor_mi_to_70": 5.0,
+   "corridors_to_70": 1,
+   "county_assumed_mi": 0,
+   "exempt": false,
+   "grid_mi": 0,
+   "important_mi": 18.8,
+   "missing": [
+    "44.1% < 70% (bans in)",
+    "non-ban 44.1% < 50% floor"
+   ],
+   "override": null,
+   "passes": false,
+   "pct_bans_in": 44.1,
+   "pct_nonban": 44.1,
+   "reports": 0
+  },
+  "jaxbeaches": {
+   "access_check": true,
+   "assumed_mi": 14.0,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 10,
+   "corridor_mi_to_70": 8.7,
+   "corridors_to_70": 6,
+   "county_assumed_mi": 0,
+   "exempt": false,
+   "grid_mi": 0,
+   "important_mi": 56.2,
+   "missing": [
+    "50.9% < 70% (bans in)"
+   ],
+   "override": null,
+   "passes": false,
+   "pct_bans_in": 50.9,
+   "pct_nonban": 50.9,
+   "reports": 0
+  },
+  "atlanticcity": {
+   "access_check": true,
+   "assumed_mi": 14.9,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 3,
+   "corridor_mi_to_70": 16.8,
+   "corridors_to_70": 14,
+   "county_assumed_mi": 0.0,
+   "exempt": false,
+   "grid_mi": 0,
+   "important_mi": 45.7,
+   "missing": [
+    "33.4% < 70% (bans in)",
+    "non-ban 33.4% < 50% floor"
+   ],
+   "override": null,
+   "passes": false,
+   "pct_bans_in": 33.4,
+   "pct_nonban": 33.4,
+   "reports": 0
+  },
+  "scottsdale": {
+   "access_check": true,
+   "assumed_mi": 137.3,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 6,
+   "corridor_mi_to_70": 180.2,
+   "corridors_to_70": 85,
+   "county_assumed_mi": 0,
+   "exempt": false,
+   "grid_mi": 0,
+   "important_mi": 318.6,
+   "missing": [
+    "13.2% < 70% (bans in)",
+    "non-ban 13.2% < 50% floor"
+   ],
+   "override": null,
+   "passes": false,
+   "pct_bans_in": 13.2,
+   "pct_nonban": 13.2,
+   "reports": 0
+  },
+  "madison": {
+   "access_check": true,
+   "assumed_mi": 18.7,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 33,
+   "corridor_mi_to_70": 70.9,
+   "corridors_to_70": 57,
+   "county_assumed_mi": 0,
+   "exempt": false,
+   "grid_mi": 0,
+   "important_mi": 129.0,
+   "missing": [
+    "12.9% < 70% (bans in)",
+    "non-ban 12.9% < 50% floor"
+   ],
+   "override": null,
+   "passes": false,
+   "pct_bans_in": 12.9,
+   "pct_nonban": 12.9,
+   "reports": 0
+  },
+  "newportri": {
+   "access_check": true,
+   "assumed_mi": 24.0,
+   "ban_mi": 0,
+   "ban_sourced_mi": 0,
+   "conflicts": 2,
+   "corridor_mi_to_70": 26.2,
+   "corridors_to_70": 23,
+   "county_assumed_mi": 0,
+   "exempt": false,
+   "grid_mi": 0,
+   "important_mi": 48.4,
+   "missing": [
+    "16.2% < 70% (bans in)",
+    "non-ban 16.2% < 50% floor"
+   ],
+   "override": null,
+   "passes": false,
+   "pct_bans_in": 16.2,
+   "pct_nonban": 16.2,
+   "reports": 0
   }
  },
  "rule": "v3 (official, Max 2026-10-22): pass = >=70% of important miles (town grids excluded) sourced by v/m/o/d+source with cited bans counted as sourced, AND >=50% of non-ban important miles sourced, AND a local-rules check recorded (ordinance/map or state law when no local ordinance); grids and reports stay on the check list; sd exempt (never beta); per-region overrides approved by Max in research/beta_overrides.json (galveston)"

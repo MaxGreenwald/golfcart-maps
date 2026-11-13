@@ -1,0 +1,69 @@
+{
+ "slug": "scottsdale",
+ "region": "scottsdale",
+ "name": "Scottsdale",
+ "state": "AZ",
+ "question_title": "Can you drive a golf cart in Scottsdale?",
+ "answer_short": "Neighborhood electric vehicles yes, plain golf carts no. In Scottsdale, a registered neighborhood electric vehicle may use a road posted 35 mph or less and may cross a faster road. The city describes a golf cart as crossing a road for golf play, not as a street network.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not on public roads, except a crossing for golf play",
+  "speed_line": "n/a",
+  "notes": "The city page does not open city streets to plain golf carts"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured. Not on Loop 101."
+ },
+ "rules": [
+  {
+   "topic": "Neighborhood electric vehicles",
+   "rule": "A neighborhood electric vehicle shall not be driven on a highway posted over 35 mph, except to cross at an intersection.",
+   "citation": "A.R.S. 28-966",
+   "source_url": "https://www.azleg.gov/ars/28/00966.htm"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "On a golf course, no street registration is required. The city says a golf cart may cross the roadway for golf play.",
+   "citation": "City of Scottsdale alternative transportation page",
+   "source_url": "https://www.scottsdaleaz.gov/codes-and-ordinances/alternative-transportation-laws"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Loop 101 (Pima Freeway)",
+   "rule": "Posted well above 35 mph",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Scottsdale?",
+   "a": "Roads posted 35 mph or less. Registered and insured. Not on Loop 101. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart on city streets in Scottsdale?",
+   "a": "The city page does not allow that. It says a golf cart may cross a roadway for golf play."
+  },
+  {
+   "q": "Can a neighborhood electric vehicle use Scottsdale Road?",
+   "a": "Only where it is posted 35 mph or less. Much of it is posted higher. Loop 101 is closed."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  33.494,
+  -111.926
+ ],
+ "zoom": 15,
+ "published": "2026-11-13",
+ "last_checked": "2026-11-13",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.azleg.gov/ars/28/00966.htm",
+  "https://www.scottsdaleaz.gov/codes-and-ordinances/alternative-transportation-laws"
+ ]
+}

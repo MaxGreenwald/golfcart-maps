@@ -1,0 +1,62 @@
+{
+ "slug": "newportri",
+ "region": "newportri",
+ "name": "Newport",
+ "state": "RI",
+ "question_title": "Can you drive a golf cart in Newport?",
+ "answer_short": "Street-legal low-speed vehicles yes, plain golf carts no. In Newport, a registered low-speed vehicle may use a public road posted 35 mph or less. Rhode Island does not register a golf cart as that vehicle.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not on public roads",
+  "speed_line": "n/a",
+  "notes": "A golf cart is not registered as a low-speed vehicle"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Public roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered, insured, and inspected. A city ban must be posted."
+ },
+ "rules": [
+  {
+   "topic": "LSV roads",
+   "rule": "A registered low-speed vehicle may use a public highway posted 35 mph or less, and may cross a highway posted 35 to 45 mph at a signal or stop sign.",
+   "citation": "R.I. Gen. Laws 31-19.6-1",
+   "source_url": "https://webserver.rilegislature.gov/Statutes/TITLE31/31-19.6/31-19.6-1.htm"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "A golf cart is not manufactured to the low-speed vehicle standard and may not be registered for public roads.",
+   "citation": "R.I. Gen. Laws 31-19.6-1",
+   "source_url": "https://webserver.rilegislature.gov/Statutes/TITLE31/31-19.6/31-19.6-1.htm"
+  }
+ ],
+ "banned_roads": [],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Newport?",
+   "a": "Public roads posted 35 mph or less. Registered, insured, and inspected. A city ban must be posted. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Newport?",
+   "a": "No. Rhode Island does not register a golf cart as a low-speed vehicle."
+  },
+  {
+   "q": "Is this Newport Beach, California?",
+   "a": "No. This map is Newport, Rhode Island. Newport Beach, California is a separate map."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  41.49,
+  -71.313
+ ],
+ "zoom": 15,
+ "published": "2026-11-13",
+ "last_checked": "2026-11-13",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://webserver.rilegislature.gov/Statutes/TITLE31/31-19.6/31-19.6-1.htm"
+ ]
+}

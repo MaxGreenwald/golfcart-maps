@@ -1,0 +1,56 @@
+{
+ "poly": [
+  [
+   -81.445,
+   30.225
+  ],
+  [
+   -81.38,
+   30.225
+  ],
+  [
+   -81.38,
+   30.355
+  ],
+  [
+   -81.445,
+   30.355
+  ],
+  [
+   -81.445,
+   30.225
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "3rd Street (A1A), Beach Boulevard, and Atlantic Boulevard change speed along the coast. An untagged piece of those roads is the class default until a sign is read.",
+  "Neptune Beach Ordinance 2020-17 created a golf cart article. The adopted street list was not read, so plain golf carts are not shown on those streets.",
+  "Untagged residential, living street, service, unclassified, and tertiary roads are assumed 25 mph. A tertiary road posted above the cap would show as legal until a sign or a DOT speed is added. Those roads are listed for a person to check. A posted sign still wins."
+ ],
+ "sources": [
+  "F.S. 316.2122 https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+  "Atlantic Beach Ordinance 75-25-29 https://coab.civicweb.net/document/205079/",
+  "OpenStreetMap",
+  "FDOT and FHWA speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-13",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "F.S. 316.2122 (LSVs)",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+   },
+   {
+    "label": "Atlantic Beach Ordinance 75-25-29",
+    "url": "https://coab.civicweb.net/document/205079/Ordinanace%20No.%2075-25-29.pdf?handle=93BD604B23A8469CA793846F12E20CB8"
+   },
+   {
+    "label": "Neptune Beach Ordinance 2020-17 listing",
+    "url": "https://library.municode.com/fl/neptune_beach/ordinances/code_of_ordinances?nodeId=2021"
+   }
+  ],
+  "note": "Plain golf carts stay red because Florida requires a designated street list and the adopted Neptune Beach street text was not in hand (the city PDF returned 404). Atlantic Beach Ordinance 75-25-29 Sec. 21-107(i) says a registered low-speed vehicle may operate only on city roadways. No beach-city list banning LSVs from a named road was applied. Jacksonville city proper is outside this box."
+ },
+ "status": "Added (legal-towns, 2026-11-13)"
+}

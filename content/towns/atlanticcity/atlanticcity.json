@@ -1,0 +1,69 @@
+{
+ "slug": "atlanticcity",
+ "region": "atlanticcity",
+ "name": "Atlantic City",
+ "state": "NJ",
+ "question_title": "Can you drive a golf cart in Atlantic City?",
+ "answer_short": "Street-legal LSVs yes, plain golf carts no. In Atlantic City, a registered electric LSV may use roads posted 25 mph or less. A town can open a road up to 35 mph by ordinance. No such ordinance was found.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not on public roads",
+  "speed_line": "n/a",
+  "notes": "New Jersey does not register a plain golf cart for the street"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Electric, titled, and insured. Not on the expressway."
+ },
+ "rules": [
+  {
+   "topic": "LSV roads",
+   "rule": "An LSV may use a public road posted 25 mph or less. A municipality may by ordinance open a road posted up to 35 mph, or ban a hazardous street.",
+   "citation": "N.J.S.A. 39:4-31.1",
+   "source_url": "https://law.justia.com/codes/new-jersey/title-39/section-39-4-31-1/"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "An LSV must be electric and meet the federal low-speed vehicle standard. A gas golf cart does not qualify.",
+   "citation": "NJ MVC low-speed vehicles",
+   "source_url": "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Atlantic City Expressway",
+   "rule": "Above the 25 mph cap",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Atlantic City?",
+   "a": "Roads posted 25 mph or less. Electric, titled, and insured. Not on the expressway. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Atlantic City?",
+   "a": "No. New Jersey allows a registered electric low-speed vehicle, not a plain golf cart."
+  },
+  {
+   "q": "Can an LSV use Atlantic Avenue?",
+   "a": "Only where it is posted 25 mph or less. No city ordinance opening 30 or 35 mph roads was found."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  39.364,
+  -74.423
+ ],
+ "zoom": 15,
+ "published": "2026-11-13",
+ "last_checked": "2026-11-13",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://law.justia.com/codes/new-jersey/title-39/section-39-4-31-1/",
+  "https://www.nj.gov/mvc/vehicletopics/lowspeed.htm"
+ ]
+}

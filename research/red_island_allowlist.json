@@ -3846,6 +3846,764 @@
    "cite": [
     "No Mapillary speed sign within 50 m. One end is Main Street assumed at 25 mph, not a posted sign, so the builder does not copy the other end's four-sign 35 mph onto this 496 m secondary stretch. Left closed."
    ]
+  },
+  {
+   "region": "holland",
+   "road": "112th Avenue",
+   "at": [
+    42.80367,
+    -86.05811
+   ],
+   "m": 18,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "holland",
+   "road": "Pine Avenue",
+   "at": [
+    42.79483,
+    -86.11205
+   ],
+   "m": 506,
+   "mph": [
+    40
+   ],
+   "sides": [
+    30,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 0740203 posted 40 mph"
+   ]
+  },
+  {
+   "region": "jaxbeaches",
+   "road": "San Pablo Road South",
+   "at": [
+    30.28782,
+    -81.43776
+   ],
+   "m": 519,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "jaxbeaches",
+   "road": "San Pablo Road South",
+   "at": [
+    30.25744,
+    -81.43701
+   ],
+   "m": 149,
+   "mph": [
+    45
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "single",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "jaxbeaches",
+   "road": "Mayport Road",
+   "at": [
+    30.33899,
+    -81.41338
+   ],
+   "m": 154,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FDOT Maximum Speed Limit (TDA): 72230000 posted 40 mph"
+   ]
+  },
+  {
+   "region": "jaxbeaches",
+   "road": "Mayport Road",
+   "at": [
+    30.33105,
+    -81.41676
+   ],
+   "m": 100,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 72230000 posted 40 mph"
+   ]
+  },
+  {
+   "region": "jaxbeaches",
+   "road": "Mayport Road",
+   "at": [
+    30.33753,
+    -81.41397
+   ],
+   "m": 74,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 72230000 posted 40 mph"
+   ]
+  },
+  {
+   "region": "jaxbeaches",
+   "road": "Mayport Road",
+   "at": [
+    30.32982,
+    -81.41737
+   ],
+   "m": 185,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FDOT Maximum Speed Limit (TDA): 72230000 posted 40 mph"
+   ]
+  },
+  {
+   "region": "atlanticcity",
+   "road": "Absecon Boulevard",
+   "at": [
+    39.37351,
+    -74.44047
+   ],
+   "m": 158,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "atlanticcity",
+   "road": "Huron Avenue",
+   "at": [
+    39.37784,
+    -74.43068
+   ],
+   "m": 12,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "atlanticcity",
+   "road": "Wellington Avenue",
+   "at": [
+    39.3497,
+    -74.48473
+   ],
+   "m": 31,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "atlanticcity",
+   "road": "Arctic Avenue",
+   "at": [
+    39.35994,
+    -74.43832
+   ],
+   "m": 200,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "madison",
+   "road": "John Nolen Drive",
+   "at": [
+    43.06014,
+    -89.38577
+   ],
+   "m": 39,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4845626 posted 45 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "John Nolen Drive",
+   "at": [
+    43.0598,
+    -89.38557
+   ],
+   "m": 40,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4845626 posted 45 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "East Johnson Street",
+   "at": [
+    43.09332,
+    -89.36342
+   ],
+   "m": 319,
+   "mph": [
+    55,
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4842120 posted 55 mph",
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 5121581 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "East Washington Avenue",
+   "at": [
+    43.09727,
+    -89.35259
+   ],
+   "m": 40,
+   "mph": [
+    40
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 52044 posted 40 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "John Nolen Drive",
+   "at": [
+    43.05102,
+    -89.37791
+   ],
+   "m": 182,
+   "mph": [
+    55
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 5372580 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "John Nolen Drive",
+   "at": [
+    43.06696,
+    -89.38583
+   ],
+   "m": 8,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4845626 posted 45 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "John Nolen Drive",
+   "at": [
+    43.05599,
+    -89.38203
+   ],
+   "m": 113,
+   "mph": [
+    45
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4845626 posted 45 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "East Johnson Street",
+   "at": [
+    43.09333,
+    -89.36364
+   ],
+   "m": 7,
+   "mph": [
+    55
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4842120 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "East Johnson Street",
+   "at": [
+    43.08948,
+    -89.36906
+   ],
+   "m": 9,
+   "mph": [
+    55
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4858588 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "East Johnson Street",
+   "at": [
+    43.09354,
+    -89.36337
+   ],
+   "m": 30,
+   "mph": [
+    55
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4842120 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "East Washington Avenue",
+   "at": [
+    43.10658,
+    -89.33945
+   ],
+   "m": 222,
+   "mph": [
+    55,
+    99
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 53080 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "Packers Avenue",
+   "at": [
+    43.11628,
+    -89.35497
+   ],
+   "m": 50,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25,
+    35
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "madison",
+   "road": "Monroe Street",
+   "at": [
+    43.05132,
+    -89.43716
+   ],
+   "m": 275,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "madison",
+   "road": "Campus Drive",
+   "at": [
+    43.07363,
+    -89.41307
+   ],
+   "m": 97,
+   "mph": [
+    55
+   ],
+   "sides": [
+    25,
+    30
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 5193074 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "Campus Drive",
+   "at": [
+    43.07327,
+    -89.42524
+   ],
+   "m": 17,
+   "mph": [
+    55
+   ],
+   "sides": [
+    30,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4822413 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "Mineral Point Road",
+   "at": [
+    43.0608,
+    -89.45032
+   ],
+   "m": 753,
+   "mph": [
+    55,
+    99
+   ],
+   "sides": [
+    30,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4845166 posted 55 mph",
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4845169 posted 55 mph",
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4845173 posted 55 mph",
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4845182 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "University Avenue",
+   "at": [
+    43.07522,
+    -89.4511
+   ],
+   "m": 37,
+   "mph": [
+    55,
+    99
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4828194 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "South Park Street",
+   "at": [
+    43.06653,
+    -89.40093
+   ],
+   "m": 128,
+   "mph": [
+    55
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4844624 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "South Midvale Boulevard",
+   "at": [
+    43.0545,
+    -89.45105
+   ],
+   "m": 797,
+   "mph": [
+    55
+   ],
+   "sides": [
+    30
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4824422 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "University Avenue",
+   "at": [
+    43.07478,
+    -89.43857
+   ],
+   "m": 84,
+   "mph": [
+    55
+   ],
+   "sides": [
+    30,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4822280 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "Campus Drive",
+   "at": [
+    43.07326,
+    -89.41042
+   ],
+   "m": 68,
+   "mph": [
+    55
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4886875 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "University Avenue",
+   "at": [
+    43.07435,
+    -89.43673
+   ],
+   "m": 57,
+   "mph": [
+    55
+   ],
+   "sides": [
+    30,
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4822280 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "University Avenue",
+   "at": [
+    43.07526,
+    -89.44671
+   ],
+   "m": 39,
+   "mph": [
+    55
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4822176 posted 55 mph"
+   ]
+  },
+  {
+   "region": "madison",
+   "road": "University Avenue",
+   "at": [
+    43.07528,
+    -89.44658
+   ],
+   "m": 42,
+   "mph": [
+    55
+   ],
+   "sides": [
+    35
+   ],
+   "kind": "confirmed",
+   "status": "source-confirmed",
+   "cite": [
+    "FHWA 2022 speed limit study (HPMS 2020, NHS roads): 4822179 posted 55 mph"
+   ]
+  },
+  {
+   "region": "newportri",
+   "road": "Green End Avenue",
+   "at": [
+    41.50576,
+    -71.29121
+   ],
+   "m": 740,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
+  },
+  {
+   "region": "newportri",
+   "road": "Farewell Street",
+   "at": [
+    41.49186,
+    -71.31384
+   ],
+   "m": 488,
+   "mph": [
+    99
+   ],
+   "sides": [
+    25
+   ],
+   "kind": "gap",
+   "status": "unreviewed",
+   "cite": []
   }
  ]
 }
