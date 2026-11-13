@@ -234,5 +234,62 @@
    "cite": "Conn. Gen. Stat. Sec. 14-300g: a traffic authority may permit golf carts in daylight only, on roads posted 25 mph or less, with a horn, flag, and a licensed driver",
    "url": "https://www.cga.ct.gov/current/pub/chap_249.htm#sec_14-300g"
   }
+ },
+ "MI": {
+  "name": "Michigan",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "who": "street-legal LSVs",
+   "note": "A titled, registered low-speed vehicle. A plain golf cart is a different rule and needs a city resolution.",
+   "cite": "MCL 257.660(8): a low-speed vehicle must not be operated on a street with a speed limit of more than 35 mph, except to cross that street. MDOT may prohibit one on a state highway for safety.",
+   "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=MCL-257-660"
+  },
+  "golf_cart": {
+   "not_street_legal": true,
+   "max_posted": 0,
+   "cross": false,
+   "note": "Plain golf carts are not street-legal unless that city, village, or township has adopted a resolution. Switch to LSV if yours is titled and registered.",
+   "cite": "MCL 257.657a: a city under 65,000 may allow golf carts only by resolution, only on streets posted 30 mph or less, not from half an hour before sunset to half an hour after sunrise, and not on a state trunk line except to cross",
+   "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-257-657a"
+  }
+ },
+ "WI": {
+  "name": "Wisconsin",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "who": "street-legal LSVs",
+   "note": "Madison's ordinance allows this. A different Wisconsin town needs its own check.",
+   "cite": "Wis. Stat. 349.26 (a municipality may allow a low-speed vehicle on a roadway posted 35 mph or less). WisDOT TEOpS 13-3-1: where no ordinance applies, local roads posted 35 mph or less.",
+   "url": "https://docs.legis.wisconsin.gov/statutes/statutes/349/ii/26"
+  },
+  "golf_cart": {
+   "not_street_legal": true,
+   "max_posted": 0,
+   "cross": false,
+   "note": "Plain golf carts need a municipal ordinance. Madison's low-speed vehicle section does not grant that.",
+   "cite": "Wis. Stat. 349.18(1m): a municipality may allow golf carts on highways posted 25 mph or less. Without that ordinance, a golf cart is not a low-speed vehicle.",
+   "url": "https://docs.legis.wisconsin.gov/statutes/statutes/349/ii/18"
+  }
+ },
+ "RI": {
+  "name": "Rhode Island",
+  "lsv": {
+   "max_posted": 35,
+   "cross": true,
+   "who": "street-legal LSVs",
+   "note": "Registered, insured, and inspected. A city may prohibit a road and must post that ban.",
+   "cite": "R.I. Gen. Laws 31-19.6-1: a registered low-speed vehicle may use a public highway posted 35 mph or less, and may cross a highway posted 35 to 45 mph at a signal or stop sign",
+   "url": "https://webserver.rilegislature.gov/Statutes/TITLE31/31-19.6/31-19.6-1.htm"
+  },
+  "golf_cart": {
+   "not_street_legal": true,
+   "max_posted": 0,
+   "cross": false,
+   "note": "A golf cart is not an LSV and is not registered for Rhode Island public roads. Switch to LSV if yours is factory-certified.",
+   "cite": "R.I. Gen. Laws 31-19.6-1 and the RI DMV: a golf cart is not manufactured to the low-speed vehicle standard and may not be registered as one",
+   "url": "https://webserver.rilegislature.gov/Statutes/TITLE31/31-19.6/31-19.6-1.htm"
+  }
  }
 }

@@ -1,0 +1,69 @@
+{
+ "slug": "traversecity",
+ "region": "traversecity",
+ "name": "Traverse City",
+ "state": "MI",
+ "question_title": "Can you drive a golf cart in Traverse City?",
+ "answer_short": "Street-legal LSVs yes, plain golf carts no. In Traverse City, a registered low-speed vehicle may use streets posted 35 mph or less and may cross a faster street. No city resolution allowing plain golf carts was found.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not on public roads",
+  "speed_line": "n/a",
+  "notes": "No city resolution found"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Streets posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured; a state highway can still be closed"
+ },
+ "rules": [
+  {
+   "topic": "LSV roads",
+   "rule": "A registered low-speed vehicle may use a street posted 35 mph or less, and may cross a faster street.",
+   "citation": "MCL 257.660(8)",
+   "source_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=MCL-257-660"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "A city may allow golf carts only by resolution. No Traverse City or Holland resolution was found.",
+   "citation": "MCL 257.657a",
+   "source_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-257-657a"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "State trunk lines posted over 35 mph",
+   "rule": "Cross only",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Traverse City?",
+   "a": "Streets posted 35 mph or less. Registered and insured; a state highway can still be closed. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Traverse City?",
+   "a": "No. Michigan allows that only after the city adopts a resolution, and none was found."
+  },
+  {
+   "q": "What streets can an LSV use in Traverse City?",
+   "a": "Streets posted 35 mph or less. A faster street can be crossed, not driven along."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  44.7631,
+  -85.6206
+ ],
+ "zoom": 15,
+ "published": "2026-11-13",
+ "last_checked": "2026-11-13",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.legislature.mi.gov/Laws/MCL?objectName=MCL-257-660",
+  "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-257-657a"
+ ]
+}

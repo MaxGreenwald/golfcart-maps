@@ -1,0 +1,55 @@
+{
+ "poly": [
+  [
+   -85.67,
+   44.735
+  ],
+  [
+   -85.575,
+   44.735
+  ],
+  [
+   -85.575,
+   44.79
+  ],
+  [
+   -85.67,
+   44.79
+  ],
+  [
+   -85.67,
+   44.735
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "Front Street, Grandview Parkway, and US 31 through town change posted speed by block. An untagged piece stays at the class default until a sign is read.",
+  "Untagged residential, living street, service, unclassified, and tertiary roads are assumed 25 mph. A tertiary road posted above the cap would show as legal until a sign or a DOT speed is added. Those roads are listed for a person to check. A posted sign still wins."
+ ],
+ "sources": [
+  "MCL 257.660 https://www.legislature.mi.gov/Laws/MCL?objectName=MCL-257-660",
+  "MCL 257.657a https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-257-657a",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-13",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "MCL 257.660 (low-speed vehicles)",
+    "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=MCL-257-660"
+   },
+   {
+    "label": "MCL 257.657a (golf carts need a city resolution)",
+    "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-257-657a"
+   },
+   {
+    "label": "Traverse City Code of Ordinances",
+    "url": "https://library.municode.com/mi/traverse_city/codes/code_of_ordinances"
+   }
+  ],
+  "note": "Searched the Traverse City code (codified through Ordinance 1236) and the web for a golf cart resolution under MCL 257.657a. None was found, so plain golf carts stay off public streets. Low-speed vehicles follow MCL 257.660(8): streets posted 35 mph or less, cross a faster street. No MDOT prohibition list for this city was found."
+ },
+ "status": "Added (legal-towns, 2026-11-13)"
+}

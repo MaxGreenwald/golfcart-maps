@@ -1,0 +1,57 @@
+{
+ "poly": [
+  [
+   -111.96,
+   33.48
+  ],
+  [
+   -111.86,
+   33.48
+  ],
+  [
+   -111.86,
+   33.64
+  ],
+  [
+   -111.96,
+   33.64
+  ],
+  [
+   -111.96,
+   33.48
+  ]
+ ],
+ "bans": [
+  {
+   "names": "Loop 101|Pima Freeway|(^|;)AZ[- ]?101($|;)",
+   "url": "https://www.azleg.gov/ars/28/00966.htm",
+   "label": "Loop 101 (the Pima Freeway) is posted well above 35 mph. A.R.S. 28-966 keeps a neighborhood electric vehicle off it except to cross."
+  }
+ ],
+ "unverified": [
+  "Scottsdale Road, Hayden Road, Shea Boulevard, Indian School Road, and Camelback Road are often posted above 35 mph. An untagged tertiary piece of those names would show as 25 mph until a sign is read.",
+  "Untagged residential, living street, service, unclassified, and tertiary roads are assumed 25 mph. A tertiary road posted above the cap would show as legal until a sign or a DOT speed is added. Those roads are listed for a person to check. A posted sign still wins."
+ ],
+ "sources": [
+  "A.R.S. 28-966 https://www.azleg.gov/ars/28/00966.htm",
+  "City of Scottsdale https://www.scottsdaleaz.gov/codes-and-ordinances/alternative-transportation-laws",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-13",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "A.R.S. 28-966",
+    "url": "https://www.azleg.gov/ars/28/00966.htm"
+   },
+   {
+    "label": "City of Scottsdale alternative transportation page",
+    "url": "https://www.scottsdaleaz.gov/codes-and-ordinances/alternative-transportation-laws"
+   }
+  ],
+  "note": "The city page says a golf cart may cross a roadway for golf play. It does not describe a street network for plain golf carts, so those stay off public roads. Neighborhood electric vehicles follow the 35 mph cap. Loop 101 is banned. No separate city street-ban list was found."
+ },
+ "status": "Added (legal-towns, 2026-11-13)"
+}

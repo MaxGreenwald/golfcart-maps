@@ -1,6 +1,7 @@
 """Regression (iOS build 18, Chloe Belle, Oct 19): typed destination text vanished as soon as suggestions showed.
 Cause: every GPS tick (watchPosition, start = Your location) ran sync(), which rewrote #q from state (to=null -> '').
-Out of region (Phoenix -> nearest-region fallback Sun City) and SD are both checked."""
+Out of region (west Phoenix, outside every box, nearest region Sun City) and SD are both checked.
+The pin sits west of Scottsdale so that region's center is not the nearest one."""
 import functools, http.server, os, socketserver, threading, unittest
 try:
     from playwright.sync_api import sync_playwright
@@ -43,7 +44,8 @@ class SearchKeepsText(unittest.TestCase):
             pass
 
     def test_out_of_region_keeps_text_when_suggestions_arrive(self):
-        pg = self.run_case(33.5, -112.07, "suncity", "60")
+        # Outside every bbox. Sun City's center is about 12 km away; Scottsdale's is about 37 km.
+        pg = self.run_case(33.55, -112.25, "suncity", "60")
         self.assertEqual(pg.evaluate("$('sugg').style.display"), "block")  # 'Arapaho Village Units 201-560' showed
         pg.click("#sugg div"); pg.wait_for_timeout(300)                 # picking still fills the box
         self.assertIn("Arapaho", pg.input_value("#q")); pg.context.close()

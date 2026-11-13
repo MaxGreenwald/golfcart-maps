@@ -1,0 +1,50 @@
+{
+ "poly": [
+  [
+   -71.34,
+   41.455
+  ],
+  [
+   -71.285,
+   41.455
+  ],
+  [
+   -71.285,
+   41.515
+  ],
+  [
+   -71.34,
+   41.515
+  ],
+  [
+   -71.34,
+   41.455
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "Memorial Boulevard, America's Cup Avenue, and Thames Street should be checked against the posted signs. An untagged piece stays at the class default.",
+  "Untagged residential, living street, service, unclassified, and tertiary roads are assumed 25 mph. A tertiary road posted above the cap would show as legal until a sign or a DOT speed is added. Those roads are listed for a person to check. A posted sign still wins."
+ ],
+ "sources": [
+  "R.I. Gen. Laws 31-19.6-1 https://webserver.rilegislature.gov/Statutes/TITLE31/31-19.6/31-19.6-1.htm",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-13",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "R.I. Gen. Laws 31-19.6-1",
+    "url": "https://webserver.rilegislature.gov/Statutes/TITLE31/31-19.6/31-19.6-1.htm"
+   },
+   {
+    "label": "Newport commercial low-speed vehicle statute (jitneys only)",
+    "url": "https://webserver.rilegislature.gov/statutes/TITLE31/31-19.5/31-19.5-1.htm"
+   }
+  ],
+  "note": "State law lets a registered low-speed vehicle use roads posted 35 mph or less. A golf cart is not that vehicle. Newport's separate jitney statute (31-19.5) is a commercial permit, not a golf cart ordinance. The RI DMV's September 2024 list of towns that sent a local LSV rule does not include Newport. No city prohibition ordinance was found."
+ },
+ "status": "Added (legal-towns, 2026-11-13)"
+}

@@ -1,0 +1,73 @@
+{
+ "slug": "atlantic-beach",
+ "region": "jaxbeaches",
+ "name": "Atlantic Beach",
+ "state": "FL",
+ "question_title": "Can you drive a golf cart in Atlantic Beach?",
+ "answer_short": "Street-legal LSVs yes. Plain golf carts only on a street the city has designated, and that list is not drawn here. In Atlantic Beach, a registered LSV may use roads posted 35 mph or less.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not drawn on public roads",
+  "speed_line": "n/a",
+  "notes": "A designated street list is required and is not on this map"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "LSV roads",
+   "rule": "A registered, insured LSV may use a road posted 35 mph or less and may cross a faster road at an intersection.",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  },
+  {
+   "topic": "Atlantic Beach",
+   "rule": "A low-speed vehicle must be registered and may be operated only on the roadways in the city.",
+   "citation": "Atlantic Beach Ordinance 75-25-29, Sec. 21-107(i)",
+   "source_url": "https://coab.civicweb.net/document/205079/Ordinanace%20No.%2075-25-29.pdf?handle=93BD604B23A8469CA793846F12E20CB8"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "A golf cart may use a public road only where the city has designated and signed it. That street list is not drawn on this map, so plain carts stay off public roads here.",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+  }
+ ],
+ "banned_roads": [],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Atlantic Beach?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Atlantic Beach?",
+   "a": "Only on a street the city has designated and signed. That list is not on this map, so plain carts are shown off public roads."
+  },
+  {
+   "q": "Where can I drive an LSV in Atlantic Beach?",
+   "a": "On roads posted 35 mph or less. Atlantic Beach also says an LSV stays on the roadway and must be registered."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [
+  "neptune-beach",
+  "jacksonville-beach"
+ ],
+ "map_center": [
+  30.334,
+  -81.398
+ ],
+ "zoom": 15,
+ "published": "2026-11-13",
+ "last_checked": "2026-11-13",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://coab.civicweb.net/document/205079/Ordinanace%20No.%2075-25-29.pdf?handle=93BD604B23A8469CA793846F12E20CB8",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+ ]
+}

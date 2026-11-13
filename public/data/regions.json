@@ -2243,5 +2243,217 @@
   "cover": "Crystal River, Florida only. Pick another city in the menu above.",
   "slug": "crystalriver",
   "beta": true
+ },
+ {
+  "id": "traversecity",
+  "name": "Traverse City, MI",
+  "short": "Traverse City",
+  "state": "MI",
+  "center": [
+   44.7631,
+   -85.6206
+  ],
+  "zoom": 14,
+  "bbox": [
+   44.735,
+   -85.67,
+   44.79,
+   -85.575
+  ],
+  "cover": "Traverse City, Michigan only. Pick another city in the menu above.",
+  "slug": "traversecity",
+  "beta": true
+ },
+ {
+  "id": "holland",
+  "name": "Holland, MI",
+  "short": "Holland",
+  "state": "MI",
+  "center": [
+   42.7875,
+   -86.1089
+  ],
+  "zoom": 14,
+  "bbox": [
+   42.765,
+   -86.145,
+   42.815,
+   -86.055
+  ],
+  "cover": "Holland, Michigan only. Pick another city in the menu above.",
+  "slug": "holland",
+  "beta": true
+ },
+ {
+  "id": "mystic",
+  "name": "Mystic, CT",
+  "short": "Mystic",
+  "state": "CT",
+  "center": [
+   41.354,
+   -71.966
+  ],
+  "zoom": 15,
+  "bbox": [
+   41.34,
+   -71.99,
+   41.378,
+   -71.94
+  ],
+  "cover": "Mystic village (the Stonington and Groton sides of the river) only. Pick another city in the menu above.",
+  "slug": "mystic",
+  "beta": true
+ },
+ {
+  "id": "boothbay",
+  "name": "Boothbay Harbor, ME",
+  "short": "Boothbay Harbor",
+  "state": "ME",
+  "center": [
+   43.853,
+   -69.629
+  ],
+  "zoom": 15,
+  "bbox": [
+   43.838,
+   -69.66,
+   43.868,
+   -69.608
+  ],
+  "cover": "Boothbay Harbor, Maine only. Pick another city in the menu above.",
+  "slug": "boothbay",
+  "beta": true
+ },
+ {
+  "id": "jaxbeaches",
+  "name": "Jacksonville Beaches, FL",
+  "short": "Jacksonville Beaches",
+  "state": "FL",
+  "center": [
+   30.29,
+   -81.41
+  ],
+  "zoom": 13,
+  "bbox": [
+   30.225,
+   -81.445,
+   30.355,
+   -81.38
+  ],
+  "cover": "Atlantic Beach, Neptune Beach, and Jacksonville Beach only. Jacksonville city proper is a different map and is not included. Pick another city in the menu above.",
+  "slug": "jaxbeaches",
+  "rule": {
+   "lsv": {
+    "max_posted": 35,
+    "cross": true,
+    "cite": "F.S. 316.2122 (a registered LSV on a road posted 35 mph or less). Atlantic Beach Ordinance 75-25-29, Sec. 21-107(i): a low-speed vehicle must be registered and may be operated only on city roadways.",
+    "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "atlanticcity",
+  "name": "Atlantic City, NJ",
+  "short": "Atlantic City",
+  "state": "NJ",
+  "center": [
+   39.364,
+   -74.423
+  ],
+  "zoom": 14,
+  "bbox": [
+   39.348,
+   -74.49,
+   39.385,
+   -74.405
+  ],
+  "cover": "Atlantic City only, not Ventnor or Margate. Pick another city in the menu above.",
+  "slug": "atlanticcity",
+  "beta": true
+ },
+ {
+  "id": "scottsdale",
+  "name": "Scottsdale, AZ",
+  "short": "Scottsdale",
+  "state": "AZ",
+  "center": [
+   33.56,
+   -111.91
+  ],
+  "zoom": 13,
+  "bbox": [
+   33.48,
+   -111.96,
+   33.64,
+   -111.86
+  ],
+  "cover": "Central and south Scottsdale (Old Town through McCormick Ranch) only. The far north and the McDowell Sonoran Preserve are outside this map. Pick another city in the menu above.",
+  "slug": "scottsdale",
+  "rule": {
+   "lsv": {
+    "max_posted": 35,
+    "cross": true,
+    "cite": "A.R.S. 28-966: a neighborhood electric vehicle shall not be driven on a highway posted over 35 mph, except to cross at an intersection. Scottsdale states the same limit.",
+    "url": "https://www.azleg.gov/ars/28/00966.htm"
+   },
+   "golf_cart": {
+    "not_street_legal": true,
+    "max_posted": 0,
+    "cross": false,
+    "note": "The city page allows a golf cart to cross a roadway for golf play. It does not open a street network for plain golf carts.",
+    "cite": "City of Scottsdale, Alternative Transportation Devices and Laws: a golf cart may cross the roadway for golf play. A neighborhood electric vehicle shall not be operated on a roadway posted at more than 35 mph, except to cross.",
+    "url": "https://www.scottsdaleaz.gov/codes-and-ordinances/alternative-transportation-laws"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "madison",
+  "name": "Madison, WI",
+  "short": "Madison",
+  "state": "WI",
+  "center": [
+   43.075,
+   -89.395
+  ],
+  "zoom": 13,
+  "bbox": [
+   43.04,
+   -89.46,
+   43.13,
+   -89.33
+  ],
+  "cover": "Central Madison (the isthmus, downtown, near east side, and near west side) only. Pick another city in the menu above.",
+  "slug": "madison",
+  "rule": {
+   "lsv": {
+    "max_posted": 35,
+    "cross": true,
+    "cite": "Madison Code Sec. 12.792: a low-speed vehicle may be operated on a roadway with a speed limit of 35 mph or less. Wis. Stat. 349.26.",
+    "url": "https://library.municode.com/wi/madison/codes/code_of_ordinances?nodeId=COORMAWIVOIICH11--19_CH12VECO_MO"
+   }
+  },
+  "beta": true
+ },
+ {
+  "id": "newportri",
+  "name": "Newport, RI",
+  "short": "Newport RI",
+  "state": "RI",
+  "center": [
+   41.49,
+   -71.313
+  ],
+  "zoom": 14,
+  "bbox": [
+   41.455,
+   -71.34,
+   41.515,
+   -71.285
+  ],
+  "cover": "Newport, Rhode Island only. This is not Newport Beach, California. Pick another city in the menu above.",
+  "slug": "newportri",
+  "beta": true
  }
 ]

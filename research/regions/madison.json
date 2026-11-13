@@ -1,0 +1,51 @@
+{
+ "poly": [
+  [
+   -89.46,
+   43.04
+  ],
+  [
+   -89.33,
+   43.04
+  ],
+  [
+   -89.33,
+   43.13
+  ],
+  [
+   -89.46,
+   43.13
+  ],
+  [
+   -89.46,
+   43.04
+  ]
+ ],
+ "bans": [],
+ "unverified": [
+  "East Washington Avenue, John Nolen Drive, and University Avenue change posted speed by segment. An untagged piece stays at the class default until a sign is read.",
+  "Untagged residential, living street, service, unclassified, and tertiary roads are assumed 25 mph. A tertiary road posted above the cap would show as legal until a sign or a DOT speed is added. Those roads are listed for a person to check. A posted sign still wins."
+ ],
+ "sources": [
+  "Madison Code Sec. 12.792 https://library.municode.com/wi/madison/codes/code_of_ordinances?nodeId=COORMAWIVOIICH11--19_CH12VECO_MO",
+  "Wis. Stat. 349.26 https://docs.legis.wisconsin.gov/statutes/statutes/349/ii/26",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-13",
+  "result": "none_found",
+  "sources": [
+   {
+    "label": "Madison Code Sec. 12.792",
+    "url": "https://library.municode.com/wi/madison/codes/code_of_ordinances?nodeId=COORMAWIVOIICH11--19_CH12VECO_MO"
+   },
+   {
+    "label": "Wis. Stat. 349.18 (golf carts)",
+    "url": "https://docs.legis.wisconsin.gov/statutes/statutes/349/ii/18"
+   }
+  ],
+  "note": "Sec. 12.792 allows a low-speed vehicle on a roadway posted 35 mph or less, and tells the traffic engineer to sign any connecting highway the Wisconsin DOT objects to. No signed objection list was found. No Madison ordinance allowing plain golf carts under Wis. Stat. 349.18 was found, so plain golf carts stay off public streets."
+ },
+ "status": "Added (legal-towns, 2026-11-13)"
+}

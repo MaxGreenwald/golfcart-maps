@@ -387,6 +387,24 @@
    "url": "https://library.municode.com/fl/crystal_river/codes/code_of_ordinances?nodeId=PTIICOOR_CH15TR",
    "label": "Crystal River Code Secs. 15-80 to 15-82 (golf carts on streets designated by resolution). The resolution in hand names SE 8th Avenue between SE Governors Boulevard and 250 feet east of US 19.",
    "applied": "US 19 ban. The short SE 8th Avenue piece is not split out, so plain golf carts stay red except tagged cart paths."
+  },
+  "madison": {
+   "kind": "city code",
+   "url": "https://library.municode.com/wi/madison/codes/code_of_ordinances?nodeId=COORMAWIVOIICH11--19_CH12VECO_MO",
+   "label": "Madison Code Sec. 12.792: a low-speed vehicle may use a roadway posted 35 mph or less. No golf cart ordinance under Wis. Stat. 349.18 was found.",
+   "applied": "Wisconsin low-speed vehicle profile, Madison cite on the region. Plain golf carts stay off public streets."
+  },
+  "scottsdale": {
+   "kind": "city rule page",
+   "url": "https://www.scottsdaleaz.gov/codes-and-ordinances/alternative-transportation-laws",
+   "label": "City of Scottsdale: a neighborhood electric vehicle shall not use a roadway posted over 35 mph, except to cross. A golf cart may cross a roadway for golf play.",
+   "applied": "Region golf_cart.not_street_legal. Loop 101 ban in research/regions/scottsdale.json."
+  },
+  "jaxbeaches": {
+   "kind": "city ordinance",
+   "url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+   "label": "F.S. 316.2122 for LSVs, plus Atlantic Beach Ordinance 75-25-29 Sec. 21-107(i) (registered LSVs on city roadways). Neptune Beach Ordinance 2020-17 exists; its street list was not read.",
+   "applied": "Florida golf cart rule stays designated-only, so plain carts stay red. LSVs use the 35 mph cap."
   }
  },
  "candidates": {
@@ -494,6 +512,42 @@
    "law": "F.S. 316.212 (golf carts only on designated, signed streets) and F.S. 316.2122 (LSVs on roads posted 35 mph or less). Key Largo is unincorporated Monroe County. No county designated-street list for this area was found.",
    "law_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
    "searched": "Monroe County code and web search 'Key Largo golf cart ordinance designated streets'. No street list for this area was found."
+  },
+  "traversecity": {
+   "text": "state law, no local ordinance found",
+   "law": "MCL 257.660(8) (a low-speed vehicle on streets posted 35 mph or less, except to cross) and MCL 257.657a (golf carts only if the city adopts a resolution). No Traverse City resolution was found.",
+   "law_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=MCL-257-660",
+   "searched": "Traverse City Code of Ordinances (library.municode.com/mi/traverse_city, codified through Ordinance 1236) and web search 'Traverse City golf cart resolution'."
+  },
+  "holland": {
+   "text": "state law, no local ordinance found",
+   "law": "MCL 257.660(8) (low-speed vehicles on streets posted 35 mph or less) and MCL 257.657a (golf carts only by city resolution). No Holland resolution was found. I-196 is a freeway.",
+   "law_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=MCL-257-660",
+   "searched": "Holland traffic code (https://ecode360.com/27623066) and web search 'Holland Michigan golf cart resolution'."
+  },
+  "mystic": {
+   "text": "state law, no local ordinance found",
+   "law": "Conn. Gen. Stat. Sec. 14-289m (LSVs on roads with a speed limit of 25 mph or less unless prohibited) and Sec. 14-300g (golf carts only if the traffic authority permits them). No Stonington or Groton permit was found.",
+   "law_url": "https://www.cga.ct.gov/current/pub/chap_248.htm#sec_14-289m",
+   "searched": "Web search 'Stonington CT golf cart ordinance' and 'Groton CT golf cart ordinance'; Conn. Gen. Stat. Sec. 14-300g and Sec. 14-289m. A blog claim of a Stonington permit was not backed by an ordinance page."
+  },
+  "boothbay": {
+   "text": "state law, no local ordinance found",
+   "law": "29-A M.R.S. section 2089 (LSVs on roads posted 35 mph or less) and section 501(2-A) (golf carts only on islands without state roads).",
+   "law_url": "https://legislature.maine.gov/legis/statutes/29-a/title29-Asec2089.html",
+   "searched": "Boothbay Harbor ordinance index (https://boothbayharbor.maine.gov/ordinances/) and web search 'Boothbay Harbor golf cart ordinance' and 'Boothbay Harbor low-speed vehicle'."
+  },
+  "atlanticcity": {
+   "text": "state law, no local ordinance found",
+   "law": "N.J.S.A. 39:4-31.1 (an electric LSV on roads posted 25 mph or less; a municipality may open roads up to 35 mph or ban a street). No Atlantic City ordinance doing either was found. Plain golf carts are not street-legal.",
+   "law_url": "https://law.justia.com/codes/new-jersey/title-39/section-39-4-31-1/",
+   "searched": "Atlantic City Code Chapter 243 (https://ecode360.com/15216595) and web search 'Atlantic City NJ golf cart ordinance' and 'Atlantic City low-speed vehicle ordinance'."
+  },
+  "newportri": {
+   "text": "state law, no local ordinance found",
+   "law": "R.I. Gen. Laws 31-19.6-1 (a registered low-speed vehicle on public highways posted 35 mph or less). A golf cart is not registered as an LSV. Newport's jitney statute, 31-19.5, is a commercial permit, not a golf cart rule.",
+   "law_url": "https://webserver.rilegislature.gov/Statutes/TITLE31/31-19.6/31-19.6-1.htm",
+   "searched": "R.I. Gen. Laws 31-19.6-1 and 31-19.5-1; RI DMV September 2024 note that Providence, Westerly, Portsmouth, and West Warwick sent local LSV rules (Newport is not on that list); web search 'Newport RI golf cart ordinance'."
   }
  },
  "_note_v3": "v3 is the OFFICIAL bar (Max, Oct 22 2026, 2:47 PM ET): access check = a local-rules search is recorded: 'regions' (local source) or 'state_law' (no local ordinance found, with what was searched)."

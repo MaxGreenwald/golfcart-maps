@@ -1,0 +1,63 @@
+{
+ "slug": "boothbay",
+ "region": "boothbay",
+ "name": "Boothbay Harbor",
+ "state": "ME",
+ "question_title": "Can you drive a golf cart in Boothbay Harbor?",
+ "answer_short": "Street-legal LSVs yes, plain golf carts no. In Boothbay Harbor, a registered LSV may use a road posted 35 mph or less and may cross a faster road at an intersection. Plain golf carts are not road-legal on the mainland.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not on public roads",
+  "speed_line": "n/a",
+  "notes": "Mainland golf carts are not road-legal"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered. The town can still close a road for safety."
+ },
+ "rules": [
+  {
+   "topic": "LSV roads",
+   "rule": "A low-speed vehicle may be operated only on a road posted 35 mph or less, and may cross a faster road at an intersection.",
+   "citation": "29-A M.R.S. section 2089",
+   "source_url": "https://legislature.maine.gov/legis/statutes/29-a/title29-Asec2089.html"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "A golf cart registration for public roads is limited to islands that have no state-maintained roads.",
+   "citation": "29-A M.R.S. section 501(2-A)",
+   "source_url": "https://legislature.maine.gov/statutes/29-a/title29-Asec501.html"
+  }
+ ],
+ "banned_roads": [],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Boothbay Harbor?",
+   "a": "Roads posted 35 mph or less. Registered. The town can still close a road for safety. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Boothbay Harbor?",
+   "a": "No. Maine limits that registration to islands without state roads."
+  },
+  {
+   "q": "Where can I drive an LSV in Boothbay Harbor?",
+   "a": "On roads posted 35 mph or less. Cross a faster road only at an intersection."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  43.853,
+  -69.629
+ ],
+ "zoom": 15,
+ "published": "2026-11-13",
+ "last_checked": "2026-11-13",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://legislature.maine.gov/legis/statutes/29-a/title29-Asec2089.html",
+  "https://legislature.maine.gov/statutes/29-a/title29-Asec501.html"
+ ]
+}

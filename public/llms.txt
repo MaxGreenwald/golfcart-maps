@@ -1,13 +1,13 @@
 # Golf Cart Maps
 
-> Golf Cart Maps (golfcartmap.com) is a golf cart map, LSV map and route planner for golf carts and street-legal LSVs (low speed vehicles), free to use. It shows which roads are legal for golf carts and street-legal LSVs in 100 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
+> Golf Cart Maps (golfcartmap.com) is a golf cart map, LSV map and route planner for golf carts and street-legal LSVs (low speed vehicles), free to use. It shows which roads are legal for golf carts and street-legal LSVs in 109 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
 
 URL: https://golfcartmap.com/
 Also written: Golf Cart Map, GolfCartMap (same site).
 
 ## What it does
 - Colors every road: green = allowed for your vehicle, red = too fast or banned (avoid).
-- LSV map (low speed vehicle map): for street-legal golf carts and other LSVs it shows roads posted 35 mph or less in 94 of our 100 regions (25 mph in Avalon (Catalina Island), CA; Cape May & the Wildwoods, NJ; Greenwich, CT; Gulf Shores / Orange Beach, AL; Long Beach Island, NJ; Ocean City, NJ), minus roads a town or county bans for LSVs. LSV map app: https://golfcartmap.com/lsv.
+- LSV map (low speed vehicle map): for street-legal golf carts and other LSVs it shows roads posted 35 mph or less in 101 of our 109 regions (25 mph in Atlantic City, NJ; Avalon (Catalina Island), CA; Cape May & the Wildwoods, NJ; Greenwich, CT; Gulf Shores / Orange Beach, AL; Long Beach Island, NJ; Mystic, CT; Ocean City, NJ), minus roads a town or county bans for LSVs. LSV map app: https://golfcartmap.com/lsv.
 - Golf cart map: plain golf carts get their own state and local rules, usually fewer roads.
 - Golf cart maps (plural): https://golfcartmap.com/golf-cart-maps lists every town map.
 - Plans routes on allowed roads; crossing a faster road at an intersection is allowed where state law permits it.
@@ -31,6 +31,7 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 - [Fairhope, AL](https://golfcartmap.com/fairhope)
 - [Gulf Shores / Orange Beach, AL](https://golfcartmap.com/gulfshores)
 ### Arizona
+- [Scottsdale, AZ](https://golfcartmap.com/scottsdale)
 - [Sun City / Sun City West, AZ](https://golfcartmap.com/suncity)
 - [Sun Lakes, AZ](https://golfcartmap.com/sunlakes)
 ### California
@@ -44,6 +45,7 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 - [South Bay LA, CA](https://golfcartmap.com/southbay)
 ### Connecticut
 - [Greenwich, CT](https://golfcartmap.com/greenwich)
+- [Mystic, CT](https://golfcartmap.com/mystic)
 ### Delaware
 - [Rehoboth, Dewey & Bethany Beach, DE](https://golfcartmap.com/delawarebeaches)
 ### Florida
@@ -64,6 +66,7 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 - [Fort Myers Beach, FL](https://golfcartmap.com/fortmyersbeach)
 - [Howey-in-the-Hills, FL](https://golfcartmap.com/howey)
 - [Islamorada, FL](https://golfcartmap.com/islamorada)
+- [Jacksonville Beaches, FL](https://golfcartmap.com/jaxbeaches)
 - [Key Largo, FL](https://golfcartmap.com/keylargo)
 - [Key West, FL](https://golfcartmap.com/keywest)
 - [Lakewood Ranch, FL](https://golfcartmap.com/lakewoodranch)
@@ -100,8 +103,13 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 - [Waikoloa & Mauna Lani, Big Island](https://golfcartmap.com/waikoloa)
 - [Wailea & Kihei, Maui](https://golfcartmap.com/wailea)
 ### Maine
+- [Boothbay Harbor, ME](https://golfcartmap.com/boothbay)
 - [Old Orchard Beach, ME](https://golfcartmap.com/oldorchardbeach)
+### Michigan
+- [Holland, MI](https://golfcartmap.com/holland)
+- [Traverse City, MI](https://golfcartmap.com/traversecity)
 ### New Jersey
+- [Atlantic City, NJ](https://golfcartmap.com/atlanticcity)
 - [Cape May & the Wildwoods, NJ](https://golfcartmap.com/capemay)
 - [Long Beach Island, NJ](https://golfcartmap.com/lbi)
 - [Ocean City, NJ](https://golfcartmap.com/oceancitynj)
@@ -119,6 +127,8 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 - [Celina, OH](https://golfcartmap.com/celina)
 - [Kelleys Island & Marblehead, OH](https://golfcartmap.com/kelleysisland)
 - [Put-in-Bay, OH](https://golfcartmap.com/putinbay)
+### Rhode Island
+- [Newport, RI](https://golfcartmap.com/newportri)
 ### South Carolina
 - [Beaufort, SC](https://golfcartmap.com/beaufort)
 - [Charleston beach towns, SC](https://golfcartmap.com/charleston)
@@ -141,6 +151,8 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 - [Cape Charles, VA](https://golfcartmap.com/capecharles)
 - [Chincoteague, VA](https://golfcartmap.com/chincoteague)
 - [Colonial Beach, VA](https://golfcartmap.com/colonialbeach)
+### Wisconsin
+- [Madison, WI](https://golfcartmap.com/madison)
 
 ## State rules used
 - Alabama: LSVs on roads posted 35 mph or less (Single app rule ≤35 (Code of Ala. 32-1-1.1 LSV); Gulf Shores/Orange Beach region cap ≤25 (regions.json rule)). Golf carts: No state golf-cart road statute; local ordinance (Gulf Shores Sec. 21-13, Orange Beach Sec. 70-273: streets ≤25 mph).
@@ -152,12 +164,15 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 - Georgia: LSVs on roads posted 35 mph or less (O.C.G.A. 40-6-362). Golf carts: O.C.G.A. 40-6-331 (PTVs only where a local ordinance allows); app uses the common local cap of ≤25 mph (Glynn County, Tybee, Peachtree City streets except Hwy 74/54/Peachtree Pkwy). UNCONFIRMED per town.
 - Hawaii: LSVs on roads posted 35 mph or less (HRS 291C-134 (neighborhood electric vehicles: roads posted ≤35 mph, may cross at intersections, no controlled-access highways); HRS 291C-53). Golf carts: HRS 291C-134 (only neighborhood electric vehicles), HRS 286-2 (golf carts not registrable motor vehicles).
 - Maine: LSVs on roads posted 35 mph or less (29-A M.R.S. §2089 (LSVs on roads posted ≤35 mph, may cross at intersections); §501(2-A) golf carts only on islands without state roads). Golf carts: 29-A M.R.S. §501(2-A) (golf carts only on islands without state roads); §2089 LSVs.
+- Michigan: LSVs on roads posted 35 mph or less (MCL 257.660(8): a low-speed vehicle must not be operated on a street with a speed limit of more than 35 mph, except to cross that street. MDOT may prohibit one on a state highway for safety.). Golf carts: MCL 257.657a: a city under 65,000 may allow golf carts only by resolution, only on streets posted 30 mph or less, not from half an hour before sunset to half an hour after sunrise, and not on a state trunk line except to cross.
 - New Jersey: LSVs on roads posted 25 mph or less (N.J.S.A. 39:4-31.1 / NJ MVC low-speed vehicles (roads posted 25 mph or less; may cross faster roads at intersections)). Golf carts: NJ MVC low-speed vehicles: an LSV must meet 49 CFR 571.500 and be titled, registered and insured; golf carts don't qualify.
 - North Carolina: LSVs on roads posted 35 mph or less (N.C.G.S. 20-121.1 (LSV ≤35); golf carts by local ordinance (G.S. 160A-300.6)). Golf carts: N.C.G.S. 160A-300.6 / 153A-245 (golf carts only where a town/county ordinance allows); app uses the most common cap of ≤25. UNCONFIRMED per town.
 - Ohio: LSVs on roads posted 35 mph or less (ORC 4511.214 (under-speed/LSV on ≤35 roads where locally authorized; Put-in-Bay village permits carts)). Golf carts: ORC 4511.214 (under-speed vehicles on roads ≤35 mph where the local authority allows; titled, inspected, plated); Put-in-Bay Codified Ord. 490.02.
+- Rhode Island: LSVs on roads posted 35 mph or less (R.I. Gen. Laws 31-19.6-1: a registered low-speed vehicle may use a public highway posted 35 mph or less, and may cross a highway posted 35 to 45 mph at a signal or stop sign). Golf carts: R.I. Gen. Laws 31-19.6-1 and the RI DMV: a golf cart is not manufactured to the low-speed vehicle standard and may not be registered as one.
 - South Carolina: LSVs on roads posted 35 mph or less (S.C. Code 56-2-100 (a low speed vehicle may use a highway posted 35 mph or less and may cross a faster highway at an intersection)). Golf carts: S.C. Code 56-2-90 (2025 Act No. 64, H.3292, eff. May 22, 2025; amended by 2026 Act No. 164, S.222, Section 6.A, eff. May 18, 2026): without a local ordinance, a permitted golf cart may use a secondary highway posted 35 mph or less, in daylight, within 4 miles of the registration address or of a gated-community entrance, and may cross a faster road at an intersection. A city or county may set hours, methods and locations by ordinance, still only on highways posted 35 mph or less, and may allow night driving with working headlights and taillights. A half-mile window around certain large athletic events is not drawn on the map.
 - Texas: LSVs on roads posted 35 mph or less (Tex. Transp. Code 551.303 (a neighborhood electric vehicle may use a street or highway posted 45 mph or less, may cross a faster road at an intersection, and may not travel faster than 35 mph; the map plans on roads posted 35 mph or less)). Golf carts: Tex. Transp. Code 551.402 through 551.405 (license plate required, 551.402; daytime on a road posted 35 mph or less within 5 miles of where the cart is parked, and only to or from a golf course, 551.403; or in a master-planned community or on a beach open to vehicles; or where a city or an eligible county authorizes, 551.404; may cross a faster road at an intersection, 551.405).
 - Virginia: LSVs on roads posted 35 mph or less (Va. Code §46.2-908.3 (LSVs on highways posted 35 mph or less)). Golf carts: Va. Code §46.2-916.3 (golf carts only on highways the locality designates, posted 25 mph or less; cross at intersections posted 35 or less; sunrise to sunset unless equipped).
+- Wisconsin: LSVs on roads posted 35 mph or less (Wis. Stat. 349.26 (a municipality may allow a low-speed vehicle on a roadway posted 35 mph or less). WisDOT TEOpS 13-3-1: where no ordinance applies, local roads posted 35 mph or less.). Golf carts: Wis. Stat. 349.18(1m): a municipality may allow golf carts on highways posted 25 mph or less. Without that ordinance, a golf cart is not a low-speed vehicle.
 
 ## How rules are sourced
 Priority: manual fixes from local reports, then posted speed-limit signs seen in Mapillary street imagery, then official city speed lists and ordinances, then OpenStreetMap speed tags. Small residential streets without a posted limit are assumed to be 25 mph. Not legal advice; posted signs win.

@@ -1,0 +1,69 @@
+{
+ "slug": "mystic",
+ "region": "mystic",
+ "name": "Mystic",
+ "state": "CT",
+ "question_title": "Can you drive a golf cart in Mystic?",
+ "answer_short": "Street-legal LSVs yes, plain golf carts no. In Mystic, an LSV may use a road whose speed limit is 25 mph or less, unless the town prohibits that road. No Stonington or Groton permit for plain golf carts was found.",
+ "golf_cart": {
+  "allowed": "no",
+  "roads": "Not on public roads",
+  "speed_line": "n/a",
+  "notes": "A town permit is required and none was found"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads with a speed limit of 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Registered. The town or the state can still close a road."
+ },
+ "rules": [
+  {
+   "topic": "LSV roads",
+   "rule": "An LSV may use a highway with an established speed limit of 25 mph or less, unless the traffic authority or the state prohibits that highway.",
+   "citation": "Conn. Gen. Stat. Sec. 14-289m",
+   "source_url": "https://www.cga.ct.gov/current/pub/chap_248.htm#sec_14-289m"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "A traffic authority may permit golf carts in daylight on roads posted 25 mph or less. No Stonington or Groton permit was found.",
+   "citation": "Conn. Gen. Stat. Sec. 14-300g",
+   "source_url": "https://www.cga.ct.gov/current/pub/chap_249.htm#sec_14-300g"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "I-95",
+   "rule": "Limited-access highway; no LSVs",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Mystic?",
+   "a": "Roads with a speed limit of 25 mph or less. Registered. The town or the state can still close a road. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a regular golf cart in Mystic?",
+   "a": "No. Connecticut requires the town traffic authority to permit it, and no Stonington or Groton permit was found."
+  },
+  {
+   "q": "What is the LSV speed cap in Mystic?",
+   "a": "25 mph. A road posted faster than that is closed to LSVs."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  41.354,
+  -71.966
+ ],
+ "zoom": 15,
+ "published": "2026-11-13",
+ "last_checked": "2026-11-13",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.cga.ct.gov/current/pub/chap_248.htm#sec_14-289m",
+  "https://www.cga.ct.gov/current/pub/chap_249.htm#sec_14-300g"
+ ]
+}
