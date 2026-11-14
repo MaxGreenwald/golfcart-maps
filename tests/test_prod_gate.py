@@ -1,4 +1,4 @@
-"""Production deploys refuse before wrangler without Max's OK ref, or when HEAD is ahead of origin.
+"""Production deploys refuse before wrangler without an allowlisted Max OK ref.
 
 Run: python3 -m unittest tests.test_prod_gate -v
 
@@ -6,7 +6,9 @@ The ahead-of-origin cases copy the deploy scripts into a temp git repo whose mas
 has one local commit on top of origin/master. The no-ref cases also hit the real
 scripts in this checkout. WRANGLER is a stub, and npx/wrangler on PATH are stubs:
 if either runs, the test fails. GCM_BOT_LOG points at a temp file, never
-/workspace/gcm/bot-log.md.
+/workspace/gcm/bot-log.md. GCM_DEPLOY_REFS points at a temp allowlist, never
+/workspace/gcm/approvals/deploy_refs.json. setUp seeds the refs the older cases
+pass (chat-123, card-456, card-9, chat-99) as reusable rows (one_time false).
 """
 import json
 import os
@@ -16,7 +18,13 @@ import tempfile
 import unittest
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
-SCRIPTS = ("deploy_web.sh", "deploy_worker.sh", "prod_gate.sh", "check_new_region_only.py")
+SCRIPTS = (
+    "deploy_web.sh",
+    "deploy_worker.sh",
+    "prod_gate.sh",
+    "check_new_region_only.py",
+    "check_deploy_ref.py",
+)
 
 
 class ProdGate(unittest.TestCase):
@@ -39,6 +47,12 @@ class ProdGate(unittest.TestCase):
         self.env["GCM_BOT_LOG"] = os.path.join(self.tmp.name, "bot-log.md")
         self.env.pop("GIT_DIR", None)
         self.env.pop("GIT_WORK_TREE", None)
+        self.seed_allowlist([
+            self.allow_row("chat-123"),
+            self.allow_row("card-456"),
+            self.allow_row("card-9"),
+            self.allow_row("chat-99"),
+        ])
 
     def _clear_sentinel(self):
         if os.path.exists(self.sentinel):
@@ -51,6 +65,25 @@ class ProdGate(unittest.TestCase):
         self.assertFalse(invoked, "wrangler ran:\n" + proc.stdout + "\n" + proc.stderr)
         self.assertIn(needle, proc.stderr, proc.stdout + "\n" + proc.stderr)
         self._clear_sentinel()
+
+    def allow_row(self, ref, one_time=False):
+        return {
+            "ref": ref,
+            "source": "test-source",
+            "scope": "production deploy",
+            "one_time": one_time,
+        }
+
+    def seed_allowlist(self, rows):
+        path = os.path.join(self.tmp.name, "deploy_refs.json")
+        with open(path, "w", encoding="utf-8") as handle:
+            json.dump({"refs": rows}, handle)
+            handle.write("\n")
+        self.env["GCM_DEPLOY_REFS"] = path
+        return path
+
+    def used_path(self):
+        return os.path.join(os.path.dirname(self.env["GCM_DEPLOY_REFS"]), "deploy_refs_used.json")
 
     def run_script(self, script, args, cwd):
         self._clear_sentinel()
@@ -194,7 +227,10 @@ class ProdGate(unittest.TestCase):
         with open(os.path.join(ROOT, "scripts/deploy_worker.sh"), encoding="utf-8") as f:
             worker = f.read()
         self.assertLess(worker.index(call), worker.index("$W deploy"))
-        self.assertEqual(worker.count(call), 1)
+        self.assertEqual(worker.count(call), 2)
+        prod_tail = worker.split('if [ "$mode" = production ]; then', 1)[1]
+        self.assertLess(prod_tail.index("$W deploy"), prod_tail.index("--mark-used"))
+        self.assertNotIn("--mark-used", worker.split("\nelse\n", 1)[1])
 
 
 class NewRegionOk(ProdGate):
@@ -283,6 +319,242 @@ class NewRegionOk(ProdGate):
             os.path.join(d, "scripts/deploy_web.sh"), ["production", "--new-region-ok", "t390s2042"], d
         )
         self.assert_refused_before_wrangler(proc, "--live-commit", "NEW-REGION no live commit")
+
+
+class Allowlist(ProdGate):
+    """--max-ok must be a row in the allowlist. The file is not in the repo.
+
+    Must-fail: invented ref, gary-relay-* even when listed, reused one_time ref,
+    missing allowlist. Must-pass: dry run of a seeded one_time ref does not mark it used.
+    """
+
+    def test_invented_ref_not_in_allowlist(self):
+        d = self.make_repo("invented")
+        proc = self.run_script(
+            os.path.join(d, "scripts/deploy_web.sh"),
+            ["production", "--max-ok", "invented-ref"],
+            d,
+        )
+        self.assert_refused_before_wrangler(proc, "not in the approval allowlist", "ALLOWLIST-MISS web")
+        self.assertIn("invented-ref", proc.stderr)
+        self.assertNotIn("only from master", proc.stderr)
+        log = self.env["GCM_BOT_LOG"]
+        proc = self.run_script(
+            os.path.join(ROOT, "scripts/prod_gate.sh"),
+            ["--append-log", "--max-ok", "invented-ref", "--status", "PASS"],
+            ROOT,
+        )
+        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertIn("not in the approval allowlist", proc.stderr)
+        self.assertFalse(os.path.exists(log), proc.stderr)
+        self.assertFalse(os.path.exists(self.used_path()))
+
+    def test_relay_ref_refused_even_when_listed(self):
+        relay = "gary-relay-2694-max-1649PT"
+        other = "Gary-RELAY-9"
+        self.seed_allowlist([self.allow_row(relay), self.allow_row(other, one_time=True)])
+        d = self.make_repo("relay")
+        for ref in (relay, other):
+            proc = self.run_script(
+                os.path.join(d, "scripts/deploy_web.sh"),
+                ["production", "--max-ok", ref],
+                d,
+            )
+            self.assert_refused_before_wrangler(proc, "looks relayed", "RELAY " + ref)
+            self.assertIn("not Max's own approval", proc.stderr)
+            self.assertNotIn("not in the approval allowlist", proc.stderr)
+        self.env["GCM_DEPLOY_REFS"] = os.path.join(self.tmp.name, "missing-relay.json")
+        proc = self.run_script(
+            os.path.join(d, "scripts/prod_gate.sh"),
+            ["--max-ok", relay, "--paths", "scripts"],
+            d,
+        )
+        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertIn("looks relayed", proc.stderr)
+        self.assertNotIn("approval allowlist is missing", proc.stderr)
+        self.assertFalse(os.path.exists(self.used_path()))
+
+    def test_reused_one_time_ref_refused(self):
+        ref = "once-9"
+        self.seed_allowlist([self.allow_row(ref, one_time=True)])
+        gate = os.path.join(ROOT, "scripts/prod_gate.sh")
+        proc = self.run_script(gate, ["--append-log", "--max-ok", ref, "--status", "PASS"], ROOT)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        with open(self.env["GCM_BOT_LOG"], encoding="utf-8") as handle:
+            self.assertEqual(len(handle.read().splitlines()), 1)
+        with open(self.used_path(), encoding="utf-8") as handle:
+            self.assertEqual(json.load(handle)["refs"], [ref])
+        # The log line alone is enough. Deleting the used-ref record must not revive it.
+        os.remove(self.used_path())
+        d = self.make_repo("reused")
+        proc = self.run_script(
+            os.path.join(d, "scripts/deploy_web.sh"),
+            ["production", "--max-ok", ref],
+            d,
+        )
+        self.assert_refused_before_wrangler(proc, "one_time and was already used", "REUSED web")
+        proc = self.run_script(gate, ["--append-log", "--max-ok", ref, "--status", "FAIL"], ROOT)
+        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertIn("one_time and was already used", proc.stderr)
+        with open(self.env["GCM_BOT_LOG"], encoding="utf-8") as handle:
+            self.assertEqual(len(handle.read().splitlines()), 1)
+
+    def test_missing_allowlist_refused(self):
+        missing = os.path.join(self.tmp.name, "no-such-allowlist.json")
+        self.env["GCM_DEPLOY_REFS"] = missing
+        d = self.make_repo("missing-allow")
+        proc = self.run_script(
+            os.path.join(d, "scripts/deploy_web.sh"),
+            ["production", "--max-ok", "chat-123"],
+            d,
+        )
+        self.assert_refused_before_wrangler(proc, "approval allowlist is missing", "ALLOWLIST-FILE-MISS")
+        self.assertIn(missing, proc.stderr)
+        gate = os.path.join(ROOT, "scripts/prod_gate.sh")
+        proc = self.run_script(gate, ["--append-log", "--max-ok", "chat-123", "--status", "PASS"], ROOT)
+        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertIn("approval allowlist is missing", proc.stderr)
+        self.assertFalse(os.path.exists(self.env["GCM_BOT_LOG"]))
+        self.env.pop("GCM_DEPLOY_REFS", None)
+        proc = self.run_script(
+            os.path.join(d, "scripts/prod_gate.sh"),
+            ["--max-ok", "chat-123", "--paths", "scripts"],
+            d,
+        )
+        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertIn("/workspace/gcm/approvals/deploy_refs.json", proc.stderr)
+        self.assertIn("approval allowlist is missing", proc.stderr)
+
+    def test_invalid_and_unreadable_allowlist_refused(self):
+        bad = os.path.join(self.tmp.name, "bad.json")
+        with open(bad, "w", encoding="utf-8") as handle:
+            handle.write("{")
+        self.env["GCM_DEPLOY_REFS"] = bad
+        d = self.make_repo("bad-allow")
+        proc = self.run_script(
+            os.path.join(d, "scripts/deploy_web.sh"),
+            ["production", "--max-ok", "chat-123"],
+            d,
+        )
+        self.assert_refused_before_wrangler(proc, "approval allowlist is invalid", "ALLOWLIST-INVALID-JSON")
+        with open(bad, "w", encoding="utf-8") as handle:
+            json.dump({"refs": [{"ref": "chat-123", "source": "test-source", "scope": "production deploy", "one_time": "true"}]}, handle)
+        proc = self.run_script(
+            os.path.join(d, "scripts/prod_gate.sh"),
+            ["--max-ok", "chat-123", "--paths", "scripts"],
+            d,
+        )
+        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertIn("one_time must be true or false", proc.stderr)
+        if os.geteuid() == 0:
+            return
+        os.chmod(bad, 0)
+        self.addCleanup(os.chmod, bad, 0o644)
+        proc = self.run_script(
+            os.path.join(d, "scripts/prod_gate.sh"),
+            ["--max-ok", "chat-123", "--paths", "scripts"],
+            d,
+        )
+        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertIn("approval allowlist is unreadable", proc.stderr)
+
+    def test_dry_run_seeded_one_time_ref_does_not_mark(self):
+        ref = "dry-ok"
+        self.seed_allowlist([self.allow_row(ref, one_time=True)])
+        d = self.make_repo("dry-run")
+        gate = os.path.join(d, "scripts/prod_gate.sh")
+        args = ["--max-ok", ref, "--paths", "scripts"]
+        for n in (1, 2):
+            proc = self.run_script(gate, args, d)
+            print("DRY-RUN %s exit=%s" % (n, proc.returncode), flush=True)
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            self.assertFalse(os.path.exists(self.sentinel))
+            self.assertFalse(os.path.exists(self.used_path()))
+            self.assertFalse(os.path.exists(self.env["GCM_BOT_LOG"]))
+
+    def test_mark_used_is_idempotent_and_then_check_refuses(self):
+        ref = "once-worker"
+        self.seed_allowlist([self.allow_row(ref, one_time=True)])
+        gate = os.path.join(ROOT, "scripts/prod_gate.sh")
+        for n in (1, 2):
+            proc = self.run_script(gate, ["--mark-used", "--max-ok", ref], ROOT)
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            with open(self.used_path(), encoding="utf-8") as handle:
+                self.assertEqual(json.load(handle)["refs"], [ref], "mark %s" % n)
+        d = self.make_repo("marked")
+        proc = self.run_script(
+            os.path.join(d, "scripts/deploy_web.sh"),
+            ["production", "--max-ok", ref],
+            d,
+        )
+        self.assert_refused_before_wrangler(proc, "one_time and was already used", "MARKED-THEN-CHECK")
+        proc = self.run_script(gate, ["--mark-used", "--max-ok", ref], ROOT)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        with open(self.used_path(), encoding="utf-8") as handle:
+            self.assertEqual(json.load(handle)["refs"], [ref])
+
+    def test_one_time_refuses_when_used_record_cannot_be_written(self):
+        folder = os.path.join(self.tmp.name, "ro-allow")
+        os.makedirs(folder)
+        path = os.path.join(folder, "deploy_refs.json")
+        with open(path, "w", encoding="utf-8") as handle:
+            json.dump({"refs": [self.allow_row("once-ro", one_time=True)]}, handle)
+        os.chmod(folder, 0o555)
+        self.addCleanup(os.chmod, folder, 0o755)
+        self.env["GCM_DEPLOY_REFS"] = path
+        d = self.make_repo("ro-allow-repo")
+        proc = self.run_script(
+            os.path.join(d, "scripts/prod_gate.sh"),
+            ["--max-ok", "once-ro", "--paths", "scripts"],
+            d,
+        )
+        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertIn("used-ref record directory is not writable", proc.stderr)
+        self.assertFalse(os.path.exists(self.sentinel))
+
+    def test_invalid_used_record_refuses(self):
+        ref = "once-bad-used"
+        self.seed_allowlist([self.allow_row(ref, one_time=True)])
+        with open(self.used_path(), "w", encoding="utf-8") as handle:
+            handle.write("{")
+        d = self.make_repo("bad-used")
+        proc = self.run_script(
+            os.path.join(d, "scripts/prod_gate.sh"),
+            ["--max-ok", ref, "--paths", "scripts"],
+            d,
+        )
+        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertIn("used-ref record is invalid", proc.stderr)
+
+    def test_new_region_log_ref_skips_allowlist(self):
+        self.env["GCM_DEPLOY_REFS"] = os.path.join(self.tmp.name, "missing.json")
+        gate = os.path.join(ROOT, "scripts/prod_gate.sh")
+        proc = self.run_script(
+            gate, ["--append-log", "--max-ok", "new-region-ok:t390s2042", "--status", "PASS"], ROOT
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        with open(self.env["GCM_BOT_LOG"], encoding="utf-8") as handle:
+            line = handle.read().strip()
+        self.assertRegex(line, r" max-ok=new-region-ok:t390s2042 PASS$")
+        self.assertFalse(os.path.exists(os.path.join(self.tmp.name, "deploy_refs_used.json")))
+        proc = self.run_script(
+            gate, ["--append-log", "--max-ok", "new-region-ok:gary-relay-1", "--status", "PASS"], ROOT
+        )
+        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertIn("looks relayed", proc.stderr)
+        with open(self.env["GCM_BOT_LOG"], encoding="utf-8") as handle:
+            self.assertEqual(len(handle.read().splitlines()), 1)
+
+    def test_new_region_ok_token_is_not_a_max_ok_bypass(self):
+        d = self.make_repo("nr-bypass")
+        proc = self.run_script(
+            os.path.join(d, "scripts/prod_gate.sh"),
+            ["--max-ok", "new-region-ok:t390s2042", "--paths", "scripts"],
+            d,
+        )
+        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertIn("not in the approval allowlist", proc.stderr)
+        self.assertFalse(os.path.exists(self.used_path()))
 
 
 if __name__ == "__main__":
