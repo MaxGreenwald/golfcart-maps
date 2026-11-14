@@ -381,6 +381,36 @@ function shopView() {
       <div class="muted" id="codeDaysHint">1 to 30 days, or No expiry.</div></div></div>
     <p><button class="btn" id="genCode" type="button">Generate access code</button></p>
     <table><thead><tr><th>Code</th><th>Usage</th><th>Link</th></tr></thead><tbody>${codeRows}</tbody></table>
+    ${qrKitBlock(s, b.codes)}
+  </div>`;
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error('QR kit did not load'));
+    document.body.appendChild(s);
+  });
+}
+let qrKitLoad = null;
+function loadQrKit() {
+  if (window.GCMQrKit) return Promise.resolve();
+  if (!qrKitLoad) qrKitLoad = loadScript('/qrkit.js');
+  return qrKitLoad;
+}
+
+function qrKitBlock(shop, codes) {
+  const list = codes || [];
+  const opts = list.map(c => `<option value="${esc(c.code)}">${esc(c.code)}</option>`).join('');
+  const disabled = list.length ? '' : ' disabled';
+  return `<div id="qrKit">
+    <h3>QR sticker and counter card</h3>
+    <p class="muted">One print page: a cart sticker and a counter card with your logo and color. The QR opens /p/${esc(shop.slug)} with the code filled in. Save a PDF from the print dialog.</p>
+    <label for="qrCode">Access code on the QR</label>
+    <select id="qrCode"${disabled}>${opts || '<option value="">Generate an access code first</option>'}</select>
+    <p><button class="btn" id="printQr" type="button"${disabled}>Print QR kit</button></p>
   </div>`;
 }
 
@@ -1070,6 +1100,24 @@ function bindApp() {
       try { await navigator.clipboard.writeText(link); } catch (_) {}
       await refreshShop();
     } catch (e) { flash(false, e.message); }
+  };
+  const printQr = $('#printQr');
+  if (printQr) printQr.onclick = async () => {
+    const code = ($('#qrCode') && $('#qrCode').value) || '';
+    if (!code) { flash(false, 'Generate an access code first'); return; }
+    const w = window.open('', 'gcm-qr-kit');
+    if (!w) { flash(false, 'Allow pop-ups to print the QR kit.'); return; }
+    try {
+      await loadQrKit();
+      if (!window.GCMQrKit) throw new Error('QR kit did not load');
+      const s = state.shopBundle.shop;
+      const html = GCMQrKit.printHtml({
+        name: s.name, slug: s.slug, color: s.color, logoUrl: s.logo_url, code, origin: location.origin,
+      });
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+    } catch (e) { w.close(); flash(false, e.message); }
   };
 }
 
