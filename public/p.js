@@ -835,7 +835,9 @@ async function routeFree(dest, quiet) {
   if (liveLayer) liveLayer.clearLayers();
   if (!leg || !leg.points || leg.points.length < 2) {
     stopNav();
-    setGoNote(freeRisky ? 'No way through, even with risky stretches.' : 'No legal route there. Try ⚠️ Risky to see short-stretch options.');
+    const rule = roadApi && roadApi.rule;
+    const stopped = leg && (leg.reason === 'timeout' || leg.reason === 'budget');
+    setGoNote(rule && GCMRule.routeStop ? GCMRule.routeStop(rule, { risky: !!freeRisky, reason: stopped ? 'timeout' : 'none' }) : (freeRisky ? 'No way through, even with risky stretches.' : 'No legal route there. Try ⚠️ Risky to see short-stretch options.'));
     return;
   }
   addRouteLine(leg.points, liveLayer, leg.dashed);

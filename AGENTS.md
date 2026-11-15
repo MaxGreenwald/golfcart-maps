@@ -60,6 +60,7 @@ Where a check lives only on an unmerged branch, the branch is named; it becomes 
 | 39 | Town and city counts on the homepage, partner pages, SEO hubs, llms.txt, and schema equal the number of regions in `public/data/regions.json` | expansion to 100 towns | `tests/test_town_count.py` | web-ci |
 | 40 | HubSpot portal 52245531 loads on public https://golfcartmap.com pages from `public/hubspot.js` on first view, with no site consent banner. Native app, `/partner`, other hosts, webdriver, gcm-internal, and NO_TRACK do not load it. Not portal 247729169 | Max, Nov 12 2026 | `tests/hubspot.test.mjs`, `tests/test_hubspot.py`, `scripts/test_hubspot_first_view.py` | web-ci |
 | 41 | Public HTML, sitemap, robots.txt, llms.txt, and SEO generators do not name sdr-chat.golfcartmap.com or gcm-sdr-chat.maxgreenwald-assistant.workers.dev. golfcartmap.com stays crawlable | Max t486u, Nov 11 2026 | `tests/test_sdr_discovery.py` | web-ci |
+| 42 | A route search stops on a shared time and state budget and runs off the main thread. A failed road tile stays on screen with Retry instead of routing on partial roads | route crash Nov 15 2026 | `tests/test_route_budget.py` (`tests/route_budget.mjs`) | web-ci |
 
 When you add a check, add a row. When a rule has no check, say so here rather than leaving it implied.
 

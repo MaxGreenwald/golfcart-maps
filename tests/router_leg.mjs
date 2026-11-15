@@ -43,22 +43,22 @@ function isStopChord(leg, a, b) {
   return near(leg.points[0], a) && near(leg.points[1], b);
 }
 
-test('short miss is a dash and a long miss is omitted', () => {
+test('short miss is a dash and a long miss is omitted', async () => {
   const net = GCMRouter.create();
   const D = { segs: [], meta: {} };
   const o = { cls: () => 0, unk: () => false, rule: { max_posted: 25, cross: true }, risky: false, G: GCMRouter.G };
   const a = { lat: 32.85, lon: -117.25 };
   const near = { lat: 32.8502, lon: -117.2502 };
-  const dash = GCMRouter.routePair(net, D, {}, a, near, o);
+  const dash = await GCMRouter.routePair(net, D, {}, a, near, o);
   assert.equal(dash.dashed, true);
   assert.equal(dash.points.length, 2);
   const far = { lat: 32.88, lon: -117.22 };
-  const skip = GCMRouter.routePair(net, D, {}, a, far, o);
+  const skip = await GCMRouter.routePair(net, D, {}, a, far, o);
   assert.equal(skip.points, null);
   assert.equal(skip.dashed, false);
 });
 
-test('an L-shaped road does not chord the corner', () => {
+test('an L-shaped road does not chord the corner', async () => {
   const D = {
     meta: {},
     segs: [
@@ -73,7 +73,7 @@ test('an L-shaped road does not chord the corner', () => {
   net.build(D, 0, o);
   const a = { lat: 32.85, lon: -117.27 };
   const b = { lat: 32.86, lon: -117.26 };
-  const leg = GCMRouter.routePair(net, D, buckets, a, b, o);
+  const leg = await GCMRouter.routePair(net, D, buckets, a, b, o);
   assert.equal(leg.dashed, false);
   assert.ok(leg.points && leg.points.length >= 3);
   assert.ok(maxGap(leg.points, a, b) > 200);
