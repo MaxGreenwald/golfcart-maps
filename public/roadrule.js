@@ -36,15 +36,28 @@ function why(s,R,Rother,src){if(cls(s,R)!==3)return '';if(R.not_street_legal)ret
   return `Avoid: ${nextBand(R.max_posted)}+ mph or major road${Rother&&cls(s,Rother)!==3?` (OK for ${vname(Rother)})`:''}`}
 // text when no legal route exists
 const noRoute=R=>R.not_street_legal?"Plain golf carts aren't street-legal here, so only cart paths count. Switch to 🚙 LSV if yours is street-legal.":R.designated_only?'Every way there leaves the cart paths/designated roads.':`Every way there uses a ${nextBand(R.max_posted)}+ mph road.`;
-// Shown when a search finds nothing or stops. Names the vehicle that is on, so a
+// Short name for the settings switch and the no-route line. Stored values stay
+// 'golf_cart' and 'lsv'. The 25 mph name is only used when that is the cart cap.
+function switchName(R){if(!R||R.veh==='lsv')return 'Street-legal LSV';
+ if(R.not_street_legal)return 'Cart paths only';
+ if(R.designated_only)return 'Designated cart roads only';
+ const n=+R.max_posted;
+ if(n===25)return 'Under 25 mph roads only';
+ if(n>0)return 'Under '+n+' mph roads only';
+ return 'Plain golf cart rules'}
+// One line under the switch. The 35 mph sentence is only for a town whose LSV cap is 35 or higher.
+function lsvHint(R){const n=R&&+R.max_posted;if(n>=35)return 'Most street-legal LSVs can use 35 mph roads';
+ if(n>0)return 'Street-legal LSVs here use roads posted '+n+' mph or under';
+ return ''}
+// Shown when a search finds nothing or stops. Names the setting that is on, so a
 // correct red road does not look like stale data. reason: 'none' | 'timeout' | 'budget'.
-function routeStop(R,o){o=o||{};const mode=R.veh==='golf_cart'?'Golf cart mode':'LSV mode';
+function routeStop(R,o){o=o||{};const mode=switchName(R);
  const limit=R.not_street_legal?'only cart paths count':R.designated_only?'only cart paths and designated roads':'only roads posted '+R.max_posted+' mph or under';
- const head=mode+': '+limit+'.';const lsv=R.veh==='golf_cart'?' Try LSV mode?':'';
+ const head=mode+': '+limit+'.';const lsv=R.veh==='golf_cart'?' Turn this off for a street-legal LSV.':'';
  if(o.reason==='timeout'||o.reason==='budget')return head+' The search stopped before it finished.'+lsv;
  if(o.risky)return head+' Even short stretches of faster roads (up to 500 ft) don’t connect these points.'+lsv;
- if(R.veh==='golf_cart')return head+' Try LSV mode?';
+ if(R.veh==='golf_cart')return head+lsv;
  return head+' Try ⚠️ Risky to see short stretches of faster roads.'}
-const api={DEFAULT_VEH,noRoute,routeStop,VEHICLES,VNAME,ruleFor,cls,desig,why,vname,nextBand};
+const api={DEFAULT_VEH,noRoute,routeStop,switchName,lsvHint,VEHICLES,VNAME,ruleFor,cls,desig,why,vname,nextBand};
 if(typeof module==='object'&&module.exports)module.exports=api;else root.GCMRule=api;
 })(typeof window!=='undefined'?window:globalThis);

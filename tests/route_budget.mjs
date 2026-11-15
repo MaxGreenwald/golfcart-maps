@@ -196,5 +196,5 @@ test('the map runs the search off the main thread and keeps a failed tile on scr
     JSON.parse(fs.readFileSync(path.join(ROOT, 'public/data/rules.json'), 'utf8')),
     JSON.parse(fs.readFileSync(path.join(ROOT, 'public/data/regions.json'), 'utf8')).find(r => r.id === 'sd'),
     'golf_cart'
-  ), {}), 'Golf cart mode: only roads posted 25 mph or under. Try LSV mode?');
+  ), {}), 'Under 25 mph roads only: only roads posted 25 mph or under. Turn this off for a street-legal LSV.');
 });
