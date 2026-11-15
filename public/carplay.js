@@ -75,7 +75,7 @@ window.GCMCarPlay={
   let useRisky=!!allowRisky;
   if(window.GCM_IOS){const chip=document.getElementById('cRisk');useRisky=!!(chip&&chip.classList.contains('on'))}
   const lr=await asCarPlay(()=>window.testRoute([from.lat,from.lon],[to.lat,to.lon],useRisky,Number.isFinite(heading)?heading:null));const r=window._lastDetail;
-  if(!lr||!r)return {ok:false,reason:GCMRule.noRoute(RULE)};
+  if(!lr||!r)return {ok:false,reason:window._routeFail||GCMRule.noRoute(RULE)};
   const route=window.navStepsFor(r,dest||'');cpLast=route;
   const line=route.pts.map(p=>[+p[0].toFixed(6),+p[1].toFixed(6)]);
   return {ok:true,mode:MODE,region:REG.id,meters:Math.round(r.dist),miles:lr.mi,roundTripMiles:lr.rt,minutes:lr.min,range:lr.range,
