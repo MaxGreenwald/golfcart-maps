@@ -39,5 +39,30 @@ t('LSV mode classifies every real segment exactly like master app.js did',()=>{
 t('flag 4 (local golf-cart-only ban): Avoid for golf carts, LSVs unaffected, a posted sign never lifts it',()=>{for(const id of ['annamaria','rockport','chs','staug']){const g=R.ruleFor(rules,reg(id),'golf_cart'),l=R.ruleFor(rules,reg(id),'lsv');
   for(const c of ['t','v','m','o','d']){const s=[0,'residential',25,c,0,0,1,[],-1,4,0];a.equal(R.cls(s,g),3,id+' '+c);a.equal(R.cls(s,l),0,id+' '+c);a.match(R.why(s,g,l),/golf carts not allowed on this road \(local ordinance\).*OK for/)}}});
 t('South Padre: local cap 35 cites Sec. 18-30',()=>{for(const v of R.VEHICLES){const x=R.ruleFor(rules,reg('southpadre'),v);a.equal(x.max_posted,35);a.match(x.cite,/18-30/);a.equal(R.cls(seg(40),x),3)}});
-t('a failed search names the vehicle that is on',()=>{a.equal(R.routeStop(cart,{risky:true}),'Golf cart mode: only roads posted 25 mph or under. Even short stretches of faster roads (up to 500 ft) don’t connect these points. Try LSV mode?');a.equal(R.routeStop(cart,{}),'Golf cart mode: only roads posted 25 mph or under. Try LSV mode?');a.match(R.routeStop(lsv,{reason:'timeout'}),/LSV mode: only roads posted 35 mph or under/);a.equal(R.routeStop(cart,{reason:'timeout'}).includes('—'),false)});
+t('a failed search names the setting that is on',()=>{
+  a.equal(R.switchName(cart),'Under 25 mph roads only');
+  a.equal(R.switchName(lsv),'Street-legal LSV');
+  a.equal(R.lsvHint(lsv),'Most street-legal LSVs can use 35 mph roads');
+  a.equal(R.lsvHint(R.ruleFor(rules,reg('capemay'),'lsv')),'Street-legal LSVs here use roads posted 25 mph or under');
+  a.equal(R.switchName(R.ruleFor(rules,reg('villages'),'golf_cart')),'Designated cart roads only');
+  a.equal(R.switchName(R.ruleFor(rules,reg('oob'),'golf_cart')),'Cart paths only');
+  a.equal(R.switchName(R.ruleFor(rules,reg('myrtle'),'golf_cart')),'Under 35 mph roads only');
+  a.equal(R.routeStop(cart,{risky:true}),'Under 25 mph roads only: only roads posted 25 mph or under. Even short stretches of faster roads (up to 500 ft) don’t connect these points. Turn this off for a street-legal LSV.');
+  a.equal(R.routeStop(cart,{}),'Under 25 mph roads only: only roads posted 25 mph or under. Turn this off for a street-legal LSV.');
+  a.match(R.routeStop(lsv,{reason:'timeout'}),/Street-legal LSV: only roads posted 35 mph or under/);
+  a.equal(R.routeStop(cart,{reason:'timeout'}).includes('—'),false);
+  a.equal(R.routeStop(cart,{}).includes('—'),false);
+  for(const r of regs)for(const v of R.VEHICLES){const rule=R.ruleFor(rules,r,v);for(const s of [R.switchName(rule),R.lsvHint(rule),R.routeStop(rule,{}),R.routeStop(rule,{risky:true})])a.equal(s.includes('—'),false,r.id+' '+v)}
+});
+t('settings copy dropped the Golf cart mode name; stored vehicle ids stay',()=>{
+  const html=fs.readFileSync(PUB+'/index.html','utf8'),priv=fs.readFileSync(PUB+'/privacy.html','utf8');
+  a.ok(html.includes('id="vehTitle">Under 25 mph roads only'));
+  a.ok(html.includes('Most street-legal LSVs can use 35 mph roads'));
+  a.ok(html.includes('turn on Under 25 mph roads only in'));
+  a.ok(!html.includes('Golf cart mode'));
+  a.ok(!priv.includes('Golf cart mode'));
+  a.ok(html.includes('Free to use.'));
+  a.deepEqual(R.VEHICLES,['golf_cart','lsv']);
+  a.equal(R.DEFAULT_VEH,'lsv');
+});
 console.log(`RESULT ALL PASS (${n})`);
