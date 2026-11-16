@@ -27,6 +27,8 @@ jobs:
         run: node --test tests/hubspot.test.mjs
       - name: Shop activity stats (unlocks, rides, offer taps; denylist)
         run: node --test tests/shop_stats.test.mjs
+      - name: Ready-made partner rides (legal loops per town and vehicle)
+        run: node --test tests/starters.test.mjs
       - name: Live town loader (native app prefers golfcartmap.com JSON; bundled fallback)
         run: node --test tests/livedata.test.mjs
       - name: CarPlay Experiences bridge (node --test)
@@ -174,6 +176,8 @@ jobs:
         run: python -m unittest tests.test_shop_dashboard -v
       - name: test_partner_templates (copy a ride or page to another location, optional sync)
         run: python -m unittest tests.test_partner_templates -v
+      - name: test_starter_experiences (shop adds a ready-made ride for its town and vehicle)
+        run: python -m unittest tests.test_starter_experiences -v
       - name: test_turn_by_turn (renter banner follows GPS, step list, mute, reroute, arrival; picked ride folds the others away)
         run: python -m unittest tests.test_turn_by_turn -v
       - name: test_return_reminders (admin saves return-by, range, and return spot; renter sees the nudge)

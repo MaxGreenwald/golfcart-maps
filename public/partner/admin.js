@@ -407,6 +407,69 @@ function copyCard() {
   </div>`;
 }
 
+function starterBlock() {
+  return `<div id="starterCard">
+    <p class="muted" id="starterHint">Loading ready-made rides…</p>
+    <div id="starterList"></div>
+  </div>`;
+}
+
+let starterToken = 0;
+async function loadStarters() {
+  const hint = $('#starterHint');
+  const list = $('#starterList');
+  if (!hint || !list) return;
+  const token = ++starterToken;
+  const region = activeRegion();
+  const veh = ($('#brandVehicle') && $('#brandVehicle').value) || 'golf_cart';
+  const who = veh === 'lsv' ? 'a street-legal LSV' : 'a golf cart';
+  const town = (region && (region.short || region.name)) || 'this town';
+  hint.textContent = 'Loading ready-made rides…';
+  list.innerHTML = '';
+  let data = null;
+  try {
+    const r = await fetch('/data/' + encodeURIComponent(region.id) + '/starters.json', { cache: 'no-store' });
+    if (r.ok) data = await r.json();
+  } catch (e) { data = null; }
+  if (token !== starterToken) return;
+  const rides = (data && data.vehicles && data.vehicles[veh]) || [];
+  if (!rides.length) {
+    hint.textContent = 'No ready-made rides for ' + who + ' in ' + town + '. Add your own stops below.';
+    return;
+  }
+  hint.textContent = rides.length + ' ready-made ride' + (rides.length === 1 ? '' : 's') + ' for ' + who + ' in ' + town + '. Add one, then edit the stops.';
+  list.innerHTML = rides.map((ride, i) => `<div class="starter-ride">
+      <b>${esc(ride.title)}</b>
+      <div class="muted">${esc((ride.stops || []).map(s => s.label).filter(Boolean).join(' · '))}${Number.isFinite(+ride.miles) ? ' · about ' + esc(ride.miles) + ' mi' : ''}</div>
+      <p style="margin:8px 0 0"><button type="button" class="btn alt" data-starter="${i}">Add this ride</button></p>
+    </div>`).join('');
+  list.querySelectorAll('[data-starter]').forEach(btn => {
+    btn.onclick = () => addStarter(rides[+btn.dataset.starter], btn);
+  });
+}
+
+async function addStarter(ride, btn) {
+  if (!ride || !ride.title || !(ride.stops || []).length) return;
+  if (btn) btn.disabled = true;
+  try {
+    const made = await api('/shop/experiences', { method: 'POST', body: JSON.stringify({
+      title: ride.title,
+      description: ride.description || '',
+      stops: ride.stops,
+      nearest_start: true,
+    }) });
+    state.msg = ride.title + ' added. Edit the stops, then save.';
+    state.err = '';
+    const id = made.experience && made.experience.id;
+    await refreshShop();
+    const ex = ((state.shopBundle && state.shopBundle.experiences) || []).find(e => e.id === id);
+    if (ex) loadExperience(ex);
+  } catch (e) {
+    if (btn) btn.disabled = false;
+    flash(false, e.message);
+  }
+}
+
 function shopView() {
   const b = state.shopBundle;
   if (!b || !b.shop) return `<div class="card"><p class="msg err">No shop linked to this account yet. Accept an invite from Max.</p></div>`;
@@ -481,6 +544,7 @@ function shopView() {
   ${rentalCard(s)}
   <div class="card"><h2>Experiences</h2>
     <p class="muted">Ordered joyride stops. Search a place or drop a pin and name it yourself. Edit an experience to change a stop or its order.</p>
+    ${starterBlock()}
     <p class="muted hidden" id="exEditing">Editing this experience. Save changes keeps the stops and their order.</p>
     <input type="hidden" id="exId" value="">
     <label>Title</label><input id="exTitle" placeholder="La Jolla seals joyride">
@@ -1426,6 +1490,11 @@ function bindApp() {
   });
   if (daysIn) daysIn.oninput = () => chips.forEach(x => x.classList.toggle('on', x.dataset.days === daysIn.value));
   wireDash();
+  const regionSel = $('#brandRegion');
+  if (regionSel) regionSel.addEventListener('change', () => loadStarters());
+  const vehSel = $('#brandVehicle');
+  if (vehSel) vehSel.addEventListener('change', () => loadStarters());
+  loadStarters();
   const genCode = $('#genCode');
   const locPick = $('#locPick');
   if (locPick) locPick.onchange = async () => {
