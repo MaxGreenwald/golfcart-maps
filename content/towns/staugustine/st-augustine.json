@@ -1,0 +1,99 @@
+{
+ "slug": "st-augustine",
+ "region": "staugustine",
+ "name": "St. Augustine",
+ "state": "FL",
+ "seo_title": "St. Augustine golf cart map and LSV map",
+ "question_title": "Can you drive a golf cart in St. Augustine?",
+ "answer_short": "Street-legal LSVs yes, on roads posted 35 mph or less. Plain golf carts only on streets a city or county has designated and signed, and St. Augustine Beach says traditional golf carts may not use its public streets. US 1, SR 312, SR 207 and SR 16 stay red on the map.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated and signed streets only",
+  "speed_line": "n/a",
+  "notes": "No official street list found; the map shows only cart paths and roads mapped as designated for carts"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered, insured, licensed driver"
+ },
+ "rules": [
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs only on streets posted 35 mph or less; may cross a faster road at an intersection",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a county or city has designated for carts and signed",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+  },
+  {
+   "topic": "St. Augustine Beach",
+   "rule": "Traditional golf carts may not be operated on public streets. LSVs must be registered and insured, with a licensed driver, on streets 35 mph and under",
+   "citation": "City of St. Augustine Beach",
+   "source_url": "https://www.staugbch.com/413/Golf-CartsLow-Speed-Vehicles"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 1 (Ponce de Leon Blvd)",
+   "rule": "State road; the map keeps it red for LSVs and golf carts",
+   "crossings_ok": true
+  },
+  {
+   "name": "SR 312, SR 207 and SR 16",
+   "rule": "State roads; the map keeps them red for LSVs and golf carts",
+   "crossings_ok": true
+  },
+  {
+   "name": "A1A where posted over 35 mph",
+   "rule": "No LSVs; plain golf carts banned on St. Augustine Beach streets",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive an LSV across the Bridge of Lions?",
+   "a": "Yes, if it is a registered, street-legal LSV. The Bridge of Lions is posted 30 mph in our data, under the 35 mph LSV limit. A plain golf cart is not allowed unless the road is designated for carts, and the map shows it in red for golf carts."
+  },
+  {
+   "q": "Can I drive a regular golf cart in St. Augustine Beach?",
+   "a": "No. The City of St. Augustine Beach says traditional golf carts may not be operated on public streets. Street-legal LSVs may use streets posted 35 mph and under."
+  },
+  {
+   "q": "Where can I drive my LSV in St. Augustine?",
+   "a": "Roads posted 35 mph or less (F.S. 316.2122). The map keeps US 1, SR 312, SR 207, SR 16 and faster stretches of A1A red; you may cross a faster road at an intersection. Posted signs win."
+  },
+  {
+   "q": "Can I drive a plain golf cart in downtown St. Augustine?",
+   "a": "Only on streets the city or county has designated and signed for golf carts (F.S. 316.212). We have not found an official city or county street list, so the map shows plain golf carts only on cart paths and the few roads mapped as designated for carts."
+  }
+ ],
+ "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "St. Augustine Beach posts its golf cart and LSV rules.",
+   "name": "Golf Carts/Low Speed Vehicles (City of St. Augustine Beach)",
+   "url": "https://www.staugbch.com/413/Golf-CartsLow-Speed-Vehicles"
+  }
+ ],
+ "nearby": [],
+ "map_center": [
+  29.8946,
+  -81.3145
+ ],
+ "zoom": 15,
+ "published": "2026-11-16",
+ "last_checked": "2026-11-16",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "https://www.staugbch.com/413/Golf-CartsLow-Speed-Vehicles",
+  "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+ ]
+}

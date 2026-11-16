@@ -3,6 +3,7 @@
 
 /golf-cart-maps  plural query ("golf cart maps"). Self-canonical. Home stays canonical at /.
 /lsv             "LSV map app" / "low speed vehicle map". Self-canonical.
+/app             "golf cart map app" / the iPhone app. Self-canonical. Features only as the live App Store listing states them.
 
 Neither page invents road rules: the town list and the 35 mph line come from regions.json and roadrule.js.
 """
@@ -134,10 +135,62 @@ def lsv_page():
     return page(title, desc, "/lsv", body, ld)
 
 
+def app_page():
+    """/app: the iPhone app. Max t151s713 (Nov 16 2026). Feature lines match the live App Store listing
+    (id6823958385); no ratings, no device or screen claims the listing does not make."""
+    regs = regions()
+    n, ns = len(regs), len({r["state"] for r in regs})
+    title = f"Golf Cart Maps App for iPhone: golf cart map and LSV map | {BRAND}"
+    desc = (f"The {BRAND} iPhone app: a golf cart map and LSV map with legal roads in green, routes that stay on them, "
+            "and a battery range check." + POS.LANDING_DESC_TAIL)
+    faq = [
+        ("Is there a golf cart map app?",
+         f"Yes. {BRAND} is a golf cart map app for iPhone, on the App Store. It colors every street: green for roads your golf cart or LSV may use, red for fast or banned roads."),
+        ("What does the Golf Cart Maps app do?",
+         "It shows legal streets at a glance, plans routes that stay off fast and banned roads, starts a route from your location, checks battery range for a round trip, and lets you report a road that looks wrong."),
+        ("Does the app work with a weak signal?",
+         "Yes. Road data is built into the app, so the legal-street map and routing keep working with a weak signal."),
+        ("Do I need the app?",
+         f"No. The web map at golfcartmap.com works in any browser and covers {n} beach and golf towns. The iPhone app puts the map on your phone, with road data built in."),
+        ("Is it legal advice?", "No. Posted signs and local law always win."),
+    ]
+    body = f"""<nav aria-label="Breadcrumb" class="muted"><a href="/">Home</a> › App</nav>
+<h1>Golf Cart Maps app: the golf cart map for iPhone</h1>
+<p>{BRAND} is a golf cart map and LSV map app for iPhone. Green means a road your golf cart or street-legal LSV may use, red means skip it, and every route stays on legal streets and cart paths.</p>
+<p><a class="appstore" href="{APPSTORE}" data-ev="app_store_click" data-p='{{"position":"app_page"}}'><img src="/download-on-the-app-store.svg" width="161" height="54" alt="Download on the App Store"></a></p>
+<p><a class="cta" href="{APPSTORE}" data-ev="app_store_click" data-p='{{"position":"app_page_cta"}}'>Get the iPhone app</a> <a href="/map" data-ev="cta_try_map_click" data-p='{{"position":"app_page"}}'>Or open the web map</a></p>
+<h2>What the app does</h2>
+<ul>
+<li>See legal streets at a glance: green for roads your cart or LSV may use under the local rule, red for fast roads, highways and roads where carts are not allowed.</li>
+<li>Get routes that stay off fast and banned roads.</li>
+<li>Start a route from where you are. Your location stays on your phone.</li>
+<li>Check battery range for a round trip.</li>
+<li>Report a road that looks wrong, right from the map.</li>
+<li>Road data is built into the app, so the map and routing keep working with a weak signal.</li>
+</ul>
+<h2>Golf cart or LSV</h2>
+<p>Pick your vehicle. A street-legal LSV usually gets roads posted 35 mph or less; a plain golf cart usually gets fewer roads, and some towns allow it only on designated streets. Each town shows the rule it follows and the law behind it. See the <a href="/lsv">LSV map</a> and the <a href="/golf-cart-maps">golf cart maps by town</a>.</p>
+<h2>Where it works</h2>
+<p>The web map covers {n} beach and golf towns in {ns} states, from San Diego to The Villages, 30A, Key West and Hilton Head. Open the town picker in the app for its current list.</p>
+<h2>FAQ</h2>
+{''.join(f'<h3>{e(q)}</h3><p>{e(a)}</p>' for q, a in faq)}"""
+    webpage = {"@context": "https://schema.org", "@type": "WebPage", "name": title,
+               "url": SITE + "/app", "isPartOf": {"@id": SITE + "/#website"}, "about": {"@id": SITE + "/#org"}}
+    app = {"@context": "https://schema.org", "@type": "MobileApplication", "name": BRAND, "alternateName": ALT_NAMES,
+           "operatingSystem": "iOS", "applicationCategory": "NavigationApplication",
+           "description": "Golf cart map and LSV map for iPhone: legal golf cart and LSV roads in green, routes that stay on them, and a round-trip battery range check.",
+           "installUrl": APPSTORE, "url": SITE + "/app", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+           "publisher": {"@id": SITE + "/#org"}}
+    ld = [org(), website(), app, webpage, faq_schema(faq),
+          crumbs([("Home", "/"), ("App", "/app")])]
+    return page(title, desc, "/app", body, ld)
+
+
 def build(out):
     open(os.path.join(out, "golf-cart-maps.html"), "w", encoding="utf-8").write(maps_page())
     open(os.path.join(out, "lsv.html"), "w", encoding="utf-8").write(lsv_page())
+    open(os.path.join(out, "app.html"), "w", encoding="utf-8").write(app_page())
 
 
 if __name__ == "__main__":
-    print("maps", len(maps_page()), "lsv", len(lsv_page()))
+    print("maps", len(maps_page()), "lsv", len(lsv_page()), "app", len(app_page()))

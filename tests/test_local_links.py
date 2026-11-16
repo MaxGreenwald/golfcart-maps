@@ -11,7 +11,7 @@ def all_resources():
 class LocalLinks(unittest.TestCase):
     def test_counts_and_shape(self):
         items = [(p, r) for p, L in all_resources() for r in L]
-        self.assertEqual(len(items), 60 + 23 + 4 + 11 + 24)   # prior batches, plus 24 region pages added to reach 100 towns
+        self.assertEqual(len(items), 60 + 23 + 4 + 11 + 24 + 4)   # prior batches, plus 24 region pages added to reach 100 towns, plus 4 on the Nov 16 town guides (t151s713)
         urls = [r["url"] for _, r in items]
         by_page = collections.defaultdict(list)
         for p, r in items: by_page[p].append(r["url"])
