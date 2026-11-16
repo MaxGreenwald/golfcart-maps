@@ -1,7 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
-import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL, cleanRental, rentalFromRow, cleanReturnBy, cleanRangeMi, cleanReturnSpot } from '../../../lib/partner.js';
+import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL, cleanRental, rentalFromRow, cleanReturnBy, cleanRangeMi, cleanReturnSpot, cleanPhone } from '../../../lib/partner.js';
 import { fetchShopStats } from '../../../lib/shop_stats.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
@@ -112,6 +112,8 @@ export class PartnerStore extends DurableObject {
     if (!cols.includes('vehicle')) this.sql.exec("ALTER TABLE shops ADD COLUMN vehicle TEXT DEFAULT ''");
     // Pickup, return, phone, cart rules. Omitted from the locked teaser. Added Nov 10 2026.
     if (!cols.includes('rental_json')) this.sql.exec("ALTER TABLE shops ADD COLUMN rental_json TEXT DEFAULT ''");
+    // Shop phone for the renter Help button. A rental info card should keep this column name.
+    if (!cols.includes('phone')) this.sql.exec("ALTER TABLE shops ADD COLUMN phone TEXT DEFAULT ''");
     // Per-experience nearest-stop start (on by default; existing rows read 1). Added Oct 31 2026.
     const exCols = this.sql.exec('PRAGMA table_info(experiences)').toArray().map(c => c.name);
     if (!exCols.includes('nearest_start')) this.sql.exec('ALTER TABLE experiences ADD COLUMN nearest_start INTEGER NOT NULL DEFAULT 1');
@@ -135,6 +137,7 @@ export class PartnerStore extends DurableObject {
       range_mi: Number(r.range_mi) > 0 ? Number(r.range_mi) : 0,
       return_lat: Number.isFinite(r.return_lat) ? r.return_lat : null,
       return_lon: Number.isFinite(r.return_lon) ? r.return_lon : null,
+      phone: r.phone || '',
     };
     if (opts && opts.rental) row.rental = rentalFromRow(r.rental_json);
     return row;
@@ -236,9 +239,12 @@ export class PartnerStore extends DurableObject {
         const range_mi = range.skip ? (Number(sh.range_mi) || 0) : range.value;
         const return_lat = spot.skip ? sh.return_lat : spot.lat;
         const return_lon = spot.skip ? sh.return_lon : spot.lon;
+        const ph = cleanPhone(body.phone !== undefined ? body.phone : null);
+        if (ph.error) return J({ error: ph.error }, 400);
+        const phone = ph.skip ? (sh.phone || '') : ph.value;
         this.sql.exec(
-          'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=?, rental_json=?, return_by=?, range_mi=?, return_lat=?, return_lon=? WHERE id=?',
-          name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, rental_json, return_by, range_mi, return_lat, return_lon, sid,
+          'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=?, rental_json=?, return_by=?, range_mi=?, return_lat=?, return_lon=?, phone=? WHERE id=?',
+          name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, rental_json, return_by, range_mi, return_lat, return_lon, phone, sid,
         );
         return J({ shop: this.shopRow(this.one('SELECT * FROM shops WHERE id=?', sid), { rental: true }) });
       }
