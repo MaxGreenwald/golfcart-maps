@@ -69,6 +69,28 @@ test('places(): saved Home, beach and favorites for the CarPlay Places list', as
   assert.deepEqual(JSON.parse(JSON.stringify(r.map(p => p.name))), ['Home', 'Favorite beach', 'Destiny Coast']);
   assert.equal(r[0].sub, '123 Main St'); assert.equal(r[2].sub, 'Favorite'); assert.equal(r[0].lat, 32.8);
 });
+test('ride and offerTap record shop tokens on carplay and do nothing without a rental or a tracker', async () => {
+  const sent = [];
+  const store = access();
+  const ls = { getItem: k => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = String(v); } };
+  const win = { GCMTrack: { track: (e, p, o) => sent.push({ e, p, o }) } };
+  const ctx = { window: win, localStorage: ls, location: { protocol: 'capacitor:' }, console,
+    fetch: async () => ok(UNLOCK), setTimeout, Promise, JSON, Math, Date, isFinite, String };
+  vm.createContext(ctx); vm.runInContext(SRC, ctx);
+  assert.equal((await win.GCMCarPlay.ride('', 'started')).ok, false);
+  assert.equal((await win.GCMCarPlay.ride('E1', 'nope')).ok, false);
+  assert.equal((await win.GCMCarPlay.ride('E1', 'started')).ok, true);
+  assert.equal((await win.GCMCarPlay.ride('E1', 'finished')).ok, true);
+  assert.equal((await win.GCMCarPlay.offerTap('A1')).ok, true);
+  assert.deepEqual(JSON.parse(JSON.stringify(sent.map(s => [s.e, s.p, s.o.platform]))), [
+    ['experience_started', { shop: 'beachmode', ride: 'e1' }, 'carplay'],
+    ['experience_finished', { shop: 'beachmode', ride: 'e1' }, 'carplay'],
+    ['affiliate_tap', { shop: 'beachmode', pin: 'a1' }, 'carplay'],
+  ]);
+  const bare = load({}, () => ok(UNLOCK));
+  assert.equal((await bare.cp.offerTap('a1')).reason, 'no tracker');
+});
+
 test('places(): nothing saved or no places module gives an empty list', async () => {
   const { cp } = load({}, () => ok(UNLOCK));
   assert.equal((await cp.places()).length, 0);

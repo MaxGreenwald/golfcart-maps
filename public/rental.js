@@ -31,7 +31,7 @@
     try { storage.removeItem(KEY); if (a && a.slug) storage.removeItem('gcm_partner_grant:' + a.slug); } catch (_) {}
   }
   /** Unlock with a typed code: {ok:true, access} or {ok:false, reason}. Counts one code use. */
-  async function enter(code, { fetch, storage, win, nowMs = Date.now() }) {
+  async function enter(code, { fetch, storage, win, nowMs = Date.now(), platform } = {}) {
     const c = normalize(code);
     if (!c) return { ok: false, reason: 'That doesn’t look like a rental code.' };
     let r, j = {};
@@ -44,6 +44,17 @@
     try {
       storage.setItem(KEY, JSON.stringify(access));
       if (j.grant) storage.setItem('gcm_partner_grant:' + access.slug, j.grant);
+    } catch (_) {}
+    try {
+      const T = win && win.GCMTrack;
+      const shop = String(access.slug || '').toLowerCase();
+      if (T && shop) {
+        const town = access.shop && access.shop.region_id;
+        const opts = {};
+        if (town) opts.town = town;
+        if (platform) opts.platform = platform;
+        T.track('partner_unlock', { shop, code: String(access.code || '').toLowerCase() }, opts);
+      }
     } catch (_) {}
     return { ok: true, access };
   }

@@ -3,6 +3,7 @@
 #   production: scripts/deploy_worker.sh production analytics --max-ok <Max chat or card id>
 #               (gcm-analytics, used by golfcartmap.com; the script refuses without the ref)
 # STATS_KEY is a secret: wrangler secret put STATS_KEY [--env preview]
+# /shop-stats uses that same key. The partner Worker calls it with ANALYTICS_STATS_KEY.
 name = "gcm-analytics"
 main = "src/index.js"
 compatibility_date = "2026-10-15"
