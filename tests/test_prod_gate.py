@@ -415,6 +415,8 @@ class Allowlist(ProdGate):
         self.assertEqual(proc.returncode, 1, proc.stderr)
         self.assertIn("approval allowlist is missing", proc.stderr)
         self.assertFalse(os.path.exists(self.env["GCM_BOT_LOG"]))
+        # The default path only counts as missing where it really is (CI). On the box
+        # the real allowlist exists, so there the gate must name it and still refuse chat-123.
         self.env.pop("GCM_DEPLOY_REFS", None)
         proc = self.run_script(
             os.path.join(d, "scripts/prod_gate.sh"),
@@ -423,7 +425,8 @@ class Allowlist(ProdGate):
         )
         self.assertEqual(proc.returncode, 1, proc.stderr)
         self.assertIn("/workspace/gcm/approvals/deploy_refs.json", proc.stderr)
-        self.assertIn("approval allowlist is missing", proc.stderr)
+        if not os.path.exists("/workspace/gcm/approvals/deploy_refs.json"):
+            self.assertIn("approval allowlist is missing", proc.stderr)
 
     def test_invalid_and_unreadable_allowlist_refused(self):
         bad = os.path.join(self.tmp.name, "bad.json")
