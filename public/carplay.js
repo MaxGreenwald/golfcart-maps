@@ -34,7 +34,7 @@ function maneuvers(r,route){
    risky:!!(l&&l.f),mph:l&&l.s[2]&&l.s[2]!==99?l.s[2]:null,lat:s.ll[0],lon:s.ll[1],text:s.text,short}})}
 // Live guidance for CarPlay through the SAME engine the phone uses (GCMFollow.engine). Native sends every GPS fix
 // and only renders what comes back (card index, distances, map heading, reroute, arrival).
-let cpNav=null,cpLast=null,cpPlan=null,cpArrived=false;
+let cpNav=null,cpLast=null,cpPlan=null,cpArrived=false,cpNotes=[],cpStory='',cpSpeak={phase:'idle'};
 let cpNudge=[],cpNudgeAt=0,cpNudgeSaid=new Set(),cpHomeApi=null,cpHomeKey='';
 function remindMuted(){
  try{if(window.GCMFollow&&GCMFollow.isMuted())return true}catch(_){}
@@ -56,6 +56,10 @@ async function refreshCpNudge(lat,lon){
  const GS=window.GCMRemind;
  const battery=window.GCMRange?(GCMRange.load().battery??100):100;
  cpNudge=GS.nudges({now:new Date(),returnBy:sh.return_by||'',travelMin,homeMi,rangeMi:sh.range_mi,batteryPct:battery})}
+function voiceOff(){
+ try{if(window.GCMFollow&&GCMFollow.isMuted())return true}catch(_){}
+ try{if(localStorage.getItem('gcm_voice_muted')==='1'||localStorage.getItem('gcm_nav_mute')==='1')return true}catch(_){}
+ return false}
 const navOut=(st,reroute,say)=>({idx:st.idx,off:Math.round(st.off),along:Math.round(st.along),toNext:Math.round(st.toNext),remaining:Math.round(st.remaining),arrived:!!st.arrived,
  bearing:st.bearing==null?null:Math.round(st.bearing),course:st.course==null?null:Math.round(st.course),reroute:reroute||null,say:say||null});
 
@@ -88,8 +92,12 @@ window.GCMCarPlay={
  // Ordered stops of one experience with distance from lat/lon (meters, null without a fix). coupon: the matching partner offer's code, if any.
  async stops(id,lat,lon){const x=await xpLoad();if(!x.ok)return x;const e=(x.j.experiences||[]).find(e=>String(e.id)===String(id));if(!e)return {ok:false,reason:'Experience not found'};
   const af=x.j.affiliates||[];
-  return {ok:true,title:e.title||'',stops:(e.stops||[]).filter(s=>s.lat!==null&&s.lon!==null&&isFinite(+s.lat)&&isFinite(+s.lon)).map(s=>{const a=af.find(a=>(s.affiliate_id&&a.id===s.affiliate_id)||(a.name&&a.name===s.name));
-   return {name:s.name||'Stop',category:s.category||'',lat:+s.lat,lon:+s.lon,meters:lat==null?null:xpDist(+lat,+lon,+s.lat,+s.lon),coupon:a&&a.coupon||''}})}},
+  const stops=(e.stops||[]).filter(s=>s.lat!==null&&s.lon!==null&&isFinite(+s.lat)&&isFinite(+s.lon)).map(s=>{const a=af.find(a=>(s.affiliate_id&&a.id===s.affiliate_id)||(a.name&&a.name===s.name));
+   const GS=window.GCMStories;
+   const note=GS?GS.storyLine(s.note):String(s.note||'').replace(/\s+/g,' ').trim();
+   return {name:s.name||s.label||'Stop',category:s.category||'',lat:+s.lat,lon:+s.lon,note,meters:lat==null?null:xpDist(+lat,+lon,+s.lat,+s.lon),coupon:a&&a.coupon||''}});
+  cpNotes=stops.map(s=>({name:s.name,lat:s.lat,lon:s.lon,note:s.note}));
+  return {ok:true,title:e.title||'',stops}},
  async status(){await ready();return {region:REG&&REG.id,regionName:REG&&REG.short,mode:MODE,center:REG&&REG.center,
   regions:REGIONS.map(r=>({id:r.id,name:r.short||r.name,center:r.center,hidden:!!r.hidden})),range:GCMRange.rangeFor(),battery:(GCMRange.load().battery??100)}},
  // vehicle = phone Settings switch (localStorage 'gcm-veh', values 'golf_cart' or 'lsv', default 'lsv'); setMode changes it for phone + CarPlay
@@ -107,18 +115,25 @@ window.GCMCarPlay={
   const lr=await asCarPlay(()=>window.testRoute([from.lat,from.lon],[to.lat,to.lon],useRisky,Number.isFinite(heading)?heading:null));const r=window._lastDetail;
   if(!lr||!r)return {ok:false,reason:window._routeFail||GCMRule.noRoute(RULE)};
   const route=window.navStepsFor(r,dest||'');cpLast=route;
+  cpStory=window.GCMStories?window.GCMStories.matchNote(cpNotes,to,dest||''):'';
   const line=route.pts.map(p=>[+p[0].toFixed(6),+p[1].toFixed(6)]);
   return {ok:true,mode:MODE,region:REG.id,meters:Math.round(r.dist),miles:lr.mi,roundTripMiles:lr.rt,minutes:lr.min,range:lr.range,
    risky:lr.risky,line,maneuvers:maneuvers(r,route)}},
  // Start live guidance on the last plan() (Go, or after a reroute plan). Same engine as the phone.
  // Speech comes from the phone's promptPlan too (t459u): native only speaks `say` through GCMVoice, never its own timing.
- navStart(){if(!cpLast)return {ok:false,reason:'no plan'};cpNav=GCMFollow.engine(cpLast);cpPlan=GCMFollow.promptPlan();cpArrived=false;return {ok:true,steps:cpLast.steps.length,say:cpLast.steps[0].text}},
+ navStart(){if(!cpLast)return {ok:false,reason:'no plan'};cpNav=GCMFollow.engine(cpLast);cpPlan=GCMFollow.promptPlan();cpArrived=false;cpSpeak={phase:'idle'};return {ok:true,steps:cpLast.steps.length,say:cpLast.steps[0].text}},
  // One GPS fix {lat,lon,course,speed,accuracy,t (ms)}. reroute: {reason, course} once when the phone rules say so.
  navFix(f){if(!cpNav||!f)return null;const now=Number.isFinite(+f.t)&&f.t!==null?+f.t:Date.now();
   const st=cpNav.fix({latitude:+f.lat,longitude:+f.lon,heading:f.course>=0?+f.course:null,speed:f.speed>=0?+f.speed:null},now);
   // "wrong way" is the on-the-line reversal (Calle del Oro). The native nav log stores this reason.
   const rr=cpNav.offCheck(now)?{reason:(st.wrong?'wrong way, ':'')+'off route '+Math.round(st.off)+' m',course:st.course}:null;if(rr)cpNav.reset();
-  let say=null;if(rr)say='Rerouting';else if(st.arrived){if(!cpArrived){cpArrived=true;say=cpLast.steps[cpLast.steps.length-1].text}}else say=cpPlan.update(st,f.speed>=0?+f.speed:null);
+  let say=null;if(rr)say='Rerouting';else if(st.arrived){const last=cpLast.steps[cpLast.steps.length-1];
+   // With a shop note, the callout is the same "You've arrived" line as the phone, then the note on the next fix.
+   // Without a note, the callout stays the arrive step ("Arrive at X") so other trips are unchanged.
+   const GS=window.GCMStories;
+   const callout=cpStory&&GS?GS.arrivalLines(last.name||'',cpStory,'').callout:last.text;
+   const step=GS?GS.onArrive(cpSpeak,{arrived:true,callout,story:cpStory}):{state:{phase:'done'},say:cpArrived?null:last.text};
+   cpSpeak=step.state;cpArrived=true;say=voiceOff()?null:step.say}else say=cpPlan.update(st,f.speed>=0?+f.speed:null);
   if(window.GCMRemind&&now-cpNudgeAt>60000){cpNudgeAt=now;refreshCpNudge(+f.lat,+f.lon).catch(()=>{})}
   if(!say&&!remindMuted()){const n=cpNudge.find(x=>!cpNudgeSaid.has(x.id));if(n){cpNudgeSaid.add(n.id);say=n.text}}
   return navOut(st,rr,say)},
