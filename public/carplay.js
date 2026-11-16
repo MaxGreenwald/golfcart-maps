@@ -17,6 +17,11 @@ async function regionFor(lat,lon){if(REG&&inBox(REG,lat,lon))return;const r=REGI
 const CP_EVENTS={session:1,route_started:1,route_completed:1};
 function cpTrack(name,props){if(!CP_EVENTS[name])return {ok:false,reason:'not allowed'};const p={};if(props&&props.mi!=null&&isFinite(+props.mi))p.mi=Math.round(+props.mi*2)/2;
  if(!window.GCMTrack)return {ok:false,reason:'no tracker'};window.GCMTrack.track(name,p,name==='session'?{platform:'carplay',force:true}:CP);return {ok:true,event:name,platform:'carplay',props:p}}
+// Shop activity for the rental saved on this phone. Tokens only (slug, experience id, affiliate id).
+function shopTrack(e,props){if(!window.GCMTrack)return {ok:false,reason:'no tracker'};let a=null;try{a=JSON.parse(localStorage.getItem(XP_KEY)||'null')}catch(_){}
+ const shop=a&&a.slug?String(a.slug).toLowerCase():'';if(!shop)return {ok:false,reason:'no rental'};
+ const p={shop};if(props&&props.ride)p.ride=String(props.ride).toLowerCase();if(props&&props.pin)p.pin=String(props.pin).toLowerCase();
+ const town=a.shop&&a.shop.region_id;window.GCMTrack.track(e,p,{platform:'carplay',town:town||undefined});return {ok:true,event:e}}
 // CarPlay maneuvers are the phone's steps (navStepsFor -> GCMNav.buildSteps), one for one, so the engine's step
 // index (navFix idx) is the CarPlay card index (t459u). Only CarPlay display fields are added here.
 // meters = length of the road AFTER it; toMeters = distance driven to reach it; turn = signed angle (+ right).
@@ -43,13 +48,17 @@ async function xpLoad(){let a=null;try{a=JSON.parse(localStorage.getItem(XP_KEY)
  return {ok:true,slug:a.slug,j:a}}
 window.GCMCarPlay={
  // Rental code typed in CarPlay (Max t449u): one code use, saved like the phone's Settings row.
- async enterCode(code){if(!window.GCMRental)return {ok:false,reason:'Enter your code in the phone app.'};const r=await GCMRental.enter(code,{fetch:fetch.bind(window),storage:localStorage,win:window});
+ async enterCode(code){if(!window.GCMRental)return {ok:false,reason:'Enter your code in the phone app.'};const r=await GCMRental.enter(code,{fetch:fetch.bind(window),storage:localStorage,win:window,platform:'carplay'});
   return r.ok?{ok:true,shop:(r.access.shop&&r.access.shop.name)||r.access.slug,experiences:r.access.experiences.length}:r},
  // Active rental shop for the CarPlay settings screen, or {ok:false}.
  rental(){const a=window.GCMRental&&GCMRental.load(localStorage);return a?{ok:true,shop:(a.shop&&a.shop.name)||a.slug,code:a.code}:{ok:false}},
  removeRental(){if(window.GCMRental)GCMRental.remove(localStorage);return {ok:true}},
  version:2,
  track:cpTrack,
+ // Ride start/finish and offer taps from the CarPlay scene. The phone page (p.js) records the same events.
+ ride(id,phase){const e=phase==='finished'?'experience_finished':phase==='started'?'experience_started':'';
+  if(!e||!id)return {ok:false,reason:'bad ride'};return shopTrack(e,{ride:id})},
+ offerTap(id){if(!id)return {ok:false,reason:'bad offer'};return shopTrack('affiliate_tap',{pin:id})},
  // Experiences for the renter access on this phone, or {ok:false,reason}. vehicle: the shop's rules (golf_cart unless 'lsv').
  async experiences(){const x=await xpLoad();if(!x.ok)return x;const j=x.j,sh=j.shop||{};
   return {ok:true,shop:{slug:x.slug,name:sh.name||'',vehicle:sh.vehicle==='lsv'?'lsv':'golf_cart'},

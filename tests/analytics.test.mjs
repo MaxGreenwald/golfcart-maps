@@ -91,6 +91,21 @@ test('/api/e forwards only the sanitized row and always answers 204', async () =
   } finally { globalThis.fetch = realFetch }
 });
 
+test('partner shop events keep shop, code, ride and pin tokens and drop everything else', () => {
+  const code = sanitize({ ...base, e: 'partner_unlock', t: 'sd', p: { shop: 'BeachMode', code: 'AB12CD3', email: 'a@b.c', lat: 32.8, name: 'Max' } });
+  assert.deepEqual(code.props, { shop: 'beachmode', code: 'ab12cd3' });
+  assert.ok(!JSON.stringify(code).includes('@'));
+  assert.ok(!JSON.stringify(code).includes('32.8'));
+  const ride = sanitize({ ...base, e: 'experience_started', p: { shop: 'beach-mode', ride: 'E1E1E1E1E1E1E1E1', note: 'meet at the pier' } });
+  assert.deepEqual(ride.props, { shop: 'beach-mode', ride: 'e1e1e1e1e1e1e1e1' });
+  const done = sanitize({ ...base, e: 'experience_finished', p: { shop: 'beach-mode', ride: 'e1e1e1e1e1e1e1e1' } });
+  assert.equal(done.props.ride, 'e1e1e1e1e1e1e1e1');
+  const tap = sanitize({ ...base, e: 'affiliate_tap', p: { shop: 'beach-mode', pin: 'A1A1A1A1A1A1A1A1', offer: '25% off' } });
+  assert.deepEqual(tap.props, { shop: 'beach-mode', pin: 'a1a1a1a1a1a1a1a1' });
+  assert.equal(sanitize({ ...base, e: 'partner_unlock', p: { shop: 'ok', code: 'not a code!!!' } }).props.code, undefined);
+  assert.equal(sanitize({ ...base, e: 'affiliate_tap', p: { shop: 'has spaces' } }).props.shop, 'has_spaces');
+});
+
 test('App Store badge event is accepted (and legacy testflight_click still counts)', () => {
   for (const e of ['app_store_click', 'testflight_click']) {
     const r = sanitize({ v: 1, e, pl: 'web', i: 'abcdefgh12', s: 'abcdefgh34', p: { position: 'app_section' } });

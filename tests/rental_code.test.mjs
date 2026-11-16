@@ -32,6 +32,18 @@ test('enter in the app calls golfcartmap.com', async () => {
   assert.match(calls[0], /^https:\/\/golfcartmap\.com\/api\/partner\/public-code\/unlock/);
 });
 
+test('enter records one unlock for the shop, and a failed code records nothing', async () => {
+  const sent = [];
+  const win = { GCMTrack: { track: (e, p, o) => sent.push({ e, p, o }) } };
+  const r = await R.enter('AB12CD3', { fetch: okFetch([]), storage: mem(), win, nowMs: 5, platform: 'carplay' });
+  assert.equal(r.ok, true);
+  assert.deepEqual(sent, [{ e: 'partner_unlock', p: { shop: 'beachmode', code: 'ab12cd3' }, o: { platform: 'carplay' } }]);
+  sent.length = 0;
+  const bad = async () => ({ ok: false, json: async () => ({ error: 'Invalid access code' }) });
+  await R.enter('AB12CD3', { fetch: bad, storage: mem(), win });
+  assert.equal(sent.length, 0);
+});
+
 test('enter: worker error is shown, nothing saved; bad code never calls the worker', async () => {
   const st = mem(), calls = [];
   const bad = async u => { calls.push(u); return { ok: false, json: async () => ({ error: 'Code already used' }) }; };

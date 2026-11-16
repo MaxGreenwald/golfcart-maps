@@ -2,6 +2,7 @@
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
 import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL } from '../../../lib/partner.js';
+import { fetchShopStats } from '../../../lib/shop_stats.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -650,6 +651,17 @@ export default {
       const a = await access(null);
       if (!a.shopId) return deny(a);
       return doFetch('/shops/' + a.shopId + '/bundle');
+    }
+    if (u.pathname === '/shop/stats' && req.method === 'GET') {
+      const a = await access(null);
+      if (!a.shopId) return deny(a);
+      const bundle = await (await doFetch('/shops/' + a.shopId + '/bundle')).json();
+      const slug = bundle.shop && bundle.shop.slug;
+      if (!slug) return J({ error: 'not found' }, 404);
+      const days = u.searchParams.get('days') || '30';
+      return J(await fetchShopStats(globalThis.fetch.bind(globalThis), {
+        base: env.ANALYTICS_STATS_URL, key: env.ANALYTICS_STATS_KEY, shop: slug, days,
+      }));
     }
     if (u.pathname === '/shop' && req.method === 'PATCH') {
       const body = await readBody();

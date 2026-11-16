@@ -13,6 +13,10 @@
 #   DEV_AUTH_EMAIL           if set and Google secrets missing, /auth/dev accepts this email
 #   SUPER_ADMINS             comma emails (default max@golfcartmap.com,maxgreenwald.assistant@gmail.com)
 #   PUBLIC_ORIGIN            e.g. https://partner-portal-mvp.golfcart-maps.pages.dev (OAuth redirect)
+# Shop activity card (GET /shop/stats). The URL is a var; the key is a secret
+# (same value as the analytics Worker's STATS_KEY):
+#   wrangler secret put ANALYTICS_STATS_KEY [--env preview]
+# Until that secret is set, /shop/stats answers ready:false and the admin says so.
 name = "gcm-partner"
 main = "src/index.js"
 compatibility_date = "2026-10-15"
@@ -21,6 +25,7 @@ workers_dev = true
 [vars]
 SUPER_ADMINS = "max@golfcartmap.com,maxgreenwald.assistant@gmail.com"
 DEV_AUTH_EMAIL = "maxgreenwald.assistant@gmail.com"
+ANALYTICS_STATS_URL = "https://gcm-analytics.maxgreenwald-assistant.workers.dev"
 
 [[durable_objects.bindings]]
 name = "STORE"
@@ -35,6 +40,7 @@ name = "gcm-partner-preview"
 [env.preview.vars]
 SUPER_ADMINS = "max@golfcartmap.com,maxgreenwald.assistant@gmail.com"
 DEV_AUTH_EMAIL = "maxgreenwald.assistant@gmail.com"
+ANALYTICS_STATS_URL = "https://gcm-analytics-preview.maxgreenwald-assistant.workers.dev"
 [[env.preview.durable_objects.bindings]]
 name = "STORE"
 class_name = "PartnerStore"
