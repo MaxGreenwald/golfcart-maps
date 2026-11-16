@@ -7,8 +7,9 @@
 #       -> wrangler deploy (gcm-partner / gcm-analytics)
 #
 # Production uses the same gate as the web deploy (scripts/prod_gate.sh), before any
-# wrangler call. It exits 1 when --max-ok is missing, the branch is not master,
-# that worker directory is dirty, or HEAD is not origin/master.
+# wrangler call. It exits 1 when --max-ok is missing or not on the deploy allowlist,
+# the branch is not master, that worker directory is dirty, or HEAD is not origin/master.
+# After a successful production deploy, --mark-used records a one_time ref.
 #
 # WRANGLER overrides the wrangler binary (same default as scripts/deploy_web.sh).
 # Needs CLOUDFLARE_API_TOKEN in the environment.
@@ -76,6 +77,7 @@ fi
 
 if [ "$mode" = production ]; then
   ( cd "$dir" && $W deploy )
+  bash scripts/prod_gate.sh --mark-used --max-ok "$max_ok"
 else
   ( cd "$dir" && $W deploy --env preview )
 fi
