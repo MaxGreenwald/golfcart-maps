@@ -1212,8 +1212,8 @@ function bindApp() {
         return_lat: $('#rentReturnLat').value,
         return_lon: $('#rentReturnLon').value,
       }) });
-      flash(true, 'Reminders saved');
       await refreshShop();
+      flash(true, 'Reminders saved');
     } catch (e) { flash(false, e.message); }
   };
 
