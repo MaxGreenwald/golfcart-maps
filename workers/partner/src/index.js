@@ -326,7 +326,7 @@ export class PartnerStore extends DurableObject {
         if (!this.one('SELECT id FROM shops WHERE id=?', sid)) return J({ error: 'not found' }, 404);
         const title = String(body.title || '').trim();
         if (!title) return J({ error: 'Title required' }, 400);
-        const stops = cleanStops(Array.isArray(body.stops) ? body.stops : []).map(withPark);
+        const stops = cleanStops(Array.isArray(body.stops) ? body.stops.map(withPark) : []);
         const eid = id();
         const t = now();
         this.sql.exec(
@@ -341,7 +341,7 @@ export class PartnerStore extends DurableObject {
         if (!ex) return J({ error: 'not found' }, 404);
         const title = body.title != null ? String(body.title).trim() : ex.title;
         const description = body.description != null ? String(body.description) : ex.description;
-        const stops = body.stops != null ? JSON.stringify(cleanStops(Array.isArray(body.stops) ? body.stops : []).map(withPark)) : ex.stops_json;
+        const stops = body.stops != null ? JSON.stringify(cleanStops(Array.isArray(body.stops) ? body.stops.map(withPark) : [])) : ex.stops_json;
         const ns = body.nearest_start != null ? (nearestStart(body.nearest_start) ? 1 : 0) : (nearestStart(ex.nearest_start) ? 1 : 0);
         this.sql.exec('UPDATE experiences SET title=?, description=?, stops_json=?, nearest_start=?, updated_at=? WHERE id=?', title, description, stops, ns, now(), eid);
         let pushed = 0;
