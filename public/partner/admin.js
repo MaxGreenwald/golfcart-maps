@@ -58,6 +58,14 @@ function brandColorFields(stored) {
     </div>`;
 }
 
+async function uploadShopPhoto(file, kind) {
+  if (!window.GCMPhoto) throw new Error('Photo upload did not load');
+  const prepared = await GCMPhoto.prepare(file);
+  const j = await api('/shop/media', { method: 'POST', body: JSON.stringify({ kind, data_base64: prepared.data_base64 }) });
+  if (!j.url) throw new Error('Upload did not return a photo link');
+  return j.url;
+}
+
 function flash(ok, text) {
   state.msg = ok ? text : '';
   state.err = ok ? '' : text;
@@ -160,6 +168,7 @@ function parkFields(s) {
 }
 
 function stopRowHtml(s = {}, i = 0, opts = {}) {
+  const withPhoto = !!(opts && opts.photo);
   const has = Number.isFinite(numCoord(s.lat)) && Number.isFinite(numCoord(s.lon));
   return `<div class="stop" data-i="${i}">
     <div>
@@ -188,6 +197,11 @@ function stopRowHtml(s = {}, i = 0, opts = {}) {
       <label>Note (optional)</label>
       <input data-k="note" placeholder="What to do here" value="${esc(s.note || '')}">
       ${opts.parking ? parkFields(s) : ''}
+      ${withPhoto ? `<label>Photo (optional)</label>
+      <input type="file" data-k="photoFile" accept="image/jpeg,image/png,image/webp">
+      <input type="hidden" data-k="photo" value="${esc(s.photo || '')}">
+      <img data-k="photoPreview" alt="" ${/^https?:\/\//i.test(s.photo || '') ? `src="${esc(s.photo)}"` : 'hidden'}>
+      <p class="muted" data-k="photoNote">JPEG, PNG, or WebP, up to 1.5 MB. Saved when you save the experience.</p>` : ''}
     </div>
     <div class="stop-actions">
       <button type="button" class="btn alt moveUp">Move up</button>
@@ -198,7 +212,7 @@ function stopRowHtml(s = {}, i = 0, opts = {}) {
 }
 
 function stopEditor(stops) {
-  const rows = (stops && stops.length ? stops : [{}]).map((s, i) => stopRowHtml(s, i, { parking: true })).join('');
+  const rows = (stops && stops.length ? stops : [{}]).map((s, i) => stopRowHtml(s, i, { parking: true, photo: true })).join('');
   return `<div class="stops" id="stopList">${rows}</div>
     <p class="muted">Places via Photon / OpenStreetMap. Or drop a pin and type your own name for unofficial spots.</p>
     <p class="muted">Move up and Move down set the order. Save to keep it.</p>
@@ -523,7 +537,12 @@ function shopView() {
     <input id="brandPhone" inputmode="tel" placeholder="858-555-0100" value="${esc(s.phone || '')}">
     <p class="muted">Renters who unlocked your page can call or text this number. A text includes their location. Nothing is stored here.</p>
     <div class="row">
-      <div><label>Logo URL (optional)</label><input id="brandLogo" value="${esc(s.logo_url || '')}" placeholder="https://…"></div>
+      <div><label>Logo URL (optional)</label><input id="brandLogo" value="${esc(s.logo_url || '')}" placeholder="https://…">
+        <label for="brandLogoFile">Or upload a logo</label>
+        <input type="file" id="brandLogoFile" accept="image/jpeg,image/png,image/webp">
+        <p class="muted" id="logoFileNote">JPEG, PNG, or WebP, up to 1.5 MB. Then click Save brand.</p>
+        <img id="logoPreview" alt="" ${/^https?:\/\//i.test(s.logo_url || '') ? `src="${esc(s.logo_url)}"` : 'hidden'}>
+      </div>
       ${brandColorFields(s.color)}
     </div>
     ${s.page_template_id ? '<label class="ns-row"><input type="checkbox" id="brandPush" checked> Update the brand at your other locations</label>' : ''}
@@ -944,6 +963,22 @@ function wireStop(row) {
     paintPark();
   };
   $('.remStop', row).onclick = () => { row.remove(); refreshMoveButtons(); };
+  const photoFile = $('[data-k=photoFile]', row);
+  if (photoFile) photoFile.onchange = async () => {
+    const file = photoFile.files && photoFile.files[0];
+    photoFile.value = '';
+    const note = $('[data-k=photoNote]', row);
+    if (!file) return;
+    try {
+      if (note) note.textContent = 'Uploading photo...';
+      const url = await uploadShopPhoto(file, 'stop');
+      const hidden = $('[data-k=photo]', row);
+      if (hidden) hidden.value = url;
+      const img = $('[data-k=photoPreview]', row);
+      if (img) { img.hidden = false; img.src = url; }
+      if (note) note.textContent = 'Photo ready. Save the experience to keep it.';
+    } catch (e) { if (note) note.textContent = e.message; }
+  };
   const up = $('.moveUp', row);
   const down = $('.moveDown', row);
   if (up) up.onclick = () => moveStop(row, -1);
@@ -967,7 +1002,7 @@ function wirePlaces() {
     // Fill an empty first row, else append.
     const blank = [...list.querySelectorAll('.stop')].find(r => !$('[data-k=lat]', r).value);
     const wrap = document.createElement('div');
-    wrap.innerHTML = stopRowHtml({ label: p.name, lat: p.lat, lon: p.lon, note: p.note }, list.children.length, { parking: true });
+    wrap.innerHTML = stopRowHtml({ label: p.name, lat: p.lat, lon: p.lon, note: p.note }, list.children.length, { parking: true, photo: true });
     const nr = wrap.firstElementChild;
     if (blank) list.replaceChild(nr, blank); else list.appendChild(nr);
     wireStop(nr);
@@ -1108,6 +1143,8 @@ function readStops() {
     const plat = $('[data-k=park_lat]', row) ? numCoord($('[data-k=park_lat]', row).value) : NaN;
     const plon = $('[data-k=park_lon]', row) ? numCoord($('[data-k=park_lon]', row).value) : NaN;
     if (Number.isFinite(plat) && Number.isFinite(plon)) { stop.park_lat = plat; stop.park_lon = plon; }
+    const photo = ($('[data-k=photo]', row) && $('[data-k=photo]', row).value.trim()) || '';
+    if (/^https?:\/\//i.test(photo)) stop.photo = photo;
     return stop;
   }).filter(s => s.label);
 }
@@ -1125,7 +1162,7 @@ function fillStopList(stops) {
   const list = $('#stopList');
   if (!list) return;
   const rows = (stops && stops.length ? stops : [{}]);
-  list.innerHTML = rows.map((s, i) => stopRowHtml(s, i, { parking: true })).join('');
+  list.innerHTML = rows.map((s, i) => stopRowHtml(s, i, { parking: true, photo: true })).join('');
   list.querySelectorAll('.stop').forEach(wireStop);
   refreshMoveButtons();
 }
@@ -1314,6 +1351,21 @@ function bindApp() {
   });
 
   wireBrandColor();
+  const logoFile = $('#brandLogoFile');
+  if (logoFile) logoFile.onchange = async () => {
+    const file = logoFile.files && logoFile.files[0];
+    logoFile.value = '';
+    const note = $('#logoFileNote');
+    if (!file) return;
+    try {
+      if (note) note.textContent = 'Uploading logo...';
+      const url = await uploadShopPhoto(file, 'logo');
+      $('#brandLogo').value = url;
+      const img = $('#logoPreview');
+      if (img) { img.hidden = false; img.src = url; }
+      if (note) note.textContent = 'Logo ready. Click Save brand to keep it.';
+    } catch (e) { if (note) note.textContent = e.message; }
+  };
 
   const saveBrand = $('#saveBrand');
   if (saveBrand) saveBrand.onclick = async () => {
@@ -1386,7 +1438,7 @@ function bindApp() {
   if (addStop) addStop.onclick = () => {
     const list = $('#stopList');
     const wrap = document.createElement('div');
-    wrap.innerHTML = stopRowHtml({}, list.children.length, { parking: true });
+    wrap.innerHTML = stopRowHtml({}, list.children.length, { parking: true, photo: true });
     const row = wrap.firstElementChild;
     list.appendChild(row);
     wireStop(row);
