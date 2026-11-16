@@ -1,0 +1,110 @@
+{
+ "slug": "palm-desert",
+ "region": "coachella",
+ "name": "Palm Desert",
+ "state": "CA",
+ "seo_title": "Palm Desert and Coachella Valley golf cart map and LSV map",
+ "question_title": "Can you drive a golf cart in Palm Desert and the Coachella Valley?",
+ "answer_short": "Yes, with limits. Street-legal LSVs may use roads posted 35 mph or less. Plain golf carts are limited to streets posted 25 mph or less under state law, and Palm Desert runs a city permit program with signed golf cart routes. Highway 111 and Highway 74 stay red on the map.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Streets posted 25 mph or less; signed city cart routes with a Palm Desert permit",
+  "speed_line": "25 mph",
+  "notes": "The map shows only roads posted 25 mph or less"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Cross faster roads only at about 90 degree intersections"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts (state)",
+   "rule": "No golf cart on a highway except in a speed zone of 25 mph or less, unless a local golf cart transportation plan allows more",
+   "citation": "CVC 21716",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=21716.&lawCode=VEH"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "No LSV on a roadway with a speed limit over 35 mph; may cross at an intersection of about 90 degrees that begins and ends on a 35 mph road",
+   "citation": "CVC 21260",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=21260.&lawCode=VEH"
+  },
+  {
+   "topic": "Palm Desert permit",
+   "rule": "City golf cart permit, licensed driver, insurance, and equipment including lights, turn signals, mirrors, horn, windshield and seat belts",
+   "citation": "Palm Desert Code 10.76.100 to 10.76.120",
+   "source_url": "https://ecode360.com/43846799"
+  },
+  {
+   "topic": "Palm Desert roads",
+   "rule": "Permitted carts may use streets posted 25 mph or less, faster streets only on designated cart routes, and may not use state highways except to cross at controlled intersections on the route map",
+   "citation": "Palm Desert Code 10.76.110",
+   "source_url": "https://ecode360.com/43846799"
+  },
+  {
+   "topic": "Palm Desert hours",
+   "rule": "Permitted carts on public streets only from one hour before sunrise to one hour after sunset",
+   "citation": "Palm Desert Code 10.76.110",
+   "source_url": "https://ecode360.com/43846799"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Highway 111",
+   "rule": "Major highway; the map keeps it red for golf carts and LSVs",
+   "crossings_ok": true
+  },
+  {
+   "name": "Highway 74 (Pines to Palms Hwy)",
+   "rule": "Major highway; the map keeps it red for golf carts and LSVs",
+   "crossings_ok": true
+  },
+  {
+   "name": "Interstate 10",
+   "rule": "Freeway",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive a golf cart on Highway 111 in Palm Desert?",
+   "a": "No. The map keeps Highway 111 red for golf carts and LSVs. Palm Desert's code lets permitted carts cross state highways only at controlled intersections shown on the city golf cart route map."
+  },
+  {
+   "q": "Do I need a permit for a golf cart in Palm Desert?",
+   "a": "Palm Desert's code requires a city golf cart permit for operation on public streets, with a licensed driver, insurance, and equipment such as lights, turn signals, mirrors, a horn, a windshield and seat belts."
+  },
+  {
+   "q": "Does the map show Palm Desert's golf cart routes?",
+   "a": "Not yet. Palm Desert's signed cart routes are not in our data, so the map shows plain golf carts only on roads posted 25 mph or less. Switch to LSV for street-legal LSVs."
+  },
+  {
+   "q": "Which Coachella Valley cities does the map cover?",
+   "a": "Palm Desert, Indian Wells and La Quinta. Other valley cities, including the City of Coachella and Palm Springs, are not covered yet."
+  }
+ ],
+ "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Palm Desert publishes its golf cart rules in the city code.",
+   "name": "Palm Desert Code Chapter 10.76, Golf Carts (eCode360)",
+   "url": "https://ecode360.com/43846799"
+  }
+ ],
+ "nearby": [],
+ "map_center": [
+  33.7206,
+  -116.378
+ ],
+ "zoom": 15,
+ "published": "2026-11-16",
+ "last_checked": "2026-11-16",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=21716.&lawCode=VEH",
+  "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=21260.&lawCode=VEH",
+  "https://ecode360.com/43846799"
+ ]
+}

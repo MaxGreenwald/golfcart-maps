@@ -1,0 +1,136 @@
+{
+ "slug": "galveston",
+ "region": "galveston",
+ "name": "Galveston",
+ "state": "TX",
+ "seo_title": "Galveston golf cart map and LSV map",
+ "question_title": "Can you drive a golf cart in Galveston?",
+ "answer_short": "Yes, with a license plate and a city permit. Galveston allows golf carts and NEVs on streets posted 35 mph or less, except state highways such as Seawall Blvd, Broadway, Harborside Dr and 61st St, the Pelican Island Causeway, and parts of Avenues O and P. You may cross those at intersections.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Streets posted 35 mph or less, minus the city's banned streets",
+  "speed_line": "35 mph",
+  "notes": "License plate and annual city permit"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Streets posted 35 mph or less, minus the city's banned streets",
+  "speed_line": "35 mph",
+  "notes": "State registration and annual city permit"
+ },
+ "rules": [
+  {
+   "topic": "Banned streets",
+   "rule": "No golf carts or NEVs where posted over 35 mph, on state highway streets (Seawall Blvd, Broadway, Harborside Dr, 61st St, Ferry Rd, FM 3005, FM 188, I-45, SH 168), the Pelican Island Causeway, Avenue O from 53rd to 15th St, or Avenue P from 19th to 53rd St",
+   "citation": "Galveston Code Sec. 34-203 (Ord. 21-023)",
+   "source_url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021"
+  },
+  {
+   "topic": "Plate and permit",
+   "rule": "Golf carts need a license plate and NEVs state registration, plus an annual city permit and decal after a city-approved inspection",
+   "citation": "Galveston Code Secs. 34-204, 34-205",
+   "source_url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021"
+  },
+  {
+   "topic": "East of 103rd St",
+   "rule": "Carts used 103rd St and east also need turn signals, horn, brake lights and seat belts; west-end permits may not drive east of 103rd St",
+   "citation": "Galveston Code Secs. 34-205, 34-208",
+   "source_url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021"
+  },
+  {
+   "topic": "Crossing",
+   "rule": "You may cross a banned street, but not drive along it",
+   "citation": "Galveston Code Sec. 34-209(d)",
+   "source_url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021"
+  },
+  {
+   "topic": "NEV roads (state)",
+   "rule": "A registered neighborhood electric vehicle may use roads posted 45 mph or less under state law, but Galveston limits NEVs to streets posted 35 mph or less",
+   "citation": "Tex. Transp. Code 551.303",
+   "source_url": "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.303"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "Seawall Blvd",
+   "rule": "State highway street (SH 87 / FM 3005)",
+   "crossings_ok": true
+  },
+  {
+   "name": "Broadway",
+   "rule": "State highway street (SH 87)",
+   "crossings_ok": true
+  },
+  {
+   "name": "Harborside Dr",
+   "rule": "State highway street (SH 275)",
+   "crossings_ok": true
+  },
+  {
+   "name": "61st St",
+   "rule": "State highway street (Spur 342)",
+   "crossings_ok": true
+  },
+  {
+   "name": "Ferry Rd, San Luis Pass Rd, Teichman Rd and Fort Point Rd",
+   "rule": "State highway streets",
+   "crossings_ok": true
+  },
+  {
+   "name": "I-45",
+   "rule": "Interstate (state highway system)",
+   "crossings_ok": false
+  },
+  {
+   "name": "Pelican Island Causeway",
+   "rule": "Banned by city ordinance",
+   "crossings_ok": false
+  },
+  {
+   "name": "Avenue O (53rd to 15th St) and Avenue P (19th to 53rd St)",
+   "rule": "Banned by city ordinance",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can you drive a golf cart on Seawall Boulevard?",
+   "a": "No. Seawall Blvd is a state highway street, and Galveston bans golf carts and NEVs on it. You may cross it at an intersection to reach the beach side."
+  },
+  {
+   "q": "Do I need a permit to drive a golf cart in Galveston?",
+   "a": "Yes. Golf carts need a license plate and NEVs need state registration. Both also need an annual city permit and decal after a city-approved inspection. The private-owner permit fee is $25 a year."
+  },
+  {
+   "q": "What changes east of 103rd Street?",
+   "a": "Carts used 103rd St and east need turn signals, a horn, brake lights and seat belts, and riders over age 7 must wear seat belts there. A west-end permit does not allow driving east of 103rd St."
+  },
+  {
+   "q": "Can I drive an LSV on Broadway in Galveston?",
+   "a": "No. Broadway is part of the state highway system, so Galveston bans golf carts and NEVs on it. Cross it at an intersection instead."
+  }
+ ],
+ "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "The City of Galveston answers common golf cart registration questions.",
+   "name": "Golf cart FAQ (City of Galveston)",
+   "url": "https://www.galvestontx.gov/FAQ/Topic?mobile=ON&topic=27"
+  }
+ ],
+ "nearby": [],
+ "map_center": [
+  29.3005,
+  -94.7955
+ ],
+ "zoom": 15,
+ "published": "2026-11-16",
+ "last_checked": "2026-11-16",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+  "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.303",
+  "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404",
+  "https://www.galvestontx.gov/FAQ/Topic?mobile=ON&topic=27"
+ ]
+}

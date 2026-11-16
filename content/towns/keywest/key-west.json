@@ -1,0 +1,93 @@
+{
+ "slug": "key-west",
+ "region": "keywest",
+ "name": "Key West",
+ "state": "FL",
+ "seo_title": "Key West golf cart map and LSV map",
+ "question_title": "Can you drive a golf cart in Key West?",
+ "answer_short": "Street-legal LSVs yes, on roads posted 35 mph or less, which covers Duval Street. Plain golf carts only on streets the city has designated and signed, and we found no official list. If you rent, ask whether your cart is a registered LSV. US 1 stays red where it is posted over 35 mph.",
+ "golf_cart": {
+  "allowed": "limited",
+  "roads": "Designated and signed streets only",
+  "speed_line": "n/a",
+  "notes": "No official street list found; the map shows only cart paths and roads mapped as designated for carts"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered, insured, licensed driver"
+ },
+ "rules": [
+  {
+   "topic": "LSV roads",
+   "rule": "Registered, insured LSVs only on streets posted 35 mph or less; may cross a faster road at an intersection",
+   "citation": "F.S. 316.2122",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.2122"
+  },
+  {
+   "topic": "Golf carts",
+   "rule": "Plain golf carts only on roads a county or city has designated for carts and signed",
+   "citation": "F.S. 316.212",
+   "source_url": "https://www.flsenate.gov/Laws/Statutes/2025/316.212"
+  },
+  {
+   "topic": "Rental seat belts",
+   "rule": "Rental golf carts and LSVs carry a city decal: the driver and front-seat passengers 18 and older wear seat belts, and everyone under 18 is belted or in a child seat",
+   "citation": "Key West Code Sec. 18-359 (Ord. file 22-3235, adopted Nov 1, 2022)",
+   "source_url": "https://keywest.legistar.com/LegislationDetail.aspx?GUID=E27BC2B5-64DA-455B-AC32-BE9BD7B41BF5&ID=5852873&Options=&Search="
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 1 (Overseas Highway) where posted over 35 mph",
+   "rule": "No LSVs or golf carts",
+   "crossings_ok": true
+  }
+ ],
+ "faq": [
+  {
+   "q": "Can I drive an LSV on Duval Street?",
+   "a": "Yes, if it is a registered, street-legal LSV. Duval Street is posted 20 mph in our data, under the 35 mph LSV limit."
+  },
+  {
+   "q": "Are Key West rental golf carts street legal?",
+   "a": "Key West rental shops rent golf carts and low-speed vehicles for city streets (Key West Code Sec. 18-359). Ask whether yours is a registered LSV with a plate. Only an LSV may use streets posted up to 35 mph; a plain golf cart is limited to designated streets."
+  },
+  {
+   "q": "Do you have to wear a seat belt in a Key West golf cart?",
+   "a": "In a rental, the city requires a decal that says the driver and front-seat passengers 18 and older must be belted, and everyone under 18 must be belted or in a child seat, under Florida law."
+  },
+  {
+   "q": "Where can I drive my LSV in Key West?",
+   "a": "Roads posted 35 mph or less (F.S. 316.2122). Faster stretches of US 1 stay red; you may cross them at an intersection. Posted signs win."
+  },
+  {
+   "q": "Can I drive a plain golf cart on Key West streets?",
+   "a": "Only on streets the city has designated and signed for golf carts (F.S. 316.212). We have not found an official city street list, so the map shows plain golf carts only on cart paths and the few roads mapped as designated for carts."
+  }
+ ],
+ "rental_shops": [],
+ "local_resources": [
+  {
+   "lead": "Key West's 2022 ordinance puts seat belt decals on rental golf carts and LSVs.",
+   "name": "Key West Ordinance file 22-3235 (City of Key West)",
+   "url": "https://keywest.legistar.com/LegislationDetail.aspx?GUID=E27BC2B5-64DA-455B-AC32-BE9BD7B41BF5&ID=5852873&Options=&Search="
+  }
+ ],
+ "nearby": [],
+ "map_center": [
+  24.556,
+  -81.802
+ ],
+ "zoom": 15,
+ "published": "2026-11-16",
+ "last_checked": "2026-11-16",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
+  "https://www.flsenate.gov/Laws/Statutes/2025/316.212",
+  "https://keywest.legistar.com/LegislationDetail.aspx?GUID=E27BC2B5-64DA-455B-AC32-BE9BD7B41BF5&ID=5852873&Options=&Search=",
+  "https://www.flhsmv.gov/safety-center/consumer-education/low-speed-vehicles/"
+ ]
+}

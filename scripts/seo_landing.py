@@ -75,7 +75,7 @@ def render():
 <div class="hero-copy">
 <span class="pill">Free map · {n} beach &amp; golf towns · iPhone + CarPlay</span>
 <h1>Know which roads your golf cart can legally ride.</h1>
-<p class="sub">Green means go, red means skip. Pick your town, hop in the cart, and cruise the roads your city actually allows.</p>
+<p class="sub">The golf cart map for {n} beach and golf towns. Green means go, red means skip. Pick your town, hop in the cart, and cruise the roads your city actually allows.</p>
 <form class="find" id="townFind" action="/map" method="get" role="search">
 <input type="search" id="townQ" name="q" placeholder="Find your town (Port Aransas, 30A, The Villages…)" autocomplete="off" aria-label="Find your town" aria-autocomplete="list" aria-controls="townList">
 <button type="submit">Find map</button>
@@ -86,7 +86,7 @@ def render():
 <p><a class="appstore" href="{APPSTORE}" data-ev="app_store_click" data-p='{{"position":"hero"}}'><img src="/download-on-the-app-store.svg" width="143" height="48" alt="Download on the App Store"></a></p>
 <p class="muted">Works in any browser. App Store live with Apple CarPlay.</p>
 <p><label><input type="checkbox" id="remember"> Always open the map when I visit</label></p>
-<p><a href="/golf-cart-maps">Golf cart maps by town</a> · <a href="/lsv">LSV map app</a></p>
+<p><a href="/golf-cart-maps">Golf cart maps by town</a> · <a href="/lsv">LSV map app</a> · <a href="/app">Golf Cart Maps app</a></p>
 </div>
 <figure class="hero-visual">
 <img src="/hero-map.jpg" width="900" height="506" alt="Golf cart map from Golf Cart Maps: legal golf cart and LSV roads in green, roads to avoid in red" loading="eager">

@@ -114,6 +114,9 @@
 /lsv/ /lsv 301
 /for-rental-shops/ /for-rental-shops 301
 /for-manufacturers/ /for-manufacturers 301
+/app/ /app 301
+/golf-cart-map / 301
+/golf-cart-map/ / 301
 /partner /partner/index.html 200
 /partner/ /partner/index.html 200
 /partner/* /partner/index.html 200

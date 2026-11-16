@@ -30,6 +30,9 @@ def want(rs, cur):
     red = "".join(f"/{r['slug']}/ /{r['slug']} 301\n" for r in rs) + "/map/ /map 301\n/map/:slug /map 200\n/map/:slug/ /map 200\n"
     # Static SEO hubs. Self-canonical pages (not 301 to home): /golf-cart-maps and /lsv.
     red += ("/golf-cart-maps/ /golf-cart-maps 301\n/lsv/ /lsv 301\n/for-rental-shops/ /for-rental-shops 301\n/for-manufacturers/ /for-manufacturers 301\n")
+    # /app is the iPhone app page (scripts/seo_hubs.py). /golf-cart-map (singular, a common misspelling) goes home,
+    # which carries the singular "golf cart map" title (Max t151s713, Nov 16 2026).
+    red += "/app/ /app 301\n/golf-cart-map / 301\n/golf-cart-map/ / 301\n"
     # Partner portal SPA routes (brand pages at /p/<slug> so they never collide with city SEO pages).
     red += (
         "/partner /partner/index.html 200\n"
@@ -48,7 +51,7 @@ def want(rs, cur):
     head = sm[:sm.index("<urlset")]
     # Home, privacy, compare, and the static SEO hubs. City slugs are [a-z0-9]+ and are rebuilt below.
     keep = [u for u in re.findall(r"<url>.*?</url>", sm) if re.search(
-        r"<loc>" + re.escape(SITE) + r"/(privacy|compare|golf-cart-maps|lsv|for-rental-shops|for-manufacturers)?</loc>", u)]
+        r"<loc>" + re.escape(SITE) + r"/(privacy|compare|golf-cart-maps|lsv|app|for-rental-shops|for-manufacturers)?</loc>", u)]
     city = [f"<url><loc>{SITE}/{r['slug']}</loc><lastmod>{old.get(r['slug'], today)}</lastmod><changefreq>weekly</changefreq></url>" for r in rs]
     sm2 = head + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(keep + city) + "</urlset>\n"
     app = cur["app"]

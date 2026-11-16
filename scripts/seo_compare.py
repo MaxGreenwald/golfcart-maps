@@ -6,6 +6,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from seo_common import *
 AS_OF = "2026-10-19"
+OURS_AS_OF = "2026-11-16"  # our row only: the iPhone app has been live on the App Store since Nov 3 2026 (competitor rows stay AS_OF)
 APPS = [  # name, developer, area/focus, pricing as listed on the App Store, notable features from release notes
     ("Cartin'", "JCA Technologies", "Golf carts, eBikes and low-speed vehicles, nationwide", "No-cost tier; Premium $9.99/mo or $99.99/yr; Rental Pass $7.99",
      "Three route choices, restricted segments shown in red with an option to avoid them, speed limit by segment (Premium), friends radar, poker runs"),
@@ -23,7 +24,7 @@ APPS = [  # name, developer, area/focus, pricing as listed on the App Store, not
 
 def render():
     n = len(regions())
-    ours = ("Golf Cart Maps", "Golf Cart Maps LLC", f"{n} beach and golf towns in {len({r['state'] for r in regions()})} states, web (iPhone app in review)",
+    ours = ("Golf Cart Maps", "Golf Cart Maps LLC", f"{n} beach and golf towns in {len({r['state'] for r in regions()})} states, web, plus the iPhone app on the App Store",
             POS.COMPARE_PRICE,
             "Rules by vehicle (golf cart vs street-legal LSV) for each town, the statute or ordinance behind each rule, routes that stay on allowed roads, battery range check")
     rows = "".join(f"<tr><th scope=row>{e(a)}<br><span class=muted>{e(d)}</span></th><td>{e(f)}</td><td>{e(p)}</td><td>{e(x)}</td></tr>" for a, d, f, p, x in [ours] + APPS)
@@ -31,10 +32,10 @@ def render():
            ("Where does this comparison come from?", f"Each app's App Store listing and release notes, as of {AS_OF}. Prices and features change; check each listing for the current details.")]
     body = f"""<nav aria-label="Breadcrumb" class="muted"><a href="/">Home</a> › Compare</nav>
 <h1>How do golf cart navigation apps compare?</h1>
-<p>Golf cart apps differ in where they work and what they focus on: cart-path navigation for one community, general low-speed routing, or the road rules themselves. Golf Cart Maps (golfcartmap.com), {POS.STATUS_PHRASE}, focuses on which roads golf carts and LSVs may legally use in each town, with the law behind each rule. Facts below are from App Store listings as of {AS_OF}.</p>
+<p>Golf cart apps differ in where they work and what they focus on: cart-path navigation for one community, general low-speed routing, or the road rules themselves. Golf Cart Maps (golfcartmap.com), {POS.STATUS_PHRASE}, focuses on which roads golf carts and LSVs may legally use in each town, with the law behind each rule. Facts below are from App Store listings as of {AS_OF}. Our own row was updated {OURS_AS_OF}: the <a href="{APPSTORE}" data-ev="app_store_click" data-p='{{"position":"compare"}}'>Golf Cart Maps iPhone app</a> is live on the App Store (<a href="/app">about the app</a>).</p>
 <p><a class="cta" href="/" data-ev="cta_try_map_click" data-p='{{"position":"compare"}}'>Try Golf Cart Maps</a></p>
 <div style="overflow-x:auto"><table><thead><tr><th>App</th><th>Area / focus</th><th>Pricing (as listed)</th><th>Notable features (from release notes)</th></tr></thead><tbody>{rows}</tbody></table></div>
-<p class="muted">As of {AS_OF}. Information comes from each app's public App Store page and release notes and may have changed since. App names are trademarks of their owners; no affiliation is implied. Corrections: maxgreenwald.assistant@gmail.com.</p>
+<p class="muted">Other apps as of {AS_OF}; Golf Cart Maps row updated {OURS_AS_OF}. Information comes from each app's public App Store page and release notes and may have changed since. App names are trademarks of their owners; no affiliation is implied. Corrections: maxgreenwald.assistant@gmail.com.</p>
 <h2>FAQ</h2>{''.join(f'<h3>{e(q)}</h3><p>{e(a)}</p>' for q, a in faq)}"""
     ld = [org(), website(), faq_schema(faq), crumbs([("Home", "/"), ("Compare", "/compare")])]
     return page("Golf Cart Navigation Apps Compared (" + month(AS_OF) + ") | Golf Cart Maps",
