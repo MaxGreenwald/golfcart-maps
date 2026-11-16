@@ -23,7 +23,7 @@ The one deploy command (needs `CLOUDFLARE_API_TOKEN`):
 
     scripts/deploy_web.sh preview <branch>   # https://<branch>.golfcart-maps.pages.dev
     scripts/deploy_web.sh production --max-ok <Max chat or card id>
-        # https://golfcartmap.com — refuses unless HEAD equals origin/master
+        # https://golfcartmap.com. Refuses unless HEAD equals origin/master and the ref is on the deploy allowlist.
     scripts/deploy_worker.sh preview partner|analytics
     scripts/deploy_worker.sh production partner|analytics --max-ok <Max chat or card id>
 
