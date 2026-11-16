@@ -101,7 +101,9 @@ window.GCMCarPlay={
   const stops=(e.stops||[]).filter(s=>s.lat!==null&&s.lon!==null&&isFinite(+s.lat)&&isFinite(+s.lon)).map(s=>{const a=af.find(a=>(s.affiliate_id&&a.id===s.affiliate_id)||(a.name&&a.name===s.name));
    const GS=window.GCMStories;
    const note=GS?GS.storyLine(s.note):String(s.note||'').replace(/\s+/g,' ').trim();
-   return {name:s.name||s.label||'Stop',category:s.category||'',lat:+s.lat,lon:+s.lon,note,meters:lat==null?null:xpDist(+lat,+lon,+s.lat,+s.lon),coupon:a&&a.coupon||''}});
+   const Park=window.GCMPark;
+   const d=Park?Park.dest(s):{lat:+s.lat,lon:+s.lon,parked:false};
+   return {name:s.name||s.label||'Stop',category:s.category||'',lat:+d.lat,lon:+d.lon,parked:!!d.parked,place_lat:+s.lat,place_lon:+s.lon,note,meters:lat==null?null:xpDist(+lat,+lon,+d.lat,+d.lon),coupon:a&&a.coupon||''}});
   cpNotes=stops.map(s=>({name:s.name,lat:s.lat,lon:s.lon,note:s.note}));
   return {ok:true,title:e.title||'',stops}},
  async status(){await ready();return {region:REG&&REG.id,regionName:REG&&REG.short,mode:MODE,center:REG&&REG.center,
