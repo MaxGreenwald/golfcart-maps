@@ -35,6 +35,8 @@ jobs:
         run: node --test tests/stories.test.mjs
       - name: Partner owner-endpoint authz (super-admin any shop; owners only their own)
         run: node --test tests/partner_access.test.mjs
+      - name: Copy a ride or page to another location (pins stay in town)
+        run: node --test tests/partner_templates.test.mjs
       - name: App links (AASA, handoff tokens) (node --test)
         run: node --test tests/app_links.test.mjs
       - name: Rental code (node --test)
@@ -170,6 +172,8 @@ jobs:
         run: python -m unittest tests.test_partner_nearest_start -v
       - name: test_shop_dashboard (shop activity card and renter unlock event)
         run: python -m unittest tests.test_shop_dashboard -v
+      - name: test_partner_templates (copy a ride or page to another location, optional sync)
+        run: python -m unittest tests.test_partner_templates -v
       - name: test_turn_by_turn (renter banner follows GPS, step list, mute, reroute, arrival; picked ride folds the others away)
         run: python -m unittest tests.test_turn_by_turn -v
       - name: test_return_reminders (admin saves return-by, range, and return spot; renter sees the nudge)
