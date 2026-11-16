@@ -413,6 +413,18 @@ function shopView() {
     </div>
     <p style="margin-top:12px"><button class="btn" id="saveBrand" type="button">Save brand</button></p>
   </div>
+  <div class="card" id="rentalForm"><h2>Rental info</h2>
+    <p class="muted">Renters see this after they unlock. Leave a line blank to hide it.</p>
+    <label for="rentalPickup">Pickup spot</label><input id="rentalPickup" maxlength="200" value="${esc((s.rental && s.rental.pickup) || '')}" placeholder="Meet at the blue umbrellas">
+    <label for="rentalReturn">Return spot</label><input id="rentalReturn" maxlength="200" value="${esc((s.rental && s.rental.return_spot) || '')}" placeholder="Same spot, or the side lot">
+    <div class="row">
+      <div><label for="rentalBy">Return by</label><input id="rentalBy" maxlength="80" value="${esc((s.rental && s.rental.return_by) || '')}" placeholder="5:00 pm"></div>
+      <div><label for="rentalPhone">Shop phone</label><input id="rentalPhone" maxlength="40" inputmode="tel" value="${esc((s.rental && s.rental.phone) || '')}" placeholder="Shop number renters can call"></div>
+    </div>
+    <label for="rentalRules">Cart rules</label><textarea id="rentalRules" maxlength="800" placeholder="Age to drive, seat belts, kids, where to charge">${esc((s.rental && s.rental.rules) || '')}</textarea>
+    <label for="rentalDies">If the cart dies</label><textarea id="rentalDies" maxlength="800" placeholder="Call the shop. Stay with the cart.">${esc((s.rental && s.rental.if_cart_dies) || '')}</textarea>
+    <p style="margin-top:12px"><button class="btn" id="saveRental" type="button">Save rental info</button></p>
+  </div>
   <div class="card"><h2>Experiences</h2>
     <p class="muted">Ordered joyride stops. Search a place or drop a pin and name it yourself. Edit an experience to change a stop or its order.</p>
     <p class="muted hidden" id="exEditing">Editing this experience. Save changes keeps the stops and their order.</p>
@@ -835,8 +847,8 @@ function wirePlaces() {
       const pid = $('#placeId').value;
       if (pid) await api('/shop/places/' + pid, { method: 'PATCH', body: JSON.stringify(body) });
       else await api('/shop/places', { method: 'POST', body: JSON.stringify(body) });
-      flash(true, pid ? 'Place saved' : 'Place added');
       await refreshShop();
+      flash(true, pid ? 'Place saved' : 'Place added');
     } catch (e) { flash(false, e.message); }
   };
   document.querySelectorAll('[data-del-place]').forEach(b => b.onclick = async () => {
@@ -1131,8 +1143,23 @@ function bindApp() {
         color: $('#brandColor').value.trim(),
         vehicle: $('#brandVehicle').value,
       }) });
-      flash(true, 'Brand saved');
       await refreshShop();
+      flash(true, 'Brand saved');
+    } catch (e) { flash(false, e.message); }
+  };
+  const saveRental = $('#saveRental');
+  if (saveRental) saveRental.onclick = async () => {
+    try {
+      await api('/shop', { method: 'PATCH', body: JSON.stringify({ rental: {
+        pickup: $('#rentalPickup').value,
+        return_spot: $('#rentalReturn').value,
+        return_by: $('#rentalBy').value,
+        phone: $('#rentalPhone').value,
+        rules: $('#rentalRules').value,
+        if_cart_dies: $('#rentalDies').value,
+      } }) });
+      await refreshShop();
+      flash(true, 'Rental info saved');
     } catch (e) { flash(false, e.message); }
   };
 
@@ -1195,8 +1222,8 @@ function bindApp() {
         await api('/shop/affiliates/' + afId, { method: 'PATCH', body: JSON.stringify({
           name, offer: $('#afOffer').value.trim(), lat, lon, coupon: $('#afCouponText').value.trim(),
         }) });
-        flash(true, 'Affiliate saved');
         await refreshShop();
+        flash(true, 'Affiliate saved');
         return;
       }
       await api('/shop/affiliates', { method: 'POST', body: JSON.stringify({
@@ -1206,8 +1233,8 @@ function bindApp() {
         lon,
         generate_coupon: $('#afCoupon').checked,
       }) });
-      flash(true, 'Affiliate added');
       await refreshShop();
+      flash(true, 'Affiliate added');
     } catch (e) { flash(false, e.message); }
   };
   document.querySelectorAll('[data-edit-af]').forEach(b => b.onclick = () => {
