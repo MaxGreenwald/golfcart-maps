@@ -851,8 +851,8 @@ function wirePlaces() {
       const pid = $('#placeId').value;
       if (pid) await api('/shop/places/' + pid, { method: 'PATCH', body: JSON.stringify(body) });
       else await api('/shop/places', { method: 'POST', body: JSON.stringify(body) });
-      flash(true, pid ? 'Place saved' : 'Place added');
       await refreshShop();
+      flash(true, pid ? 'Place saved' : 'Place added');
     } catch (e) { flash(false, e.message); }
   };
   document.querySelectorAll('[data-del-place]').forEach(b => b.onclick = async () => {
@@ -1169,8 +1169,8 @@ function bindApp() {
         vehicle: $('#brandVehicle').value,
         phone: $('#brandPhone') ? $('#brandPhone').value.trim() : '',
       }) });
-      flash(true, 'Brand saved');
       await refreshShop();
+      flash(true, 'Brand saved');
     } catch (e) { flash(false, e.message); }
   };
   const saveRental = $('#saveRental');
@@ -1184,8 +1184,8 @@ function bindApp() {
         rules: $('#rentalRules').value,
         if_cart_dies: $('#rentalDies').value,
       } }) });
-      flash(true, 'Rental info saved');
       await refreshShop();
+      flash(true, 'Rental info saved');
     } catch (e) { flash(false, e.message); }
   };
 
@@ -1216,8 +1216,8 @@ function bindApp() {
         return_lat: $('#rentReturnLat').value,
         return_lon: $('#rentReturnLon').value,
       }) });
-      flash(true, 'Reminders saved');
       await refreshShop();
+      flash(true, 'Reminders saved');
     } catch (e) { flash(false, e.message); }
   };
 
@@ -1280,8 +1280,8 @@ function bindApp() {
         await api('/shop/affiliates/' + afId, { method: 'PATCH', body: JSON.stringify({
           name, offer: $('#afOffer').value.trim(), lat, lon, coupon: $('#afCouponText').value.trim(),
         }) });
-        flash(true, 'Affiliate saved');
         await refreshShop();
+        flash(true, 'Affiliate saved');
         return;
       }
       await api('/shop/affiliates', { method: 'POST', body: JSON.stringify({
@@ -1291,8 +1291,8 @@ function bindApp() {
         lon,
         generate_coupon: $('#afCoupon').checked,
       }) });
-      flash(true, 'Affiliate added');
       await refreshShop();
+      flash(true, 'Affiliate added');
     } catch (e) { flash(false, e.message); }
   };
   document.querySelectorAll('[data-edit-af]').forEach(b => b.onclick = () => {
