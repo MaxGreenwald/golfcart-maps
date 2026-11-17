@@ -1,6 +1,7 @@
 /* Partner admin SPA — super admin + shop admin. Talks to /api/partner/*.
-   Place pickers: Photon (Komoot) + Nominatim fallback (same as the main map),
-   plus manual pin-drop with a custom label. Lat/lon stored under the hood. */
+   Place pickers: Google Places via the partner Worker proxy (key stays on the server),
+   with Photon (Komoot) + Nominatim as fallback, plus manual pin-drop with a custom label.
+   Lat/lon stored under the hood. */
 // A super-admin editing a shop as its owner: every /shop call names that shop.
 const scoped = path => (state && state.actingShop && /^\/shop(\/|$|\?)/.test(path))
   ? path + (path.includes('?') ? '&' : '?') + 'shop_id=' + encodeURIComponent(state.actingShop.id)
@@ -93,17 +94,20 @@ function regionOptions(selected) {
   return list.map(r => `<option value="${esc(r.id)}" ${r.id === selected ? 'selected' : ''}>${esc(r.short || r.name)} (${esc(r.id)})</option>`).join('');
 }
 
-/** Photon → Nominatim, biased to the shop city bbox. No API key. */
-async function searchPlaces(q) {
-  const query = String(q || '').trim();
-  if (query.length < 2) return [];
-  const reg = activeRegion();
-  const key = (reg?.id || '') + '|' + query.toLowerCase();
-  if (placeCache.has(key)) return placeCache.get(key);
-  const b = reg?.bbox || [32.53, -117.46, 33.3, -116.95];
-  const c = reg?.center || [32.85, -117.27];
-  // bbox: [south, west, north, east]
-  let res = [];
+function newPlacesSession() {
+  try { if (crypto.randomUUID) return crypto.randomUUID(); } catch (_) {}
+  return 's' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
+function placesSessionFor(input) {
+  if (input && !input._placesSession) input._placesSession = newPlacesSession();
+  return (input && input._placesSession) || newPlacesSession();
+}
+
+/** Photon, then Nominatim, biased to the shop city bbox. Used when Google Places is off or errors. */
+async function searchOsm(query, reg) {
+  const b = (reg && reg.bbox) || [32.53, -117.46, 33.3, -116.95];
+  const c = (reg && reg.center) || [32.85, -117.27];
   try {
     const ac = new AbortController();
     const to = setTimeout(() => ac.abort(), 2500);
@@ -111,27 +115,94 @@ async function searchPlaces(q) {
     const r = await fetch(url, { signal: ac.signal, headers: { Accept: 'application/json' } });
     clearTimeout(to);
     const j = await r.json();
-    res = (j.features || []).map(f => {
+    return (j.features || []).map(f => {
       const p = f.properties || {};
       const name = p.name || [p.housenumber, p.street].filter(Boolean).join(' ');
       const sub = [p.housenumber && p.name ? p.street : null, p.city || p.district || p.state, p.osm_value].filter(Boolean).join(' · ');
       return { name, sub, lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0] };
-    }).filter(x => x.name);
+    }).filter(x => x.name && Number.isFinite(x.lat));
   } catch (_) {
     try {
       const url = `https://nominatim.openstreetmap.org/search?format=json&limit=6&bounded=1&viewbox=${b[1]},${b[2]},${b[3]},${b[0]}&q=${encodeURIComponent(query)}`;
       const r = await fetch(url, { headers: { Accept: 'application/json', 'Accept-Language': 'en' } });
       const j = await r.json();
-      res = (j || []).map(x => ({
+      return (j || []).map(x => ({
         name: String(x.display_name || '').split(',')[0],
         sub: String(x.display_name || '').split(',').slice(1, 3).join(',').trim(),
         lat: +x.lat,
         lon: +x.lon,
       })).filter(x => x.name && Number.isFinite(x.lat));
-    } catch (_) { res = []; }
+    } catch (_) { return []; }
   }
+}
+
+/** Google Places via /api/partner/places/*, then Photon / Nominatim. Biased to the shop city bbox. */
+async function searchPlaces(q, sessionToken) {
+  const query = String(q || '').trim();
+  if (query.length < 2) return [];
+  const reg = activeRegion();
+  const key = (reg?.id || '') + '|' + query.toLowerCase();
+  if (placeCache.has(key)) return placeCache.get(key);
+  const b = reg?.bbox || [32.53, -117.46, 33.3, -116.95];
+  try {
+    const ac = new AbortController();
+    const to = setTimeout(() => ac.abort(), 2500);
+    const r = await fetch('/api/partner' + scoped('/places/autocomplete'), {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ q: query, sessionToken, bbox: b, region_id: reg && reg.id }),
+      signal: ac.signal,
+    });
+    clearTimeout(to);
+    const j = await r.json().catch(() => ({}));
+    if (r.ok && Array.isArray(j.suggestions) && j.suggestions.length) {
+      const list = j.suggestions.map(x => ({
+        name: x.name,
+        sub: x.sub || '',
+        place_id: x.place_id || '',
+        lat: Number.isFinite(+x.lat) ? +x.lat : undefined,
+        lon: Number.isFinite(+x.lon) ? +x.lon : undefined,
+      })).filter(x => x.name && (x.place_id || (Number.isFinite(x.lat) && Number.isFinite(x.lon))));
+      if (list.length) {
+        placeCache.set(key, list);
+        return list;
+      }
+    }
+    if (r.ok && j && j.fallback === false && Array.isArray(j.suggestions)) {
+      placeCache.set(key, []);
+      return [];
+    }
+  } catch (_) { /* Google missing, rate limited, or down: use OpenStreetMap. */ }
+
+  const res = await searchOsm(query, reg);
   placeCache.set(key, res);
   return res;
+}
+
+/** After a Google suggestion is picked, load lat/lon. Photon hits already have coordinates. */
+async function resolvePickedPlace(x, input) {
+  if (x && Number.isFinite(+x.lat) && Number.isFinite(+x.lon) && x.name) {
+    return { name: x.name, sub: x.sub || '', lat: +x.lat, lon: +x.lon };
+  }
+  if (x && x.place_id) {
+    try {
+      const r = await fetch('/api/partner' + scoped('/places/details'), {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ placeId: x.place_id, sessionToken: input && input._placesSession }),
+      });
+      if (input) input._placesSession = newPlacesSession();
+      const j = await r.json().catch(() => ({}));
+      if (r.ok && Number.isFinite(+j.lat) && Number.isFinite(+j.lon)) {
+        return { name: j.name || x.name, sub: j.address || x.sub || '', lat: +j.lat, lon: +j.lon };
+      }
+    } catch (_) { /* fall through */ }
+    const osm = await searchOsm(x.name || '', activeRegion());
+    if (osm[0]) return osm[0];
+  }
+  return null;
 }
 
 /** Blank inputs are unset. Number("") is 0, and Number.isFinite(0) is true — that parked the pin at 0,0 in the ocean. */
@@ -214,7 +285,7 @@ function stopRowHtml(s = {}, i = 0, opts = {}) {
 function stopEditor(stops) {
   const rows = (stops && stops.length ? stops : [{}]).map((s, i) => stopRowHtml(s, i, { parking: true, photo: true })).join('');
   return `<div class="stops" id="stopList">${rows}</div>
-    <p class="muted">Places via Photon / OpenStreetMap. Or drop a pin and type your own name for unofficial spots.</p>
+    <p class="muted">Search uses Google Places when it is set up, or OpenStreetMap. Or drop a pin and type your own name for unofficial spots.</p>
     <p class="muted">Move up and Move down set the order. Save to keep it.</p>
     <p><button class="btn alt" id="addStop" type="button">Add stop</button>
       ${placeOptions() ? `<select id="addPlaceStop" aria-label="Add one of your places as a stop"><option value="">+ Add one of your places…</option>${placeOptions()}</select>` : ''}</p>`;
@@ -681,9 +752,10 @@ function wireSearchInput(input, sugg, onPick) {
     clearTimeout(tmr);
     const v = input.value.trim();
     if (v.length < 2) { hide(); return; }
+    placesSessionFor(input);
     const my = ++searchSeq;
     tmr = setTimeout(async () => {
-      const list = await searchPlaces(v);
+      const list = await searchPlaces(v, input._placesSession);
       if (my !== searchSeq) return;
       sugg.innerHTML = '';
       if (!list.length) {
@@ -694,7 +766,11 @@ function wireSearchInput(input, sugg, onPick) {
       list.forEach(x => {
         const d = document.createElement('div');
         d.innerHTML = `<b>${esc(x.name)}</b><small>${esc(x.sub || '')}</small>`;
-        d.onmousedown = e => { e.preventDefault(); onPick(x); hide(); };
+        d.onmousedown = e => {
+          e.preventDefault();
+          hide();
+          Promise.resolve(onPick(x, input)).catch(() => {});
+        };
         sugg.appendChild(d);
       });
       sugg.style.display = 'block';
@@ -910,9 +986,11 @@ function wireStop(row) {
   };
   btnSearch.onclick = () => show('search');
   btnPin.onclick = () => show('pin');
-  wireSearchInput(q, sugg, x => {
-    mirrorStopName(row, x.name, 'pick');
-    setPicked(row, x.lat, x.lon, x.name);
+  wireSearchInput(q, sugg, async (x, input) => {
+    const place = await resolvePickedPlace(x, input);
+    if (!place) return;
+    mirrorStopName(row, place.name, 'pick');
+    setPicked(row, place.lat, place.lon, place.name);
   });
   if (nameEl) nameEl.addEventListener('input', () => {
     const text = nameEl.value.trim();
@@ -1073,9 +1151,11 @@ function wireAffiliatePicker() {
       }
     };
   });
-  wireSearchInput($('#afQ'), $('#afSugg'), x => {
-    $('#afQ').value = x.name;
-    setAf(x.lat, x.lon, x.name);
+  wireSearchInput($('#afQ'), $('#afSugg'), async (x, input) => {
+    const place = await resolvePickedPlace(x, input);
+    if (!place) return;
+    $('#afQ').value = place.name;
+    setAf(place.lat, place.lon, place.name);
   });
   $('#afCustom').addEventListener('input', () => {
     const lat = numCoord($('#afLat').value), lon = numCoord($('#afLon').value);

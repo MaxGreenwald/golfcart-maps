@@ -21,6 +21,10 @@
 # (same value as the analytics Worker's STATS_KEY):
 #   wrangler secret put ANALYTICS_STATS_KEY [--env preview]
 # Until that secret is set, /shop/stats answers ready:false and the admin says so.
+# Place search in the partner admin (Places API New). Never put this in [vars]
+# or the pages bundle; the Worker proxy is the only caller:
+#   wrangler secret put GOOGLE_PLACES_API_KEY [--env preview]
+# Until that secret is set, stop search falls back to Photon / Nominatim.
 name = "gcm-partner"
 main = "src/index.js"
 compatibility_date = "2026-10-15"
