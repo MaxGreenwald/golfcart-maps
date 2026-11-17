@@ -20,8 +20,14 @@ t('HI/ME: plain golf carts not street-legal, LSVs <=35',()=>{for(const id of ['w
 t('Sheriff-map bans name the map, not the speed',()=>{const l=R.ruleFor(rules,reg('30a'),'lsv');const s=[0,'secondary',99,'v',0,0,1,[],0];
   a.equal(R.why(s,l,null,['https://waltonso.org/lsv/','Walton County Sheriff LSV map (red = prohibited): CR 283 (US 98 to the bay and south to 30A)']),'Avoid: LSVs not allowed here (Walton County Sheriff LSV map)');
   a.equal(R.why(s,l,null,['https://waltonso.org/lsv/','Walton County Sheriff: LSVs may not drive on US 98']),'Avoid: 40+ mph or major road');a.equal(R.why(s,l),'Avoid: 40+ mph or major road')});
-t('FL golf carts: designated roads only',()=>{const g=R.ruleFor(rules,reg('villages'),'golf_cart');a.ok(g.designated_only);a.equal(R.cls(seg(25,'t'),g),3);a.equal(R.cls(seg(25,'d'),g),0);a.equal(R.cls(seg(35,'d'),g),0);a.equal(R.cls(seg(40,'d'),g),3);a.match(R.why(seg(25,'t'),g),/designated/);
-  a.equal(R.cls(seg(35,'t'),R.ruleFor(rules,reg('villages'),'lsv')),0)});
+t('FL golf carts: designated roads only (state default, St. Augustine has no local override)',()=>{const g=R.ruleFor(rules,reg('staug'),'golf_cart');a.ok(g.designated_only);a.equal(g.max_posted,35);a.equal(R.cls(seg(25,'t'),g),3);a.equal(R.cls(seg(25,'d'),g),0);a.equal(R.cls(seg(35,'d'),g),0);a.equal(R.cls(seg(40,'d'),g),3);a.match(R.why(seg(25,'t'),g),/designated/);
+  a.equal(R.cls(seg(35,'t'),R.ruleFor(rules,reg('staug'),'lsv')),0)});
+t('The Villages golf carts: local streets <=30, not the Florida designated-only default',()=>{const g=R.ruleFor(rules,reg('villages'),'golf_cart'),l=R.ruleFor(rules,reg('villages'),'lsv');
+  a.ok(g.designated_only);a.equal(g.max_posted,30);a.equal(g.daylight_only,false);a.equal(g.cross,false);a.ok(g.assume.includes('residential'));
+  a.notEqual(R.cls(seg(25,'t','residential'),g),3);a.notEqual(R.cls(seg(30,'i','residential'),g),3);
+  a.equal(R.cls(seg(35,'t','residential'),g),3);a.equal(R.cls(seg(25,'t','tertiary'),g),3);
+  a.equal(R.cls(seg(25,'d','tertiary'),g),0);a.equal(R.cls(seg(35,'d','tertiary'),g),3);
+  a.equal(l.max_posted,35);a.equal(R.cls(seg(35,'t'),l),0)});
 t('region flat rule applies to both vehicles (Gulf Shores <=25)',()=>{for(const v of R.VEHICLES){const x=R.ruleFor(rules,reg('gulfshores'),v);a.equal(x.max_posted,25);a.equal(R.cls(seg(30),x),3)}});
 t('region per-vehicle rule applies to one vehicle (Coachella golf cart note)',()=>{a.match(R.ruleFor(rules,reg('coachella'),'golf_cart').note,/golf cart plans/);a.equal(R.ruleFor(rules,reg('coachella'),'lsv').note,undefined)});
 t('posted no-carts major road Avoid for both',()=>{a.equal(R.cls(seg(25,'t','primary',1),lsv),3);a.equal(R.cls(seg(25,'t','primary',1),cart),3)});

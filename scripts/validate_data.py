@@ -16,7 +16,10 @@ The builders heal the clear cases themselves (islands.heal), so anything left ne
 
 Exit 1 if any region has more red islands or ring-code errors than research/validation_baseline.json allows
 (i.e. a new regression), or any same-road island that is not in the allowlist. Known, reviewed cases live in the baseline; lower it when data gets fixed. `--update-baseline` rewrites the baseline with today's counts (review the diff!).
-Also runs scripts/check_enforcement.py (every live region needs a local enforcement record) on full runs."""
+Also runs scripts/check_enforcement.py (every live region needs a local enforcement record) on full runs.
+
+Unknown region keys (including a misspelled rule key such as "rules") fail the run.
+The app reads region.rule; a typo falls back to the state default and can hide a town's own cap."""
 import json, os, sys, glob, math
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import islands as ISL
 import check_enforcement as CE
@@ -25,6 +28,22 @@ BASE = os.path.join(ROOT, "research", "validation_baseline.json")
 ALLOW = os.path.join(ROOT, "research", "red_island_allowlist.json")
 POSTED = set("tvmdrknqs")   # tagged, verified, mapillary, street view, designated, roundabout-/turn-lane-/same-road-inherited, sources-disagree
 MAJOR_OK = ("motorway", "trunk")   # untagged freeways are legitimately red; ignore them
+
+# Keys a region may have in public/data/regions.json. The app reads "rule"
+# (optional per-town override). "rules" is a typo and is not read.
+REGION_KEYS = {
+    "id", "name", "short", "state", "center", "zoom", "bbox",
+    "cover", "slug", "beta", "rule", "hidden",
+}
+
+def unknown_region_keys(regions):
+    """Return [(id, [unknown keys...]), ...] for region objects with keys the app does not read."""
+    out = []
+    for r in regions:
+        extra = sorted(set(r) - REGION_KEYS)
+        if extra:
+            out.append((r.get("id", "?"), extra))
+    return out
 
 def load(region):
     segs = []
@@ -76,9 +95,15 @@ def same_road(region, segs, allow):
     return out
 
 def main(argv):
-    regions = [r["id"] for r in json.load(open(os.path.join(ROOT, "public", "data", "regions.json")))]
+    raw_regions = json.load(open(os.path.join(ROOT, "public", "data", "regions.json")))
+    regions = [r["id"] for r in raw_regions]
     only = [a for a in argv if not a.startswith("--")]
     if only: regions = [r for r in regions if r in only]
+    key_bad = unknown_region_keys(raw_regions)
+    if key_bad:
+        for rid, keys in key_bad:
+            hint = " (the app reads 'rule', not 'rules')" if "rules" in keys else ""
+            print(f"FAIL {rid:12} unknown region key(s): {', '.join(keys)}{hint}")
     base = json.load(open(BASE)) if os.path.exists(BASE) else {}
     bi, br = base.get("red_islands", {}), base.get("ring_code_errors", {})
     allow = json.load(open(ALLOW))["islands"] if os.path.exists(ALLOW) else []
@@ -115,9 +140,12 @@ def main(argv):
         json.dump({**{k: v for k, v in base.items() if k not in ("red_islands", "ring_code_errors")}, "_note": base.get("_note", "Reviewed known cases. Fail = more than this. Lower when fixed; raise only after checking the listed islands."),
                    "red_islands": dict(sorted({**bi, **counts}.items())), "ring_code_errors": dict(sorted({**br, **{k: v for k, v in rcounts.items() if v}}.items()))},
                   open(BASE, "w"), indent=1); print("baseline written", BASE)
-        return 0
+        if not key_bad:
+            return 0
     if not only:   # local-enforcement gate: every live region must record its sheriff/police/city source check
         if CE.main([a for a in argv if a == "--strict"]): bad.append("enforcement")
+    if key_bad:
+        bad.append("region_keys")
     print("RESULT", "ALL OK" if not bad else "FAIL " + ",".join(sorted(set(bad))))
     return 1 if bad else 0
 
