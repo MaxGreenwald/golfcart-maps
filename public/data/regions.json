@@ -36,7 +36,7 @@
   ],
   "beta": true,
   "cover": "The Villages area covers Lady Lake to Wildwood (Lake, Sumter, Marion counties). Pick another city in the menu above.",
-  "rules": {
+  "rule": {
    "golf_cart": {
     "max_posted": 30,
     "assume": [
