@@ -29,13 +29,102 @@
   }
  ],
  "unverified": [
-  "No Greenwich list of LSV-prohibited roads was found, so only the state 25 mph cap and the I-95 / Merritt Parkway ban are applied. Untagged residential streets are assumed 25 mph."
+  "Official CTDOT OSTA speeds are applied only for Lake Avenue, Stanwich Road, and North Street (the Greenwich roads asked in the 2026-11-16 check). Westover Road in this map is in Stamford; the Stamford OSTA list posts it 25 mph. School-hours and when-flashing limits on those roads are not used as the all-day posted speed. Other roads still use OSM or inferred speeds. Untagged residential streets without an official override are assumed 25 mph. I-95 and the Merritt Parkway stay banned."
+ ],
+ "speed_names": [
+  {
+   "names": "^Lake Avenue$",
+   "east_of": -73.631,
+   "mph": 25,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 7: LAKE AVENUE, LAFAYETTE PLACE to GLENVILLE ROAD, 25 mph. Same PDF attached by Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17."
+  },
+  {
+   "names": "^Lake Avenue$",
+   "south_of": 41.03675,
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 7: LAKE AVENUE, GLENVILLE ROAD to NYT POLE #20, 30 mph. Pole placed 0.30 mi north of Glenville Road along the mapped road (page 7, 0.30 mi). Same PDF attached by Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17."
+  },
+  {
+   "names": "^Lake Avenue$",
+   "south_of": 41.07808,
+   "mph": 35,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 7: LAKE AVENUE, NYT#20 to BUTTERNUT HOLLOW ROAD, 35 mph. Same PDF attached by Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17."
+  },
+  {
+   "names": "^Lake Avenue$",
+   "south_of": 41.11657,
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 7: LAKE AVENUE, BUTTERNUT HOLLOW ROAD to CLOSE ROAD, 30 mph. Same PDF attached by Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17."
+  },
+  {
+   "names": "^Lake Avenue$",
+   "mph": 25,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 7: LAKE AVENUE, CLOSE ROAD to UPPER CROSS ROAD, 25 mph. Upper Cross Road is just north of the mapped stretch; the 0.66 mi north of Close Road in the tiles matches that 0.68 mi listing. Same PDF attached by Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17."
+  },
+  {
+   "names": "^Stanwich Road$",
+   "south_of": 41.09301,
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 14: STANWICH ROAD, OLD POST ROAD #4 to GUINEA ROAD, 30 mph (3.99 mi; mapped Old Post Road intersection to Guinea Road is 3.973 mi). Same PDF attached by Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17."
+  },
+  {
+   "names": "^Stanwich Road$",
+   "mph": 25,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 14: STANWICH ROAD, GUINEA ROAD to TACONIC ROAD, 25 mph. Same PDF attached by Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17."
+  },
+  {
+   "names": "^North Street$",
+   "west_of": -73.6,
+   "north_of": 41.04001,
+   "south_of": 41.04616,
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 9: NORTH ST #1, MAPLE AVENUE #2 to COTSWOOD ROAD, 30 mph. west_of -73.60 keeps this off a separate North Street fragment near -73.580. Same PDF attached by Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17."
+  },
+  {
+   "names": "^North Street$",
+   "west_of": -73.6,
+   "south_of": 41.06363,
+   "mph": 35,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 9: NORTH ST #1, COTSWOOD ROAD to ROBERTA LANE, 35 mph. Same PDF attached by Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17."
+  },
+  {
+   "names": "^North Street$",
+   "west_of": -73.6,
+   "south_of": 41.13501,
+   "mph": 40,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 9: NORTH ST #1, ROBERTA LANE to .15 MI. S/O SCOTT ROAD, 40 mph. The 0.15 mi south of Scott Road point is at 41.13501,-73.63779, 5.25 mi north of Roberta Lane along the mapped road. Same PDF attached by Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17."
+  },
+  {
+   "names": "^North Street$",
+   "west_of": -73.6,
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 9: NORTH ST #1, .15 MI. S/O SCOTT ROAD to NEW YORK STATE LINE, 30 mph. Same PDF attached by Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17."
+  },
+  {
+   "names": "^Westover Road$",
+   "mph": 25,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/stamfordpdf.pdf?rev=eb7b5c41e63d4fefa3b2244068d5b8d6",
+   "label": "CTDOT OSTA Stamford town speed list, report printed 5/27/2025, page 15: WESTOVER ROAD, PALMERS HILL ROAD to ROXBURY ROAD, 25 mph (3.14 mi; the mapped Westover Road in the Greenwich region is also 3.14 mi). Westover Road is in Stamford (Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17). Region bounds were not widened."
+  }
  ],
  "sources": [
   "Conn. Gen. Stat. Sec. 14-289m (LSVs) https://www.cga.ct.gov/current/pub/chap_248.htm#sec_14-289m",
   "Conn. Gen. Stat. Sec. 14-300g (golf carts) https://www.cga.ct.gov/current/pub/chap_249.htm#sec_14-300g",
   "OpenStreetMap",
-  "FHWA HPMS speed limits"
+  "FHWA HPMS speed limits",
+  "CTDOT OSTA Greenwich town speed list (report printed 4/8/2026) https://portal.ct.gov/dot/osta/speed-limit-certificates-and-listings",
+  "CTDOT OSTA Stamford town speed list (report printed 5/27/2025) https://portal.ct.gov/dot/osta/speed-limit-certificates-and-listings"
  ],
  "enforcement": {
   "checked": "2026-10-28",
