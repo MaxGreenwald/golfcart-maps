@@ -3,6 +3,7 @@
 import { DurableObject } from 'cloudflare:workers';
 import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL, cleanRental, rentalFromRow, cleanReturnBy, cleanRangeMi, cleanReturnSpot, cleanPhone, withPark, bytesFromB64, cleanStops, storeImage, MEDIA_MAX_COUNT } from '../../../lib/partner.js';
 import { fetchShopStats } from '../../../lib/shop_stats.js';
+import { handlePlacesRequest, quotaBuckets, quotaAllowed } from '../../../lib/partner_places.js';
 import { sameTown, pushStops, brandFields, experiencePayload } from '../../../lib/partner_templates.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
@@ -133,9 +134,38 @@ export class PartnerStore extends DurableObject {
     const plCols = this.sql.exec('PRAGMA table_info(places)').toArray().map(c => c.name);
     if (!plCols.includes('template_id')) this.sql.exec('ALTER TABLE places ADD COLUMN template_id TEXT');
     if (!cols.includes('page_template_id')) this.sql.exec('ALTER TABLE shops ADD COLUMN page_template_id TEXT');
+    this.sql.exec(`
+      CREATE TABLE IF NOT EXISTS places_quota(
+        shop_id TEXT NOT NULL, bucket TEXT NOT NULL, count INTEGER NOT NULL,
+        PRIMARY KEY (shop_id, bucket)
+      )
+    `);
   }
   q(s, ...a) { return this.sql.exec(s, ...a).toArray(); }
   one(s, ...a) { return this.q(s, ...a)[0] || null; }
+
+  takePlacesQuota(sid, kind, nowMs) {
+    const allowedKind = kind === 'autocomplete' || kind === 'details' ? kind : '';
+    if (!sid || !allowedKind) return { ok: false, retry: 'day' };
+    const t = Number(nowMs) || Date.now();
+    const { minute, day } = quotaBuckets(t, allowedKind);
+    const countOf = (bucket) => {
+      const r = this.one('SELECT count FROM places_quota WHERE shop_id=? AND bucket=?', sid, bucket);
+      return r ? Number(r.count) || 0 : 0;
+    };
+    const allowed = quotaAllowed({ minute: countOf(minute), day: countOf(day) }, allowedKind);
+    if (!allowed.ok) return { ok: false, retry: allowed.retry };
+    const bump = (bucket) => {
+      const cur = this.one('SELECT count FROM places_quota WHERE shop_id=? AND bucket=?', sid, bucket);
+      if (cur) this.sql.exec('UPDATE places_quota SET count=count+1 WHERE shop_id=? AND bucket=?', sid, bucket);
+      else this.sql.exec('INSERT INTO places_quota(shop_id, bucket, count) VALUES(?,?,1)', sid, bucket);
+    };
+    bump(minute);
+    bump(day);
+    const dayCut = new Date(t - 2 * 86400000).toISOString().slice(0, 10);
+    this.sql.exec("DELETE FROM places_quota WHERE substr(bucket, instr(bucket, ':') + 1, 10) < ?", dayCut);
+    return { ok: true };
+  }
 
   shopRow(r, opts) {
     if (!r) return null;
@@ -514,6 +544,10 @@ export class PartnerStore extends DurableObject {
           keep_pins: keep, synced: sync, copied,
         }, 201);
       }
+      if (path.match(/^\/shops\/[^/]+\/places-quota$/) && method === 'POST') {
+        const sid = path.split('/')[2];
+        return J(this.takePlacesQuota(sid, body && body.kind, body && body.now));
+      }
       // Photos (bytes live in R2; this row is the lookup).
       if (path.match(/^\/shops\/[^/]+\/media-room$/) && method === 'GET') {
         const sid = path.split('/')[2];
@@ -844,6 +878,24 @@ export default {
     const deny = a => J({ error: a.error }, a.status);
     const readBody = async () => { try { return await req.json(); } catch { return {}; } };
     const send = (path, method, body) => doFetch(path, { method, headers: { 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) });
+
+    if ((u.pathname === '/places/autocomplete' || u.pathname === '/places/details') && req.method === 'POST') {
+      const body = await readBody();
+      const a = await access(body);
+      if (!a.shopId) return deny(a);
+      const kind = u.pathname.endsWith('/details') ? 'details' : 'autocomplete';
+      const result = await handlePlacesRequest({
+        kind,
+        body,
+        env,
+        shopId: a.shopId,
+        quota: async (shopId, qKind, nowMs) => {
+          const res = await send('/shops/' + shopId + '/places-quota', 'POST', { kind: qKind, now: nowMs });
+          try { return await res.json(); } catch { return { ok: false, retry: 'day' }; }
+        },
+      });
+      return J(result.body, result.status);
+    }
 
     if (u.pathname === '/shop/media' && req.method === 'POST') {
       if (!env.MEDIA) return J({ error: 'Photo storage is not configured' }, 503);
