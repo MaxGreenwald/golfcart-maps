@@ -21,7 +21,13 @@
    30.715
   ]
  ],
- "bans": [],
+ "bans": [
+  {
+   "names": "^Charlie Smith Senior Highway$",
+   "url": "https://www.stmarysga.gov/departments/public_works/index.php",
+   "label": "Bobby Marr, Public Works Director, City of St. Marys, email 2026-11-17 11:46 AM PT: Charlie Smith Sr. Hwy is a state highway, golf carts not allowed."
+  }
+ ],
  "cart_only_bans": [
   {
    "names": "^Winding Road$",
@@ -35,13 +41,29 @@
   }
  ],
  "unverified": [
-  "A later news report said Dilworth Street was also banned. That sentence is not in the 2021 ordinance PDF, so Dilworth is not banned here."
+  "A later news report said Dilworth Street was also banned. That sentence is not in the 2021 ordinance PDF, so Dilworth is not banned here.",
+  "Laurel Island Parkway is in the city of Kingsland, not St. Marys (Bobby Marr, Public Works Director, email 2026-11-17 11:46 AM PT). It was left unchanged."
+ ],
+ "speed_names": [
+  {
+   "names": "^Kings Bay Road$",
+   "mph": 45,
+   "url": "https://www.stmarysga.gov/departments/public_works/index.php",
+   "label": "Bobby Marr, Public Works Director, City of St. Marys, email 2026-11-17 11:46 AM PT: Kings Bay Road 45 mph; Colerain Road 45 mph."
+  },
+  {
+   "names": "^Colerain Road$",
+   "mph": 45,
+   "url": "https://www.stmarysga.gov/departments/public_works/index.php",
+   "label": "Bobby Marr, Public Works Director, City of St. Marys, email 2026-11-17 11:46 AM PT: Kings Bay Road 45 mph; Colerain Road 45 mph."
+  }
  ],
  "sources": [
   "St. Marys PTV ordinance https://cms3.revize.com/revize/stmarysnew/department/community_development/PTVs.20210419.v1.pdf",
   "O.C.G.A. 40-6-331 https://law.justia.com/codes/georgia/title-40/chapter-6/article-13/part-3/section-40-6-331/",
   "OpenStreetMap",
-  "FHWA HPMS speed limits"
+  "FHWA HPMS speed limits",
+  "Bobby Marr, Public Works Director, City of St. Marys, email 2026-11-17 11:46 AM PT https://www.stmarysga.gov/departments/public_works/index.php"
  ],
  "enforcement": {
   "checked": "2026-10-28",
