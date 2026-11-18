@@ -29,7 +29,7 @@
   }
  ],
  "unverified": [
-  "Official CTDOT OSTA speeds are applied only for Lake Avenue, Stanwich Road, and North Street (the Greenwich roads asked in the 2026-11-16 check). Westover Road in this map is in Stamford; the Stamford OSTA list posts it 25 mph. School-hours and when-flashing limits on those roads are not used as the all-day posted speed. Other roads still use OSM or inferred speeds. Untagged residential streets without an official override are assumed 25 mph. I-95 and the Merritt Parkway stay banned."
+  "Official CTDOT OSTA speeds are applied for Lake Avenue, Stanwich Road, North Street, Taconic Road, Round Hill Road (the NYT#107 to Merritt Parkway 35 mph listing only), Zaccheus Mead Lane, Lower Cross Road, North Maple Avenue, Old Church Road, Hillside Road, Close Road, Weaver Street, Sound Beach Avenue (the in-tile stretch), and Ritch Avenue (the in-tile fragment). Westover Road in this map is in Stamford; the Stamford OSTA list posts it 25 mph. School-hours and when-flashing limits are not used as the all-day posted speed. The 3.42 mi 30 mph Round Hill Road listing from the Merritt Parkway to the New York state line is not in the current tiles, and the 2.71 mi of Round Hill Road from Lake Avenue to NYT#107 has no all-day OSTA row, so those stretches are unchanged. Other roads still use OSM or inferred speeds. Untagged residential streets without an official override are assumed 25 mph. I-95 and the Merritt Parkway stay banned."
  ],
  "speed_names": [
   {
@@ -116,6 +116,102 @@
    "mph": 25,
    "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/stamfordpdf.pdf?rev=eb7b5c41e63d4fefa3b2244068d5b8d6",
    "label": "CTDOT OSTA Stamford town speed list, report printed 5/27/2025, page 15: WESTOVER ROAD, PALMERS HILL ROAD to ROXBURY ROAD, 25 mph (3.14 mi; the mapped Westover Road in the Greenwich region is also 3.14 mi). Westover Road is in Stamford (Nicholas J. Ciarlo, Greenwich DPW, 2026-11-17). Region bounds were not widened."
+  },
+  {
+   "names": "^Taconic Road$",
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 14 row 14: TACONIC ROAD, NORTH STREET #1 to STAMFORD TOWN LINE, 30 mph (3.50 mi official; 3.03 mi is in the current Greenwich tiles, ending short of the Stamford line). School-hours and when-flashing rows were not used."
+  },
+  {
+   "names": "^Round Hill Road$",
+   "north_of": 41.08089,
+   "mph": 35,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 12 row 22: ROUND HILL ROAD, NYT#107 to NORTHBOUND MERRITT PARKWAY, 35 mph (0.22 mi official). NYT#107 is placed 0.22 mi south of the Merritt along the mapped road, at 41.08089,-73.66303. The 3.42 mi 30 mph listing from the N/B Merritt Parkway ramp to the New York state line (page 12 row 21) is not in the current Greenwich tiles (the mapped road ends at the Merritt). The 2.71 mi from Lake Avenue to NYT#107 has no all-day OSTA row and is left unchanged."
+  },
+  {
+   "names": "^Zaccheus Mead Lane$",
+   "south_of": 41.04304,
+   "mph": 25,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 15 row 18: ZACCHEUS MEAD LANE, ROCK RIDGE AVENUE to WINDING LANE, 25 mph (0.68 mi official; 0.676 mi mapped to Winding Lane)."
+  },
+  {
+   "names": "^Zaccheus Mead Lane$",
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 15 row 19: ZACCHEUS MEAD LANE, WINDING LANE to PECKLAND ROAD, 30 mph (1.10 mi official; 1.104 mi mapped to Pecksland Road, the mapped spelling of Peckland)."
+  },
+  {
+   "names": "^Lower Cross Road$",
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 8 row 13: LOWER CROSS ROAD, LAKE AVENUE to NORTH STREET #1, 30 mph (1.43 mi official; 1.394 mi mapped). When-flashing 20 mph rows on this road were not used."
+  },
+  {
+   "names": "^North Maple Avenue$",
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 9 row 18: NORTH MAPLE AVENUE, NORTH STREET #1 to LAKE AVENUE, 30 mph (1.13 mi official; 1.132 mi mapped)."
+  },
+  {
+   "names": "^Old Church Road$",
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 10 row 9: OLD CHURCH ROAD, RT 1 (E. PUTNAM AVE) to FAIRFIELD ROAD, 30 mph (1.05 mi official; 1.035 mi mapped)."
+  },
+  {
+   "names": "^Hillside Road$",
+   "north_of": 41.03724,
+   "south_of": 41.04452,
+   "mph": 25,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 6 row 21: HILLSIDE ROAD, 150' N/O ROUTE 1 (EAST PUTNAM AVE) to 725' S/O FAIRFIELD ROAD, 25 mph (0.52 mi official). Cuts are placed 150 ft north of East Putnam Avenue (41.03724,-73.61046) and 725 ft south of Fairfield Road (41.04452,-73.61096) along the mapped road (0.524 mi). The same bounds appear in a when-flashing row, which was not used."
+  },
+  {
+   "names": "^Hillside Road$",
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 6 row 22: HILLSIDE ROAD, RT 1 (E. PUTNAM AVE) to FAIRFIELD ROAD, 30 mph (0.69 mi official; 0.690 mi mapped between those intersections). The inner 25 mph stretch from page 6 row 21 is applied first."
+  },
+  {
+   "names": "^Close Road$",
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 3 row 5: CLOSE ROAD, ROUND HILL ROAD to LAKE AVENUE, 30 mph (0.61 mi official; 0.594 mi mapped, from Lake Avenue west; Round Hill Road itself is not in the tiles this far north)."
+  },
+  {
+   "names": "^Weaver Street$",
+   "south_of": 41.01746,
+   "mph": 25,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 14 row 25: WEAVER STREET, BYRAM TERRACE DRIVE to EAST WEAVER STREET, 25 mph (0.24 mi official). The mapped street begins 0.114 mi north of Byram Terrace Drive and reaches East Weaver Street in 0.126 mi, which is the in-tile part of that 0.24 mi listing. Split at East Weaver Street 41.01745,-73.65015."
+  },
+  {
+   "names": "^Weaver Street$",
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 15 row 1: WEAVER STREET, EAST WEAVER STREET to GLENVILLE ROAD, 30 mph (1.62 mi official; 1.616 mi mapped)."
+  },
+  {
+   "names": "^Sound Beach Avenue$",
+   "north_of": 41.03889,
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 13 row 19: SOUND BEACH AVENUE, RT 1 (E. PUTNAM AVE.) to LOCKWOOD ROAD, 30 mph (0.34 mi official; 0.339 mi mapped). Split at Lockwood Road 41.03889,-73.57132."
+  },
+  {
+   "names": "^Sound Beach Avenue$",
+   "mph": 25,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 13 row 18: SOUND BEACH AVENUE, LOCKWOOD ROAD to LOCKWOOD AVENUE, 25 mph (0.89 mi official). Only the first 0.114 mi south of Lockwood Road is in the current tiles. The 0.58 mi 30 mph listing from Lockwood Avenue to Shore Road #2 (page 13 row 17) is not in the current Greenwich tiles."
+  },
+  {
+   "names": "^Ritch Avenue$",
+   "mph": 30,
+   "url": "https://portal.ct.gov/dot/-/media/dot/osta/townspeeds/greenwichpdf.pdf?rev=bedef88afc6e4c7abcf63c8a86fc14ae",
+   "label": "CTDOT OSTA Greenwich town speed list, report printed 4/8/2026, page 12 row 7: RITCH AVENUE, BYRAM SHORE ROAD to HAMILTON AVENUE, 30 mph (0.70 mi official). Only 0.083 mi is in the current Greenwich tiles, at the Hamilton Avenue end (the fragment meets Columbus Avenue, 113 ft from Hamilton Avenue). Region bounds were not widened."
   }
  ],
  "sources": [
