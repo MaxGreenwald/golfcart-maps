@@ -18,6 +18,7 @@ class CiBrowserHarness(unittest.TestCase):
     def test_hook_file_exists_and_mentions_fonts(self):
         text = HOOK.read_text()
         self.assertIn("domcontentloaded", text)
+        self.assertIn("go_back", text)
         self.assertIn("fonts.googleapis.com", text)
         self.assertIn("fonts.gstatic.com", text)
 
@@ -30,7 +31,9 @@ class CiBrowserHarness(unittest.TestCase):
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
         self.assertTrue(getattr(Page.goto, "_gcm_harness", False))
-        # Don't un-patch here; other tests in this process may want the hook.
+        self.assertTrue(getattr(Page.go_back, "_gcm_harness", False))
+        self.assertTrue(getattr(Page.go_forward, "_gcm_harness", False))
+        self.assertTrue(getattr(Page.reload, "_gcm_harness", False))
 
 
 if __name__ == "__main__":

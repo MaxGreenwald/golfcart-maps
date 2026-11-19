@@ -10,7 +10,8 @@ including a rerun of master 8fb7a3d, while the same tests passed locally.
 This module is imported automatically when PYTHONPATH includes this directory
 (the browser job in .github/workflows/web-ci.yml sets that). It:
 
-1. Defaults Page.goto to wait_until="domcontentloaded" unless the caller set one.
+1. Defaults Page.goto, go_back, go_forward, and reload to
+   wait_until="domcontentloaded" unless the caller set one.
    Tests already wait for window.ready afterwards.
 2. Stubs fonts.googleapis.com and fonts.gstatic.com so even an explicit
    wait_until="load" cannot block on Google Fonts.
@@ -42,15 +43,18 @@ def stub_fonts(context):
 def install():
     if Page is None or getattr(Page.goto, "_gcm_harness", False):
         return
-    orig_goto = Page.goto
+    def wrap_nav(fn):
+        def wrapped(self, *args, **kwargs):
+            kwargs.setdefault("wait_until", "domcontentloaded")
+            return fn(self, *args, **kwargs)
+        wrapped._gcm_harness = True
+        wrapped._gcm_orig = fn
+        return wrapped
 
-    def goto(self, url, **kwargs):
-        kwargs.setdefault("wait_until", "domcontentloaded")
-        return orig_goto(self, url, **kwargs)
-
-    goto._gcm_harness = True
-    goto._gcm_orig = orig_goto
-    Page.goto = goto
+    Page.goto = wrap_nav(Page.goto)
+    Page.go_back = wrap_nav(Page.go_back)
+    Page.go_forward = wrap_nav(Page.go_forward)
+    Page.reload = wrap_nav(Page.reload)
 
     orig_new_context = Browser.new_context
 
