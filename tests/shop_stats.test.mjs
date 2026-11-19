@@ -50,10 +50,10 @@ test('counts unlocks per code, rides and offer taps by day, for this shop only',
   const s = computeShopStats(qOf(dbWith(rows())), { shop: 'BeachMode', days: 30, now: NOW });
   assert.equal(s.shop, 'beachmode');
   assert.equal(s.filter, 'internal-test-excluded');
-  assert.deepEqual(s.totals, { unlocks: 3, started: 2, finished: 1, affiliate_taps: 2 });
+  assert.deepEqual(s.totals, { unlocks: 3, started: 2, finished: 1, affiliate_taps: 2, opens: 0, routes: 2, experience_opens: 0, stop_opens: 0 });
   const plain = v => JSON.parse(JSON.stringify(v));
   assert.deepEqual(plain(s.codes).map(c => [c.code, c.unlocks]), [['ab12cd3', 2], ['zz99', 1]]);
-  assert.deepEqual(plain(s.rides), [{ ride: 'e1', started: 2, finished: 1 }]);
+  assert.deepEqual(plain(s.rides), [{ ride: 'e1', opened: 0, started: 2, finished: 1 }]);
   assert.deepEqual(plain(s.pins), [{ pin: 'a1', taps: 2 }]);
   assert.equal(s.daily[0].day, DAY);
   assert.equal(s.daily[0].unlocks, 2);
@@ -111,4 +111,44 @@ test('workers expose shop stats behind the stats key and the shop session', () =
   assert.match(web, /experience_finished/);
   assert.match(web, /affiliate_tap/);
   assert.match(web, /if \(!handoffParam\) trackShop\('partner_unlock'/);
+});
+
+test('weekly renter opens, routes, ride and stop opens; Max installs and other shops left out', () => {
+  const MON = '2026-11-09', SUN = '2026-11-15', NEXT = '2026-11-16', LAST = '2026-11-08';
+  const now = Date.parse('2026-11-17T18:00:00Z');
+  const ev = (event, day, props, iid = REAL) => ({ iid, event, day, props: { shop: 'beachmode', ...props } });
+  const db = dbWith([
+    ev('partner_open', MON, { code: 'ab12' }), ev('partner_open', SUN, { code: 'ab12' }), ev('partner_open', NEXT, { code: 'ab12' }),
+    ev('partner_open', LAST, { code: 'ab12' }),
+    ev('experience_opened', MON, { ride: 'e1' }), ev('experience_opened', SUN, { ride: 'e2' }),
+    ev('stop_opened', SUN, { ride: 'e1', pin: '2' }), ev('stop_opened', SUN, { ride: 'e1', pin: '2' }), ev('stop_opened', NEXT, { ride: 'e1', pin: '1' }),
+    ev('experience_started', MON, { ride: 'e1' }), ev('partner_route', NEXT, {}),
+    ev('partner_open', MON, { code: 'ab12' }, DENY), ev('stop_opened', MON, { ride: 'e1', pin: '2' }, DENY),
+    { iid: OTHER, event: 'partner_open', day: MON, props: { shop: 'other-shop' } },
+  ]);
+  const s = computeShopStats(qOf(db), { shop: 'beachmode', days: 30, now });
+  const plain = v => JSON.parse(JSON.stringify(v));
+  assert.equal(s.totals.opens, 4);
+  assert.equal(s.totals.routes, 2, 'experience starts plus free routes');
+  assert.equal(s.totals.experience_opens, 2);
+  assert.equal(s.totals.stop_opens, 3);
+  assert.deepEqual(plain(s.weekly).map(w => [w.week, w.opens, w.routes, w.experience_opens, w.stop_opens]), [
+    ['2026-11-16', 1, 1, 0, 1],
+    ['2026-11-09', 2, 1, 2, 2],
+    ['2026-11-02', 1, 0, 0, 0],
+  ]);
+  assert.deepEqual(plain(s.stops)[0], { ride: 'e1', pin: '2', opens: 2 });
+  assert.deepEqual(plain(s.rides).find(r => r.ride === 'e2'), { ride: 'e2', opened: 1, started: 0, finished: 0 });
+  // Extra denylisted ids from the analytics Worker (EXCLUDE_IIDS env) are left out too.
+  const t = computeShopStats(qOf(db), { shop: 'beachmode', days: 30, now, extraIids: [REAL] });
+  assert.equal(t.totals.opens, 0);
+});
+
+test('new shop events carry tokens only', async () => {
+  const { sanitize } = await import('../lib/analytics.js');
+  const base = { pl: 'web', i: REAL, s: 'sess-aaaaaaaa', t: 'sd' };
+  assert.deepEqual(sanitize({ ...base, e: 'partner_open', p: { shop: 'beachmode', code: 'AB12', lat: 32.8, name: 'Jamie' } }).props, { shop: 'beachmode', code: 'ab12' });
+  assert.deepEqual(sanitize({ ...base, e: 'stop_opened', p: { shop: 'beachmode', ride: 'e1', pin: '2', label: 'Seals' } }).props, { shop: 'beachmode', ride: 'e1', pin: '2' });
+  assert.deepEqual(sanitize({ ...base, e: 'partner_route', p: { shop: 'beachmode', mi: 3 } }).props, { shop: 'beachmode' });
+  assert.deepEqual(sanitize({ ...base, e: 'experience_opened', p: { shop: 'beachmode', ride: 'e1' } }).props, { shop: 'beachmode', ride: 'e1' });
 });

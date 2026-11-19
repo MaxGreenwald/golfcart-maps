@@ -440,6 +440,13 @@ function drawRoadCanvas() {
   ctx.setLineDash([]);
 }
 
+// Stop number in the shop's saved order (the ride may be shown in visit order).
+function stopNumber(s, i) {
+  const list = (baseEx && baseEx.stops) || [];
+  let k = list.indexOf(s);
+  if (k < 0) k = list.findIndex(x => x && +x.lat === +s.lat && +x.lon === +s.lon);
+  return k >= 0 ? k + 1 : i + 1;
+}
 function stopPopupHtml(s, i) {
   const photo = safeLogo(s.photo);
   return `<b>${i + 1}. ${esc(s.label)}</b>${photo ? `<br><img src="${esc(photo)}" alt="" style="max-width:220px;border-radius:8px;margin-top:6px">` : ''}${s.note ? `<br>${esc(s.note)}` : ''}`;
@@ -587,6 +594,7 @@ async function drawUnlocked(opts) {
       if (!finite(s.lat, s.lon)) return;
       const m = L.marker([+s.lat, +s.lon], { icon: stopIcon(i + 1), zIndexOffset: 700 }).addTo(pins);
       m.bindPopup(stopPopupHtml(s, i));
+      m.on('popupopen', () => trackShop('stop_opened', { ride: activeEx && activeEx.id, pin: String(stopNumber(s, i)) }));
       bounds.push([+s.lat, +s.lon]);
       const park = routePoint(s);
       if (park.parked) {
@@ -951,6 +959,7 @@ async function routeFree(dest, quiet) {
   setGoNote(risky.length ? `${mi} mi · ⚠️ ${risky.length} risky stretch${risky.length > 1 ? 'es' : ''} (red dashes). Use caution.` : `${mi} mi on legal golf cart roads.`);
   if (!quiet) frameLatLngs(leg.points.concat([[from.lat, from.lon]]));
   beginNav(leg, -1, dest);
+  if (!quiet) trackShop('partner_route');
 }
 function navRouteLen(pts) { let m = 0; for (let i = 1; i < pts.length; i++) m += GCMNav.hav(pts[i - 1], pts[i]); return m; }
 function wireFree() {
@@ -1120,6 +1129,7 @@ function focusEx(on) {
 function selectEx(id) {
   const ex = (unlocked && unlocked.experiences) || [];
   activeEx = baseEx = ex.find(x => x.id === id) || null;
+  if (activeEx) trackShop('experience_opened', { ride: activeEx.id });
   riderShopOrder = false;
   setOrderNote(false);
   stopIdx = 0;
@@ -1172,6 +1182,7 @@ function wireOffline() {
 }
 async function unlockedView() {
   const shop = unlocked.shop;
+  trackShop('partner_open', { code: unlocked.code || codeParam });
   applyShop(shop, true);
   document.body.classList.add('is-open');
   ticker.hidden = true;
