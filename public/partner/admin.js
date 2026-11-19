@@ -1189,6 +1189,9 @@ function rentalCard(s) {
     <p class="muted">Renters get a nudge before this time, and a warning when the legal ride back is close to the cart range.</p>
     <label for="rentReturnBy">Return by</label>
     <input id="rentReturnBy" type="time" value="${esc(s.return_by || '')}">
+    <label for="rentRemindMin">Nudge renters this long before return</label>
+    <select id="rentRemindMin">${[10, 15, 20, 30, 45, 60].map(n => `<option value="${n}"${(+s.remind_min || 15) === n ? ' selected' : ''}>${n} minutes</option>`).join('')}</select>
+    <p class="muted">Booked renters (Renters today) are nudged before their own return time, in the map and by email. Everyone else uses Return by.</p>
     <label for="rentRange">Cart range when full (miles)</label>
     <input id="rentRange" inputmode="decimal" placeholder="25" value="${s.range_mi ? esc(String(s.range_mi)) : ''}">
     <label>Where the cart goes back</label>
@@ -1504,6 +1507,7 @@ function bindApp() {
     try {
       await api('/shop', { method: 'PATCH', body: JSON.stringify({
         return_by: $('#rentReturnBy').value,
+        remind_min: $('#rentRemindMin') ? $('#rentRemindMin').value : undefined,
         range_mi: $('#rentRange').value,
         return_lat: $('#rentReturnLat').value,
         return_lon: $('#rentReturnLon').value,

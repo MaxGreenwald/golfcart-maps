@@ -25,7 +25,7 @@
   }
   function record(j, code, nowMs) {
     return { slug: j.slug || (j.shop && j.shop.slug) || '', code: j.code || code, at: nowMs, shop: j.shop,
-      experiences: j.experiences || [], affiliates: j.affiliates || [], places: j.places || [] };
+      experiences: j.experiences || [], affiliates: j.affiliates || [], places: j.places || [], booking: j.booking || null };
   }
   /** The saved unlock when it's still fresh (14 days), else null. */
   function load(storage, nowMs = Date.now()) {
