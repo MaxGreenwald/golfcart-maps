@@ -86,10 +86,11 @@ export function makePartner(opts = {}) {
       body: init.json !== undefined ? JSON.stringify(init.json) : init.body,
     });
     const res = await withFetch(() => worker.fetch(req, env));
-    const text = await res.text();
+    const bytes = Buffer.from(await res.arrayBuffer());
+    const text = bytes.toString('utf8');
     let body = null;
     try { body = JSON.parse(text); } catch { body = text; }
-    return { status: res.status, body, headers: res.headers };
+    return { status: res.status, body, headers: res.headers, bytes };
   }
   async function login(email) {
     const r = await call('/auth/dev', { json: { email, expect: email } });

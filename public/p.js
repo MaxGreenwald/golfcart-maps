@@ -1186,6 +1186,7 @@ async function unlockedView() {
         <p>Code <b>${esc(code)}</b> unlocked ${esc(shop.name)}. Pick a ride, then start from where you are.</p>
       </div>
       ${rentalCard(shop)}
+      <div id="reportSlot"></div>
       <div class="offrow"><button class="allex" id="offBtn" type="button" hidden>⬇️ Download map for offline</button><p class="fine" id="offNote" aria-live="polite"></p></div>
       <div id="goPane" hidden>
         <button class="allex" id="goBack" type="button">‹ Back to experiences</button>
@@ -1258,6 +1259,13 @@ async function unlockedView() {
   }
   if (window.GCMHelp && unlocked && unlocked.shop && unlocked.shop.phone) {
     GCMHelp.mount(document, { phone: unlocked.shop.phone, shopName: unlocked.shop.name, getFix: () => meLL });
+  }
+  if (window.GCMReport && unlocked && unlocked.shop) {
+    const r = unlocked.shop.rental || {};
+    GCMReport.mount(document.getElementById('reportSlot'), {
+      api: API, slug, code: unlocked.code || codeParam, cart: unlocked.cart || '',
+      shopName: unlocked.shop.name, phone: (window.GCMHelp && GCMHelp.display && GCMHelp.display(r.phone || unlocked.shop.phone)) || '',
+    });
   }
   armNudges();
 }

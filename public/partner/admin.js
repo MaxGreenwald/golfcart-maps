@@ -633,6 +633,7 @@ function shopView() {
   </div>
   ${window.GCMBookings ? GCMBookings.card() : ''}
   ${rentalCard(s)}
+  ${window.GCMReports ? GCMReports.card() : ''}
   <div class="card"><h2>Experiences</h2>
     <p class="muted">Ordered joyride stops. Search a place or drop a pin and name it yourself. Edit an experience to change a stop or its order.</p>
     ${starterBlock()}
@@ -1624,6 +1625,7 @@ function bindApp() {
   if (daysIn) daysIn.oninput = () => chips.forEach(x => x.classList.toggle('on', x.dataset.days === daysIn.value));
   wireDash();
   if (window.GCMBookings) GCMBookings.bind();
+  if (window.GCMReports) GCMReports.bind();
   const regionSel = $('#brandRegion');
   if (regionSel) regionSel.addEventListener('change', () => loadStarters());
   const vehSel = $('#brandVehicle');
