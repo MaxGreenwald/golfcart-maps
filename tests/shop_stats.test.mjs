@@ -50,7 +50,7 @@ test('counts unlocks per code, rides and offer taps by day, for this shop only',
   const s = computeShopStats(qOf(dbWith(rows())), { shop: 'BeachMode', days: 30, now: NOW });
   assert.equal(s.shop, 'beachmode');
   assert.equal(s.filter, 'internal-test-excluded');
-  assert.deepEqual(s.totals, { unlocks: 3, started: 2, finished: 1, affiliate_taps: 2, opens: 0, routes: 2, experience_opens: 0, stop_opens: 0 });
+  assert.deepEqual(s.totals, { unlocks: 3, started: 2, finished: 1, affiliate_taps: 2, opens: 0, routes: 2, experience_opens: 0, stop_opens: 0, place_opens: 0, partner_navs: 0 });
   const plain = v => JSON.parse(JSON.stringify(v));
   assert.deepEqual(plain(s.codes).map(c => [c.code, c.unlocks]), [['ab12cd3', 2], ['zz99', 1]]);
   assert.deepEqual(plain(s.rides), [{ ride: 'e1', opened: 0, started: 2, finished: 1 }]);
@@ -151,4 +151,26 @@ test('new shop events carry tokens only', async () => {
   assert.deepEqual(sanitize({ ...base, e: 'stop_opened', p: { shop: 'beachmode', ride: 'e1', pin: '2', label: 'Seals' } }).props, { shop: 'beachmode', ride: 'e1', pin: '2' });
   assert.deepEqual(sanitize({ ...base, e: 'partner_route', p: { shop: 'beachmode', mi: 3 } }).props, { shop: 'beachmode' });
   assert.deepEqual(sanitize({ ...base, e: 'experience_opened', p: { shop: 'beachmode', ride: 'e1' } }).props, { shop: 'beachmode', ride: 'e1' });
+});
+
+test('partner stops: offer taps and place opens count as opens, Take me there as navigations', async () => {
+  const now = Date.parse('2026-11-17T18:00:00Z');
+  const ev = (event, props, iid = REAL) => ({ iid, event, day: '2026-11-16', props: { shop: 'beachmode', ...props } });
+  const db = dbWith([
+    ev('affiliate_tap', { pin: 'a1' }), ev('affiliate_tap', { pin: 'a1' }), ev('partner_nav', { pin: 'a1' }),
+    ev('place_opened', { pin: 'p1' }), ev('partner_nav', { pin: 'p1' }), ev('partner_nav', { pin: 'p1' }),
+    ev('partner_nav', { pin: 'p1' }, DENY), ev('place_opened', { pin: 'p1' }, DENY),
+    { iid: OTHER, event: 'partner_nav', day: '2026-11-16', props: { shop: 'other-shop', pin: 'p1' } },
+  ]);
+  const s = computeShopStats(qOf(db), { shop: 'beachmode', days: 30, now });
+  assert.deepEqual(JSON.parse(JSON.stringify(s.partner_stops)), [
+    { pin: 'p1', opens: 1, navs: 2 },
+    { pin: 'a1', opens: 2, navs: 1 },
+  ]);
+  assert.equal(s.totals.partner_navs, 3);
+  assert.equal(s.totals.place_opens, 1);
+  const { sanitize } = await import('../lib/analytics.js');
+  const base = { pl: 'web', i: REAL, s: 'sess-aaaaaaaa', t: 'sd' };
+  assert.deepEqual(sanitize({ ...base, e: 'partner_nav', p: { shop: 'beachmode', pin: 'p1', lat: 1, name: 'Pier' } }).props, { shop: 'beachmode', pin: 'p1' });
+  assert.deepEqual(sanitize({ ...base, e: 'place_opened', p: { shop: 'beachmode', pin: 'p1' } }).props, { shop: 'beachmode', pin: 'p1' });
 });
