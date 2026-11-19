@@ -224,6 +224,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offs
 #navBanner.show{display:block}
 #nudgeBar{position:fixed;z-index:45;left:12px;right:12px;top:calc(8px + env(safe-area-inset-top,0px));max-width:536px;margin:0 auto;background:#7a2e00;color:#fff;border-radius:14px;padding:10px 14px;font:800 14px/1.35 Nunito,system-ui,sans-serif;box-shadow:0 8px 20px rgba(0,0,0,.25)}
 #nudgeBar[hidden]{display:none!important}
+#zoneBar{position:fixed;z-index:46;left:12px;right:12px;top:calc(64px + env(safe-area-inset-top,0px));max-width:536px;margin:0 auto;background:#b42318;color:#fff;border-radius:14px;padding:10px 14px;font:800 14px/1.35 Nunito,system-ui,sans-serif;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+#zoneBar[hidden]{display:none!important}
+body.has-nav #zoneBar{top:calc(172px + env(safe-area-inset-top,0px))}
+.legend.zone-legend{color:#b42318}
+.zone-warn{color:#b42318;font-weight:900}
 body.has-nav #nudgeBar{top:calc(118px + env(safe-area-inset-top,0px))}
 #navBanner .nav-row{display:flex;align-items:center;gap:10px}
 #navBanner .nav-arrow{flex:none;width:46px;height:46px;border-radius:12px;background:#1d6fe0;display:grid;place-items:center;font:900 30px/1 system-ui}
@@ -324,9 +329,11 @@ html.gcm-offline .leaflet-container{background:#eef2ea}
   <div id="panel"><p class="fine">Loading the welcome mat…</p></div>
 </main>
 <div id="nudgeBar" hidden role="status"></div>
+<div id="zoneBar" hidden role="alert"></div>
 <div id="nextBar"><img id="nextPhoto" alt="" hidden><b id="nextLabel">Next stop</b><button id="nextBtn" type="button">Next</button></div>
 <script src="/offline.js"></script>
 <script src="/roadrule.js"></script>
+<script src="/offlimits.js"></script>
 <script src="/router.js"></script>
 <script src="/nav.js"></script>
 <script src="/navfollow.js"></script>

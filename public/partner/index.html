@@ -57,6 +57,9 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 .route-check .route-flags{margin:8px 0 0;padding-left:18px;color:var(--bad)}
 .route-check .err{color:var(--bad);margin:0}
 .pinmap{height:220px;border-radius:12px;border:1px solid var(--line);margin-top:8px;z-index:1;background:#d4dadc}
+.offmap{height:340px}
+.off-tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.off-tools [aria-pressed="true"]{background:#b42318;color:#fff}
 .pinmap .leaflet-container{font:600 12px Nunito,system-ui,sans-serif}
 .pinmap img.leaflet-tile{max-width:none !important;max-height:none !important;mix-blend-mode:normal !important}
 .stop input[type=file],#brandLogoFile{max-width:100%}
@@ -99,6 +102,8 @@ label input[type=checkbox]{width:auto;margin-right:8px}
 <script src="/router.js"></script>
 <script src="/routecheck.js"></script>
 <script src="/photoupload.js"></script>
+<script src="/offlimits.js"></script>
+<script src="/partner/offcard.js"></script>
 <script src="/partner/admin.js"></script>
 </body>
 </html>

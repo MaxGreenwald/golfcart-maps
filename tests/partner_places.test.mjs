@@ -37,7 +37,7 @@ test('PATCH validates only sent fields', () => {
 
 test('Worker routes places through the shared shop access check', () => {
   const src = readFileSync(new URL('../workers/partner/src/index.js', import.meta.url), 'utf8');
-  assert.match(src, /\['experiences', 'affiliates', 'places', 'codes'\]/);
-  assert.match(src, /\(experiences\|affiliates\|places\)\\\/\(\[\^\/\]\+\)\$/);
+  assert.match(src, /\['experiences', 'affiliates', 'places', 'codes'(, '[a-z]+')*\]/);
+  assert.match(src, /\(experiences\|affiliates\|places(\|[a-z]+)*\)\\\/\(\[\^\/\]\+\)\$/);
   assert.match(src, /places: this\.places\(sh\.id\)/, 'unlock returns places');
 });

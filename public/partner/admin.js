@@ -652,6 +652,7 @@ function shopView() {
   </div>
   ${copyCard()}
   ${placesCard()}
+  ${window.GCMOffAdmin ? GCMOffAdmin.card() : ''}
   <div class="card af-place"><h2>Affiliate offers</h2>
     <p class="muted">Restaurants and deals for your renters. Larger ★ pins on the map.</p>
     <p class="muted hidden" id="afEditing">Editing this offer. Search or drop a pin to move it.</p>
@@ -1526,6 +1527,7 @@ function bindApp() {
 
   wireAffiliatePicker();
   wirePlaces();
+  if (window.GCMOffAdmin) GCMOffAdmin.bind();
 
   const addEx = $('#addEx');
   if (addEx) addEx.onclick = async () => {

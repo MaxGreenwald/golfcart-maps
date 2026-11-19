@@ -528,13 +528,52 @@ function connectStops(stops, opts) {
   return withRoads(async () => {
     await loadRules();
     const veh = shopVeh();
-    const key = (region && region.id || 'sd') + ':' + veh;
+    const zs = zones();
+    const key = (region && region.id || 'sd') + ':' + veh + ':' + zs.map(z => z.id).join(',');
     if (!roadApi || roadKey !== key) {
-      roadApi = await GCMRouter.openRegion(region, rules, veh, freshFetch);
+      // The shop's off-limits zones cost far more in the shared router, so routes go around them when they can.
+      const avoid = window.GCMOffLimits ? GCMOffLimits.segAvoid(zs) : null;
+      roadApi = await GCMRouter.openRegion(region, rules, veh, freshFetch, avoid ? { avoid } : undefined);
       roadKey = key;
     }
     return roadApi.legs(stops, opts);
   });
+}
+// Off-limits zones the shop drew (public/offlimits.js): shaded on the map, avoided by the router,
+// called out when a route still has to cross one, and announced when the rider gets close.
+function zones() { return (unlocked && Array.isArray(unlocked.offlimits)) ? unlocked.offlimits : []; }
+function drawZones(layer) {
+  for (const z of zones()) {
+    if (!Array.isArray(z.points) || z.points.length < 2) continue;
+    const pop = `<b>⛔ Off limits: ${esc(z.name)}</b>${z.note ? `<br>${esc(z.note)}` : ''}<br><span class="muted">Marked by the shop</span>`;
+    const shape = z.kind === 'area'
+      ? L.polygon(z.points, { color: '#b42318', weight: 2, dashArray: '6 4', fillColor: '#e5484d', fillOpacity: 0.2 })
+      : L.polyline(z.points, { color: '#b42318', weight: 8, opacity: 0.55, dashArray: '2 10', lineCap: 'round' });
+    shape.bindPopup(pop).addTo(layer);
+  }
+}
+function zoneWarning(paths, stops, free) {
+  if (!window.GCMOffLimits || !zones().length) return '';
+  const hits = [];
+  for (const p of paths) for (const h of GCMOffLimits.routeHits(p, zones())) if (!hits.some(x => x.id === h.id)) hits.push(h);
+  const inside = GCMOffLimits.stopsInside(stops || [], zones());
+  const parts = [];
+  if (hits.length) parts.push(GCMOffLimits.warnText(hits));
+  for (const s of inside) parts.push(free
+    ? `⛔ ${s.label || 'That spot'} is inside ${s.zone}. Park outside it and walk in.`
+    : `⛔ Stop ${s.index + 1}${s.label ? ` (${s.label})` : ''} is inside ${s.zone}. Park outside it and walk in.`);
+  return parts.join(' ');
+}
+let zoneSaid = '';
+function zoneAlert(ll) {
+  const el = document.getElementById('zoneBar');
+  if (!el || !window.GCMOffLimits || !zones().length || !ll) return;
+  const z = GCMOffLimits.near(ll, zones(), zoneSaid ? 80 : 50);
+  if (!z) { el.hidden = true; el.textContent = ''; zoneSaid = ''; return; }
+  const text = (z.meters === 0 ? `⛔ You are in an off-limits area: ${z.name}.` : `⛔ Off limits ahead: ${z.name}.`) + (z.note ? ' ' + z.note : '');
+  el.textContent = text;
+  el.hidden = false;
+  if (zoneSaid !== z.id + ':' + (z.meters === 0)) { zoneSaid = z.id + ':' + (z.meters === 0); say(text.replace(/^⛔ /, '')); }
 }
 function describeRoute(legs, nStops) {
   if (nStops < 2) return nStops ? 'One stop. Hit Start experience to route there from you.' : '';
@@ -595,7 +634,11 @@ async function drawUnlocked(opts) {
       }
     });
   }
-  setRouteNote(describeRoute(legs, goodStops.length));
+  drawZones(pins);
+  const warn = zoneWarning((legs || []).filter(l => l.points).map(l => l.points), activeEx ? activeEx.stops : []);
+  setRouteNote([describeRoute(legs, goodStops.length), warn].filter(Boolean).join(' '));
+  const rn = document.getElementById('routeNote');
+  if (rn) rn.classList.toggle('zone-warn', !!warn);
   if (bounds.length && !(opts && opts.noFrame)) frameLatLngs(bounds);
   scheduleRoads();
   updateNext();
@@ -729,6 +772,8 @@ function stopNav() {
   if (navWatch != null && navigator.geolocation) navigator.geolocation.clearWatch(navWatch);
   navWatch = null; navRoute = null; navState = null; navStop = -1; navArrived = false;
   hideStory();
+  zoneSaid = '';
+  const zb = document.getElementById('zoneBar'); if (zb) { zb.hidden = true; zb.textContent = ''; }
   if (navFlagMk) { navFlagMk.remove(); navFlagMk = null; }
   trimNav(0);
   const el = document.getElementById('navBanner');
@@ -786,6 +831,7 @@ async function onNavFix(ll) {
   if (!finite(ll.lat, ll.lon)) return;
   meLL = { lat: ll.lat, lon: ll.lon };
   placeMe();
+  zoneAlert(meLL);
   if (follow) follow.fix(ll.coords || { latitude: ll.lat, longitude: ll.lon });
   if (!navRoute || navArrived || navRerouting) return;
   const st = GCMNav.status(navRoute, [ll.lat, ll.lon], navState, ll.coords ? { course: ll.coords.heading, speed: ll.coords.speed } : null);
@@ -948,7 +994,8 @@ async function routeFree(dest, quiet) {
   const risky = (leg.runs || []).filter(r => r.risky);
   risky.forEach(r => L.polyline(r.points, { renderer: routeR, pane: 'route', color: '#e5484d', weight: 6, dashArray: '8 8', interactive: false }).addTo(liveLayer));
   const mi = (navRouteLen(leg.points) / 1609.34).toFixed(1);
-  setGoNote(risky.length ? `${mi} mi · ⚠️ ${risky.length} risky stretch${risky.length > 1 ? 'es' : ''} (red dashes). Use caution.` : `${mi} mi on legal golf cart roads.`);
+  const zw = zoneWarning([leg.points], [dest], true);
+  setGoNote((risky.length ? `${mi} mi · ⚠️ ${risky.length} risky stretch${risky.length > 1 ? 'es' : ''} (red dashes). Use caution.` : `${mi} mi on legal golf cart roads.`) + (zw ? ' ' + zw : ''));
   if (!quiet) frameLatLngs(leg.points.concat([[from.lat, from.lon]]));
   beginNav(leg, -1, dest);
 }
@@ -1218,6 +1265,7 @@ async function unlockedView() {
       </button>`).join('')}` : ''}</div>
       <p class="legend">Green roads are legal for a ${esc(vehWord())}. Red roads are off limits. The blue line is your route.</p>
       <p class="legend muted" id="vehLegend">${esc(vehLegend())}</p>
+      ${zones().length ? '<p class="legend zone-legend">⛔ Red shaded areas and red dotted roads are off limits. The shop marked them. Routes go around them when there is a legal way.</p>' : ''}
       <p class="legend">Numbered pins are stops. Amber ★ pins are partner offers.${(unlocked.places || []).length ? ' Icon pins (🍽️ 🌅 ❓ 💡 📍) are places to see. Tap one to read about it.' : ''}</p>
       <p class="legend" id="routeNote" aria-live="polite"></p>
     </div>
