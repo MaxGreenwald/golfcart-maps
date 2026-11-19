@@ -565,6 +565,7 @@ function shopView() {
     <td><b>${esc(e.title)}</b><div class="muted">${esc(e.description || '')}</div>
       <div class="muted ex-stops">${stopsLine(e.stops)}</div>
       <div class="muted ex-order">${e.nearest_start === false ? 'Riders follow your exact order' : 'Riders start at their nearest stop'}</div>
+      ${window.GCMSeason && GCMSeason.label(e) ? `<div class="muted ex-season">Seasonal: ${esc(GCMSeason.label(e))}${GCMSeason.inSeason(e) ? '' : ' <span class="pill off">Hidden from renters today</span>'}</div>` : ''}
       ${e.template_id ? '<div class="muted">Linked to your other locations</div>' : ''}</td>
     <td><div class="ex-actions">
       <button class="btn alt" data-edit-ex="${esc(e.id)}" type="button">Edit</button>
@@ -628,6 +629,8 @@ function shopView() {
       <div><label for="rentalPhone">Shop phone</label><input id="rentalPhone" maxlength="40" inputmode="tel" value="${esc((s.rental && s.rental.phone) || '')}" placeholder="Shop number renters can call"></div>
     </div>
     <label for="rentalRules">Cart rules</label><textarea id="rentalRules" maxlength="800" placeholder="Age to drive, seat belts, kids, where to charge">${esc((s.rental && s.rental.rules) || '')}</textarea>
+    <label for="rentalRulesEs">Cart rules in Spanish (optional)</label><textarea id="rentalRulesEs" maxlength="800" lang="es" placeholder="Reglas del carrito para quienes leen en español">${esc((s.rental && s.rental.rules_es) || '')}</textarea>
+    <div class="muted">Renters who switch the page to Español see this instead of your cart rules.</div>
     <label for="rentalDies">If the cart dies</label><textarea id="rentalDies" maxlength="800" placeholder="Call the shop. Stay with the cart.">${esc((s.rental && s.rental.if_cart_dies) || '')}</textarea>
     <p style="margin-top:12px"><button class="btn" id="saveRental" type="button">Save rental info</button></p>
   </div>
@@ -643,6 +646,9 @@ function shopView() {
     <div id="routeCheck" class="route-check" aria-live="polite"></div>
     <label class="ns-row" style="margin-top:10px"><input type="checkbox" id="exNearest" checked> Start riders at their nearest stop</label>
     <div class="muted" id="exNearestHelp">Off: riders follow your exact order</div>
+    <div class="row2 ex-season-row"><div><label for="exFrom">Show from (optional)</label><input id="exFrom" type="date"></div>
+      <div><label for="exUntil">Show until (optional)</label><input id="exUntil" type="date"></div></div>
+    <div class="muted">For seasonal rides like a holiday lights tour. Renters see it only between these dates. Leave both empty to always show it.</div>
     <label class="ns-row hidden" id="exPushRow"><input type="checkbox" id="exPush" checked> Update copies at your other locations</label>
     <p>
       <button class="btn" id="addEx" type="button">Add experience</button>
@@ -1255,6 +1261,8 @@ function loadExperience(ex) {
   $('#exDesc').value = ex.description || '';
   fillStopList(ex.stops || []);
   if ($('#exNearest')) $('#exNearest').checked = ex.nearest_start !== false;
+  if ($('#exFrom')) $('#exFrom').value = ex.starts_on || '';
+  if ($('#exUntil')) $('#exUntil').value = ex.ends_on || '';
   const pushRow = $('#exPushRow');
   if (pushRow) pushRow.classList.toggle('hidden', !ex.template_id);
   if ($('#exPush')) $('#exPush').checked = !!ex.template_id;
@@ -1270,6 +1278,8 @@ function resetExperienceForm() {
   if ($('#exDesc')) $('#exDesc').value = '';
   fillStopList([{}]);
   if ($('#exNearest')) $('#exNearest').checked = true;
+  if ($('#exFrom')) $('#exFrom').value = '';
+  if ($('#exUntil')) $('#exUntil').value = '';
   setExperienceMode(false);
 }
 
@@ -1474,6 +1484,7 @@ function bindApp() {
         phone: $('#rentalPhone').value,
         rules: $('#rentalRules').value,
         if_cart_dies: $('#rentalDies').value,
+        rules_es: $('#rentalRulesEs') ? $('#rentalRulesEs').value : '',
       } }) });
       await refreshShop();
       flash(true, 'Rental info saved');
@@ -1537,6 +1548,8 @@ function bindApp() {
         description: $('#exDesc').value,
         stops,
         nearest_start: !$('#exNearest') || $('#exNearest').checked,
+        starts_on: $('#exFrom') ? $('#exFrom').value : undefined,
+        ends_on: $('#exUntil') ? $('#exUntil').value : undefined,
         push: !!($('#exPushRow') && !$('#exPushRow').classList.contains('hidden') && $('#exPush') && $('#exPush').checked),
       };
       const eid = ($('#exId') && $('#exId').value) || '';

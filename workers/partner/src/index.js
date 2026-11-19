@@ -1,6 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
+import season from '../../../public/season.js';
 import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL, cleanRental, rentalFromRow, cleanReturnBy, cleanRangeMi, cleanReturnSpot, cleanPhone, withPark, bytesFromB64, cleanStops, storeImage, MEDIA_MAX_COUNT } from '../../../lib/partner.js';
 import { fetchShopStats } from '../../../lib/shop_stats.js';
 import { handlePlacesRequest, quotaBuckets, quotaAllowed } from '../../../lib/partner_places.js';
@@ -140,6 +141,10 @@ export class PartnerStore extends DurableObject {
         PRIMARY KEY (shop_id, bucket)
       )
     `);
+    // Seasonal experiences: optional show-from / show-until dates (YYYY-MM-DD).
+    const seCols = this.sql.exec('PRAGMA table_info(experiences)').toArray().map(c => c.name);
+    if (!seCols.includes('starts_on')) this.sql.exec("ALTER TABLE experiences ADD COLUMN starts_on TEXT DEFAULT ''");
+    if (!seCols.includes('ends_on')) this.sql.exec("ALTER TABLE experiences ADD COLUMN ends_on TEXT DEFAULT ''");
   }
   q(s, ...a) { return this.sql.exec(s, ...a).toArray(); }
   one(s, ...a) { return this.q(s, ...a)[0] || null; }
@@ -188,7 +193,7 @@ export class PartnerStore extends DurableObject {
     if (!r) return null;
     let stops = [];
     try { stops = JSON.parse(r.stops_json || '[]'); } catch { stops = []; }
-    return { id: r.id, shop_id: r.shop_id, title: r.title, description: r.description || '', stops, nearest_start: nearestStart(r.nearest_start), template_id: r.template_id || '', created_at: r.created_at, updated_at: r.updated_at };
+    return { id: r.id, shop_id: r.shop_id, title: r.title, description: r.description || '', stops, nearest_start: nearestStart(r.nearest_start), template_id: r.template_id || '', created_at: r.created_at, updated_at: r.updated_at, starts_on: r.starts_on || '', ends_on: r.ends_on || '' };
   }
   placeRow(r) {
     if (!r) return null;
@@ -207,7 +212,7 @@ export class PartnerStore extends DurableObject {
         ? 'SELECT * FROM experiences WHERE id=? AND shop_id=?'
         : 'SELECT * FROM experiences WHERE shop_id=? ORDER BY created_at DESC',
       ...(c.experience_id ? [c.experience_id, sh.id] : [sh.id]),
-    ).map(r => this.expRow(r));
+    ).map(r => this.expRow(r)).filter(e => season.maybeInSeason(e, Date.now()));
     const affiliates = this.q('SELECT * FROM affiliates WHERE shop_id=? ORDER BY created_at DESC', sh.id).map(r => this.affRow(r));
     const out = {
       unlocked: true,
@@ -357,12 +362,15 @@ export class PartnerStore extends DurableObject {
         const title = String(body.title || '').trim();
         if (!title) return J({ error: 'Title required' }, 400);
         const stops = cleanStops(Array.isArray(body.stops) ? body.stops.map(withPark) : []);
+        const sea = season.clean(body);
+        if (sea.error) return J({ error: sea.error }, 400);
         const eid = id();
         const t = now();
         this.sql.exec(
           'INSERT INTO experiences(id,shop_id,title,description,stops_json,nearest_start,template_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?)',
           eid, sid, title, String(body.description || ''), JSON.stringify(stops), nearestStart(body.nearest_start) ? 1 : 0, body.template_id || null, t, t,
         );
+        if (!sea.skip) this.sql.exec('UPDATE experiences SET starts_on=?, ends_on=? WHERE id=?', sea.starts_on, sea.ends_on, eid);
         return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)) }, 201);
       }
       if (path.match(/^\/experiences\/[^/]+$/) && method === 'PATCH') {
@@ -373,7 +381,10 @@ export class PartnerStore extends DurableObject {
         const description = body.description != null ? String(body.description) : ex.description;
         const stops = body.stops != null ? JSON.stringify(cleanStops(Array.isArray(body.stops) ? body.stops.map(withPark) : [])) : ex.stops_json;
         const ns = body.nearest_start != null ? (nearestStart(body.nearest_start) ? 1 : 0) : (nearestStart(ex.nearest_start) ? 1 : 0);
+        const sea = season.clean(body);
+        if (sea.error) return J({ error: sea.error }, 400);
         this.sql.exec('UPDATE experiences SET title=?, description=?, stops_json=?, nearest_start=?, updated_at=? WHERE id=?', title, description, stops, ns, now(), eid);
+        if (!sea.skip) this.sql.exec('UPDATE experiences SET starts_on=?, ends_on=? WHERE id=?', sea.starts_on, sea.ends_on, eid);
         let pushed = 0;
         if (body.push && ex.template_id) {
           const saved = this.one('SELECT * FROM experiences WHERE id=?', eid);
@@ -655,7 +666,7 @@ export class PartnerStore extends DurableObject {
         return J({
           shop: teaserShop,
           unlocked: false,
-          experience_count: this.one('SELECT COUNT(*) n FROM experiences WHERE shop_id=?', sh.id).n,
+          experience_count: this.q('SELECT starts_on, ends_on FROM experiences WHERE shop_id=?', sh.id).filter(e => season.maybeInSeason(e, Date.now())).length,
           affiliate_count: this.one('SELECT COUNT(*) n FROM affiliates WHERE shop_id=?', sh.id).n,
         });
       }

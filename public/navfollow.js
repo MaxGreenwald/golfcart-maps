@@ -182,6 +182,9 @@
         const S = root.speechSynthesis, U = root.SpeechSynthesisUtterance;
         if (!S || !U) { setTimeout(done, 0); return; }
         const my = ++gen, u = new U(t), fin = () => { if (my === gen) done(); };
+        // The renter page in Spanish (public/i18n.js sets <html lang>) speaks with a Spanish voice.
+        const L = root.document && root.document.documentElement && root.document.documentElement.lang;
+        if (L && !/^en/i.test(L)) u.lang = L;
         u.onend = fin; u.onerror = fin;
         setTimeout(fin, 1500 + t.length * 90);
         S.speak(u);
