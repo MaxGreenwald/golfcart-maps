@@ -57,7 +57,7 @@ test('reminder email: due time, route-back link, shop phone, no em dash', () => 
 });
 
 test('banner: a booked return time beats the shop clock, and the shop lead time sets when it shows', () => {
-  const now = new Date('2026-11-19T16:00:00-08:00');
+  const now = new Date(2026, 10, 19, 16, 0); // device clock, like the page
   const plan = R.returnPlan({ return_by: '23:00', remind_min: 30 }, { return_at: now.getTime() / 1000 + 25 * 60 });
   assert.equal(plan.leadMin, 30);
   assert.ok(R.hasReturnTime(plan));
