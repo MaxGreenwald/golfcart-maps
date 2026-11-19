@@ -11,6 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: {fetch-depth: 0}   # all branch tips: test_web_build.py replays history; check_agents_md.py tells merged branches from open ones
+      - uses: actions/setup-node@v4
+        with: {node-version: "22"}   # node:sqlite for the in-process partner Worker harness
       - name: public/ is the only copy of the web app (no committed ios/android/dist bundles)
         run: python scripts/check_single_source.py
       - name: AGENTS.md paths, branch notes, stale phrases, and 16 KiB cap
@@ -37,6 +39,8 @@ jobs:
         run: node --test tests/stories.test.mjs
       - name: Partner owner-endpoint authz (super-admin any shop; owners only their own)
         run: node --test tests/partner_access.test.mjs
+      - name: Partner Worker harness (real Worker code on node:sqlite)
+        run: node --test tests/partner_worker_harness.test.mjs
       - name: Copy a ride or page to another location (pins stay in town)
         run: node --test tests/partner_templates.test.mjs
       - name: App links (AASA, handoff tokens) (node --test)
@@ -103,6 +107,8 @@ jobs:
       SHOTS_DIR: ${{ github.workspace }}/ci-shots/
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22"}   # scripts/partner_dev.mjs (partner Worker on node:sqlite) for partner browser tests
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - name: Playwright
