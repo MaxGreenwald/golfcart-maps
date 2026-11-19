@@ -5,6 +5,9 @@ import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, sho
 import { fetchShopStats } from '../../../lib/shop_stats.js';
 import { handlePlacesRequest, quotaBuckets, quotaAllowed } from '../../../lib/partner_places.js';
 import { sameTown, pushStops, brandFields, experiencePayload } from '../../../lib/partner_templates.js';
+import { cleanBooking, bookingRow, rulesLines, welcomeEmail, welcomeSms, BOOKING_KEEP_DAYS } from '../../../lib/partner_bookings.js';
+import { sendMail, mailState } from '../../../lib/partner_mail.js';
+import { sendSms, smsProvider } from '../../../lib/partner_sms.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -134,6 +137,15 @@ export class PartnerStore extends DurableObject {
     const plCols = this.sql.exec('PRAGMA table_info(places)').toArray().map(c => c.name);
     if (!plCols.includes('template_id')) this.sql.exec('ALTER TABLE places ADD COLUMN template_id TEXT');
     if (!cols.includes('page_template_id')) this.sql.exec('ALTER TABLE shops ADD COLUMN page_template_id TEXT');
+    // Rental-day bookings (renter contact + return time). Rows are deleted 30 days after return.
+    this.sql.exec(`
+      CREATE TABLE IF NOT EXISTS bookings(
+        id TEXT PRIMARY KEY, shop_id TEXT NOT NULL, renter_name TEXT NOT NULL, email TEXT NOT NULL,
+        phone TEXT DEFAULT '', return_at INTEGER NOT NULL, tz TEXT NOT NULL, code TEXT NOT NULL,
+        welcome_status TEXT DEFAULT 'pending', welcome_at INTEGER, sms_status TEXT DEFAULT 'off',
+        created_at INTEGER NOT NULL
+      )
+    `);
     this.sql.exec(`
       CREATE TABLE IF NOT EXISTS places_quota(
         shop_id TEXT NOT NULL, bucket TEXT NOT NULL, count INTEGER NOT NULL,
@@ -396,9 +408,9 @@ export class PartnerStore extends DurableObject {
         }
         return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)), pushed });
       }
-      if (path.match(/^\/(experiences|affiliates|places)\/[^/]+\/owner$/) && method === 'GET') {
+      if (path.match(/^\/(experiences|affiliates|places|bookings)\/[^/]+\/owner$/) && method === 'GET') {
         const [, tbl, rid] = path.split('/');
-        const table = { experiences: 'experiences', affiliates: 'affiliates', places: 'places' }[tbl];
+        const table = { experiences: 'experiences', affiliates: 'affiliates', places: 'places', bookings: 'bookings' }[tbl];
         const r = this.one(`SELECT shop_id FROM ${table} WHERE id=?`, rid);
         return J({ shop_id: r ? r.shop_id : null });
       }
@@ -592,6 +604,58 @@ export class PartnerStore extends DurableObject {
           code, sid, body.experience_id || null, multi, max_uses, expires_at, now(),
         );
         return J({ code: this.one('SELECT * FROM codes WHERE code=?', code) }, 201);
+      }
+      // Bookings: a renter's name, email, optional phone, and return time. The code is the shop's
+      // pick, or a new multi-use code that lasts until a day after the return time.
+      if (path.match(/^\/shops\/[^/]+\/bookings$/) && method === 'POST') {
+        const sid = path.split('/')[2];
+        const sh = this.one('SELECT * FROM shops WHERE id=?', sid);
+        if (!sh) return J({ error: 'not found' }, 404);
+        const c = cleanBooking(body, now());
+        if (c.error) return J({ error: c.error }, 400);
+        const bk = c.booking;
+        let code = bk.code;
+        if (code) {
+          const row = this.one('SELECT * FROM codes WHERE code=? AND shop_id=?', code, sid);
+          if (!row || (row.expires_at && row.expires_at < now())) return J({ error: 'That access code is not active' }, 400);
+        } else {
+          code = randomCode(4);
+          while (this.one('SELECT code FROM codes WHERE code=?', code)) code = randomCode(5);
+          this.sql.exec(
+            'INSERT INTO codes(code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at) VALUES(?,?,NULL,1,0,0,?,?)',
+            code, sid, bk.return_at + 86400, now(),
+          );
+        }
+        const bid = id();
+        this.sql.exec(
+          'INSERT INTO bookings(id,shop_id,renter_name,email,phone,return_at,tz,code,welcome_status,sms_status,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)',
+          bid, sid, bk.renter_name, bk.email, bk.phone, bk.return_at, bk.tz, code, 'pending', bk.phone ? 'pending' : 'none', now(),
+        );
+        this.sql.exec('DELETE FROM bookings WHERE return_at<?', now() - BOOKING_KEEP_DAYS * 86400);
+        return J({ booking: bookingRow(this.one('SELECT * FROM bookings WHERE id=?', bid)), shop: this.shopRow(sh, { rental: true }) }, 201);
+      }
+      if (path.match(/^\/shops\/[^/]+\/bookings$/) && method === 'GET') {
+        const sid = path.split('/')[2];
+        const rows = this.q('SELECT * FROM bookings WHERE shop_id=? AND return_at>=? ORDER BY return_at', sid, now() - 2 * 86400);
+        return J({ bookings: rows.map(bookingRow) });
+      }
+      if (path.match(/^\/bookings\/[^/]+$/) && method === 'GET') {
+        const r = this.one('SELECT * FROM bookings WHERE id=?', path.split('/')[2]);
+        if (!r) return J({ error: 'not found' }, 404);
+        return J({ booking: bookingRow(r), shop: this.shopRow(this.one('SELECT * FROM shops WHERE id=?', r.shop_id), { rental: true }) });
+      }
+      if (path.match(/^\/bookings\/[^/]+\/status$/) && method === 'POST') {
+        const bid = path.split('/')[2];
+        const ok = ['sent', 'off', 'failed', 'pending', 'none'];
+        const w = ok.includes(body.welcome) ? body.welcome : null;
+        const t = ok.includes(body.sms) ? body.sms : null;
+        if (w) this.sql.exec('UPDATE bookings SET welcome_status=?, welcome_at=? WHERE id=?', w, w === 'sent' ? now() : null, bid);
+        if (t) this.sql.exec('UPDATE bookings SET sms_status=? WHERE id=?', t, bid);
+        return J({ booking: bookingRow(this.one('SELECT * FROM bookings WHERE id=?', bid)) });
+      }
+      if (path.match(/^\/bookings\/[^/]+$/) && method === 'DELETE') {
+        this.sql.exec('DELETE FROM bookings WHERE id=?', path.split('/')[2]);
+        return J({ ok: true });
       }
       // App handoff: grant (from an unlock in the browser) -> single-use token, 10 minutes.
       const hm = path.match(/^\/public\/([^/]+)\/handoff$/);
@@ -970,6 +1034,63 @@ export default {
       if (!isSuper && !(a.owned || []).some(s => s.id === dest)) return J({ error: 'forbidden' }, 403);
       const kind = u.pathname === '/shop/copy-page' ? 'copy-page' : 'copy-experience';
       return send('/shops/' + a.shopId + '/' + kind, 'POST', { experience_id: body.experience_id, dest_shop_id: dest, sync: !!body.sync });
+    }
+    // ---- Rental-day welcome (bookings) ----
+    async function siteData() {
+      const o = originOf(req, env);
+      const get = async p => { try { const r = await fetch(o + p); return r.ok ? await r.json() : null; } catch { return null; } };
+      const [regionsJson, rulesJson] = await Promise.all([get('/data/regions.json'), get('/data/rules.json')]);
+      return { regions: Array.isArray(regionsJson) ? regionsJson : [], rules: rulesJson };
+    }
+    async function welcomeFor(shop, booking) {
+      const { regions, rules } = await siteData();
+      const region = regions.find(r => r.id === shop.region_id) || null;
+      const link = originOf(req, env) + '/p/' + encodeURIComponent(shop.slug) + '/go?code=' + encodeURIComponent(booking.code);
+      const lines = rulesLines({ rules, region, vehicle: shop.vehicle, shopRules: shop.rental && shop.rental.rules });
+      return { link, email: welcomeEmail({ shop, booking, link, rules: lines }), sms: welcomeSms({ shop, booking, link }) };
+    }
+    async function deliver(shop, booking) {
+      const w = await welcomeFor(shop, booking);
+      const mail = await sendMail(env, { to: booking.email, subject: w.email.subject, html: w.email.html, text: w.email.text, reply_to: shop.owner_email });
+      const sms = booking.phone ? await sendSms(env, { to: booking.phone, text: w.sms }) : { status: 'none' };
+      const res = await send('/bookings/' + booking.id + '/status', 'POST', { welcome: mail.status, sms: sms.status });
+      const j = await res.json();
+      return { booking: j.booking, mail, sms: { status: sms.status, reason: sms.reason }, link: w.link };
+    }
+    if (u.pathname === '/shop/bookings' && req.method === 'GET') {
+      const a = await access(null);
+      if (!a.shopId) return deny(a);
+      const r = await (await doFetch('/shops/' + a.shopId + '/bookings')).json();
+      const sms = smsProvider(env);
+      return J({ ...r, mail: mailState(env), sms: { on: sms.enabled, reason: sms.reason || '' } });
+    }
+    if (u.pathname === '/shop/bookings/preview' && req.method === 'POST') {
+      const body = await readBody();
+      const a = await access(body);
+      if (!a.shopId) return deny(a);
+      const c = cleanBooking(body, now());
+      if (c.error) return J({ error: c.error }, 400);
+      const bundle = await (await doFetch('/shops/' + a.shopId + '/bundle')).json();
+      const w = await welcomeFor(bundle.shop, { ...c.booking, code: c.booking.code || 'YOURCODE' });
+      return J({ ...w.email, sms: w.sms, mail: mailState(env) });
+    }
+    if (u.pathname === '/shop/bookings' && req.method === 'POST') {
+      const body = await readBody();
+      const a = await access(body);
+      if (!a.shopId) return deny(a);
+      const made = await send('/shops/' + a.shopId + '/bookings', 'POST', body);
+      const j = await made.json();
+      if (!made.ok) return J(j, made.status);
+      return J(await deliver(j.shop, j.booking), 201);
+    }
+    const bk = u.pathname.match(/^\/shop\/bookings\/([^/]+)(\/resend)?$/);
+    if (bk && ((bk[2] && req.method === 'POST') || (!bk[2] && req.method === 'DELETE'))) {
+      const a = await access(null, 'bookings/' + bk[1]);
+      if (!a.shopId) return deny(a);
+      if (!bk[2]) return send('/bookings/' + bk[1], 'DELETE');
+      const j = await (await doFetch('/bookings/' + bk[1])).json();
+      if (!j.booking) return J({ error: 'not found' }, 404);
+      return J(await deliver(j.shop, j.booking));
     }
     for (const kind of ['experiences', 'affiliates', 'places', 'codes']) {
       if (u.pathname === '/shop/' + kind && req.method === 'POST') {

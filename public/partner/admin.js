@@ -631,6 +631,7 @@ function shopView() {
     <label for="rentalDies">If the cart dies</label><textarea id="rentalDies" maxlength="800" placeholder="Call the shop. Stay with the cart.">${esc((s.rental && s.rental.if_cart_dies) || '')}</textarea>
     <p style="margin-top:12px"><button class="btn" id="saveRental" type="button">Save rental info</button></p>
   </div>
+  ${window.GCMBookings ? GCMBookings.card() : ''}
   ${rentalCard(s)}
   <div class="card"><h2>Experiences</h2>
     <p class="muted">Ordered joyride stops. Search a place or drop a pin and name it yourself. Edit an experience to change a stop or its order.</p>
@@ -1622,6 +1623,7 @@ function bindApp() {
   });
   if (daysIn) daysIn.oninput = () => chips.forEach(x => x.classList.toggle('on', x.dataset.days === daysIn.value));
   wireDash();
+  if (window.GCMBookings) GCMBookings.bind();
   const regionSel = $('#brandRegion');
   if (regionSel) regionSel.addEventListener('change', () => loadStarters());
   const vehSel = $('#brandVehicle');
