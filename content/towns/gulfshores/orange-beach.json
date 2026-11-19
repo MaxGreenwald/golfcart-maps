@@ -3,7 +3,7 @@
  "region": "gulfshores",
  "name": "Orange Beach",
  "state": "AL",
-  "question_title": "Can you drive a golf cart in Orange Beach?",
+ "question_title": "Can you drive a golf cart in Orange Beach?",
  "seo_title": "Orange Beach golf cart map and LSV map",
  "answer_short": "Yes, on low-speed streets. In Orange Beach, state-tagged golf carts and LSVs may only use streets posted 25 mph or less, and not the state highways (AL 59, 180, 182 and 161). Posted signs win.",
  "golf_cart": {
@@ -26,8 +26,14 @@
    "source_url": "https://library.municode.com/al/orange_beach/codes/code_of_ordinances?nodeId=COOR_CH70TRVE_ARTVIIIGOCA_S70-273DE"
   },
   {
+   "topic": "Non-designated streets",
+   "rule": "It is a violation to operate a cart on any sidewalk, street, road, or highway that is not a designated cart street. Canal Road (AL 180) is a state highway with a limit over 40 mph and is not on the designated list.",
+   "citation": "Orange Beach Sec. 70-275(c); Ord. 2024-1487",
+   "source_url": "https://www.orangebeachal.gov/DocumentCenter/View/5105/Ordinance-Number-2024-1487-Amending-Chapter-70-Article-VIII-Golf-Carts-PDF"
+  },
+  {
    "topic": "Chapter 70 amendment",
-   "rule": "Ordinance No. 2025-1521 amends Chapter 70, Article VIII (Golf Carts). Municode lists it as adopted November 3, 2025; the code history dates the amendment November 4, 2025.",
+   "rule": "Adopted November 4, 2025 (council 4-0). It re-enacts Chapter 70, Article VIII. The findings describe definition and scrivener corrections. Sec. 70-275(c) still makes it a violation to operate a cart on any sidewalk, street, road, or highway that is not a designated cart street. The ordinance does not add a crossing exception for AL 180 / Canal Road, does not raise the 25 mph designation cap, and does not designate the Canal Road Multi-Use Trail as a multi-use cart path.",
    "citation": "Orange Beach Ord. 2025-1521",
    "source_url": "https://library.municode.com/al/orange_beach/ordinances/code_of_ordinances?nodeId=2025"
   }
@@ -40,8 +46,8 @@
   },
   {
    "name": "AL 180 (Fort Morgan Rd / Canal Rd)",
-   "rule": "State highway",
-   "crossings_ok": true
+   "rule": "State highway; crossing rules not confirmed; ask Orange Beach Police",
+   "crossings_ok": false
   },
   {
    "name": "AL 182 (Beach Blvd / Perdido Beach Blvd)",
@@ -61,6 +67,10 @@
  ],
  "faq": [
   {
+   "q": "Is there a golf cart trail along Canal Road in Orange Beach?",
+   "a": "Canal Road (AL 180) itself is not a designated cart street, so carts may not be operated on that roadway (Orange Beach Sec. 70-275(c); Ord. 2024-1487, as amended by Ord. 2025-1521). The city has a 10-foot Canal Road Multi-Use Trail, described in the city's Canal Road Multi-Use Trail bid document and a city news post. That trail is not on our map yet. The ordinance defines a multi-use path and a multi-use cart path (Sec. 70-273); we have not found a city designation of this trail as a multi-use cart path."
+  },
+  {
    "q": "Where can I drive my LSV in Orange Beach?",
    "a": "Streets posted 25 mph or less. Local cap is lower than the usual 35. A town or county can still ban LSVs from a specific road, and posted signs win."
   },
@@ -79,6 +89,26 @@
    "lead": "Every cart in Orange Beach needs a city permit and inspection; the city lists dates and requirements.",
    "name": "Orange Beach golf cart permit and inspection rules",
    "url": "https://orangebeachal.gov/295/Codes-Ordinances"
+  },
+  {
+   "lead": "The city's bid describes a 10-foot Canal Road Multi-Use Trail.",
+   "name": "Canal Road Multi-Use Trail bid document",
+   "url": "https://orangebeachal.gov/DocumentCenter/View/4987"
+  },
+  {
+   "lead": "The city posted a news update on the Canal Road Multi-Use Trail.",
+   "name": "Orange Beach Canal Road Multi-Use Trail news post",
+   "url": "https://www.orangebeachal.gov/CivicAlerts.aspx?AID=232"
+  },
+  {
+   "lead": "Sec. 70-273 lists designated cart streets and defines multi-use path and multi-use cart path.",
+   "name": "Orange Beach Sec. 70-273 (Municode)",
+   "url": "https://library.municode.com/al/orange_beach/codes/code_of_ordinances?nodeId=COOR_CH70TRVE_ARTVIIIGOCA_S70-273DE"
+  },
+  {
+   "lead": "Sec. 70-275 sets operating rules, including the ban on non-designated streets.",
+   "name": "Orange Beach Sec. 70-275 (Municode)",
+   "url": "https://library.municode.com/al/orange_beach/codes/code_of_ordinances?nodeId=COOR_CH70TRVE_ARTVIIIGOCA_S70-275OPRUV"
   }
  ],
  "nearby": [
@@ -90,9 +120,15 @@
  ],
  "zoom": 15,
  "published": "2026-10-21",
- "last_checked": "2026-10-26",
+ "last_checked": "2026-11-19",
  "checked_by": "Golf Cart Maps",
  "sources": [
-  "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110"
+  "https://www.orangebeachal.gov/DocumentCenter/View/5105/Ordinance-Number-2024-1487-Amending-Chapter-70-Article-VIII-Golf-Carts-PDF",
+  "https://library.municode.com/al/orange_beach/codes/code_of_ordinances?nodeId=COOR_CH70TRVE_ARTVIIIGOCA_S70-273DE",
+  "https://library.municode.com/al/orange_beach/codes/code_of_ordinances?nodeId=COOR_CH70TRVE_ARTVIIIGOCA_S70-275OPRUV",
+  "https://library.municode.com/al/orange_beach/ordinances/code_of_ordinances?nodeId=2025",
+  "https://orangebeachal.gov/DocumentCenter/View/4987",
+  "https://www.orangebeachal.gov/CivicAlerts.aspx?AID=232",
+  "https://orangebeachal.gov/295/Codes-Ordinances"
  ]
 }
