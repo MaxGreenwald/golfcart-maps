@@ -4,7 +4,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { cleanBooking, returnLabel, rulesLines, welcomeEmail, welcomeSms } from '../lib/partner_bookings.js';
-import { mailState, sendMail } from '../lib/partner_mail.js';
+import { mailState, sendMail, MAIL_DAILY_CAP } from '../lib/partner_mail.js';
 import { smsProvider, sendSms } from '../lib/partner_sms.js';
 import { makePartner } from './partner_worker_harness.mjs';
 
@@ -129,6 +129,39 @@ test('worker: email off still saves the booking and says so; a failed mailer is 
   const f = await q.call('/shop/bookings', { as: o2, json: { renter_name: 'Sam', email: 'sam@example.com', return_at: at, tz: 'America/Los_Angeles' } });
   assert.equal(f.body.mail.status, 'failed');
   assert.equal(f.body.booking.welcome, 'failed');
+});
+
+test('worker: renter email stops at 100 in a rolling 24 hours (all shops); the booking still saves', async () => {
+  assert.equal(MAIL_DAILY_CAP, 100);
+  const outbox = [];
+  const p = makePartner({ env: MAIL_ON, fetch: mailer(outbox), regions });
+  const { owner } = await p.seedShop();
+  const t = Math.floor(Date.now() / 1000);
+  const ins = p.db.prepare('INSERT INTO mail_sends(ts) VALUES (?)');
+  for (let i = 0; i < 99; i++) ins.run(t - 3600);
+  for (let i = 0; i < 20; i++) ins.run(t - 86400 - 60);   // older than 24 hours: not counted
+  const at = t + 3600;
+  const book = n => p.call('/shop/bookings', { as: owner, json: { renter_name: 'Renter ' + n, email: `r${n}@example.com`, return_at: at, tz: 'America/Los_Angeles' } });
+  const a = await book(1);
+  assert.equal(a.body.mail.status, 'sent', 'the 100th email goes out');
+  const b = await book(2);
+  assert.equal(b.status, 201, 'the booking still saves');
+  assert.equal(b.body.mail.status, 'off');
+  assert.equal(b.body.mail.capped, true);
+  assert.match(b.body.mail.reason, /Daily renter email limit \(100 in 24 hours\) reached/);
+  assert.equal(b.body.booking.welcome, 'off');
+  assert.equal(outbox.length, 1, 'nothing sent past the cap');
+  assert.equal(p.db.prepare('SELECT COUNT(*) n FROM mail_sends').get().n, 100, 'old sends are pruned');
+  p.db.prepare('UPDATE mail_sends SET ts = ts - 86400').run();
+  assert.equal((await book(3)).body.mail.status, 'sent', 'a day later there is room again');
+});
+
+test('sendMail: past the cap it never calls the mailer', async () => {
+  const outbox = [];
+  const r = await sendMail(MAIL_ON, { to: 'a@example.com', subject: 's', text: 't' }, mailer(outbox), async () => false);
+  assert.equal(r.status, 'off');
+  assert.equal(r.capped, true);
+  assert.equal(outbox.length, 0);
 });
 
 test('worker: preview builds the email without saving; owners only; a picked code must be live', async () => {
