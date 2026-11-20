@@ -6,18 +6,35 @@ HERE = os.path.dirname(__file__)
 INTEL = json.load(open(os.path.join(HERE, "..", "research", "road_intel.json")))
 DM_SRC = "https://thecoastnews.com/del-mar-moves-to-lower-speed-limits-explore-additional-parking/"
 DM_NOTE = "adopted Oct 2026, signs may still show old limit"
-# Del Mar council speed ordinance (Oct 2026; user-provided map + Coast News article). Appended as extra intel entries.
-_DM = [("Camino del Mar", "Via de la Valle - San Dieguito Bridge", 30, True),
-       ("Camino del Mar", "Coast Blvd - Del Mar Plaza", 30, True),
-       ("Jimmy Durante Blvd", "Via de la Valle - Fairgrounds Gate 2", 40, False),
-       ("Jimmy Durante Blvd", "Fairgrounds Gate 2 - San Dieguito Dr", 30, True),
-       ("Jimmy Durante Blvd", "San Dieguito Dr - Camino del Mar", 30, True),
-       ("Via de la Valle", "Camino del Mar - Jimmy Durante Blvd", 35, True)]
+DM_ORD = "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943"   # Oct 20 2026 agenda, Item 6 (Clerk's File 904-4)
+# Sign-posted limits that differ from the ordinance (research/posted_limits.json). Conservative rule: a lower local limit only
+# counts once its signs are up (CVC 22357), so a stretch with map_uses_posted is built at posted_mph until new_signs_confirmed.
+# Enforced by scripts/check_posted_limits.py (tests/test_posted_limits.py), not just this comment.
+POSTED = {e["id"]: e for e in json.load(open(os.path.join(HERE, "..", "research", "posted_limits.json")))["stretches"]}
+# Del Mar council speed ordinance (adopted Oct 20 2026, in force Nov 19 2026). Appended as extra intel entries.
+# (road, segment, ordinance mph, posted_limits id or None). The 3 linked stretches are posted 40/45/40 today: blocked for LSVs
+# until the new signs are confirmed. The other 3 are not LSV-legal (40/45) or LSV-legal (30/35) at either limit.
+_DM = [("Camino del Mar", "Via de la Valle - San Dieguito Bridge", 30, "delmar-cdm-vdlv-bridge"),
+       ("Camino del Mar", "Coast Blvd - Del Mar Plaza", 30, None),
+       ("Jimmy Durante Blvd", "Via de la Valle - Fairgrounds Gate 2", 40, None),
+       ("Jimmy Durante Blvd", "Fairgrounds Gate 2 - San Dieguito Dr", 30, "delmar-jd-gate2-sdd"),
+       ("Jimmy Durante Blvd", "San Dieguito Dr - Camino del Mar", 30, None),
+       ("Via de la Valle", "Camino del Mar - Jimmy Durante Blvd", 35, "delmar-vdlv-cdm-jd")]
 SURVEY = "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_09142026-3926"
 DM_BASE = len(INTEL)
-for road, seg, mph_, ok in _DM:
-    INTEL.append({"road": road, "city": "Del Mar", "from_to_segment_if_known": seg + " — " + DM_NOTE, "speed_mph": mph_, "lsv_ok": ok,
-                  "source_url": DM_SRC, "confidence": "high"})
+def dm_entry(road, seg, mph_, p):
+    """One Del Mar intel entry. p: the posted_limits.json entry or None. Lifting a block = new_signs_confirmed true in that file."""
+    if p and p["map_uses_posted"] and not p["new_signs_confirmed"]:
+        use = p["posted_mph"]
+        lab = f"{seg}: posted {use} until new signs are confirmed; Del Mar ordinance {mph_} mph since Nov 19 2026"
+    elif p:
+        use, lab = mph_, f"{seg}: Del Mar ordinance {mph_} mph since Nov 19 2026, new signs confirmed"
+    else:
+        use, lab = mph_, seg + " \u2014 " + DM_NOTE
+    return {"road": road, "city": "Del Mar", "from_to_segment_if_known": lab, "speed_mph": use, "lsv_ok": use <= 35,
+            "source_url": DM_ORD if p else DM_SRC, "confidence": "high"}
+for road, seg, mph_, pid in _DM:
+    INTEL.append(dm_entry(road, seg, mph_, POSTED.get(pid)))
 PB = (32.755, -117.262, 32.815, -117.235); LJ = (32.795, -117.29, 32.885, -117.22)
 DM = (32.935, -117.275, 32.985, -117.24); SB = (32.97, -117.28, 33.01, -117.24)
 EN = (33.0, -117.31, 33.095, -117.24); CB = (33.08, -117.36, 33.18, -117.27)
