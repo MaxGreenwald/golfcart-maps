@@ -440,6 +440,13 @@ function drawRoadCanvas() {
   ctx.setLineDash([]);
 }
 
+// Stop number in the shop's saved order (the ride may be shown in visit order).
+function stopNumber(s, i) {
+  const list = (baseEx && baseEx.stops) || [];
+  let k = list.indexOf(s);
+  if (k < 0) k = list.findIndex(x => x && +x.lat === +s.lat && +x.lon === +s.lon);
+  return k >= 0 ? k + 1 : i + 1;
+}
 function stopPopupHtml(s, i) {
   const photo = safeLogo(s.photo);
   return `<b>${i + 1}. ${esc(s.label)}</b>${photo ? `<br><img src="${esc(photo)}" alt="" style="max-width:220px;border-radius:8px;margin-top:6px">` : ''}${s.note ? `<br>${esc(s.note)}` : ''}`;
@@ -471,6 +478,26 @@ function placeIcon(cat) {
 function placePopup(p) {
   const [ico, lab] = placeUi(p.category);
   return `<b>${ico} ${esc(p.name)}</b><br><span class="muted">${esc(lab)}</span>${p.note ? `<br>${esc(p.note)}` : ''}${/^https:\/\//i.test(p.link || '') ? `<br><a href="${esc(p.link)}" target="_blank" rel="noopener">More</a>` : ''}`;
+}
+// "Take me there" on a partner offer or place: a legal route through the same free-route nav.
+function goThereBtn(id) {
+  return `<br><button type="button" class="popgo" data-go-pin="${esc(id)}">\u{1F9ED} Take me there</button>`;
+}
+function wireGoThere(popup) {
+  const el = popup && popup.getElement && popup.getElement();
+  const b = el && el.querySelector('[data-go-pin]');
+  if (b) b.onclick = () => { goPartner(b.dataset.goPin); };
+}
+async function goPartner(id) {
+  const all = [...(unlocked.affiliates || []), ...(unlocked.places || [])];
+  const hit = all.find(x => x.id === id);
+  if (!hit || !finite(hit.lat, hit.lon)) return;
+  trackShop('partner_nav', { pin: hit.id });
+  if (map) map.closePopup();
+  freeMode(true);
+  freeRisky = false;
+  document.querySelectorAll('#goMode button').forEach(x => x.setAttribute('aria-pressed', x.dataset.mode === 'legal' ? 'true' : 'false'));
+  await pickDest({ name: hit.name, lat: +hit.lat, lon: +hit.lon });
 }
 function meIcon() {
   return L.divIcon({
@@ -570,7 +597,8 @@ async function drawUnlocked(opts) {
   (unlocked.affiliates || []).forEach(a => {
     if (!finite(a.lat, a.lon)) return;
     const m = L.marker([+a.lat, +a.lon], { icon: affIcon(), zIndexOffset: 600 }).addTo(pins);
-    m.bindPopup(`<b>${esc(a.name)}</b><br>${esc(a.offer || '')}${a.coupon ? `<br>Coupon: <code>${esc(a.coupon)}</code>` : ''}<br><span class="muted">Partner offer</span>`);
+    m.bindPopup(`<b>${esc(a.name)}</b><br>${esc(a.offer || '')}${a.coupon ? `<br>Coupon: <code>${esc(a.coupon)}</code>` : ''}<br><span class="muted">Partner offer</span>${goThereBtn(a.id)}`);
+    m.on('popupopen', e => wireGoThere(e.popup));
     m.on('click', () => trackShop('affiliate_tap', { pin: a.id }));
     affMarks.push({ id: a.id, marker: m });
     bounds.push([+a.lat, +a.lon]);
@@ -578,7 +606,8 @@ async function drawUnlocked(opts) {
   (unlocked.places || []).forEach(p => {
     if (!finite(p.lat, p.lon)) return;
     const m = L.marker([+p.lat, +p.lon], { icon: placeIcon(p.category), zIndexOffset: 500, title: p.name }).addTo(pins);
-    m.bindPopup(placePopup(p));
+    m.bindPopup(placePopup(p) + goThereBtn(p.id));
+    m.on('popupopen', e => { trackShop('place_opened', { pin: p.id }); wireGoThere(e.popup); });
     placeMarks.push({ id: p.id, marker: m });
     bounds.push([+p.lat, +p.lon]);
   });
@@ -587,6 +616,7 @@ async function drawUnlocked(opts) {
       if (!finite(s.lat, s.lon)) return;
       const m = L.marker([+s.lat, +s.lon], { icon: stopIcon(i + 1), zIndexOffset: 700 }).addTo(pins);
       m.bindPopup(stopPopupHtml(s, i));
+      m.on('popupopen', () => trackShop('stop_opened', { ride: activeEx && activeEx.id, pin: String(stopNumber(s, i)) }));
       bounds.push([+s.lat, +s.lon]);
       const park = routePoint(s);
       if (park.parked) {
@@ -951,6 +981,7 @@ async function routeFree(dest, quiet) {
   setGoNote(risky.length ? `${mi} mi · ⚠️ ${risky.length} risky stretch${risky.length > 1 ? 'es' : ''} (red dashes). Use caution.` : `${mi} mi on legal golf cart roads.`);
   if (!quiet) frameLatLngs(leg.points.concat([[from.lat, from.lon]]));
   beginNav(leg, -1, dest);
+  if (!quiet) trackShop('partner_route');
 }
 function navRouteLen(pts) { let m = 0; for (let i = 1; i < pts.length; i++) m += GCMNav.hav(pts[i - 1], pts[i]); return m; }
 function wireFree() {
@@ -1120,6 +1151,7 @@ function focusEx(on) {
 function selectEx(id) {
   const ex = (unlocked && unlocked.experiences) || [];
   activeEx = baseEx = ex.find(x => x.id === id) || null;
+  if (activeEx) trackShop('experience_opened', { ride: activeEx.id });
   riderShopOrder = false;
   setOrderNote(false);
   stopIdx = 0;
@@ -1172,6 +1204,7 @@ function wireOffline() {
 }
 async function unlockedView() {
   const shop = unlocked.shop;
+  trackShop('partner_open', { code: unlocked.code || codeParam });
   applyShop(shop, true);
   document.body.classList.add('is-open');
   ticker.hidden = true;
@@ -1183,7 +1216,7 @@ async function unlockedView() {
     <div class="dock-scroll" id="dockScroll">
       <div class="yay">
         <p class="yay-kicker">You’re in</p>
-        <p>Code <b>${esc(code)}</b> unlocked ${esc(shop.name)}. Pick a ride, then start from where you are.</p>
+        <p>Code <b>${esc(code)}</b>${unlocked.cart ? ` (cart ${esc(unlocked.cart)})` : ''} unlocked ${esc(shop.name)}. Pick a ride, then start from where you are.</p>
       </div>
       ${rentalCard(shop)}
       <div id="reportSlot"></div>
@@ -1374,7 +1407,7 @@ async function boot() {
       if (!handoffParam) trackShop('partner_unlock', { code: j.code || codeParam });
       // CarPlay Experiences (public/carplay.js experiences()) reads this to show the shop's rides in the car.
       // The whole unlock answer is saved because unlock counts a use (single-use codes would fail a second call).
-      try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates })); } catch (e) {}
+      try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, cart: j.cart || '', at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates })); } catch (e) {}
       try { if (j.grant) localStorage.setItem(GRANT_KEY, j.grant); } catch (_) {}
 
       await unlockedView();

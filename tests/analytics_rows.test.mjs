@@ -78,10 +78,21 @@ test('/stats with an extra denylisted install matches the old SQL', () => {
   assert.deepEqual(strip(computeStats(a.q, 7, NOW, { extraIids: extra })), strip(legacyStats(b.q, 7, NOW, { extraIids: extra })));
 });
 
+// The shop dashboard (weekly rows, stop opens, map opens, routes) and partner stops (opens, navs) add fields the old SQL never had.
+// Every field the old SQL returned must still match it exactly; the new ones are pinned in shop_stats.test.mjs.
+const DASH_TOTALS = ['opens', 'routes', 'experience_opens', 'stop_opens', 'place_opens', 'partner_navs'];
+function oldShape(s) {
+  const c = strip(s);
+  delete c.weekly; delete c.stops; delete c.partner_stops;
+  for (const k of DASH_TOTALS) delete c.totals[k];
+  for (const r of c.rides || []) delete r.opened;
+  return c;
+}
+
 test('/shop-stats is identical to the old SQL', () => {
   const { a, b } = both(synth(4000));
   for (const shop of ['beachmode', 'other-shop', 'no-such-shop']) for (const days of [7, 30]) {
-    assert.deepEqual(strip(computeShopStats(a.q, { shop, days, now: NOW })), strip(legacyShopStats(b.q, { shop, days, now: NOW })), `${shop} ${days}`);
+    assert.deepEqual(oldShape(computeShopStats(a.q, { shop, days, now: NOW })), strip(legacyShopStats(b.q, { shop, days, now: NOW })), `${shop} ${days}`);
   }
 });
 
@@ -145,7 +156,7 @@ test('no /stats or /shop-stats statement walks every stored event or re-runs the
   a.db.exec('ANALYZE');
   for (const [name, run, count] of [
     ['/stats', q => computeStats(q, 30, NOW), 10],
-    ['/shop-stats', q => computeShopStats(q, { shop: 'beachmode', days: 30, now: NOW }), 5],
+    ['/shop-stats', q => computeShopStats(q, { shop: 'beachmode', days: 30, now: NOW }), 8],   // 5 + dashboard weekly and stops + partner stops
   ]) {
     const r = recorder(a.db);
     run(r.q);
