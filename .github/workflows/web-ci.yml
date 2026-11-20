@@ -11,6 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: {fetch-depth: 0}   # all branch tips: test_web_build.py replays history; check_agents_md.py tells merged branches from open ones
+      - uses: actions/setup-node@v4
+        with: {node-version: "22"}   # node:sqlite for the in-process partner Worker harness
       - name: public/ is the only copy of the web app (no committed ios/android/dist bundles)
         run: python scripts/check_single_source.py
       - name: AGENTS.md paths, branch notes, stale phrases, and 16 KiB cap
@@ -45,6 +47,8 @@ jobs:
         run: node --test tests/stories.test.mjs
       - name: Partner owner-endpoint authz (super-admin any shop; owners only their own)
         run: node --test tests/partner_access.test.mjs
+      - name: Partner Worker harness (real Worker code on node:sqlite)
+        run: node --test tests/partner_worker_harness.test.mjs
       - name: Copy a ride or page to another location (pins stay in town)
         run: node --test tests/partner_templates.test.mjs
       - name: App links (AASA, handoff tokens) (node --test)
@@ -61,6 +65,8 @@ jobs:
         run: node --test tests/partner_places_autocomplete.test.mjs
       - name: QR sticker and counter card kit
         run: node --test tests/qrkit.test.mjs
+      - name: Fleet stickers (cart numbers, one code per cart, sheet and PNG page)
+        run: node --test tests/partner_fleet.test.mjs
       - name: Experience route check (miles, time, battery, legal roads)
         run: node --test tests/routecheck.test.mjs
       - name: Partner photo uploads (type, size, R2 key)
@@ -114,6 +120,8 @@ jobs:
       PYTHONPATH: ${{ github.workspace }}/scripts/ci_harness
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22"}   # scripts/partner_dev.mjs (partner Worker on node:sqlite) for partner browser tests
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - name: Playwright
@@ -173,6 +181,8 @@ jobs:
         run: python -m unittest tests.test_partner_brand_color -v
       - name: test_partner_qr (cart sticker and counter card print page)
         run: python -m unittest tests.test_partner_qr -v
+      - name: test_partner_fleet (cart codes from the local Worker, six-per-page sheet, PNG download, renter sees the cart)
+        run: python -m unittest tests.test_partner_fleet -v
       - name: test_partner_experience_stops (edit a stop and reorder, then the save sticks)
         run: python -m unittest tests.test_partner_experience_stops -v
       - name: test_partner_route_check (miles, time, battery, unreachable stop)
