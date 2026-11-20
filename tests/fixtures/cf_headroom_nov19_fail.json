@@ -1,0 +1,15 @@
+{
+  "comment": "Must-fail fixture: gcm-analytics Durable Object rows read already at the 5,000,000 free-plan cap by 14:23 UTC (6:23 AM PT) on 19 Nov 2026. Projected full UTC day is above 80 percent of the limit, so the script must exit 1.",
+  "now": "2026-11-19T14:23:00Z",
+  "counters": [
+    {"worker": "gcm-analytics", "counter": "do_rows_read", "used": 5000000},
+    {"worker": "gcm-analytics", "counter": "do_rows_written", "used": 1000},
+    {"worker": "gcm-analytics", "counter": "worker_requests", "used": 10000},
+    {"worker": "gcm-partner", "counter": "do_rows_read", "used": 1000},
+    {"worker": "gcm-partner", "counter": "do_rows_written", "used": 100},
+    {"worker": "gcm-partner", "counter": "worker_requests", "used": 1000},
+    {"worker": "gcm-sdr-chat", "counter": "kv_reads", "used": 10000},
+    {"worker": "gcm-sdr-chat", "counter": "kv_writes", "used": 50},
+    {"worker": "gcm-sdr-chat", "counter": "worker_requests", "used": 2000}
+  ]
+}

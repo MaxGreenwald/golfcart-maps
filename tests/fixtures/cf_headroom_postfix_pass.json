@@ -1,0 +1,15 @@
+{
+  "comment": "Must-pass fixture: about 189,242 Durable Object rows read on gcm-analytics in the hours after the 7:48 PM PT 19 Nov 2026 deploy (03:48 UTC 20 Nov). As of 04:58 UTC (8:58 PM PT 19 Nov, when 189k was reported), the projected UTC day stays under 50 percent of the 5,000,000 cap, so the script must exit 0.",
+  "now": "2026-11-20T04:58:00Z",
+  "counters": [
+    {"worker": "gcm-analytics", "counter": "do_rows_read", "used": 189242},
+    {"worker": "gcm-analytics", "counter": "do_rows_written", "used": 500},
+    {"worker": "gcm-analytics", "counter": "worker_requests", "used": 4000},
+    {"worker": "gcm-partner", "counter": "do_rows_read", "used": 800},
+    {"worker": "gcm-partner", "counter": "do_rows_written", "used": 80},
+    {"worker": "gcm-partner", "counter": "worker_requests", "used": 800},
+    {"worker": "gcm-sdr-chat", "counter": "kv_reads", "used": 8000},
+    {"worker": "gcm-sdr-chat", "counter": "kv_writes", "used": 40},
+    {"worker": "gcm-sdr-chat", "counter": "worker_requests", "used": 1500}
+  ]
+}
