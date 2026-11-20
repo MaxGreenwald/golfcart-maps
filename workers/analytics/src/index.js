@@ -4,15 +4,20 @@
 //   GET  /stats?days=30          JSON summary for the dashboard   (header x-stats-key or ?k=)
 //   GET  /shop-stats?shop=&days=  one partner shop's activity     (same key; not public)
 // /stats and /shop-stats drop denylisted install ids and internal/test/simulator traffic (lib/analytics_exclude.js).
-// That filter runs at read time, so it covers events already stored. It is live only after this
-// Worker is deployed; until then production /stats is the unfiltered build.
+// Each event is checked once when stored (internal_rows, excluded_iids); a change to that file
+// re-flags stored events on the next wake after deploy, so the filter still covers events already stored.
 //   GET  /daily.csv?days=30      one row per day                  (same key)
 //   GET  /top-iids?town=&days=7   per-iid top-N for one town        (same key; not public)
-// Raw events older than 400 days are deleted.
+// Raw events older than 400 days are deleted (once per UTC day, via the day index).
+// Rows read are billed: the internal/test check runs once per event at ingest (lib/analytics_store.js),
+// and a /stats answer is reused for STATS_TTL_MS so retries and back-to-back scripts do not rescan.
 import { DurableObject } from 'cloudflare:workers';
 import { sanitize } from '../../../lib/analytics.js';
 import { computeStats, topIidsByTown } from '../../../lib/analytics_stats.js';
 import { computeShopStats } from '../../../lib/shop_stats.js';
+import { ensureSchema, insertEvent, purgeOld } from '../../../lib/analytics_store.js';
+
+export const STATS_TTL_MS = 5 * 60 * 1000;
 
 const J = (o, s = 200) => new Response(JSON.stringify(o, null, 1), { status: s, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
 const NC = () => new Response(null, { status: 204, headers: { 'cache-control': 'no-store', 'access-control-allow-origin': '*' } });
@@ -20,17 +25,28 @@ function eq(a, b) { if (typeof a !== 'string' || typeof b !== 'string' || a.leng
 
 export class Events extends DurableObject {
   constructor(ctx, env) {
-    super(ctx, env); this.sql = ctx.storage.sql;
-    this.sql.exec(`CREATE TABLE IF NOT EXISTS events(ts INTEGER NOT NULL, day TEXT NOT NULL, event TEXT NOT NULL, town TEXT, platform TEXT, pwa INTEGER, iid TEXT, sid TEXT, props TEXT);
-      CREATE INDEX IF NOT EXISTS ev_day ON events(day); CREATE INDEX IF NOT EXISTS ev_event_day ON events(event, day); CREATE INDEX IF NOT EXISTS ev_iid ON events(iid);`);
+    super(ctx, env); this.sql = ctx.storage.sql; this.statsCache = new Map(); this.purgedDay = '';
+    ensureSchema((s, ...a) => { this.sql.exec(s, ...a); }, (s, ...a) => this.q(s, ...a));
   }
   add(r, now) {
-    const d = new Date(now), day = d.toISOString().slice(0, 10);
-    this.sql.exec('INSERT INTO events VALUES (?,?,?,?,?,?,?,?,?)', now, day, r.event, r.town, r.platform, r.pwa, r.iid, r.sid, JSON.stringify(r.props));
-    if (Math.random() < 0.01) this.sql.exec('DELETE FROM events WHERE ts < ?', now - 400 * 864e5);
+    const { day } = insertEvent((s, ...a) => this.q(s, ...a), (s, ...a) => { this.sql.exec(s, ...a); }, r, now);
+    if (this.purgedDay !== day) {
+      const last = (this.q(`SELECT v FROM meta WHERE k='purged_day'`)[0] || {}).v;
+      if (last !== day) {
+        purgeOld((s, ...a) => this.q(s, ...a), (s, ...a) => { this.sql.exec(s, ...a); }, now);
+        this.sql.exec(`INSERT INTO meta(k, v) VALUES('purged_day', ?) ON CONFLICT(k) DO UPDATE SET v=excluded.v`, day);
+      }
+      this.purgedDay = day;
+    }
   }
   q(s, ...a) { return this.sql.exec(s, ...a).toArray() }
-  stats(days, now) { return computeStats((s, ...a) => this.q(s, ...a), days, now); }
+  stats(days, now) {
+    const hit = this.statsCache.get(days);
+    if (hit && now - hit.at < STATS_TTL_MS) return hit.body;
+    const body = computeStats((s, ...a) => this.q(s, ...a), days, now);
+    this.statsCache.set(days, { at: now, body });
+    return body;
+  }
   shopStats(shop, days, now) { return computeShopStats((s, ...a) => this.q(s, ...a), { shop, days, now }); }
   topIids(days, now, town, limit) { return topIidsByTown((s, ...a) => this.q(s, ...a), days, now, { town, limit }); }
   async fetch(req) {
@@ -57,8 +73,15 @@ export default {
     if (u.pathname === '/e' && req.method === 'POST') {
       try {
         const t = await req.text(); if (t.length > 4000) return NC();
-        const r = sanitize(JSON.parse(t)); if (r) await stub.fetch('https://do/add', { method: 'POST', body: JSON.stringify(r) });
-      } catch (_) {}
+        const r = sanitize(JSON.parse(t));
+        if (r) {
+          const res = await stub.fetch('https://do/add', { method: 'POST', body: JSON.stringify(r) });
+          if (!res.ok) console.error('gcm-analytics /e: store returned', res.status);
+        }
+      } catch (e) {
+        // Bad JSON from a client is normal; a storage failure (for example a Durable Object limit) is not.
+        if (!(e instanceof SyntaxError)) console.error('gcm-analytics /e: event not stored:', String(e && e.message || e));
+      }
       return NC();
     }
     if (u.pathname === '/stats' || u.pathname === '/daily.csv' || u.pathname === '/top-iids' || u.pathname === '/shop-stats') {
