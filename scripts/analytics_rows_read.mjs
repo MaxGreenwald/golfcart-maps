@@ -47,6 +47,11 @@ for (const [label, extraOld] of [['recent', 0], ['plus_old_history', N]]) {
 }
 
 const strip = b => { const c = JSON.parse(JSON.stringify(b)); delete c.generated; return c; };
+// /shop-stats gained shop-dashboard fields the old Worker never returned. Keep only the old shape
+// (same keys, same array lengths) so every field the old Worker returned must still match exactly.
+const onto = (a, b) => Array.isArray(b) ? (Array.isArray(a) && a.length === b.length ? b.map((x, i) => onto(a[i], x)) : a)
+  : b && typeof b === 'object' ? (a && typeof a === 'object' ? Object.fromEntries(Object.keys(b).map(k => [k, onto(a[k], b[k])])) : a) : a;
+const shape = (p, after, before) => p.startsWith('/shop-stats') ? onto(after, before) : after;
 const r = result.recent, o = result.plus_old_history;
 console.log(`events in table: ${r.after.total_rows - 1} (35 days); 7-day window ${r.after.window_rows[7]}, 30-day window ${r.after.window_rows[30]}`);
 console.log('request                                 | before rows read | after rows read | statements before -> after');
@@ -61,7 +66,8 @@ console.log(`with ${o.after.total_rows - 1 - (r.after.total_rows - 1)} more even
 
 const fails = [];
 for (const set of [r, o]) for (const p of ['/stats?days=7', '/stats?days=30', '/shop-stats?shop=beachmode&days=30']) {
-  if (JSON.stringify(strip(set.before[p].body)) !== JSON.stringify(strip(set.after[p].body))) fails.push(`${p} output differs before vs after`);
+  const before = strip(set.before[p].body);
+  if (JSON.stringify(before) !== JSON.stringify(shape(p, strip(set.after[p].body), before))) fails.push(`${p} output differs before vs after`);
 }
 if (r.after['/stats?days=7'].rows * 10 > r.before['/stats?days=7'].rows) fails.push('/stats?days=7 did not drop 10x');
 if (o.after['/stats?days=7'].rows > r.after['/stats?days=7'].rows * 1.05 + 100) fails.push('/stats?days=7 still grows with history outside the window');
