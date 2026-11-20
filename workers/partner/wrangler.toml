@@ -39,10 +39,6 @@ ANALYTICS_STATS_URL = "https://gcm-analytics.maxgreenwald-assistant.workers.dev"
 name = "STORE"
 class_name = "PartnerStore"
 
-[[r2_buckets]]
-binding = "MEDIA"
-bucket_name = "gcm-partner-media"
-
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["PartnerStore"]
