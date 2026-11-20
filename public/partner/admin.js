@@ -687,6 +687,7 @@ function shopView() {
     <table><thead><tr><th>Experience</th><th></th></tr></thead><tbody>${exRows}</tbody></table>
   </div>
   ${copyCard()}
+  ${window.GCMSalesAdmin ? GCMSalesAdmin.card() : ''}
   ${placesCard()}
   <div class="card af-place"><h2>Affiliate offers</h2>
     <p class="muted">Restaurants and deals for your renters. Larger ★ pins on the map.</p>
@@ -1605,6 +1606,7 @@ function bindApp() {
 
   wireAffiliatePicker();
   wirePlaces();
+  if (window.GCMSalesAdmin) GCMSalesAdmin.bind();
 
   const addEx = $('#addEx');
   if (addEx) addEx.onclick = async () => {

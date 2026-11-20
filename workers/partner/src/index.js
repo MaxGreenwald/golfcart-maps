@@ -1,6 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
+import sales from '../../../public/sales.js';
 import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL, cleanRental, rentalFromRow, cleanReturnBy, cleanRangeMi, cleanReturnSpot, cleanPhone, withPark, bytesFromB64, cleanStops, storeImage, MEDIA_MAX_COUNT } from '../../../lib/partner.js';
 import { fetchShopStats } from '../../../lib/shop_stats.js';
 import { handlePlacesRequest, quotaBuckets, quotaAllowed } from '../../../lib/partner_places.js';
@@ -119,6 +120,8 @@ export class PartnerStore extends DurableObject {
     if (!cols.includes('vehicle')) this.sql.exec("ALTER TABLE shops ADD COLUMN vehicle TEXT DEFAULT ''");
     // Pickup, return, phone, cart rules. Omitted from the locked teaser. Added Nov 10 2026.
     if (!cols.includes('rental_json')) this.sql.exec("ALTER TABLE shops ADD COLUMN rental_json TEXT DEFAULT ''");
+    // Sales mode for dealers (/s/<slug>): settings JSON, off by default.
+    if (!cols.includes('sales_json')) this.sql.exec("ALTER TABLE shops ADD COLUMN sales_json TEXT DEFAULT ''");
     // Shop phone for the renter Help button. A rental info card should keep this column name.
     if (!cols.includes('phone')) this.sql.exec("ALTER TABLE shops ADD COLUMN phone TEXT DEFAULT ''");
     // Per-experience nearest-stop start (on by default; existing rows read 1). Added Oct 31 2026.
@@ -186,6 +189,7 @@ export class PartnerStore extends DurableObject {
       page_template_id: r.page_template_id || '',
     };
     if (opts && opts.rental) row.rental = rentalFromRow(r.rental_json);
+    if (opts && opts.rental) row.sales = sales.fromRow(r.sales_json);
     return row;
   }
   expRow(r) {
@@ -275,6 +279,12 @@ export class PartnerStore extends DurableObject {
           if (c.error) return J({ error: c.error }, 400);
           rental_json = JSON.stringify(c.rental);
         }
+        let sales_json = sh.sales_json || '';
+        if (body.sales != null) {
+          const c = sales.clean(body.sales);
+          if (c.error) return J({ error: c.error }, 400);
+          sales_json = JSON.stringify(c.sales);
+        }
         const retBy = cleanReturnBy(body.return_by !== undefined ? body.return_by : null);
         if (retBy.error) return J({ error: retBy.error }, 400);
         const range = cleanRangeMi(body.range_mi !== undefined ? body.range_mi : null);
@@ -293,6 +303,7 @@ export class PartnerStore extends DurableObject {
           'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=?, rental_json=?, return_by=?, range_mi=?, return_lat=?, return_lon=?, phone=? WHERE id=?',
           name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, rental_json, return_by, range_mi, return_lat, return_lon, phone, sid,
         );
+        if (sales_json !== (sh.sales_json || '')) this.sql.exec('UPDATE shops SET sales_json=? WHERE id=?', sales_json, sid);
         let pushed = 0;
         if (body.push_page && sh.page_template_id) {
           const fields = brandFields({ blurb, logo_url, color, vehicle });
@@ -662,6 +673,17 @@ export class PartnerStore extends DurableObject {
         const sh = this.one('SELECT * FROM shops WHERE slug=? AND disabled=0', slug);
         if (!sh) return J({ error: 'not found' }, 404);
         const shop = this.shopRow(sh);
+        if (parts[1] === 'sales') {
+          // Dealer sales page: public brand, sales card and the shop's places. No codes or rides.
+          const sl = sales.fromRow(sh.sales_json);
+          if (!sl.on) return J({ error: 'This shop has no sales page', shop: { name: shop.name, slug: shop.slug } }, 404);
+          const { on, ...card } = sl;
+          return J({
+            shop: { slug: shop.slug, name: shop.name, region_id: shop.region_id, logo_url: shop.logo_url, color: shop.color, vehicle: shop.vehicle },
+            sales: { ...card, phone: card.phone || shop.phone || '' },
+            places: this.places(sh.id).map(p => ({ name: p.name, category: p.category, lat: p.lat, lon: p.lon })),
+          });
+        }
         if (parts[1] === 'unlock') {
           const code = String(u.searchParams.get('code') || '').trim().toUpperCase();
           if (!code) return J({ error: 'code required', shop }, 400);
