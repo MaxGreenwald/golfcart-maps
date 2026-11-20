@@ -14,7 +14,7 @@
 <li><b>Photon by Komoot</b> (photon.komoot.io) for place search.</li>
 <li><b>Google Places API</b> (places.googleapis.com) for place search in the partner admin, when a shop owner adds a stop or offer. The search text and the selected place go through our server; the API key is not in the browser. If that service is unavailable, search falls back to Photon and Nominatim. The public map keeps using Photon and Nominatim only.</li>
 <li><b>unpkg</b> (map code library) and <b>Google Fonts</b> (fonts).</li>
-<li><b>Cloudflare</b>, which hosts the site, processes standard request logs, and stores our anonymous usage statistics (see below).</li>
+<li><b>Cloudflare</b>, which hosts the site, processes standard request logs, stores our anonymous usage statistics (see below), and stores shop-uploaded logos and stop photos (see below).</li>
 <li><b>HubSpot</b> on public pages of golfcartmap.com, for analytics and chat. Details are in Cookies and tracking below. The iPhone app and the partner admin do not load it.</li>
 </ul>
 <p>Road and EV charger data (from OpenStreetMap and the U.S. DOE Alternative Fuels Data Center) is packaged and served from our own site; the app doesn't send your location to the DOE.</p>
@@ -24,6 +24,9 @@
 
 <h2>Reporting a problem</h2>
 <p>"Report a problem" opens your own email app with a pre-filled message. Nothing is sent unless you choose to send it. If you do, we get your email address and what you wrote, and use it only to fix the map and reply to you.</p>
+
+<h2>Shop logos and stop photos</h2>
+<p>Rental shops can upload a logo and a photo for each stop on a ride. We store those images with Cloudflare (in R2) and serve them at a public web address, so renters and anyone else with the link can see them; a shop can replace a logo or take a photo off a stop, but the file may still be reachable at its original link.</p>
 
 <h2>Usage statistics</h2>
 <p>To learn which towns and features help people, the website, the iPhone app and CarPlay send us a few anonymous usage events: when a visit starts, which town map you view, when you search for a route (whether one was found, and its length rounded to half a mile), when you start or finish a route, and when you open a road report (only the issue type you picked, never your notes).</p>
