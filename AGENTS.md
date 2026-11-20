@@ -64,6 +64,7 @@ Where a check lives only on an unmerged branch, the branch is named; it becomes 
 | 43 | Shop activity (unlocks per access code, rides started and finished, offer taps by day) is read from the analytics store and leaves out denylisted installs | Nov 10 2026 | `tests/shop_stats.test.mjs`, `tests/test_shop_dashboard.py` | web-ci |
 | 44 | A partner can copy a ride or a whole page to another shop they own. Pins move only when the town matches. A linked edit can update the other copies | Nov 10 2026 | `tests/partner_templates.test.mjs`, `tests/test_partner_templates.py` | web-ci |
 | 45 | Ready-made partner rides are loops the legal-road router accepts for that shop's vehicle, built from the town's places | Nov 10 2026 | `tests/starters.test.mjs`, `tests/test_starter_experiences.py` | web-ci |
+| 46 | Analytics Worker reads stay inside the requested day window: the internal/test check is stored at ingest, never re-run over all events (free plan: 5M rows read/day) | Nov 19 2026 | `tests/analytics_rows.test.mjs`, `scripts/analytics_rows_read.mjs --check` | web-ci |
 
 When you add a check, add a row. When a rule has no check, say so here rather than leaving it implied.
 

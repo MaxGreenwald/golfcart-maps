@@ -4,6 +4,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
+import { ensureSchema, refreshFlags } from '../lib/analytics_store.js';
 import { computeShopStats, fetchShopStats, shopStatsRequest } from '../lib/shop_stats.js';
 import { EXCLUDE_IIDS } from '../lib/analytics_exclude.js';
 
@@ -16,9 +17,11 @@ const DENY = EXCLUDE_IIDS[0];
 
 function dbWith(rows) {
   const db = new DatabaseSync(':memory:');
-  db.exec(`CREATE TABLE events(ts INTEGER NOT NULL, day TEXT NOT NULL, event TEXT NOT NULL, town TEXT, platform TEXT, pwa INTEGER, iid TEXT, sid TEXT, props TEXT)`);
-  const ins = db.prepare('INSERT INTO events VALUES (?,?,?,?,?,?,?,?,?)');
+  const exec = (s, ...a) => { db.prepare(s).run(...a); };
+  ensureSchema(exec, (s, ...a) => db.prepare(s).all(...a));
+  const ins = db.prepare('INSERT INTO events(ts, day, event, town, platform, pwa, iid, sid, props) VALUES (?,?,?,?,?,?,?,?,?)');
   for (const r of rows) ins.run(r.ts || NOW, r.day || DAY, r.event, r.town ?? 'sd', r.platform || 'web', 0, r.iid ?? REAL, r.sid || 'sess-aaaaaaaa', JSON.stringify(r.props || {}));
+  refreshFlags(exec);   // same flags the Worker stores at ingest (lib/analytics_store.js)
   return db;
 }
 const qOf = db => (sql, ...params) => db.prepare(sql).all(...params);
