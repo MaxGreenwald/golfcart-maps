@@ -39,14 +39,37 @@
     return miles / mph * 60;
   }
 
-  // slack = minutes you can wait before you must leave to arrive by return_by.
+  // Minutes from now until a booked return time (unix ms). Negative when it has passed.
+  function minutesUntilAt(now, returnAt) {
+    const at = Number(returnAt);
+    if (!(at > 0) || !now || Number.isNaN(now.getTime())) return null;
+    return (at - now.getTime()) / 60000;
+  }
+
+  // The return time a renter is held to: their own booking when the shop booked one, else
+  // the shop's daily return-by. leadMin is the shop's "nudge this many minutes before".
+  // Shared by the renter page and CarPlay so both say the same thing.
+  function returnPlan(shop, booking) {
+    const s = shop || {};
+    const b = booking || {};
+    const lead = +(b.remind_min || s.remind_min);
+    return {
+      returnBy: s.return_by || '',
+      returnAt: +b.return_at > 0 ? +b.return_at * 1000 : null,
+      leadMin: lead > 0 && lead <= 120 ? lead : LEAVE_LEAD_MIN,
+    };
+  }
+  function hasReturnTime(plan) { return !!(plan && (plan.returnAt || plan.returnBy)); }
+
+  // slack = minutes you can wait before you must leave to arrive by the return time.
   // travelMin is required (0 when the shop set a time and no return pin).
   function timeNudge(o) {
     o = o || {};
-    const until = minutesUntil(o.now, o.returnBy);
+    const until = o.returnAt ? minutesUntilAt(o.now, o.returnAt) : minutesUntil(o.now, o.returnBy);
     if (until == null || !Number.isFinite(+o.travelMin)) return null;
     const slack = until - Math.max(0, +o.travelMin);
-    if (slack > LEAVE_LEAD_MIN) return null;
+    const lead = +o.leadMin > 0 ? +o.leadMin : LEAVE_LEAD_MIN;
+    if (slack > lead) return null;
     if (slack > 0) {
       const n = Math.max(1, Math.ceil(slack));
       return { id: 'leave-window', text: n === 1 ? 'Head back in 1 minute.' : 'Head back in ' + n + ' minutes.' };
@@ -78,5 +101,5 @@
     return out;
   }
 
-  return { LEAVE_LEAD_MIN, RANGE_MARGIN, CART_MPH, clockMinutes, minutesUntil, pathMiles, travelMinutes, timeNudge, rangeNudge, nudges };
+  return { LEAVE_LEAD_MIN, RANGE_MARGIN, CART_MPH, clockMinutes, minutesUntil, minutesUntilAt, returnPlan, hasReturnTime, pathMiles, travelMinutes, timeNudge, rangeNudge, nudges };
 });

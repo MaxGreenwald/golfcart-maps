@@ -3,10 +3,16 @@
 import { DurableObject } from 'cloudflare:workers';
 import roadrule from '../../../public/roadrule.js';
 import quizLib from '../../../public/quiz.js';
+import sales from '../../../public/sales.js';
 import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL, cleanRental, rentalFromRow, cleanReturnBy, cleanRangeMi, cleanReturnSpot, cleanPhone, withPark, bytesFromB64, cleanStops, storeImage, MEDIA_MAX_COUNT } from '../../../lib/partner.js';
 import { fetchShopStats } from '../../../lib/shop_stats.js';
 import { handlePlacesRequest, quotaBuckets, quotaAllowed } from '../../../lib/partner_places.js';
 import { sameTown, pushStops, brandFields, experiencePayload } from '../../../lib/partner_templates.js';
+import { cleanBooking, bookingRow, rulesLines, welcomeEmail, welcomeSms, BOOKING_KEEP_DAYS, validZone, cleanRemindMin, remindMinutes, remindAt, reminderAction, reminderEmail, backLink, DEFAULT_REMIND_MIN } from '../../../lib/partner_bookings.js';
+import { sendMail, mailState } from '../../../lib/partner_mail.js';
+import { sendSms, smsProvider } from '../../../lib/partner_sms.js';
+import { cleanReport, reportPhotoKey, reportEmail, reportRow, REPORT_KINDS, REPORT_KEEP_DAYS, REPORTS_PER_CODE_DAY } from '../../../lib/partner_reports.js';
+import { parseCarts, fleetPlan, cleanCartLabel, cartOrder } from '../../../lib/partner_fleet.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -75,6 +81,7 @@ export class PartnerStore extends DurableObject {
   constructor(ctx, env) {
     super(ctx, env);
     this.sql = ctx.storage.sql;
+    this.ensureReports();
     this.sql.exec(`
       CREATE TABLE IF NOT EXISTS shops(
         id TEXT PRIMARY KEY, slug TEXT UNIQUE NOT NULL, name TEXT NOT NULL,
@@ -120,6 +127,8 @@ export class PartnerStore extends DurableObject {
     if (!cols.includes('vehicle')) this.sql.exec("ALTER TABLE shops ADD COLUMN vehicle TEXT DEFAULT ''");
     // Pickup, return, phone, cart rules. Omitted from the locked teaser. Added Nov 10 2026.
     if (!cols.includes('rental_json')) this.sql.exec("ALTER TABLE shops ADD COLUMN rental_json TEXT DEFAULT ''");
+    // Sales mode for dealers (/s/<slug>): settings JSON, off by default.
+    if (!cols.includes('sales_json')) this.sql.exec("ALTER TABLE shops ADD COLUMN sales_json TEXT DEFAULT ''");
     // Shop phone for the renter Help button. A rental info card should keep this column name.
     if (!cols.includes('phone')) this.sql.exec("ALTER TABLE shops ADD COLUMN phone TEXT DEFAULT ''");
     // Per-experience nearest-stop start (on by default; existing rows read 1). Added Oct 31 2026.
@@ -136,6 +145,26 @@ export class PartnerStore extends DurableObject {
     const plCols = this.sql.exec('PRAGMA table_info(places)').toArray().map(c => c.name);
     if (!plCols.includes('template_id')) this.sql.exec('ALTER TABLE places ADD COLUMN template_id TEXT');
     if (!cols.includes('page_template_id')) this.sql.exec('ALTER TABLE shops ADD COLUMN page_template_id TEXT');
+    // Rental-day bookings (renter contact + return time). Rows are deleted 30 days after return.
+    this.sql.exec(`
+      CREATE TABLE IF NOT EXISTS bookings(
+        id TEXT PRIMARY KEY, shop_id TEXT NOT NULL, renter_name TEXT NOT NULL, email TEXT NOT NULL,
+        phone TEXT DEFAULT '', return_at INTEGER NOT NULL, tz TEXT NOT NULL, code TEXT NOT NULL,
+        welcome_status TEXT DEFAULT 'pending', welcome_at INTEGER, sms_status TEXT DEFAULT 'off',
+        created_at INTEGER NOT NULL
+      )
+    `);
+    // Return-time reminders: the shop picks how many minutes before return; each booking with an
+    // email gets one "head back soon" email from the Durable Object alarm.
+    if (!cols.includes('remind_min')) this.sql.exec('ALTER TABLE shops ADD COLUMN remind_min INTEGER DEFAULT ' + DEFAULT_REMIND_MIN);
+    const bkCols = this.sql.exec('PRAGMA table_info(bookings)').toArray().map(c => c.name);
+    if (!bkCols.includes('remind_at')) this.sql.exec('ALTER TABLE bookings ADD COLUMN remind_at INTEGER');
+    if (!bkCols.includes('remind_status')) this.sql.exec("ALTER TABLE bookings ADD COLUMN remind_status TEXT DEFAULT 'none'");
+    if (!bkCols.includes('reminded_at')) this.sql.exec('ALTER TABLE bookings ADD COLUMN reminded_at INTEGER');
+    if (!bkCols.includes('link_origin')) this.sql.exec("ALTER TABLE bookings ADD COLUMN link_origin TEXT DEFAULT ''");
+    // Fleet stickers: the cart number a code is printed for. Empty for desk codes.
+    const codeCols = this.sql.exec('PRAGMA table_info(codes)').toArray().map(c => c.name);
+    if (!codeCols.includes('cart_label')) this.sql.exec("ALTER TABLE codes ADD COLUMN cart_label TEXT DEFAULT ''");
     this.sql.exec(`
       CREATE TABLE IF NOT EXISTS places_quota(
         shop_id TEXT NOT NULL, bucket TEXT NOT NULL, count INTEGER NOT NULL,
@@ -152,8 +181,52 @@ export class PartnerStore extends DurableObject {
       )
     `);
   }
+  ensureReports() {
+    // Renter problem reports (cart, what happened, optional note, contact, photo). Kept 90 days.
+    this.sql.exec(`
+      CREATE TABLE IF NOT EXISTS reports(
+        id TEXT PRIMARY KEY, shop_id TEXT NOT NULL, code TEXT NOT NULL, cart TEXT DEFAULT '',
+        kind TEXT NOT NULL, note TEXT DEFAULT '', contact_name TEXT DEFAULT '', contact_phone TEXT DEFAULT '',
+        photo_key TEXT, photo_type TEXT, photo_status TEXT DEFAULT 'none', mail_status TEXT DEFAULT 'pending',
+        status TEXT DEFAULT 'open', fixed_at INTEGER, created_at INTEGER NOT NULL
+      )
+    `);
+  }
   q(s, ...a) { return this.sql.exec(s, ...a).toArray(); }
   one(s, ...a) { return this.q(s, ...a)[0] || null; }
+
+  /** Point the alarm at the next scheduled reminder, or clear it. */
+  async armReminders() {
+    const next = this.one("SELECT MIN(remind_at) AS t FROM bookings WHERE remind_status='scheduled'");
+    if (next && next.t != null) await this.ctx.storage.setAlarm(Math.max(Number(next.t) * 1000, Date.now() + 1000));
+    else await this.ctx.storage.deleteAlarm();
+  }
+
+  /** Send every due "head back soon" email. Mail off: the row says so and nothing is sent. */
+  async alarm() {
+    const t = now();
+    for (const row of this.q("SELECT * FROM bookings WHERE remind_status='scheduled' AND remind_at<=?", t)) {
+      const act = reminderAction(row, t);
+      if (act === 'late') {
+        this.sql.exec("UPDATE bookings SET remind_status='late' WHERE id=?", row.id);
+        continue;
+      }
+      if (act !== 'send') continue;
+      const sh = this.one('SELECT * FROM shops WHERE id=?', row.shop_id);
+      if (!sh || !row.email || !row.link_origin) {
+        this.sql.exec("UPDATE bookings SET remind_status='none' WHERE id=?", row.id);
+        continue;
+      }
+      const shop = this.shopRow(sh, { rental: true });
+      const link = backLink(row.link_origin, sh.slug, row.code);
+      const mail = reminderEmail({ shop, booking: row, link, minutes: remindMinutes(sh) });
+      // Claim the row first so a retried alarm cannot send twice.
+      this.sql.exec("UPDATE bookings SET remind_status='sending' WHERE id=?", row.id);
+      const res = await sendMail(this.env, { to: row.email, subject: mail.subject, html: mail.html, text: mail.text, reply_to: shop.owner_email });
+      this.sql.exec('UPDATE bookings SET remind_status=?, reminded_at=? WHERE id=?', res.status, now(), row.id);
+    }
+    await this.armReminders();
+  }
 
   takePlacesQuota(sid, kind, nowMs) {
     const allowedKind = kind === 'autocomplete' || kind === 'details' ? kind : '';
@@ -191,9 +264,11 @@ export class PartnerStore extends DurableObject {
       return_lon: Number.isFinite(r.return_lon) ? r.return_lon : null,
       phone: r.phone || '',
       page_template_id: r.page_template_id || '',
+      remind_min: remindMinutes(r),
     };
     if (opts && opts.rental) row.rental = rentalFromRow(r.rental_json);
     row.quiz_on = !!r.quiz_on;
+    if (opts && opts.rental) row.sales = sales.fromRow(r.sales_json);
     return row;
   }
   expRow(r) {
@@ -225,7 +300,11 @@ export class PartnerStore extends DurableObject {
       unlocked: true,
       shop: { ...shop, rental: rentalFromRow(sh.rental_json) },
       experiences, affiliates, places: this.places(sh.id), code: c.code,
+      cart: c.cart_label || '',
     };
+    // A booked renter's own return time drives the in-app "head back" banner. No contact details.
+    const bk = this.one('SELECT return_at, tz FROM bookings WHERE shop_id=? AND code=? AND return_at>=? ORDER BY return_at LIMIT 1', sh.id, c.code, now() - 6 * 3600);
+    if (bk) out.booking = { return_at: bk.return_at, tz: bk.tz, remind_min: remindMinutes(sh) };
     if (withGrant) {
       out.grant = randomToken(24);
       this.sql.exec('INSERT INTO grants(grant,shop_id,code,expires_at) VALUES(?,?,?,?)', out.grant, sh.id, c.code, grantExpiry(now(), c.expires_at));
@@ -282,6 +361,12 @@ export class PartnerStore extends DurableObject {
           if (c.error) return J({ error: c.error }, 400);
           rental_json = JSON.stringify(c.rental);
         }
+        let sales_json = sh.sales_json || '';
+        if (body.sales != null) {
+          const c = sales.clean(body.sales);
+          if (c.error) return J({ error: c.error }, 400);
+          sales_json = JSON.stringify(c.sales);
+        }
         const retBy = cleanReturnBy(body.return_by !== undefined ? body.return_by : null);
         if (retBy.error) return J({ error: retBy.error }, 400);
         const range = cleanRangeMi(body.range_mi !== undefined ? body.range_mi : null);
@@ -296,11 +381,19 @@ export class PartnerStore extends DurableObject {
         const ph = cleanPhone(body.phone !== undefined ? body.phone : null);
         if (ph.error) return J({ error: ph.error }, 400);
         const phone = ph.skip ? (sh.phone || '') : ph.value;
+        const rm = cleanRemindMin(body.remind_min);
+        if (rm.error) return J({ error: rm.error }, 400);
+        if (!rm.skip) {
+          this.sql.exec('UPDATE shops SET remind_min=? WHERE id=?', rm.value, sid);
+          this.sql.exec("UPDATE bookings SET remind_at=return_at-? WHERE shop_id=? AND remind_status='scheduled'", rm.value * 60, sid);
+          await this.armReminders();
+        }
         this.sql.exec(
           'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=?, rental_json=?, return_by=?, range_mi=?, return_lat=?, return_lon=?, phone=? WHERE id=?',
           name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, rental_json, return_by, range_mi, return_lat, return_lon, phone, sid,
         );
         if (body.quiz_on !== undefined) this.sql.exec('UPDATE shops SET quiz_on=? WHERE id=?', body.quiz_on === true || body.quiz_on === 1 || body.quiz_on === '1' ? 1 : 0, sid);
+        if (sales_json !== (sh.sales_json || '')) this.sql.exec('UPDATE shops SET sales_json=? WHERE id=?', sales_json, sid);
         let pushed = 0;
         if (body.push_page && sh.page_template_id) {
           const fields = brandFields({ blurb, logo_url, color, vehicle });
@@ -360,7 +453,7 @@ export class PartnerStore extends DurableObject {
           experiences: this.q('SELECT * FROM experiences WHERE shop_id=? ORDER BY created_at DESC', sid).map(r => this.expRow(r)),
           affiliates: this.q('SELECT * FROM affiliates WHERE shop_id=? ORDER BY created_at DESC', sid).map(r => this.affRow(r)),
           places: this.places(sid),
-          codes: this.q('SELECT code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at FROM codes WHERE shop_id=? ORDER BY created_at DESC', sid),
+          codes: this.q('SELECT code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at,cart_label FROM codes WHERE shop_id=? ORDER BY created_at DESC', sid),
         });
       }
       // Experiences
@@ -409,9 +502,9 @@ export class PartnerStore extends DurableObject {
         }
         return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)), pushed });
       }
-      if (path.match(/^\/(experiences|affiliates|places)\/[^/]+\/owner$/) && method === 'GET') {
+      if (path.match(/^\/(experiences|affiliates|places|bookings|reports)\/[^/]+\/owner$/) && method === 'GET') {
         const [, tbl, rid] = path.split('/');
-        const table = { experiences: 'experiences', affiliates: 'affiliates', places: 'places' }[tbl];
+        const table = { experiences: 'experiences', affiliates: 'affiliates', places: 'places', bookings: 'bookings', reports: 'reports' }[tbl];
         const r = this.one(`SELECT shop_id FROM ${table} WHERE id=?`, rid);
         return J({ shop_id: r ? r.shop_id : null });
       }
@@ -601,10 +694,138 @@ export class PartnerStore extends DurableObject {
         if (exp.error) return J({ error: exp.error }, 400);
         const expires_at = exp.expires_at;
         this.sql.exec(
-          'INSERT INTO codes(code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at) VALUES(?,?,?,?,?,0,?,?)',
-          code, sid, body.experience_id || null, multi, max_uses, expires_at, now(),
+          'INSERT INTO codes(code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at,cart_label) VALUES(?,?,?,?,?,0,?,?,?)',
+          code, sid, body.experience_id || null, multi, max_uses, expires_at, now(), cleanCartLabel(body.cart_label),
         );
         return J({ code: this.one('SELECT * FROM codes WHERE code=?', code) }, 201);
+      }
+      // Bookings: a renter's name, email, optional phone, and return time. The code is the shop's
+      // pick, or a new multi-use code that lasts until a day after the return time.
+      if (path.match(/^\/shops\/[^/]+\/bookings$/) && method === 'POST') {
+        const sid = path.split('/')[2];
+        const sh = this.one('SELECT * FROM shops WHERE id=?', sid);
+        if (!sh) return J({ error: 'not found' }, 404);
+        const c = cleanBooking(body, now());
+        if (c.error) return J({ error: c.error }, 400);
+        const bk = c.booking;
+        let code = bk.code;
+        if (code) {
+          const row = this.one('SELECT * FROM codes WHERE code=? AND shop_id=?', code, sid);
+          if (!row || (row.expires_at && row.expires_at < now())) return J({ error: 'That access code is not active' }, 400);
+        } else {
+          code = randomCode(4);
+          while (this.one('SELECT code FROM codes WHERE code=?', code)) code = randomCode(5);
+          this.sql.exec(
+            'INSERT INTO codes(code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at) VALUES(?,?,NULL,1,0,0,?,?)',
+            code, sid, bk.return_at + 86400, now(),
+          );
+        }
+        const bid = id();
+        this.sql.exec(
+          'INSERT INTO bookings(id,shop_id,renter_name,email,phone,return_at,tz,code,welcome_status,sms_status,created_at,remind_at,remind_status,link_origin) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+          bid, sid, bk.renter_name, bk.email, bk.phone, bk.return_at, bk.tz, code, 'pending', bk.phone ? 'pending' : 'none', now(),
+          remindAt(bk.return_at, remindMinutes(sh)), bk.email ? 'scheduled' : 'none', String((body && body.link_origin) || ''),
+        );
+        await this.armReminders();
+        this.sql.exec('DELETE FROM bookings WHERE return_at<?', now() - BOOKING_KEEP_DAYS * 86400);
+        return J({ booking: bookingRow(this.one('SELECT * FROM bookings WHERE id=?', bid)), shop: this.shopRow(sh, { rental: true }) }, 201);
+      }
+      if (path.match(/^\/shops\/[^/]+\/bookings$/) && method === 'GET') {
+        const sid = path.split('/')[2];
+        const rows = this.q('SELECT * FROM bookings WHERE shop_id=? AND return_at>=? ORDER BY return_at', sid, now() - 2 * 86400);
+        return J({ bookings: rows.map(bookingRow) });
+      }
+      if (path.match(/^\/bookings\/[^/]+$/) && method === 'GET') {
+        const r = this.one('SELECT * FROM bookings WHERE id=?', path.split('/')[2]);
+        if (!r) return J({ error: 'not found' }, 404);
+        return J({ booking: bookingRow(r), shop: this.shopRow(this.one('SELECT * FROM shops WHERE id=?', r.shop_id), { rental: true }) });
+      }
+      if (path.match(/^\/bookings\/[^/]+\/status$/) && method === 'POST') {
+        const bid = path.split('/')[2];
+        const ok = ['sent', 'off', 'failed', 'pending', 'none'];
+        const w = ok.includes(body.welcome) ? body.welcome : null;
+        const t = ok.includes(body.sms) ? body.sms : null;
+        if (w) this.sql.exec('UPDATE bookings SET welcome_status=?, welcome_at=? WHERE id=?', w, w === 'sent' ? now() : null, bid);
+        if (t) this.sql.exec('UPDATE bookings SET sms_status=? WHERE id=?', t, bid);
+        return J({ booking: bookingRow(this.one('SELECT * FROM bookings WHERE id=?', bid)) });
+      }
+      if (path.match(/^\/bookings\/[^/]+$/) && method === 'DELETE') {
+        this.sql.exec('DELETE FROM bookings WHERE id=?', path.split('/')[2]);
+        await this.armReminders();
+        return J({ ok: true });
+      }
+      // Problem reports. The renter's code must be live for the shop; at most 5 a code a day.
+      if (path.match(/^\/public\/[^/]+\/report-check$/) && method === 'POST') {
+        const sh = this.one('SELECT * FROM shops WHERE slug=? AND disabled=0', normalizeSlug(path.split('/')[2]));
+        if (!sh) return J({ error: 'not found' }, 404);
+        const code = String((body && body.code) || '').replace(/\s+/g, '').toUpperCase();
+        const c = code && this.one('SELECT * FROM codes WHERE code=? AND shop_id=?', code, sh.id);
+        if (!c || (c.expires_at && c.expires_at < now())) return J({ error: 'Your access code is not active' }, 403);
+        const n = this.one('SELECT COUNT(*) AS n FROM reports WHERE shop_id=? AND code=? AND created_at>?', sh.id, code, now() - 86400).n;
+        if (n >= REPORTS_PER_CODE_DAY) return J({ error: 'This code has sent ' + REPORTS_PER_CODE_DAY + ' reports today. Call the shop.' }, 429);
+        return J({ shop_id: sh.id, code, shop: this.shopRow(sh, { rental: true }) });
+      }
+      if (path.match(/^\/shops\/[^/]+\/reports$/) && method === 'POST') {
+        const sid = path.split('/')[2];
+        const r = body || {};
+        const c = cleanReport(r);
+        if (c.error) return J({ error: c.error }, 400);
+        const rid = String(r.id || id());
+        this.sql.exec(
+          'INSERT INTO reports(id,shop_id,code,cart,kind,note,contact_name,contact_phone,photo_key,photo_type,photo_status,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',
+          rid, sid, String(r.code || ''), c.report.cart, c.report.kind, c.report.note, c.report.contact_name, c.report.contact_phone,
+          r.photo_key || null, r.photo_type || null, ['saved', 'failed', 'off'].includes(r.photo_status) ? r.photo_status : 'none', now(),
+        );
+        this.sql.exec('DELETE FROM reports WHERE created_at<?', now() - REPORT_KEEP_DAYS * 86400);
+        return J({ report: reportRow(this.one('SELECT * FROM reports WHERE id=?', rid)) }, 201);
+      }
+      if (path.match(/^\/shops\/[^/]+\/reports$/) && method === 'GET') {
+        const rows = this.q('SELECT * FROM reports WHERE shop_id=? ORDER BY created_at DESC LIMIT 200', path.split('/')[2]);
+        return J({ reports: rows.map(reportRow) });
+      }
+      if (path.match(/^\/reports\/[^/]+$/) && method === 'GET') {
+        const r = this.one('SELECT * FROM reports WHERE id=?', path.split('/')[2]);
+        if (!r) return J({ error: 'not found' }, 404);
+        return J({ report: reportRow(r), photo_key: r.photo_key || '', photo_type: r.photo_type || '' });
+      }
+      if (path.match(/^\/reports\/[^/]+\/status$/) && method === 'POST') {
+        const rid = path.split('/')[2];
+        if (!this.one('SELECT id FROM reports WHERE id=?', rid)) return J({ error: 'not found' }, 404);
+        if (body && ['sent', 'off', 'failed'].includes(body.mail)) this.sql.exec('UPDATE reports SET mail_status=? WHERE id=?', body.mail, rid);
+        if (body && ['open', 'fixed'].includes(body.status)) {
+          this.sql.exec('UPDATE reports SET status=?, fixed_at=? WHERE id=?', body.status, body.status === 'fixed' ? now() : null, rid);
+        }
+        return J({ report: reportRow(this.one('SELECT * FROM reports WHERE id=?', rid)) });
+      }
+      // Fleet stickers: one multi-use code per cart number. A cart that already has a live code keeps it.
+      if (path.match(/^\/shops\/[^/]+\/fleet$/) && method === 'POST') {
+        const sid = path.split('/')[2];
+        if (!this.one('SELECT id FROM shops WHERE id=?', sid)) return J({ error: 'not found' }, 404);
+        const parsed = parseCarts(body.carts);
+        if (parsed.error) return J({ error: parsed.error }, 400);
+        const exp = codeExpiry({ expires_days: body.expires_days === undefined ? null : body.expires_days }, now());
+        if (exp.error) return J({ error: exp.error }, 400);
+        const plan = fleetPlan(parsed.carts, this.q('SELECT code,cart_label,expires_at FROM codes WHERE shop_id=? ORDER BY created_at DESC', sid), now());
+        for (const cart of plan.make) {
+          let code = randomCode(4);
+          while (this.one('SELECT code FROM codes WHERE code=?', code)) code = randomCode(5);
+          this.sql.exec(
+            'INSERT INTO codes(code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at,cart_label) VALUES(?,?,NULL,1,0,0,?,?,?)',
+            code, sid, exp.expires_at, now(), cart,
+          );
+        }
+        const want = new Set(parsed.carts.map(c => c.toLowerCase()));
+        const fresh = this.q("SELECT code,cart_label,expires_at,uses FROM codes WHERE shop_id=? AND cart_label<>'' ORDER BY created_at DESC", sid);
+        const seen = new Set();
+        const fleet = [];
+        for (const r of fresh) {
+          const key = r.cart_label.toLowerCase();
+          if (!want.has(key) || seen.has(key) || (r.expires_at && r.expires_at < now())) continue;
+          seen.add(key);
+          fleet.push({ cart: r.cart_label, code: r.code, expires_at: r.expires_at, uses: r.uses });
+        }
+        fleet.sort((a, b) => cartOrder(a.cart, b.cart));
+        return J({ fleet, created: plan.make.length, reused: plan.reuse.length }, 201);
       }
       // App handoff: grant (from an unlock in the browser) -> single-use token, 10 minutes.
       const hm = path.match(/^\/public\/([^/]+)\/handoff$/);
@@ -660,6 +881,17 @@ export class PartnerStore extends DurableObject {
         const sh = this.one('SELECT * FROM shops WHERE slug=? AND disabled=0', slug);
         if (!sh) return J({ error: 'not found' }, 404);
         const shop = this.shopRow(sh);
+        if (parts[1] === 'sales') {
+          // Dealer sales page: public brand, sales card and the shop's places. No codes or rides.
+          const sl = sales.fromRow(sh.sales_json);
+          if (!sl.on) return J({ error: 'This shop has no sales page', shop: { name: shop.name, slug: shop.slug } }, 404);
+          const { on, ...card } = sl;
+          return J({
+            shop: { slug: shop.slug, name: shop.name, region_id: shop.region_id, logo_url: shop.logo_url, color: shop.color, vehicle: shop.vehicle },
+            sales: { ...card, phone: card.phone || shop.phone || '' },
+            places: this.places(sh.id).map(p => ({ name: p.name, category: p.category, lat: p.lat, lon: p.lon })),
+          });
+        }
         if (parts[1] === 'unlock') {
           const code = String(u.searchParams.get('code') || '').trim().toUpperCase();
           if (!code) return J({ error: 'code required', shop }, 400);
@@ -1035,6 +1267,69 @@ export default {
       const kind = u.pathname === '/shop/copy-page' ? 'copy-page' : 'copy-experience';
       return send('/shops/' + a.shopId + '/' + kind, 'POST', { experience_id: body.experience_id, dest_shop_id: dest, sync: !!body.sync });
     }
+    // ---- Rental-day welcome (bookings) ----
+    async function siteData() {
+      const o = originOf(req, env);
+      const get = async p => { try { const r = await fetch(o + p); return r.ok ? await r.json() : null; } catch { return null; } };
+      const [regionsJson, rulesJson] = await Promise.all([get('/data/regions.json'), get('/data/rules.json')]);
+      return { regions: Array.isArray(regionsJson) ? regionsJson : [], rules: rulesJson };
+    }
+    async function welcomeFor(shop, booking) {
+      const { regions, rules } = await siteData();
+      const region = regions.find(r => r.id === shop.region_id) || null;
+      const link = originOf(req, env) + '/p/' + encodeURIComponent(shop.slug) + '/go?code=' + encodeURIComponent(booking.code);
+      const lines = rulesLines({ rules, region, vehicle: shop.vehicle, shopRules: shop.rental && shop.rental.rules });
+      return { link, email: welcomeEmail({ shop, booking, link, rules: lines }), sms: welcomeSms({ shop, booking, link }) };
+    }
+    async function deliver(shop, booking) {
+      const w = await welcomeFor(shop, booking);
+      const mail = await sendMail(env, { to: booking.email, subject: w.email.subject, html: w.email.html, text: w.email.text, reply_to: shop.owner_email });
+      const sms = booking.phone ? await sendSms(env, { to: booking.phone, text: w.sms }) : { status: 'none' };
+      const res = await send('/bookings/' + booking.id + '/status', 'POST', { welcome: mail.status, sms: sms.status });
+      const j = await res.json();
+      return { booking: j.booking, mail, sms: { status: sms.status, reason: sms.reason }, link: w.link };
+    }
+    if (u.pathname === '/shop/bookings' && req.method === 'GET') {
+      const a = await access(null);
+      if (!a.shopId) return deny(a);
+      const r = await (await doFetch('/shops/' + a.shopId + '/bookings')).json();
+      const sms = smsProvider(env);
+      return J({ ...r, mail: mailState(env), sms: { on: sms.enabled, reason: sms.reason || '' } });
+    }
+    if (u.pathname === '/shop/bookings/preview' && req.method === 'POST') {
+      const body = await readBody();
+      const a = await access(body);
+      if (!a.shopId) return deny(a);
+      const c = cleanBooking(body, now());
+      if (c.error) return J({ error: c.error }, 400);
+      const bundle = await (await doFetch('/shops/' + a.shopId + '/bundle')).json();
+      const w = await welcomeFor(bundle.shop, { ...c.booking, code: c.booking.code || 'YOURCODE' });
+      return J({ ...w.email, sms: w.sms, mail: mailState(env) });
+    }
+    if (u.pathname === '/shop/bookings' && req.method === 'POST') {
+      const body = await readBody();
+      const a = await access(body);
+      if (!a.shopId) return deny(a);
+      const made = await send('/shops/' + a.shopId + '/bookings', 'POST', { ...(body || {}), link_origin: originOf(req, env) });
+      const j = await made.json();
+      if (!made.ok) return J(j, made.status);
+      return J(await deliver(j.shop, j.booking), 201);
+    }
+    const bk = u.pathname.match(/^\/shop\/bookings\/([^/]+)(\/resend)?$/);
+    if (bk && ((bk[2] && req.method === 'POST') || (!bk[2] && req.method === 'DELETE'))) {
+      const a = await access(null, 'bookings/' + bk[1]);
+      if (!a.shopId) return deny(a);
+      if (!bk[2]) return send('/bookings/' + bk[1], 'DELETE');
+      const j = await (await doFetch('/bookings/' + bk[1])).json();
+      if (!j.booking) return J({ error: 'not found' }, 404);
+      return J(await deliver(j.shop, j.booking));
+    }
+    if (u.pathname === '/shop/fleet' && req.method === 'POST') {
+      const body = await readBody();
+      const a = await access(body);
+      if (!a.shopId) return deny(a);
+      return send('/shops/' + a.shopId + '/fleet', 'POST', { carts: body.carts, expires_days: body.expires_days });
+    }
     for (const kind of ['experiences', 'affiliates', 'places', 'codes']) {
       if (u.pathname === '/shop/' + kind && req.method === 'POST') {
         const body = await readBody();
@@ -1050,6 +1345,69 @@ export default {
       if (!a.shopId) return deny(a);
       const payload = req.method === 'PATCH' && rm[1] === 'experiences' ? withPush(body, a) : body;
       return send('/' + rm[1] + '/' + rm[2], req.method, payload);
+    }
+
+    // ---- Problem reports ----
+    if (u.pathname === '/shop/reports' && req.method === 'GET') {
+      const a = await access(null);
+      if (!a.shopId) return deny(a);
+      const r = await (await doFetch('/shops/' + a.shopId + '/reports')).json();
+      return J({ ...r, photos: !!env.MEDIA, mail: mailState(env) });
+    }
+    const rp = u.pathname.match(/^\/shop\/reports\/([^/]+)\/(fixed|photo)$/);
+    if (rp) {
+      const a = await access(null, 'reports/' + rp[1]);
+      if (!a.shopId) return deny(a);
+      if (rp[2] === 'fixed' && req.method === 'POST') {
+        const body = await readBody();
+        return send('/reports/' + rp[1] + '/status', 'POST', { status: body.fixed === false ? 'open' : 'fixed' });
+      }
+      if (rp[2] === 'photo' && req.method === 'GET') {
+        if (!env.MEDIA) return J({ error: 'Photo storage is not configured' }, 503);
+        const j = await (await doFetch('/reports/' + rp[1])).json();
+        if (!j.photo_key) return J({ error: 'not found' }, 404);
+        const obj = await env.MEDIA.get(j.photo_key);
+        if (!obj) return J({ error: 'not found' }, 404);
+        return new Response(obj.body, { headers: { 'content-type': j.photo_type || 'application/octet-stream', 'cache-control': 'private, max-age=3600', 'x-content-type-options': 'nosniff' } });
+      }
+    }
+    const pr = u.pathname.match(/^\/public\/([^/]+)\/(report|report-info)$/);
+    if (pr && pr[2] === 'report-info' && req.method === 'GET') {
+      return J({ photos: !!env.MEDIA, kinds: REPORT_KINDS });
+    }
+    if (pr && pr[2] === 'report' && req.method === 'POST') {
+      // A renter with a live code reports a problem. Works without photos (no R2 binding).
+      const body = await readBody();
+      const c = cleanReport(body);
+      if (c.error) return J({ error: c.error }, 400);
+      const chk = await send('/public/' + encodeURIComponent(pr[1]) + '/report-check', 'POST', { code: body.code });
+      const ck = await chk.json();
+      if (!chk.ok) return J({ error: ck.error }, chk.status);
+      const rid = randomToken(12);
+      let photo = { photo_status: 'none' };
+      if (body.photo_base64) {
+        if (!env.MEDIA) photo = { photo_status: 'off' };
+        else {
+          const dec = bytesFromB64(body.photo_base64);
+          const k = dec.error ? dec : reportPhotoKey(ck.shop_id, rid, dec.bytes);
+          if (k.error) return J({ error: k.error }, 400);
+          try {
+            await env.MEDIA.put(k.key, dec.bytes, { httpMetadata: { contentType: k.content_type } });
+            photo = { photo_status: 'saved', photo_key: k.key, photo_type: k.content_type };
+          } catch (e) { photo = { photo_status: 'failed' }; }
+        }
+      }
+      const made = await send('/shops/' + ck.shop_id + '/reports', 'POST', { ...c.report, id: rid, code: ck.code, ...photo });
+      const j = await made.json();
+      if (!made.ok) return J(j, made.status);
+      const shop = ck.shop;
+      const tz = validZone(body.tz) || 'America/Los_Angeles';
+      let when = '';
+      try { when = new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: 'numeric', minute: '2-digit', weekday: 'short', month: 'short', day: 'numeric', timeZoneName: 'short' }).format(new Date()); } catch {}
+      const m = reportEmail({ shop, report: { ...c.report, code: ck.code }, adminLink: originOf(req, env) + '/partner', photo: photo.photo_status === 'saved' ? 'saved' : photo.photo_status === 'failed' ? 'failed' : 'none', when });
+      const mail = shop.owner_email ? await sendMail(env, { to: shop.owner_email, subject: m.subject, html: m.html, text: m.text }) : { status: 'failed' };
+      await send('/reports/' + rid + '/status', 'POST', { mail: mail.status });
+      return J({ ok: true, report: { id: rid, cart: c.report.cart, kind: c.report.kind }, photo: photo.photo_status, shop_phone: (shop.rental && shop.rental.phone) || shop.phone || '' }, 201);
     }
 
     // Public (no auth)

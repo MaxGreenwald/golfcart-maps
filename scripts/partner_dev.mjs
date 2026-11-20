@@ -18,7 +18,17 @@ const seedFile = process.argv[3];
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.webmanifest': 'application/manifest+json', '.pbf': 'application/octet-stream' };
 
 const regions = JSON.parse(fs.readFileSync(path.join(PUB, 'data', 'regions.json'), 'utf8'));
-const partner = makePartner({ regions, env: JSON.parse(process.env.PARTNER_DEV_ENV || '{}') });
+const devEnv = JSON.parse(process.env.PARTNER_DEV_ENV || '{}');
+// DEV_MEMORY_MEDIA: an in-memory stand-in for the R2 photo bucket (local previews only).
+if (devEnv.DEV_MEMORY_MEDIA) {
+  const objs = new Map();
+  devEnv.MEDIA = {
+    async put(k, bytes) { objs.set(k, new Uint8Array(bytes)); },
+    async get(k) { return objs.has(k) ? { body: objs.get(k) } : null; },
+  };
+  delete devEnv.DEV_MEMORY_MEDIA;
+}
+const partner = makePartner({ regions, env: devEnv });
 
 async function seed() {
   if (!seedFile) return;
@@ -55,7 +65,8 @@ const server = http.createServer(async (req, res) => {
     const sc = r.headers.get('set-cookie');
     if (sc) out['set-cookie'] = sc.replace(/; Secure/g, '');
     res.writeHead(r.status, out);
-    res.end(typeof r.body === 'string' ? r.body : JSON.stringify(r.body));
+    // Images (report photos) pass through as bytes; everything else is JSON or text.
+    res.end(/^image\//.test(out['content-type']) ? r.bytes : (typeof r.body === 'string' ? r.body : JSON.stringify(r.body)));
     return;
   }
   const f = path.join(PUB, fileFor(u.pathname));

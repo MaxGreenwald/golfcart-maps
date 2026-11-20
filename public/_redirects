@@ -126,3 +126,5 @@
 /p/:slug/ /p 200
 /p/:slug/go /p 200
 /p/:slug/go/ /p 200
+/s/:slug /s 200
+/s/:slug/ /s 200

@@ -123,3 +123,18 @@ test('CarPlay navFix speaks a due nudge and stays quiet when muted', async () =>
   quiet.navStart();
   assert.equal(quiet.navFix(fix).say, null);
 });
+
+test('CarPlay uses a booked renter return time and the shop lead time, same as the phone', async () => {
+  const access = JSON.stringify({
+    slug: 'beachmode', code: 'TEST123', at: Date.now(),
+    shop: { name: 'Beach Mode', vehicle: 'golf_cart', return_by: '', range_mi: 0, remind_min: 30 },
+    booking: { return_at: Math.floor(Date.now() / 1000) + 25 * 60, tz: 'UTC', remind_min: 30 },
+    experiences: [{ id: 'e1', title: 'Loop', stops: [{ name: 'Pier', lat: 32.81, lon: -117.26 }] }],
+    affiliates: [],
+  });
+  const cp = loadCarPlay({ gcm_partner_access: access });
+  await cp.plan({ lat: 32.8, lon: -117.25 }, { lat: 32.81, lon: -117.26 }, 'lsv', false, null, 'Pier');
+  cp.navStart();
+  const said = cp.navFix({ lat: 32.8, lon: -117.25, course: 10, speed: 4, t: Date.now() });
+  assert.match(said.say, /Head back in 2[45] minutes/);
+});
