@@ -378,5 +378,157 @@
       '</div><script>document.getElementById("doPrint").onclick=function(){window.print();};<\/script></body></html>';
   }
 
-  return { DEFAULT_COLOR, esc, hexColor, safeLogo, renterUrl, modules, svg, printHtml };
+  // Fleet sheet: one sticker per cart, six to a letter page. Each page also saves as a PNG.
+  const PER_PAGE = 6;
+  const PNG_PAGE = { w: 1275, h: 1650, cols: 2, rows: 3, margin: 60, gap: 36 };
+
+  /** Readable text color on a band color (dark text on light colors). */
+  function bandInk(color) {
+    const h = hexColor(color) || DEFAULT_COLOR;
+    const n = parseInt(h.slice(1), 16);
+    const lum = 0.2126 * ((n >> 16) & 255) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255);
+    return lum > 140 ? '#073044' : '#ffffff';
+  }
+
+  /** Split cart stickers into printed pages of PER_PAGE. */
+  function fleetPages(items) {
+    const pages = [];
+    for (let i = 0; i < (items || []).length; i += PER_PAGE) pages.push(items.slice(i, i + PER_PAGE));
+    return pages;
+  }
+
+  /**
+   * Draw one cart sticker on a 2D canvas context. Self-contained (no outer names) so the
+   * print page can carry it as source. item: { cart, code, url, rows }. look: { name, color, ink }.
+   */
+  function drawSticker(ctx, x, y, w, h, item, look) {
+    const r = Math.round(w * 0.05);
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+    ctx.fillStyle = '#ffffff'; ctx.fill();
+    ctx.lineWidth = 2; ctx.strokeStyle = '#cfe7ea'; ctx.stroke();
+    ctx.clip();
+    const band = Math.round(h * 0.17);
+    ctx.fillStyle = look.color; ctx.fillRect(x, y, w, band);
+    ctx.fillStyle = look.ink;
+    ctx.textBaseline = 'middle';
+    const pad = Math.round(w * 0.05);
+    const cartText = 'Cart ' + item.cart;
+    ctx.font = '800 ' + Math.round(band * 0.42) + 'px system-ui, sans-serif';
+    const cartW = ctx.measureText(cartText).width;
+    ctx.textAlign = 'right';
+    ctx.fillText(cartText, x + w - pad, y + band / 2);
+    let size = Math.round(band * 0.36);
+    let name = String(look.name || '');
+    ctx.textAlign = 'left';
+    ctx.font = '800 ' + size + 'px system-ui, sans-serif';
+    const room = w - pad * 3 - cartW;
+    while (name.length > 1 && ctx.measureText(name).width > room) name = name.slice(0, -2) + '\u2026';
+    ctx.fillText(name, x + pad, y + band / 2);
+    ctx.fillStyle = '#0b6e86';
+    ctx.textAlign = 'center';
+    ctx.font = '800 ' + Math.round(h * 0.045) + 'px system-ui, sans-serif';
+    ctx.fillText('SCAN FOR YOUR RIDES', x + w / 2, y + band + h * 0.06);
+    const rows = item.rows || [];
+    const n = rows.length;
+    const qr = Math.round(Math.min(w * 0.56, h * 0.5));
+    const quiet = 2;
+    const cell = qr / (n + quiet * 2);
+    const qx = x + (w - qr) / 2, qy = y + band + h * 0.1;
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(qx, qy, qr, qr);
+    ctx.fillStyle = '#000000';
+    for (let rr = 0; rr < n; rr++) {
+      for (let cc = 0; cc < n; cc++) {
+        if (rows[rr][cc] === '1') ctx.fillRect(qx + (cc + quiet) * cell, qy + (rr + quiet) * cell, Math.ceil(cell), Math.ceil(cell));
+      }
+    }
+    ctx.fillStyle = '#0b3c50';
+    ctx.font = '800 ' + Math.round(h * 0.07) + 'px ui-monospace, Menlo, monospace';
+    ctx.fillText(item.code, x + w / 2, qy + qr + h * 0.065);
+    ctx.fillStyle = '#3e6270';
+    ctx.font = '600 ' + Math.round(h * 0.03) + 'px system-ui, sans-serif';
+    let url = String(item.url || '');
+    while (url.length > 8 && ctx.measureText(url).width > w - pad * 2) url = url.slice(0, -2) + '\u2026';
+    ctx.fillText(url, x + w / 2, qy + qr + h * 0.13);
+    ctx.restore();
+  }
+
+  /** Draw one printed page (up to six stickers) at 150 dpi. Self-contained like drawSticker. */
+  function drawPage(ctx, items, look, P, draw) {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, P.w, P.h);
+    const cw = (P.w - P.margin * 2 - P.gap * (P.cols - 1)) / P.cols;
+    const ch = (P.h - P.margin * 2 - P.gap * (P.rows - 1)) / P.rows;
+    items.forEach((item, i) => {
+      const col = i % P.cols, row = Math.floor(i / P.cols);
+      draw(ctx, P.margin + col * (cw + P.gap), P.margin + row * (ch + P.gap), cw, ch, item, look);
+    });
+  }
+
+  /**
+   * Print page for a whole fleet: opts { name, slug, color, logoUrl, origin, fleet: [{ cart, code }] }.
+   * Print or save as PDF from the dialog; "Save page N as PNG" draws the same page on a canvas.
+   */
+  function fleetHtml(opts) {
+    const o = opts || {};
+    const name = String(o.name || 'Golf cart rentals').trim() || 'Golf cart rentals';
+    const slug = String(o.slug || '').trim();
+    const list = (o.fleet || []).filter(f => f && f.code && f.cart);
+    if (!list.length) throw new Error('Make cart codes first');
+    const color = hexColor(o.color) || DEFAULT_COLOR;
+    const ink = bandInk(color);
+    const logo = safeLogo(o.logoUrl);
+    const items = list.map(f => {
+      const code = String(f.code).trim().toUpperCase();
+      const url = renterUrl(o.origin || '', slug, code);
+      return { cart: String(f.cart), code, url, rows: modules(url) };
+    });
+    const pages = fleetPages(items);
+    const logoImg = logo ? '<img class="logo" alt="" src="' + esc(logo) + '">' : '';
+    const sheet = pages.map((pg, pi) => '<div class="page" data-page="' + (pi + 1) + '">' + pg.map(it =>
+      '<section class="piece sticker" data-cart="' + esc(it.cart) + '"><div class="band">' + logoImg +
+      '<h1>' + esc(name) + '</h1><span class="cart">Cart ' + esc(it.cart) + '</span></div>' +
+      '<div class="body"><p class="kicker">Scan for your rides</p>' + svg(it.rows) +
+      '<p class="code">' + esc(it.code) + '</p><p class="url">' + softUrl(it.url) + '</p></div></section>').join('') + '</div>').join('');
+    const pngButtons = pages.map((_, pi) => '<button type="button" class="png" data-png="' + (pi + 1) + '">Save page ' + (pi + 1) + ' as PNG</button>').join('');
+    const data = JSON.stringify({ pages, look: { name, color, ink }, P: PNG_PAGE, slug }).replace(/</g, '\\u003c');
+    return '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Fleet stickers · ' + esc(name) + '</title>' +
+      '<style>' +
+      'body{margin:0;font:700 16px/1.35 Nunito,system-ui,sans-serif;color:#0b3c50;background:#eef6f7}' +
+      '.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:14px 18px;background:#fff;border-bottom:1px solid #cfe7ea}' +
+      '.bar .btns{display:flex;flex-wrap:wrap;gap:8px}' +
+      '.bar button{border:0;border-radius:12px;padding:10px 14px;font:800 14px system-ui;background:#14b8c4;color:#fff;cursor:pointer}' +
+      '.bar button.png{background:#0b6e86}' +
+      '.hint{margin:0;font-size:13px;font-weight:600;max-width:46ch}' +
+      '.page{display:grid;grid-template-columns:repeat(2,3.6in);gap:0.25in;justify-content:center;padding:18px}' +
+      '.piece{background:#fff;border:1px solid #cfe7ea;border-radius:16px;overflow:hidden;height:3.15in;break-inside:avoid}' +
+      '.band{background:' + color + ';color:' + ink + ';padding:8px 12px;display:flex;gap:8px;align-items:center}' +
+      '.logo{width:30px;height:30px;object-fit:cover;border-radius:8px;background:#fff}' +
+      'h1{margin:0;font-size:15px;line-height:1.2;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}' +
+      '.cart{font:900 18px system-ui;white-space:nowrap}' +
+      '.body{padding:6px 12px 8px;text-align:center}' +
+      '.body svg{width:1.7in;height:1.7in;display:block;margin:0 auto}' +
+      '.kicker{margin:0 0 4px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#0b6e86}' +
+      '.code{margin:4px 0 0;font:800 18px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em}' +
+      '.url{margin:2px 0 0;font-size:9px;font-weight:600;overflow-wrap:anywhere;color:#3e6270}' +
+      '@media print{.bar{display:none}body{background:#fff}.page{padding:0;break-after:page}.page:last-child{break-after:auto}}' +
+      '@page{size:letter;margin:0.4in}' +
+      '</style></head><body>' +
+      '<div class="bar"><p class="hint">' + items.length + ' cart sticker' + (items.length === 1 ? '' : 's') + ', six per page. Each QR opens your page with that cart\'s code filled in. Print, or save as PDF from the print dialog.</p>' +
+      '<div class="btns"><button type="button" id="doPrint">Print or save as PDF</button>' + pngButtons + '</div></div>' +
+      sheet +
+      '<script>(function(){var D=' + data + ';var drawSticker=' + drawSticker.toString() + ';var drawPage=' + drawPage.toString() + ';' +
+      'document.getElementById("doPrint").onclick=function(){window.print();};' +
+      'document.querySelectorAll("[data-png]").forEach(function(b){b.onclick=function(){var i=+b.getAttribute("data-png")-1;' +
+      'var c=document.createElement("canvas");c.width=D.P.w;c.height=D.P.h;drawPage(c.getContext("2d"),D.pages[i],D.look,D.P,drawSticker);' +
+      'var a=document.createElement("a");a.download=(D.slug||"fleet")+"-stickers-page-"+(i+1)+".png";a.href=c.toDataURL("image/png");document.body.appendChild(a);a.click();a.remove();};});' +
+      '})();<\/script></body></html>';
+  }
+
+  return { DEFAULT_COLOR, PER_PAGE, PNG_PAGE, esc, hexColor, safeLogo, renterUrl, modules, svg, printHtml, bandInk, fleetPages, drawSticker, drawPage, fleetHtml };
 });
