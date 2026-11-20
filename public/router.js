@@ -456,7 +456,26 @@
       stat.ms = Date.now() - t0;
       return null;
     }
-    return { reset, build, nearest, astar, astarAsync };
+    // Every node reachable from the seeds on legal roads (and short legal jogs) within maxM of
+    // road length. seeds: [[node, startMeters], ...]. Returns Map node -> meters. Sales mode (/s/).
+    function reach(seeds, maxM, o) {
+      const rule = o.rule, dist = new Map(), h = [];
+      for (const [n, m] of seeds) if (n != null && nodes[n] != null && !(dist.get(n) <= m)) { dist.set(n, m); heapPush(h, [m, n]); }
+      while (h.length) {
+        const [d, u] = heapPop(h);
+        if (d > dist.get(u)) continue;
+        for (const [v, , , , kind, geo] of (adj[u] || [])) {
+          if (kind === 2 || (kind === 1 && shownFeet(geo) > SHORT_LEGAL_FT)) continue;
+          if (rule.cross === false && fnode.has(v) && !cnode.has(v)) continue;
+          const nd = d + geo;
+          if (nd > maxM || dist.get(v) <= nd) continue;
+          dist.set(v, nd);
+          heapPush(h, [nd, v]);
+        }
+      }
+      return dist;
+    }
+    return { reset, build, nearest, astar, astarAsync, reach };
 
   }
 
@@ -688,7 +707,34 @@
       ];
       return STY[c] || STY[0];
     }
-    return { legs, trip, streets, rule, veh: rule.veh, cover: ensure, segments: () => D.segs, roadStyle };
+    // Sales mode: legal roads you can drive from `from` within `miles` of road (one way).
+    // { ok, snapM, miles, roadMiles, segs: [[lat,lon]...][], at(lat, lon) -> road miles or null }
+    async function reachable(from, miles) {
+      const maxM = Math.max(0, +miles || 0) * 1609.34;
+      const lat = +from.lat, lon = +from.lon;
+      const dLat = maxM / 111320 + 0.01, dLon = dLat / Math.max(0.2, Math.cos(lat * Math.PI / 180));
+      await ensure(lat - dLat, lon - dLon, lat + dLat, lon + dLon);
+      const A = net.nearest(D, buckets, { lat, lng: lon }, o);
+      if (A[0] == null || A[1] > 400) return { ok: false, reason: 'far', snapM: A[0] == null ? null : Math.round(A[1]) };
+      const dist = net.reach([[A[0], A[1]], [A[2], A[1]]], maxM, o);
+      const segs = [];
+      let roadM = 0;
+      for (const s of D.segs) {
+        if (!s || cls(s) === 3) continue;
+        const da = dist.get(s[5]), db = dist.get(s[6]);
+        if (da == null || db == null) continue;
+        segs.push(s[7].map(p => [p[1], p[0]]));
+        roadM += s._len || len(s[7]);
+      }
+      function at(la, lo) {
+        const P = net.nearest(D, buckets, { lat: +la, lng: +lo }, o);
+        if (P[0] == null || P[1] > 400) return null;
+        const d = Math.min(dist.has(P[0]) ? dist.get(P[0]) : Infinity, dist.has(P[2]) ? dist.get(P[2]) : Infinity);
+        return Number.isFinite(d) ? Math.round((d + P[1]) / 160.934) / 10 : null;
+      }
+      return { ok: true, snapM: Math.round(A[1]), miles: +miles, roadMiles: Math.round(roadM / 160.934) / 10, segs, at };
+    }
+    return { legs, trip, reachable, streets, rule, veh: rule.veh, cover: ensure, segments: () => D.segs, roadStyle };
   }
 
   const api = { UTURN_M, aheadStart, bearingDeg, G, RISKY_MAX, SHORT_LEGAL_FT, ROUTE_BUDGET_MS, ROUTE_STATE_BUDGET, HOLD_TRAVEL_M, UNKW, GAP_MAX_M, hav, len, shownFeet, explicitBan, riskyMask, create, geometry, namedRuns, bucketize, routePair, tilesIn, graphOpts, openRegion };

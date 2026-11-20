@@ -374,10 +374,11 @@ function superView() {
 function dashCard() {
   return `<div class="card" id="shopDash">
     <h2>Shop activity</h2>
-    <p class="muted" id="dashHint">Unlocks, rides started and finished, and offer taps. Test installs are left out.</p>
+    <p class="muted" id="dashHint">How renters use your map, week by week: opens, routes started, and which rides and stops they look at. Golf Cart Maps' own phones do not count. Test installs are left out.</p>
     <div class="mode-row" id="dashRange">
       <button type="button" class="btn alt" data-dash-days="7">7 days</button>
       <button type="button" class="btn alt on" data-dash-days="30">30 days</button>
+      <button type="button" class="btn alt" data-dash-days="84">12 weeks</button>
     </div>
     <div id="dashBody"><p class="muted">Loading activity…</p></div>
   </div>`;
@@ -404,33 +405,68 @@ function dashHtml(j, bundle) {
     const hit = ex.find(x => String(x.id).toLowerCase() === String(id || '').toLowerCase());
     return hit ? hit.title : (id || 'Unknown ride');
   };
-  const pinName = id => {
-    const hit = af.find(x => String(x.id).toLowerCase() === String(id || '').toLowerCase());
-    return hit ? hit.name : (id || 'Unknown offer');
-  };
   const t = j.totals || {};
   const codeRows = (j.codes || []).map(c => `<tr><td><code>${esc(codeName(c.code))}</code></td><td>${dashNum(c.unlocks)}</td></tr>`).join('')
     || '<tr><td colspan="2" class="muted">No unlocks in this window.</td></tr>';
   const dayRows = (j.daily || []).map(d => `<tr><td>${esc(d.day)}</td><td>${dashNum(d.unlocks)}</td><td>${dashNum(d.started)}</td><td>${dashNum(d.finished)}</td><td>${dashNum(d.affiliate_taps)}</td></tr>`).join('')
     || '<tr><td colspan="5" class="muted">No activity in this window.</td></tr>';
-  const rideRows = (j.rides || []).map(r => `<tr><td>${esc(rideName(r.ride))}</td><td>${dashNum(r.started)}</td><td>${dashNum(r.finished)}</td></tr>`).join('')
-    || '<tr><td colspan="3" class="muted">No rides in this window.</td></tr>';
-  const pinRows = (j.pins || []).map(p => `<tr><td>${esc(pinName(p.pin))}</td><td>${dashNum(p.taps)}</td></tr>`).join('')
-    || '<tr><td colspan="2" class="muted">No offer taps in this window.</td></tr>';
+  const rideRows = (j.rides || []).map(r => `<tr><td>${esc(rideName(r.ride))}</td><td>${dashNum(r.opened)}</td><td>${dashNum(r.started)}</td><td>${dashNum(r.finished)}</td></tr>`).join('')
+    || '<tr><td colspan="4" class="muted">No rides in this window.</td></tr>';
+  const pl = (bundle && bundle.places) || [];
+  const partnerName = id => {
+    const k = String(id || '').toLowerCase();
+    const a = af.find(x => String(x.id).toLowerCase() === k);
+    if (a) return { name: a.name, kind: 'Offer' + (a.coupon ? ' (coupon ' + a.coupon + ')' : '') };
+    const p = pl.find(x => String(x.id).toLowerCase() === k);
+    if (p) return { name: p.name, kind: 'Place to see' };
+    return { name: id || 'Removed stop', kind: '' };
+  };
+  // Older stats Workers only send pins (offer taps); show those with no navigation count.
+  const partnerList = j.partner_stops || (j.pins || []).map(p => ({ pin: p.pin, opens: p.taps, navs: null }));
+  const pinRows = partnerList.map(p => {
+    const n = partnerName(p.pin);
+    return `<tr><td>${esc(n.name)}${n.kind ? `<div class="muted">${esc(n.kind)}</div>` : ''}</td><td>${dashNum(p.opens)}</td><td>${p.navs == null ? '' : dashNum(p.navs)}</td></tr>`;
+  }).join('') || '<tr><td colspan="3" class="muted">No partner stop opens in this window.</td></tr>';
+  const weekLabel = w => {
+    const d = new Date(String(w) + 'T12:00:00Z');
+    return Number.isNaN(d.getTime()) ? String(w || '') : 'Week of ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+  };
+  const weekRows = (j.weekly || []).map(w => `<tr><td>${esc(weekLabel(w.week))}</td><td>${dashNum(w.opens)}</td><td>${dashNum(w.routes)}</td><td>${dashNum(w.experience_opens)}</td><td>${dashNum(w.stop_opens)}</td></tr>`).join('')
+    || '<tr><td colspan="5" class="muted">No renter activity in this window.</td></tr>';
+  const stopName = (ride, pin) => {
+    const hit = ex.find(x => String(x.id).toLowerCase() === String(ride || '').toLowerCase());
+    const n = Number(pin);
+    const st = hit && Number.isInteger(n) && hit.stops && hit.stops[n - 1];
+    return (hit ? hit.title : 'Ride') + ': stop ' + (Number.isInteger(n) ? n : '?') + (st && st.label ? ' (' + st.label + ')' : '');
+  };
+  const stopRows = (j.stops || []).map(x => `<tr><td>${esc(stopName(x.ride, x.pin))}</td><td>${dashNum(x.opens)}</td></tr>`).join('')
+    || '<tr><td colspan="2" class="muted">No stop opens in this window.</td></tr>';
   return `<div class="stats" id="dashTotals">
+      <div class="stat"><b>${dashNum(t.opens)}</b><span>Renter opens</span></div>
+      <div class="stat"><b>${dashNum(t.routes)}</b><span>Routes started</span></div>
+      <div class="stat"><b>${dashNum(t.experience_opens)}</b><span>Ride opens</span></div>
+      <div class="stat"><b>${dashNum(t.stop_opens)}</b><span>Stop opens</span></div>
+    </div>
+    <div class="stats" id="dashTotals2">
       <div class="stat"><b>${dashNum(t.unlocks)}</b><span>Unlocks</span></div>
       <div class="stat"><b>${dashNum(t.started)}</b><span>Rides started</span></div>
       <div class="stat"><b>${dashNum(t.finished)}</b><span>Rides finished</span></div>
       <div class="stat"><b>${dashNum(t.affiliate_taps)}</b><span>Offer taps</span></div>
+      <div class="stat"><b>${dashNum(t.partner_navs)}</b><span>Partner navigations</span></div>
     </div>
+    <h3 class="dash-h">By week</h3>
+    <table id="dashWeeks"><thead><tr><th>Week</th><th>Renter opens</th><th>Routes started</th><th>Ride opens</th><th>Stop opens</th></tr></thead><tbody>${weekRows}</tbody></table>
     <h3 class="dash-h">Unlocks by code</h3>
     <table id="dashCodes"><thead><tr><th>Code</th><th>Unlocks</th></tr></thead><tbody>${codeRows}</tbody></table>
     <h3 class="dash-h">By day</h3>
     <table id="dashDays"><thead><tr><th>Day</th><th>Unlocks</th><th>Started</th><th>Finished</th><th>Offer taps</th></tr></thead><tbody>${dayRows}</tbody></table>
     <h3 class="dash-h">Rides</h3>
-    <table id="dashRides"><thead><tr><th>Ride</th><th>Started</th><th>Finished</th></tr></thead><tbody>${rideRows}</tbody></table>
-    <h3 class="dash-h">Offers</h3>
-    <table id="dashPins"><thead><tr><th>Offer</th><th>Taps</th></tr></thead><tbody>${pinRows}</tbody></table>`;
+    <table id="dashRides"><thead><tr><th>Ride</th><th>Opened</th><th>Started</th><th>Finished</th></tr></thead><tbody>${rideRows}</tbody></table>
+    <h3 class="dash-h">Stops</h3>
+    <table id="dashStops"><thead><tr><th>Stop</th><th>Opens</th></tr></thead><tbody>${stopRows}</tbody></table>
+    <h3 class="dash-h">Partner stops</h3>
+    <p class="muted">Opens: a renter tapped the offer or place. Take me there: a renter asked for a route to it. Share these with your partners.</p>
+    <table id="dashPins"><thead><tr><th>Partner stop</th><th>Opens</th><th>Take me there</th></tr></thead><tbody>${pinRows}</tbody></table>`;
 }
 
 let dashDays = 30, dashToken = 0;
@@ -652,6 +688,7 @@ function shopView() {
     <table><thead><tr><th>Experience</th><th></th></tr></thead><tbody>${exRows}</tbody></table>
   </div>
   ${copyCard()}
+  ${window.GCMSalesAdmin ? GCMSalesAdmin.card() : ''}
   ${placesCard()}
   <div class="card af-place"><h2>Affiliate offers</h2>
     <p class="muted">Restaurants and deals for your renters. Larger ★ pins on the map.</p>
@@ -1570,6 +1607,7 @@ function bindApp() {
 
   wireAffiliatePicker();
   wirePlaces();
+  if (window.GCMSalesAdmin) GCMSalesAdmin.bind();
 
   const addEx = $('#addEx');
   if (addEx) addEx.onclick = async () => {
