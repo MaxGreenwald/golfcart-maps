@@ -38,7 +38,7 @@ Through `scripts/live_notrack.py` (NO_TRACK):
 | test_vehicle | Golf cart / LSV toggle vs road-rule module |
 | test_sw | Cache name, offline open, `/sandiego` offline |
 | test_safety_caution | Dashed orange + popup/route caution text |
-| test_delmar_warning | Time-boxed Del Mar advisory |
+| test_delmar_warning | Del Mar ordinance stretches: no-expiry caution, expired warning gone, speeds unchanged |
 | test_chips / test_layout / test_city_chip / test_islands_ui / test_regions | Existing UI coverage |
 
 ## Proof it catches a wrong-legal road

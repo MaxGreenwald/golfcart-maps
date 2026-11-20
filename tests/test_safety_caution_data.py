@@ -23,7 +23,7 @@ class SafetyCaution(unittest.TestCase):
         return [s for s in self.segs if self.idx["names"][s[0]] == name]
 
     def test_every_caution_matches_data(self):
-        self.assertEqual(len(self.cau), 4)
+        self.assertEqual(len(self.cau), 7)   # 4 SD cautions (Oct 18 2026) + 3 Del Mar ordinance stretches (Nov 19 2026)
         for src, text in self.cau:
             hits = [s for s in self.segs if src in self.lab(s)]
             self.assertTrue(hits, f"no segment carries caution label {src!r}")
@@ -49,6 +49,26 @@ class SafetyCaution(unittest.TestCase):
         self.assertEqual(len(hit), 4)
         self.assertEqual({s[2] for s in hit}, {35})
         self.assertTrue(all(-117.2720 < s[7][0][0] < -117.2709 for s in hit))
+
+    def test_del_mar_ordinance_stretches_cautioned_speeds_unchanged(self):
+        # Del Mar ordinance (Clerk's File 904-4) took effect Nov 19 2026; new signs not confirmed, so no-expiry caution.
+        # The caution is presentation only: speeds stay the ordinance values and every segment stays sourced and <= 35.
+        want = {"Camino del Mar (Via de la Valle - San Dieguito Bridge": ("Camino del Mar", 30, 10, "from 40 to 30 mph"),
+                "Jimmy Durante Blvd (Fairgrounds Gate 2 - San Dieguito Dr": ("Jimmy Durante Boulevard", 30, 35, "from 45 to 30 mph"),
+                "Via de la Valle (Camino del Mar - Jimmy Durante Blvd": ("Via de la Valle", 35, 23, "from 40 to 35 mph")}
+        cau = dict(self.cau)
+        for src, (name, mph, n, frag) in want.items():
+            self.assertIn(src, cau, f"no caution for {src!r}")
+            self.assertIn("new signs may not be up yet. Check posted signs.", cau[src])
+            self.assertIn(frag + " on Nov 19, 2026", cau[src])
+            hit = [s for s in self.segs if src in self.lab(s)]
+            self.assertEqual(len(hit), n, src)
+            self.assertEqual({self.idx["names"][s[0]] for s in hit}, {name})
+            self.assertEqual({s[2] for s in hit}, {mph}, src)
+            self.assertEqual({s[3] for s in hit}, {"v"}, src)
+        js = open(os.path.join(ROOT, "public", "app.js"), encoding="utf-8").read()
+        for gone in ("ADV_UNTIL", "drops to", "until Nov 19, 2026"):   # the expired time-boxed warning must not come back
+            self.assertNotIn(gone, js)
 
     def test_cleared_roads_unchanged(self):
         # Prospect St: the Mapillary "35" is a parking sign (photo Jan 10 2025); city business district 25 (R-316675 Table 3).
