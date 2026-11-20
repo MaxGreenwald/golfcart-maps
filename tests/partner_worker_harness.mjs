@@ -68,10 +68,11 @@ export function makePartner(opts = {}) {
     }
     return new Response(JSON.stringify({ error: 'offline in tests' }), { status: 599 });
   };
+  // Overlapping calls (the dev server serves several at once) share one install of the fake.
+  let depth = 0, real = null;
   async function withFetch(fn) {
-    const real = globalThis.fetch;
-    globalThis.fetch = fakeFetch;
-    try { return await fn(); } finally { globalThis.fetch = real; }
+    if (depth++ === 0) { real = globalThis.fetch; globalThis.fetch = fakeFetch; }
+    try { return await fn(); } finally { if (--depth === 0) globalThis.fetch = real; }
   }
   const cookies = new Map();
   async function call(path, init = {}) {
@@ -86,10 +87,11 @@ export function makePartner(opts = {}) {
       body: init.json !== undefined ? JSON.stringify(init.json) : init.body,
     });
     const res = await withFetch(() => worker.fetch(req, env));
-    const text = await res.text();
+    const bytes = Buffer.from(await res.arrayBuffer());
+    const text = bytes.toString('utf8');
     let body = null;
     try { body = JSON.parse(text); } catch { body = text; }
-    return { status: res.status, body, headers: res.headers };
+    return { status: res.status, body, headers: res.headers, bytes };
   }
   async function login(email) {
     const r = await call('/auth/dev', { json: { email, expect: email } });

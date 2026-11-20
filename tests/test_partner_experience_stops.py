@@ -274,7 +274,7 @@ class ExperienceStopEdit(unittest.TestCase):
                 pg.locator(".ex-stops").inner_text(),
                 "1. La Jolla Cove (Snorkel here) · 2. Seals (Morning) · 3. Pier (Sunset)",
             )
-            self.assertIn("Cove morning loop", pg.locator("table").nth(0).inner_text())
+            self.assertIn("Cove morning loop", pg.locator("table:has(th:text-is('Experience'))").inner_text())
             self.assertEqual(pg.locator("#addEx").inner_text(), "Add experience")
             self.assertEqual(pg.input_value("#exId"), "")
 
