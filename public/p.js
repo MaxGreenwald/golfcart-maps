@@ -479,6 +479,26 @@ function placePopup(p) {
   const [ico, lab] = placeUi(p.category);
   return `<b>${ico} ${esc(p.name)}</b><br><span class="muted">${esc(lab)}</span>${p.note ? `<br>${esc(p.note)}` : ''}${/^https:\/\//i.test(p.link || '') ? `<br><a href="${esc(p.link)}" target="_blank" rel="noopener">More</a>` : ''}`;
 }
+// "Take me there" on a partner offer or place: a legal route through the same free-route nav.
+function goThereBtn(id) {
+  return `<br><button type="button" class="popgo" data-go-pin="${esc(id)}">\u{1F9ED} Take me there</button>`;
+}
+function wireGoThere(popup) {
+  const el = popup && popup.getElement && popup.getElement();
+  const b = el && el.querySelector('[data-go-pin]');
+  if (b) b.onclick = () => { goPartner(b.dataset.goPin); };
+}
+async function goPartner(id) {
+  const all = [...(unlocked.affiliates || []), ...(unlocked.places || [])];
+  const hit = all.find(x => x.id === id);
+  if (!hit || !finite(hit.lat, hit.lon)) return;
+  trackShop('partner_nav', { pin: hit.id });
+  if (map) map.closePopup();
+  freeMode(true);
+  freeRisky = false;
+  document.querySelectorAll('#goMode button').forEach(x => x.setAttribute('aria-pressed', x.dataset.mode === 'legal' ? 'true' : 'false'));
+  await pickDest({ name: hit.name, lat: +hit.lat, lon: +hit.lon });
+}
 function meIcon() {
   return L.divIcon({
     className: '',
@@ -577,7 +597,8 @@ async function drawUnlocked(opts) {
   (unlocked.affiliates || []).forEach(a => {
     if (!finite(a.lat, a.lon)) return;
     const m = L.marker([+a.lat, +a.lon], { icon: affIcon(), zIndexOffset: 600 }).addTo(pins);
-    m.bindPopup(`<b>${esc(a.name)}</b><br>${esc(a.offer || '')}${a.coupon ? `<br>Coupon: <code>${esc(a.coupon)}</code>` : ''}<br><span class="muted">Partner offer</span>`);
+    m.bindPopup(`<b>${esc(a.name)}</b><br>${esc(a.offer || '')}${a.coupon ? `<br>Coupon: <code>${esc(a.coupon)}</code>` : ''}<br><span class="muted">Partner offer</span>${goThereBtn(a.id)}`);
+    m.on('popupopen', e => wireGoThere(e.popup));
     m.on('click', () => trackShop('affiliate_tap', { pin: a.id }));
     affMarks.push({ id: a.id, marker: m });
     bounds.push([+a.lat, +a.lon]);
@@ -585,7 +606,8 @@ async function drawUnlocked(opts) {
   (unlocked.places || []).forEach(p => {
     if (!finite(p.lat, p.lon)) return;
     const m = L.marker([+p.lat, +p.lon], { icon: placeIcon(p.category), zIndexOffset: 500, title: p.name }).addTo(pins);
-    m.bindPopup(placePopup(p));
+    m.bindPopup(placePopup(p) + goThereBtn(p.id));
+    m.on('popupopen', e => { trackShop('place_opened', { pin: p.id }); wireGoThere(e.popup); });
     placeMarks.push({ id: p.id, marker: m });
     bounds.push([+p.lat, +p.lon]);
   });
