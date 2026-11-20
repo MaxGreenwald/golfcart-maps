@@ -29,6 +29,14 @@ jobs:
         run: node --test tests/hubspot.test.mjs
       - name: Shop activity stats (unlocks, rides, offer taps; denylist)
         run: node --test tests/shop_stats.test.mjs
+      - name: Analytics /stats filter (denylist, internal, test UTMs)
+        run: node --test tests/analytics_stats.test.mjs
+      - name: Analytics Durable Object reads bounded by the day window (same /stats JSON as before)
+        run: node --test tests/analytics_rows.test.mjs
+      - name: Analytics rows read before vs after, in local workerd (Miniflare; nothing touches Cloudflare)
+        run: |
+          npm install --silent --no-audit --no-fund --prefix /tmp/mf miniflare@3.20250718.3 esbuild@0.17.19
+          NODE_PATH=/tmp/mf/node_modules node scripts/analytics_rows_read.mjs --events 15000 --check
       - name: Ready-made partner rides (legal loops per town and vehicle)
         run: node --test tests/starters.test.mjs
       - name: Live town loader (native app prefers golfcartmap.com JSON; bundled fallback)
@@ -107,6 +115,9 @@ jobs:
       URL: http://localhost:8765/map/   # dist/: / is the landing page, the map is /map (scripts/serve_dist.py mimics Pages routing)
       SHOTS: ${{ github.workspace }}/ci-shots/
       SHOTS_DIR: ${{ github.workspace }}/ci-shots/
+      # Sitecustomize: default goto to domcontentloaded and stub Google Fonts so
+      # a hung fonts.googleapis.com stylesheet cannot stall Page.goto(load).
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci_harness
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
