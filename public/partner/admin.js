@@ -374,10 +374,11 @@ function superView() {
 function dashCard() {
   return `<div class="card" id="shopDash">
     <h2>Shop activity</h2>
-    <p class="muted" id="dashHint">Unlocks, rides started and finished, and offer taps. Test installs are left out.</p>
+    <p class="muted" id="dashHint">How renters use your map, week by week: opens, routes started, and which rides and stops they look at. Golf Cart Maps' own phones do not count. Test installs are left out.</p>
     <div class="mode-row" id="dashRange">
       <button type="button" class="btn alt" data-dash-days="7">7 days</button>
       <button type="button" class="btn alt on" data-dash-days="30">30 days</button>
+      <button type="button" class="btn alt" data-dash-days="84">12 weeks</button>
     </div>
     <div id="dashBody"><p class="muted">Loading activity…</p></div>
   </div>`;
@@ -404,33 +405,68 @@ function dashHtml(j, bundle) {
     const hit = ex.find(x => String(x.id).toLowerCase() === String(id || '').toLowerCase());
     return hit ? hit.title : (id || 'Unknown ride');
   };
-  const pinName = id => {
-    const hit = af.find(x => String(x.id).toLowerCase() === String(id || '').toLowerCase());
-    return hit ? hit.name : (id || 'Unknown offer');
-  };
   const t = j.totals || {};
   const codeRows = (j.codes || []).map(c => `<tr><td><code>${esc(codeName(c.code))}</code></td><td>${dashNum(c.unlocks)}</td></tr>`).join('')
     || '<tr><td colspan="2" class="muted">No unlocks in this window.</td></tr>';
   const dayRows = (j.daily || []).map(d => `<tr><td>${esc(d.day)}</td><td>${dashNum(d.unlocks)}</td><td>${dashNum(d.started)}</td><td>${dashNum(d.finished)}</td><td>${dashNum(d.affiliate_taps)}</td></tr>`).join('')
     || '<tr><td colspan="5" class="muted">No activity in this window.</td></tr>';
-  const rideRows = (j.rides || []).map(r => `<tr><td>${esc(rideName(r.ride))}</td><td>${dashNum(r.started)}</td><td>${dashNum(r.finished)}</td></tr>`).join('')
-    || '<tr><td colspan="3" class="muted">No rides in this window.</td></tr>';
-  const pinRows = (j.pins || []).map(p => `<tr><td>${esc(pinName(p.pin))}</td><td>${dashNum(p.taps)}</td></tr>`).join('')
-    || '<tr><td colspan="2" class="muted">No offer taps in this window.</td></tr>';
+  const rideRows = (j.rides || []).map(r => `<tr><td>${esc(rideName(r.ride))}</td><td>${dashNum(r.opened)}</td><td>${dashNum(r.started)}</td><td>${dashNum(r.finished)}</td></tr>`).join('')
+    || '<tr><td colspan="4" class="muted">No rides in this window.</td></tr>';
+  const pl = (bundle && bundle.places) || [];
+  const partnerName = id => {
+    const k = String(id || '').toLowerCase();
+    const a = af.find(x => String(x.id).toLowerCase() === k);
+    if (a) return { name: a.name, kind: 'Offer' + (a.coupon ? ' (coupon ' + a.coupon + ')' : '') };
+    const p = pl.find(x => String(x.id).toLowerCase() === k);
+    if (p) return { name: p.name, kind: 'Place to see' };
+    return { name: id || 'Removed stop', kind: '' };
+  };
+  // Older stats Workers only send pins (offer taps); show those with no navigation count.
+  const partnerList = j.partner_stops || (j.pins || []).map(p => ({ pin: p.pin, opens: p.taps, navs: null }));
+  const pinRows = partnerList.map(p => {
+    const n = partnerName(p.pin);
+    return `<tr><td>${esc(n.name)}${n.kind ? `<div class="muted">${esc(n.kind)}</div>` : ''}</td><td>${dashNum(p.opens)}</td><td>${p.navs == null ? '' : dashNum(p.navs)}</td></tr>`;
+  }).join('') || '<tr><td colspan="3" class="muted">No partner stop opens in this window.</td></tr>';
+  const weekLabel = w => {
+    const d = new Date(String(w) + 'T12:00:00Z');
+    return Number.isNaN(d.getTime()) ? String(w || '') : 'Week of ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+  };
+  const weekRows = (j.weekly || []).map(w => `<tr><td>${esc(weekLabel(w.week))}</td><td>${dashNum(w.opens)}</td><td>${dashNum(w.routes)}</td><td>${dashNum(w.experience_opens)}</td><td>${dashNum(w.stop_opens)}</td></tr>`).join('')
+    || '<tr><td colspan="5" class="muted">No renter activity in this window.</td></tr>';
+  const stopName = (ride, pin) => {
+    const hit = ex.find(x => String(x.id).toLowerCase() === String(ride || '').toLowerCase());
+    const n = Number(pin);
+    const st = hit && Number.isInteger(n) && hit.stops && hit.stops[n - 1];
+    return (hit ? hit.title : 'Ride') + ': stop ' + (Number.isInteger(n) ? n : '?') + (st && st.label ? ' (' + st.label + ')' : '');
+  };
+  const stopRows = (j.stops || []).map(x => `<tr><td>${esc(stopName(x.ride, x.pin))}</td><td>${dashNum(x.opens)}</td></tr>`).join('')
+    || '<tr><td colspan="2" class="muted">No stop opens in this window.</td></tr>';
   return `<div class="stats" id="dashTotals">
+      <div class="stat"><b>${dashNum(t.opens)}</b><span>Renter opens</span></div>
+      <div class="stat"><b>${dashNum(t.routes)}</b><span>Routes started</span></div>
+      <div class="stat"><b>${dashNum(t.experience_opens)}</b><span>Ride opens</span></div>
+      <div class="stat"><b>${dashNum(t.stop_opens)}</b><span>Stop opens</span></div>
+    </div>
+    <div class="stats" id="dashTotals2">
       <div class="stat"><b>${dashNum(t.unlocks)}</b><span>Unlocks</span></div>
       <div class="stat"><b>${dashNum(t.started)}</b><span>Rides started</span></div>
       <div class="stat"><b>${dashNum(t.finished)}</b><span>Rides finished</span></div>
       <div class="stat"><b>${dashNum(t.affiliate_taps)}</b><span>Offer taps</span></div>
+      <div class="stat"><b>${dashNum(t.partner_navs)}</b><span>Partner navigations</span></div>
     </div>
+    <h3 class="dash-h">By week</h3>
+    <table id="dashWeeks"><thead><tr><th>Week</th><th>Renter opens</th><th>Routes started</th><th>Ride opens</th><th>Stop opens</th></tr></thead><tbody>${weekRows}</tbody></table>
     <h3 class="dash-h">Unlocks by code</h3>
     <table id="dashCodes"><thead><tr><th>Code</th><th>Unlocks</th></tr></thead><tbody>${codeRows}</tbody></table>
     <h3 class="dash-h">By day</h3>
     <table id="dashDays"><thead><tr><th>Day</th><th>Unlocks</th><th>Started</th><th>Finished</th><th>Offer taps</th></tr></thead><tbody>${dayRows}</tbody></table>
     <h3 class="dash-h">Rides</h3>
-    <table id="dashRides"><thead><tr><th>Ride</th><th>Started</th><th>Finished</th></tr></thead><tbody>${rideRows}</tbody></table>
-    <h3 class="dash-h">Offers</h3>
-    <table id="dashPins"><thead><tr><th>Offer</th><th>Taps</th></tr></thead><tbody>${pinRows}</tbody></table>`;
+    <table id="dashRides"><thead><tr><th>Ride</th><th>Opened</th><th>Started</th><th>Finished</th></tr></thead><tbody>${rideRows}</tbody></table>
+    <h3 class="dash-h">Stops</h3>
+    <table id="dashStops"><thead><tr><th>Stop</th><th>Opens</th></tr></thead><tbody>${stopRows}</tbody></table>
+    <h3 class="dash-h">Partner stops</h3>
+    <p class="muted">Opens: a renter tapped the offer or place. Take me there: a renter asked for a route to it. Share these with your partners.</p>
+    <table id="dashPins"><thead><tr><th>Partner stop</th><th>Opens</th><th>Take me there</th></tr></thead><tbody>${pinRows}</tbody></table>`;
 }
 
 let dashDays = 30, dashToken = 0;
@@ -582,7 +618,7 @@ function shopView() {
     </div></td>
   </tr>`).join('') || '<tr><td colspan="2" class="muted">No affiliate offers yet.</td></tr>';
   const codeRows = (b.codes || []).map(c => `<tr>
-    <td><code>${esc(c.code)}</code></td>
+    <td><code>${esc(c.code)}</code>${c.cart_label ? `<div class="muted code-cart">Cart ${esc(c.cart_label)}</div>` : ''}</td>
     <td class="muted">uses ${c.uses}${c.max_uses ? '/' + c.max_uses : ''} · ${c.multi_use ? 'multi' : 'single'}
       <div class="code-exp">${c.expires_at ? (c.expires_at * 1000 < Date.now() ? 'Expired ' : 'Expires ') + esc(new Date(c.expires_at * 1000).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })) : 'Never expires'}</div></td>
     <td><a href="/p/${esc(s.slug)}/go?code=${esc(c.code)}" target="_blank" rel="noopener">Open renter link</a></td>
@@ -634,7 +670,9 @@ function shopView() {
     <label for="rentalDies">If the cart dies</label><textarea id="rentalDies" maxlength="800" placeholder="Call the shop. Stay with the cart.">${esc((s.rental && s.rental.if_cart_dies) || '')}</textarea>
     <p style="margin-top:12px"><button class="btn" id="saveRental" type="button">Save rental info</button></p>
   </div>
+  ${window.GCMBookings ? GCMBookings.card() : ''}
   ${rentalCard(s)}
+  ${window.GCMReports ? GCMReports.card() : ''}
   <div class="card"><h2>Experiences</h2>
     <p class="muted">Ordered joyride stops. Search a place or drop a pin and name it yourself. Edit an experience to change a stop or its order.</p>
     ${starterBlock()}
@@ -657,7 +695,9 @@ function shopView() {
     <table><thead><tr><th>Experience</th><th></th></tr></thead><tbody>${exRows}</tbody></table>
   </div>
   ${copyCard()}
+  ${window.GCMSalesAdmin ? GCMSalesAdmin.card() : ''}
   ${placesCard()}
+  ${window.GCMOffAdmin ? GCMOffAdmin.card() : ''}
   <div class="card af-place"><h2>Affiliate offers</h2>
     <p class="muted">Restaurants and deals for your renters. Larger ★ pins on the map.</p>
     <p class="muted hidden" id="afEditing">Editing this offer. Search or drop a pin to move it.</p>
@@ -693,6 +733,7 @@ function shopView() {
       <button class="btn alt hidden" id="cancelAf" type="button">Cancel</button></p>
     <table><thead><tr><th>Affiliate</th><th></th></tr></thead><tbody>${afRows}</tbody></table>
   </div>
+  ${window.GCMQuizAdmin ? GCMQuizAdmin.card(s) : ''}
   <div class="card"><h2>Renter access codes</h2>
     <p class="muted">Give this link after they pay the extra $5–10 in your own checkout. Multi-use.</p>
     <label for="codeDays">Code lasts</label>
@@ -705,6 +746,7 @@ function shopView() {
     <p><button class="btn" id="genCode" type="button">Generate access code</button></p>
     <table><thead><tr><th>Code</th><th>Usage</th><th>Link</th></tr></thead><tbody>${codeRows}</tbody></table>
     ${qrKitBlock(s, b.codes)}
+    ${fleetBlock(b.codes)}
   </div>`;
 }
 
@@ -725,8 +767,9 @@ function loadQrKit() {
 }
 
 function qrKitBlock(shop, codes) {
-  const list = codes || [];
-  const opts = list.map(c => `<option value="${esc(c.code)}">${esc(c.code)}</option>`).join('');
+  // Desk codes first; cart codes (fleet stickers) after, labeled with the cart.
+  const list = [...(codes || [])].sort((a, b) => (a.cart_label ? 1 : 0) - (b.cart_label ? 1 : 0));
+  const opts = list.map(c => `<option value="${esc(c.code)}">${esc(c.code)}${c.cart_label ? ' (cart ' + esc(c.cart_label) + ')' : ''}</option>`).join('');
   const disabled = list.length ? '' : ' disabled';
   return `<div id="qrKit">
     <h3>QR sticker and counter card</h3>
@@ -735,6 +778,47 @@ function qrKitBlock(shop, codes) {
     <select id="qrCode"${disabled}>${opts || '<option value="">Generate an access code first</option>'}</select>
     <p><button class="btn" id="printQr" type="button"${disabled}>Print QR kit</button></p>
   </div>`;
+}
+
+// Fleet stickers: the newest live code for each cart number, in cart order.
+function fleetCodes(codes) {
+  const nowSec = Date.now() / 1000;
+  const seen = new Set();
+  const out = [];
+  for (const c of codes || []) {
+    const cart = String(c.cart_label || '').trim();
+    if (!cart || seen.has(cart.toLowerCase())) continue;
+    if (c.expires_at && c.expires_at < nowSec) continue;
+    seen.add(cart.toLowerCase());
+    out.push({ cart, code: c.code });
+  }
+  return out.sort((a, b) => a.cart.localeCompare(b.cart, 'en', { numeric: true, sensitivity: 'base' }));
+}
+
+function fleetBlock(codes) {
+  const fleet = fleetCodes(codes);
+  const n = fleet.length;
+  return `<div id="fleetKit">
+    <h3>Fleet stickers</h3>
+    <p class="muted">One code per cart, printed on a sticker for that cart. Scanning it opens your page with the code filled in, so renters skip typing. Six stickers per letter page. Save as PDF, or save each page as a PNG.</p>
+    <label for="fleetCarts">Cart numbers</label>
+    <input id="fleetCarts" placeholder="1-12, or A1, A2, B7" autocomplete="off" aria-describedby="fleetHint">
+    <div class="muted" id="fleetHint">Ranges and lists both work. A cart that already has a code keeps it.</div>
+    <label class="ns-row"><input type="checkbox" id="fleetExpire"> Cart codes stop working after 30 days</label>
+    <p><button class="btn" id="makeFleet" type="button">Make cart codes and print</button>
+      <button class="btn alt" id="printFleet" type="button"${n ? '' : ' disabled'}>Print all cart stickers</button></p>
+    <p class="muted" id="fleetNote" aria-live="polite">${n ? `${n} cart${n === 1 ? ' has a code' : 's have codes'}: ${esc(fleet.slice(0, 12).map(f => f.cart).join(', '))}${n > 12 ? ', and more' : ''}.` : 'No cart codes yet.'}</p>
+  </div>`;
+}
+
+async function openFleetSheet(w, fleet) {
+  await loadQrKit();
+  if (!window.GCMQrKit) throw new Error('QR kit did not load');
+  const s = state.shopBundle.shop;
+  const html = GCMQrKit.fleetHtml({ name: s.name, slug: s.slug, color: s.color, logoUrl: s.logo_url, origin: location.origin, fleet });
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
 }
 
 function setPicked(root, lat, lon, label) {
@@ -1194,6 +1278,9 @@ function rentalCard(s) {
     <p class="muted">Renters get a nudge before this time, and a warning when the legal ride back is close to the cart range.</p>
     <label for="rentReturnBy">Return by</label>
     <input id="rentReturnBy" type="time" value="${esc(s.return_by || '')}">
+    <label for="rentRemindMin">Nudge renters this long before return</label>
+    <select id="rentRemindMin">${[10, 15, 20, 30, 45, 60].map(n => `<option value="${n}"${(+s.remind_min || 15) === n ? ' selected' : ''}>${n} minutes</option>`).join('')}</select>
+    <p class="muted">Booked renters (Renters today) are nudged before their own return time, in the map and by email. Everyone else uses Return by.</p>
     <label for="rentRange">Cart range when full (miles)</label>
     <input id="rentRange" inputmode="decimal" placeholder="25" value="${s.range_mi ? esc(String(s.range_mi)) : ''}">
     <label>Where the cart goes back</label>
@@ -1514,6 +1601,7 @@ function bindApp() {
     try {
       await api('/shop', { method: 'PATCH', body: JSON.stringify({
         return_by: $('#rentReturnBy').value,
+        remind_min: $('#rentRemindMin') ? $('#rentRemindMin').value : undefined,
         range_mi: $('#rentRange').value,
         return_lat: $('#rentReturnLat').value,
         return_lon: $('#rentReturnLon').value,
@@ -1537,6 +1625,8 @@ function bindApp() {
 
   wireAffiliatePicker();
   wirePlaces();
+  if (window.GCMOffAdmin) GCMOffAdmin.bind();
+  if (window.GCMSalesAdmin) GCMSalesAdmin.bind();
 
   const addEx = $('#addEx');
   if (addEx) addEx.onclick = async () => {
@@ -1635,10 +1725,13 @@ function bindApp() {
   });
   if (daysIn) daysIn.oninput = () => chips.forEach(x => x.classList.toggle('on', x.dataset.days === daysIn.value));
   wireDash();
+  if (window.GCMBookings) GCMBookings.bind();
+  if (window.GCMReports) GCMReports.bind();
   const regionSel = $('#brandRegion');
   if (regionSel) regionSel.addEventListener('change', () => loadStarters());
   const vehSel = $('#brandVehicle');
   if (vehSel) vehSel.addEventListener('change', () => loadStarters());
+  if (window.GCMQuizAdmin) GCMQuizAdmin.bind();
   loadStarters();
   const genCode = $('#genCode');
   const locPick = $('#locPick');
@@ -1695,6 +1788,27 @@ function bindApp() {
       try { await navigator.clipboard.writeText(link); } catch (_) {}
       await refreshShop();
     } catch (e) { flash(false, e.message); }
+  };
+  const makeFleet = $('#makeFleet');
+  if (makeFleet) makeFleet.onclick = async () => {
+    const carts = ($('#fleetCarts') && $('#fleetCarts').value || '').trim();
+    if (!carts) { flash(false, 'Type your cart numbers, like 1-12'); return; }
+    const w = window.open('', 'gcm-fleet');
+    if (!w) { flash(false, 'Allow pop-ups to print the fleet stickers.'); return; }
+    try {
+      const j = await api('/shop/fleet', { method: 'POST', body: JSON.stringify({ carts, expires_days: $('#fleetExpire').checked ? 30 : null }) });
+      await openFleetSheet(w, j.fleet || []);
+      await refreshShop();
+      flash(true, `Cart codes ready: ${j.created} new, ${j.reused} kept.`);
+    } catch (e) { w.close(); flash(false, e.message); }
+  };
+  const printFleet = $('#printFleet');
+  if (printFleet) printFleet.onclick = async () => {
+    const fleet = fleetCodes(state.shopBundle && state.shopBundle.codes);
+    if (!fleet.length) { flash(false, 'Make cart codes first'); return; }
+    const w = window.open('', 'gcm-fleet');
+    if (!w) { flash(false, 'Allow pop-ups to print the fleet stickers.'); return; }
+    try { await openFleetSheet(w, fleet); } catch (e) { w.close(); flash(false, e.message); }
   };
   const printQr = $('#printQr');
   if (printQr) printQr.onclick = async () => {

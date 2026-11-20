@@ -113,6 +113,17 @@ body.is-open #logo{width:40px;height:40px;border-radius:14px}
 .rental dd{margin:0 0 8px;font-weight:700}
 .rental dd:last-child{margin-bottom:0}
 .rental a{color:var(--deep)}
+.qz{border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0}
+.qz legend{font-weight:800;padding:0 4px}
+.qz-opt{display:block;padding:6px 2px;font-weight:700}
+.qz.bad{border-color:#e5484d;background:#fff5f5}
+.qz-why{margin:4px 0 0;color:#b91c1c;font-weight:800;font-size:13px}
+.rp-open{border:0;background:none;color:var(--deep);font:800 15px Nunito,system-ui,sans-serif;cursor:pointer;padding:2px 0;text-align:left;width:100%}
+.rp-l{display:block;margin:10px 0 4px;font-size:12px;font-weight:800;color:var(--deep)}
+.rp textarea.goq{resize:vertical;font-size:15px}
+.rp-send{border:0;border-radius:12px;background:var(--deep);color:#fff;font:800 15px Nunito,system-ui,sans-serif;padding:12px 18px;cursor:pointer}
+.rp-send:disabled{opacity:.6}
+.popgo{margin-top:8px;border:0;border-radius:10px;background:#1d6fe0;color:#fff;font:800 13px Nunito,system-ui,sans-serif;padding:7px 12px;cursor:pointer}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
 .stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px 14px}
 .stat b{display:block;font-size:32px;line-height:1;font-weight:900;color:var(--deep)}
@@ -226,6 +237,12 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offs
 #navBanner.show{display:block}
 #nudgeBar{position:fixed;z-index:45;left:12px;right:12px;top:calc(8px + env(safe-area-inset-top,0px));max-width:536px;margin:0 auto;background:#7a2e00;color:#fff;border-radius:14px;padding:10px 14px;font:800 14px/1.35 Nunito,system-ui,sans-serif;box-shadow:0 8px 20px rgba(0,0,0,.25)}
 #nudgeBar[hidden]{display:none!important}
+#zoneBar{position:fixed;z-index:46;left:12px;right:12px;top:calc(64px + env(safe-area-inset-top,0px));max-width:536px;margin:0 auto;background:#b42318;color:#fff;border-radius:14px;padding:10px 14px;font:800 14px/1.35 Nunito,system-ui,sans-serif;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+#zoneBar[hidden]{display:none!important}
+body.has-nav #zoneBar{top:calc(172px + env(safe-area-inset-top,0px))}
+.legend.zone-legend{color:#b42318}
+.zone-warn{color:#b42318;font-weight:900}
+#nudgeBar .nudge-back{margin-left:10px;background:#fff;color:#7a2e00;border:0;border-radius:10px;padding:6px 12px;font:800 13px/1.2 Nunito,system-ui,sans-serif;cursor:pointer;vertical-align:middle}
 body.has-nav #nudgeBar{top:calc(118px + env(safe-area-inset-top,0px))}
 #navBanner .nav-row{display:flex;align-items:center;gap:10px}
 #navBanner .nav-arrow{flex:none;width:46px;height:46px;border-radius:12px;background:#1d6fe0;display:grid;place-items:center;font:900 30px/1 system-ui}
@@ -327,9 +344,11 @@ html.gcm-offline .leaflet-container{background:#eef2ea}
   <div id="panel"><p class="fine">Loading the welcome mat…</p></div>
 </main>
 <div id="nudgeBar" hidden role="status"></div>
+<div id="zoneBar" hidden role="alert"></div>
 <div id="nextBar"><img id="nextPhoto" alt="" hidden><b id="nextLabel">Next stop</b><button id="nextBtn" type="button">Next</button></div>
 <script src="/offline.js"></script>
 <script src="/roadrule.js"></script>
+<script src="/offlimits.js"></script>
 <script src="/router.js"></script>
 <script src="/nav.js"></script>
 <script src="/navfollow.js"></script>
@@ -343,6 +362,8 @@ html.gcm-offline .leaflet-container{background:#eef2ea}
 <script src="/i18n.js"></script>
 <script src="/stories.js"></script>
 <script src="/help.js"></script>
+<script src="/quiz.js"></script>
+<script src="/report.js"></script>
 <script src="/parking.js"></script>
 <script src="/rental.js"></script>
 <script src="/p.js"></script>

@@ -44,6 +44,9 @@ def want(rs, cur):
         "/p/:slug/ /p 200\n"
         "/p/:slug/go /p 200\n"
         "/p/:slug/go/ /p 200\n"
+        # Dealer sales pages (sales mode): /s/<slug>?at=lat,lon
+        "/s/:slug /s 200\n"
+        "/s/:slug/ /s 200\n"
     )
     sm = cur["sitemap"]
     old = dict(re.findall(r"<loc>" + re.escape(SITE) + r"/([a-z0-9]+)</loc><lastmod>([^<]*)</lastmod>", sm))

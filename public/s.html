@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Where can a golf cart take you from here? · Golf Cart Maps</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#7ed8ef">
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0b3c50;--deep:#0b6e86;--aqua:#14b8c4;--sand:#f6ead2;--brand:var(--aqua);--on-brand:#073044;--line:#d7eef1;--good:#12a150;--bad:#b42318}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:700 16px/1.45 Nunito,system-ui,sans-serif;color:var(--ink);background:#fff6ea}
+[hidden]{display:none!important}
+.top{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--line)}
+.top img{width:36px;height:36px;border-radius:9px;object-fit:cover}
+.top .who{font:900 18px Nunito}
+.top .by{margin-left:auto;font:800 12px Nunito;color:var(--deep);text-decoration:none}
+.wrap{max-width:1100px;margin:0 auto;padding:14px 16px 40px;display:grid;gap:16px}
+@media(min-width:900px){.wrap{grid-template-columns:1.6fr 1fr;align-items:start}}
+h1{font:900 26px/1.15 Nunito;margin:4px 0 6px}
+.lede{margin:0 0 10px;color:#245468}
+#map{height:min(62vh,560px);border-radius:16px;border:1px solid var(--line);background:#d4dadc}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+.stat{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0}
+.stat div{background:#eaf8f3;border-radius:12px;padding:8px 12px}
+.stat b{display:block;font:900 22px Nunito;color:var(--good)}
+.stat span{font:800 12px Nunito;color:#245468}
+.reach{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.reach button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font:800 13px Nunito;color:var(--ink);cursor:pointer}
+.reach button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.places{list-style:none;padding:0;margin:8px 0 0}
+.places li{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid var(--line)}
+.places .yes{color:var(--good)}
+.places .no{color:var(--bad)}
+.find{display:flex;gap:8px;margin-top:8px}
+.find input{flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:700 15px Nunito}
+.sugg button{display:block;width:100%;text-align:left;border:0;background:#fff;border-bottom:1px solid var(--line);padding:8px 10px;font:700 14px Nunito;cursor:pointer}
+.sugg span{display:block;font:600 12px Nunito;color:#5a7a88}
+.buy{border:2px solid var(--brand)}
+.buy .logo{width:56px;height:56px;border-radius:14px;object-fit:cover;float:right;margin-left:10px}
+.buy h2{font:900 21px Nunito;margin:0 0 4px}
+.buy .cta{display:block;text-align:center;text-decoration:none;background:var(--brand);color:var(--on-brand);border-radius:14px;padding:13px;font:900 17px Nunito;margin-top:12px}
+.buy .alt{display:block;text-align:center;text-decoration:none;border:1px solid var(--line);color:var(--ink);border-radius:14px;padding:11px;font:800 15px Nunito;margin-top:8px}
+.fine{font:700 12px/1.4 Nunito;color:#5a7a88}
+.msg{background:#fee4e2;color:var(--bad);border-radius:12px;padding:10px 12px}
+</style>
+</head>
+<body>
+<header class="top"><img id="shopLogo" alt="" hidden><span class="who" id="shopName">Golf Cart Maps</span><a class="by" href="/" target="_blank" rel="noopener">Golf Cart Maps</a></header>
+<div class="wrap">
+  <section>
+    <h1 id="headline">Where can a golf cart take you from here?</h1>
+    <p class="lede" id="lede">Green roads are legal for a cart and reachable from this home.</p>
+    <div id="map" role="region" aria-label="Roads you can reach"></div>
+    <p class="fine" id="mapNote" aria-live="polite">Loading roads…</p>
+  </section>
+  <aside>
+    <div class="card" id="reachCard">
+      <div id="homeLine"><b>Pick a home to start.</b></div>
+      <div class="stat" id="stats" hidden><div><b id="roadMi">0</b><span>miles of legal roads in reach</span></div><div><b id="placeN">0</b><span>places in reach</span></div></div>
+      <div class="fine">How far one way</div>
+      <div class="reach" id="reachBtns" role="group" aria-label="How far one way"></div>
+      <p class="fine" id="ruleLine"></p>
+      <ul class="places" id="places"></ul>
+      <label class="fine" for="addr">Try another address</label>
+      <div class="find"><input id="addr" type="search" placeholder="Street address" autocomplete="off"></div>
+      <div class="sugg" id="sugg"></div>
+    </div>
+    <div class="card buy" id="buyCard" hidden></div>
+    <p class="fine">Based on OpenStreetMap roads, posted speed limits and local cart rules. Always follow posted signs. Not legal advice.</p>
+  </aside>
+</div>
+<script src="/vendor/leaflet/leaflet.js"></script>
+<script src="/applink.js"></script>
+<script src="/roadrule.js"></script>
+<script src="/router.js"></script>
+<script src="/geosearch.js"></script>
+<script src="/sales.js"></script>
+<script src="/s.js"></script>
+<script defer src="/hubspot.js"></script>
+</body>
+</html>

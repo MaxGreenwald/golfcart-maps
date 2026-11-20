@@ -10,6 +10,12 @@
   const KEY = 'gcm_lang';
   const DICT = {
     'Golf cart adventures': 'Paseos en carrito de golf',
+    // Renter lines from the reports, quiz and off-limits features.
+    '🛠️ Report a problem with your cart': '🛠️ Reportar un problema con tu carrito',
+    'Before you drive': 'Antes de manejar',
+    'Quick rules check': 'Repaso rápido de las reglas',
+    'Check my answers': 'Revisar mis respuestas',
+    'This quiz is a reminder of the local cart rules, not legal advice. You must still follow posted signs and the law.': 'Este repaso te recuerda las reglas locales para carritos; no es asesoría legal. Debes seguir las señales y la ley.',
     'Golf cart adventures · Golf Cart Maps': 'Paseos en carrito de golf · Golf Cart Maps',
     'Your cart, the coast, and stops worth pulling over for.': 'Tu carrito, la costa y paradas que valen la pena.',
     'You’re in. Pick a ride and follow the stops.': 'Ya entraste. Elige un paseo y sigue las paradas.',

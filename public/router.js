@@ -17,6 +17,7 @@
   // change the 75 ft / 500 ft decision cheaply enough to be worth a second copy of the graph.
   const HOLD_TRAVEL_M = 400;
   const UNKW = 1.8;
+  const AVOIDW = 40; // shop off-limits stretch: only when nothing else connects
   // A miss longer than this is omitted. A short gap may be a dashed stub.
   // Anything longer would be the chord Max saw crossing the La Jolla water.
   const GAP_MAX_M = 70;
@@ -103,7 +104,8 @@
         if (s[3] === 'c') { cnode.add(a); cnode.add(b); }
         // kind: 0 legal, 1 faster-road (75 ft waiver can apply), 2 explicit ban (never waived)
         const kind = c !== 3 ? 0 : explicitBan(s, rule) ? 2 : 1;
-        const wmul = (unk(s) || s[3] === 'q') ? UNKW : 1;
+        // Shop off-limits zones (public/offlimits.js) cost AVOIDW times more: used only when there is no other legal way.
+        const wmul = ((unk(s) || s[3] === 'q') ? UNKW : 1) * (o.avoid && o.avoid(s) ? AVOIDW : 1);
         const geo = s._len;
         if (s[4] >= 0) (adj[a] || (adj[a] = [])).push([b, s._len * wmul, i, false, kind, geo]);
         if (s[4] <= 0) (adj[b] || (adj[b] = [])).push([a, s._len * wmul, i, true, kind, geo]);
@@ -456,7 +458,26 @@
       stat.ms = Date.now() - t0;
       return null;
     }
-    return { reset, build, nearest, astar, astarAsync };
+    // Every node reachable from the seeds on legal roads (and short legal jogs) within maxM of
+    // road length. seeds: [[node, startMeters], ...]. Returns Map node -> meters. Sales mode (/s/).
+    function reach(seeds, maxM, o) {
+      const rule = o.rule, dist = new Map(), h = [];
+      for (const [n, m] of seeds) if (n != null && nodes[n] != null && !(dist.get(n) <= m)) { dist.set(n, m); heapPush(h, [m, n]); }
+      while (h.length) {
+        const [d, u] = heapPop(h);
+        if (d > dist.get(u)) continue;
+        for (const [v, , , , kind, geo] of (adj[u] || [])) {
+          if (kind === 2 || (kind === 1 && shownFeet(geo) > SHORT_LEGAL_FT)) continue;
+          if (rule.cross === false && fnode.has(v) && !cnode.has(v)) continue;
+          const nd = d + geo;
+          if (nd > maxM || dist.get(v) <= nd) continue;
+          dist.set(v, nd);
+          heapPush(h, [nd, v]);
+        }
+      }
+      return dist;
+    }
+    return { reset, build, nearest, astar, astarAsync, reach };
 
   }
 
@@ -609,14 +630,15 @@
   // Load the region's road tiles and route an ordered stop list.
   // veh is 'golf_cart' or 'lsv' (public/roadrule.js). Risky is off, so no stretch
   // over SHORT_LEGAL_FT. A faster-road jog at or under that length is legal.
-  async function openRegion(region, rules, veh, fetchImpl) {
+  // extra.avoid(seg) -> true for segments in a shop's off-limits zone (renter page only).
+  async function openRegion(region, rules, veh, fetchImpl, extra) {
     const fetchFn = fetchImpl || fetch;
     const base = '/data/' + region.id + '/';
     const Rule = rulesApi();
     const rule = Rule.ruleFor(rules, region, veh || Rule.DEFAULT_VEH);
     const cls = s => Rule.cls(s, rule);
     const unk = s => region.id !== 'sd' && region.id !== 'villages' && s[3] === 'i' && /^(secondary|tertiary|unclassified)/.test(s[1]) && cls(s) !== 3;
-    const o = { cls, unk, rule, risky: false, G };
+    const o = { cls, unk, rule, risky: false, G, avoid: (extra && typeof extra.avoid === 'function') ? extra.avoid : null };
     const indexRes = await fetchFn(base + 'index.json');
     if (!indexRes.ok) throw new Error('road index');
     const index = await indexRes.json();
@@ -688,10 +710,37 @@
       ];
       return STY[c] || STY[0];
     }
-    return { legs, trip, streets, rule, veh: rule.veh, cover: ensure, segments: () => D.segs, roadStyle };
+    // Sales mode: legal roads you can drive from `from` within `miles` of road (one way).
+    // { ok, snapM, miles, roadMiles, segs: [[lat,lon]...][], at(lat, lon) -> road miles or null }
+    async function reachable(from, miles) {
+      const maxM = Math.max(0, +miles || 0) * 1609.34;
+      const lat = +from.lat, lon = +from.lon;
+      const dLat = maxM / 111320 + 0.01, dLon = dLat / Math.max(0.2, Math.cos(lat * Math.PI / 180));
+      await ensure(lat - dLat, lon - dLon, lat + dLat, lon + dLon);
+      const A = net.nearest(D, buckets, { lat, lng: lon }, o);
+      if (A[0] == null || A[1] > 400) return { ok: false, reason: 'far', snapM: A[0] == null ? null : Math.round(A[1]) };
+      const dist = net.reach([[A[0], A[1]], [A[2], A[1]]], maxM, o);
+      const segs = [];
+      let roadM = 0;
+      for (const s of D.segs) {
+        if (!s || cls(s) === 3) continue;
+        const da = dist.get(s[5]), db = dist.get(s[6]);
+        if (da == null || db == null) continue;
+        segs.push(s[7].map(p => [p[1], p[0]]));
+        roadM += s._len || len(s[7]);
+      }
+      function at(la, lo) {
+        const P = net.nearest(D, buckets, { lat: +la, lng: +lo }, o);
+        if (P[0] == null || P[1] > 400) return null;
+        const d = Math.min(dist.has(P[0]) ? dist.get(P[0]) : Infinity, dist.has(P[2]) ? dist.get(P[2]) : Infinity);
+        return Number.isFinite(d) ? Math.round((d + P[1]) / 160.934) / 10 : null;
+      }
+      return { ok: true, snapM: Math.round(A[1]), miles: +miles, roadMiles: Math.round(roadM / 160.934) / 10, segs, at };
+    }
+    return { legs, trip, reachable, streets, rule, veh: rule.veh, cover: ensure, segments: () => D.segs, roadStyle };
   }
 
-  const api = { UTURN_M, aheadStart, bearingDeg, G, RISKY_MAX, SHORT_LEGAL_FT, ROUTE_BUDGET_MS, ROUTE_STATE_BUDGET, HOLD_TRAVEL_M, UNKW, GAP_MAX_M, hav, len, shownFeet, explicitBan, riskyMask, create, geometry, namedRuns, bucketize, routePair, tilesIn, graphOpts, openRegion };
+  const api = { AVOIDW, UTURN_M, aheadStart, bearingDeg, G, RISKY_MAX, SHORT_LEGAL_FT, ROUTE_BUDGET_MS, ROUTE_STATE_BUDGET, HOLD_TRAVEL_M, UNKW, GAP_MAX_M, hav, len, shownFeet, explicitBan, riskyMask, create, geometry, namedRuns, bucketize, routePair, tilesIn, graphOpts, openRegion };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMRouter = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

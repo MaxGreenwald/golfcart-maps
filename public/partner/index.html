@@ -58,6 +58,9 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 .route-check .route-flags{margin:8px 0 0;padding-left:18px;color:var(--bad)}
 .route-check .err{color:var(--bad);margin:0}
 .pinmap{height:220px;border-radius:12px;border:1px solid var(--line);margin-top:8px;z-index:1;background:#d4dadc}
+.offmap{height:340px}
+.off-tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.off-tools [aria-pressed="true"]{background:#b42318;color:#fff}
 .pinmap .leaflet-container{font:600 12px Nunito,system-ui,sans-serif}
 .pinmap img.leaflet-tile{max-width:none !important;max-height:none !important;mix-blend-mode:normal !important}
 .stop input[type=file],#brandLogoFile{max-width:100%}
@@ -73,6 +76,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 .stat{background:#f4fafb;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
 .stat b{display:block;font-size:20px;color:var(--deep)}
 .stat span{font-size:12px;font-weight:700}
+.sales-on{display:flex;gap:8px;align-items:center;margin:8px 0;font-weight:800}
 .dash-h{margin:14px 0 6px;font-size:14px;color:var(--deep)}
 #shopDash table{font-size:12px}
 #shopDash th,#shopDash td{padding:6px 4px}
@@ -83,6 +87,10 @@ label input[type=checkbox]{width:auto;margin-right:8px}
 .starter-ride .btn{width:auto}
 #login{max-width:420px;margin:40px auto}
 .af-place .place-wrap{margin-bottom:8px}
+.rp-thumb{width:96px;height:72px;object-fit:cover;border-radius:8px;border:1px solid #cfe7ea}
+.rp-note{white-space:pre-wrap;margin:4px 0}
+.rp-done{opacity:.6}
+.rp-fixed{display:flex;align-items:center;font-weight:700;margin:0 0 8px}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet">
@@ -101,6 +109,13 @@ label input[type=checkbox]{width:auto;margin-right:8px}
 <script src="/router.js"></script>
 <script src="/routecheck.js"></script>
 <script src="/photoupload.js"></script>
+<script src="/offlimits.js"></script>
+<script src="/partner/offcard.js"></script>
+<script src="/partner/quizcard.js"></script>
+<script src="/partner/bookings.js"></script>
+<script src="/partner/reports.js"></script>
+<script src="/sales.js"></script>
+<script src="/partner/salescard.js"></script>
 <script src="/partner/admin.js"></script>
 </body>
 </html>

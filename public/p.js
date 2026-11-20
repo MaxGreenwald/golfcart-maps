@@ -459,6 +459,13 @@ function drawRoadCanvas() {
   ctx.setLineDash([]);
 }
 
+// Stop number in the shop's saved order (the ride may be shown in visit order).
+function stopNumber(s, i) {
+  const list = (baseEx && baseEx.stops) || [];
+  let k = list.indexOf(s);
+  if (k < 0) k = list.findIndex(x => x && +x.lat === +s.lat && +x.lon === +s.lon);
+  return k >= 0 ? k + 1 : i + 1;
+}
 function stopPopupHtml(s, i) {
   const photo = safeLogo(s.photo);
   return `<b>${i + 1}. ${esc(s.label)}</b>${photo ? `<br><img src="${esc(photo)}" alt="" style="max-width:220px;border-radius:8px;margin-top:6px">` : ''}${s.note ? `<br>${esc(s.note)}` : ''}`;
@@ -490,6 +497,26 @@ function placeIcon(cat) {
 function placePopup(p) {
   const [ico, lab] = placeUi(p.category);
   return `<b>${ico} ${esc(p.name)}</b><br><span class="muted">${esc(lab)}</span>${p.note ? `<br>${esc(p.note)}` : ''}${/^https:\/\//i.test(p.link || '') ? `<br><a href="${esc(p.link)}" target="_blank" rel="noopener">More</a>` : ''}`;
+}
+// "Take me there" on a partner offer or place: a legal route through the same free-route nav.
+function goThereBtn(id) {
+  return `<br><button type="button" class="popgo" data-go-pin="${esc(id)}">\u{1F9ED} Take me there</button>`;
+}
+function wireGoThere(popup) {
+  const el = popup && popup.getElement && popup.getElement();
+  const b = el && el.querySelector('[data-go-pin]');
+  if (b) b.onclick = () => { goPartner(b.dataset.goPin); };
+}
+async function goPartner(id) {
+  const all = [...(unlocked.affiliates || []), ...(unlocked.places || [])];
+  const hit = all.find(x => x.id === id);
+  if (!hit || !finite(hit.lat, hit.lon)) return;
+  trackShop('partner_nav', { pin: hit.id });
+  if (map) map.closePopup();
+  freeMode(true);
+  freeRisky = false;
+  document.querySelectorAll('#goMode button').forEach(x => x.setAttribute('aria-pressed', x.dataset.mode === 'legal' ? 'true' : 'false'));
+  await pickDest({ name: hit.name, lat: +hit.lat, lon: +hit.lon });
 }
 function meIcon() {
   return L.divIcon({
@@ -547,13 +574,52 @@ function connectStops(stops, opts) {
   return withRoads(async () => {
     await loadRules();
     const veh = shopVeh();
-    const key = (region && region.id || 'sd') + ':' + veh;
+    const zs = zones();
+    const key = (region && region.id || 'sd') + ':' + veh + ':' + zs.map(z => z.id).join(',');
     if (!roadApi || roadKey !== key) {
-      roadApi = await GCMRouter.openRegion(region, rules, veh, freshFetch);
+      // The shop's off-limits zones cost far more in the shared router, so routes go around them when they can.
+      const avoid = window.GCMOffLimits ? GCMOffLimits.segAvoid(zs) : null;
+      roadApi = await GCMRouter.openRegion(region, rules, veh, freshFetch, avoid ? { avoid } : undefined);
       roadKey = key;
     }
     return roadApi.legs(stops, opts);
   });
+}
+// Off-limits zones the shop drew (public/offlimits.js): shaded on the map, avoided by the router,
+// called out when a route still has to cross one, and announced when the rider gets close.
+function zones() { return (unlocked && Array.isArray(unlocked.offlimits)) ? unlocked.offlimits : []; }
+function drawZones(layer) {
+  for (const z of zones()) {
+    if (!Array.isArray(z.points) || z.points.length < 2) continue;
+    const pop = `<b>⛔ Off limits: ${esc(z.name)}</b>${z.note ? `<br>${esc(z.note)}` : ''}<br><span class="muted">Marked by the shop</span>`;
+    const shape = z.kind === 'area'
+      ? L.polygon(z.points, { color: '#b42318', weight: 2, dashArray: '6 4', fillColor: '#e5484d', fillOpacity: 0.2 })
+      : L.polyline(z.points, { color: '#b42318', weight: 8, opacity: 0.55, dashArray: '2 10', lineCap: 'round' });
+    shape.bindPopup(pop).addTo(layer);
+  }
+}
+function zoneWarning(paths, stops, free) {
+  if (!window.GCMOffLimits || !zones().length) return '';
+  const hits = [];
+  for (const p of paths) for (const h of GCMOffLimits.routeHits(p, zones())) if (!hits.some(x => x.id === h.id)) hits.push(h);
+  const inside = GCMOffLimits.stopsInside(stops || [], zones());
+  const parts = [];
+  if (hits.length) parts.push(GCMOffLimits.warnText(hits));
+  for (const s of inside) parts.push(free
+    ? `⛔ ${s.label || 'That spot'} is inside ${s.zone}. Park outside it and walk in.`
+    : `⛔ Stop ${s.index + 1}${s.label ? ` (${s.label})` : ''} is inside ${s.zone}. Park outside it and walk in.`);
+  return parts.join(' ');
+}
+let zoneSaid = '';
+function zoneAlert(ll) {
+  const el = document.getElementById('zoneBar');
+  if (!el || !window.GCMOffLimits || !zones().length || !ll) return;
+  const z = GCMOffLimits.near(ll, zones(), zoneSaid ? 80 : 50);
+  if (!z) { el.hidden = true; el.textContent = ''; zoneSaid = ''; return; }
+  const text = (z.meters === 0 ? `⛔ You are in an off-limits area: ${z.name}.` : `⛔ Off limits ahead: ${z.name}.`) + (z.note ? ' ' + z.note : '');
+  el.textContent = text;
+  el.hidden = false;
+  if (zoneSaid !== z.id + ':' + (z.meters === 0)) { zoneSaid = z.id + ':' + (z.meters === 0); say(text.replace(/^⛔ /, '')); }
 }
 function describeRoute(legs, nStops) {
   if (nStops < 2) return nStops ? 'One stop. Hit Start experience to route there from you.' : '';
@@ -589,7 +655,8 @@ async function drawUnlocked(opts) {
   (unlocked.affiliates || []).forEach(a => {
     if (!finite(a.lat, a.lon)) return;
     const m = L.marker([+a.lat, +a.lon], { icon: affIcon(), zIndexOffset: 600 }).addTo(pins);
-    m.bindPopup(`<b>${esc(a.name)}</b><br>${esc(a.offer || '')}${a.coupon ? `<br>Coupon: <code>${esc(a.coupon)}</code>` : ''}<br><span class="muted">Partner offer</span>`);
+    m.bindPopup(`<b>${esc(a.name)}</b><br>${esc(a.offer || '')}${a.coupon ? `<br>Coupon: <code>${esc(a.coupon)}</code>` : ''}<br><span class="muted">Partner offer</span>${goThereBtn(a.id)}`);
+    m.on('popupopen', e => wireGoThere(e.popup));
     m.on('click', () => trackShop('affiliate_tap', { pin: a.id }));
     affMarks.push({ id: a.id, marker: m });
     bounds.push([+a.lat, +a.lon]);
@@ -597,7 +664,8 @@ async function drawUnlocked(opts) {
   (unlocked.places || []).forEach(p => {
     if (!finite(p.lat, p.lon)) return;
     const m = L.marker([+p.lat, +p.lon], { icon: placeIcon(p.category), zIndexOffset: 500, title: p.name }).addTo(pins);
-    m.bindPopup(placePopup(p));
+    m.bindPopup(placePopup(p) + goThereBtn(p.id));
+    m.on('popupopen', e => { trackShop('place_opened', { pin: p.id }); wireGoThere(e.popup); });
     placeMarks.push({ id: p.id, marker: m });
     bounds.push([+p.lat, +p.lon]);
   });
@@ -606,6 +674,7 @@ async function drawUnlocked(opts) {
       if (!finite(s.lat, s.lon)) return;
       const m = L.marker([+s.lat, +s.lon], { icon: stopIcon(i + 1), zIndexOffset: 700 }).addTo(pins);
       m.bindPopup(stopPopupHtml(s, i));
+      m.on('popupopen', () => trackShop('stop_opened', { ride: activeEx && activeEx.id, pin: String(stopNumber(s, i)) }));
       bounds.push([+s.lat, +s.lon]);
       const park = routePoint(s);
       if (park.parked) {
@@ -614,7 +683,11 @@ async function drawUnlocked(opts) {
       }
     });
   }
-  setRouteNote(describeRoute(legs, goodStops.length));
+  drawZones(pins);
+  const warn = zoneWarning((legs || []).filter(l => l.points).map(l => l.points), activeEx ? activeEx.stops : []);
+  setRouteNote([describeRoute(legs, goodStops.length), warn].filter(Boolean).join(' '));
+  const rn = document.getElementById('routeNote');
+  if (rn) rn.classList.toggle('zone-warn', !!warn);
   if (bounds.length && !(opts && opts.noFrame)) frameLatLngs(bounds);
   scheduleRoads();
   updateNext();
@@ -748,6 +821,8 @@ function stopNav() {
   if (navWatch != null && navigator.geolocation) navigator.geolocation.clearWatch(navWatch);
   navWatch = null; navRoute = null; navState = null; navStop = -1; navArrived = false;
   hideStory();
+  zoneSaid = '';
+  const zb = document.getElementById('zoneBar'); if (zb) { zb.hidden = true; zb.textContent = ''; }
   if (navFlagMk) { navFlagMk.remove(); navFlagMk = null; }
   trimNav(0);
   const el = document.getElementById('navBanner');
@@ -805,6 +880,7 @@ async function onNavFix(ll) {
   if (!finite(ll.lat, ll.lon)) return;
   meLL = { lat: ll.lat, lon: ll.lon };
   placeMe();
+  zoneAlert(meLL);
   if (follow) follow.fix(ll.coords || { latitude: ll.lat, longitude: ll.lon });
   if (!navRoute || navArrived || navRerouting) return;
   const st = GCMNav.status(navRoute, [ll.lat, ll.lon], navState, ll.coords ? { course: ll.coords.heading, speed: ll.coords.speed } : null);
@@ -937,7 +1013,7 @@ function freeMode(on) {
 }
 function setGoNote(t) { const el = document.getElementById('goNote'); if (el) el.textContent = t; }
 async function pickDest(d) {
-  freeDest = { label: d.name || 'Dropped pin', lat: +d.lat, lon: +d.lon };
+  freeDest = { label: d.name || 'Dropped pin', lat: +d.lat, lon: +d.lon, back: !!d.back };
   const sg = document.getElementById('goSugg'); if (sg) sg.innerHTML = '';
   const inp = document.getElementById('goQ'); if (inp) inp.value = freeDest.label;
   if (freeMark) map.removeLayer(freeMark);
@@ -967,9 +1043,11 @@ async function routeFree(dest, quiet) {
   const risky = (leg.runs || []).filter(r => r.risky);
   risky.forEach(r => L.polyline(r.points, { renderer: routeR, pane: 'route', color: '#e5484d', weight: 6, dashArray: '8 8', interactive: false }).addTo(liveLayer));
   const mi = (navRouteLen(leg.points) / 1609.34).toFixed(1);
-  setGoNote(risky.length ? `${mi} mi · ⚠️ ${risky.length} risky stretch${risky.length > 1 ? 'es' : ''} (red dashes). Use caution.` : `${mi} mi on legal golf cart roads.`);
+  const zw = zoneWarning([leg.points], [dest], true);
+  setGoNote((risky.length ? `${mi} mi · ⚠️ ${risky.length} risky stretch${risky.length > 1 ? 'es' : ''} (red dashes). Use caution.` : `${mi} mi on legal golf cart roads.`) + (zw ? ' ' + zw : ''));
   if (!quiet) frameLatLngs(leg.points.concat([[from.lat, from.lon]]));
   beginNav(leg, -1, dest);
+  if (!quiet) trackShop('partner_route');
 }
 function navRouteLen(pts) { let m = 0; for (let i = 1; i < pts.length; i++) m += GCMNav.hav(pts[i - 1], pts[i]); return m; }
 function wireFree() {
@@ -1139,6 +1217,7 @@ function focusEx(on) {
 function selectEx(id) {
   const ex = (unlocked && unlocked.experiences) || [];
   activeEx = baseEx = ex.find(x => x.id === id) || null;
+  if (activeEx) trackShop('experience_opened', { ride: activeEx.id });
   riderShopOrder = false;
   setOrderNote(false);
   stopIdx = 0;
@@ -1189,8 +1268,74 @@ function wireOffline() {
   addEventListener('gcm-offline-refreshed', paint);
   paint();
 }
+// Rules quiz gate: when the shop turned it on, the map opens only after every answer is right.
+// The pass is recorded by the partner Worker (code and time) and remembered on this device for a day.
+async function quizGate() {
+  const shop = unlocked && unlocked.shop;
+  const code = (unlocked && unlocked.code) || codeParam;
+  if (!shop || !shop.quiz_on || !window.GCMQuiz) return false;
+  if (GCMQuiz.passed(localStorage, slug, code)) return false;
+  applyShop(shop, true);
+  ticker.hidden = true;
+  const top = document.getElementById('goTop'); if (top) top.hidden = true;
+  blurbEl.textContent = 'One quick rules check, then your map opens.';
+  let rule = null;
+  try {
+    const [regs, rr] = [await loadRegions(), await loadRules()];
+    const region = regs.find(r => r.id === shop.region_id);
+    if (region && rr && rr[region.state]) rule = GCMRule.ruleFor(rr, region, shopVeh());
+  } catch (e) { rule = null; }
+  const qs = GCMQuiz.build({ rule, vehicle: shopVeh(), shopRules: shop.rental && shop.rental.rules });
+  panel.innerHTML = `<div class="dock-scroll" id="dockScroll"><form id="quizForm" class="quiz" novalidate>
+    <p class="yay-kicker">Before you drive</p>
+    <h2 class="sec">Quick rules check</h2>
+    <p class="fine">${esc(shop.name)} asks every renter to answer these first. It takes under a minute.</p>
+    <p class="fine" id="quizNotice">${esc(GCMQuiz.NOTICE)}</p>
+    ${qs.map((q, i) => `<fieldset class="qz" data-q="${esc(q.id)}"><legend>${i + 1}. ${esc(q.text)}</legend>
+      ${q.options.map(o => `<label class="qz-opt"><input type="radio" name="qz_${esc(q.id)}" value="${esc(o.id)}"> ${esc(o.text)}</label>`).join('')}
+      <p class="qz-why" hidden></p></fieldset>`).join('')}
+    <p><button type="submit" class="start" id="quizSend">Check my answers</button></p>
+    <p class="msg" id="quizMsg" hidden role="status"></p>
+  </form></div>`;
+  const form = document.getElementById('quizForm');
+  const msg = document.getElementById('quizMsg');
+  const say = (ok, t) => { msg.hidden = false; msg.className = 'msg' + (ok ? '' : ' err'); msg.textContent = t; };
+  form.onsubmit = async e => {
+    e.preventDefault();
+    const answers = {};
+    qs.forEach(q => { const c = form.querySelector(`input[name="qz_${q.id}"]:checked`); if (c) answers[q.id] = c.value; });
+    const g = GCMQuiz.grade(qs, answers);
+    form.querySelectorAll('.qz').forEach(fs => {
+      const q = qs.find(x => x.id === fs.dataset.q);
+      const bad = g.wrong.includes(q.id);
+      fs.classList.toggle('bad', bad);
+      const why = fs.querySelector('.qz-why');
+      why.hidden = !bad;
+      why.textContent = bad ? (answers[q.id] ? 'Not quite. Try again.' : 'Pick an answer.') : '';
+    });
+    if (!g.ok) { say(false, g.wrong.length === 1 ? 'One answer needs another look.' : g.wrong.length + ' answers need another look.'); return; }
+    document.getElementById('quizSend').disabled = true;
+    try {
+      const r = await fetch(`${API}/public/${encodeURIComponent(slug)}/quiz`, {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code, answers }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) { say(false, j.error || 'Could not save your answers. Try again.'); return; }
+      GCMQuiz.markPassed(localStorage, slug, code);
+      await unlockedView();
+    } catch (err) {
+      say(false, 'Could not save your answers. Check your connection and try again.');
+    } finally {
+      const b = document.getElementById('quizSend'); if (b) b.disabled = false;
+    }
+  };
+  return true;
+}
+
 async function unlockedView() {
+  if (await quizGate()) return;
   const shop = unlocked.shop;
+  trackShop('partner_open', { code: unlocked.code || codeParam });
   applyShop(shop, true);
   document.body.classList.add('is-open');
   ticker.hidden = true;
@@ -1202,9 +1347,10 @@ async function unlockedView() {
     <div class="dock-scroll" id="dockScroll">
       <div class="yay">
         <p class="yay-kicker">You’re in</p>
-        <p>Code <b>${esc(code)}</b> unlocked ${esc(shop.name)}. Pick a ride, then start from where you are.</p>
+        <p>Code <b>${esc(code)}</b>${unlocked.cart ? ` (cart ${esc(unlocked.cart)})` : ''} unlocked ${esc(shop.name)}. Pick a ride, then start from where you are.</p>
       </div>
       ${rentalCard(shop)}
+      <div id="reportSlot"></div>
       <div class="offrow"><button class="allex" id="offBtn" type="button" hidden>⬇️ Download map for offline</button><p class="fine" id="offNote" aria-live="polite"></p></div>
       <div id="goPane" hidden>
         <button class="allex" id="goBack" type="button">‹ Back to experiences</button>
@@ -1237,6 +1383,7 @@ async function unlockedView() {
       </button>`).join('')}` : ''}</div>
       <p class="legend">Green roads are legal for a ${esc(vehWord())}. Red roads are off limits. The blue line is your route.</p>
       <p class="legend muted" id="vehLegend">${esc(vehLegend())}</p>
+      ${zones().length ? '<p class="legend zone-legend">⛔ Red shaded areas and red dotted roads are off limits. The shop marked them. Routes go around them when there is a legal way.</p>' : ''}
       <p class="legend">Numbered pins are stops. Amber ★ pins are partner offers.${(unlocked.places || []).length ? ' Icon pins (🍽️ 🌅 ❓ 💡 📍) are places to see. Tap one to read about it.' : ''}</p>
       <p class="legend" id="routeNote" aria-live="polite"></p>
     </div>
@@ -1278,7 +1425,16 @@ async function unlockedView() {
   if (window.GCMHelp && unlocked && unlocked.shop && unlocked.shop.phone) {
     GCMHelp.mount(document, { phone: unlocked.shop.phone, shopName: unlocked.shop.name, getFix: () => meLL });
   }
+  if (window.GCMReport && unlocked && unlocked.shop) {
+    const r = unlocked.shop.rental || {};
+    GCMReport.mount(document.getElementById('reportSlot'), {
+      api: API, slug, code: unlocked.code || codeParam, cart: unlocked.cart || '',
+      shopName: unlocked.shop.name, phone: (window.GCMHelp && GCMHelp.display && GCMHelp.display(r.phone || unlocked.shop.phone)) || '',
+    });
+  }
   armNudges();
+  // The "head back soon" email links here with back=1: open straight to the route back.
+  if (params.get('back') === '1' && map) routeBack().catch(() => {});
 }
 
 // Return-by and range reminders. The shop sets return_by (HH:MM), range_mi, and a return spot.
@@ -1296,7 +1452,23 @@ function paintNudge(lines) {
   if (!el) return;
   if (!lines || !lines.length) { el.hidden = true; el.textContent = ''; return; }
   el.hidden = false;
-  el.textContent = lines.map(n => n.text).join(' ');
+  const s = (unlocked && unlocked.shop) || {};
+  const canRoute = finite(s.return_lat, s.return_lon) && !(freeOn && freeDest && freeDest.back);
+  el.innerHTML = `<span class="nudge-text">${esc(lines.map(n => n.text).join(' '))}</span>` +
+    (canRoute ? '<button type="button" id="nudgeBack" class="nudge-back">Route me back</button>' : '');
+  const b = document.getElementById('nudgeBack');
+  if (b) b.onclick = () => { routeBack(); };
+}
+// Cart-legal route to the shop's return spot, through the same free-route nav as any destination.
+async function routeBack() {
+  const s = (unlocked && unlocked.shop) || {};
+  if (!finite(s.return_lat, s.return_lon) || !map) return false;
+  freeMode(true);
+  freeRisky = false;
+  document.querySelectorAll('#goMode button').forEach(x => x.setAttribute('aria-pressed', x.dataset.mode === 'legal' ? 'true' : 'false'));
+  const el = document.getElementById('nudgeBack'); if (el) el.remove();
+  await pickDest({ name: 'Return spot: ' + ((s.rental && s.rental.return_spot) || s.name || 'shop'), lat: +s.return_lat, lon: +s.return_lon, back: true });
+  return true;
 }
 function voiceBusy() {
   return !!(navVoice && (navVoice.speaking() || navVoice.pending()));
@@ -1320,7 +1492,8 @@ async function homeTrip() {
 async function refreshNudge() {
   if (!window.GCMRemind || !unlocked || !unlocked.shop) { paintNudge([]); return 60000; }
   const s = unlocked.shop;
-  const hasTime = !!s.return_by;
+  const plan = GCMRemind.returnPlan ? GCMRemind.returnPlan(s, unlocked.booking) : { returnBy: s.return_by || '' };
+  const hasTime = GCMRemind.hasReturnTime ? GCMRemind.hasReturnTime(plan) : !!s.return_by;
   const hasRange = +s.range_mi > 0;
   if (!hasTime && !hasRange) { paintNudge([]); return 60000; }
   if (!meLL) { const loc = await locateMe(); if (loc) { meLL = loc; placeMe(); } }
@@ -1329,7 +1502,9 @@ async function refreshNudge() {
   if (pinned && !trip) return 5000;
   const lines = GCMRemind.nudges({
     now: new Date(),
-    returnBy: s.return_by,
+    returnBy: plan.returnBy,
+    returnAt: plan.returnAt,
+    leadMin: plan.leadMin,
     travelMin: trip ? trip.travelMin : (hasTime ? 0 : null),
     homeMi: trip ? trip.homeMi : null,
     rangeMi: s.range_mi,
@@ -1385,7 +1560,7 @@ async function boot() {
       if (!handoffParam) trackShop('partner_unlock', { code: j.code || codeParam });
       // CarPlay Experiences (public/carplay.js experiences()) reads this to show the shop's rides in the car.
       // The whole unlock answer is saved because unlock counts a use (single-use codes would fail a second call).
-      try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates })); } catch (e) {}
+      try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, cart: j.cart || '', at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates, booking: j.booking || null })); } catch (e) {}
       try { if (j.grant) localStorage.setItem(GRANT_KEY, j.grant); } catch (_) {}
 
       await unlockedView();

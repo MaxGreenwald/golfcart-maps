@@ -31,7 +31,7 @@ test('worker routes every owner endpoint through shopAccess', () => {
   const i = w.indexOf('async function access(');
   assert.ok(i > 0);
   const tail = w.slice(i);
-  for (const re of [/'\/shop' && req\.method === 'GET'/, /'\/shop' && req\.method === 'PATCH'/, /\['experiences', 'affiliates', 'places', 'codes'\]/, /shop\\\/\(experiences\|affiliates\|places\)/]) {
+  for (const re of [/'\/shop' && req\.method === 'GET'/, /'\/shop' && req\.method === 'PATCH'/, /\['experiences', 'affiliates', 'places', 'codes'(, '[a-z]+')*\]/, /shop\\\/\(experiences\|affiliates\|places(\|[a-z]+)*\)/]) {
     assert.match(tail, re);
   }
   assert.doesNotMatch(w, /if \(!shop && !isSuper\) return J\(\{ error: 'forbidden' \}/, 'old any-owner check is gone');

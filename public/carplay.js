@@ -52,10 +52,11 @@ async function refreshCpNudge(lat,lon){
   if(!cpHomeApi||cpHomeKey!==key){cpHomeApi=await window.GCMRouter.openRegion(REG,RULES,veh,u=>fetch(u));cpHomeKey=key}
   const leg=await cpHomeApi.trip({lat:+lat,lon:+lon},{lat:+sh.return_lat,lon:+sh.return_lon},{risky:false});
   if(leg&&leg.points&&leg.points.length>1){homeMi=window.GCMRemind.pathMiles(leg.points,window.GCMRouter.hav);travelMin=window.GCMRemind.travelMinutes(homeMi,veh)}
- }else if(sh.return_by)travelMin=0;
- const GS=window.GCMRemind;
+ }
+ const GS=window.GCMRemind,plan=GS.returnPlan?GS.returnPlan(sh,a.booking):{returnBy:sh.return_by||''};
+ if(travelMin==null&&(plan.returnAt||plan.returnBy))travelMin=0;
  const battery=window.GCMRange?(GCMRange.load().battery??100):100;
- cpNudge=GS.nudges({now:new Date(),returnBy:sh.return_by||'',travelMin,homeMi,rangeMi:sh.range_mi,batteryPct:battery})}
+ cpNudge=GS.nudges({now:new Date(),returnBy:plan.returnBy,returnAt:plan.returnAt,leadMin:plan.leadMin,travelMin,homeMi,rangeMi:sh.range_mi,batteryPct:battery})}
 function voiceOff(){
  try{if(window.GCMFollow&&GCMFollow.isMuted())return true}catch(_){}
  try{if(localStorage.getItem('gcm_voice_muted')==='1'||localStorage.getItem('gcm_nav_mute')==='1')return true}catch(_){}
