@@ -1216,7 +1216,7 @@ async function unlockedView() {
     <div class="dock-scroll" id="dockScroll">
       <div class="yay">
         <p class="yay-kicker">You’re in</p>
-        <p>Code <b>${esc(code)}</b> unlocked ${esc(shop.name)}. Pick a ride, then start from where you are.</p>
+        <p>Code <b>${esc(code)}</b>${unlocked.cart ? ` (cart ${esc(unlocked.cart)})` : ''} unlocked ${esc(shop.name)}. Pick a ride, then start from where you are.</p>
       </div>
       ${rentalCard(shop)}
       <div class="offrow"><button class="allex" id="offBtn" type="button" hidden>⬇️ Download map for offline</button><p class="fine" id="offNote" aria-live="polite"></p></div>
@@ -1399,7 +1399,7 @@ async function boot() {
       if (!handoffParam) trackShop('partner_unlock', { code: j.code || codeParam });
       // CarPlay Experiences (public/carplay.js experiences()) reads this to show the shop's rides in the car.
       // The whole unlock answer is saved because unlock counts a use (single-use codes would fail a second call).
-      try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates })); } catch (e) {}
+      try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, cart: j.cart || '', at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates })); } catch (e) {}
       try { if (j.grant) localStorage.setItem(GRANT_KEY, j.grant); } catch (_) {}
 
       await unlockedView();
