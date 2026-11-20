@@ -8,6 +8,7 @@ import { sameTown, pushStops, brandFields, experiencePayload } from '../../../li
 import { cleanBooking, bookingRow, rulesLines, welcomeEmail, welcomeSms, BOOKING_KEEP_DAYS } from '../../../lib/partner_bookings.js';
 import { sendMail, mailState } from '../../../lib/partner_mail.js';
 import { sendSms, smsProvider } from '../../../lib/partner_sms.js';
+import { parseCarts, fleetPlan, cleanCartLabel, cartOrder } from '../../../lib/partner_fleet.js';
 
 const J = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
   status: s,
@@ -146,6 +147,9 @@ export class PartnerStore extends DurableObject {
         created_at INTEGER NOT NULL
       )
     `);
+    // Fleet stickers: the cart number a code is printed for. Empty for desk codes.
+    const codeCols = this.sql.exec('PRAGMA table_info(codes)').toArray().map(c => c.name);
+    if (!codeCols.includes('cart_label')) this.sql.exec("ALTER TABLE codes ADD COLUMN cart_label TEXT DEFAULT ''");
     this.sql.exec(`
       CREATE TABLE IF NOT EXISTS places_quota(
         shop_id TEXT NOT NULL, bucket TEXT NOT NULL, count INTEGER NOT NULL,
@@ -225,6 +229,7 @@ export class PartnerStore extends DurableObject {
       unlocked: true,
       shop: { ...shop, rental: rentalFromRow(sh.rental_json) },
       experiences, affiliates, places: this.places(sh.id), code: c.code,
+      cart: c.cart_label || '',
     };
     if (withGrant) {
       out.grant = randomToken(24);
@@ -359,7 +364,7 @@ export class PartnerStore extends DurableObject {
           experiences: this.q('SELECT * FROM experiences WHERE shop_id=? ORDER BY created_at DESC', sid).map(r => this.expRow(r)),
           affiliates: this.q('SELECT * FROM affiliates WHERE shop_id=? ORDER BY created_at DESC', sid).map(r => this.affRow(r)),
           places: this.places(sid),
-          codes: this.q('SELECT code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at FROM codes WHERE shop_id=? ORDER BY created_at DESC', sid),
+          codes: this.q('SELECT code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at,cart_label FROM codes WHERE shop_id=? ORDER BY created_at DESC', sid),
         });
       }
       // Experiences
@@ -600,8 +605,8 @@ export class PartnerStore extends DurableObject {
         if (exp.error) return J({ error: exp.error }, 400);
         const expires_at = exp.expires_at;
         this.sql.exec(
-          'INSERT INTO codes(code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at) VALUES(?,?,?,?,?,0,?,?)',
-          code, sid, body.experience_id || null, multi, max_uses, expires_at, now(),
+          'INSERT INTO codes(code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at,cart_label) VALUES(?,?,?,?,?,0,?,?,?)',
+          code, sid, body.experience_id || null, multi, max_uses, expires_at, now(), cleanCartLabel(body.cart_label),
         );
         return J({ code: this.one('SELECT * FROM codes WHERE code=?', code) }, 201);
       }
@@ -656,6 +661,36 @@ export class PartnerStore extends DurableObject {
       if (path.match(/^\/bookings\/[^/]+$/) && method === 'DELETE') {
         this.sql.exec('DELETE FROM bookings WHERE id=?', path.split('/')[2]);
         return J({ ok: true });
+      }
+      // Fleet stickers: one multi-use code per cart number. A cart that already has a live code keeps it.
+      if (path.match(/^\/shops\/[^/]+\/fleet$/) && method === 'POST') {
+        const sid = path.split('/')[2];
+        if (!this.one('SELECT id FROM shops WHERE id=?', sid)) return J({ error: 'not found' }, 404);
+        const parsed = parseCarts(body.carts);
+        if (parsed.error) return J({ error: parsed.error }, 400);
+        const exp = codeExpiry({ expires_days: body.expires_days === undefined ? null : body.expires_days }, now());
+        if (exp.error) return J({ error: exp.error }, 400);
+        const plan = fleetPlan(parsed.carts, this.q('SELECT code,cart_label,expires_at FROM codes WHERE shop_id=? ORDER BY created_at DESC', sid), now());
+        for (const cart of plan.make) {
+          let code = randomCode(4);
+          while (this.one('SELECT code FROM codes WHERE code=?', code)) code = randomCode(5);
+          this.sql.exec(
+            'INSERT INTO codes(code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at,cart_label) VALUES(?,?,NULL,1,0,0,?,?,?)',
+            code, sid, exp.expires_at, now(), cart,
+          );
+        }
+        const want = new Set(parsed.carts.map(c => c.toLowerCase()));
+        const fresh = this.q("SELECT code,cart_label,expires_at,uses FROM codes WHERE shop_id=? AND cart_label<>'' ORDER BY created_at DESC", sid);
+        const seen = new Set();
+        const fleet = [];
+        for (const r of fresh) {
+          const key = r.cart_label.toLowerCase();
+          if (!want.has(key) || seen.has(key) || (r.expires_at && r.expires_at < now())) continue;
+          seen.add(key);
+          fleet.push({ cart: r.cart_label, code: r.code, expires_at: r.expires_at, uses: r.uses });
+        }
+        fleet.sort((a, b) => cartOrder(a.cart, b.cart));
+        return J({ fleet, created: plan.make.length, reused: plan.reuse.length }, 201);
       }
       // App handoff: grant (from an unlock in the browser) -> single-use token, 10 minutes.
       const hm = path.match(/^\/public\/([^/]+)\/handoff$/);
@@ -1091,6 +1126,12 @@ export default {
       const j = await (await doFetch('/bookings/' + bk[1])).json();
       if (!j.booking) return J({ error: 'not found' }, 404);
       return J(await deliver(j.shop, j.booking));
+    }
+    if (u.pathname === '/shop/fleet' && req.method === 'POST') {
+      const body = await readBody();
+      const a = await access(body);
+      if (!a.shopId) return deny(a);
+      return send('/shops/' + a.shopId + '/fleet', 'POST', { carts: body.carts, expires_days: body.expires_days });
     }
     for (const kind of ['experiences', 'affiliates', 'places', 'codes']) {
       if (u.pathname === '/shop/' + kind && req.method === 'POST') {
