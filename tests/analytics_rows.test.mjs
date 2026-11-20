@@ -9,7 +9,7 @@ import { readFileSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
 import { computeStats } from '../lib/analytics_stats.js';
 import { computeShopStats } from '../lib/shop_stats.js';
-import { ensureSchema, insertEvent, purgeOld, refreshFlags, signalVersion, SIGNAL_SQL } from '../lib/analytics_store.js';
+import { ensureSchema, insertEvent, purgeOld, signalVersion, SIGNAL_SQL } from '../lib/analytics_store.js';
 import { computeStats as legacyStats } from './fixtures/analytics_stats_legacy.mjs';
 import { computeShopStats as legacyShopStats } from './fixtures/shop_stats_legacy.mjs';
 import { EXCLUDE_IIDS } from '../lib/analytics_exclude.js';
@@ -87,30 +87,48 @@ test('/shop-stats is identical to the old SQL', () => {
 
 test('the flag stored at ingest equals the old SQL check on every row', () => {
   const { a } = both(synth(3000));
-  const bad = a.q(`SELECT COUNT(*) n FROM events WHERE internal <> (${SIGNAL_SQL})`)[0].n;
-  assert.equal(bad, 0);
+  const want = a.q(`SELECT rowid AS rid FROM events WHERE ${SIGNAL_SQL} ORDER BY rowid`).map(r => r.rid);
+  assert.ok(want.length > 50);
+  assert.deepEqual(a.q('SELECT rid FROM internal_rows ORDER BY rid').map(r => r.rid), want);
   const flaggedIids = a.q(`SELECT DISTINCT iid FROM events WHERE iid IS NOT NULL AND ${SIGNAL_SQL} ORDER BY iid`).map(r => r.iid);
   assert.deepEqual(a.q('SELECT iid FROM excluded_iids ORDER BY iid').map(r => r.iid), flaggedIids);
+  assert.deepEqual(ensureSchema(a.exec, a.q), { migrated: false, checked: 0 }, 'ingest kept flagged_through current; a wake rechecks nothing');
 });
 
-test('upgrading a pre-change store backfills the flags once and gives the same /stats', () => {
+test('upgrading a pre-change store flags every event once and gives the same /stats', () => {
   const b = legacy();
-  const rows = synth(2000);
-  for (const { ts, r } of rows) b.add(r, ts);
+  for (const { ts, r } of synth(2000)) b.add(r, ts);
   const before = strip(legacyStats(b.q, 30, NOW));
   const exec = (s, ...a) => { b.db.prepare(s).run(...a); };
-  assert.deepEqual(ensureSchema(exec, b.q), { migrated: true });
+  assert.deepEqual(ensureSchema(exec, b.q), { migrated: true, checked: 'all' });
   assert.deepEqual(strip(computeStats(b.q, 30, NOW)), before);
-  assert.deepEqual(ensureSchema(exec, b.q), { migrated: false }, 'second wake does not rescan');
+  assert.deepEqual(ensureSchema(exec, b.q), { migrated: false, checked: 0 }, 'second wake does not rescan');
   assert.equal(b.q(`SELECT v FROM meta WHERE k='signal'`)[0].v, signalVersion());
+});
+
+test('rollback-safe: events written by the old Worker (9-value INSERT) are flagged on the next wake', () => {
+  const rows = synth(2400);
+  const a = store(), b = legacy();
+  const oldInsert = a.db.prepare('INSERT INTO events VALUES (?,?,?,?,?,?,?,?,?)');   // master's Events.add
+  rows.forEach(({ ts, r }, i) => {
+    b.add(r, ts);
+    if (i % 3) insertEvent(a.q, a.exec, r, ts);
+    else oldInsert.run(ts, new Date(ts).toISOString().slice(0, 10), r.event, r.town, r.platform, r.pwa, r.iid, r.sid, JSON.stringify(r.props));
+  });
+  const wake = ensureSchema(a.exec, a.q);
+  assert.equal(wake.migrated, false);
+  assert.ok(wake.checked > 0);
+  assert.deepEqual(strip(computeStats(a.q, 30, NOW)), strip(legacyStats(b.q, 30, NOW)));
 });
 
 test('a changed internal/test rule re-flags stored events on the next wake', () => {
   const { a } = both(synth(800));
-  a.exec('UPDATE events SET internal = 1 - internal');   // flags from some other rule
+  a.exec('DELETE FROM internal_rows');
+  a.exec('DELETE FROM excluded_iids');
   a.exec(`UPDATE meta SET v='old-rule' WHERE k='signal'`);
-  assert.deepEqual(ensureSchema(a.exec, a.q), { migrated: true });
-  assert.equal(a.q(`SELECT COUNT(*) n FROM events WHERE internal <> (${SIGNAL_SQL})`)[0].n, 0);
+  assert.deepEqual(ensureSchema(a.exec, a.q), { migrated: true, checked: 'all' });
+  const want = a.q(`SELECT COUNT(*) n FROM events WHERE ${SIGNAL_SQL}`)[0].n;
+  assert.equal(a.q('SELECT COUNT(*) n FROM internal_rows')[0].n, want);
 });
 
 function planOf(db, sql, params) {
@@ -162,9 +180,12 @@ test('purge drops events past 400 days by day and forgets installs only they exc
   insertEvent(a.q, a.exec, { event: 'session', town: 'sd', platform: 'web', pwa: 0, iid: 'iid-oldtest', sid: 'sess-1', props: { internal: 'sim' } }, old);
   insertEvent(a.q, a.exec, { event: 'session', town: 'sd', platform: 'web', pwa: 0, iid: 'iid-oldtest', sid: 'sess-2', props: {} }, NOW);
   insertEvent(a.q, a.exec, { event: 'session', town: 'sd', platform: 'web', pwa: 0, iid: 'iid-keeptest', sid: 'sess-3', props: { utm_source: 'e2e' } }, NOW);
+  insertEvent(a.q, a.exec, { event: 'session', town: 'sd', platform: 'web', pwa: 0, iid: null, sid: 'sess-4', props: { utm_source: 'test' } }, old);
   assert.deepEqual(a.q('SELECT iid, internal FROM excluded_iids ORDER BY iid').map(plain), [{ iid: 'iid-keeptest', internal: 0 }, { iid: 'iid-oldtest', internal: 1 }]);
-  assert.equal(purgeOld(a.q, a.exec, NOW), 1);
+  assert.equal(a.q('SELECT COUNT(*) n FROM internal_rows')[0].n, 3);
+  assert.equal(purgeOld(a.q, a.exec, NOW), 2);
   assert.deepEqual(a.q('SELECT iid FROM excluded_iids').map(r => r.iid), ['iid-keeptest']);
+  assert.equal(a.q('SELECT COUNT(*) n FROM internal_rows')[0].n, 1, 'purged events leave internal_rows too');
   const plan = planOf(a.db, 'DELETE FROM events WHERE day < ?', ['2025-10-01']).join(' ');
   assert.match(plan, /ev_day/, 'purge uses the day index, not a full scan');
 });
@@ -172,6 +193,7 @@ test('purge drops events past 400 days by day and forgets installs only they exc
 test('Worker: ingest flags once, purges once a day, caches /stats, logs store failures', () => {
   const src = readFileSync(new URL('../workers/analytics/src/index.js', import.meta.url), 'utf8');
   assert.match(src, /insertEvent\(/);
+  assert.doesNotMatch(src, /ALTER TABLE events/, 'events keeps its columns so an older Worker can still insert');
   assert.match(src, /ensureSchema\(/);
   assert.doesNotMatch(src, /DELETE FROM events WHERE ts/, 'old purge read the whole table on 1% of events');
   assert.match(src, /purged_day/);

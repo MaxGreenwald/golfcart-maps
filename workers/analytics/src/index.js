@@ -4,8 +4,8 @@
 //   GET  /stats?days=30          JSON summary for the dashboard   (header x-stats-key or ?k=)
 //   GET  /shop-stats?shop=&days=  one partner shop's activity     (same key; not public)
 // /stats and /shop-stats drop denylisted install ids and internal/test/simulator traffic (lib/analytics_exclude.js).
-// Each event is checked once when stored (events.internal); a change to that file re-flags stored
-// events on the next wake after deploy, so the filter still covers events already stored.
+// Each event is checked once when stored (internal_rows, excluded_iids); a change to that file
+// re-flags stored events on the next wake after deploy, so the filter still covers events already stored.
 //   GET  /daily.csv?days=30      one row per day                  (same key)
 //   GET  /top-iids?town=&days=7   per-iid top-N for one town        (same key; not public)
 // Raw events older than 400 days are deleted (once per UTC day, via the day index).
