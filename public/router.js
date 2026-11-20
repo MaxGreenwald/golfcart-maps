@@ -17,6 +17,7 @@
   // change the 75 ft / 500 ft decision cheaply enough to be worth a second copy of the graph.
   const HOLD_TRAVEL_M = 400;
   const UNKW = 1.8;
+  const AVOIDW = 40; // shop off-limits stretch: only when nothing else connects
   // A miss longer than this is omitted. A short gap may be a dashed stub.
   // Anything longer would be the chord Max saw crossing the La Jolla water.
   const GAP_MAX_M = 70;
@@ -103,7 +104,8 @@
         if (s[3] === 'c') { cnode.add(a); cnode.add(b); }
         // kind: 0 legal, 1 faster-road (75 ft waiver can apply), 2 explicit ban (never waived)
         const kind = c !== 3 ? 0 : explicitBan(s, rule) ? 2 : 1;
-        const wmul = (unk(s) || s[3] === 'q') ? UNKW : 1;
+        // Shop off-limits zones (public/offlimits.js) cost AVOIDW times more: used only when there is no other legal way.
+        const wmul = ((unk(s) || s[3] === 'q') ? UNKW : 1) * (o.avoid && o.avoid(s) ? AVOIDW : 1);
         const geo = s._len;
         if (s[4] >= 0) (adj[a] || (adj[a] = [])).push([b, s._len * wmul, i, false, kind, geo]);
         if (s[4] <= 0) (adj[b] || (adj[b] = [])).push([a, s._len * wmul, i, true, kind, geo]);
@@ -628,14 +630,15 @@
   // Load the region's road tiles and route an ordered stop list.
   // veh is 'golf_cart' or 'lsv' (public/roadrule.js). Risky is off, so no stretch
   // over SHORT_LEGAL_FT. A faster-road jog at or under that length is legal.
-  async function openRegion(region, rules, veh, fetchImpl) {
+  // extra.avoid(seg) -> true for segments in a shop's off-limits zone (renter page only).
+  async function openRegion(region, rules, veh, fetchImpl, extra) {
     const fetchFn = fetchImpl || fetch;
     const base = '/data/' + region.id + '/';
     const Rule = rulesApi();
     const rule = Rule.ruleFor(rules, region, veh || Rule.DEFAULT_VEH);
     const cls = s => Rule.cls(s, rule);
     const unk = s => region.id !== 'sd' && region.id !== 'villages' && s[3] === 'i' && /^(secondary|tertiary|unclassified)/.test(s[1]) && cls(s) !== 3;
-    const o = { cls, unk, rule, risky: false, G };
+    const o = { cls, unk, rule, risky: false, G, avoid: (extra && typeof extra.avoid === 'function') ? extra.avoid : null };
     const indexRes = await fetchFn(base + 'index.json');
     if (!indexRes.ok) throw new Error('road index');
     const index = await indexRes.json();
@@ -737,7 +740,7 @@
     return { legs, trip, reachable, streets, rule, veh: rule.veh, cover: ensure, segments: () => D.segs, roadStyle };
   }
 
-  const api = { UTURN_M, aheadStart, bearingDeg, G, RISKY_MAX, SHORT_LEGAL_FT, ROUTE_BUDGET_MS, ROUTE_STATE_BUDGET, HOLD_TRAVEL_M, UNKW, GAP_MAX_M, hav, len, shownFeet, explicitBan, riskyMask, create, geometry, namedRuns, bucketize, routePair, tilesIn, graphOpts, openRegion };
+  const api = { AVOIDW, UTURN_M, aheadStart, bearingDeg, G, RISKY_MAX, SHORT_LEGAL_FT, ROUTE_BUDGET_MS, ROUTE_STATE_BUDGET, HOLD_TRAVEL_M, UNKW, GAP_MAX_M, hav, len, shownFeet, explicitBan, riskyMask, create, geometry, namedRuns, bucketize, routePair, tilesIn, graphOpts, openRegion };
   if (typeof module === 'object' && module.exports) module.exports = api;
   root.GCMRouter = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

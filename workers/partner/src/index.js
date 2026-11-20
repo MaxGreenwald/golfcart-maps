@@ -1,6 +1,7 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
+import offlimits from '../../../public/offlimits.js';
 import roadrule from '../../../public/roadrule.js';
 import quizLib from '../../../public/quiz.js';
 import sales from '../../../public/sales.js';
@@ -171,6 +172,13 @@ export class PartnerStore extends DurableObject {
         PRIMARY KEY (shop_id, bucket)
       )
     `);
+    // Off-limits zones a shop draws (areas or road segments). Renters see them; the router avoids them.
+    this.sql.exec(`
+      CREATE TABLE IF NOT EXISTS offlimits(
+        id TEXT PRIMARY KEY, shop_id TEXT NOT NULL, kind TEXT NOT NULL, name TEXT NOT NULL,
+        note TEXT NOT NULL DEFAULT '', points_json TEXT NOT NULL, created_at INTEGER NOT NULL
+      )
+    `);
     // Rules quiz: the shop turns it on; each pass is kept (code, time, quiz version) as the shop's record.
     const qzCols = this.sql.exec('PRAGMA table_info(shops)').toArray().map(c => c.name);
     if (!qzCols.includes('quiz_on')) this.sql.exec('ALTER TABLE shops ADD COLUMN quiz_on INTEGER DEFAULT 0');
@@ -192,6 +200,12 @@ export class PartnerStore extends DurableObject {
       )
     `);
   }
+  offRow(r) {
+    let points = [];
+    try { points = JSON.parse(r.points_json || '[]'); } catch { points = []; }
+    return { id: r.id, kind: r.kind, name: r.name, note: r.note || '', points, created_at: r.created_at };
+  }
+  offlimits(sid) { return this.q('SELECT * FROM offlimits WHERE shop_id=? ORDER BY created_at', sid).map(r => this.offRow(r)); }
   q(s, ...a) { return this.sql.exec(s, ...a).toArray(); }
   one(s, ...a) { return this.q(s, ...a)[0] || null; }
 
@@ -300,6 +314,7 @@ export class PartnerStore extends DurableObject {
       unlocked: true,
       shop: { ...shop, rental: rentalFromRow(sh.rental_json) },
       experiences, affiliates, places: this.places(sh.id), code: c.code,
+      offlimits: this.offlimits(sh.id),
       cart: c.cart_label || '',
     };
     // A booked renter's own return time drives the in-app "head back" banner. No contact details.
@@ -453,6 +468,7 @@ export class PartnerStore extends DurableObject {
           experiences: this.q('SELECT * FROM experiences WHERE shop_id=? ORDER BY created_at DESC', sid).map(r => this.expRow(r)),
           affiliates: this.q('SELECT * FROM affiliates WHERE shop_id=? ORDER BY created_at DESC', sid).map(r => this.affRow(r)),
           places: this.places(sid),
+          offlimits: this.offlimits(sid),
           codes: this.q('SELECT code,shop_id,experience_id,multi_use,max_uses,uses,expires_at,created_at,cart_label FROM codes WHERE shop_id=? ORDER BY created_at DESC', sid),
         });
       }
@@ -502,9 +518,34 @@ export class PartnerStore extends DurableObject {
         }
         return J({ experience: this.expRow(this.one('SELECT * FROM experiences WHERE id=?', eid)), pushed });
       }
-      if (path.match(/^\/(experiences|affiliates|places|bookings|reports)\/[^/]+\/owner$/) && method === 'GET') {
+      // Off-limits zones
+      if (path.match(/^\/shops\/[^/]+\/offlimits$/) && method === 'POST') {
+        const sid = path.split('/')[2];
+        if (!this.one('SELECT id FROM shops WHERE id=?', sid)) return J({ error: 'not found' }, 404);
+        const c = offlimits.clean(body);
+        if (c.error) return J({ error: c.error }, 400);
+        if (this.one('SELECT COUNT(*) n FROM offlimits WHERE shop_id=?', sid).n >= offlimits.MAX_ZONES) return J({ error: 'Up to ' + offlimits.MAX_ZONES + ' off-limits zones per shop' }, 400);
+        const oid = id();
+        this.sql.exec('INSERT INTO offlimits(id,shop_id,kind,name,note,points_json,created_at) VALUES(?,?,?,?,?,?,?)', oid, sid, c.zone.kind, c.zone.name, c.zone.note, JSON.stringify(c.zone.points), now());
+        return J({ zone: this.offRow(this.one('SELECT * FROM offlimits WHERE id=?', oid)) }, 201);
+      }
+      if (path.match(/^\/offlimits\/[^/]+$/) && method === 'PATCH') {
+        const oid = path.split('/')[2];
+        const cur = this.one('SELECT * FROM offlimits WHERE id=?', oid);
+        if (!cur) return J({ error: 'not found' }, 404);
+        const was = this.offRow(cur);
+        const c = offlimits.clean({ kind: was.kind, name: body.name ?? was.name, note: body.note ?? was.note, points: body.points ?? was.points });
+        if (c.error) return J({ error: c.error }, 400);
+        this.sql.exec('UPDATE offlimits SET name=?, note=?, points_json=? WHERE id=?', c.zone.name, c.zone.note, JSON.stringify(c.zone.points), oid);
+        return J({ zone: this.offRow(this.one('SELECT * FROM offlimits WHERE id=?', oid)) });
+      }
+      if (path.match(/^\/offlimits\/[^/]+$/) && method === 'DELETE') {
+        this.sql.exec('DELETE FROM offlimits WHERE id=?', path.split('/')[2]);
+        return J({ ok: true });
+      }
+      if (path.match(/^\/(experiences|affiliates|places|offlimits|bookings|reports)\/[^/]+\/owner$/) && method === 'GET') {
         const [, tbl, rid] = path.split('/');
-        const table = { experiences: 'experiences', affiliates: 'affiliates', places: 'places', bookings: 'bookings', reports: 'reports' }[tbl];
+        const table = { experiences: 'experiences', affiliates: 'affiliates', places: 'places', offlimits: 'offlimits', bookings: 'bookings', reports: 'reports' }[tbl];
         const r = this.one(`SELECT shop_id FROM ${table} WHERE id=?`, rid);
         return J({ shop_id: r ? r.shop_id : null });
       }
@@ -1330,7 +1371,7 @@ export default {
       if (!a.shopId) return deny(a);
       return send('/shops/' + a.shopId + '/fleet', 'POST', { carts: body.carts, expires_days: body.expires_days });
     }
-    for (const kind of ['experiences', 'affiliates', 'places', 'codes']) {
+    for (const kind of ['experiences', 'affiliates', 'places', 'codes', 'offlimits']) {
       if (u.pathname === '/shop/' + kind && req.method === 'POST') {
         const body = await readBody();
         const a = await access(body);
@@ -1338,7 +1379,7 @@ export default {
         return send('/shops/' + a.shopId + '/' + kind, 'POST', body);
       }
     }
-    const rm = u.pathname.match(/^\/shop\/(experiences|affiliates|places)\/([^/]+)$/);
+    const rm = u.pathname.match(/^\/shop\/(experiences|affiliates|places|offlimits)\/([^/]+)$/);
     if (rm && (req.method === 'PATCH' || req.method === 'DELETE')) {
       const body = req.method === 'PATCH' ? await readBody() : undefined;
       const a = await access(body, rm[1] + '/' + rm[2]);
