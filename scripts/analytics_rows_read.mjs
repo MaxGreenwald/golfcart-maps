@@ -66,5 +66,5 @@ for (const set of [r, o]) for (const p of ['/stats?days=7', '/stats?days=30', '/
 if (r.after['/stats?days=7'].rows * 10 > r.before['/stats?days=7'].rows) fails.push('/stats?days=7 did not drop 10x');
 if (o.after['/stats?days=7'].rows > r.after['/stats?days=7'].rows * 1.05 + 100) fails.push('/stats?days=7 still grows with history outside the window');
 if (r.after.cached_repeat.rows > r.after['/stats?days=7'].rows) fails.push('/stats repeat within 5 min was not cached');
-console.log(fails.length ? 'FAIL\n- ' + fails.join('\n- ') : 'OK: outputs identical before/after; reads bounded by the window');
+console.log(fails.length ? 'FAIL\n- ' + fails.join('\n- ') : 'PASS outputs identical before and after; reads bounded by the day window');
 if (CHECK && fails.length) process.exit(1);
