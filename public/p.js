@@ -948,7 +948,7 @@ function freeMode(on) {
 }
 function setGoNote(t) { const el = document.getElementById('goNote'); if (el) el.textContent = t; }
 async function pickDest(d) {
-  freeDest = { label: d.name || 'Dropped pin', lat: +d.lat, lon: +d.lon };
+  freeDest = { label: d.name || 'Dropped pin', lat: +d.lat, lon: +d.lon, back: !!d.back };
   const sg = document.getElementById('goSugg'); if (sg) sg.innerHTML = '';
   const inp = document.getElementById('goQ'); if (inp) inp.value = freeDest.label;
   if (freeMark) map.removeLayer(freeMark);
@@ -1301,6 +1301,8 @@ async function unlockedView() {
     });
   }
   armNudges();
+  // The "head back soon" email links here with back=1: open straight to the route back.
+  if (params.get('back') === '1' && map) routeBack().catch(() => {});
 }
 
 // Return-by and range reminders. The shop sets return_by (HH:MM), range_mi, and a return spot.
@@ -1318,7 +1320,23 @@ function paintNudge(lines) {
   if (!el) return;
   if (!lines || !lines.length) { el.hidden = true; el.textContent = ''; return; }
   el.hidden = false;
-  el.textContent = lines.map(n => n.text).join(' ');
+  const s = (unlocked && unlocked.shop) || {};
+  const canRoute = finite(s.return_lat, s.return_lon) && !(freeOn && freeDest && freeDest.back);
+  el.innerHTML = `<span class="nudge-text">${esc(lines.map(n => n.text).join(' '))}</span>` +
+    (canRoute ? '<button type="button" id="nudgeBack" class="nudge-back">Route me back</button>' : '');
+  const b = document.getElementById('nudgeBack');
+  if (b) b.onclick = () => { routeBack(); };
+}
+// Cart-legal route to the shop's return spot, through the same free-route nav as any destination.
+async function routeBack() {
+  const s = (unlocked && unlocked.shop) || {};
+  if (!finite(s.return_lat, s.return_lon) || !map) return false;
+  freeMode(true);
+  freeRisky = false;
+  document.querySelectorAll('#goMode button').forEach(x => x.setAttribute('aria-pressed', x.dataset.mode === 'legal' ? 'true' : 'false'));
+  const el = document.getElementById('nudgeBack'); if (el) el.remove();
+  await pickDest({ name: 'Return spot: ' + ((s.rental && s.rental.return_spot) || s.name || 'shop'), lat: +s.return_lat, lon: +s.return_lon, back: true });
+  return true;
 }
 function voiceBusy() {
   return !!(navVoice && (navVoice.speaking() || navVoice.pending()));
@@ -1342,7 +1360,8 @@ async function homeTrip() {
 async function refreshNudge() {
   if (!window.GCMRemind || !unlocked || !unlocked.shop) { paintNudge([]); return 60000; }
   const s = unlocked.shop;
-  const hasTime = !!s.return_by;
+  const plan = GCMRemind.returnPlan ? GCMRemind.returnPlan(s, unlocked.booking) : { returnBy: s.return_by || '' };
+  const hasTime = GCMRemind.hasReturnTime ? GCMRemind.hasReturnTime(plan) : !!s.return_by;
   const hasRange = +s.range_mi > 0;
   if (!hasTime && !hasRange) { paintNudge([]); return 60000; }
   if (!meLL) { const loc = await locateMe(); if (loc) { meLL = loc; placeMe(); } }
@@ -1351,7 +1370,9 @@ async function refreshNudge() {
   if (pinned && !trip) return 5000;
   const lines = GCMRemind.nudges({
     now: new Date(),
-    returnBy: s.return_by,
+    returnBy: plan.returnBy,
+    returnAt: plan.returnAt,
+    leadMin: plan.leadMin,
     travelMin: trip ? trip.travelMin : (hasTime ? 0 : null),
     homeMi: trip ? trip.homeMi : null,
     rangeMi: s.range_mi,
@@ -1407,7 +1428,7 @@ async function boot() {
       if (!handoffParam) trackShop('partner_unlock', { code: j.code || codeParam });
       // CarPlay Experiences (public/carplay.js experiences()) reads this to show the shop's rides in the car.
       // The whole unlock answer is saved because unlock counts a use (single-use codes would fail a second call).
-      try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, cart: j.cart || '', at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates })); } catch (e) {}
+      try { localStorage.setItem('gcm_partner_access', JSON.stringify({ slug, code: j.code || codeParam, cart: j.cart || '', at: Date.now(), shop: j.shop, experiences: j.experiences, affiliates: j.affiliates, booking: j.booking || null })); } catch (e) {}
       try { if (j.grant) localStorage.setItem(GRANT_KEY, j.grant); } catch (_) {}
 
       await unlockedView();

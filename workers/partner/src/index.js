@@ -6,7 +6,7 @@ import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, sho
 import { fetchShopStats } from '../../../lib/shop_stats.js';
 import { handlePlacesRequest, quotaBuckets, quotaAllowed } from '../../../lib/partner_places.js';
 import { sameTown, pushStops, brandFields, experiencePayload } from '../../../lib/partner_templates.js';
-import { cleanBooking, bookingRow, rulesLines, welcomeEmail, welcomeSms, BOOKING_KEEP_DAYS, validZone } from '../../../lib/partner_bookings.js';
+import { cleanBooking, bookingRow, rulesLines, welcomeEmail, welcomeSms, BOOKING_KEEP_DAYS, validZone, cleanRemindMin, remindMinutes, remindAt, reminderAction, reminderEmail, backLink, DEFAULT_REMIND_MIN } from '../../../lib/partner_bookings.js';
 import { sendMail, mailState } from '../../../lib/partner_mail.js';
 import { sendSms, smsProvider } from '../../../lib/partner_sms.js';
 import { cleanReport, reportPhotoKey, reportEmail, reportRow, REPORT_KINDS, REPORT_KEEP_DAYS, REPORTS_PER_CODE_DAY } from '../../../lib/partner_reports.js';
@@ -152,6 +152,14 @@ export class PartnerStore extends DurableObject {
         created_at INTEGER NOT NULL
       )
     `);
+    // Return-time reminders: the shop picks how many minutes before return; each booking with an
+    // email gets one "head back soon" email from the Durable Object alarm.
+    if (!cols.includes('remind_min')) this.sql.exec('ALTER TABLE shops ADD COLUMN remind_min INTEGER DEFAULT ' + DEFAULT_REMIND_MIN);
+    const bkCols = this.sql.exec('PRAGMA table_info(bookings)').toArray().map(c => c.name);
+    if (!bkCols.includes('remind_at')) this.sql.exec('ALTER TABLE bookings ADD COLUMN remind_at INTEGER');
+    if (!bkCols.includes('remind_status')) this.sql.exec("ALTER TABLE bookings ADD COLUMN remind_status TEXT DEFAULT 'none'");
+    if (!bkCols.includes('reminded_at')) this.sql.exec('ALTER TABLE bookings ADD COLUMN reminded_at INTEGER');
+    if (!bkCols.includes('link_origin')) this.sql.exec("ALTER TABLE bookings ADD COLUMN link_origin TEXT DEFAULT ''");
     // Fleet stickers: the cart number a code is printed for. Empty for desk codes.
     const codeCols = this.sql.exec('PRAGMA table_info(codes)').toArray().map(c => c.name);
     if (!codeCols.includes('cart_label')) this.sql.exec("ALTER TABLE codes ADD COLUMN cart_label TEXT DEFAULT ''");
@@ -175,6 +183,39 @@ export class PartnerStore extends DurableObject {
   }
   q(s, ...a) { return this.sql.exec(s, ...a).toArray(); }
   one(s, ...a) { return this.q(s, ...a)[0] || null; }
+
+  /** Point the alarm at the next scheduled reminder, or clear it. */
+  async armReminders() {
+    const next = this.one("SELECT MIN(remind_at) AS t FROM bookings WHERE remind_status='scheduled'");
+    if (next && next.t != null) await this.ctx.storage.setAlarm(Math.max(Number(next.t) * 1000, Date.now() + 1000));
+    else await this.ctx.storage.deleteAlarm();
+  }
+
+  /** Send every due "head back soon" email. Mail off: the row says so and nothing is sent. */
+  async alarm() {
+    const t = now();
+    for (const row of this.q("SELECT * FROM bookings WHERE remind_status='scheduled' AND remind_at<=?", t)) {
+      const act = reminderAction(row, t);
+      if (act === 'late') {
+        this.sql.exec("UPDATE bookings SET remind_status='late' WHERE id=?", row.id);
+        continue;
+      }
+      if (act !== 'send') continue;
+      const sh = this.one('SELECT * FROM shops WHERE id=?', row.shop_id);
+      if (!sh || !row.email || !row.link_origin) {
+        this.sql.exec("UPDATE bookings SET remind_status='none' WHERE id=?", row.id);
+        continue;
+      }
+      const shop = this.shopRow(sh, { rental: true });
+      const link = backLink(row.link_origin, sh.slug, row.code);
+      const mail = reminderEmail({ shop, booking: row, link, minutes: remindMinutes(sh) });
+      // Claim the row first so a retried alarm cannot send twice.
+      this.sql.exec("UPDATE bookings SET remind_status='sending' WHERE id=?", row.id);
+      const res = await sendMail(this.env, { to: row.email, subject: mail.subject, html: mail.html, text: mail.text, reply_to: shop.owner_email });
+      this.sql.exec('UPDATE bookings SET remind_status=?, reminded_at=? WHERE id=?', res.status, now(), row.id);
+    }
+    await this.armReminders();
+  }
 
   takePlacesQuota(sid, kind, nowMs) {
     const allowedKind = kind === 'autocomplete' || kind === 'details' ? kind : '';
@@ -212,6 +253,7 @@ export class PartnerStore extends DurableObject {
       return_lon: Number.isFinite(r.return_lon) ? r.return_lon : null,
       phone: r.phone || '',
       page_template_id: r.page_template_id || '',
+      remind_min: remindMinutes(r),
     };
     if (opts && opts.rental) row.rental = rentalFromRow(r.rental_json);
     if (opts && opts.rental) row.sales = sales.fromRow(r.sales_json);
@@ -248,6 +290,9 @@ export class PartnerStore extends DurableObject {
       experiences, affiliates, places: this.places(sh.id), code: c.code,
       cart: c.cart_label || '',
     };
+    // A booked renter's own return time drives the in-app "head back" banner. No contact details.
+    const bk = this.one('SELECT return_at, tz FROM bookings WHERE shop_id=? AND code=? AND return_at>=? ORDER BY return_at LIMIT 1', sh.id, c.code, now() - 6 * 3600);
+    if (bk) out.booking = { return_at: bk.return_at, tz: bk.tz, remind_min: remindMinutes(sh) };
     if (withGrant) {
       out.grant = randomToken(24);
       this.sql.exec('INSERT INTO grants(grant,shop_id,code,expires_at) VALUES(?,?,?,?)', out.grant, sh.id, c.code, grantExpiry(now(), c.expires_at));
@@ -324,6 +369,13 @@ export class PartnerStore extends DurableObject {
         const ph = cleanPhone(body.phone !== undefined ? body.phone : null);
         if (ph.error) return J({ error: ph.error }, 400);
         const phone = ph.skip ? (sh.phone || '') : ph.value;
+        const rm = cleanRemindMin(body.remind_min);
+        if (rm.error) return J({ error: rm.error }, 400);
+        if (!rm.skip) {
+          this.sql.exec('UPDATE shops SET remind_min=? WHERE id=?', rm.value, sid);
+          this.sql.exec("UPDATE bookings SET remind_at=return_at-? WHERE shop_id=? AND remind_status='scheduled'", rm.value * 60, sid);
+          await this.armReminders();
+        }
         this.sql.exec(
           'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=?, rental_json=?, return_by=?, range_mi=?, return_lat=?, return_lon=?, phone=? WHERE id=?',
           name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, rental_json, return_by, range_mi, return_lat, return_lon, phone, sid,
@@ -657,9 +709,11 @@ export class PartnerStore extends DurableObject {
         }
         const bid = id();
         this.sql.exec(
-          'INSERT INTO bookings(id,shop_id,renter_name,email,phone,return_at,tz,code,welcome_status,sms_status,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)',
+          'INSERT INTO bookings(id,shop_id,renter_name,email,phone,return_at,tz,code,welcome_status,sms_status,created_at,remind_at,remind_status,link_origin) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
           bid, sid, bk.renter_name, bk.email, bk.phone, bk.return_at, bk.tz, code, 'pending', bk.phone ? 'pending' : 'none', now(),
+          remindAt(bk.return_at, remindMinutes(sh)), bk.email ? 'scheduled' : 'none', String((body && body.link_origin) || ''),
         );
+        await this.armReminders();
         this.sql.exec('DELETE FROM bookings WHERE return_at<?', now() - BOOKING_KEEP_DAYS * 86400);
         return J({ booking: bookingRow(this.one('SELECT * FROM bookings WHERE id=?', bid)), shop: this.shopRow(sh, { rental: true }) }, 201);
       }
@@ -684,6 +738,7 @@ export class PartnerStore extends DurableObject {
       }
       if (path.match(/^\/bookings\/[^/]+$/) && method === 'DELETE') {
         this.sql.exec('DELETE FROM bookings WHERE id=?', path.split('/')[2]);
+        await this.armReminders();
         return J({ ok: true });
       }
       // Problem reports. The renter's code must be live for the shop; at most 5 a code a day.
@@ -1191,7 +1246,7 @@ export default {
       const body = await readBody();
       const a = await access(body);
       if (!a.shopId) return deny(a);
-      const made = await send('/shops/' + a.shopId + '/bookings', 'POST', body);
+      const made = await send('/shops/' + a.shopId + '/bookings', 'POST', { ...(body || {}), link_origin: originOf(req, env) });
       const j = await made.json();
       if (!made.ok) return J(j, made.status);
       return J(await deliver(j.shop, j.booking), 201);

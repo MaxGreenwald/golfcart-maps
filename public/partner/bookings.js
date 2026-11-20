@@ -32,6 +32,16 @@
       return new Intl.DateTimeFormat('en-US', { timeZone: b.tz, hour: 'numeric', minute: '2-digit', weekday: 'short', month: 'short', day: 'numeric' }).format(new Date(b.return_at * 1000));
     } catch (e) { return new Date(b.return_at * 1000).toLocaleString(); }
   }
+  // "Head back soon" email status for one booking.
+  function remindPill(b) {
+    const at = b.remind_at ? whenLabel({ return_at: b.remind_at, tz: b.tz }) : '';
+    const txt = {
+      scheduled: (info.mail && info.mail.on) ? 'Reminder ' + at : 'Reminder email off',
+      sending: 'Reminder sending', sent: 'Reminder sent', off: 'Reminder email off',
+      failed: 'Reminder failed', late: 'Reminder skipped (past return)',
+    }[b.remind] || '';
+    return txt ? `<span class="pill" data-remind="${esc(b.remind)}">${esc(txt)}</span>` : '';
+  }
   function linkFor(b) {
     const s = state.shopBundle && state.shopBundle.shop;
     return location.origin + '/p/' + encodeURIComponent((s && s.slug) || '') + '/go?code=' + encodeURIComponent(b.code);
@@ -46,7 +56,8 @@
         <td><b>${esc(b.renter_name)}</b><div class="muted">${esc(b.email)}${b.phone ? ' · ' + esc(b.phone) : ''}</div>
           <div class="muted">Code <code>${esc(b.code)}</code></div></td>
         <td>Return ${esc(whenLabel(b))}<div><span class="pill ${st[0]}" data-welcome="${esc(b.welcome)}">${esc(st[1])}</span>
-          ${b.phone ? `<span class="pill" data-sms="${esc(b.sms)}">${b.sms === 'sent' ? 'Texted' : 'Text: not set up'}</span>` : ''}</div></td>
+          ${b.phone ? `<span class="pill" data-sms="${esc(b.sms)}">${b.sms === 'sent' ? 'Texted' : 'Text: not set up'}</span>` : ''}
+          ${remindPill(b)}</div></td>
         <td><div class="ex-actions">
           <button class="btn alt" type="button" data-bk-copy="${esc(b.id)}">Copy link</button>
           <button class="btn alt" type="button" data-bk-resend="${esc(b.id)}">Resend</button>
