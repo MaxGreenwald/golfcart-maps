@@ -1,21 +1,36 @@
 {
  "unverified": [
   "Region cap 25 mph (Max 2026-10-14): roads posted 26+ blocked. Designated-street list itself not digitized; \u226425 roads treated as OK.",
-  "Orange Beach list OCR'd from Ord. 2024-1487 PDF (some names garbled, left column partly missing; 2025-1521 amendment not read). Orange Beach treated designated-only; city boundary approximated at lon -87.615.",
+  "Orange Beach list OCR'd from Ord. 2024-1487 PDF (some names garbled, left column partly missing). Ord. 2025-1521 (adopted Nov 4, 2025) re-enacts Article VIII; 70-275(c) still bans operation on non-designated streets, roads, and highways, adds no crossing exception for AL 180, and does not designate the Canal Road Multi-Use Trail as a multi-use cart path. Orange Beach treated designated-only; city boundary approximated at lon -87.615.",
   "Gulf Shores: state-tagged LSVs may use any street posted <=25 (Sec. 21-13(c)); designated list marked for display. Street-segment limits in the list (e.g. 'stops @ W 1st St') applied to whole street."
  ],
  "bans": [
   {
-   "names": "^(SR|AL) ?(59|180|182|161|135)\\b|Gulf Shores P|Perdido Beach B|Canal R|Foley Beach Exp|Beach Express",
+   "names": "^(SR|AL) ?(59|182|161|135)\\b|Gulf Shores P|Perdido Beach B|Foley Beach Exp|Beach Express",
    "url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110",
-   "label": "State highways (AL 59/180/182/161) \u2013 not designated cart streets"
+   "label": "State highways (AL 59/182/161) \u2013 not designated cart streets"
+  },
+  {
+   "names": "^(SR|AL) ?180\\b|Canal R|Fort Morgan R",
+   "url": "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110",
+   "label": "State highway AL 180 / Canal Rd / Fort Morgan Rd: not a designated cart street (Gulf Shores)",
+   "bbox": [30.22, -87.8, 30.32, -87.615],
+   "per_segment": true
+  },
+  {
+   "names": "^(SR|AL) ?180\\b|Canal R",
+   "url": "https://www.orangebeachal.gov/DocumentCenter/View/5105/Ordinance-Number-2024-1487-Amending-Chapter-70-Article-VIII-Golf-Carts-PDF",
+   "label": "Orange Beach Sec. 70-275(c) (Ord. 2024-1487; Ord. 2025-1521): Canal Road / AL 180 is not a designated cart street",
+   "bbox": [30.22, -87.615, 30.32, -87.5],
+   "per_segment": true
   }
  ],
  "sources": [
   "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15481?fileID=45110 (Ord. Apr 13 2026: state-tagged carts/LSVs not on streets posted >25)",
   "https://www.gulfshoresal.gov/AgendaCenter/ViewFile/Item/15531?fileID=45381 (designated cart streets list)",
   "https://www.orangebeachal.gov/DocumentCenter/View/592/ (Ala. Const. Baldwin Co. \u00a71.570: no cart street >25 mph)",
-  "https://library.municode.com/al/orange_beach/ordinances/code_of_ordinances?nodeId=2025 (Ord. 2025-1521 carts; SR 182 35 mph segment)"
+  "https://www.orangebeachal.gov/DocumentCenter/View/5105/Ordinance-Number-2024-1487-Amending-Chapter-70-Article-VIII-Golf-Carts-PDF (Ord. 2024-1487: Sec. 70-275(c) ban on non-designated streets)",
+  "https://library.municode.com/al/orange_beach/ordinances/code_of_ordinances?nodeId=2025 (Ord. 2025-1521, adopted Nov 4 2025: re-enacts Ch. 70 Art. VIII; 70-275(c) still bans non-designated streets; no AL 180 crossing exception; no Canal Road trail designation)"
  ],
  "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=gulfshores loads it",
  "region_cap_mph": 25,
