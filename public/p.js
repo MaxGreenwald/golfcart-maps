@@ -40,6 +40,24 @@ function trackShop(e, props) {
 }
 
 let map, pins = null, routeLayer = null, liveLayer = null, regions = [], region = null, rules = null;
+// Seasonal rides (public/season.js) show only between the shop's dates, by this device's date.
+// Español / English toggle (public/i18n.js swaps the words). The shop's own Spanish rules and the
+// season dates are rendered here, so repaint them when the language flips.
+(function wireLang() {
+  const b = document.getElementById('langBtn');
+  if (b && window.GCMLang) b.onclick = () => GCMLang.set(GCMLang.lang() === 'es' ? 'en' : 'es');
+  window.addEventListener('gcm-lang', () => {
+    const card = document.getElementById('rentalCard');
+    if (card && unlocked && unlocked.shop) card.outerHTML = rentalCard(unlocked.shop) || '';
+    document.querySelectorAll('.chip.season').forEach(c => {
+      c.textContent = GCMSeason.label({ starts_on: c.dataset.from, ends_on: c.dataset.until }, GCMLang.lang());
+    });
+  });
+})();
+function seasonal(a) {
+  if (!a || !Array.isArray(a.experiences) || !window.GCMSeason) return a;
+  return { ...a, experiences: a.experiences.filter(e => GCMSeason.inSeason(e)) };
+}
 let unlocked = null, activeEx = null, stopIdx = 0, drawToken = 0, startToken = 0;
 // baseEx: the partner's experience as saved. activeEx: the same ride in visit order (nearest-stop start, Max t441u).
 let baseEx = null, riderShopOrder = false;
@@ -213,13 +231,14 @@ function rentalCard(shop) {
     const v = String(value || '').trim();
     if (!v) return;
     const inner = href ? `<a href="${esc(href)}">${esc(v)}</a>` : esc(v);
-    rows.push(`<div><dt>${label}</dt><dd>${inner}</dd></div>`);
+    rows.push(`<div><dt>${label}</dt><dd translate="no">${inner}</dd></div>`);
   };
   add('Pickup', r.pickup);
   add('Return', r.return_spot);
   add('Return by', r.return_by);
   add('Shop phone', r.phone, telHref(r.phone));
-  add('Cart rules', r.rules);
+  const es = window.GCMLang && GCMLang.lang() === 'es' && String(r.rules_es || '').trim();
+  add('Cart rules', es ? r.rules_es : r.rules);
   add('If the cart dies', r.if_cart_dies);
   if (!rows.length) return '';
   return `<section class="rental" id="rentalCard"><h2 class="sec">Your rental</h2><dl>${rows.join('')}</dl></section>`;
@@ -757,7 +776,7 @@ function say(text) {
   if (follow && !follow.state().navigating) return;
   if (navMuted || !text || text === navSpoken) return;
   navSpoken = text;
-  navVoice.say(text);
+  navVoice.say(window.GCMLang ? GCMLang.t(text) : text);
 }
 // Shop note for this stop, spoken after the arrival callout. Same voice (mute + ducking).
 let navStory = '';
@@ -1347,11 +1366,11 @@ async function unlockedView() {
       <h2 class="sec">Experiences</h2>
       <p class="subsec">Tap one. Its stops light up on the map.</p>
       ${ex.map((e, i) => `<button class="xcard" type="button" data-ex="${esc(e.id)}" aria-pressed="false">
-        <span class="xmeta"><span class="num">${String(i + 1).padStart(2, '0')}</span><span class="chip">${(e.stops || []).length} ${(e.stops || []).length === 1 ? 'stop' : 'stops'}</span></span>
-        <span class="xtitle">${esc(e.title)}</span>
-        ${e.description ? `<span class="xdesc">${esc(e.description)}</span>` : ''}
+        <span class="xmeta"><span class="num">${String(i + 1).padStart(2, '0')}</span><span class="chip">${(e.stops || []).length} ${(e.stops || []).length === 1 ? 'stop' : 'stops'}</span>${window.GCMSeason && GCMSeason.label(e) ? `<span class="chip season" translate="no" data-from="${esc(e.starts_on || '')}" data-until="${esc(e.ends_on || '')}">${esc(GCMSeason.label(e, window.GCMLang ? GCMLang.lang() : 'en'))}</span>` : ''}</span>
+        <span class="xtitle" translate="no">${esc(e.title)}</span>
+        ${e.description ? `<span class="xdesc" translate="no">${esc(e.description)}</span>` : ''}
         <span class="xgo">Show stops</span>
-      </button>`).join('') || '<p class="fine">No rides pinned yet. Ask the shop — partner offers may still be on the map.</p>'}
+      </button>`).join('') || '<p class="fine">No rides pinned yet. Ask the shop. Partner offers may still be on the map.</p>'}
       <div class="offers"><h2 class="sec">Partner offers</h2>
       ${af.map(a => `<button class="ocard" type="button" data-af="${esc(a.id)}">
         <span class="star" aria-hidden="true">★</span>
@@ -1536,7 +1555,7 @@ async function boot() {
         renderLocked(j.shop ? { shop: j.shop } : null, j.error || 'Could not unlock');
         return;
       }
-      unlocked = j;
+      unlocked = seasonal(j);
       // A handoff redeem does not spend a code, so it is not another unlock.
       if (!handoffParam) trackShop('partner_unlock', { code: j.code || codeParam });
       // CarPlay Experiences (public/carplay.js experiences()) reads this to show the shop's rides in the car.
@@ -1548,7 +1567,7 @@ async function boot() {
       addAppButton();
     } else if (savedAccess()) {
       // Unlocked earlier (rental code in Settings, or a code link): show it again without another code use.
-      unlocked = savedAccess();
+      unlocked = seasonal(savedAccess());
       await unlockedView();
     } else {
       const r = await fetch(`${API}/public/${encodeURIComponent(slug)}`);

@@ -94,7 +94,7 @@ window.GCMCarPlay={
  // Experiences for the renter access on this phone, or {ok:false,reason}. vehicle: the shop's rules (golf_cart unless 'lsv').
  async experiences(){const x=await xpLoad();if(!x.ok)return x;const j=x.j,sh=j.shop||{};
   return {ok:true,shop:{slug:x.slug,name:sh.name||'',vehicle:sh.vehicle==='lsv'?'lsv':'golf_cart'},
-   experiences:(j.experiences||[]).map(e=>({id:String(e.id),title:e.title||'Experience',stops:(e.stops||[]).filter(s=>isFinite(+s.lat)&&isFinite(+s.lon)&&s.lat!==null&&s.lon!==null).length})).filter(e=>e.stops>0),
+   experiences:(j.experiences||[]).filter(e=>!window.GCMSeason||GCMSeason.inSeason(e)).map(e=>({id:String(e.id),title:e.title||'Experience',stops:(e.stops||[]).filter(s=>isFinite(+s.lat)&&isFinite(+s.lon)&&s.lat!==null&&s.lon!==null).length})).filter(e=>e.stops>0),
    offers:(j.affiliates||[]).map(a=>({name:a.name||'',offer:a.offer||'',coupon:a.coupon||''}))}},
  // Ordered stops of one experience with distance from lat/lon (meters, null without a fix). coupon: the matching partner offer's code, if any.
  async stops(id,lat,lon){const x=await xpLoad();if(!x.ok)return x;const e=(x.j.experiences||[]).find(e=>String(e.id)===String(id));if(!e)return {ok:false,reason:'Experience not found'};
