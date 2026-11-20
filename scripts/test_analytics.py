@@ -11,7 +11,7 @@ URL = os.environ.get("URL", "http://localhost:8765/").rstrip("/") + "/"
 # webdriver is true under Playwright. Production treats that as e2e and does not send.
 # This run is the real-user path, so force webdriver off. The e2e cases below turn it back on.
 SINK = "window.GCM_TRACK_SINK=()=>{};try{Object.defineProperty(navigator,'webdriver',{configurable:true,get:()=>false})}catch(e){}"
-A, B = (32.9595, -117.2655), (32.9918, -117.2717)          # Del Mar Plaza -> Fletcher Cove
+A, B = (33.0650, -117.3030), (33.0345, -117.2930)          # Leucadia -> Swami's on Coast Hwy 101 (Del Mar Plaza -> Fletcher Cove has no legal LSV route while the 3 Del Mar stretches are blocked)
 ev = lambda pg: pg.evaluate("(window.__gcmSent||[]).slice()")
 with sync_playwright() as p:
     launch = {}
@@ -37,7 +37,7 @@ with sync_playwright() as p:
     pg.evaluate(f"testRoute([{A[0]},{A[1]}],[{B[0]},{B[1]}]).then(r=>r&&r.mi)"); pg.wait_for_timeout(500)
     ck("same route twice within 10 min = one route_searched", len([x for x in ev(pg) if x["e"] == "route_searched"]) == 1)
     ck("no route_completed before moving", not any(x["e"] == "route_completed" for x in ev(pg)))
-    c.set_geolocation({"latitude": A[0] + 0.0001, "longitude": A[1]}); pg.wait_for_timeout(1200)   # still at the start: 3.6 km from the end
+    c.set_geolocation({"latitude": A[0] + 0.0001, "longitude": A[1]}); pg.wait_for_timeout(1200)   # still at the start: 3.5 km from the end
     ck("no route_completed while far away", not any(x["e"] == "route_completed" for x in ev(pg)))
     c.set_geolocation({"latitude": B[0] + 0.0002, "longitude": B[1]}); pg.wait_for_timeout(1500)   # ~22 m from the destination
     done = [x for x in ev(pg) if x["e"] == "route_completed"]
