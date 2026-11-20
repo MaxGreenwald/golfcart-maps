@@ -51,6 +51,8 @@ jobs:
         run: node --test tests/partner_access.test.mjs
       - name: Partner Worker harness (real Worker code on node:sqlite)
         run: node --test tests/partner_worker_harness.test.mjs
+      - name: Rules quiz (questions from the road rule, all-right grading, Worker re-grade and pass record)
+        run: node --test tests/partner_quiz.test.mjs
       - name: Copy a ride or page to another location (pins stay in town)
         run: node --test tests/partner_templates.test.mjs
       - name: App links (AASA, handoff tokens) (node --test)
@@ -217,6 +219,8 @@ jobs:
         run: python -m unittest tests.test_partner_nearest_start -v
       - name: test_shop_dashboard (shop activity card and renter unlock event)
         run: python -m unittest tests.test_shop_dashboard -v
+      - name: test_partner_quiz (shop turns the quiz on, renter map stays closed until all answers are right, pass recorded)
+        run: python -m unittest tests.test_partner_quiz -v
       - name: test_partner_stops (partner offer and place opens, Take me there, dashboard counts)
         run: python -m unittest tests.test_partner_stops -v
       - name: test_partner_templates (copy a ride or page to another location, optional sync)

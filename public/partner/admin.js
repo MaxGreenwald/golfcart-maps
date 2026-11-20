@@ -726,6 +726,7 @@ function shopView() {
       <button class="btn alt hidden" id="cancelAf" type="button">Cancel</button></p>
     <table><thead><tr><th>Affiliate</th><th></th></tr></thead><tbody>${afRows}</tbody></table>
   </div>
+  ${window.GCMQuizAdmin ? GCMQuizAdmin.card(s) : ''}
   <div class="card"><h2>Renter access codes</h2>
     <p class="muted">Give this link after they pay the extra $5–10 in your own checkout. Multi-use.</p>
     <label for="codeDays">Code lasts</label>
@@ -1715,6 +1716,7 @@ function bindApp() {
   if (regionSel) regionSel.addEventListener('change', () => loadStarters());
   const vehSel = $('#brandVehicle');
   if (vehSel) vehSel.addEventListener('change', () => loadStarters());
+  if (window.GCMQuizAdmin) GCMQuizAdmin.bind();
   loadStarters();
   const genCode = $('#genCode');
   const locPick = $('#locPick');

@@ -1202,7 +1202,72 @@ function wireOffline() {
   addEventListener('gcm-offline-refreshed', paint);
   paint();
 }
+// Rules quiz gate: when the shop turned it on, the map opens only after every answer is right.
+// The pass is recorded by the partner Worker (code and time) and remembered on this device for a day.
+async function quizGate() {
+  const shop = unlocked && unlocked.shop;
+  const code = (unlocked && unlocked.code) || codeParam;
+  if (!shop || !shop.quiz_on || !window.GCMQuiz) return false;
+  if (GCMQuiz.passed(localStorage, slug, code)) return false;
+  applyShop(shop, true);
+  ticker.hidden = true;
+  const top = document.getElementById('goTop'); if (top) top.hidden = true;
+  blurbEl.textContent = 'One quick rules check, then your map opens.';
+  let rule = null;
+  try {
+    const [regs, rr] = [await loadRegions(), await loadRules()];
+    const region = regs.find(r => r.id === shop.region_id);
+    if (region && rr && rr[region.state]) rule = GCMRule.ruleFor(rr, region, shopVeh());
+  } catch (e) { rule = null; }
+  const qs = GCMQuiz.build({ rule, vehicle: shopVeh(), shopRules: shop.rental && shop.rental.rules });
+  panel.innerHTML = `<div class="dock-scroll" id="dockScroll"><form id="quizForm" class="quiz" novalidate>
+    <p class="yay-kicker">Before you drive</p>
+    <h2 class="sec">Quick rules check</h2>
+    <p class="fine">${esc(shop.name)} asks every renter to answer these first. It takes under a minute.</p>
+    <p class="fine" id="quizNotice">${esc(GCMQuiz.NOTICE)}</p>
+    ${qs.map((q, i) => `<fieldset class="qz" data-q="${esc(q.id)}"><legend>${i + 1}. ${esc(q.text)}</legend>
+      ${q.options.map(o => `<label class="qz-opt"><input type="radio" name="qz_${esc(q.id)}" value="${esc(o.id)}"> ${esc(o.text)}</label>`).join('')}
+      <p class="qz-why" hidden></p></fieldset>`).join('')}
+    <p><button type="submit" class="start" id="quizSend">Check my answers</button></p>
+    <p class="msg" id="quizMsg" hidden role="status"></p>
+  </form></div>`;
+  const form = document.getElementById('quizForm');
+  const msg = document.getElementById('quizMsg');
+  const say = (ok, t) => { msg.hidden = false; msg.className = 'msg' + (ok ? '' : ' err'); msg.textContent = t; };
+  form.onsubmit = async e => {
+    e.preventDefault();
+    const answers = {};
+    qs.forEach(q => { const c = form.querySelector(`input[name="qz_${q.id}"]:checked`); if (c) answers[q.id] = c.value; });
+    const g = GCMQuiz.grade(qs, answers);
+    form.querySelectorAll('.qz').forEach(fs => {
+      const q = qs.find(x => x.id === fs.dataset.q);
+      const bad = g.wrong.includes(q.id);
+      fs.classList.toggle('bad', bad);
+      const why = fs.querySelector('.qz-why');
+      why.hidden = !bad;
+      why.textContent = bad ? (answers[q.id] ? 'Not quite. Try again.' : 'Pick an answer.') : '';
+    });
+    if (!g.ok) { say(false, g.wrong.length === 1 ? 'One answer needs another look.' : g.wrong.length + ' answers need another look.'); return; }
+    document.getElementById('quizSend').disabled = true;
+    try {
+      const r = await fetch(`${API}/public/${encodeURIComponent(slug)}/quiz`, {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code, answers }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) { say(false, j.error || 'Could not save your answers. Try again.'); return; }
+      GCMQuiz.markPassed(localStorage, slug, code);
+      await unlockedView();
+    } catch (err) {
+      say(false, 'Could not save your answers. Check your connection and try again.');
+    } finally {
+      const b = document.getElementById('quizSend'); if (b) b.disabled = false;
+    }
+  };
+  return true;
+}
+
 async function unlockedView() {
+  if (await quizGate()) return;
   const shop = unlocked.shop;
   trackShop('partner_open', { code: unlocked.code || codeParam });
   applyShop(shop, true);

@@ -1,6 +1,8 @@
 // gcm-partner Worker: rental-shop partner portal (super admin, shop admin, renter unlock).
 // Storage: SQLite Durable Object. Auth: Google OAuth when secrets set, else DEV_AUTH_EMAIL mock.
 import { DurableObject } from 'cloudflare:workers';
+import roadrule from '../../../public/roadrule.js';
+import quizLib from '../../../public/quiz.js';
 import sales from '../../../public/sales.js';
 import { assertShopSlug, randomCode, randomToken, couponCode, normalizeSlug, shopAccess, codeExpiry, cleanPlace, SHOP_VEHICLES, shopVehicle, nearestStart, grantExpiry, handoffProblem, HANDOFF_TTL, cleanRental, rentalFromRow, cleanReturnBy, cleanRangeMi, cleanReturnSpot, cleanPhone, withPark, bytesFromB64, cleanStops, storeImage, MEDIA_MAX_COUNT } from '../../../lib/partner.js';
 import { fetchShopStats } from '../../../lib/shop_stats.js';
@@ -169,6 +171,15 @@ export class PartnerStore extends DurableObject {
         PRIMARY KEY (shop_id, bucket)
       )
     `);
+    // Rules quiz: the shop turns it on; each pass is kept (code, time, quiz version) as the shop's record.
+    const qzCols = this.sql.exec('PRAGMA table_info(shops)').toArray().map(c => c.name);
+    if (!qzCols.includes('quiz_on')) this.sql.exec('ALTER TABLE shops ADD COLUMN quiz_on INTEGER DEFAULT 0');
+    this.sql.exec(`
+      CREATE TABLE IF NOT EXISTS quiz_passes(
+        id TEXT PRIMARY KEY, shop_id TEXT NOT NULL, code TEXT NOT NULL, questions INTEGER NOT NULL,
+        version INTEGER NOT NULL, passed_at INTEGER NOT NULL
+      )
+    `);
   }
   ensureReports() {
     // Renter problem reports (cart, what happened, optional note, contact, photo). Kept 90 days.
@@ -256,6 +267,7 @@ export class PartnerStore extends DurableObject {
       remind_min: remindMinutes(r),
     };
     if (opts && opts.rental) row.rental = rentalFromRow(r.rental_json);
+    row.quiz_on = !!r.quiz_on;
     if (opts && opts.rental) row.sales = sales.fromRow(r.sales_json);
     return row;
   }
@@ -380,6 +392,7 @@ export class PartnerStore extends DurableObject {
           'UPDATE shops SET name=?, region_id=?, blurb=?, logo_url=?, color=?, owner_email=?, disabled=?, vehicle=?, rental_json=?, return_by=?, range_mi=?, return_lat=?, return_lon=?, phone=? WHERE id=?',
           name, region_id, blurb, logo_url, color, owner_email, disabled, vehicle, rental_json, return_by, range_mi, return_lat, return_lon, phone, sid,
         );
+        if (body.quiz_on !== undefined) this.sql.exec('UPDATE shops SET quiz_on=? WHERE id=?', body.quiz_on === true || body.quiz_on === 1 || body.quiz_on === '1' ? 1 : 0, sid);
         if (sales_json !== (sh.sales_json || '')) this.sql.exec('UPDATE shops SET sales_json=? WHERE id=?', sales_json, sid);
         let pushed = 0;
         if (body.push_page && sh.page_template_id) {
@@ -826,6 +839,26 @@ export class PartnerStore extends DurableObject {
         this.sql.exec('DELETE FROM handoffs WHERE expires_at<?', now() - 86400);
         return J({ token, expires_at });
       }
+      // Rules quiz: a live code for the shop can record a pass.
+      if (path.match(/^\/public\/[^/]+\/quiz-check$/) && method === 'POST') {
+        const sh = this.one('SELECT * FROM shops WHERE slug=? AND disabled=0', normalizeSlug(path.split('/')[2]));
+        if (!sh) return J({ error: 'not found' }, 404);
+        const code = String((body && body.code) || '').replace(/\s+/g, '').toUpperCase();
+        const c = code && this.one('SELECT * FROM codes WHERE code=? AND shop_id=?', code, sh.id);
+        if (!c || (c.expires_at && c.expires_at < now())) return J({ error: 'Your access code is not active' }, 403);
+        return J({ shop_id: sh.id, code, shop: this.shopRow(sh, { rental: true }) });
+      }
+      if (path.match(/^\/shops\/[^/]+\/quiz-passes$/) && method === 'POST') {
+        const sid = path.split('/')[2];
+        const at = now();
+        this.sql.exec('INSERT INTO quiz_passes(id,shop_id,code,questions,version,passed_at) VALUES(?,?,?,?,?,?)',
+          id(), sid, String(body.code || ''), Number(body.questions) || 0, Number(body.version) || 1, at);
+        this.sql.exec('DELETE FROM quiz_passes WHERE passed_at<?', at - 365 * 86400);
+        return J({ passed_at: at }, 201);
+      }
+      if (path.match(/^\/shops\/[^/]+\/quiz-passes$/) && method === 'GET') {
+        return J({ passes: this.q('SELECT code, questions, version, passed_at FROM quiz_passes WHERE shop_id=? ORDER BY passed_at DESC LIMIT 200', path.split('/')[2]) });
+      }
       // Rental code typed in the app (Max t449u): no shop link, so find the shop from the code.
       // One code use, same checks and answer as /public/<slug>/unlock.
       if (path === '/public-code/unlock' && method === 'GET') {
@@ -1159,6 +1192,37 @@ export default {
       const a = await access(null);
       if (!a.shopId) return deny(a);
       return doFetch('/shops/' + a.shopId + '/bundle');
+    }
+    // ---- Rules quiz ----
+    async function quizFor(shop) {
+      const o = originOf(req, env);
+      const get = async p => { try { const r = await fetch(o + p); return r.ok ? await r.json() : null; } catch { return null; } };
+      const [regs, rules] = await Promise.all([get('/data/regions.json'), get('/data/rules.json')]);
+      const region = Array.isArray(regs) ? regs.find(x => x.id === shop.region_id) : null;
+      const veh = shop.vehicle === 'lsv' ? 'lsv' : 'golf_cart';
+      const rule = rules && region && rules[region.state] ? roadrule.ruleFor(rules, region, veh) : null;
+      return quizLib.build({ rule, vehicle: veh, shopRules: shop.rental && shop.rental.rules });
+    }
+    const qz = u.pathname.match(/^\/public\/([^/]+)\/quiz$/);
+    if (qz && req.method === 'POST') {
+      const body = await readBody();
+      const chk = await send('/public/' + encodeURIComponent(qz[1]) + '/quiz-check', 'POST', { code: body.code });
+      const ck = await chk.json();
+      if (!chk.ok) return J({ error: ck.error }, chk.status);
+      const questions = await quizFor(ck.shop);
+      const g = quizLib.grade(questions, body.answers);
+      if (!g.ok) return J({ ok: false, wrong: g.wrong, error: 'Some answers are not right yet' }, 400);
+      const rec = await (await send('/shops/' + ck.shop_id + '/quiz-passes', 'POST', { code: ck.code, questions: questions.length, version: quizLib.VERSION })).json();
+      return J({ ok: true, passed_at: rec.passed_at });
+    }
+    if (u.pathname === '/shop/quiz' && req.method === 'GET') {
+      const a = await access(null);
+      if (!a.shopId) return deny(a);
+      const bundle = await (await doFetch('/shops/' + a.shopId + '/bundle')).json();
+      const shop = bundle.shop || {};
+      const questions = await quizFor({ ...shop, rental: shop.rental || bundle.rental });
+      const p = await (await doFetch('/shops/' + a.shopId + '/quiz-passes')).json();
+      return J({ on: !!shop.quiz_on, questions, passes: p.passes || [] });
     }
     if (u.pathname === '/shop/stats' && req.method === 'GET') {
       const a = await access(null);

@@ -68,10 +68,11 @@ export function makePartner(opts = {}) {
     }
     return new Response(JSON.stringify({ error: 'offline in tests' }), { status: 599 });
   };
+  // Overlapping calls (the dev server serves several at once) share one install of the fake.
+  let depth = 0, real = null;
   async function withFetch(fn) {
-    const real = globalThis.fetch;
-    globalThis.fetch = fakeFetch;
-    try { return await fn(); } finally { globalThis.fetch = real; }
+    if (depth++ === 0) { real = globalThis.fetch; globalThis.fetch = fakeFetch; }
+    try { return await fn(); } finally { if (--depth === 0) globalThis.fetch = real; }
   }
   const cookies = new Map();
   async function call(path, init = {}) {
