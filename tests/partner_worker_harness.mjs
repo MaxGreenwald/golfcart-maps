@@ -3,6 +3,10 @@
 // Node 22.5 or newer (node:sqlite). Nothing leaves the process.
 import { register } from 'node:module';
 import { DatabaseSync } from 'node:sqlite';
+import { readFileSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+const PUBLIC_DATA = fileURLToPath(new URL('../public/data/', import.meta.url));
 
 const STUB = 'export class DurableObject { constructor(ctx, env) { this.ctx = ctx; this.env = env; } }';
 register('data:text/javascript,' + encodeURIComponent(`
@@ -55,6 +59,9 @@ export function makePartner(opts = {}) {
   const fakeFetch = async (input, init) => {
     const url = typeof input === 'string' ? input : input.url;
     if (/\/data\/regions\.json$/.test(url)) return new Response(JSON.stringify(regions), { headers: { 'content-type': 'application/json' } });
+    // Site JSON (rules.json, schema.json) comes from this checkout's public/data.
+    const site = /\/data\/([a-z0-9_-]+\.json)$/.exec(url);
+    if (site && existsSync(PUBLIC_DATA + site[1])) return new Response(readFileSync(PUBLIC_DATA + site[1], 'utf8'), { headers: { 'content-type': 'application/json' } });
     if (opts.fetch) {
       const r = await opts.fetch(url, init || {}, outbox);
       if (r) return r;

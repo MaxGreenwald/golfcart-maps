@@ -28,18 +28,25 @@ SHOP = {
 }
 STATS = {
     "ready": True, "shop": "beachmode", "days": 30,
-    "totals": {"unlocks": 4, "started": 3, "finished": 2, "affiliate_taps": 5},
+    "totals": {"unlocks": 4, "started": 3, "finished": 2, "affiliate_taps": 5,
+               "opens": 9, "routes": 6, "experience_opens": 7, "stop_opens": 8},
+    "weekly": [
+        {"week": "2026-11-09", "opens": 5, "routes": 4, "experience_opens": 4, "stop_opens": 6, "unlocks": 2},
+        {"week": "2026-11-02", "opens": 4, "routes": 2, "experience_opens": 3, "stop_opens": 2, "unlocks": 2},
+    ],
+    "stops": [{"ride": "e1", "pin": "2", "opens": 6}, {"ride": "e1", "pin": "1", "opens": 2}],
     "daily": [
         {"day": "2026-11-09", "unlocks": 2, "started": 2, "finished": 1, "affiliate_taps": 3},
         {"day": "2026-11-08", "unlocks": 2, "started": 1, "finished": 1, "affiliate_taps": 2},
     ],
     "codes": [{"code": "ab12cd3", "unlocks": 3}, {"code": "zz99", "unlocks": 1}],
-    "rides": [{"ride": "e1", "started": 3, "finished": 2}],
+    "rides": [{"ride": "e1", "opened": 7, "started": 3, "finished": 2}],
     "pins": [{"pin": "a1", "taps": 5}],
 }
 BUNDLE = {
     "shop": SHOP,
-    "experiences": [{"id": "e1", "title": "Sunset loop", "description": "", "stops": [], "nearest_start": True}],
+    "experiences": [{"id": "e1", "title": "Sunset loop", "description": "", "nearest_start": True,
+                     "stops": [{"lat": 32.85, "lon": -117.27, "label": "Cove"}, {"lat": 32.84, "lon": -117.28, "label": "Seals"}]}],
     "affiliates": [{"id": "a1", "name": "Taco Shack", "lat": 32.8, "lon": -117.25, "offer": "chips", "coupon": ""}],
     "places": [],
     "codes": [{"code": "AB12CD3", "uses": 3, "max_uses": 0, "multi_use": 1, "expires_at": None}],
@@ -132,7 +139,17 @@ class ShopDashboard(unittest.TestCase):
             self.assertIn("Shop activity", text)
             self.assertIn("Test installs are left out.", text)
             self.assertIn("Unlocks", text)
-            self.assertRegex(pg.inner_text("#dashTotals"), r"4")
+            self.assertRegex(pg.inner_text("#dashTotals2"), r"4")
+            totals = pg.inner_text("#dashTotals")
+            for label, n in (("Renter opens", "9"), ("Routes started", "6"), ("Ride opens", "7"), ("Stop opens", "8")):
+                self.assertIn(label, totals)
+                self.assertIn(n, totals)
+            weeks = pg.inner_text("#dashWeeks")
+            self.assertIn("Week of Nov 9", weeks)
+            self.assertIn("Week of Nov 2", weeks)
+            self.assertLess(weeks.index("Nov 9"), weeks.index("Nov 2"), "newest week first")
+            self.assertIn("Sunset loop: stop 2 (Seals)", pg.inner_text("#dashStops"))
+            self.assertIn("7", pg.inner_text("#dashRides"))
             self.assertIn("AB12CD3", pg.inner_text("#dashCodes"))
             self.assertNotIn("ab12cd3", pg.inner_text("#dashCodes"))
             self.assertIn("ZZ99", pg.inner_text("#dashCodes"))
@@ -186,5 +203,44 @@ class ShopDashboard(unittest.TestCase):
             self.assertEqual(ev[0]["p"]["code"], "ab12cd3")
             self.assertEqual(ev[0]["t"], "sd")
             self.assertNotIn("internal", ev[0])
+        finally:
+            pg.close()
+
+    def test_renter_open_ride_and_stop_record_shop_events(self):
+        pg = self.b.new_page(viewport={"width": 1100, "height": 800})
+        pg.add_init_script("window.__sent=[];window.GCM_TRACK_SINK=function(o){window.__sent.push(o)};try{Object.defineProperty(navigator,'webdriver',{configurable:true,get:()=>false})}catch(e){}")
+        rides = [
+            {"id": "e1", "title": "Sunset loop", "description": "", "nearest_start": False,
+             "stops": [{"lat": 32.85, "lon": -117.27, "label": "Cove"}, {"lat": 32.84, "lon": -117.28, "label": "Seals"}]},
+            {"id": "e2", "title": "Village tour", "description": "", "nearest_start": False,
+             "stops": [{"lat": 32.847, "lon": -117.273, "label": "Library"}]},
+        ]
+
+        def handle(route):
+            path = urlsplit(route.request.url).path
+            if path.endswith("/unlock"):
+                return route.fulfill(json={"unlocked": True, "code": "AB12CD3", "grant": "g", "shop": SHOP,
+                                           "experiences": rides, "affiliates": [], "places": []})
+            route.fallback()
+
+        pg.route("**/api/partner/**", handle)
+        pg.route("**://*.tile.openstreetmap.org/**", lambda r: r.abort())
+        try:
+            pg.goto(self.base + "/p/beachmode/go?code=AB12CD3", wait_until="domcontentloaded")
+            pg.wait_for_function("window.__sent && window.__sent.some(function(o){return o.e==='partner_open'})", timeout=15000)
+            opened = pg.evaluate("window.__sent.filter(function(o){return o.e==='partner_open'})")
+            self.assertEqual(opened[0]["p"], {"shop": "beachmode", "code": "ab12cd3"})
+            pg.click(".xcard[data-ex='e1']")
+            pg.wait_for_function("window.__sent.some(function(o){return o.e==='experience_opened'})")
+            ex = pg.evaluate("window.__sent.filter(function(o){return o.e==='experience_opened'})")
+            self.assertEqual(ex[-1]["p"], {"shop": "beachmode", "ride": "e1"})
+            pg.wait_for_selector(".pin-stop")
+            pg.locator(".pin-stop", has_text="2").first.click(force=True)
+            pg.wait_for_function("window.__sent.some(function(o){return o.e==='stop_opened'})")
+            st = pg.evaluate("window.__sent.filter(function(o){return o.e==='stop_opened'})")
+            self.assertEqual(st[-1]["p"], {"shop": "beachmode", "ride": "e1", "pin": "2"})
+            for o in pg.evaluate("window.__sent"):
+                self.assertNotIn("lat", o.get("p", {}))
+                self.assertNotIn("label", o.get("p", {}))
         finally:
             pg.close()
