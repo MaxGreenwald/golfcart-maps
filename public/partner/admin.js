@@ -606,7 +606,7 @@ function shopView() {
     </div></td>
   </tr>`).join('') || '<tr><td colspan="2" class="muted">No affiliate offers yet.</td></tr>';
   const codeRows = (b.codes || []).map(c => `<tr>
-    <td><code>${esc(c.code)}</code></td>
+    <td><code>${esc(c.code)}</code>${c.cart_label ? `<div class="muted code-cart">Cart ${esc(c.cart_label)}</div>` : ''}</td>
     <td class="muted">uses ${c.uses}${c.max_uses ? '/' + c.max_uses : ''} · ${c.multi_use ? 'multi' : 'single'}
       <div class="code-exp">${c.expires_at ? (c.expires_at * 1000 < Date.now() ? 'Expired ' : 'Expires ') + esc(new Date(c.expires_at * 1000).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })) : 'Never expires'}</div></td>
     <td><a href="/p/${esc(s.slug)}/go?code=${esc(c.code)}" target="_blank" rel="noopener">Open renter link</a></td>
@@ -724,6 +724,7 @@ function shopView() {
     <p><button class="btn" id="genCode" type="button">Generate access code</button></p>
     <table><thead><tr><th>Code</th><th>Usage</th><th>Link</th></tr></thead><tbody>${codeRows}</tbody></table>
     ${qrKitBlock(s, b.codes)}
+    ${fleetBlock(b.codes)}
   </div>`;
 }
 
@@ -744,8 +745,9 @@ function loadQrKit() {
 }
 
 function qrKitBlock(shop, codes) {
-  const list = codes || [];
-  const opts = list.map(c => `<option value="${esc(c.code)}">${esc(c.code)}</option>`).join('');
+  // Desk codes first; cart codes (fleet stickers) after, labeled with the cart.
+  const list = [...(codes || [])].sort((a, b) => (a.cart_label ? 1 : 0) - (b.cart_label ? 1 : 0));
+  const opts = list.map(c => `<option value="${esc(c.code)}">${esc(c.code)}${c.cart_label ? ' (cart ' + esc(c.cart_label) + ')' : ''}</option>`).join('');
   const disabled = list.length ? '' : ' disabled';
   return `<div id="qrKit">
     <h3>QR sticker and counter card</h3>
@@ -754,6 +756,47 @@ function qrKitBlock(shop, codes) {
     <select id="qrCode"${disabled}>${opts || '<option value="">Generate an access code first</option>'}</select>
     <p><button class="btn" id="printQr" type="button"${disabled}>Print QR kit</button></p>
   </div>`;
+}
+
+// Fleet stickers: the newest live code for each cart number, in cart order.
+function fleetCodes(codes) {
+  const nowSec = Date.now() / 1000;
+  const seen = new Set();
+  const out = [];
+  for (const c of codes || []) {
+    const cart = String(c.cart_label || '').trim();
+    if (!cart || seen.has(cart.toLowerCase())) continue;
+    if (c.expires_at && c.expires_at < nowSec) continue;
+    seen.add(cart.toLowerCase());
+    out.push({ cart, code: c.code });
+  }
+  return out.sort((a, b) => a.cart.localeCompare(b.cart, 'en', { numeric: true, sensitivity: 'base' }));
+}
+
+function fleetBlock(codes) {
+  const fleet = fleetCodes(codes);
+  const n = fleet.length;
+  return `<div id="fleetKit">
+    <h3>Fleet stickers</h3>
+    <p class="muted">One code per cart, printed on a sticker for that cart. Scanning it opens your page with the code filled in, so renters skip typing. Six stickers per letter page. Save as PDF, or save each page as a PNG.</p>
+    <label for="fleetCarts">Cart numbers</label>
+    <input id="fleetCarts" placeholder="1-12, or A1, A2, B7" autocomplete="off" aria-describedby="fleetHint">
+    <div class="muted" id="fleetHint">Ranges and lists both work. A cart that already has a code keeps it.</div>
+    <label class="ns-row"><input type="checkbox" id="fleetExpire"> Cart codes stop working after 30 days</label>
+    <p><button class="btn" id="makeFleet" type="button">Make cart codes and print</button>
+      <button class="btn alt" id="printFleet" type="button"${n ? '' : ' disabled'}>Print all cart stickers</button></p>
+    <p class="muted" id="fleetNote" aria-live="polite">${n ? `${n} cart${n === 1 ? ' has a code' : 's have codes'}: ${esc(fleet.slice(0, 12).map(f => f.cart).join(', '))}${n > 12 ? ', and more' : ''}.` : 'No cart codes yet.'}</p>
+  </div>`;
+}
+
+async function openFleetSheet(w, fleet) {
+  await loadQrKit();
+  if (!window.GCMQrKit) throw new Error('QR kit did not load');
+  const s = state.shopBundle.shop;
+  const html = GCMQrKit.fleetHtml({ name: s.name, slug: s.slug, color: s.color, logoUrl: s.logo_url, origin: location.origin, fleet });
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
 }
 
 function setPicked(root, lat, lon, label) {
@@ -1707,6 +1750,27 @@ function bindApp() {
       try { await navigator.clipboard.writeText(link); } catch (_) {}
       await refreshShop();
     } catch (e) { flash(false, e.message); }
+  };
+  const makeFleet = $('#makeFleet');
+  if (makeFleet) makeFleet.onclick = async () => {
+    const carts = ($('#fleetCarts') && $('#fleetCarts').value || '').trim();
+    if (!carts) { flash(false, 'Type your cart numbers, like 1-12'); return; }
+    const w = window.open('', 'gcm-fleet');
+    if (!w) { flash(false, 'Allow pop-ups to print the fleet stickers.'); return; }
+    try {
+      const j = await api('/shop/fleet', { method: 'POST', body: JSON.stringify({ carts, expires_days: $('#fleetExpire').checked ? 30 : null }) });
+      await openFleetSheet(w, j.fleet || []);
+      await refreshShop();
+      flash(true, `Cart codes ready: ${j.created} new, ${j.reused} kept.`);
+    } catch (e) { w.close(); flash(false, e.message); }
+  };
+  const printFleet = $('#printFleet');
+  if (printFleet) printFleet.onclick = async () => {
+    const fleet = fleetCodes(state.shopBundle && state.shopBundle.codes);
+    if (!fleet.length) { flash(false, 'Make cart codes first'); return; }
+    const w = window.open('', 'gcm-fleet');
+    if (!w) { flash(false, 'Allow pop-ups to print the fleet stickers.'); return; }
+    try { await openFleetSheet(w, fleet); } catch (e) { w.close(); flash(false, e.message); }
   };
   const printQr = $('#printQr');
   if (printQr) printQr.onclick = async () => {
