@@ -31,7 +31,7 @@ Where a check lives only on an unmerged branch, the branch is named; it becomes 
 | 10 | Never paywall the core legal-roads view | plan, mandate | `scripts/test_chips.py` / `scripts/test_ui.py` cover map + chips with no account; paywall only on the charger layer: **human review** for any new paywall | web-ci + human review |
 | 11 | Roundabouts and turn lanes follow the road-rule module, not one-street patches | Dobby fix 3 | `tests/test_roundabouts.py`, `tests/test_turnlanes.py` | web-ci |
 | 12 | Region rule citations must match the cited code section | Avalon CVC 21115 mix-up | `tests/test_region_cites.py` | web-ci |
-| 13 | Time-boxed warnings expire on their date (Del Mar advisory until Nov 19, 2026) | Max, Oct 18 | `scripts/test_delmar_warning.py` | web-ci |
+| 13 | Time-boxed warnings expire on their date (Del Mar advisory expired Nov 19, 2026; never returns) | Max, Oct 18 | `scripts/test_delmar_warning.py` | web-ci |
 | 14 | Mobile layout: chips/selects don't overflow at 375/390/430 px, WebKit included | repeat iPhone bugs | `scripts/test_layout.py`, `scripts/test_chip_overflow.py` | web-ci |
 | 15 | Analytics: town level only, no coordinates/free text/PII, honors GPC/DNT/opt-out, no production analytics deploy without Max | Max; privacy policy | `tests/analytics.test.mjs`, `scripts/test_analytics.py`; CarPlay hooks: carplay-ios.yml "analytics hooks fired" step; production Worker: `scripts/deploy_worker.sh production analytics --max-ok` (`scripts/prod_gate.sh`, `tests/test_prod_gate.py`) | web-ci; carplay-ios on branch ios-analytics; worker deploy gate on web-ci. The ref must pass the rule 5 allowlist; that the row is Max's is **human review** |
 | 16 | Any new use of customer data or privacy-policy change needs Max | plan, Ask Max | **Human review** (Max) | none |
@@ -64,6 +64,7 @@ Where a check lives only on an unmerged branch, the branch is named; it becomes 
 | 43 | Shop activity (unlocks per access code, rides started and finished, offer taps by day) is read from the analytics store and leaves out denylisted installs | Nov 10 2026 | `tests/shop_stats.test.mjs`, `tests/test_shop_dashboard.py` | web-ci |
 | 44 | A partner can copy a ride or a whole page to another shop they own. Pins move only when the town matches. A linked edit can update the other copies | Nov 10 2026 | `tests/partner_templates.test.mjs`, `tests/test_partner_templates.py` | web-ci |
 | 45 | Ready-made partner rides are loops the legal-road router accepts for that shop's vehicle, built from the town's places | Nov 10 2026 | `tests/starters.test.mjs`, `tests/test_starter_experiences.py` | web-ci |
+| 46 | A stretch signed over the LSV cap stays not LSV-legal until new signs are confirmed, whatever a caution or override says | Magnolio, Nov 19 2026 | `scripts/check_posted_limits.py` (`research/posted_limits.json`), `tests/test_posted_limits.py` | web-ci |
 
 When you add a check, add a row. When a rule has no check, say so here rather than leaving it implied.
 
