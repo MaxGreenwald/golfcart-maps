@@ -76,5 +76,7 @@
     } catch (e) {}
   }
 
-  return { VERSION, PASS_DAYS, build, grade, passed, markPassed };
+  // Shown with the quiz. It is a rules reminder only; it is not legal advice and not a waiver.
+  const NOTICE = 'This quiz is a reminder of the local cart rules, not legal advice. You must still follow posted signs and the law.';
+  return { VERSION, PASS_DAYS, NOTICE, build, grade, passed, markPassed };
 });

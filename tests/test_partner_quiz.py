@@ -53,6 +53,10 @@ class RulesQuiz(unittest.TestCase):
             rp.click("#quizSend")
             rp.wait_for_selector(".qz.bad")
             self.assertRegex(rp.inner_text("#quizMsg"), r"need(s)? another look")
+            notice = rp.inner_text("#quizNotice")
+            self.assertIn("reminder of the local cart rules, not legal advice", notice)
+            self.assertIn("follow posted signs and the law", notice)
+            self.assertNotIn("waiver", rp.inner_text("#quizForm").lower())
             shot(rp, "quiz-renter-wrong.png")
             # Pick the right answers by text, as a renter would.
             right = {"speed": "25 mph", "red": "Off limits for this cart", "signs": "The posted sign",
@@ -76,6 +80,7 @@ class RulesQuiz(unittest.TestCase):
             ap.wait_for_selector("#quizPasses code")
             self.assertIn("CART7", ap.inner_text("#quizPasses"))
             self.assertNotIn("\u2014", ap.inner_text("#quizCard"))
+            self.assertIn("not legal advice", ap.inner_text("#quizNoticeAdmin"))
             shot(ap.locator("#quizCard"), "quiz-admin.png")
             b.close()
 

@@ -1192,6 +1192,7 @@ async function quizGate() {
     <p class="yay-kicker">Before you drive</p>
     <h2 class="sec">Quick rules check</h2>
     <p class="fine">${esc(shop.name)} asks every renter to answer these first. It takes under a minute.</p>
+    <p class="fine" id="quizNotice">${esc(GCMQuiz.NOTICE)}</p>
     ${qs.map((q, i) => `<fieldset class="qz" data-q="${esc(q.id)}"><legend>${i + 1}. ${esc(q.text)}</legend>
       ${q.options.map(o => `<label class="qz-opt"><input type="radio" name="qz_${esc(q.id)}" value="${esc(o.id)}"> ${esc(o.text)}</label>`).join('')}
       <p class="qz-why" hidden></p></fieldset>`).join('')}

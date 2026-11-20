@@ -10,6 +10,7 @@
   function card(s) {
     return `<div class="card" id="quizCard"><h2>Rules quiz</h2>
       <p class="muted">When this is on, renters answer a short quiz on the local cart rules before your map opens. Every question must be right; they can try again. Each pass is saved below with the code and time, so you have a record.</p>
+      <p class="muted" id="quizNoticeAdmin">Renters also see: "This quiz is a reminder of the local cart rules, not legal advice. You must still follow posted signs and the law." The quiz is a rules reminder, not a liability waiver.</p>
       <label class="qz-on"><input type="checkbox" id="quizOn"${s && s.quiz_on ? ' checked' : ''}> Require the rules quiz before the map</label>
       <h3 class="dash-h">What renters see</h3>
       <ol id="quizPreview"><li class="muted">Loading the quiz…</li></ol>
