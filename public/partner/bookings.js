@@ -151,6 +151,7 @@
         flashKeep(m.status !== 'failed', m.status === 'sent'
           ? 'Welcome sent to ' + j.booking.email + '.'
           : m.status === 'failed' ? 'Saved, but the email failed. Copy the link and send it yourself.'
+          : m.capped ? 'Saved. ' + m.reason
           : 'Saved. Email is off for now, so copy the link and send it yourself.');
       } catch (e) { flashKeep(false, e.message); }
     };

@@ -139,6 +139,7 @@ export class PartnerStore extends DurableObject {
     if (!cols.includes('page_template_id')) this.sql.exec('ALTER TABLE shops ADD COLUMN page_template_id TEXT');
     // Rental-day bookings (renter contact + return time). Rows are deleted 30 days after return.
     this.sql.exec(`
+      CREATE TABLE IF NOT EXISTS mail_sends(ts INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS bookings(
         id TEXT PRIMARY KEY, shop_id TEXT NOT NULL, renter_name TEXT NOT NULL, email TEXT NOT NULL,
         phone TEXT DEFAULT '', return_at INTEGER NOT NULL, tz TEXT NOT NULL, code TEXT NOT NULL,
@@ -232,6 +233,16 @@ export class PartnerStore extends DurableObject {
     }
     return out;
   }
+  /** One renter email slot under the rolling 24-hour cap (all shops). False when the cap is reached. */
+  reserveMail(cap) {
+    const t = now();
+    this.sql.exec('DELETE FROM mail_sends WHERE ts < ?', t - 86400);
+    const n = this.one('SELECT COUNT(*) n FROM mail_sends').n;
+    if (!(cap > 0) || n >= cap) return false;
+    this.sql.exec('INSERT INTO mail_sends(ts) VALUES (?)', t);
+    return true;
+  }
+
   async fetch(req) {
     const u = new URL(req.url);
     const path = u.pathname;
@@ -644,6 +655,7 @@ export class PartnerStore extends DurableObject {
         if (!r) return J({ error: 'not found' }, 404);
         return J({ booking: bookingRow(r), shop: this.shopRow(this.one('SELECT * FROM shops WHERE id=?', r.shop_id), { rental: true }) });
       }
+      if (path === '/mail/reserve' && method === 'POST') return J({ ok: this.reserveMail(Number(body.cap) || 0) });
       if (path.match(/^\/bookings\/[^/]+\/status$/) && method === 'POST') {
         const bid = path.split('/')[2];
         const ok = ['sent', 'off', 'failed', 'pending', 'none'];
@@ -1036,6 +1048,7 @@ export default {
       return send('/shops/' + a.shopId + '/' + kind, 'POST', { experience_id: body.experience_id, dest_shop_id: dest, sync: !!body.sync });
     }
     // ---- Rental-day welcome (bookings) ----
+    const mailSlot = async cap => { try { return !!(await (await send('/mail/reserve', 'POST', { cap })).json()).ok; } catch { return false; } };
     async function siteData() {
       const o = originOf(req, env);
       const get = async p => { try { const r = await fetch(o + p); return r.ok ? await r.json() : null; } catch { return null; } };
@@ -1051,7 +1064,7 @@ export default {
     }
     async function deliver(shop, booking) {
       const w = await welcomeFor(shop, booking);
-      const mail = await sendMail(env, { to: booking.email, subject: w.email.subject, html: w.email.html, text: w.email.text, reply_to: shop.owner_email });
+      const mail = await sendMail(env, { to: booking.email, subject: w.email.subject, html: w.email.html, text: w.email.text, reply_to: shop.owner_email }, fetch, mailSlot);
       const sms = booking.phone ? await sendSms(env, { to: booking.phone, text: w.sms }) : { status: 'none' };
       const res = await send('/bookings/' + booking.id + '/status', 'POST', { welcome: mail.status, sms: sms.status });
       const j = await res.json();
