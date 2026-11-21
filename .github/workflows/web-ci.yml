@@ -165,7 +165,7 @@ jobs:
         run: python scripts/test_verified.py
       - name: test_analytics (events, attribution, arrival, CarPlay hooks, GPC/DNT opt-out; local sink, nothing sent)
         run: python scripts/test_analytics.py
-      - name: test_delmar_warning (Del Mar posted-limit warning shows until Nov 19 2026, then hides)
+      - name: "test_delmar_warning (Del Mar ordinance stretches carry the no-expiry caution; expired Nov 19 warning never returns; speeds unchanged)"
         run: python scripts/test_delmar_warning.py
       - name: "test_safety_caution (SD stretches where signs or OSM show a higher limit; dashed orange, popup, route steps)"
         run: python scripts/test_safety_caution.py

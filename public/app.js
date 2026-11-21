@@ -46,28 +46,25 @@ function showTileError(){tileFailed=true;$('title').innerHTML='⚠️ Roads didn
 async function ensure(s,w,n,e){await READY;const ks=tilesIn(s,w,n,e).filter(k=>!loaded.has(k));if(!ks.length)return true;let done=0;const prev=$('sub').innerHTML;const paint=()=>{if(!tileFailed)$('sub').textContent=`Loading roads… ${done}/${ks.length} areas`};paint();await Promise.allSettled(ks.map(k=>loadTile(k).then(()=>{done++;paint()})));const failed=ks.filter(k=>!loaded.has(k));if(failed.length){showTileError();return false}tileFailed=false;const idle=window.ready?'See where you can legally drive. Tap the map to set a start, or hit 📍.':'See where you can legally drive. Tap the map to set a start, or hit 📍.';$('sub').innerHTML=window.ready?(prev&&prev.indexOf('tileRetry')<0?prev:idle):idle;return true}
 async function onMove(){if(!D)return;const b=map.getBounds().pad(0.1);const n0=loaded.size;if(map.getZoom()>=11)await ensure(b.getSouth(),b.getWest(),b.getNorth(),b.getEast());if(loaded.size!==n0){shown={};layer.clearLayers()}refresh()}
 map.on('moveend',onMove);
-// ---- Del Mar speed ordinance advisory (Clerk's File 904-4; https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943).
-// The map already uses the new ordinance limits, but until Nov 19 2026 these 3 stretches are still POSTED 40-45 mph, so we warn
-// on the line (dashed orange), in the popup and in route steps. The warning hides itself on/after Nov 19 2026 (device date).
-const ADV_UNTIL='2026-11-19';
-const ADV=[{name:'Camino del Mar',src:'Via de la Valle - San Dieguito Bridge',now:40,next:30},
- {name:'Jimmy Durante Boulevard',src:'Fairgrounds Gate 2 - San Dieguito Dr',now:45,next:30},
- {name:'Via de la Valle',src:'Camino del Mar - Jimmy Durante Blvd',now:40,next:35}];
-const advToday=()=>window.GCM_TODAY||new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'});
+// ---- Del Mar speed ordinance (Clerk's File 904-4; https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943).
+// The ordinance took effect Nov 19 2026 and the map uses its limits. The time-boxed "posted 40-45 mph until Nov 19" warning expired with it;
+// the 3 stretches it covered are now in the no-expiry CAU caution below until the new signs are confirmed posted.
 // Safety cautions (Oct 18 2026): a dated sign photo or OpenStreetMap shows a different limit than the city's newer number. Matched by the
 // override labels in scripts/overrides.py (Safety caution block); evidence in research/sd_safety_caution.md. No expiry: remove once signs are confirmed.
 const CAU=[{src:'La Jolla Blvd (Loring St - Colima St: posted 35',text:'Signs photographed Jan 8, 2025 show 35 mph. San Diego voted to lower this stretch to 25 mph in March 2026, and new signs may not be up yet. Check posted signs.'},
  {src:'Mission Blvd (Santa Clara Pl - Loring St: posted 30',text:'Signs photographed Jan 8, 2025 show 30 mph. San Diego is lowering this stretch to 25 mph, and new signs may not be up yet. Check posted signs.'},
  {src:'Mission Bl (San Fernando Pl - Santa Clara Pl)',text:'San Diego lowered this stretch to 25 mph in March 2026, but signs seen in Dec 2024 showed 30 mph. Check posted signs.'},
+ {src:'Camino del Mar (Via de la Valle - San Dieguito Bridge',text:'Del Mar lowered this stretch from 40 to 30 mph on Nov 19, 2026, and new signs may not be up yet. Check posted signs.'},
+ {src:'Jimmy Durante Blvd (Fairgrounds Gate 2 - San Dieguito Dr',text:'Del Mar lowered this stretch from 45 to 30 mph on Nov 19, 2026, and new signs may not be up yet. Check posted signs.'},
+ {src:'Via de la Valle (Camino del Mar - Jimmy Durante Blvd',text:'Del Mar lowered this stretch from 40 to 35 mph on Nov 19, 2026, and new signs may not be up yet. Check posted signs.'},
  {src:'Lomas Santa Fe Dr (at Hwy 101:',text:'Sources disagree here: Solana Beach lists 35 mph, OpenStreetMap says 50 mph. Check posted signs.'}];
 // 'q' = sources disagree (scripts/islands.py): one OSM tag or Mapillary sign says 40+ on a short stretch of a road posted <=35 on both sides.
 // Drawn and warned like a safety caution; the text is the segment's source label. One object per label so route steps group.
 const QADV={};
 function advOf(s){if(s[3]==='q'&&REG){const k=REG.id+':'+s[8],src=D.sources&&D.sources[s[8]];return QADV[k]||(QADV[k]={text:src&&src[1]||'Sources disagree on the limit here. Check posted signs.'})}
- if(!REG||REG.id!=='sd'||s[3]!=='v'||!(s[2]<=35))return null;const n=D.names[s[0]],src=D.sources&&D.sources[s[8]];const lab=JSON.stringify(src||'');
- if(advToday()<ADV_UNTIL){const a=ADV.find(a=>a.name===n&&lab.includes(a.src));if(a)return a}
+ if(!REG||REG.id!=='sd'||s[3]!=='v'||!(s[2]<=35))return null;const src=D.sources&&D.sources[s[8]];const lab=JSON.stringify(src||'');
  return CAU.find(c=>lab.includes(c.src))||null}
-const advText=a=>a.text||`Posted ${a.now} mph today; the limit drops to ${a.next} mph on Nov 19, 2026, when Del Mar's new speed ordinance takes effect.`;
+const advText=a=>a.text;
 window.advOf=advOf;
 // sd-verified-badge:start  (the only place the app may say "verified"; gated to REG.id==='sd' + data/sd/verified.json)
 // ---- Source wording + confidence. "Verified" is reserved for coastal San Diego segments where two independent
@@ -141,7 +138,7 @@ async function route(){const gen=++routeGen;window._routeFail='';$('title').inne
  const min=Math.max(1,Math.round(r.dist/1609.34/22*60));
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
  $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:(RULE.designated_only?'All on cart paths & designated roads 🌴':(r.legs.some(l=>l.u)?`Mostly ≤${RULE.max_posted} mph roads; <b>❓ ${mi(r.legs.filter(l=>l.u).reduce((a,l)=>a+l.s._len,0))} speed unknown — check signs</b>`:`All on roads ≤${RULE.max_posted} mph 🌴`))+ruleNotes()+(da>150||db>150?' · snapped to nearest legal road':'');
- r.back=await backDist(a,b,a2,b2,r.dist,deadline,stateLeft);if(gen!==routeGen)return null;renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st" role="button" tabindex="0" data-ll="${s.ll.join(',')}"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
+ r.back=await backDist(a,b,a2,b2,r.dist,deadline,stateLeft);if(gen!==routeGen)return null;renderRange(r);if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st" role="button" tabindex="0" data-ll="${s.ll.join(',')}"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
  liveNavSet(r);if(!navOn())focusStart();if(!navOn())setSnap('half');window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:GCMRouter.shownFeet(s.len)}))};window._lastDetail=r;return r}
 // return trip: one-way rules can differ, so route B->A; fall back to same distance
 async function backDist(a,b,a2,b2,d,deadline,stateLeft){if(a==null||b==null)return d;const left=stateLeft||{n:GCMRouter.ROUTE_STATE_BUDGET};for(const [x,y] of [[b,a],[b2,a],[b,a2],[b2,a2]]){if(deadline&&Date.now()>deadline)return d;const r=await astarOff(x,y,null,deadline||Date.now()+GCMRouter.ROUTE_BUDGET_MS,left.n);left.n=Math.max(0,left.n-(((r.stat&&r.stat.expanded)||0)));if(r.parts)return summarize(r.parts).dist;if(r.stat&&(r.stat.reason==='timeout'||r.stat.reason==='budget'))return d}return d}
