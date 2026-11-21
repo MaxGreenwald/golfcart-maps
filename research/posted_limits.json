@@ -1,0 +1,242 @@
+{
+ "_doc": [
+  "Sign-posted speed limits where they differ, or may differ, from the limit the map uses (an ordinance or resolution not yet signed, or a dated sign photo).",
+  "posted_mph: the limit on the signs as last evidenced (null = no sign evidence, see posted_evidence). bbox [S,W,N,E] + osm_name pick the stretch's segments by geometry (segment midpoint), independent of labels.",
+  "label: the source-label fragment the map data and the app's CAU list use for this stretch.",
+  "map_uses_posted: scripts/overrides.py builds this stretch at posted_mph until new_signs_confirmed is true, then at lowered_to_mph.",
+  "Guard (scripts/check_posted_limits.py, tests/test_posted_limits.py): while new_signs_confirmed is false and posted_mph is above the region's LSV cap, every segment of the stretch must be shown not LSV-legal, whatever any caution, note or override says. Every CAU caution in public/app.js must map to an entry here.",
+  "To lift a block: set new_signs_confirmed true and signs_evidence to a dated photo or notice of the new signs, run python3 scripts/build_data.py, delete the stretch's BLK line in public/app.js (tests/test_posted_limits.py names any stale one)."
+ ],
+ "stretches": [
+  {
+   "id": "delmar-cdm-vdlv-bridge",
+   "region": "sd",
+   "road": "Camino del Mar",
+   "osm_name": "Camino del Mar",
+   "stretch": "Via de la Valle - San Dieguito Bridge",
+   "label": "Camino del Mar (Via de la Valle - San Dieguito Bridge",
+   "bbox": [
+    32.97595,
+    -117.26936,
+    32.98025,
+    -117.26901
+   ],
+   "posted_mph": 40,
+   "posted_evidence": "Oct 20 2026 staff report, Item 6, Table 1, Existing column (segments 1-2: 40).",
+   "posted_source": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943",
+   "lowered_to_mph": 30,
+   "lowered_on": "2026-11-19",
+   "lowered_source": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943",
+   "map_uses_posted": true,
+   "new_signs_confirmed": false,
+   "signs_evidence": null
+  },
+  {
+   "id": "delmar-jd-gate2-sdd",
+   "region": "sd",
+   "road": "Jimmy Durante Blvd",
+   "osm_name": "Jimmy Durante Boulevard",
+   "stretch": "Fairgrounds Gate 2 - San Dieguito Dr",
+   "label": "Jimmy Durante Blvd (Fairgrounds Gate 2 - San Dieguito Dr",
+   "bbox": [
+    32.96673,
+    -117.26524,
+    32.97784,
+    -117.25616
+   ],
+   "posted_mph": 45,
+   "posted_evidence": "Oct 20 2026 staff report, Item 6, Table 1, Existing column (segment 13: 45).",
+   "posted_source": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943",
+   "lowered_to_mph": 30,
+   "lowered_on": "2026-11-19",
+   "lowered_source": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943",
+   "map_uses_posted": true,
+   "new_signs_confirmed": false,
+   "signs_evidence": null
+  },
+  {
+   "id": "delmar-vdlv-cdm-jd",
+   "region": "sd",
+   "road": "Via de la Valle",
+   "osm_name": "Via de la Valle",
+   "stretch": "Camino del Mar - Jimmy Durante Blvd",
+   "label": "Via de la Valle (Camino del Mar - Jimmy Durante Blvd",
+   "bbox": [
+    32.97939,
+    -117.26905,
+    32.98046,
+    -117.25683
+   ],
+   "posted_mph": 40,
+   "posted_evidence": "Oct 20 2026 staff report, Item 6, Table 1, Existing column (segment 16: 40).",
+   "posted_source": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943",
+   "lowered_to_mph": 35,
+   "lowered_on": "2026-11-19",
+   "lowered_source": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943",
+   "map_uses_posted": true,
+   "new_signs_confirmed": false,
+   "signs_evidence": null
+  },
+  {
+   "id": "delmar-jd-vdlv-gate2",
+   "region": "sd",
+   "road": "Jimmy Durante Blvd",
+   "osm_name": "Jimmy Durante Boulevard",
+   "stretch": "Via de la Valle - Fairgrounds Gate 2",
+   "label": "Jimmy Durante Blvd (Via de la Valle - Fairgrounds Gate 2",
+   "bbox": [
+    32.97835,
+    -117.25687,
+    32.97943,
+    -117.25627
+   ],
+   "posted_mph": 45,
+   "posted_evidence": "Oct 20 2026 staff report, Item 6, Table 1, Existing column (segment 12: 45). Not LSV-legal at either limit.",
+   "posted_source": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943",
+   "lowered_to_mph": 40,
+   "lowered_on": "2026-11-19",
+   "lowered_source": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943",
+   "map_uses_posted": false,
+   "new_signs_confirmed": false,
+   "signs_evidence": null
+  },
+  {
+   "id": "delmar-cdm-coast-plaza",
+   "region": "sd",
+   "road": "Camino del Mar",
+   "osm_name": "Camino del Mar",
+   "stretch": "Coast Blvd - Del Mar Plaza",
+   "label": "Camino del Mar (Coast Blvd - Del Mar Plaza",
+   "bbox": [
+    32.95961,
+    -117.26715,
+    32.96768,
+    -117.26515
+   ],
+   "posted_mph": 35,
+   "posted_evidence": "Oct 20 2026 staff report, Item 6, Table 1, Existing column (segments 4-5: 35). LSV-legal at either limit.",
+   "posted_source": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943",
+   "lowered_to_mph": 30,
+   "lowered_on": "2026-11-19",
+   "lowered_source": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943",
+   "map_uses_posted": false,
+   "new_signs_confirmed": false,
+   "signs_evidence": null
+  },
+  {
+   "id": "delmar-jd-sdd-cdm",
+   "region": "sd",
+   "road": "Jimmy Durante Blvd",
+   "osm_name": "Jimmy Durante Boulevard",
+   "stretch": "San Dieguito Dr - Camino del Mar",
+   "label": "Jimmy Durante Blvd (San Dieguito Dr - Camino del Mar",
+   "bbox": [
+    32.96402,
+    -117.26549,
+    32.96604,
+    -117.26511
+   ],
+   "posted_mph": 35,
+   "posted_evidence": "Oct 20 2026 staff report, Item 6, Table 1, Existing column (segment 14: 35). LSV-legal at either limit.",
+   "posted_source": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943",
+   "lowered_to_mph": 30,
+   "lowered_on": "2026-11-19",
+   "lowered_source": "https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943",
+   "map_uses_posted": false,
+   "new_signs_confirmed": false,
+   "signs_evidence": null
+  },
+  {
+   "id": "sd-lajolla-loring-colima",
+   "region": "sd",
+   "road": "La Jolla Blvd",
+   "osm_name": "La Jolla Boulevard",
+   "stretch": "Loring St - Colima St",
+   "label": "La Jolla Blvd (Loring St - Colima St: posted 35",
+   "bbox": [
+    32.80488,
+    -117.26679,
+    32.81125,
+    -117.25818
+   ],
+   "posted_mph": 35,
+   "posted_evidence": "Mapillary sign photos Jan 8 2025: SPEED LIMIT 35 (feature 9238952249552002). research/sd_safety_caution.md.",
+   "posted_source": "https://www.mapillary.com/app/?lat=32.810455&lng=-117.266100&z=19&focus=map&mapFeatureId=9238952249552002",
+   "lowered_to_mph": 25,
+   "lowered_on": "2026-03-16",
+   "lowered_source": "San Diego R-316675 (adopted Mar 16 2026)",
+   "map_uses_posted": false,
+   "new_signs_confirmed": false,
+   "signs_evidence": null
+  },
+  {
+   "id": "sd-mission-santaclara-loring",
+   "region": "sd",
+   "road": "Mission Blvd",
+   "osm_name": "Mission Boulevard",
+   "stretch": "Santa Clara Pl - Loring St",
+   "label": "Mission Blvd (Santa Clara Pl - Loring St: posted 30",
+   "bbox": [
+    32.78225,
+    -117.25809,
+    32.80501,
+    -117.25243
+   ],
+   "posted_mph": 30,
+   "posted_evidence": "Mapillary sign photo Jan 8 2025: SPEED LIMIT 30 at Wilbur Ave (feature 960076746257679). research/sd_safety_caution.md.",
+   "posted_source": "https://www.mapillary.com/app/?lat=32.803837&lng=-117.257860&z=19&focus=map&mapFeatureId=960076746257679",
+   "lowered_to_mph": 25,
+   "lowered_on": null,
+   "lowered_source": "San Diego R-316675 (lowering to 25)",
+   "map_uses_posted": false,
+   "new_signs_confirmed": false,
+   "signs_evidence": null
+  },
+  {
+   "id": "sd-mission-sanfernando-santaclara",
+   "region": "sd",
+   "road": "Mission Blvd",
+   "osm_name": "Mission Boulevard",
+   "stretch": "San Fernando Pl - Santa Clara Pl",
+   "label": "Mission Bl (San Fernando Pl - Santa Clara Pl)",
+   "bbox": [
+    32.76771,
+    -117.25268,
+    32.78237,
+    -117.25081
+   ],
+   "posted_mph": 30,
+   "posted_evidence": "Mapillary 30 detections Dec 20 2024 (3960899604187237, 646794851055392); sign not readable. research/sd_safety_caution.md.",
+   "posted_source": "https://www.mapillary.com/app/?focus=map&mapFeatureId=3960899604187237",
+   "lowered_to_mph": 25,
+   "lowered_on": "2026-03-16",
+   "lowered_source": "San Diego R-316675 Table 7",
+   "map_uses_posted": false,
+   "new_signs_confirmed": false,
+   "signs_evidence": null
+  },
+  {
+   "id": "sb-lomas-santa-fe-hwy101",
+   "region": "sd",
+   "road": "Lomas Santa Fe Dr",
+   "osm_name": "Lomas Santa Fe Drive",
+   "stretch": "at Hwy 101",
+   "label": "Lomas Santa Fe Dr (at Hwy 101:",
+   "bbox": [
+    32.99186,
+    -117.27163,
+    32.99198,
+    -117.27111
+   ],
+   "posted_mph": null,
+   "posted_evidence": "No sign photo on these 4 short ways. Solana Beach lists 35 (Jul 12 2023 staff report); only OpenStreetMap says 50, which is not sign evidence.",
+   "posted_source": null,
+   "lowered_to_mph": 35,
+   "lowered_on": null,
+   "lowered_source": "https://cityofsolanabeach.ca.gov/sites/default/files/Solana%20Beach/Meetings/City%20Council/2023/07-12-23/07-12-23%20Reg/A.3.%20Report%20-%2007-12-23%20-%20O.pdf",
+   "map_uses_posted": false,
+   "new_signs_confirmed": false,
+   "signs_evidence": null
+  }
+ ]
+}

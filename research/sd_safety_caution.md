@@ -24,3 +24,19 @@ Map is lower than the evidence there, but legal either way.
 
 Caveat for the SD "carts & LSVs <= 35" rule: CVC 21115/21716 limit plain golf carts (not LSVs) to roads posted 25 or less. At 30-35 these
 stretches are LSV-only under state law; the app's SD rule treats <= 35 as OK for both.
+
+## Del Mar ordinance stretches: blocked until new signs are confirmed (Nov 19 2026)
+
+Del Mar's speed ordinance (Clerk's File 904-4, Oct 20 2026 agenda Item 6, https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943)
+took effect Nov 19 2026. The staff report says "Speed limit signs will be replaced"; no source confirms they are up (checked Nov 19 2026).
+Applying the rule above (CVC 22357), three stretches are built at the limit still posted, so they are not LSV-legal:
+
+| Stretch | Posted (map now) | Ordinance |
+|---|---|---|
+| Camino del Mar, Via de la Valle - San Dieguito Bridge | 40 | 30 |
+| Jimmy Durante Blvd, Fairgrounds Gate 2 - San Dieguito Dr | 45 | 30 |
+| Via de la Valle, Camino del Mar - Jimmy Durante Blvd | 40 | 35 |
+
+Data: research/posted_limits.json (map_uses_posted). Guard: scripts/check_posted_limits.py. To lift one: set its new_signs_confirmed
+to true with signs_evidence (a dated photo or city notice of the new sign), run python3 scripts/build_data.py, delete its BLK line in
+public/app.js, and update scripts/test_delmar_warning.py.
