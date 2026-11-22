@@ -60,10 +60,12 @@ with sync_playwright() as p:
     # after GPS, reset -> two arbitrary points again
     pg.click("#reset");pg.evaluate("map.fire('click',{latlng:L.latLng(32.84,-117.27)});0");s=S();ck("after reset with GPS known, tap sets From pin (not GPS)",s["from"] and not s["from"]["me"])
     pg.click("#reset")
-    # Mexico / inland rejected
+    # Mexico rejected. Inland (Escondido, outside the SD outline) is accepted since Max t590u: it opens the general US area
     pg.evaluate("map.fire('click',{latlng:L.latLng(32.52,-117.12)});0");ck("Mexico tap rejected",not S()["from"])
-    pg.evaluate("map.fire('click',{latlng:L.latLng(33.12,-117.08)});0");ck("Escondido tap rejected",not S()["from"])
     ck("testRoute rejects Mexico",pg.evaluate("testRoute([32.58,-117.11],[32.52,-117.11])") is None)
+    pg.click("#reset")
+    pg.evaluate("map.fire('click',{latlng:L.latLng(33.12,-117.08)});0");pg.wait_for_timeout(800)
+    ck("Escondido tap accepted in the general US area",S()["from"] and pg.evaluate("REG.id")=="other",pg.evaluate("REG.id"))
     pg.click("#reset");pg.evaluate("setSnap('half');0");pg.click("#q");pg.wait_for_timeout(300)
     pg.screenshot(path=SHOTS_DIR+"screenshot-fields.png")
 finish()

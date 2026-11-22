@@ -105,6 +105,8 @@ jobs:
         run: node --test tests/heading_reroute.test.mjs
       - name: Nav extras (finish flag, trimmed line, one arrival celebration)
         run: node --test tests/navfx.test.mjs
+      - name: "Outside mapped towns: US check, general route request, warning copy (Max t590u)"
+        run: node --test tests/anywhere.test.mjs
       - name: Local-first search (bias, distance rerank, far label)
         run: node --test tests/geosearch.test.mjs
       - name: Saved places (Home, Favorite beach, favorites)
@@ -159,6 +161,8 @@ jobs:
         run: python -m unittest tests.test_search_keep_text -v
       - name: Local-first search + saved places (browser)
         run: python -m unittest tests.test_local_search_ui -v
+      - name: "test_anywhere (unmapped US spot: map, GPS, route + warning; mapped towns unchanged; router mocked)"
+        run: python scripts/test_anywhere.py
       - name: test_ui
         run: python scripts/test_ui.py
       - name: test_verified ('verified' only on two-source coastal SD segments; other regions never)

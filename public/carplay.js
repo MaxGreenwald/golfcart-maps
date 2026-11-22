@@ -12,7 +12,7 @@ async function ready(){await READY;for(let i=0;i<200&&!window.ready;i++)await ne
 // Analytics: everything CarPlay triggers is tagged platform 'carplay' (public/track.js; town level only).
 const CP={platform:'carplay'};
 async function asCarPlay(f){const prev=window._trackOpts;window._trackOpts=CP;try{return await f()}finally{window._trackOpts=prev}}
-async function regionFor(lat,lon){if(REG&&inBox(REG,lat,lon))return;const r=REGIONS.find(x=>inBox(x,lat,lon));if(r){window._regHow='carplay';await asCarPlay(async()=>{await loadRegion(r.id,true);await ready()})}}
+async function regionFor(lat,lon){if(REG&&REG.bbox&&inBox(REG,lat,lon))return;const r=REGIONS.find(x=>inBox(x,lat,lon));if(r){window._regHow='carplay';await asCarPlay(async()=>{await loadRegion(r.id,true);await ready()})}}
 // Native hooks call these (CarPlaySceneDelegate.swift via GCMBridge): connect -> session, Go -> route_started, arrival -> route_completed.
 const CP_EVENTS={session:1,route_started:1,route_completed:1};
 function cpTrack(name,props){if(!CP_EVENTS[name])return {ok:false,reason:'not allowed'};const p={};if(props&&props.mi!=null&&isFinite(+props.mi))p.mi=Math.round(+props.mi*2)/2;
@@ -47,7 +47,7 @@ async function refreshCpNudge(lat,lon){
  const sh=a.shop,veh=sh.vehicle==='lsv'?'lsv':'golf_cart';
  let homeMi=null,travelMin=null;
  const pinned=Number.isFinite(+sh.return_lat)&&Number.isFinite(+sh.return_lon);
- if(pinned&&window.GCMRouter&&typeof REG!=='undefined'&&REG&&typeof RULES!=='undefined'){
+ if(pinned&&window.GCMRouter&&typeof REG!=='undefined'&&REG&&!REG.general&&typeof RULES!=='undefined'){
   const key=REG.id+':'+veh;
   if(!cpHomeApi||cpHomeKey!==key){cpHomeApi=await window.GCMRouter.openRegion(REG,RULES,veh,u=>fetch(u));cpHomeKey=key}
   const leg=await cpHomeApi.trip({lat:+lat,lon:+lon},{lat:+sh.return_lat,lon:+sh.return_lon},{risky:false});
@@ -126,7 +126,7 @@ window.GCMCarPlay={
   const route=window.navStepsFor(r,dest||'');cpLast=route;
   cpStory=window.GCMStories?window.GCMStories.matchNote(cpNotes,to,dest||''):'';
   const line=route.pts.map(p=>[+p[0].toFixed(6),+p[1].toFixed(6)]);
-  return {ok:true,mode:MODE,region:REG.id,meters:Math.round(r.dist),miles:lr.mi,roundTripMiles:lr.rt,minutes:lr.min,range:lr.range,
+  return {ok:true,mode:MODE,region:REG.id,general:!!REG.general,note:REG.general&&window.GCMAnywhere?GCMAnywhere.WARNING:undefined,meters:Math.round(r.dist),miles:lr.mi,roundTripMiles:lr.rt,minutes:lr.min,range:lr.range,
    risky:lr.risky,line,maneuvers:maneuvers(r,route)}},
  // Start live guidance on the last plan() (Go, or after a reroute plan). Same engine as the phone.
  // Speech comes from the phone's promptPlan too (t459u): native only speaks `say` through GCMVoice, never its own timing.
