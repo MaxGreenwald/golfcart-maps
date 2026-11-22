@@ -97,7 +97,9 @@ class RegionDefault(unittest.TestCase):
         )
         self.assertGreater(nearest, self.limit)
         self.assertIn('geolocation={"latitude":FAR_LAT,"longitude":FAR_LNG}', self.text)
-        self.assertIn('ck("far away -> San Diego default"', self.text)
+        # Max t590u: a far-away US spot opens the general area there; outside the US still defaults to San Diego.
+        self.assertIn('ck("far away in the US (Kansas) -> general area at that spot, not San Diego (Max t590u)"', self.text)
+        self.assertIn('ck("outside the US (London) -> San Diego default"', self.text)
 
 
 if __name__ == "__main__":
