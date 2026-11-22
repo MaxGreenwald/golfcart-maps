@@ -1,13 +1,13 @@
 # Golf Cart Maps
 
-> Golf Cart Maps (golfcartmap.com) is a golf cart map, LSV map and route planner for golf carts and street-legal LSVs (low speed vehicles), free to use. It shows which roads are legal for golf carts and street-legal LSVs in 109 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
+> Golf Cart Maps (golfcartmap.com) is a golf cart map, LSV map and route planner for golf carts and street-legal LSVs (low speed vehicles), free to use. It shows which roads are legal for golf carts and street-legal LSVs in 110 beach and golf towns across the U.S., plans routes that stay on them, and cites the state law behind each rule.
 
 URL: https://golfcartmap.com/
 Also written: Golf Cart Map, GolfCartMap (same site).
 
 ## What it does
 - Colors every road: green = allowed for your vehicle, red = too fast or banned (avoid).
-- LSV map (low speed vehicle map): for street-legal golf carts and other LSVs it shows roads posted 35 mph or less in 101 of our 109 regions (25 mph in Atlantic City, NJ; Avalon (Catalina Island), CA; Cape May & the Wildwoods, NJ; Greenwich, CT; Gulf Shores / Orange Beach, AL; Long Beach Island, NJ; Mystic, CT; Ocean City, NJ), minus roads a town or county bans for LSVs. LSV map app: https://golfcartmap.com/lsv.
+- LSV map (low speed vehicle map): for street-legal golf carts and other LSVs it shows roads posted 35 mph or less in 102 of our 110 regions (25 mph in Atlantic City, NJ; Avalon (Catalina Island), CA; Cape May & the Wildwoods, NJ; Greenwich, CT; Gulf Shores / Orange Beach, AL; Long Beach Island, NJ; Mystic, CT; Ocean City, NJ), minus roads a town or county bans for LSVs. LSV map app: https://golfcartmap.com/lsv.
 - Golf cart map: plain golf carts get their own state and local rules, usually fewer roads.
 - Golf cart maps (plural): https://golfcartmap.com/golf-cart-maps lists every town map.
 - Plans routes on allowed roads; crossing a faster road at an intersection is allowed where state law permits it.
@@ -37,6 +37,7 @@ Also written: Golf Cart Map, GolfCartMap (same site).
 ### California
 - [Avalon (Catalina Island), CA](https://golfcartmap.com/catalina)
 - [Coachella Valley, CA](https://golfcartmap.com/coachella)
+- [Healdsburg, CA](https://golfcartmap.com/healdsburg)
 - [Morro Bay, CA](https://golfcartmap.com/morrobay)
 - [Newport Beach & Balboa, CA](https://golfcartmap.com/newportbeach)
 - [Laguna Woods / OC coast, CA](https://golfcartmap.com/occoast)

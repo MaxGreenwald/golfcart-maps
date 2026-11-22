@@ -13632,5 +13632,17 @@
     "conflict": false
    }
   ]
+ },
+ "healdsburg": {
+  "reports": [],
+  "conflicts": [
+   {
+    "name": "South Fitch Mountain Road",
+    "mi": 0.13,
+    "mph": 25,
+    "kind": "neighbour_disagrees"
+   }
+  ],
+  "gap": []
  }
 }

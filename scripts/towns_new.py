@@ -4,12 +4,12 @@ where no local permit was found."""
 P, T, RID = {}, [], {}
 DAY = "2026-11-13"
 
-def one(rid, slug, name, state, lat, lng, a, gc, lsv, rules, banned, faq, town_slug=None):
+def one(rid, slug, name, state, lat, lng, a, gc, lsv, rules, banned, faq, town_slug=None, day=DAY):
     if rid not in P:
         P[rid] = dict(q="Can you drive a golf cart in {n}?", a=a,
                       gc=dict(zip(("allowed", "roads", "speed_line", "notes"), gc)),
                       lsv=dict(zip(("allowed", "roads", "speed_line", "notes"), lsv)),
-                      rules=rules, banned=banned, faq=faq, sources=sorted({x[3] for x in rules}), day=DAY)
+                      rules=rules, banned=banned, faq=faq, sources=sorted({x[3] for x in rules}), day=day)
     RID[slug] = rid
     T.append((slug, town_slug or slug, name, state, lat, lng))
 
@@ -128,3 +128,19 @@ one("newportri", "newportri", "Newport", "RI", 41.490, -71.313,
     [],
     [("Can I drive a regular golf cart in {n}?", "No. Rhode Island does not register a golf cart as a low-speed vehicle."),
      ("Is this Newport Beach, California?", "No. This map is Newport, Rhode Island. Newport Beach, California is a separate map.")])
+
+CVC = "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum="
+HMC1050 = "https://ecode360.com/47365641"
+one("healdsburg", "healdsburg", "Healdsburg", "CA", 38.6105, -122.8692,
+    "Yes, with the California caps. In {n}, a golf cart may use a street posted 25 mph or less in a business or residence district. An LSV may use a road posted 35 mph or less. Streets around the Plaza are posted 20 mph. US 101 is closed to both.",
+    ("yes", "Streets posted 25 mph or less", "25 mph", "Business or residence district"),
+    ("yes", "Roads posted 35 mph or less", "35 mph", "Registered and insured"),
+    [("Golf carts", "Golf carts on highways posted 25 mph or less in a business or residence district", "CVC 21716", CVC + "21716"),
+     ("LSV roads", "LSVs on roads posted 35 mph or less; they may cross faster roads at intersections", "CVC 21260", CVC + "21260"),
+     ("City speed limits", "Healdsburg Avenue is 20 mph from Piper Street to Mill Street, 25 mph through the rest of downtown, 30 mph north to Parkland Farms Boulevard and 35 mph near both city limits. University Avenue, Chiquita Road and South Fitch Mountain Road are 30 mph.", "Healdsburg Municipal Code 10.50.050", HMC1050),
+     ("US 101", "Freeway; no golf carts or LSVs", "CVC 21260", CVC + "21260")],
+    [("US 101", "No golf carts or LSVs", False)],
+    [("Can I drive a golf cart around the {n} Plaza?", "Yes. Healdsburg Avenue, Center Street, Matheson Street and Plaza Street around the Plaza are posted 20 mph, under the 25 mph golf cart cap."),
+     ("Can I take an LSV to the wineries outside {n}?", "Only on roads posted 35 mph or less. Many county wine roads outside town are faster or unposted, and they show red on the map. An LSV may cross them at an intersection."),
+     ("Does {n} have a golf cart ordinance?", "No golf cart or NEV transportation plan was found in the city code, so the California state rules apply.")],
+    day="2026-11-22")
