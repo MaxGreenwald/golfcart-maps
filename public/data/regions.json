@@ -2455,5 +2455,24 @@
   "cover": "Newport, Rhode Island only. This is not Newport Beach, California. Pick another city in the menu above.",
   "slug": "newportri",
   "beta": true
+ },
+ {
+  "id": "healdsburg",
+  "name": "Healdsburg, CA",
+  "short": "Healdsburg",
+  "state": "CA",
+  "center": [
+   38.6105,
+   -122.8692
+  ],
+  "zoom": 14,
+  "bbox": [
+   38.59,
+   -122.89,
+   38.652,
+   -122.84
+  ],
+  "cover": "Healdsburg, California (Sonoma County), inside the city limits. The county wine roads outside town are not on this map. Pick another city in the menu above.",
+  "slug": "healdsburg"
  }
 ]

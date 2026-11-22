@@ -1,0 +1,86 @@
+{
+ "slug": "healdsburg",
+ "region": "healdsburg",
+ "name": "Healdsburg",
+ "state": "CA",
+ "question_title": "Can you drive a golf cart in Healdsburg?",
+ "answer_short": "Yes, with the California caps. In Healdsburg, a golf cart may use a street posted 25 mph or less in a business or residence district. An LSV may use a road posted 35 mph or less. Streets around the Plaza are posted 20 mph. US 101 is closed to both.",
+ "golf_cart": {
+  "allowed": "yes",
+  "roads": "Streets posted 25 mph or less",
+  "speed_line": "25 mph",
+  "notes": "Business or residence district"
+ },
+ "lsv": {
+  "allowed": "yes",
+  "roads": "Roads posted 35 mph or less",
+  "speed_line": "35 mph",
+  "notes": "Registered and insured"
+ },
+ "rules": [
+  {
+   "topic": "Golf carts",
+   "rule": "Golf carts on highways posted 25 mph or less in a business or residence district",
+   "citation": "CVC 21716",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716"
+  },
+  {
+   "topic": "LSV roads",
+   "rule": "LSVs on roads posted 35 mph or less; they may cross faster roads at intersections",
+   "citation": "CVC 21260",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260"
+  },
+  {
+   "topic": "City speed limits",
+   "rule": "Healdsburg Avenue is 20 mph from Piper Street to Mill Street, 25 mph through the rest of downtown, 30 mph north to Parkland Farms Boulevard and 35 mph near both city limits. University Avenue, Chiquita Road and South Fitch Mountain Road are 30 mph.",
+   "citation": "Healdsburg Municipal Code 10.50.050",
+   "source_url": "https://ecode360.com/47365641"
+  },
+  {
+   "topic": "US 101",
+   "rule": "Freeway; no golf carts or LSVs",
+   "citation": "CVC 21260",
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260"
+  }
+ ],
+ "banned_roads": [
+  {
+   "name": "US 101",
+   "rule": "No golf carts or LSVs",
+   "crossings_ok": false
+  }
+ ],
+ "faq": [
+  {
+   "q": "Where can I drive my LSV in Healdsburg?",
+   "a": "Roads posted 35 mph or less. Registered and insured. A town or county can still ban LSVs from a specific road, and posted signs win."
+  },
+  {
+   "q": "Can I drive a golf cart around the Healdsburg Plaza?",
+   "a": "Yes. Healdsburg Avenue, Center Street, Matheson Street and Plaza Street around the Plaza are posted 20 mph, under the 25 mph golf cart cap."
+  },
+  {
+   "q": "Can I take an LSV to the wineries outside Healdsburg?",
+   "a": "Only on roads posted 35 mph or less. Many county wine roads outside town are faster or unposted, and they show red on the map. An LSV may cross them at an intersection."
+  },
+  {
+   "q": "Does Healdsburg have a golf cart ordinance?",
+   "a": "No golf cart or NEV transportation plan was found in the city code, so the California state rules apply."
+  }
+ ],
+ "rental_shops": [],
+ "nearby": [],
+ "map_center": [
+  38.6105,
+  -122.8692
+ ],
+ "zoom": 15,
+ "published": "2026-11-22",
+ "last_checked": "2026-11-22",
+ "checked_by": "Golf Cart Maps",
+ "sources": [
+  "https://ecode360.com/47365641",
+  "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260",
+  "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716"
+ ]
+}
