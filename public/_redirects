@@ -107,6 +107,7 @@
 /scottsdale/ /scottsdale 301
 /madison/ /madison 301
 /newportri/ /newportri 301
+/healdsburg/ /healdsburg 301
 /map/ /map 301
 /map/:slug /map 200
 /map/:slug/ /map 200

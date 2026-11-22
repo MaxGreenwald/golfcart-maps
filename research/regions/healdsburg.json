@@ -1,0 +1,740 @@
+{
+ "poly": [
+  [
+   -122.88594,
+   38.6392
+  ],
+  [
+   -122.88519,
+   38.63595
+  ],
+  [
+   -122.88283,
+   38.63756
+  ],
+  [
+   -122.87949,
+   38.63654
+  ],
+  [
+   -122.87923,
+   38.63699
+  ],
+  [
+   -122.87881,
+   38.63626
+  ],
+  [
+   -122.87764,
+   38.63577
+  ],
+  [
+   -122.87887,
+   38.61599
+  ],
+  [
+   -122.87868,
+   38.61444
+  ],
+  [
+   -122.87777,
+   38.61252
+  ],
+  [
+   -122.87361,
+   38.60773
+  ],
+  [
+   -122.86781,
+   38.60344
+  ],
+  [
+   -122.86854,
+   38.60229
+  ],
+  [
+   -122.87252,
+   38.60234
+  ],
+  [
+   -122.87256,
+   38.60038
+  ],
+  [
+   -122.86671,
+   38.60044
+  ],
+  [
+   -122.86671,
+   38.60212
+  ],
+  [
+   -122.86501,
+   38.6021
+  ],
+  [
+   -122.86105,
+   38.59947
+  ],
+  [
+   -122.85881,
+   38.59858
+  ],
+  [
+   -122.85767,
+   38.59779
+  ],
+  [
+   -122.85779,
+   38.5975
+  ],
+  [
+   -122.84895,
+   38.59289
+  ],
+  [
+   -122.85214,
+   38.60061
+  ],
+  [
+   -122.854,
+   38.60253
+  ],
+  [
+   -122.85582,
+   38.60345
+  ],
+  [
+   -122.85538,
+   38.60352
+  ],
+  [
+   -122.85567,
+   38.60418
+  ],
+  [
+   -122.85289,
+   38.60457
+  ],
+  [
+   -122.85299,
+   38.60619
+  ],
+  [
+   -122.85327,
+   38.60622
+  ],
+  [
+   -122.85332,
+   38.60683
+  ],
+  [
+   -122.85191,
+   38.60717
+  ],
+  [
+   -122.85192,
+   38.60769
+  ],
+  [
+   -122.85614,
+   38.60836
+  ],
+  [
+   -122.85186,
+   38.60845
+  ],
+  [
+   -122.84499,
+   38.61004
+  ],
+  [
+   -122.84494,
+   38.60911
+  ],
+  [
+   -122.84249,
+   38.61191
+  ],
+  [
+   -122.84288,
+   38.61209
+  ],
+  [
+   -122.84326,
+   38.61136
+  ],
+  [
+   -122.84408,
+   38.61123
+  ],
+  [
+   -122.84405,
+   38.61315
+  ],
+  [
+   -122.84364,
+   38.61335
+  ],
+  [
+   -122.84358,
+   38.61454
+  ],
+  [
+   -122.8451,
+   38.61458
+  ],
+  [
+   -122.84561,
+   38.6132
+  ],
+  [
+   -122.84877,
+   38.61321
+  ],
+  [
+   -122.84863,
+   38.61407
+  ],
+  [
+   -122.84821,
+   38.61444
+  ],
+  [
+   -122.84859,
+   38.61445
+  ],
+  [
+   -122.84856,
+   38.61505
+  ],
+  [
+   -122.84649,
+   38.61493
+  ],
+  [
+   -122.84617,
+   38.62056
+  ],
+  [
+   -122.84713,
+   38.62056
+  ],
+  [
+   -122.84719,
+   38.62385
+  ],
+  [
+   -122.84916,
+   38.62419
+  ],
+  [
+   -122.84882,
+   38.62374
+  ],
+  [
+   -122.84918,
+   38.62341
+  ],
+  [
+   -122.84944,
+   38.62382
+  ],
+  [
+   -122.84998,
+   38.62382
+  ],
+  [
+   -122.85012,
+   38.62324
+  ],
+  [
+   -122.85144,
+   38.62281
+  ],
+  [
+   -122.85259,
+   38.62343
+  ],
+  [
+   -122.85345,
+   38.62328
+  ],
+  [
+   -122.85403,
+   38.62403
+  ],
+  [
+   -122.85422,
+   38.62785
+  ],
+  [
+   -122.86227,
+   38.62795
+  ],
+  [
+   -122.86227,
+   38.62866
+  ],
+  [
+   -122.86348,
+   38.62866
+  ],
+  [
+   -122.86226,
+   38.62953
+  ],
+  [
+   -122.86301,
+   38.63018
+  ],
+  [
+   -122.86341,
+   38.63014
+  ],
+  [
+   -122.86306,
+   38.63041
+  ],
+  [
+   -122.86384,
+   38.63143
+  ],
+  [
+   -122.86473,
+   38.63112
+  ],
+  [
+   -122.86518,
+   38.63137
+  ],
+  [
+   -122.86618,
+   38.63499
+  ],
+  [
+   -122.86458,
+   38.63495
+  ],
+  [
+   -122.86456,
+   38.63772
+  ],
+  [
+   -122.8665,
+   38.63773
+  ],
+  [
+   -122.86652,
+   38.63961
+  ],
+  [
+   -122.86455,
+   38.63958
+  ],
+  [
+   -122.86455,
+   38.63868
+  ],
+  [
+   -122.86065,
+   38.63865
+  ],
+  [
+   -122.86064,
+   38.64091
+  ],
+  [
+   -122.85778,
+   38.64229
+  ],
+  [
+   -122.85407,
+   38.64232
+  ],
+  [
+   -122.85411,
+   38.64968
+  ],
+  [
+   -122.86899,
+   38.6497
+  ],
+  [
+   -122.86855,
+   38.64754
+  ],
+  [
+   -122.87292,
+   38.64764
+  ],
+  [
+   -122.87511,
+   38.64245
+  ],
+  [
+   -122.88186,
+   38.64254
+  ],
+  [
+   -122.88186,
+   38.6409
+  ],
+  [
+   -122.88594,
+   38.6392
+  ]
+ ],
+ "bans": [
+  {
+   "names": "^(US 101|U\\.S\\. 101|Redwood Highway)$|(^|;)US 101($|;)",
+   "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260",
+   "label": "US 101 is a freeway posted well above 35 mph (no golf carts or LSVs)"
+  }
+ ],
+ "unverified": [
+  "No city golf cart or NEV transportation plan was found, so the California state speed caps apply.",
+  "Street speeds inside the city limits follow Healdsburg Municipal Code Chapter 10.50. The map is clipped to the city limits, so unposted Sonoma County roads outside town are not drawn. A road that crosses the line keeps its outside piece, using OpenStreetMap and federal speed data; an unposted secondary road there stays red.",
+  "The Healdsburg Avenue Memorial Bridge is posted 15 mph (HMC 10.50.060). It is drawn at 30 mph with its east approach, so plain golf carts see it red. That is stricter than the sign.",
+  "Kinley Drive (35 mph in HMC 10.50.050) and the Magnolia Drive area west of US 101 are outside the OpenStreetMap city line, so they are not drawn.",
+  "Where Healdsburg Avenue meets Old Redwood Highway at the southern city limit, a short piece picks up the federal US 101 speed (70 mph) and stays red. The city code posts that end of Healdsburg Avenue at 35 mph."
+ ],
+ "speed_names": [
+  {
+   "names": "^Healdsburg Avenue$",
+   "mph": 35,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Healdsburg Avenue, northern city limits to Parkland Farms Boulevard 35 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.6379,
+    -122.88,
+    38.7,
+    -122.86
+   ]
+  },
+  {
+   "names": "^Healdsburg Avenue$",
+   "mph": 30,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Healdsburg Avenue, Parkland Farms Boulevard to Powell Avenue 30 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.6207,
+    -122.88,
+    38.6379,
+    -122.86
+   ]
+  },
+  {
+   "names": "^Healdsburg Avenue$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Healdsburg Avenue, Powell Avenue to Piper Street 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.6143,
+    -122.88,
+    38.6207,
+    -122.86
+   ]
+  },
+  {
+   "names": "^Healdsburg Avenue$",
+   "mph": 20,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Healdsburg Avenue, Piper Street to Mill Street 20 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.6084,
+    -122.88,
+    38.6143,
+    -122.86
+   ]
+  },
+  {
+   "names": "^Healdsburg Avenue$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Healdsburg Avenue, Mill Street to Front Street/Kennedy Lane 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.6036,
+    -122.88,
+    38.6084,
+    -122.8611
+   ]
+  },
+  {
+   "names": "^Healdsburg Avenue$",
+   "mph": 30,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Healdsburg Avenue, Memorial Bridge and its east approach to Bailhache Avenue 30 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.6031,
+    -122.8611,
+    38.6045,
+    -122.85
+   ]
+  },
+  {
+   "names": "^Healdsburg Avenue$",
+   "mph": 35,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Healdsburg Avenue, Bailhache Avenue to southern city limits 35 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.55,
+    -122.87,
+    38.6031,
+    -122.84
+   ]
+  },
+  {
+   "names": "^Center Street$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Center Street, Powell Avenue to North Street 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.6122,
+    -122.875,
+    38.6215,
+    -122.865
+   ]
+  },
+  {
+   "names": "^Center Street$",
+   "mph": 20,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Center Street, North Street to Mill Street 20 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.608,
+    -122.875,
+    38.6122,
+    -122.865
+   ]
+  },
+  {
+   "names": "^Chiquita Road$",
+   "mph": 30,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Chiquita Road, city limits north to Grove Street 30 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json"
+  },
+  {
+   "names": "^Dry Creek Road$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Dry Creek Road, US 101 to Healdsburg Avenue 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.62,
+    -122.8792,
+    38.63,
+    -122.87
+   ]
+  },
+  {
+   "names": "^(Fitch|Harmon|Hudson) Street$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Fitch, Harmon and Hudson Streets 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json"
+  },
+  {
+   "names": "^Front Street$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Front Street, Mason Street to Healdsburg Avenue 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.6035,
+    -122.87,
+    38.608,
+    -122.855
+   ]
+  },
+  {
+   "names": "^(West )?Grant (Street|Avenue)$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Grant Avenue, Grove Street to University Street 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.614,
+    -122.876,
+    38.618,
+    -122.863
+   ]
+  },
+  {
+   "names": "^(Grove|Vine) Street$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Grove Street and Grove/Vine Street, Healdsburg Avenue to Mill Street 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json"
+  },
+  {
+   "names": "^March Avenue$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: March Avenue, Healdsburg Avenue to Woodside Court 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json"
+  },
+  {
+   "names": "^(West )?Matheson Street$",
+   "mph": 20,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Matheson Street, western city boundary to East Street 20 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.6,
+    -122.9,
+    38.62,
+    -122.8683
+   ]
+  },
+  {
+   "names": "^Matheson Street$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Matheson Street, East Street to Heron Street 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.6,
+    -122.8683,
+    38.62,
+    -122.85
+   ]
+  },
+  {
+   "names": "^Mill Street$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Mill Street, East Street to US 101 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json"
+  },
+  {
+   "names": "^Parkland Farms Boulevard$",
+   "mph": 35,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Parkland Farms Boulevard, Healdsburg Avenue to Saddle Draw 35 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json"
+  },
+  {
+   "names": "^Plaza Street$",
+   "mph": 20,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Plaza Street, Healdsburg Avenue to Center Street 20 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json"
+  },
+  {
+   "names": "^Powell Avenue$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Powell Avenue, Healdsburg Avenue to eastern city limits 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json"
+  },
+  {
+   "names": "^South Fitch Mountain Road$",
+   "mph": 30,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: South Fitch Mountain Road, Heron Drive to eastern city limits 30 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.6,
+    -122.857,
+    38.63,
+    -122.83
+   ]
+  },
+  {
+   "names": "^Terrace Boulevard$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: Terrace Boulevard, Healdsburg Avenue to University Street 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json"
+  },
+  {
+   "names": "^University Avenue$",
+   "mph": 30,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: University Avenue, Terrace Boulevard to Powell Avenue 30 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json"
+  },
+  {
+   "names": "^University Street$",
+   "mph": 25,
+   "url": "https://ecode360.com/47365641",
+   "label": "Healdsburg Municipal Code 10.50: University Street, Powell Avenue to Mason Street 25 mph",
+   "highway": "^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street)(_link)?$",
+   "poly": "healdsburg.json",
+   "bbox": [
+    38.6,
+    -122.87,
+    38.6207,
+    -122.86
+   ]
+  }
+ ],
+ "sources": [
+  "CVC 21716 https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716",
+  "CVC 21260 https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260",
+  "Healdsburg Municipal Code Chapter 10.50 (speed limits) https://ecode360.com/47365641",
+  "Healdsburg Municipal Code Title 10 (no golf cart or LSV chapter) https://ecode360.com/47365398",
+  "OpenStreetMap",
+  "FHWA HPMS speed limits"
+ ],
+ "enforcement": {
+  "checked": "2026-11-22",
+  "result": "bans_applied",
+  "sources": [
+   {
+    "label": "CVC 21716",
+    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21716"
+   },
+   {
+    "label": "CVC 21260",
+    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21260"
+   },
+   {
+    "label": "Healdsburg Municipal Code Chapter 10.50 (speed limits)",
+    "url": "https://ecode360.com/47365641"
+   },
+   {
+    "label": "Healdsburg Municipal Code Title 10 (no golf cart or LSV chapter)",
+    "url": "https://ecode360.com/47365398"
+   }
+  ],
+  "note": "Posted signs do not lift a ban. No Healdsburg ordinance bans golf carts or LSVs from a named street; US 101 is closed by the state speed cap."
+ },
+ "status": "Added (healdsburg, 2026-11-22)"
+}
