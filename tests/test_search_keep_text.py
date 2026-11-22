@@ -1,7 +1,7 @@
 """Regression (iOS build 18, Chloe Belle, Oct 19): typed destination text vanished as soon as suggestions showed.
 Cause: every GPS tick (watchPosition, start = Your location) ran sync(), which rewrote #q from state (to=null -> '').
-Out of region (west Phoenix, outside every box, nearest region Sun City) and SD are both checked.
-The pin sits west of Scottsdale so that region's center is not the nearest one."""
+Out of region (west Phoenix, outside every box) and SD are both checked. Since Max t590u an unmapped US spot opens the
+general area ('other') instead of the nearest town (Sun City), so its suggestion comes from the (mocked) place search."""
 import functools, http.server, os, socketserver, threading, unittest
 try:
     from playwright.sync_api import sync_playwright
@@ -24,11 +24,11 @@ class SearchKeepsText(unittest.TestCase):
     def tearDownClass(cls):
         cls.b.close(); cls.pw.stop(); cls.srv.shutdown()
 
-    def run_case(self, lat, lng, region, text):
+    def run_case(self, lat, lng, region, text, photon=None):
         c = self.b.new_context(**self.pw.devices["iPhone 13"], geolocation={"latitude": lat, "longitude": lng}, permissions=["geolocation"])
         try:
             pg = c.new_page()
-            pg.route("**/photon.komoot.io/**", lambda r: r.fulfill(json={"features": []}))
+            pg.route("**/photon.komoot.io/**", lambda r: r.fulfill(json={"features": photon or []}))
             pg.route("**/nominatim.openstreetmap.org/**", lambda r: r.fulfill(json=[]))
             pg.route("**/api/e", lambda r: r.fulfill(status=204))
             pg.goto(f"http://127.0.0.1:{self.srv.server_address[1]}/?r=x")
@@ -44,8 +44,10 @@ class SearchKeepsText(unittest.TestCase):
             pass
 
     def test_out_of_region_keeps_text_when_suggestions_arrive(self):
-        # Outside every bbox. Sun City's center is about 12 km away; Scottsdale's is about 37 km.
-        pg = self.run_case(33.55, -112.25, "suncity", "60")
+        # Outside every bbox (Sun City's center is about 12 km away): the general area, not Sun City.
+        near = [{"type": "Feature", "properties": {"name": "Arapaho Village Units 201-560", "city": "Glendale"}, "geometry": {"coordinates": [-112.24, 33.56]}}]
+        pg = self.run_case(33.55, -112.25, "other", "605", photon=near)  # 3+ letters: the place search runs
+        pg.wait_for_timeout(800)
         self.assertEqual(pg.evaluate("$('sugg').style.display"), "block")  # 'Arapaho Village Units 201-560' showed
         pg.click("#sugg div"); pg.wait_for_timeout(300)                 # picking still fills the box
         self.assertIn("Arapaho", pg.input_value("#q")); pg.context.close()

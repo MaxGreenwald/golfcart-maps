@@ -44,7 +44,7 @@ function tilesIn(s,w,n,e){const T=D.meta.tileSize,out=[];for(let x=Math.floor(w/
 let tileFailed=false;
 function showTileError(){tileFailed=true;$('title').innerHTML='⚠️ Roads didn’t load';$('sub').innerHTML='Couldn’t load road data for this area. Check your connection. <button type="button" class="chip" id="tileRetry">Retry</button>';const b=$('tileRetry');if(b)b.onclick=()=>{tileFailed=false;if(start&&end)route();else onMove()}}
 async function ensure(s,w,n,e){await READY;const ks=tilesIn(s,w,n,e).filter(k=>!loaded.has(k));if(!ks.length)return true;let done=0;const prev=$('sub').innerHTML;const paint=()=>{if(!tileFailed)$('sub').textContent=`Loading roads… ${done}/${ks.length} areas`};paint();await Promise.allSettled(ks.map(k=>loadTile(k).then(()=>{done++;paint()})));const failed=ks.filter(k=>!loaded.has(k));if(failed.length){showTileError();return false}tileFailed=false;const idle=window.ready?'See where you can legally drive. Tap the map to set a start, or hit 📍.':'See where you can legally drive. Tap the map to set a start, or hit 📍.';$('sub').innerHTML=window.ready?(prev&&prev.indexOf('tileRetry')<0?prev:idle):idle;return true}
-async function onMove(){if(!D)return;const b=map.getBounds().pad(0.1);const n0=loaded.size;if(map.getZoom()>=11)await ensure(b.getSouth(),b.getWest(),b.getNorth(),b.getEast());if(loaded.size!==n0){shown={};layer.clearLayers()}refresh()}
+async function onMove(){if(!D)return;if(REG&&!REG.general&&!(from||to)&&map.getZoom()>=12){const c=map.getCenter();if(!inBoxR(REG,c)&&!townFor([c])&&GCMAnywhere.inUS(c.lat,c.lng))$('sub').textContent=GCMAnywhere.BANNER}const b=map.getBounds().pad(0.1);const n0=loaded.size;if(map.getZoom()>=11)await ensure(b.getSouth(),b.getWest(),b.getNorth(),b.getEast());if(loaded.size!==n0){shown={};layer.clearLayers()}refresh()}
 map.on('moveend',onMove);
 // ---- Del Mar speed ordinance advisory (Clerk's File 904-4; https://www.delmar.ca.us/AgendaCenter/ViewFile/Agenda/_10202026-3943).
 // The map already uses the new ordinance limits, but until Nov 19 2026 these 3 stretches are still POSTED 40-45 mph, so we warn
@@ -117,10 +117,13 @@ function summarize(parts,H){let dist=0,stretches=[],cur=null,line=[];const legs=
  // turn-by-turn by street name
  const steps=[];for(const l of legs){const n=D.names[l.s[0]]||'unnamed road',ln=l.len!=null?l.len:l.s._len;const last=steps[steps.length-1];if(last&&last.n===n&&last.f===l.f&&last.u===l.u&&last.a===l.a)last.d+=ln;else steps.push({n,d:ln,f:l.f,u:l.u,sp:l.s[2],a:l.a,ll:[l.p[0][1],l.p[0][0]]})}
  return {dist,stretches,legs,steps}}
-window.popSet=f=>{if(inMX(window._pll))return;map.closePopup();setField(f,{ll:window._pll,label:lbl(window._pll)})};
+window.popSet=f=>{if(!covers(window._pll)&&!GCMAnywhere.inUS(window._pll.lat,window._pll.lng))return;map.closePopup();setField(f,{ll:window._pll,label:lbl(window._pll)})};
 const ft=m=>GCMRouter.shownFeet(m)+' ft',mi=m=>(m/1609.34).toFixed(1)+' mi';
 let routing=false,routeGen=0;
-async function route(){const gen=++routeGen;window._routeFail='';$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';const P=0.06;const roadsOk=await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(gen!==routeGen)return null;if(!roadsOk){showTileError();return null}if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
+async function route(){const gen=++routeGen;window._routeFail='';$('title').innerHTML='<span class="spin">🛺</span> Finding a cart-friendly route…';$('sub').textContent='';
+ // Max t590u/t591u: the route's two ends pick the area first (one mapped town, else general US roads, else not covered).
+ const area=await fitArea([start,end]);if(gen!==routeGen)return null;if(area==='out'){routeOut(outMsg(GCMAnywhere.inUS(start.lat,start.lng)?end:start));return null}
+ if(REG&&REG.general)return routeGeneral(gen);const P=0.06;const roadsOk=await ensure(Math.min(start.lat,end.lat)-P,Math.min(start.lng,end.lng)-P,Math.max(start.lat,end.lat)+P,Math.max(start.lng,end.lng)+P);if(gen!==routeGen)return null;if(!roadsOk){showTileError();return null}if(routeG)map.removeLayer(routeG);routeG=null;const [a,da,a2]=nearest(start),[b,db,b2]=nearest(end);
  await new Promise(r=>setTimeout(r,0));if(gen!==routeGen)return null;const deadline=Date.now()+GCMRouter.ROUTE_BUDGET_MS;const stateLeft={n:GCMRouter.ROUTE_STATE_BUDGET};let parts=null,H=null,stat={};
  const take=async(s,t,back)=>{if(s==null||t==null)return false;const r=await astarOff(s,t,back,deadline,stateLeft.n);if(gen!==routeGen)return 'stale';stat=r.stat||{};stateLeft.n=Math.max(0,stateLeft.n-((stat.expanded)||0));parts=r.parts;return !!parts};
  const step=async(s,t,back)=>{const got=await take(s,t,back);if(got==='stale')return 'stale';if(got)return 'hit';if(stat.reason==='timeout'||stat.reason==='budget')return 'stop';return 'next'};
@@ -128,7 +131,9 @@ async function route(){const gen=++routeGen;window._routeFail='';$('title').inne
  if(!parts&&a!=null&&b!=null&&stat.reason!=='timeout'&&stat.reason!=='budget'){for(const [x,y] of [[a,b],[a2,b],[a,b2],[a2,b2]]){const got=await step(x,y,null);if(got==='stale')return null;if(got!=='next')break}}
  if(gen!==routeGen)return null;$('acts').style.display='flex';
  if(!parts){liveNavSet(null);const stopped=stat.reason==='timeout'||stat.reason==='budget';const why=a==null||b==null?'no_road_nearby':stopped?'other':'no_legal_route';trackRoute(false,null,why);const copy=a==null||b==null?'No road near one of those points. Try a pin closer to a street.':GCMRule.routeStop(RULE,{risky:!!risky,reason:stopped?'timeout':'none'});window._routeFail=copy;$('title').innerHTML=stopped?'⏱ Search stopped':'🚫 No legal route';$('sub').innerHTML=copy;$('steps').innerHTML='';$('range').style.display='none';setSnap('half');return null}
- const r=summarize(parts,H);r.ahead=!!H;trackRoute(true,r.dist/1609.34);routeG=L.layerGroup().addTo(map);
+ const r=summarize(parts,H);r.ahead=!!H;return showRoute(r,gen,{a,b,a2,b2,da,db,deadline,stateLeft})}
+// Draw a found route: line, title, summary, range, steps, live nav. x.general: a route from general road data (anywhere.js).
+async function showRoute(r,gen,x){const {a,b,a2,b2,da,db,deadline,stateLeft}=x;trackRoute(true,r.dist/1609.34);routeG=L.layerGroup().addTo(map);
  const all=[];r.legs.forEach(l=>all.push(...l.p));const ll=all.map(p=>[p[1],p[0]]);
  // Opaque casing wider than legal roads (weight ~3.2) so the path stays obvious
  // on a phone, especially over bright green. Blue matches the legend swatch.
@@ -140,9 +145,48 @@ async function route(){const gen=++routeGen;window._routeFail='';$('title').inne
  r.stretches.forEach(s=>L.polyline(s.p.map(p=>[p[1],p[0]]),{...rs,color:'#ffc400',weight:12}).addTo(routeG).bindTooltip(`Risky: ${ft(s.len)} on ${s.name}`));
  const min=Math.max(1,Math.round(r.dist/1609.34/22*60));
  $('title').innerHTML=r.stretches.length?`⚠️ ${min} min · ${mi(r.dist)}`:`🛺 ${min} min · ${mi(r.dist)}`;
- $('sub').innerHTML=r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:(RULE.designated_only?'All on cart paths & designated roads 🌴':(r.legs.some(l=>l.u)?`Mostly ≤${RULE.max_posted} mph roads; <b>❓ ${mi(r.legs.filter(l=>l.u).reduce((a,l)=>a+l.s._len,0))} speed unknown — check signs</b>`:`All on roads ≤${RULE.max_posted} mph 🌴`))+ruleNotes()+(da>150||db>150?' · snapped to nearest legal road':'');
- r.back=await backDist(a,b,a2,b2,r.dist,deadline,stateLeft);if(gen!==routeGen)return null;renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st" role="button" tabindex="0" data-ll="${s.ll.join(',')}"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
+ $('sub').innerHTML=x.general?`<span class="anyw" id="anyWarn">⚠️ ${esc(GCMAnywhere.WARNING)}</span>`:r.stretches.length?`Includes <b>${r.stretches.length}</b> risky stretch${r.stretches.length>1?'es':''} (${r.stretches.map(s=>ft(s.len)).join(', ')}) on faster roads.`:(RULE.designated_only?'All on cart paths & designated roads 🌴':(r.legs.some(l=>l.u)?`Mostly ≤${RULE.max_posted} mph roads; <b>❓ ${mi(r.legs.filter(l=>l.u).reduce((a,l)=>a+l.s._len,0))} speed unknown — check signs</b>`:`All on roads ≤${RULE.max_posted} mph 🌴`))+ruleNotes()+(da>150||db>150?' · snapped to nearest legal road':'');
+ r.back=x.general?r.dist:await backDist(a,b,a2,b2,r.dist,deadline,stateLeft);if(gen!==routeGen)return null;renderRange(r);if(r.legs.some(l=>l.a&&!l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a Del Mar road still posted 40–45 mph until Nov 19, 2026</span>';if(r.legs.some(l=>l.a&&l.a.text))$('sub').innerHTML+=' · <span class="advw">⚠️ Uses a road where posted signs may not match our data. Check signs</span>';$('steps').innerHTML=r.steps.filter(s=>s.d>15).map(s=>`<div class="st" role="button" tabindex="0" data-ll="${s.ll.join(',')}"><span class="badge ${s.f?'y':''}">${s.f?ft(s.d):mi(s.d)}</span><span>${s.f?'⚠️ Risky: ':s.u?'❓ Speed unknown — check signs: ':''}${s.n}${s.f&&s.sp&&s.sp!=99?` (${s.sp} mph)`:''}${s.a?`<br><span class="advw">⚠️ ${advText(s.a)}</span>`:''}</span></div>`).join('');
  liveNavSet(r);if(!navOn())focusStart();if(!navOn())setSnap('half');window.gcmHaptic&&gcmHaptic(r.stretches.length?'warn':'ok');shareBtn();window.lastRoute={mi:+(r.dist/1609.34).toFixed(2),rt:+((r.dist+r.back)/1609.34).toFixed(2),range:window._rangeRes,min,risky:r.stretches.map(s=>({road:s.name,ft:GCMRouter.shownFeet(s.len)}))};window._lastDetail=r;return r}
+// ---- Outside our mapped towns (Max t590u/t591u): anywhere in the US still gets a route from general road data, with one warning ----
+const inBoxR=(r,ll)=>!!(r&&r.bbox&&ll.lat>=r.bbox[0]&&ll.lat<=r.bbox[2]&&ll.lng>=r.bbox[1]&&ll.lng<=r.bbox[3]);
+// covers: the loaded area can route this point (a mapped town inside its box and outline, or any US point in general mode)
+const covers=ll=>!!(ll&&REG&&(REG.general?GCMAnywhere.inUS(ll.lat,ll.lng):inBoxR(REG,ll)&&!inMX(ll)));
+window.coversPt=covers;
+// One town holding every point: the loaded town first, then the list (hidden towns only when already open).
+function townFor(pts){const c=[];if(REG&&!REG.general)c.push(REG);for(const r of REGIONS)if(!r.hidden)c.push(r);return c.find(r=>pts.every(p=>inBoxR(r,p)))||null}
+// Old copy at a town's edge (the San Diego Mexico line, unchanged); farther away, the US-only line.
+const nearBox=(r,ll,d)=>!!(r&&r.bbox&&ll.lat>=r.bbox[0]-d&&ll.lat<=r.bbox[2]+d&&ll.lng>=r.bbox[1]-d&&ll.lng<=r.bbox[3]+d);
+const outMsg=ll=>REG&&!REG.general&&ll&&nearBox(REG,ll,0.5)?'That spot is outside the map — '+(REG.cover||'pick another area in the city menu above.'):GCMAnywhere.US_ONLY;
+let areaQ=Promise.resolve();
+// Make the loaded area fit these points: 'ok' or 'out' (not in the US). Serialized, so GPS and taps can't load two areas at once.
+function fitArea(pts){const run=()=>fitArea0(pts.filter(Boolean));const p=areaQ.then(run,run);areaQ=p.catch(()=>{});return p}
+async function fitArea0(pts){if(!pts.length||!REG)return 'ok';
+ if(!REG.general&&pts.every(covers))return 'ok';
+ const t=townFor(pts);
+ if(t){if(REG.id!==t.id){setURL(t.id,false);window._regHow='auto';await loadRegion(t.id,true)}if(pts.every(covers))return 'ok'}
+ if(pts.every(p=>GCMAnywhere.inUS(p.lat,p.lng))){if(!REG.general){window._regHow='auto';await loadGeneral(pts[0],true)}return 'ok'}
+ return 'out'}
+window.fitArea=fitArea;
+function routeOut(msg,title){window._routeFail=msg;$('title').innerHTML=title||'📍 Not covered here';$('sub').textContent=msg;$('steps').innerHTML='';$('range').style.display='none';$('acts').style.display='flex';liveNavSet(null);setSnap('half')}
+async function routeGeneral(gen){routeHeading=null;$('title').innerHTML='<span class="spin">🛺</span> Finding a route…';
+ const res=await GCMAnywhere.route(start,end,{veh:MODE});if(gen!==routeGen)return null;if(routeG)map.removeLayer(routeG);routeG=null;
+ if(!res.ok){trackRoute(false,null,res.reason==='no_route'?'no_road_nearby':'other');
+  if(res.reason==='network'){routeOut('Couldn’t get a route here. Check your connection and try again.','⚠️ No route yet');$('sub').insertAdjacentHTML('beforeend',' <button type="button" class="chip" id="anyRetry">Retry</button>');const bt=$('anyRetry');if(bt)bt.onclick=()=>{if(start&&end)route()};return null}
+  routeOut(res.reason==='too_far'?GCMAnywhere.TOO_FAR:'No road near one of those points. Try a pin closer to a street.','🚫 No route');return null}
+ D.names=res.names;D.segs=res.segs;for(const s of D.segs)s._len=GCMRouter.len(s[7]);
+ const r=summarize(D.segs.map((s,i)=>[i,false]),null);r.ahead=false;r.general=true;return showRoute(r,gen,{general:true})}
+async function loadGeneral(ll,keepView){if(REG&&REG.general&&D)return;if(!keepView)clearR();resetData();const r=GCMAnywhere.region(ll.lat,ll.lng);REG=r;BASE='';window.REG=r;
+ cityOther(true);legalChips(false);setRule();if(/^\/map\/./.test(location.pathname))try{history.replaceState(null,'','/map/'+location.search+location.hash)}catch(_){}  // no town slug for a general area
+ $('sub').textContent=GCMAnywhere.BANNER;if(!keepView)map.setView(ll,r.zoom);
+ const lc=$('lgCart');if(lc)lc.style.display='none';$('dmeta').textContent='Data: OpenStreetMap roads (no speed data for this area yet).';VER=null;
+ D={meta:{general:true,tiles:[],tileSize:0.1,generated:''},names:[''],sources:[],segs:[],tileSet:new Set()};readyRes();CHG=null;if(chgOn)showChg(true);
+ sync();window.ready=true;track('town_viewed',{how:window._regHow||'auto'},window._trackOpts);window._regHow=null}
+window.loadGeneral=loadGeneral;
+// Legal only / Risky mean nothing without speed data, so a general area hides them.
+function legalChips(on){for(const k of ['cNorm','cRisk']){const e=$(k);if(e)e.style.display=on?'':'none'}}
+// The city chip lists "Other US area" only while it is the loaded area.
+function cityOther(on){const s=$('city');if(!s)return;let o=s.querySelector('option[value="'+GCMAnywhere.ID+'"]');if(on&&!o){o=document.createElement('option');o.value=GCMAnywhere.ID;o.textContent='Other US area';s.insertBefore(o,s.firstChild)}if(!on&&o)o.remove();if(on)s.value=GCMAnywhere.ID;fitCity()}
 // return trip: one-way rules can differ, so route B->A; fall back to same distance
 async function backDist(a,b,a2,b2,d,deadline,stateLeft){if(a==null||b==null)return d;const left=stateLeft||{n:GCMRouter.ROUTE_STATE_BUDGET};for(const [x,y] of [[b,a],[b2,a],[b,a2],[b2,a2]]){if(deadline&&Date.now()>deadline)return d;const r=await astarOff(x,y,null,deadline||Date.now()+GCMRouter.ROUTE_BUDGET_MS,left.n);left.n=Math.max(0,left.n-(((r.stat&&r.stat.expanded)||0)));if(r.parts)return summarize(r.parts).dist;if(r.stat&&(r.stat.reason==='timeout'||r.stat.reason==='budget'))return d}return d}
 let lastR=null;function renderRange(r){if(r)lastR=r;r=lastR;if(!r)return;const R=GCMRange,s=R.load(),rng=R.rangeFor(s),bat=s.battery==null?100:s.battery;
@@ -178,17 +222,17 @@ function sync(){start=P(from);end=P(to);mk.forEach(m=>map.removeLayer(m));mk=[];
  $('xf').style.visibility=from?'visible':'hidden';$('xt').style.visibility=to?'visible':'hidden';
  $('fF').classList.toggle('act',active==='from');$('useme').style.display=(active||((from||to)&&!(from&&to)&&!(from&&from.me)&&!(to&&to.me)))?'':'none';$('fT').classList.toggle('act',active==='to');
  $('reset').style.display=$('acts').style.display=(from||to)?'':'none';
- $('help').textContent=active==='from'?'Tip: tap the map to drop your start pin':active==='to'||(from&&!to)?'Tip: tap the map to drop a pin for your destination':(from&&to)?'Tip: tap any road for its speed & length':'Tip: tap the map twice (start, then destination), or tap a road for its speed & length';
+ $('help').textContent=active==='from'?'Tip: tap the map to drop your start pin':active==='to'||(from&&!to)?'Tip: tap the map to drop a pin for your destination':REG&&REG.general?(from&&to?'Tip: tap a step to zoom to it':'Tip: tap the map twice (start, then destination)'):(from&&to)?'Tip: tap any road for its speed & length':'Tip: tap the map twice (start, then destination), or tap a road for its speed & length';
  if(routeG&&!(start&&end)){map.removeLayer(routeG);routeG=null;liveNavSet(null);$('steps').innerHTML='';$('range').style.display='none'}
- if(!(from||to)){$('title').innerHTML='🏖️ Golf Cart Maps';$('sub').innerHTML='Tap a road to see its speed limit and length, or plan a route above.'}
+ if(!(from||to)){$('title').innerHTML='🏖️ Golf Cart Maps';$('sub').innerHTML=REG&&REG.general?esc(GCMAnywhere.BANNER):'Tap a road to see its speed limit and length, or plan a route above.'}
  else if(!(start&&end)){$('title').innerHTML=from?'📍 Start set':'🏖️ Destination set';$('sub').textContent=from?'Now pick where you’re headed.':'Now pick a start, or hit 📍 to start from you.'}}
-function setField(f,pt){if(f==='from')from=pt;else to=pt;active=null;sync();if(start&&end)route();window.state=st()}
+function setField(f,pt){if(f==='from')from=pt;else to=pt;active=null;sync();if(start&&end)route();else if(P(pt)&&!covers(P(pt)))fitArea([P(pt)]);window.state=st()}
 const st=()=>({from:from&&{label:$('qf').value,me:!!from.me,lat:P(from)&&P(from).lat},to:to&&{label:$('q').value,me:!!to.me,lat:P(to)&&P(to).lat},routed:!!routeG});
 window.getState=st;
 // a tap places a point: focused field first, else the first empty field. Returns false if nothing to fill.
 const inPoly=(x,y,P)=>{let c=false;for(let i=0,j=P.length-1;i<P.length;j=i++){const [x1,y1]=P[i],[x2,y2]=P[j];if((y1>y)!==(y2>y)&&x<(x2-x1)*(y-y1)/(y2-y1)+x1)c=!c}return c};
 const inMX=ll=>(REG&&REG.id==='sd'&&ll.lat<32.5343+(ll.lng+117.1235)*0.0367-0.0002)||!!(D&&D.meta.poly&&!inPoly(ll.lng,ll.lat,D.meta.poly));window.inMX=inMX;
-function setPt(ll,label){if(saveSlot&&!label){finishSave({name:lbl(ll),lat:ll.lat,lon:ll.lng});return true}if(inMX(ll)){$('help').textContent='⚠️ That spot is outside the map — '+(REG&&REG.cover||'pick another area in the city menu above.');return true}const f=active||(!from?'from':!to?'to':null);if(!f)return false;setField(f,{ll,label:label||lbl(ll)});return true}
+function setPt(ll,label){if(saveSlot&&!label){finishSave({name:lbl(ll),lat:ll.lat,lon:ll.lng});return true}if(!covers(ll)&&!GCMAnywhere.inUS(ll.lat,ll.lng)){$('help').textContent='⚠️ '+outMsg(ll);return true}const f=active||(!from?'from':!to?'to':null);if(!f)return false;setField(f,{ll,label:label||lbl(ll)});return true}
 function clearField(f){if(f==='from')from=null;else to=null;active=f;sync();window.state=st()}
 function clearR(){from=to=null;active=null;if(routeG)map.removeLayer(routeG);routeG=null;liveNavSet(null);$('steps').innerHTML='';$('range').style.display='none';map.closePopup();sync();window.state=st()}
 window.resetRoute=clearR;
@@ -196,7 +240,7 @@ map.on('click',e=>{if(!setPt(e.latlng))map.closePopup()});
 // long-press (mobile) / right-click: report here
 map.on('contextmenu',e=>{window._rseg={road:'(not a specific road)',ll:e.latlng};L.popup(popOpts()).setLatLng(e.latlng).setContent('<button class="pbtn rpt" onclick="reportRoad()">🚩 Report a problem here</button>').openOn(map)});$('clr').onclick=clearR;$('reset').onclick=clearR;
 function swap(){[from,to]=[to,from];active=null;sync();if(start&&end)route();else if(routeG){map.removeLayer(routeG);routeG=null}window.state=st()}
-$('swap').onclick=swap;function shareBtn(){const b=$('share');if(b)b.style.display=window.gcmCanShare&&gcmCanShare()?'':'none'}window.shareBtn=shareBtn;$('share').onclick=async()=>{const lr=window.lastRoute,dest=($('q').value||'').trim(),url='https://golfcartmap.com/map/'+(SLUG[REG.id]||'');const text=lr?`Cart-legal route${dest?' to '+dest:''} in ${REG.short}: ${lr.min} min, ${lr.mi} mi`+(lr.risky.length?` (${lr.risky.length} risky stretch${lr.risky.length>1?'es':''})`:''):`Golf cart and LSV legal streets in ${REG.short}`;const r=await gcmShare({title:'Golf Cart Maps',text,url});if(r==='copied'){const b=$('share'),t=b.textContent;b.textContent='✓ Link copied';setTimeout(()=>b.textContent=t,1500)}};$('swap2').onclick=swap;window.swapRoute=swap;
+$('swap').onclick=swap;function shareBtn(){const b=$('share');if(b)b.style.display=window.gcmCanShare&&gcmCanShare()?'':'none'}window.shareBtn=shareBtn;$('share').onclick=async()=>{const lr=window.lastRoute,dest=($('q').value||'').trim(),url='https://golfcartmap.com/map/'+(SLUG[REG.id]||'');const text=lr&&REG.general?`Route${dest?' to '+dest:''}: ${lr.min} min, ${lr.mi} mi`:lr?`Cart-legal route${dest?' to '+dest:''} in ${REG.short}: ${lr.min} min, ${lr.mi} mi`+(lr.risky.length?` (${lr.risky.length} risky stretch${lr.risky.length>1?'es':''})`:''):`Golf cart and LSV legal streets in ${REG.short}`;const r=await gcmShare({title:'Golf Cart Maps',text,url});if(r==='copied'){const b=$('share'),t=b.textContent;b.textContent='✓ Link copied';setTimeout(()=>b.textContent=t,1500)}};$('swap2').onclick=swap;window.swapRoute=swap;
 for(const [f,id,x] of [['from','qf','xf'],['to','q','xt']]){
  $(id).addEventListener('focus',()=>{active=f;$(id).select();sync();curField=f});
  $(id).addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();clearField(f);$(id).value='';$('sugg').style.display='none'}});
@@ -220,7 +264,7 @@ function locate(){if(!navigator.geolocation){$('sub').textContent='Location not 
   if(!me)me=meMarker(myLL);else me.setLatLng(myLL)
   liveNavFix(p.coords);if(navOn()){first=false;if(!(from&&from.me)&&!(to&&to.me))return;sync();return}
   try{if(routeG&&end&&_rtKey&&myLL.distanceTo(end)>150)_wasFar=_rtKey;if(routeG&&end&&_rtKey&&_wasFar===_rtKey&&_doneKey!==_rtKey&&myLL.distanceTo(end)<40){_doneKey=_rtKey;track('route_completed',window.lastRoute&&window.lastRoute.mi!=null?{mi:Math.round(window.lastRoute.mi*2)/2}:{})}}catch(_){}
-  if(first){first=false;const rg=regionAt(myLL.lat,myLL.lng);if(rg&&REG&&rg.id!==REG.id){setURL(rg.id,false);window._regHow='auto';loadRegion(rg.id,true)}map.setView(myLL,16);$('showloc').style.display='none';if(to&&to.me){sync();if(start&&end)route()}else setField('from',{me:true})}else if((from&&from.me)||(to&&to.me)){sync()}};
+  if(first){first=false;const here=myLL;fitArea([here,to&&!to.me?P(to):null]).then(a=>{if(a==='out')$('help').textContent='⚠️ '+outMsg(here)});map.setView(myLL,16);$('showloc').style.display='none';if(to&&to.me){sync();if(start&&end)route()}else setField('from',{me:true})}else if((from&&from.me)||(to&&to.me)){sync()}};
  const err=e=>{$('showloc').textContent='📍 Show my location';$('sub').textContent=e.code===1?'Location is blocked. Turn it on in Settings › Safari › Location.':'Couldn’t find you: '+e.message};
  if(watching){navigator.geolocation.getCurrentPosition(p=>{first=true;ok(p)},err,{enableHighAccuracy:true});return}
  watching=true;navigator.geolocation.watchPosition(ok,err,{enableHighAccuracy:true,maximumAge:0})}  // maximumAge 0: never a cached fix, so turns are judged on where you are now (t451u)
@@ -244,7 +288,8 @@ async function remote(q,bp){const key=bp.lat.toFixed(2)+','+bp.lon.toFixed(2)+'|
  const fj=async(u,sig)=>{const r=await fetch(u,{signal:sig});if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
  let res=[];try{res=await GCMGeo.remote(q,bp,fj,ac.signal)}catch(_){clearTimeout(to);return null}clearTimeout(to);
  qcache.set(key,res);return res}
-function showSugg(list,far){list=list.filter(x=>!inMX(L.latLng(x.lat,x.lon)));far=(far||[]).filter(x=>!inMX(L.latLng(x.lat,x.lon)));const sg=$('sugg');sg.innerHTML='';sg.style.display=list.length||far.length?'block':'none';
+const reach=x=>{const ll=L.latLng(x.lat,x.lon);return covers(ll)||GCMAnywhere.inUS(ll.lat,ll.lng)};
+function showSugg(list,far){list=list.filter(reach);far=(far||[]).filter(reach);const sg=$('sugg');sg.innerHTML='';sg.style.display=list.length||far.length?'block':'none';
  const miTxt=x=>x.mi==null?'':(x.mi<0.1?' · here':' · '+(x.mi<10?x.mi.toFixed(1):Math.round(x.mi))+' mi');
  const add=x=>{const d=document.createElement('div');d.innerHTML=`<b>${x.name}</b><br><small style="color:#6b8592">${(x.sub||'')+miTxt(x)}</small>`;d.onclick=()=>pick(x);sg.appendChild(d)};
  list.forEach(add);if(far.length){const h=document.createElement('div');h.className='sfar';h.textContent='Farther away (over '+GCMGeo.NEAR_MI+' mi)';h.style.cssText='font-size:12px;color:#6b8592;background:#f4f8f9;padding:6px 14px;cursor:default';sg.appendChild(h);far.forEach(add)}}
@@ -279,7 +324,7 @@ function editSaved(p){const sg=$('sugg');sg.innerHTML='';
  sRow('<span style="color:#6b8592">Back</span>',showSaved);sg.style.display='block'}
 // One tap: route from me (or the current start) to the saved place. To Home = the way back.
 function goSaved(p,field){const f=field||'to';$('sugg').style.display='none';document.activeElement&&document.activeElement.blur();
- const ll=L.latLng(p.lat,p.lon);if(inMX(ll)){$('help').textContent='⚠️ '+PL.label(p)+' is outside this map area';return}
+ const ll=L.latLng(p.lat,p.lon);if(!covers(ll)&&!GCMAnywhere.inUS(ll.lat,ll.lng)){$('help').textContent='⚠️ '+PL.label(p)+' is outside this map area';return}
  const pt={ll,label:p.icon+' '+PL.label(p)};
  if(f==='from'){setField('from',pt);return}  // opened from Start: fill Start, leave the destination alone
  if(!from||(from.ll&&from.ll.distanceTo(ll)<20)){if(myLL)from={me:true};else{from=null;locate()}}
@@ -295,21 +340,21 @@ function renderSaved(){const box=$('chips');if(!box)return;box.querySelectorAll(
 {const _s=sync;sync=function(){const r=_s.apply(this,arguments);try{renderSaved()}catch(_){}return r}}
 for(const id of ['q','qf'])$(id).addEventListener('focus',()=>{if(!$(id).value.trim()||$(id).value===$(id).defaultValue)setTimeout(()=>{if(document.activeElement===$(id)&&!$(id).value.trim())showSaved()},0)});
 $('q').oninput=onq;$('qf').oninput=onq;for(const id of ['q','qf'])$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){const f=$('sugg').firstChild;if(f)f.click()}});
-window.testRoute=async(a,b,rk=false,heading=null)=>{risky=rk;routeHeading=Number.isFinite(heading)?heading:null;from={ll:L.latLng(a),label:'A'};to={ll:L.latLng(b),label:'B'};active=null;sync();if(inMX(from.ll)||inMX(to.ll))return null;const r=await route();return r?window.lastRoute:null};
+window.testRoute=async(a,b,rk=false,heading=null)=>{risky=rk;routeHeading=Number.isFinite(heading)?heading:null;from={ll:L.latLng(a),label:'A'};to={ll:L.latLng(b),label:'B'};active=null;sync();if([from.ll,to.ll].some(x=>!covers(x)&&!GCMAnywhere.inUS(x.lat,x.lng)))return null;const r=await route();return r?window.lastRoute:null};
 window.gcmMyFix=()=>myLL?{lat:myLL.lat,lon:myLL.lng}:null;
 let readyRes,READY=new Promise(r=>readyRes=r);
 // ---- regions: ?r= / saved > geolocation (already-granted only) nearest within 50 mi > San Diego ----
 const modeName=()=>GCMRule.vname(RULE);  // 'golf carts' or 'LSVs' (RULE.who overrides, e.g. HI 'street-legal electric LSVs')
 let OTHER=null;  // rule for the other vehicle type, so popups can say 'OK for LSVs'
 function ruleNotes(){const n=[];if(RULE.note)n.push(RULE.note);if(RULE.radius_mi)n.push(`stay within ${RULE.radius_mi} mi of where the cart is registered`);if(RULE.daylight_only)n.push('daylight only');return n.length?' · '+n.join(' · '):''}
-function setRule(){const st=RULES[REG.state]||RULES.CA;RULE=GCMRule.ruleFor(RULES,REG,MODE);OTHER=GCMRule.ruleFor(RULES,REG,MODE==='lsv'?'golf_cart':'lsv');vehUI();
- $('rnote').textContent=`${st.name}, ${modeName()}: `+(RULE.not_street_legal?'cart paths only':RULE.designated_only?`cart paths + designated roads${RULE.assume?' (local streets, not yet confirmed)':''}`:`roads posted ≤${RULE.max_posted} mph`)+ruleNotes()+(REG&&REG.beta?' · Local road rules are still being checked':'');$('rnote').title=RULE.cite||'';const lg=$('lgOk');if(lg)lg.textContent=RULE.not_street_legal?'No roads (carts not street-legal)':RULE.designated_only?'Designated ≤'+RULE.max_posted:'Posted ≤'+RULE.max_posted;const ln=$('lgNo');if(ln)ln.textContent=RULE.not_street_legal?'Roads — avoid':GCMRule.nextBand(RULE.max_posted)+'+ / major — avoid'}
+function setRule(){if(REG&&REG.general)RULES[REG.state]=GCMAnywhere.RULES;const st=RULES[REG.state]||RULES.CA;RULE=GCMRule.ruleFor(RULES,REG,MODE);OTHER=GCMRule.ruleFor(RULES,REG,MODE==='lsv'?'golf_cart':'lsv');vehUI();
+ $('rnote').textContent=`${st.name}, ${modeName()}: `+(RULE.not_street_legal?'cart paths only':RULE.designated_only?`cart paths + designated roads${RULE.assume?' (local streets, not yet confirmed)':''}`:`roads posted ≤${RULE.max_posted} mph`)+ruleNotes()+(REG&&REG.beta?' · Local road rules are still being checked':'');if(REG&&REG.general)$('rnote').textContent=GCMAnywhere.BANNER;$('rnote').title=RULE.cite||'';const lg=$('lgOk');if(lg)lg.textContent=RULE.not_street_legal?'No roads (carts not street-legal)':RULE.designated_only?'Designated ≤'+RULE.max_posted:'Posted ≤'+RULE.max_posted;const ln=$('lgNo');if(ln)ln.textContent=RULE.not_street_legal?'Roads — avoid':GCMRule.nextBand(RULE.max_posted)+'+ / major — avoid'}
 function vehUI(){const b=$('vehCart');if(!b)return;b.checked=MODE==='golf_cart';
  const cart=MODE==='golf_cart'?RULE:OTHER,lsv=MODE==='lsv'?RULE:OTHER;
  const title=$('vehTitle');if(title&&cart&&cart.veh==='golf_cart')title.textContent=GCMRule.switchName(cart);
  const t=$('vehSub');if(t)t.textContent=MODE==='golf_cart'?(RULE.not_street_legal?"On: plain golf carts aren't street-legal here, cart paths only":RULE.designated_only?'On: cart paths + designated roads only':'On: only roads posted ≤'+RULE.max_posted+' mph'):'Off: street-legal LSV, roads posted ≤'+RULE.max_posted+' mph';
  const h=$('vehHint');if(h&&lsv&&lsv.veh==='lsv')h.textContent=GCMRule.lsvHint(lsv)}
-function setVeh(v){if(!GCMRule.VEHICLES.includes(v)||v===MODE)return;MODE=v;try{localStorage.setItem('gcm-veh',v)}catch(_){}if(REG){const id=REG.id;REG=null;loadRegion(id,true).then(()=>{if(start&&end)route()}).catch(()=>{})}else vehUI()}
+function setVeh(v){if(!GCMRule.VEHICLES.includes(v)||v===MODE)return;MODE=v;try{localStorage.setItem('gcm-veh',v)}catch(_){}if(REG&&REG.general){setRule();if(start&&end)route();return}if(REG){const id=REG.id;REG=null;loadRegion(id,true).then(()=>{if(start&&end)route()}).catch(()=>{})}else vehUI()}
 window.setVeh=setVeh;
 // re-read the saved vehicle (CarPlay's web view and the phone share localStorage); resolves true if it changed and data reloaded
 window.vehSync=async()=>{let v=null;try{v=localStorage.getItem('gcm-veh')}catch(_){}if(!GCMRule.VEHICLES.includes(v)||v===MODE)return false;setVeh(v);await READY;for(let i=0;i<200&&!window.ready;i++)await new Promise(r=>setTimeout(r,50));return true};
@@ -317,7 +362,7 @@ window.addEventListener('storage',e=>{if(e.key==='gcm-veh')window.vehSync()});
 function regionAt(lat,lng){let best=null,bd=80467;for(const r of REGIONS){if(r.hidden)continue;const b=r.bbox;if(lat>=b[0]&&lat<=b[2]&&lng>=b[1]&&lng<=b[3])return r;const d=hav([lng,lat],[r.center[1],r.center[0]]);if(d<bd){bd=d;best=r}}return best}
 function resetData(){roadNet.reset();resetRouteWorker();tileFailed=false;if(layer){layer.clearLayers();map.removeLayer(layer)}shown={};buckets={};loaded.clear();for(const k in loading)delete loading[k];nameAt=null;POIS=[];D=null;window.ready=false;READY=new Promise(r=>readyRes=r)}
 async function loadRegion(id,keepView){const r=REGIONS.find(x=>x.id===id)||REGIONS[0];if(REG&&REG.id===r.id&&D)return;if(!keepView)clearR();resetData();REG=r;BASE='data/'+r.id+'/';window.REG=r;
- try{localStorage.setItem('gcm-region',r.id)}catch(_){}$('city').value=r.id;fitCity();setRule();$('sub').textContent='Loading roads…';
+ try{localStorage.setItem('gcm-region',r.id)}catch(_){}cityOther(false);legalChips(true);$('city').value=r.id;fitCity();setRule();$('sub').textContent='Loading roads…';
  if(!keepView)map.setView(r.center,r.zoom);
  fetch(BASE+'pois.json').then(x=>x.ok?x.json():[]).then(j=>{if(REG===r)POIS=j}).catch(()=>{});
  const j=await (await fetch(BASE+'index.json')).json();if(REG!==r)return;$('lgCart').style.display=j.meta.stats&&j.meta.stats.cartpath?'':'none';D={...j,segs:[],tileSet:new Set(j.meta.tiles)};readyRes();
@@ -357,7 +402,7 @@ function meMarker(ll){return addM(tapMarker(L.marker(ll,{icon:meIcon,zIndexOffse
 const addM=m=>m.addTo(map);
 // ---- public EV chargers (DOE AFDC, Level 1/2 only), loaded lazily per region ----
 let CHG=null,CHGR=null,chgOn=false,chgL=null;const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-async function chargers(){if(CHG&&CHGR===REG)return CHG;const r=REG;try{const j=await (await fetch(BASE+'chargers.json')).json();if(REG===r){CHG=j.stations;CHGR=r}}catch(_){CHG=[];CHGR=r}return CHG}
+async function chargers(){if(CHG&&CHGR===REG)return CHG;const r=REG;if(r&&r.general){CHG=[];CHGR=r;return CHG}try{const j=await (await fetch(BASE+'chargers.json')).json();if(REG===r){CHG=j.stations;CHGR=r}}catch(_){CHG=[];CHGR=r}return CHG}
 const CON={J1772:'J1772 (Level 2)',NEMA515:'120V outlet (5-15)',NEMA520:'120V outlet (5-20)',NEMA1450:'240V outlet (14-50)',TESLA:'Tesla',CHADEMO:'CHAdeMO',J1772COMBO:'CCS'};
 function chgPop(c){return `<div class="cpop"><b>${esc(c.name)}</b><br>${esc(c.addr)}<br>🔌 ${c.con.map(x=>esc(CON[x]||x)).join(', ')}${c.l2?` · ${c.l2} L2 port${c.l2>1?'s':''}`:''}${c.l1?` · ${c.l1} L1`:''}<br>🕒 ${esc(c.hours||'Hours not listed')}${c.network&&c.network!=='Non-Networked'?`<br>${esc(c.network)}`:''}${c.price?`<br>💲 ${esc(c.price)}`:''}<div class="cn">Most golf carts and LSVs need a J1772 adapter or a regular 120V outlet. Call ahead; listing from DOE AFDC${c.confirmed?`, confirmed ${esc(c.confirmed)}`:''}.</div></div>`}
 async function showChg(on){if(on&&window.PAY&&!PAY.unlocked()){PAY.sheet();return}chgOn=on;$('cChg').classList.toggle('on',on);if(chgL){map.removeLayer(chgL);chgL=null}if(!on)return;const list=await chargers();if(!chgOn)return;
@@ -374,10 +419,12 @@ $('city').onchange=e=>{setURL(e.target.value,true);window._regHow='picker';loadR
 (async()=>{const q=new URLSearchParams(location.search).get('r');[REGIONS,RULES]=await Promise.all([fetch('data/regions.json').then(r=>r.json()),fetch('data/rules.json').then(r=>r.json())]);
  $('city').innerHTML=GCMRegions.pickerList(REGIONS,q,!!window.GCM_IOS).map(o=>`<option value="${o.id}">${o.text}</option>`).join('');  // A-Z (city chip in the top row)
  let saved=null;try{saved=localStorage.getItem('gcm-region')}catch(_){}
- const pid=idFromPath();let id=(pid&&REGIONS.some(r=>r.id===pid))?pid:(pid===null)?'sd':(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;
- if(!id&&navigator.permissions&&navigator.geolocation){try{const p=await navigator.permissions.query({name:'geolocation'});if(p.state==='granted'){const pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:4000,maximumAge:600000}));const r=regionAt(pos.coords.latitude,pos.coords.longitude);if(r)id=r.id}}catch(_){}}
+ const pid=idFromPath();let anyAt=null,id=(pid&&REGIONS.some(r=>r.id===pid))?pid:(pid===null)?'sd':(q&&REGIONS.some(r=>r.id===q))?q:(saved&&REGIONS.some(r=>r.id===saved&&!r.hidden))?saved:null;
+ if(!id&&navigator.permissions&&navigator.geolocation){try{const p=await navigator.permissions.query({name:'geolocation'});if(p.state==='granted'){const pos=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:4000,maximumAge:600000}));const r=regionAt(pos.coords.latitude,pos.coords.longitude);if(r)id=r.id;else if(GCMAnywhere.inUS(pos.coords.latitude,pos.coords.longitude))anyAt=L.latLng(pos.coords.latitude,pos.coords.longitude)}}catch(_){}}
  const how0=(pid&&id===pid)||(q&&id===q)?'link':(saved&&id===saved)?'restore':id?'auto':'default';
- if(!window._regHow)window._regHow=how0;await loadRegion(id||'sd');if(!REG.hidden)setURL(REG.id,false);const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');if(la&&lo)map.setView([la,lo],+P.get('z')||17);try{await window.gcmPartnerOverlay?.(P)}catch(_){}})();
+ if(!window._regHow)window._regHow=how0;const P=new URLSearchParams(location.search),la=+P.get('lat'),lo=+P.get('lon');
+ if(anyAt&&!(la&&lo))await loadGeneral(anyAt);else{await loadRegion(id||'sd');if(!REG.hidden)setURL(REG.id,false)}
+ if(la&&lo){const ll=L.latLng(la,lo);if(!covers(ll))await fitArea([ll]);map.setView(ll,+P.get('z')||17)}try{await window.gcmPartnerOverlay?.(P)}catch(_){}})();
 // Partner overlay: when /map?partner=<slug>&code=… unlocks, lock the city chip and draw larger affiliate pins + experience stops.
 window.gcmPartnerOverlay=async function(P){
   const slug=P.get('partner'),code=(P.get('code')||'').trim(); if(!slug||!code)return;
@@ -418,7 +465,7 @@ function de(y){if(!drag)return;const d=y-drag.y0,v=d/Math.max(1,Date.now()-drag.
  if(!moved){setSnap(ORDER[(ORDER.indexOf(snap)+1)%3]);return}
  const S=snaps();let best=Object.keys(S).reduce((a,b)=>Math.abs(S[a]-curY)<Math.abs(S[b]-curY)?a:b);
  if(best===snap&&Math.abs(v)>0.3){const i=ORDER.indexOf(snap)+(v>0?-1:1);best=ORDER[Math.max(0,Math.min(2,i))]}setSnap(best)}
-const isBtn=e=>e.target.closest&&e.target.closest('#chev');
+const isBtn=e=>e.target.closest&&e.target.closest('#chev,#tileRetry,#anyRetry');  // Retry buttons in the header must stay tappable on touch
 if(window.PointerEvent){
  shead.addEventListener('pointerdown',e=>{if(isBtn(e))return;e.preventDefault();try{shead.setPointerCapture(e.pointerId)}catch(_){}ds(e.clientY,e.pointerId)},{passive:false});
  shead.addEventListener('pointermove',e=>{if(drag){e.preventDefault();dm(e.clientY)}},{passive:false});
@@ -468,7 +515,7 @@ window.gcmFollow=follow;
 $('steps').addEventListener('click',e=>{const d=e.target.closest('.st[data-ll]');if(!d)return;const [a,b]=d.dataset.ll.split(',').map(Number);follow.pause();map.setView([a,b],18)});
 // ---- Download a city for offline (public/offline.js). Online the map still fetches live data first. ----
 (function(){const O=window.GCMOffline,b=$('cOff'),n=$('offNote');if(!O||!b){if(b)b.style.display='none';return}let busy=false;
- async function paint(){if(busy||!window.REG)return;const r=window.REG,m=O.list()[r.id];
+ async function paint(){if(busy||!window.REG)return;const r=window.REG;b.style.display=r.general?'none':'';if(r.general){n.textContent='';return}const m=O.list()[r.id];
   if(m){b.textContent='✅ '+r.name+' downloaded';n.textContent=`Saved ${O.fmtDate(m.at)} (${O.fmtBytes(m.bytes)}). Updates itself when you are online. Tap to remove.`}
   else{const sz=await O.sizeOf(r.id);b.textContent='⬇️ Download '+r.name+' for offline'+(sz?` (${O.fmtBytes(sz)})`:'');n.textContent='Roads, routing and directions keep working with no signal. Street map images need a connection.'}}
  b.onclick=async()=>{const r=window.REG;if(!r||busy)return;if(O.isDownloaded(r.id)){if(confirm(`Remove the offline copy of ${r.name}?`)){await O.remove(r.id);paint()}return}
