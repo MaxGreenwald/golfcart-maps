@@ -20,6 +20,8 @@
 # set GCM_BOT_LOG to a writable file there. Line format:
 #   YYYY-MM-DD HH:MM PT commit=<12 hex> max-ok=<ref> PASS|FAIL
 # verify_live FAIL still appends the line, then this script exits non-zero.
+# Before the build, production runs scripts/check_playwright_chromium.py and exits 1 with
+# no upload and no log line if Playwright Chromium cannot launch (verify_live needs it).
 #
 # Needs CLOUDFLARE_API_TOKEN in the environment. WRANGLER overrides the wrangler binary
 # (default: /workspace/.wr3/node_modules/.bin/wrangler, else npx wrangler@3).
@@ -76,6 +78,13 @@ case "$mode" in
     # Before build, unit tests, or wrangler. Same gate the worker deploy uses.
     bash scripts/prod_gate.sh --max-ok "$max_ok" --new-region-ok "$new_region_ok" --live-commit "$live_commit" --paths public functions lib \
       --dirty-msg "uncommitted changes in public/ functions/ lib/; commit first"
+    # verify_live runs after the upload and needs Playwright Chromium. Check it now, before
+    # the build or any wrangler call, so a missing browser stops here: no upload, no bot-log
+    # line, the one_time ref stays unused (the gate check above does not record use).
+    python3 scripts/check_playwright_chromium.py || {
+      echo "production deploy refused: Playwright Chromium missing; run: python3 -m playwright install chromium, then deploy again" >&2
+      exit 1
+    }
     branch=master
     ;;
   preview)
