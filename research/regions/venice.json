@@ -30,7 +30,8 @@
   "F.S. 316.2122 https://www.flsenate.gov/Laws/Statutes/2025/316.2122",
   "City of Venice code https://library.municode.com/fl/venice/codes/code_of_ordinances",
   "OpenStreetMap",
-  "FHWA HPMS speed limits"
+  "FHWA HPMS speed limits",
+  "Sarasota County Street GIS, field speedlimit, https://ags3.scgov.net/server/rest/services/Hosted/Street/FeatureServer/0"
  ],
  "enforcement": {
   "checked": "2026-10-28",
@@ -51,5 +52,62 @@
   ],
   "note": "Golf Cart Maps Greenwich and next-10 research (Oct 28 2026). Posted signs never lift a ban. Designated street lists that are not digitized stay red for plain golf carts."
  },
- "status": "Added (regions-11, 2026-10-28)"
+ "status": "Added (regions-11, 2026-10-28)",
+ "speed_names": [
+  {
+   "names": "^Pinebrook Road$",
+   "highway": "^tertiary$",
+   "north_of": 27.123,
+   "south_of": 27.138,
+   "bbox": [
+    27.123,
+    -82.4185,
+    27.138,
+    -82.416
+   ],
+   "mph": 40,
+   "url": "https://ags3.scgov.net/server/rest/services/Hosted/Street/FeatureServer/0",
+   "label": "Sarasota County Street GIS, field speedlimit: PINEBROOK RD posted 40 mph (maintenance CM) from about Edmondson Road north to Laurel Road East / Honore Avenue. OBJECTID 9528 (ST_102012_025355, last update 2014-02-05 08:10 PT); OBJECTID 182 (ST_102012_000372, last update 2014-02-05 08:10 PT); OBJECTID 43 (ST_102012_000215, last update 2023-05-11 04:37 PT); OBJECTID 33238 (ST_102012_001626, last update 2023-05-11 04:38 PT); OBJECTID 79 (ST_06022022_079536, last update 2023-05-11 04:37 PT); OBJECTID 33132 (ST_102012_030830, last update 2023-05-11 04:38 PT); OBJECTID 9425 (ST_08122021_089275, last update 2023-05-11 04:37 PT); OBJECTID 9413 (ST_102012_030810, last update 2023-05-11 04:37 PT). Extract: research/venice_sarasota_gis/speedlimit_extract.json, queried 2026-11-23."
+  },
+  {
+   "names": "^Pinebrook Road$",
+   "highway": "^tertiary$",
+   "bbox": [
+    27.12285,
+    -82.4174,
+    27.12305,
+    -82.41722
+   ],
+   "mph": 40,
+   "url": "https://ags3.scgov.net/server/rest/services/Hosted/Street/FeatureServer/0",
+   "label": "Sarasota County Street GIS, field speedlimit: PINEBROOK RD posted 40 mph (maintenance CM) from about Edmondson Road north to Laurel Road East / Honore Avenue. OBJECTID 9528 (ST_102012_025355, last update 2014-02-05 08:10 PT); OBJECTID 182 (ST_102012_000372, last update 2014-02-05 08:10 PT); OBJECTID 43 (ST_102012_000215, last update 2023-05-11 04:37 PT); OBJECTID 33238 (ST_102012_001626, last update 2023-05-11 04:38 PT); OBJECTID 79 (ST_06022022_079536, last update 2023-05-11 04:37 PT); OBJECTID 33132 (ST_102012_030830, last update 2023-05-11 04:38 PT); OBJECTID 9425 (ST_08122021_089275, last update 2023-05-11 04:37 PT); OBJECTID 9413 (ST_102012_030810, last update 2023-05-11 04:37 PT). Extract: research/venice_sarasota_gis/speedlimit_extract.json, queried 2026-11-23."
+  },
+  {
+   "names": "^Laurel Road East$",
+   "highway": "^tertiary$",
+   "bbox": [
+    27.1365,
+    -82.4067,
+    27.138,
+    -82.3795
+   ],
+   "west_of": -82.40114,
+   "mph": 40,
+   "url": "https://ags3.scgov.net/server/rest/services/Hosted/Street/FeatureServer/0",
+   "label": "Sarasota County Street GIS, field speedlimit: LAUREL RD E posted 40 mph (maintenance STATE) on the eastern mainline west of about Knights Trail Road (lon -82.40112) in the LSV-open tertiary stretch. OBJECTID 9429 (ST_102012_030839, last update 2020-10-07 02:06 PT); OBJECTID 9438 (ST_102012_030849, last update 2020-10-07 02:06 PT); OBJECTID 9430 (ST_102012_030840, last update 2020-10-07 02:06 PT); OBJECTID 9437 (ST_102012_030848, last update 2020-10-07 02:06 PT); OBJECTID 9427 (ST_102012_030837, last update 2020-10-07 02:06 PT). Extract: research/venice_sarasota_gis/speedlimit_extract.json, queried 2026-11-23."
+  },
+  {
+   "names": "^Laurel Road East$",
+   "highway": "^tertiary$",
+   "bbox": [
+    27.1365,
+    -82.4067,
+    27.138,
+    -82.3795
+   ],
+   "mph": 45,
+   "url": "https://ags3.scgov.net/server/rest/services/Hosted/Street/FeatureServer/0",
+   "label": "Sarasota County Street GIS, field speedlimit: LAUREL RD E posted 45 mph on the eastern mainline from about Knights Trail Road (lon -82.40112) east. OBJECTID 34165 (ST_102012_030825, last update 2024-03-19 01:28 PT); OBJECTID 9421 (ST_03192024_089270, last update 2024-03-19 01:29 PT); OBJECTID 10562 (ST_06112025_090523, last update 2025-07-11 07:44 PT); OBJECTID 34606 (ST_102012_030819, last update 2025-05-29 04:30 PT); OBJECTID 33115 (ST_102012_031222, last update 2022-04-08 08:12 PT); OBJECTID 8404 (ST_08032021_088202, last update 2021-08-03 01:06 PT); OBJECTID 33116 (ST_08032021_199761, last update 2023-09-27 07:21 PT). Extract: research/venice_sarasota_gis/speedlimit_extract.json, queried 2026-11-23."
+  }
+ ]
 }

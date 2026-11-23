@@ -1,0 +1,529 @@
+{
+  "source_url": "https://ags3.scgov.net/server/rest/services/Hosted/Street/FeatureServer/0",
+  "layer": "Sarasota County Street GIS, Hosted/Street FeatureServer/0",
+  "field": "speedlimit",
+  "queried": "2026-11-23",
+  "note": "Subset of records used to close north Pinebrook Road (40 mph) and the LSV-open eastern mainline of Laurel Road East (40 or 45 mph). Other records from the 2026-11-23 query are not included. Center Road and Albee Farm Road were not changed.",
+  "records": [
+    {
+      "objectid": 9528,
+      "streetid": "ST_102012_025355",
+      "full_name": "PINEBROOK RD",
+      "speedlimit": 40,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.124703635878433,
+      "mid_lon": -82.41718468219396,
+      "bbox_S": 27.122904008572945,
+      "bbox_N": 27.12655203097719,
+      "bbox_W": -82.41724699852011,
+      "bbox_E": -82.41714893084736,
+      "miles": 0.253,
+      "lastupdate_ms": 1391616636000,
+      "lastupdate_pt": "2014-02-05 08:10 PT",
+      "addr_l": [
+        1901,
+        2299
+      ],
+      "addr_r": [
+        1900,
+        2298
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 182,
+      "streetid": "ST_102012_000372",
+      "full_name": "PINEBROOK RD",
+      "speedlimit": 40,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.12680168389559,
+      "mid_lon": -82.41719227767821,
+      "bbox_S": 27.12655203097719,
+      "bbox_N": 27.128333297442495,
+      "bbox_W": -82.41724699852011,
+      "bbox_E": -82.41712930131006,
+      "miles": 0.124,
+      "lastupdate_ms": 1391616636000,
+      "lastupdate_pt": "2014-02-05 08:10 PT",
+      "addr_l": [
+        201,
+        351
+      ],
+      "addr_r": [
+        200,
+        350
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 43,
+      "streetid": "ST_102012_000215",
+      "full_name": "PINEBROOK RD",
+      "speedlimit": 40,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.129441132628774,
+      "mid_lon": -82.41711617114223,
+      "bbox_S": 27.128333297442495,
+      "bbox_N": 27.130063222568758,
+      "bbox_W": -82.41715868453623,
+      "bbox_E": -82.41709903844792,
+      "miles": 0.12,
+      "lastupdate_ms": 1683805064000,
+      "lastupdate_pt": "2023-05-11 04:37 PT",
+      "addr_l": [
+        353,
+        499
+      ],
+      "addr_r": [
+        352,
+        498
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 33238,
+      "streetid": "ST_102012_001626",
+      "full_name": "PINEBROOK RD",
+      "speedlimit": 40,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.13028032330339,
+      "mid_lon": -82.41716838554392,
+      "bbox_S": 27.130063222568758,
+      "bbox_N": 27.131067625211983,
+      "bbox_W": -82.41717678217871,
+      "bbox_E": -82.41715868453623,
+      "miles": 0.069,
+      "lastupdate_ms": 1683805099000,
+      "lastupdate_pt": "2023-05-11 04:38 PT",
+      "addr_l": [
+        501,
+        551
+      ],
+      "addr_r": [
+        500,
+        550
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 79,
+      "streetid": "ST_06022022_079536",
+      "full_name": "PINEBROOK RD",
+      "speedlimit": 40,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.13181680343552,
+      "mid_lon": -82.41716429881922,
+      "bbox_S": 27.131067625211983,
+      "bbox_N": 27.132077555763573,
+      "bbox_W": -82.41717234370468,
+      "bbox_E": -82.41716014172191,
+      "miles": 0.07,
+      "lastupdate_ms": 1683805064000,
+      "lastupdate_pt": "2023-05-11 04:37 PT",
+      "addr_l": [
+        553,
+        599
+      ],
+      "addr_r": [
+        552,
+        598
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 33132,
+      "streetid": "ST_102012_030830",
+      "full_name": "PINEBROOK RD",
+      "speedlimit": 40,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.132834150425513,
+      "mid_lon": -82.41715543555561,
+      "bbox_S": 27.132077555763573,
+      "bbox_N": 27.134347234149686,
+      "bbox_W": -82.41716014172191,
+      "bbox_E": -82.4171460248486,
+      "miles": 0.157,
+      "lastupdate_ms": 1683805099000,
+      "lastupdate_pt": "2023-05-11 04:38 PT",
+      "addr_l": [
+        601,
+        699
+      ],
+      "addr_r": [
+        600,
+        698
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 9425,
+      "streetid": "ST_08122021_089275",
+      "full_name": "PINEBROOK RD",
+      "speedlimit": 40,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.136680221460256,
+      "mid_lon": -82.41713151484181,
+      "bbox_S": 27.134347234149686,
+      "bbox_N": 27.137471351244546,
+      "bbox_W": -82.4171460248486,
+      "bbox_E": -82.41712659466505,
+      "miles": 0.216,
+      "lastupdate_ms": 1683805075000,
+      "lastupdate_pt": "2023-05-11 04:37 PT",
+      "addr_l": [
+        701,
+        799
+      ],
+      "addr_r": [
+        700,
+        798
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 9413,
+      "streetid": "ST_102012_030810",
+      "full_name": "PINEBROOK RD",
+      "speedlimit": 40,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.137507219083016,
+      "mid_lon": -82.41713341332677,
+      "bbox_S": 27.137471351244546,
+      "bbox_N": 27.137578747296583,
+      "bbox_W": -82.4171470115465,
+      "bbox_E": -82.41712659466505,
+      "miles": 0.008,
+      "lastupdate_ms": 1683805075000,
+      "lastupdate_pt": "2023-05-11 04:37 PT",
+      "addr_l": [
+        0,
+        0
+      ],
+      "addr_r": [
+        0,
+        0
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 9429,
+      "streetid": "ST_102012_030839",
+      "full_name": "LAUREL RD E",
+      "speedlimit": 40,
+      "maintenanceentity": "STATE",
+      "class": "A30",
+      "mid_lat": 27.137511178457245,
+      "mid_lon": -82.40629396005052,
+      "bbox_S": 27.137498567443387,
+      "bbox_N": 27.13751291671424,
+      "bbox_W": -82.40661277788618,
+      "bbox_E": -82.40413054794406,
+      "miles": 0.153,
+      "lastupdate_ms": 1602061590000,
+      "lastupdate_pt": "2020-10-07 02:06 PT",
+      "addr_l": [
+        0,
+        0
+      ],
+      "addr_r": [
+        0,
+        0
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 9438,
+      "streetid": "ST_102012_030849",
+      "full_name": "LAUREL RD E",
+      "speedlimit": 40,
+      "maintenanceentity": "STATE",
+      "class": "A30",
+      "mid_lat": 27.13736485059961,
+      "mid_lon": -82.40555212521816,
+      "bbox_S": 27.137347875913395,
+      "bbox_N": 27.13738286936682,
+      "bbox_W": -82.40642622574101,
+      "bbox_E": -82.40467995356947,
+      "miles": 0.107,
+      "lastupdate_ms": 1602061590000,
+      "lastupdate_pt": "2020-10-07 02:06 PT",
+      "addr_l": [
+        0,
+        0
+      ],
+      "addr_r": [
+        0,
+        0
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 9430,
+      "streetid": "ST_102012_030840",
+      "full_name": "LAUREL RD E",
+      "speedlimit": 40,
+      "maintenanceentity": "STATE",
+      "class": "A30",
+      "mid_lat": 27.137494779403692,
+      "mid_lon": -82.40349889091557,
+      "bbox_S": 27.137487207659216,
+      "bbox_N": 27.137498567443387,
+      "bbox_W": -82.40413054794406,
+      "bbox_E": -82.40223595214086,
+      "miles": 0.116,
+      "lastupdate_ms": 1602061590000,
+      "lastupdate_pt": "2020-10-07 02:06 PT",
+      "addr_l": [
+        3401,
+        3451
+      ],
+      "addr_r": [
+        0,
+        0
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 9437,
+      "streetid": "ST_102012_030848",
+      "full_name": "LAUREL RD E",
+      "speedlimit": 40,
+      "maintenanceentity": "STATE",
+      "class": "A30",
+      "mid_lat": 27.137378867725126,
+      "mid_lon": -82.40180422815592,
+      "bbox_S": 27.1373425079601,
+      "bbox_N": 27.13742059550195,
+      "bbox_W": -82.40467995356947,
+      "bbox_E": -82.40111945834035,
+      "miles": 0.22,
+      "lastupdate_ms": 1602061590000,
+      "lastupdate_pt": "2020-10-07 02:06 PT",
+      "addr_l": [
+        0,
+        0
+      ],
+      "addr_r": [
+        3400,
+        3512
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 9427,
+      "streetid": "ST_102012_030837",
+      "full_name": "LAUREL RD E",
+      "speedlimit": 40,
+      "maintenanceentity": "STATE",
+      "class": "A30",
+      "mid_lat": 27.137451147102965,
+      "mid_lon": -82.40136236537745,
+      "bbox_S": 27.13742059550195,
+      "bbox_N": 27.137487207659216,
+      "bbox_W": -82.40223595214086,
+      "bbox_E": -82.40111945834035,
+      "miles": 0.069,
+      "lastupdate_ms": 1602061590000,
+      "lastupdate_pt": "2020-10-07 02:06 PT",
+      "addr_l": [
+        3453,
+        3499
+      ],
+      "addr_r": [
+        0,
+        0
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 34165,
+      "streetid": "ST_102012_030825",
+      "full_name": "LAUREL RD E",
+      "speedlimit": 45,
+      "maintenanceentity": "STATE",
+      "class": "A30",
+      "mid_lat": 27.13743688811186,
+      "mid_lon": -82.40006937245955,
+      "bbox_S": 27.13742059550195,
+      "bbox_N": 27.137443474003263,
+      "bbox_W": -82.40111945834035,
+      "bbox_E": -82.39960174237889,
+      "miles": 0.093,
+      "lastupdate_ms": 1710836896000,
+      "lastupdate_pt": "2024-03-19 01:28 PT",
+      "addr_l": [
+        3501,
+        3521
+      ],
+      "addr_r": [
+        3514,
+        3520
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 9421,
+      "streetid": "ST_03192024_089270",
+      "full_name": "LAUREL RD E",
+      "speedlimit": 45,
+      "maintenanceentity": "STATE",
+      "class": "A30",
+      "mid_lat": 27.13742786859502,
+      "mid_lon": -82.39850686067663,
+      "bbox_S": 27.137421892172167,
+      "bbox_N": 27.13743399796132,
+      "bbox_W": -82.39960174237889,
+      "bbox_E": -82.39663112585896,
+      "miles": 0.183,
+      "lastupdate_ms": 1710836983000,
+      "lastupdate_pt": "2024-03-19 01:29 PT",
+      "addr_l": [
+        3523,
+        3571
+      ],
+      "addr_r": [
+        3522,
+        3570
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 10562,
+      "streetid": "ST_06112025_090523",
+      "full_name": "LAUREL RD E",
+      "speedlimit": 45,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.137419774693825,
+      "mid_lon": -82.39493655452573,
+      "bbox_S": 27.137408949066867,
+      "bbox_N": 27.137431696924512,
+      "bbox_W": -82.39663112585896,
+      "bbox_E": -82.39382924446936,
+      "miles": 0.172,
+      "lastupdate_ms": 1752245065000,
+      "lastupdate_pt": "2025-07-11 07:44 PT",
+      "addr_l": [
+        3591,
+        3799
+      ],
+      "addr_r": [
+        3590,
+        3798
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 34606,
+      "streetid": "ST_102012_030819",
+      "full_name": "LAUREL RD E",
+      "speedlimit": 45,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.137402049396787,
+      "mid_lon": -82.39285205520429,
+      "bbox_S": 27.13739673430402,
+      "bbox_N": 27.137408949066867,
+      "bbox_W": -82.39382924446936,
+      "bbox_E": -82.39163491570709,
+      "miles": 0.135,
+      "lastupdate_ms": 1748518239000,
+      "lastupdate_pt": "2025-05-29 04:30 PT",
+      "addr_l": [
+        3591,
+        3799
+      ],
+      "addr_r": [
+        3590,
+        3798
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 33115,
+      "streetid": "ST_102012_031222",
+      "full_name": "LAUREL RD E",
+      "speedlimit": 45,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.13739215826422,
+      "mid_lon": -82.39107129800105,
+      "bbox_S": 27.13736623304958,
+      "bbox_N": 27.13739673430402,
+      "bbox_W": -82.39163491570709,
+      "bbox_E": -82.38810344663537,
+      "miles": 0.217,
+      "lastupdate_ms": 1649430763000,
+      "lastupdate_pt": "2022-04-08 08:12 PT",
+      "addr_l": [
+        3801,
+        5101
+      ],
+      "addr_r": [
+        3800,
+        5100
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 8404,
+      "streetid": "ST_08032021_088202",
+      "full_name": "LAUREL RD E",
+      "speedlimit": 45,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.13735338111687,
+      "mid_lon": -82.38670539150887,
+      "bbox_S": 27.137340197275037,
+      "bbox_N": 27.13736623304958,
+      "bbox_W": -82.38810344663537,
+      "bbox_E": -82.38527177845123,
+      "miles": 0.174,
+      "lastupdate_ms": 1627977992000,
+      "lastupdate_pt": "2021-08-03 01:06 PT",
+      "addr_l": [
+        5103,
+        5149
+      ],
+      "addr_r": [
+        5102,
+        5148
+      ],
+      "postal": "NOKOMIS"
+    },
+    {
+      "objectid": 33116,
+      "streetid": "ST_08032021_199761",
+      "full_name": "LAUREL RD E",
+      "speedlimit": 45,
+      "maintenanceentity": "CM",
+      "class": "A30",
+      "mid_lat": 27.137312183342722,
+      "mid_lon": -82.38209886571978,
+      "bbox_S": 27.13729483345671,
+      "bbox_N": 27.137340197275037,
+      "bbox_W": -82.38527177845123,
+      "bbox_E": -82.37996608503263,
+      "miles": 0.326,
+      "lastupdate_ms": 1695824518000,
+      "lastupdate_pt": "2023-09-27 07:21 PT",
+      "addr_l": [
+        5151,
+        5249
+      ],
+      "addr_r": [
+        5150,
+        5248
+      ],
+      "postal": "NOKOMIS"
+    }
+  ]
+}
