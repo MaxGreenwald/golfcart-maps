@@ -14,7 +14,7 @@ GUIDES = [
     ("staug", "staugustine/st-augustine.json", ["Bridge of Lions"],
      ["US 1", "SR 312", "SR 207", "Ponce de Leon Boulevard", "A1A"]),
     ("galveston", "galveston/galveston.json", [],
-     ["Seawall Boulevard", "Broadway - Avenue J", "Broadway Street", "Harborside Drive", "61st Street", "Ferry Road",
+     ["Broadway - Avenue J", "Broadway Street", "Harborside Drive", "61st Street", "Ferry Road",
       "San Luis Pass Road", "Teichman Road", "Pelican Island Causeway", "Gulf Freeway"]),
     ("keywest", "keywest/key-west.json", ["Duval Street"], []),
     ("coachella", "coachella/palm-desert.json", [], ["East Palm Canyon Drive", "Pines To Palms Highway", "CA- 111"]),

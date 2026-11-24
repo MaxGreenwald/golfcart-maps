@@ -1,0 +1,28 @@
+CLOSE                                              n=  2 mi=0.05 | Galveston Sec. 34-203(b)(4)(c): SH 87 ramp at Seawall Blvd and Ferry R
+CLOSE 10 Mile Road                                 n=  1 mi=0.48 | Galveston Code Sec. 34-59(b)(10): 10 Mile Road (Auzston Road) from Hom
+CLOSE 9 Mile Road                                  n= 10 mi=0.87 | Galveston Code Sec. 34-59(b)(9): 9 Mile Road from Homrighaus Road to S
+CLOSE Apffel Park Road                             n=  5 mi=2.02 | Galveston Code Sec. 34-59(h)(1): Apffel Park Road from Lakeside Drive 
+CLOSE Bernardo De Galvez Avenue                    n=  4 mi=0.14 | Galveston Sec. 34-203(b)(2): Avenue P (Bernardo De Galvez Ave) prohibi
+CLOSE Bradner Road                                 n=  2 mi=0.47 | Galveston Code Sec. 34-59(b)(3): Bradner Street 45 mph
+CLOSE Park Road 66                                 n= 28 mi=2.94 | Galveston Sec. 34-203(b)(4)(g): Park Road at the State Park (Park Road
+CLOSE Seawolf Parkway                              n=  7 mi=2.57 | Galveston Code Sec. 34-59(b)(2): Seawolf Parkway from Bradner to Seawo
+CLOSE University Boulevard - 6th Street            n=  1 mi=0.09 | Galveston Sec. 34-203(b)(4)(a): 6th St piece at Harborside Dr carried 
+OPEN                                               n=  3 mi=0.08 | 
+OPEN  14th Street                                  n= 27 mi=0.82 | Galveston Code Sec. 34-56: state speed law applies; 14th Street is not
+OPEN  31st Street                                  n=  1 mi=0.02 | Galveston Code Sec. 34-56: state speed law applies; 31st Street is not
+OPEN  37th Street                                  n= 45 mi=1.63 | Galveston Code Sec. 34-56: state speed law applies; 37th Street is not
+OPEN  81st Street                                  n= 18 mi=0.68 | Galveston Code Sec. 34-56: state speed law applies; 81st Street from J
+OPEN  Avenue O                                     n=  3 mi=0.22 | 
+OPEN  Jones Drive                                  n= 13 mi=0.60 | Galveston Code Sec. 34-56: state speed law applies; Jones Drive west o
+OPEN  Jones Drive                                  n=  2 mi=0.06 | Galveston Code Sec. 34-58(a)(7): Jones Drive from 69th Street to Stewa
+OPEN  Market Street                                n= 40 mi=1.67 | Galveston Code Sec. 34-56: state speed law applies; Market Street is n
+OPEN  Martin Luther King Boulevard - 29th Street   n= 51 mi=1.46 | Galveston Code Sec. 34-56: state speed law applies; 29th Street (MLK B
+OPEN  Mary Moody Northern Boulevard - 53rd Street  n= 44 mi=1.48 | Galveston Code Sec. 34-56: state speed law applies; 53rd Street (Mary 
+OPEN  Mike Gaido Boulevard - 39th Street           n= 13 mi=0.54 | Galveston Code Sec. 34-56: state speed law applies; 39th Street (Mike 
+OPEN  Moody Avenue - 21st Street                   n= 41 mi=1.25 | Galveston Code Sec. 34-56: state speed law applies; 21st Street (Moody
+OPEN  Seawall Boulevard                            n=149 mi=4.35 | Galveston Code Sec. 34-58(a)(3): Seawall Blvd from Ferry Rd to 61st St
+OPEN  Stewart Road                                 n=  7 mi=0.26 | Galveston Code Sec. 34-56: state speed law applies; Stewart Road east 
+OPEN  Stewart Road                                 n= 27 mi=0.57 | Galveston Code Sec. 34-58(a)(6): Stewart Road from 61st Street to 85th
+OPEN  University Boulevard - 6th Street            n= 30 mi=0.76 | Galveston Code Sec. 34-56: state speed law applies; 6th Street (Univer
+{'CLOSE': 9.63, 'OPEN': 16.45}
+segments changed 1965

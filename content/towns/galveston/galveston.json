@@ -5,7 +5,7 @@
  "state": "TX",
  "seo_title": "Galveston golf cart map and LSV map",
  "question_title": "Can you drive a golf cart in Galveston?",
- "answer_short": "Yes, with a license plate and a city permit. Galveston allows golf carts and NEVs on streets posted 35 mph or less, except state highways such as Seawall Blvd, Broadway, Harborside Dr and 61st St, the Pelican Island Causeway, and parts of Avenues O and P. You may cross those at intersections.",
+ "answer_short": "Yes, with a license plate and a city permit. Golf carts and NEVs may use streets posted 35 mph or less, except state highways (Broadway, Harborside Dr, 61st St, Seawall Blvd east of 6th St or west of 61st St), the Pelican Island Causeway, and parts of Avenues O and P. You may cross those at intersections.",
  "golf_cart": {
   "allowed": "yes",
   "roads": "Streets posted 35 mph or less, minus the city's banned streets",
@@ -21,7 +21,7 @@
  "rules": [
   {
    "topic": "Banned streets",
-   "rule": "No golf carts or NEVs where posted over 35 mph, on state highway streets (Seawall Blvd, Broadway, Harborside Dr, 61st St, Ferry Rd, FM 3005, FM 188, I-45, SH 168), the Pelican Island Causeway, Avenue O from 53rd to 15th St, or Avenue P from 19th to 53rd St",
+   "rule": "No golf carts or NEVs where posted over 35 mph, on state highway streets (Broadway, Harborside Dr, 61st St, Ferry Rd, Seawall Blvd east of 6th St (SH 87) and west of 61st St (FM 3005), FM 188, I-45, SH 168, the State Park road), the Pelican Island Causeway, Avenue O from 53rd to 15th St, or Avenue P from 19th to 53rd St",
    "citation": "Galveston Code Sec. 34-203 (Ord. 21-023)",
    "source_url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021"
   },
@@ -52,8 +52,8 @@
  ],
  "banned_roads": [
   {
-   "name": "Seawall Blvd",
-   "rule": "State highway street (SH 87 / FM 3005)",
+   "name": "Seawall Blvd east of 6th St and west of 61st St",
+   "rule": "State highway street (SH 87 east of 6th St, FM 3005 west of 61st St)",
    "crossings_ok": true
   },
   {
@@ -95,7 +95,7 @@
  "faq": [
   {
    "q": "Can you drive a golf cart on Seawall Boulevard?",
-   "a": "No. Seawall Blvd is a state highway street, and Galveston bans golf carts and NEVs on it. You may cross it at an intersection to reach the beach side."
+   "a": "Between 6th St and 61st St, yes. That stretch is a city street posted 35 mph (Galveston Code Sec. 34-58). East of 6th St it is SH 87 and west of 61st St it is FM 3005, and Galveston bans golf carts and NEVs on both. You may cross them at an intersection."
   },
   {
    "q": "Do I need a permit to drive a golf cart in Galveston?",
@@ -125,12 +125,13 @@
  ],
  "zoom": 15,
  "published": "2026-11-16",
- "last_checked": "2026-11-16",
+ "last_checked": "2026-11-24",
  "checked_by": "Golf Cart Maps",
  "sources": [
   "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
   "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.303",
   "https://statutes.capitol.texas.gov/GetStatute.aspx?Code=TN&Value=551.404",
-  "https://www.galvestontx.gov/FAQ/Topic?mobile=ON&topic=27"
+  "https://www.galvestontx.gov/FAQ/Topic?mobile=ON&topic=27",
+  "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC"
  ]
 }
