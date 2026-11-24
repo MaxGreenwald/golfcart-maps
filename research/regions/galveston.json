@@ -2,42 +2,94 @@
  "unverified": [],
  "bans": [
   {
-   "names": "Seawall|^Broadway|Harborside|^61st St|Ferry R|Teichman|^(FM|SH|TX|Spur|I) ?-?(3005|188|87|275|342|168|45)\\b|Pelican Island Causeway|San Luis Pass|Butterowe|Gulf Freeway",
+   "names": "^Broadway|Harborside|^61st St|Ferry R|Teichman|^(FM|SH|TX|Spur|I) ?-?(3005|188|87|275|342|168|45)\\b|Pelican Island Causeway|San Luis Pass|Butterowe|Gulf Freeway",
    "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
-   "label": "Galveston Sec. 34-203: state-highway streets (Seawall, Broadway, Harborside, 61st, Ferry Rd, FM 3005/188, I-45) prohibited"
+   "label": "Galveston Sec. 34-203(b)(4): state-highway streets (Broadway, Harborside, 61st, Ferry Rd, FM 3005/188, I-45) prohibited"
+  },
+  {
+   "names": "^Seawall Boulevard$",
+   "per_segment": true,
+   "bbox": [
+    29.0,
+    -94.7726,
+    29.4,
+    -94.6
+   ],
+   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+   "label": "Galveston Sec. 34-203(b)(4)(c): Seawall Blvd east of 6th St is SH 87 (6th St to Ferry Rd), prohibited"
+  },
+  {
+   "names": "^Seawall Boulevard$",
+   "per_segment": true,
+   "bbox": [
+    29.0,
+    -95.2,
+    29.4,
+    -94.8263
+   ],
+   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+   "label": "Galveston Sec. 34-203(b)(4)(d): Seawall Blvd west of 61st St is FM 3005, prohibited"
   },
   {
    "names": "^Avenue O$",
-   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
-   "label": "Galveston: Avenue O prohibited 53rd\u201315th St",
+   "per_segment": true,
    "bbox": [
-    29.27,
-    -94.84,
-    29.31,
-    -94.77
-   ]
+    29.25,
+    -94.8243,
+    29.32,
+    -94.7807
+   ],
+   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+   "label": "Galveston Sec. 34-203(b)(2): Avenue O prohibited between 53rd and 15th Streets"
   },
   {
-   "names": "^Avenue P$",
-   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
-   "label": "Galveston: Avenue P prohibited 19th\u201353rd St",
+   "names": "^(Avenue P|Bernardo De Galvez Avenue)$",
+   "per_segment": true,
    "bbox": [
-    29.27,
-    -94.84,
-    29.31,
-    -94.78
-   ]
+    29.25,
+    -94.8237,
+    29.32,
+    -94.7848
+   ],
+   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+   "label": "Galveston Sec. 34-203(b)(2): Avenue P (Bernardo De Galvez Ave) prohibited between 19th and 53rd Streets"
+  },
+  {
+   "names": "^Park Road 66$|^PR ?66$",
+   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+   "label": "Galveston Sec. 34-203(b)(4)(g): Park Road at the State Park (Park Road 66, TxDOT PR0066) prohibited"
+  },
+  {
+   "names": "^$",
+   "ways": [
+    20888897,
+    128961827
+   ],
+   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+   "label": "Galveston Sec. 34-203(b)(4)(c): SH 87 ramp at Seawall Blvd and Ferry Rd (TxDOT SH0087), prohibited"
+  },
+  {
+   "names": "^University Boulevard - 6th Street$",
+   "ways": [
+    183739735
+   ],
+   "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
+   "label": "Galveston Sec. 34-203(b)(4)(a): 6th St piece at Harborside Dr carried on SH 275 (TxDOT SH0275 record), prohibited"
   }
  ],
  "sources": [
   "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021",
   "https://www.galvestontx.gov/FAQ/Topic?mobile=ON&topic=27",
   "https://library.municode.com/tx/galveston/codes/code_of_ordinances?nodeId=PTIICOCI_CH34TR_ARTIIIVEOP_SS34-78--34-85RE (speed zones)",
-  "West-of-103rd St registration split not modeled"
+  "West-of-103rd St registration split not modeled",
+  "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC (Sec. 34-56, 34-58, 34-59 speed schedule)",
+  "https://mcclibraryfunctions-stage.azurewebsites.us/api/ordinanceDownload/10204/842548/pdf (Ord. 17-050: Seawall 35 mph Ferry Rd to 61st St)",
+  "https://www.galvestontx.gov/AgendaCenter/ViewFile/Item/19564?fileID=40464 (Jan 23 2025 engineering memo: unzoned streets default to Tex. Transp. Code 545.352, 30 mph)",
+  "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.545.htm#545.352"
  ],
  "status": "HIDDEN beta on expansion-15 test branch (2026-10-14); ?r=galveston loads it",
  "enforcement": {
-  "checked": "2026-10-21",
+  "checked": "2026-11-24",
   "result": "bans_applied",
   "sources": [
    {
@@ -45,6 +97,631 @@
     "url": "https://www.galvestontx.gov/DocumentCenter/View/12508/Golf-Cart-Ordinance-June-2021"
    }
   ],
-  "note": "Seawall, Broadway, Harborside, 61st, Ave O/P etc. applied."
- }
+  "note": "Nov 24 2026 scrub (research/galveston_ordinance/README.md): Ord. 21-023 Sec. 34-203(b) list applied by stretch (Seawall closed east of 6th St and west of 61st St only; Ave O 53rd to 15th; Ave P / Bernardo De Galvez 19th to 53rd; Park Road 66; SH 87 and SH 275 pieces). Speed zones from Code Sec. 34-58/34-59 applied to named streets."
+ },
+ "speed_names": [
+  {
+   "names": "^Seawall Boulevard$",
+   "bbox": [
+    29.0,
+    -94.8263,
+    29.4,
+    -94.7726
+   ],
+   "mph": 35,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-58(a)(3): Seawall Blvd from Ferry Rd to 61st St posted 35 mph (Ord. 17-050). Between 6th St and 61st St it is a city street, not on the Sec. 34-203(b)(4) state-highway list (SH 87 covers Seawall only from 6th St to Ferry Rd; FM 3005 starts at 61st St)"
+  },
+  {
+   "names": "^Seawolf Parkway$",
+   "bbox": [
+    29.3,
+    -94.8078,
+    29.36,
+    -94.77
+   ],
+   "mph": 45,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-59(b)(2): Seawolf Parkway from Bradner to Seawolf Park 45 mph"
+  },
+  {
+   "names": "^Bradner (Road|Street)$",
+   "mph": 45,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-59(b)(3): Bradner Street 45 mph"
+  },
+  {
+   "names": "^9 Mile Road$",
+   "north_of": 29.2332,
+   "mph": 45,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-59(b)(9): 9 Mile Road from Homrighaus Road to Stewart Road 45 mph"
+  },
+  {
+   "names": "^10 Mile Road$",
+   "north_of": 29.2277,
+   "mph": 45,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-59(b)(10): 10 Mile Road (Auzston Road) from Homrighaus Road to Stewart Road 45 mph"
+  },
+  {
+   "names": "^Apffel Park Road$",
+   "east_of": -94.7586,
+   "mph": 40,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-59(h)(1): Apffel Park Road from Lakeside Drive to the entrance to R.A. Apffel Park 40 mph"
+  },
+  {
+   "names": "^Apffel Park Road$",
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-59(g)(1): Apffel Park Road from Seawall Boulevard to Lakeside Drive 30 mph"
+  }
+ ],
+ "overrides": [
+  {
+   "way": 20893742,
+   "mph": 35,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-58(a)(7): Jones Drive from 69th Street to Stewart Road 35 mph. Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 234879360,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Jones Drive west of 69th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 234879362,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Jones Drive west of 69th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842132,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Jones Drive west of 69th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842133,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Jones Drive west of 69th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842134,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Jones Drive west of 69th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842135,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Jones Drive west of 69th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1369713190,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Jones Drive west of 69th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1482850717,
+   "mph": 35,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-58(a)(7): Jones Drive from 69th Street to Stewart Road 35 mph. Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 20899074,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 29th Street (MLK Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 278715917,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 29th Street (MLK Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1216188086,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 29th Street (MLK Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1368838304,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 29th Street (MLK Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1368838307,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 29th Street (MLK Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1369368543,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 29th Street (MLK Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 20899093,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 53rd Street (Mary Moody Northern Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 183348730,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 53rd Street (Mary Moody Northern Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 278718830,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 53rd Street (Mary Moody Northern Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1008811134,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 53rd Street (Mary Moody Northern Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1155780313,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 53rd Street (Mary Moody Northern Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1313591429,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 53rd Street (Mary Moody Northern Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1369713195,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 53rd Street (Mary Moody Northern Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1369713197,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 53rd Street (Mary Moody Northern Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 20902928,
+   "mph": 35,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-58(a)(6): Stewart Road from 61st Street to 85th Street 35 mph. Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1075957718,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Stewart Road east of 61st Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1077665875,
+   "mph": 35,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-58(a)(6): Stewart Road from 61st Street to 85th Street 35 mph. Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1369713189,
+   "mph": 35,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-58(a)(6): Stewart Road from 61st Street to 85th Street 35 mph. Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 20906603,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 37th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 519816949,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 37th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 561131803,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 37th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 20907019,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1086608549,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1087196851,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1216180767,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1216180768,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1216180769,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1216180770,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1313472344,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1313472345,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1313474800,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1313474801,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1313474802,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1313474803,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1313474804,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1313474805,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1369233698,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1369781414,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; Market Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 20907425,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 14th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1086212980,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 14th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1369361831,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 14th Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 20909739,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 21st Street (Moody Ave) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1020819591,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 21st Street (Moody Ave) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1020819594,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 21st Street (Moody Ave) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1115798659,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 21st Street (Moody Ave) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1369781415,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 21st Street (Moody Ave) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1369781416,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 21st Street (Moody Ave) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 104743607,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 183739733,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1085756394,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1085756396,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1085756397,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1085756398,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1085756399,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1085756401,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1085756402,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1085756404,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1085756405,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1086608538,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1086608539,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1086608540,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1086608541,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1086608543,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1086608544,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1086608545,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1086608546,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1086608550,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1562934210,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 6th Street (University Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 20909610,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 81st Street from Jones Drive to Stewart Road is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842136,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 81st Street from Jones Drive to Stewart Road is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842137,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 81st Street from Jones Drive to Stewart Road is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842138,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 81st Street from Jones Drive to Stewart Road is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842139,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 81st Street from Jones Drive to Stewart Road is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842140,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 81st Street from Jones Drive to Stewart Road is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842143,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 81st Street from Jones Drive to Stewart Road is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842146,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 81st Street from Jones Drive to Stewart Road is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842148,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 81st Street from Jones Drive to Stewart Road is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 463842149,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 81st Street from Jones Drive to Stewart Road is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 561131796,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 39th Street (Mike Gaido Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 561131797,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 39th Street (Mike Gaido Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 561131798,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 39th Street (Mike Gaido Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 561131805,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 31st Street is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1194000799,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 39th Street (Mike Gaido Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1369713182,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 39th Street (Mike Gaido Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  },
+  {
+   "way": 1369713184,
+   "mph": 30,
+   "url": "https://galvestontx.gov/DocumentCenter/View/11414/Chapter_34___TRAFFIC",
+   "label": "Galveston Code Sec. 34-56: state speed law applies; 39th Street (Mike Gaido Blvd) is not on any Sec. 34-58 or 34-59 speed zone over 35 mph, so its limit is the Tex. Transp. Code 545.352(b)(1) urban default of 30 mph (city engineering memo Jan 23 2025 applies the same 30 mph default). Not on the Sec. 34-203(b) prohibited list"
+  }
+ ]
 }
