@@ -352,8 +352,8 @@ function setRule(){if(REG&&REG.general)RULES[REG.state]=GCMAnywhere.RULES;const 
 function vehUI(){const b=$('vehCart');if(!b)return;b.checked=MODE==='golf_cart';
  const lsv=MODE==='lsv'?RULE:OTHER;
  const title=$('vehTitle');if(title)title.textContent=GCMRule.MODE_TITLE;
- const t=$('vehSub');if(t)t.textContent=GCMRule.modeSub(RULE);
- const h=$('vehHint');if(h&&lsv&&lsv.veh==='lsv')h.textContent=GCMRule.lsvHint(lsv)}
+ const law=GCMRule.ruleFor(RULES,REG,'golf_cart');const t=$('vehSub');if(t)t.textContent=GCMRule.modeSub(RULE,law);
+ const h=$('vehHint');if(h&&lsv&&lsv.veh==='lsv')h.textContent=GCMRule.lsvHint(lsv,law)}
 function setVeh(v){if(!GCMRule.VEHICLES.includes(v)||v===MODE)return;MODE=v;try{localStorage.setItem('gcm-veh',v)}catch(_){}if(REG&&REG.general){setRule();if(start&&end)route();return}if(REG){const id=REG.id;REG=null;loadRegion(id,true).then(()=>{if(start&&end)route()}).catch(()=>{})}else vehUI()}
 window.setVeh=setVeh;
 // re-read the saved vehicle (CarPlay's web view and the phone share localStorage); resolves true if it changed and data reloaded

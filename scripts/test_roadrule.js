@@ -98,6 +98,11 @@ t('switch sublabels name the active side without em dashes',()=>{
   a.equal(R.modeSub(R.modeRule(rules,CA,'lsv')),'Street-legal LSV: roads posted 35 mph or less');
   a.equal(R.modeSub(R.modeRule(rules,CA,'golf_cart')),'Golf cart: roads posted 25 mph or less');
   a.equal(R.modeSub(R.modeRule(rules,reg('galveston'),'golf_cart')),'Golf cart: roads posted 25 mph or less');
-  for(const r of regs)for(const v of R.VEHICLES)a.equal(R.modeSub(R.modeRule(rules,r,v)).includes('—'),false,r.id+' '+v);
+  const g=reg('galveston'),gl=R.ruleFor(rules,g,'golf_cart');
+  a.equal(R.modeSub(R.modeRule(rules,g,'lsv'),gl),'Golf carts and LSVs: roads posted 35 mph or less');
+  a.match(R.lsvHint(R.modeRule(rules,g,'lsv'),gl),/golf carts and LSVs may both use roads posted 35 mph or less\. Leave this off/);
+  a.equal(R.modeSub(R.modeRule(rules,CA,'lsv'),R.ruleFor(rules,CA,'golf_cart')),'Street-legal LSV: roads posted 35 mph or less');
+  a.equal(R.lsvHint(R.modeRule(rules,CA,'lsv'),R.ruleFor(rules,CA,'golf_cart')),'Most street-legal LSVs can use 35 mph roads');
+  for(const r of regs)for(const v of R.VEHICLES){const law=R.ruleFor(rules,r,'golf_cart'),m=R.modeRule(rules,r,v);a.equal((R.modeSub(m,law)+R.lsvHint(m,law)).includes('—'),false,r.id+' '+v)}
 });
 console.log(`RESULT ALL PASS (${n})`);

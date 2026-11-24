@@ -40,8 +40,11 @@ const MODE_VERSION='2';
 function storedMode(v){return v==='golf_cart'?'golf_cart':DEFAULT_VEH}
 // Switch copy. The title names the mode; the line under it describes whichever side is active.
 const MODE_TITLE='Golf cart mode (25 mph roads only)';
-function modeSub(R){if(!R)return '';
- if(R.veh==='lsv')return 'Street-legal LSV: roads posted '+R.max_posted+' mph or less';
+// cartLaw: the town's golf cart rule before the 25 cap (ruleFor). Where it already allows the LSV limit
+// (Texas: both 35), Off says so plainly, so a rental customer leaves the switch off.
+const cartsShareLsv=(R,cartLaw)=>!!(R&&cartLaw&&!cartLaw.not_street_legal&&!cartLaw.designated_only&&cartLaw.max_posted>=R.max_posted);
+function modeSub(R,cartLaw){if(!R)return '';
+ if(R.veh==='lsv')return (cartsShareLsv(R,cartLaw)?'Golf carts and LSVs':'Street-legal LSV')+': roads posted '+R.max_posted+' mph or less';
  if(R.not_street_legal)return "Golf cart: plain golf carts aren't street-legal here, cart paths only";
  if(R.designated_only)return 'Golf cart: cart paths and designated roads posted '+R.max_posted+' mph or less';
  return 'Golf cart: roads posted '+R.max_posted+' mph or less'}
@@ -65,7 +68,7 @@ function switchName(R){if(!R||R.veh==='lsv')return 'Street-legal LSV';
  if(n>0)return 'Under '+n+' mph roads only';
  return 'Plain golf cart rules'}
 // One line under the switch. The 35 mph sentence is only for a town whose LSV cap is 35 or higher.
-function lsvHint(R){const n=R&&+R.max_posted;if(n>=35)return 'Most street-legal LSVs can use 35 mph roads';
+function lsvHint(R,cartLaw){const n=R&&+R.max_posted;if(n>0&&cartsShareLsv(R,cartLaw))return 'Here golf carts and LSVs may both use roads posted '+n+' mph or less. Leave this off unless you want 25 mph roads only.';if(n>=35)return 'Most street-legal LSVs can use 35 mph roads';
  if(n>0)return 'Street-legal LSVs here use roads posted '+n+' mph or under';
  return ''}
 // Shown when a search finds nothing or stops. Names the setting that is on, so a

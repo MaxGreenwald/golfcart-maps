@@ -25,7 +25,7 @@ with sync_playwright() as p:
     pg.goto(URL+GAL);ready(pg)
     ck("default is Off (street-legal LSV, 35 mph)",pg.evaluate("MODE")=="lsv" and pg.evaluate("$('vehCart').checked")==False and pg.evaluate("RULE.max_posted")==35,pg.evaluate("[MODE,RULE.max_posted]"))
     ck("first visit stores the default and the mode version",pg.evaluate("[localStorage.getItem('gcm-veh'),localStorage.getItem('gcm-veh-v')]")==["lsv",pg.evaluate("GCMRule.MODE_VERSION")])
-    ck("switch title and Off sublabel",pg.inner_text("#vehTitle")=="Golf cart mode (25 mph roads only)" and pg.inner_text("#vehSub")=="Street-legal LSV: roads posted 35 mph or less",pg.inner_text("#vehTitle")+" | "+pg.inner_text("#vehSub"))
+    ck("Texas: Off sublabel says golf carts and LSVs share 35; hint says leave it off",pg.inner_text("#vehTitle")=="Golf cart mode (25 mph roads only)" and pg.inner_text("#vehSub")=="Golf carts and LSVs: roads posted 35 mph or less" and "Leave this off" in pg.inner_text("#vehHint"),pg.inner_text("#vehTitle")+" | "+pg.inner_text("#vehSub")+" | "+pg.inner_text("#vehHint"))
     ck("legend: Unverified Neighborhood Road, 40+ mph / major: avoid, no em dash",pg.inner_text("#lgUnv")=="Unverified Neighborhood Road" and pg.inner_text("#lgNo")=="40+ mph / major: avoid" and "—" not in pg.inner_text("#legend"),pg.inner_text("#legend"))
     ck("legend: Risky stretch hidden while Risky is off",not pg.is_visible("#lgRisk"))
     ck("legend: dotted green swatch for Unverified Neighborhood Road","#4cc38a" in (pg.get_attribute("#lgUnv i","style") or "").lower())
