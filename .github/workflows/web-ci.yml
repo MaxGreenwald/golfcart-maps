@@ -187,6 +187,8 @@ jobs:
         run: python scripts/test_chip_overflow.py
       - name: "test_vehicle (golf cart / LSV toggle, CA golf carts <=25)"
         run: python scripts/test_vehicle.py
+      - name: "test_golfcart_mode (off = LSV 35 default, on = golf cart 25 everywhere; low-confidence roads dotted green; legend)"
+        run: python scripts/test_golfcart_mode.py
       - name: "test_appstore (iOS build - no paywall, tip or beta labels; native share and haptics wired; launches with third-party hosts blocked)"
         run: python scripts/test_appstore.py
       - name: test_live_regions (app mode shows a town that exists only on the live origin)

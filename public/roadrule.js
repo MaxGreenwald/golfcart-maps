@@ -26,6 +26,28 @@ function cls(s,R,lenient){if(s[3]==='c')return 0;if(R.not_street_legal)return 3;
   if(s[2]==null||(s[2]>R.max_posted&&!(lenient&&s[2]===99)))return 3;if(R.designated_only&&!desig(s,R))return 3;
   return s[3]==='t'||s[3]==='o'||s[3]==='v'||s[3]==='m'||s[3]==='s'||s[3]==='d'||s[3]==='r'||s[3]==='k'||s[3]==='n'||s[3]==='q'?0:1}
 const nextBand=m=>m%5?m+1:m+(m===25?1:5);
+// The main map's Settings switch. Off (default): street-legal LSV rule, roads posted 35 mph or less in most states.
+// On: golf cart mode, the golf cart rule with roads capped at 25 mph, even where state law lets golf carts use 35 mph roads
+// (TX, SC, AZ, OH, many towns), so On always differs from Off. Legal limits stay: cart paths only, designated roads, local bans.
+// Only the main map and CarPlay use modeRule; partner pages keep ruleFor for the shop's vehicle (AGENTS.md rule 29).
+const GOLF_CART_MODE_MAX=25;
+function modeRule(rules,reg,mode){const r=ruleFor(rules,reg,mode);
+  if(r.veh==='golf_cart'&&!r.not_street_legal&&!(r.max_posted<=GOLF_CART_MODE_MAX))r.max_posted=GOLF_CART_MODE_MAX;
+  return r}
+// Stored switch value ('gcm-veh'). Only an explicit 'golf_cart' (the user turned the switch on; it was always off by default)
+// stays on. Anything else, including a missing or unknown value, is the default: Off.
+const MODE_VERSION='2';
+function storedMode(v){return v==='golf_cart'?'golf_cart':DEFAULT_VEH}
+// Switch copy. The title names the mode; the line under it describes whichever side is active.
+const MODE_TITLE='Golf cart mode (25 mph roads only)';
+// cartLaw: the town's golf cart rule before the 25 cap (ruleFor). Where it already allows the LSV limit
+// (Texas: both 35), Off says so plainly, so a rental customer leaves the switch off.
+const cartsShareLsv=(R,cartLaw)=>!!(R&&cartLaw&&!cartLaw.not_street_legal&&!cartLaw.designated_only&&cartLaw.max_posted>=R.max_posted);
+function modeSub(R,cartLaw){if(!R)return '';
+ if(R.veh==='lsv')return (cartsShareLsv(R,cartLaw)?'Golf carts and LSVs':'Street-legal LSV')+': roads posted '+R.max_posted+' mph or less';
+ if(R.not_street_legal)return "Golf cart: plain golf carts aren't street-legal here, cart paths only";
+ if(R.designated_only)return 'Golf cart: cart paths and designated roads posted '+R.max_posted+' mph or less';
+ return 'Golf cart: roads posted '+R.max_posted+' mph or less'}
 // why a segment is forbidden for this vehicle (popup text); '' when allowed
 // src: the segment's source entry [url,label] (D.sources[s[8]]); a ban taken from a sheriff's LSV map names that map instead of the generic speed text.
 function why(s,R,Rother,src){if(cls(s,R)!==3)return '';if(R.not_street_legal)return `Avoid: plain golf carts aren't street-legal here${R.unconfirmed?' (no rule on file)':''}${Rother&&cls(s,Rother)!==3?` (OK for ${vname(Rother)})`:''}`;
@@ -46,7 +68,7 @@ function switchName(R){if(!R||R.veh==='lsv')return 'Street-legal LSV';
  if(n>0)return 'Under '+n+' mph roads only';
  return 'Plain golf cart rules'}
 // One line under the switch. The 35 mph sentence is only for a town whose LSV cap is 35 or higher.
-function lsvHint(R){const n=R&&+R.max_posted;if(n>=35)return 'Most street-legal LSVs can use 35 mph roads';
+function lsvHint(R,cartLaw){const n=R&&+R.max_posted;if(n>0&&cartsShareLsv(R,cartLaw))return 'Here golf carts and LSVs may both use roads posted '+n+' mph or less. Leave this off unless you want 25 mph roads only.';if(n>=35)return 'Most street-legal LSVs can use 35 mph roads';
  if(n>0)return 'Street-legal LSVs here use roads posted '+n+' mph or under';
  return ''}
 // Shown when a search finds nothing or stops. Names the setting that is on, so a
@@ -58,6 +80,6 @@ function routeStop(R,o){o=o||{};const mode=switchName(R);
  if(o.risky)return head+' Even short stretches of faster roads (up to 500 ft) don’t connect these points.'+lsv;
  if(R.veh==='golf_cart')return head+lsv;
  return head+' Try ⚠️ Risky to see short stretches of faster roads.'}
-const api={DEFAULT_VEH,noRoute,routeStop,switchName,lsvHint,VEHICLES,VNAME,ruleFor,cls,desig,why,vname,nextBand};
+const api={DEFAULT_VEH,GOLF_CART_MODE_MAX,MODE_VERSION,MODE_TITLE,modeRule,storedMode,modeSub,noRoute,routeStop,switchName,lsvHint,VEHICLES,VNAME,ruleFor,cls,desig,why,vname,nextBand};
 if(typeof module==='object'&&module.exports)module.exports=api;else root.GCMRule=api;
 })(typeof window!=='undefined'?window:globalThis);
