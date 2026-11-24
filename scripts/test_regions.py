@@ -20,7 +20,7 @@ with sync_playwright() as p:
     pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000);ck("saved choice persists",pg.evaluate("REG.id")=="villages")
     A,B=[28.9095,-81.9745],[28.9330,-81.9590]   # Spanish Springs area -> north residential
     r1=pg.evaluate(f"testRoute({A},{B})");ck("villages LSV route",bool(r1),r1)
-    ck("no vehicle chip; Villages shows designated cart roads, LSV by default",pg.locator("#cMode,#cVeh").count()==0 and pg.locator("#vehCart").count()==1 and pg.evaluate("MODE")=="lsv" and pg.inner_text("#vehTitle")=="Designated cart roads only" and pg.inner_text("#vehHint")=="Most street-legal LSVs can use 35 mph roads")
+    ck("no vehicle chip; Villages: LSV by default, golf cart mode is designated roads at 25",pg.locator("#cMode,#cVeh").count()==0 and pg.locator("#vehCart").count()==1 and pg.evaluate("MODE")=="lsv" and pg.inner_text("#vehTitle")=="Golf cart mode (25 mph roads only)" and pg.inner_text("#vehSub")=="Street-legal LSV: roads posted 35 mph or less" and pg.evaluate("GCMRule.modeSub(GCMRule.modeRule(RULES,REG,'golf_cart'))")=="Golf cart: cart paths and designated roads posted 25 mph or less" and pg.inner_text("#vehHint")=="Most street-legal LSVs can use 35 mph roads")
     pg.evaluate("map.setView([28.9095,-81.9745],15);0");pg.wait_for_timeout(2500);pg.screenshot(path=f"{OUT}/villages-route.png")
     r3=pg.evaluate("testRoute([28.9095,-81.9745],[28.8800,-81.9700])");ck("route across CR 466",r3 is None or True,r3)
     r4=pg.evaluate(f"testRoute({A},{B})");ck("villages route not detouring (<3.5 mi)",bool(r4) and r4["mi"]<3.5,r4)

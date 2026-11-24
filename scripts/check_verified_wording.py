@@ -7,13 +7,15 @@ must be gated to the SD region and to ways listed in public/data/sd/verified.jso
 
 Scanned: every text file in public/ except the generated map data, the displayed strings in
 public/data/regions.json (name, short, cover, rule.cite) and rules.json (cite/label/note text shown in the
-app), functions/ and lib/. Allowed exceptions: the Stripe /api/verify endpoint name.
+app), functions/ and lib/. Allowed exceptions: the Stripe /api/verify endpoint name and the exact map legend
+label "Unverified Neighborhood Road" (a disclaimer Max chose for low-confidence roads).
 Run: python3 scripts/check_verified_wording.py   (exit 1 on any hit)"""
 import json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WORD = re.compile(r"verified", re.I)
-ALLOW = [re.compile(r"""['"/]verify\?session_id""")]          # endpoint name, never shown
+ALLOW = [re.compile(r"""['"/]verify\?session_id"""),          # endpoint name, never shown
+         re.compile(r">Unverified Neighborhood Road<")]           # map legend label Max named (t604u): disclaims, never claims
 TEXT_EXT = {".html", ".js", ".txt", ".xml", ".webmanifest", ".json", ".css", ".svg", ".md"}
 START, END = "sd-verified-badge:start", "sd-verified-badge:end"
 hits = []

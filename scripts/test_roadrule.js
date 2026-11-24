@@ -60,15 +60,44 @@ t('a failed search names the setting that is on',()=>{
   a.equal(R.routeStop(cart,{}).includes('—'),false);
   for(const r of regs)for(const v of R.VEHICLES){const rule=R.ruleFor(rules,r,v);for(const s of [R.switchName(rule),R.lsvHint(rule),R.routeStop(rule,{}),R.routeStop(rule,{risky:true})])a.equal(s.includes('—'),false,r.id+' '+v)}
 });
-t('settings copy dropped the Golf cart mode name; stored vehicle ids stay',()=>{
+t('settings switch is Golf cart mode (25 mph roads only), off by default; stored vehicle ids stay',()=>{
   const html=fs.readFileSync(PUB+'/index.html','utf8'),priv=fs.readFileSync(PUB+'/privacy.html','utf8');
-  a.ok(html.includes('id="vehTitle">Under 25 mph roads only'));
+  a.ok(html.includes('id="vehTitle">Golf cart mode (25 mph roads only)<'));
+  a.ok(html.includes('id="vehSub">Street-legal LSV: roads posted 35 mph or less<'));
   a.ok(html.includes('Most street-legal LSVs can use 35 mph roads'));
-  a.ok(html.includes('turn on Under 25 mph roads only in'));
-  a.ok(!html.includes('Golf cart mode'));
+  a.ok(html.includes('turn on Golf cart mode in'));
+  a.equal(R.MODE_TITLE,'Golf cart mode (25 mph roads only)');
   a.ok(!priv.includes('Golf cart mode'));
   a.ok(html.includes('Free to use.'));
   a.deepEqual(R.VEHICLES,['golf_cart','lsv']);
   a.equal(R.DEFAULT_VEH,'lsv');
+});
+// Main-map switch: Off = street-legal LSV (35 mph roads), On = golf cart mode capped at 25 mph in every region.
+t('modeRule: Off is the LSV rule (35); On caps golf carts at 25 even where state law allows 35 (TX, SC, AZ, OH)',()=>{
+  for(const id of ['sd','galveston','myrtle','southpadre','scottsdale','carolinabeach']){const r=reg(id);if(!r)continue;
+    const off=R.modeRule(rules,r,'lsv'),on=R.modeRule(rules,r,'golf_cart');
+    a.equal(off.max_posted,R.ruleFor(rules,r,'lsv').max_posted,id+' off keeps the LSV rule');
+    a.ok(on.not_street_legal||on.max_posted<=25,id+' on is capped at 25');
+    if(!on.not_street_legal&&!on.designated_only){a.equal(R.cls(seg(30,'v'),on),3,id+' on: verified 30 closed');a.equal(R.cls(seg(35,'v'),on),3,id+' on: verified 35 closed');a.notEqual(R.cls(seg(25,'v'),on),3,id+' on: 25 open');a.notEqual(R.cls(seg(25,'i'),on),3,id+' on: assumed 25 open')}
+    if(off.max_posted>=35){a.notEqual(R.cls(seg(30,'v'),off),3,id+' off: 30 open');a.notEqual(R.cls(seg(35,'v'),off),3,id+' off: 35 open')}
+  }
+  const gal=reg('galveston');a.equal(R.ruleFor(rules,gal,'golf_cart').max_posted,35);a.equal(R.modeRule(rules,gal,'golf_cart').max_posted,25);
+});
+t('modeRule keeps stricter legal limits: cart paths only, designated roads, local bans, lower caps',()=>{
+  a.ok(R.modeRule(rules,reg('oob'),'golf_cart').not_street_legal);
+  a.equal(R.cls(seg(25,'c'),R.modeRule(rules,reg('oob'),'golf_cart')),0);
+  a.equal(R.cls(seg(25,'s','residential',4),R.modeRule(rules,CA,'golf_cart')),3);
+  const vil=R.modeRule(rules,reg('villages'),'golf_cart');a.equal(vil.max_posted,25);
+  const nj=R.modeRule(rules,reg('capemay'),'lsv');a.equal(nj.max_posted,R.ruleFor(rules,reg('capemay'),'lsv').max_posted);
+  for(const r of regs){const on=R.modeRule(rules,r,'golf_cart'),base=R.ruleFor(rules,r,'golf_cart');a.ok(on.max_posted<=base.max_posted,r.id);a.equal(!!on.not_street_legal,!!base.not_street_legal,r.id);a.equal(!!on.designated_only,!!base.designated_only,r.id)}
+});
+t('stored switch value: only an explicit golf_cart stays on; missing, lsv or junk is Off',()=>{
+  a.equal(R.storedMode('golf_cart'),'golf_cart');for(const v of [null,undefined,'','lsv','cart','1','true'])a.equal(R.storedMode(v),'lsv',String(v));
+});
+t('switch sublabels name the active side without em dashes',()=>{
+  a.equal(R.modeSub(R.modeRule(rules,CA,'lsv')),'Street-legal LSV: roads posted 35 mph or less');
+  a.equal(R.modeSub(R.modeRule(rules,CA,'golf_cart')),'Golf cart: roads posted 25 mph or less');
+  a.equal(R.modeSub(R.modeRule(rules,reg('galveston'),'golf_cart')),'Golf cart: roads posted 25 mph or less');
+  for(const r of regs)for(const v of R.VEHICLES)a.equal(R.modeSub(R.modeRule(rules,r,v)).includes('—'),false,r.id+' '+v);
 });
 console.log(`RESULT ALL PASS (${n})`);

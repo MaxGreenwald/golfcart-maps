@@ -1,4 +1,4 @@
-"""Settings > Under 25 mph roads only (plain golf cart vs LSV, default LSV): toggle, CarPlay bridge, persistence, ?veh=, CA <=25 golf cart rule in the live map, popups, rule note,
+"""Settings > Golf cart mode (25 mph roads only) (golf cart vs street-legal LSV, default off = LSV): toggle, CarPlay bridge, persistence, ?veh=, CA <=25 golf cart rule in the live map, popups, rule note,
 routes for golf carts never use a road posted over 25 in CA, HI/ME golf carts cart-paths only. Uses public/roadrule.js via the page."""
 from playwright.sync_api import sync_playwright
 import os
@@ -13,7 +13,7 @@ with sync_playwright() as p:
     b=p.chromium.launch();ctx=b.new_context(**p.devices["iPhone 13"]);pg=ctx.new_page();pg.goto(URL);pg.wait_for_function("window.ready===true",timeout=120000)
     ck("default vehicle is LSV (no change for existing users)",pg.evaluate("MODE")=="lsv")
     ck("chip row has no vehicle chip (same as master)",pg.evaluate("[...document.querySelectorAll('#chips>*')].map(e=>e.id||e.className).join()")=="chip city,cNorm,cRisk,savePin,useme,reset",pg.evaluate("[...document.querySelectorAll('#chips>*')].map(e=>e.id||e.className).join()"))
-    ck("settings toggle off by default",pg.evaluate("$('vehCart').checked")==False and "Off" in pg.inner_text("#vehSub") and pg.inner_text("#vehTitle")=="Under 25 mph roads only" and pg.inner_text("#vehHint")=="Most street-legal LSVs can use 35 mph roads" and "street-legal LSV" in pg.inner_text("#vehSub"),pg.inner_text("#vehTitle")+" | "+pg.inner_text("#vehSub")+" | "+pg.inner_text("#vehHint"))
+    ck("settings toggle off by default",pg.evaluate("$('vehCart').checked")==False and pg.inner_text("#vehSub")=="Street-legal LSV: roads posted 35 mph or less" and pg.inner_text("#vehTitle")=="Golf cart mode (25 mph roads only)" and pg.inner_text("#vehHint")=="Most street-legal LSVs can use 35 mph roads",pg.inner_text("#vehTitle")+" | "+pg.inner_text("#vehSub")+" | "+pg.inner_text("#vehHint"))
     ck("CarPlay status reads LSV",pg.evaluate("GCMCarPlay.status().then(s=>s.mode)")=="lsv")
     ck("rule note names LSVs",pg.inner_text("#rnote").startswith("California, LSVs: roads posted ≤35 mph"),pg.inner_text("#rnote"))
     f=pg.evaluate(FIND);ck("found a 35 mph Carlsbad Blvd segment",bool(f),f)
@@ -23,7 +23,7 @@ with sync_playwright() as p:
     r=pg.evaluate(ROUTE);ck("LSV route found",bool(r["mi"]),r)
     pg.screenshot(path=OUT+"veh-lsv-popup.png")
     pg.evaluate("setMenu(true)");pg.wait_for_timeout(600);pg.click("label.vrow");pg.wait_for_function("window.ready===true&&MODE==='golf_cart'&&REG&&REG.id==='sd'",timeout=120000);pg.wait_for_timeout(1500)
-    ck("toggle on, subtitle shows <=25",pg.evaluate("$('vehCart').checked")==True and "≤25" in pg.inner_text("#vehSub"),pg.inner_text("#vehSub"))
+    ck("toggle on, subtitle shows 25 mph",pg.evaluate("$('vehCart').checked")==True and pg.inner_text("#vehSub")=="Golf cart: roads posted 25 mph or less",pg.inner_text("#vehSub"))
     ck("CarPlay status reads golf_cart",pg.evaluate("GCMCarPlay.status().then(s=>s.mode)")=="golf_cart")
     cp=pg.evaluate("GCMCarPlay.plan({lat:32.797,lon:-117.252},{lat:32.806,lon:-117.256},'lsv',false).then(r=>({ok:r.ok,mode:r.mode}))");ck("CarPlay plan uses the setting, ignores native mode arg",cp.get("mode")=="golf_cart",cp)
     ck("rule note: golf carts <=25 (CVC 21716 in title)",pg.inner_text("#rnote").startswith("California, golf carts: roads posted ≤25 mph") and "21716" in pg.get_attribute("#rnote","title"),pg.inner_text("#rnote"))

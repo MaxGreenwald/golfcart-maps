@@ -700,13 +700,13 @@
     // Same palette as app.js STY / mkLine, so the renter map reads like the city map.
     function roadStyle(s) {
       const c0 = cls(s);
-      const c = s[3] === 'c' ? 2 : unk(s) ? 4 : c0;
+      // Low-confidence roads (no posted limit) are dotted green, never yellow.
+      const c = s[3] === 'c' ? 2 : unk(s) ? 1 : c0;
       const STY = [
         { color: '#12a150', weight: 3.2 },
         { color: '#4cc38a', weight: 2.6, dashArray: '5 4' },
         { color: '#0b9fb3', weight: 3.4 },
         { color: '#e5484d', weight: 3, opacity: 0.75 },
-        { color: '#e0a800', weight: 3.2, dashArray: '6 6' },
       ];
       return STY[c] || STY[0];
     }
