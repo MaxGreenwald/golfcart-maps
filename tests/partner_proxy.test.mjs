@@ -77,8 +77,15 @@ test('proxy also forwards a callback 302 to /partner with the session cookie', a
     assert.equal(res.status, 302);
     assert.equal(res.headers.get('location'), 'https://golfcartmap.com/partner');
     const cookies = res.headers.getSetCookie();
+    assert.equal(cookies.length, 2);
     assert.ok(cookies.includes(session));
-    assert.ok(cookies.some(c => c.startsWith('gcm_oauth_st=')));
+    const sessionCookie = cookies.find(c => c.startsWith('gcm_partner='));
+    const clear = cookies.find(c => c.startsWith('gcm_oauth_st='));
+    assert.ok(sessionCookie);
+    assert.ok(clear);
+    assert.match(sessionCookie, /Max-Age=1209600/);
+    assert.equal(/Max-Age=0/.test(sessionCookie), false);
+    assert.match(clear, /Max-Age=0/);
     assert.equal(calls[0].init.redirect, 'manual');
     assert.equal(calls[0].init.headers.get('cookie'), 'gcm_oauth_st=y');
     assert.equal(calls[0].url, 'https://gcm-partner.maxgreenwald-assistant.workers.dev/auth/callback?code=x&state=y');
@@ -91,6 +98,7 @@ test('Worker OAuth cookies use Path=/ and SameSite=Lax and do not pin Domain to 
   assert.match(src, /gcm_partner=\$\{encodeURIComponent\(token\)\}; Max-Age=\$\{maxAge\}; Path=\/; HttpOnly; Secure; SameSite=Lax/);
   assert.equal(/set-cookie[\s\S]{0,200}Domain=/i.test(src), false);
   assert.equal(/workers\.dev/.test(src.split('function setCookie')[1].slice(0, 400)), false);
+  assert.equal(src.includes("setCookie(token) + ', gcm_oauth_st="), false);
   const proxy = read('functions/api/partner/[[path]].js');
   assert.match(proxy, /redirect:\s*'manual'/);
 });

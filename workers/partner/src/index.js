@@ -1112,14 +1112,13 @@ export default {
       const email = String(ui.email || '').toLowerCase();
       if (!email) return TEXT('No email from Google', 400);
       const token = await signSession(env, { email, name: ui.name || '', exp: now() + 14 * 86400 });
-      return new Response(null, {
-        status: 302,
-        headers: {
-          location: o + '/partner',
-          'set-cookie': setCookie(token) + ', gcm_oauth_st=; Max-Age=0; Path=/',
-          'cache-control': 'no-store',
-        },
+      const headers = new Headers({
+        location: o + '/partner',
+        'cache-control': 'no-store',
       });
+      headers.append('set-cookie', setCookie(token));
+      headers.append('set-cookie', 'gcm_oauth_st=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Lax');
+      return new Response(null, { status: 302, headers });
     }
 
     // ---- Authed API ----
