@@ -50,3 +50,32 @@ test('Google OAuth callback sends session and cleared state as two Set-Cookie he
   assert.match(clear, /Secure/);
   assert.match(clear, /SameSite=Lax/);
 });
+
+test('Worker /auth/start 302s to accounts.google.com; /auth/google stays an alias', async () => {
+  const p = makePartner({
+    env: { GOOGLE_CLIENT_ID: 'test-client-id', GOOGLE_CLIENT_SECRET: 'test-client-secret' },
+  });
+  for (const path of ['/auth/start', '/auth/google']) {
+    const res = await p.call(path);
+    assert.equal(res.status, 302, path);
+    const loc = res.headers.get('location');
+    const url = new URL(loc);
+    assert.equal(url.origin + url.pathname, 'https://accounts.google.com/o/oauth2/v2/auth');
+    assert.equal(url.searchParams.get('client_id'), 'test-client-id');
+    assert.equal(url.searchParams.get('redirect_uri'), 'https://golfcartmap.test/api/partner/auth/callback');
+    assert.equal(url.searchParams.get('response_type'), 'code');
+    assert.equal(url.searchParams.get('scope'), 'openid email profile');
+    assert.equal(url.searchParams.get('access_type'), 'online');
+    assert.equal(url.searchParams.get('prompt'), 'select_account');
+    assert.ok(url.searchParams.get('state'));
+    const cookie = res.headers.get('set-cookie') || '';
+    assert.match(cookie, /gcm_oauth_st=/);
+    assert.match(cookie, /Max-Age=600/);
+    assert.match(cookie, /Path=\//);
+    assert.match(cookie, /HttpOnly/);
+    assert.match(cookie, /Secure/);
+    assert.match(cookie, /SameSite=Lax/);
+    const st = /gcm_oauth_st=([^;]+)/.exec(cookie)[1];
+    assert.equal(url.searchParams.get('state'), st);
+  }
+});

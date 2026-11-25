@@ -134,6 +134,17 @@ class PartnerPortal(unittest.TestCase):
         self.assertIn("priorStopLatLng", admin)
         self.assertIn("PIN_OFFSET", admin)
 
+    def test_google_signin_uses_unflagged_start_path(self):
+        with open(os.path.join(ROOT, "public/partner/admin.js"), encoding="utf-8") as f:
+            admin = f.read()
+        self.assertIn('href="/api/partner/auth/start"', admin)
+        self.assertNotIn("/api/partner/auth/google", admin)
+        with open(os.path.join(ROOT, "workers/partner/src/index.js"), encoding="utf-8") as f:
+            worker = f.read()
+        self.assertIn("/auth/start", worker)
+        # Flagged path stays as an alias only. The portal must not link to it.
+        self.assertIn("/auth/google", worker)
+
     def test_brand_path_not_colliding_with_cities(self):
         # Partner brand pages are under /p/, never /<cityslug>.
         cities = {r["slug"] for r in U.regions()}

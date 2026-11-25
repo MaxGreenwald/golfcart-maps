@@ -1062,7 +1062,7 @@ export default {
       return J({ ok: true, email }, 200, { 'set-cookie': setCookie(token) });
     }
 
-    if (u.pathname === '/auth/google' && req.method === 'GET') {
+    if ((u.pathname === '/auth/start' || u.pathname === '/auth/google') && req.method === 'GET') {
       if (!googleReady(env)) return J({ error: 'Google OAuth not configured', use: '/auth/dev' }, 501);
       const o = originOf(req, env);
       const redirect = o + '/api/partner/auth/callback';
