@@ -327,7 +327,7 @@ function loginView() {
   return `<div id="login" class="card">
     <h2>Sign in</h2>
     <p class="muted">Shop owners use Google (Gmail). Super admin: Max’s allowlisted emails.</p>
-    ${me && me.google ? `<p><a class="btn" href="/api/partner/auth/google">Continue with Google</a></p>` : ''}
+    ${me && me.google ? `<p><a class="btn" href="/api/partner/auth/start">Continue with Google</a></p>` : ''}
     ${dev ? `<div>
       <p class="msg">Mock login is on (DEV_AUTH_EMAIL). Google OAuth secrets are not set on this preview.</p>
       <label>Email</label>

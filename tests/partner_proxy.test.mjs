@@ -102,3 +102,29 @@ test('Worker OAuth cookies use Path=/ and SameSite=Lax and do not pin Domain to 
   const proxy = read('functions/api/partner/[[path]].js');
   assert.match(proxy, /redirect:\s*'manual'/);
 });
+
+test('portal Continue with Google links to /api/partner/auth/start, not /auth/google', () => {
+  const admin = read('public/partner/admin.js');
+  assert.match(admin, /href="\/api\/partner\/auth\/start"/);
+  assert.equal(admin.includes('/api/partner/auth/google'), false);
+});
+
+test('proxy also returns a 302 for the unflagged /auth/start path', async () => {
+  await withMockFetch(() => {
+    const headers = new Headers();
+    headers.set('location', GOOGLE);
+    headers.append('set-cookie', STATE_COOKIE);
+    headers.set('cache-control', 'no-store');
+    return new Response(null, { status: 302, headers });
+  }, async (calls) => {
+    const res = await onRequest({
+      request: new Request('https://golfcartmap.com/api/partner/auth/start', { method: 'GET' }),
+      env: {},
+      params: { path: ['auth', 'start'] },
+    });
+    assert.equal(res.status, 302);
+    assert.equal(res.headers.get('location'), GOOGLE);
+    assert.equal(calls[0].url, 'https://gcm-partner.maxgreenwald-assistant.workers.dev/auth/start');
+    assert.equal(calls[0].init.redirect, 'manual');
+  });
+});
