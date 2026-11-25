@@ -85,6 +85,8 @@ jobs:
         run: node --test tests/routecheck.test.mjs
       - name: Partner photo uploads (type, size, R2 key)
         run: node --test tests/partner_photos.test.mjs
+      - name: Partner Pages proxy passes Worker OAuth redirects to the browser
+        run: node --test tests/partner_proxy.test.mjs
       - name: Shop rental vehicle (API values, worker stores and exposes it)
         run: node --test tests/partner_vehicle.test.mjs
       - name: Return-by and range reminders (clock slack, 80 percent of range)
