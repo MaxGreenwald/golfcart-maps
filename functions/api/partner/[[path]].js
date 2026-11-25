@@ -36,7 +36,7 @@ export async function onRequest(context) {
   if (request.method !== 'GET' && request.method !== 'HEAD') body = await request.arrayBuffer();
   let res;
   try {
-    res = await fetch(target, { method: request.method, headers, body });
+    res = await fetch(target, { method: request.method, headers, body, redirect: 'manual' });
   } catch (e) {
     return new Response(JSON.stringify({ error: 'partner worker unreachable', detail: String(e), target: base }), {
       status: 502,
