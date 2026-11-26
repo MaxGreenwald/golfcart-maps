@@ -120,7 +120,7 @@ class TownVideos(unittest.TestCase):
             self.assertEqual(node["description"], meta["description"])
             self.assertEqual(node["thumbnailUrl"], meta["thumbnailUrl"])
             self.assertEqual(node["uploadDate"], meta["uploadDate"])
-            self.assertRegex(node["uploadDate"], r"^\d{4}-\d{2}-\d{2}$")
+            self.assertRegex(node["uploadDate"], r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$")
             self.assertEqual(node["embedUrl"], f"https://www.youtube-nocookie.com/embed/{vid}")
             self.assertEqual(node["contentUrl"], f"https://www.youtube.com/watch?v={vid}")
             types = {x["@type"] for x in ld(h)}
@@ -134,7 +134,7 @@ class TownVideos(unittest.TestCase):
         self.assertNotIn("<iframe", h.lower())
         node = video_node(h)
         self.assertEqual(node["name"], self.meta[vid]["title"])
-        self.assertEqual(node["uploadDate"], "2026-11-06")
+        self.assertEqual(node["uploadDate"], "2026-11-06T00:00:00Z")
         self.assertEqual(node["embedUrl"], f"https://www.youtube-nocookie.com/embed/{vid}")
         types = {x["@type"] for x in ld(h)}
         self.assertTrue({"WebPage", "BreadcrumbList", "FAQPage", "VideoObject"} <= types)

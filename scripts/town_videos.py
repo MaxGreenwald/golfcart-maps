@@ -8,12 +8,17 @@ Then run scripts/fetch_video_meta.py so content/video_meta.json picks up the tit
 description, thumbnail and upload date from YouTube. A slug with no line renders
 the same HTML it does without this module.
 """
-import json, os, re
+import datetime, json, os, re
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 MAP_PATH = os.path.join(ROOT, "content", "videos.json")
 META_PATH = os.path.join(ROOT, "content", "video_meta.json")
 ID_RE = re.compile(r"^[A-Za-z0-9_-]{11}$")
-DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+# Full YouTube publish timestamp: ISO 8601 date-time with a timezone offset.
+DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$")
+DATE_ONLY_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+# Date-only stored values become midnight UTC. The calendar date is known;
+# the publish time is not, so Z is used instead of inventing a Pacific offset.
+FALLBACK_SUFFIX = "T00:00:00Z"
 # Same user-facing bans as seo_common.page, so a video cannot publish a page the builder would reject.
 BANNED = re.compile(r"(?i)\bbeta\b|verified|android")
 FIELDS = ("title", "description", "thumbnailUrl", "uploadDate")
@@ -71,16 +76,42 @@ def load_meta(path=META_PATH):
     return data
 
 
+def parse_upload_datetime(value):
+    """Return a timezone-aware datetime, or None if the string is not valid."""
+    if not isinstance(value, str):
+        return None
+    text = value.strip()
+    if not DATE_RE.match(text):
+        return None
+    try:
+        return datetime.datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def normalize_upload_date(value, vid=""):
+    """Keep a full ISO timestamp with offset, or add T00:00:00Z to a date-only value."""
+    if isinstance(value, str) and DATE_RE.match(value.strip()) and parse_upload_datetime(value):
+        return value.strip()
+    if isinstance(value, str) and DATE_ONLY_RE.match(value.strip()):
+        return value.strip() + FALLBACK_SUFFIX
+    label = f"{vid} " if vid else ""
+    raise SystemExit(
+        f"{label}uploadDate must be ISO 8601 date-time with timezone, got {value!r}"
+    )
+
+
 def _checked(vid, meta):
     if not isinstance(meta, dict) or any(not isinstance(meta.get(k), str) or not meta[k].strip() for k in FIELDS):
         raise SystemExit(f"content/video_meta.json missing title, description, thumbnailUrl or uploadDate for {vid}")
     if not meta["thumbnailUrl"].startswith("https://i.ytimg.com/"):
         raise SystemExit(f"{vid} thumbnail must be an https://i.ytimg.com URL from YouTube")
-    if not DATE_RE.match(meta["uploadDate"]):
-        raise SystemExit(f"{vid} uploadDate must be YYYY-MM-DD from YouTube, got {meta['uploadDate']!r}")
+    uploaded = normalize_upload_date(meta["uploadDate"], vid)
     if "</" in meta["description"] or BANNED.search(meta["title"]) or BANNED.search(meta["description"]):
         raise SystemExit(f"{vid} title or description is not safe to publish")
-    return {"id": vid, **{k: meta[k] for k in FIELDS}}
+    out = {k: meta[k] for k in FIELDS}
+    out["uploadDate"] = uploaded
+    return {"id": vid, **out}
 
 
 def video_for(slug):

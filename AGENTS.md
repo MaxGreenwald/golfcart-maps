@@ -19,7 +19,7 @@ Where a check lives only on an unmerged branch, the branch is named; it becomes 
 
 | # | Standing rule | Source | Automated check | Where it runs |
 |---|---|---|---|---|
-| 1 | One copy of the web app (`public/`); no committed ios/android/dist bundles | Dobby fix 1 | `scripts/check_single_source.py`, `tests/test_web_build.py` | web-ci (every push/PR) |
+| 1 | One copy of the web app (`public/`); no committed ios/android/dist bundles | Dobby fix 1 | `scripts/check_single_source.py`, `tests/test_web_build.py` | web-ci |
 | 2 | Service-worker cache name is derived from content, never hand-bumped; offline open works | Dobby fix 2 | `tests/test_web_build.py`, `scripts/test_sw.py` | web-ci |
 | 3 | iOS build must contain current master and the app-only overrides | build 7 shipped 42 commits stale | `scripts/check_native_overrides.py` | ios-testflight.yml |
 | 4 | Production deploys only from master with a clean tree, and HEAD must equal `origin/master` (no local-only commits) | Max | `scripts/prod_gate.sh` (called by `scripts/deploy_web.sh` and `scripts/deploy_worker.sh`); `tests/test_prod_gate.py` | deploy scripts + web-ci |
@@ -66,6 +66,7 @@ Where a check lives only on an unmerged branch, the branch is named; it becomes 
 | 45 | Ready-made partner rides are loops the legal-road router accepts for that shop's vehicle, built from the town's places | Nov 10 2026 | `tests/starters.test.mjs`, `tests/test_starter_experiences.py` | web-ci |
 | 46 | Analytics Worker reads stay inside the requested day window: the internal/test check is stored at ingest, never re-run over all events (free plan: 5M rows read/day) | Nov 19 2026 | `tests/analytics_rows.test.mjs`, `scripts/analytics_rows_read.mjs --check` | web-ci |
 | 47 | Map switch: off (default) is LSV, posted ≤35; on is golf cart, ≤25 in every town. Low-confidence roads are dotted green, never yellow | Max t602u-t604u | `scripts/test_golfcart_mode.py`, `scripts/test_roadrule.js` | web-ci |
+| 48 | JSON-LD required fields; VideoObject uploadDate has a timezone | Search Console | `scripts/test_structured_data.py` | web-ci |
 
-When you add a check, add a row. When a rule has no check, say so here rather than leaving it implied.
+When you add a check, add a row.
 
