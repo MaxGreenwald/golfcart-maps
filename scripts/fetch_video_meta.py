@@ -3,8 +3,9 @@
 
 Add a video later: one line in content/videos.json ("region-slug": "VIDEO_ID"), then run
 this script. Title and thumbnail come from YouTube oEmbed. Upload date and description
-come from the public watch page. publishDate and dateText must agree. Nothing is filled in
-by hand.
+come from the public watch page. A full ISO 8601 timestamp with timezone is kept when
+the page has one; a date-only value becomes midnight UTC (T00:00:00Z). publishDate and
+dateText must agree. Nothing is filled in by hand.
 
   python scripts/fetch_video_meta.py
   python scripts/fetch_video_meta.py --check
@@ -23,11 +24,31 @@ def _get(url):
         return res.read()
 
 
-def _iso(text):
+ISO_DT_RE = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})")
+
+
+def _date_only(text):
     m = DATE.match(text)
     if not m:
         raise SystemExit(f"YouTube date {text!r} is not Mon D, YYYY")
     return datetime.date(int(m.group(3)), datetime.datetime.strptime(m.group(1), "%b").month, int(m.group(2))).isoformat()
+
+
+def _iso(text):
+    """Keep a timezone-aware timestamp, or midnight UTC when only a calendar date is known."""
+    return V.normalize_upload_date(text if V.DATE_RE.match((text or "").strip()) else _date_only(text) if DATE.match(text or "") else text)
+
+
+def iso_timestamps(html, calendar_date):
+    """ISO 8601 publish/upload timestamps on the watch page whose date matches calendar_date."""
+    found = []
+    for key in ("publishDate", "uploadDate"):
+        found.extend(re.findall(r'"' + key + r'"\s*:\s*"(' + ISO_DT_RE.pattern + r')"', html))
+    out = []
+    for item in found:
+        if item.startswith(calendar_date) and item not in out and V.parse_upload_datetime(item):
+            out.append(item)
+    return out
 
 
 def parse_watch(html, title):
@@ -45,7 +66,10 @@ def parse_watch(html, title):
     desc, _ = json.JSONDecoder().raw_decode(html[i + len(marker):])
     if not isinstance(desc, str) or not desc.strip():
         raise SystemExit(f"YouTube description empty for {title!r}")
-    return _iso(published[0]), desc
+    calendar = _date_only(published[0])
+    # Prefer YouTube's full timestamp. Fall back to midnight UTC on the calendar date.
+    stamps = iso_timestamps(html, calendar)
+    return V.normalize_upload_date(stamps[0] if stamps else calendar), desc
 
 
 def fetch_one(vid):
