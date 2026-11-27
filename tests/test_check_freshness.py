@@ -9,6 +9,7 @@ exits 1.
 """
 from __future__ import annotations
 
+import importlib.util
 import os
 import subprocess
 import sys
@@ -18,6 +19,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = ROOT / "scripts" / "check_freshness.py"
+
+
+def load_mod():
+    spec = importlib.util.spec_from_file_location("check_freshness", SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+MOD = load_mod()
 CONFIG = ROOT / "ops" / "expected_runs.json"
 FIX_FAIL = ROOT / "tests" / "fixtures" / "freshness_must_fail"
 FIX_PASS = ROOT / "tests" / "fixtures" / "freshness_must_pass"
@@ -102,6 +113,15 @@ class FreshnessFixtures(unittest.TestCase):
         )
         self.assertEqual(proc.returncode, 1, proc.stdout + "\n" + proc.stderr)
         self.assertIn("STALE cf_headroom last=2026-11-20", proc.stdout)
+
+class FreshnessHelpers(unittest.TestCase):
+    def test_dated_glob_does_not_create_double_star_component(self):
+        # CI runs Python 3.12, which rejects a glob like cf-headroom/**.txt.
+        pat = MOD.artifact_glob("cf-headroom/YYYY-MM-DD*.txt")
+        self.assertEqual(pat, "cf-headroom/*.txt")
+        self.assertNotIn("**", pat)
+        self.assertEqual(MOD.artifact_glob("cf-headroom/YYYY-MM-DD.txt"), "cf-headroom/*.txt")
+
 
 
 if __name__ == "__main__":

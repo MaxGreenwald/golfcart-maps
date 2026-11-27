@@ -113,9 +113,18 @@ def filename_date(path):
     return datetime.strptime(match.group(1), "%Y-%m-%d").replace(tzinfo=timezone.utc)
 
 
+def artifact_glob(pattern):
+    """Turn a dated artifact pattern into a glob that Python 3.12 accepts.
+
+    Replacing YYYY-MM-DD with * in YYYY-MM-DD*.txt would produce **.txt,
+    which pathlib on 3.12 rejects ('**' can only be an entire path component).
+    """
+    return pattern.replace(DATE_TOKEN + "*", "*").replace(DATE_TOKEN, "*")
+
+
 def glob_dated(base_dir, pattern):
     """Return (path, date) pairs for files matching a dated artifact pattern."""
-    glob_pat = pattern.replace(DATE_TOKEN, "*")
+    glob_pat = artifact_glob(pattern)
     path = resolve(base_dir, glob_pat)
     if path.is_absolute() and not path.is_relative_to(base_dir):
         matches = sorted(Path("/").glob(str(path).lstrip("/")))
