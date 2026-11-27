@@ -1,0 +1,15 @@
+[
+  {
+    "job": "cf_headroom",
+    "artifact": "cf-headroom/YYYY-MM-DD*.txt",
+    "max_age_hours": 24,
+    "owner": "Engineer"
+  },
+  {
+    "job": "analytics_limit_trip_log",
+    "artifact": "bot-log.md",
+    "line_pattern": "analytics limit-trip log",
+    "max_age_hours": 24,
+    "owner": "Engineer"
+  }
+]
